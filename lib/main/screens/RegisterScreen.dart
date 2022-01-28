@@ -13,6 +13,16 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class RegisterScreenState extends State<RegisterScreen> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController passController = TextEditingController();
+
+  FocusNode nameFocus = FocusNode();
+  FocusNode emailFocus = FocusNode();
+  FocusNode phoneFocus = FocusNode();
+  FocusNode passFocus = FocusNode();
+
   @override
   void initState() {
     super.initState();
@@ -35,11 +45,13 @@ class RegisterScreenState extends State<RegisterScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          FlutterLogo(size: 70),
-          30.height,
+          Container(
+            height: context.height() * 0.25,
+            child: FlutterLogo(size: 70),
+          ),
           Container(
             width: context.width(),
-            padding: EdgeInsets.only(left: 16, right: 16),
+            padding: EdgeInsets.only(left: 24, right: 24),
             decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
             child: SingleChildScrollView(
               child: Column(
@@ -53,28 +65,39 @@ class RegisterScreenState extends State<RegisterScreen> {
                   Text('Name', style: primaryTextStyle()),
                   8.height,
                   AppTextField(
+                    controller: nameController,
                     textFieldType: TextFieldType.NAME,
+                    focus: nameFocus,
+                    nextFocus: emailFocus,
                     decoration: commonInputDecoration(),
                   ),
                   16.height,
                   Text('Email', style: primaryTextStyle()),
                   8.height,
                   AppTextField(
+                    controller: emailController,
                     textFieldType: TextFieldType.EMAIL,
+                    focus: emailFocus,
+                    nextFocus: phoneFocus,
                     decoration: commonInputDecoration(),
                   ),
                   16.height,
                   Text('Phone Number', style: primaryTextStyle()),
                   8.height,
                   AppTextField(
+                    controller: phoneController,
                     textFieldType: TextFieldType.PHONE,
+                    focus: phoneFocus,
+                    nextFocus: passFocus,
                     decoration: commonInputDecoration(),
                   ),
                   16.height,
                   Text('Password', style: primaryTextStyle()),
                   8.height,
                   AppTextField(
+                    controller: passController,
                     textFieldType: TextFieldType.PASSWORD,
+                    focus: passFocus,
                     decoration: commonInputDecoration(),
                   ),
                   30.height,
@@ -96,7 +119,7 @@ class RegisterScreenState extends State<RegisterScreen> {
             ),
           ).expand(),
         ],
-      ).paddingOnly(top: 50),
+      ),
     );
   }
 }

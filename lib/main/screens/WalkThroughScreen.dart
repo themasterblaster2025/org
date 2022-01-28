@@ -45,7 +45,7 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
           Text('Skip', style: boldTextStyle(color: grey)).onTap(
             () async {
               await setValue(IS_FIRST_TIME, false);
-              LoginScreen().launch(context, isNewTask: true);
+              LoginScreen().launch(context, isNewTask: true, duration: Duration(seconds: 2), pageRouteAnimation: PageRouteAnimation.Scale);
             },
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
@@ -71,10 +71,11 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
                           style: boldTextStyle(size: headingSize),
                           textAlign: TextAlign.center,
                         ).paddingOnly(left: 30, right: 30),
-                        30.height,
+                        16.height,
                         Text(
                           pages[index].subTitle!,
                           textAlign: TextAlign.center,
+                          style: secondaryTextStyle(size: 16),
                         ).paddingOnly(left: 30, right: 30),
                       ],
                     ),
@@ -94,7 +95,7 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Icon(Icons.navigate_before, color: colorPrimary, size: 30).onTap(() {
-            pageController.animateToPage(--currentPage, duration: Duration(milliseconds: 300), curve: Curves.bounceInOut);
+            pageController.animateToPage(--currentPage, duration: Duration(milliseconds: 800), curve: Curves.easeInOut);
           }).visible(currentPage != 0),
           DotIndicator(
             pages: pages,
@@ -103,13 +104,13 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
           ),
           currentPage != 2
               ? Icon(Icons.navigate_next, color: colorPrimary, size: 30).onTap(() {
-                  pageController.animateToPage(++currentPage, duration: Duration(milliseconds: 300), curve: Curves.bounceInOut);
+                  pageController.animateToPage(++currentPage, duration: Duration(milliseconds: 800), curve: Curves.easeInOut);
                 })
               : commonButton(
                   'Get Started',
                   () async {
                     await setValue(IS_FIRST_TIME, false);
-                    LoginScreen().launch(context, isNewTask: true);
+                    LoginScreen().launch(context, isNewTask: true, duration: Duration(seconds: 2), pageRouteAnimation: PageRouteAnimation.Scale);
                   },
                 ),
         ],

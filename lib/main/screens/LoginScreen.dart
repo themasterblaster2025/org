@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localdelivery_flutter/user/screens/DashboardScreen.dart';
 import 'package:localdelivery_flutter/main/screens/RegisterScreen.dart';
 import 'package:localdelivery_flutter/main/utils/Colors.dart';
 import 'package:localdelivery_flutter/main/utils/Common.dart';
@@ -14,6 +15,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class LoginScreenState extends State<LoginScreen> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passController = TextEditingController();
+
+  FocusNode emailFocus = FocusNode();
+  FocusNode passFocus = FocusNode();
+
   @override
   void initState() {
     super.initState();
@@ -36,11 +43,13 @@ class LoginScreenState extends State<LoginScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          FlutterLogo(size: 70),
-          30.height,
+          Container(
+            height: context.height() * 0.25,
+            child: FlutterLogo(size: 70),
+          ),
           Container(
             width: context.width(),
-            padding: EdgeInsets.only(left: 16, right: 16),
+            padding: EdgeInsets.only(left: 24, right: 24),
             decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
             child: SingleChildScrollView(
               child: Column(
@@ -55,20 +64,27 @@ class LoginScreenState extends State<LoginScreen> {
                   Text('Email', style: primaryTextStyle()),
                   8.height,
                   AppTextField(
+                    controller: emailController,
                     textFieldType: TextFieldType.EMAIL,
+                    focus: emailFocus,
+                    nextFocus: passFocus,
                     decoration: commonInputDecoration(),
                   ),
                   16.height,
                   Text('Password', style: primaryTextStyle()),
                   8.height,
                   AppTextField(
+                    controller: passController,
                     textFieldType: TextFieldType.PASSWORD,
+                    focus: passFocus,
                     decoration: commonInputDecoration(),
                   ),
                   16.height,
                   Align(alignment: Alignment.centerRight, child: Text('Forgot Password ?', style: primaryTextStyle(color: colorPrimary))),
                   30.height,
-                  commonButton('Sign In', () {}, width: context.width()),
+                  commonButton('Sign In', () {
+                    DashboardScreen().launch(context);
+                  }, width: context.width()),
                   16.height,
                   Row(
                     children: [
@@ -100,7 +116,7 @@ class LoginScreenState extends State<LoginScreen> {
                       Text('Don\'t have an account?', style: primaryTextStyle()),
                       4.width,
                       Text('Sign Up', style: boldTextStyle(color: colorPrimary)).onTap(() {
-                        RegisterScreen().launch(context);
+                        RegisterScreen().launch(context,duration: Duration(seconds: 1),pageRouteAnimation: PageRouteAnimation.Slide);
                       }),
                     ],
                   ),
@@ -110,7 +126,7 @@ class LoginScreenState extends State<LoginScreen> {
             ),
           ).expand(),
         ],
-      ).paddingOnly(top: 50),
+      ),
       /* body: SingleChildScrollView(
         padding: EdgeInsets.only(top: 50, left: 16, right: 16, bottom: 16),
         child: Column(
