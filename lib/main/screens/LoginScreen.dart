@@ -28,7 +28,7 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> init() async {
-    //
+    setStatusBarColor(colorPrimary,statusBarIconBrightness: Brightness.light);
   }
 
   @override

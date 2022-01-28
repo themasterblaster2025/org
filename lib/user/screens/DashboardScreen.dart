@@ -4,10 +4,8 @@ import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:localdelivery_flutter/main/models/models.dart';
 import 'package:localdelivery_flutter/main/utils/Colors.dart';
-import 'package:localdelivery_flutter/main/utils/Colors.dart';
-import 'package:localdelivery_flutter/main/utils/Colors.dart';
-import 'package:localdelivery_flutter/main/utils/Colors.dart';
 import 'package:localdelivery_flutter/main/utils/DataProviders.dart';
+import 'package:localdelivery_flutter/main/utils/Widgets.dart';
 import 'package:localdelivery_flutter/user/fragment/AccountFragment.dart';
 import 'package:localdelivery_flutter/user/fragment/HomeFragment.dart';
 import 'package:localdelivery_flutter/user/fragment/OrderFragment.dart';
@@ -23,11 +21,6 @@ class DashboardScreen extends StatefulWidget {
 class DashboardScreenState extends State<DashboardScreen> {
   List<BottomNavigationBarItemModel> BottomNavBarItems = getNavBarItems();
   int currentIndex = 0;
-  List<Widget> bodyData = [
-    HomeFragment(),
-    OrderFragment(),
-    AccountFragment(),
-  ];
 
   @override
   void initState() {
@@ -47,7 +40,12 @@ class DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: bodyData[currentIndex],
+      body: Stack(
+        children: [
+          customAppBarWidget(context, '${BottomNavBarItems[currentIndex].title}'),
+          containerWidget(context,BottomNavBarItems[currentIndex].widget),
+        ],
+      ),
       bottomNavigationBar: BubbleBottomBar(
         opacity: 0.2,
         currentIndex: currentIndex,

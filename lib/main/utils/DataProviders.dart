@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:localdelivery_flutter/main/models/models.dart';
+import 'package:localdelivery_flutter/user/fragment/AccountFragment.dart';
+import 'package:localdelivery_flutter/user/fragment/HomeFragment.dart';
+import 'package:localdelivery_flutter/user/fragment/OrderFragment.dart';
+import 'package:localdelivery_flutter/user/screens/ChangePasswordScreen.dart';
+import 'package:localdelivery_flutter/user/screens/EditProfileScreen.dart';
 
 List<WalkThroughItemModel> getWalkThroughItems(){
   List<WalkThroughItemModel> list = [];
@@ -11,9 +16,20 @@ List<WalkThroughItemModel> getWalkThroughItems(){
 
 List<BottomNavigationBarItemModel> getNavBarItems(){
   List<BottomNavigationBarItemModel> list = [];
-  list.add(BottomNavigationBarItemModel(icon:Icons.dashboard,title: 'Home'));
-  list.add(BottomNavigationBarItemModel(icon:Icons.shopping_bag,title: 'Order'));
+  list.add(BottomNavigationBarItemModel(icon:Icons.dashboard,title: 'Home',widget: HomeFragment()));
+  list.add(BottomNavigationBarItemModel(icon:Icons.shopping_bag,title: 'Order',widget: OrderFragment()));
   //list.add(BottomNavigationBarItemModel(icon:Icons.notifications,title: 'Notification'));
-  list.add(BottomNavigationBarItemModel(icon:Icons.person,title: 'Account'));
+  list.add(BottomNavigationBarItemModel(icon:Icons.person,title: 'Account',widget: AccountFragment()));
+  return list;
+}
+
+List<SettingItemModel> getSettingItems(){
+  List<SettingItemModel> list = [];
+  list.add(SettingItemModel(icon: Icons.person_outline,title: 'Edit Profile',widget: EditProfileScreen()));
+  list.add(SettingItemModel(icon: Icons.lock_outline,title: 'Change Password',widget: ChangePasswordScreen()));
+  list.add(SettingItemModel(icon: Icons.language,title: 'Language'));
+  list.add(SettingItemModel(icon: Icons.wb_sunny_outlined,title: 'DarkMode'));
+  list.add(SettingItemModel(icon: Icons.info_outline,title: 'About Us'));
+  list.add(SettingItemModel(icon: Icons.help_outline,title: 'Help & Support'));
   return list;
 }

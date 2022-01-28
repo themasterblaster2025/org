@@ -25,10 +25,8 @@ class HomeFragmentState extends State<HomeFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text('Home'),
-      ),
+    return  Center(
+      child: Text('Home'),
     );
   }
 }

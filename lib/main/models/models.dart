@@ -11,6 +11,15 @@ class WalkThroughItemModel{
 class BottomNavigationBarItemModel{
   IconData? icon;
   String? title;
+  Widget? widget;
 
-  BottomNavigationBarItemModel({this.icon, this.title});
+  BottomNavigationBarItemModel({this.icon, this.title,this.widget});
+}
+
+class SettingItemModel{
+  IconData? icon;
+  String? title;
+  Widget? widget;
+
+  SettingItemModel({this.icon, this.title, this.widget});
 }

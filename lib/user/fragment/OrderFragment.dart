@@ -25,10 +25,8 @@ class OrderFragmentState extends State<OrderFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text('Order'),
-      ),
+    return  Center(
+      child: Text('Order'),
     );
   }
 }
