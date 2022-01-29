@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mighty.delivery.mighty_local_delievery">
+    package="com.mighty.delivery">
    <application
-        android:label="mighty_local_delievery"
+        android:label="On Demand Local Delivery"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
