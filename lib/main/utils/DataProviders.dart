@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mighty_delivery/delivery/fragment/DHomeFragment.dart';
+import 'package:mighty_delivery/delivery/fragment/DOrderFragment.dart';
+import 'package:mighty_delivery/delivery/fragment/DProfileFragment.dart';
 import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/user/fragment/AccountFragment.dart';
 import 'package:mighty_delivery/user/fragment/HomeFragment.dart';
@@ -27,6 +30,25 @@ List<BottomNavigationBarItemModel> getNavBarItems(){
 }
 
 List<SettingItemModel> getSettingItems(){
+  List<SettingItemModel> list = [];
+  list.add(SettingItemModel(icon: Icons.person_outline,title: 'Edit Profile',widget: EditProfileScreen()));
+  list.add(SettingItemModel(icon: Icons.lock_outline,title: 'Change Password',widget: ChangePasswordScreen()));
+  list.add(SettingItemModel(icon: Icons.language,title: 'Language'));
+  list.add(SettingItemModel(icon: Icons.wb_sunny_outlined,title: 'DarkMode'));
+  list.add(SettingItemModel(icon: Icons.info_outline,title: 'About Us'));
+  list.add(SettingItemModel(icon: Icons.help_outline,title: 'Help & Support'));
+  return list;
+}
+
+List<BottomNavigationBarItemModel> getDeliveryNavBarItems(){
+  List<BottomNavigationBarItemModel> list = [];
+  list.add(BottomNavigationBarItemModel(icon:Icons.dashboard,title: 'Home',widget: DHomeFragment()));
+  list.add(BottomNavigationBarItemModel(icon:Icons.shopping_bag,title: 'Order',widget: DOrderFragment()));
+  list.add(BottomNavigationBarItemModel(icon:Icons.person,title: 'Profile',widget: DProfileFragment()));
+  return list;
+}
+
+List<SettingItemModel> getDeliverySettingItems(){
   List<SettingItemModel> list = [];
   list.add(SettingItemModel(icon: Icons.person_outline,title: 'Edit Profile',widget: EditProfileScreen()));
   list.add(SettingItemModel(icon: Icons.lock_outline,title: 'Change Password',widget: ChangePasswordScreen()));

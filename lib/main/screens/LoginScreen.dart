@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mighty_delivery/delivery/screens/DDashboardScreen.dart';
 import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
 import 'package:mighty_delivery/main/screens/RegisterScreen.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
@@ -107,7 +108,9 @@ class LoginScreenState extends State<LoginScreen> {
                         Text('Continue with Google', style: boldTextStyle()),
                       ],
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      DDashboardScreen().launch(context);
+                    },
                   ),
                   16.height,
                   Row(
@@ -127,61 +130,6 @@ class LoginScreenState extends State<LoginScreen> {
           ).expand(),
         ],
       ),
-      /* body: SingleChildScrollView(
-        padding: EdgeInsets.only(top: 50, left: 16, right: 16, bottom: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            FlutterLogo(size: 50),
-            30.height,
-            Text('Welcome Back!', style: primaryTextStyle(size: headingSize)),
-            16.height,
-            Text('Let\'s Get Start', style: secondaryTextStyle(size: 16)),
-            30.height,
-            Text('Email',style: primaryTextStyle()),
-            8.height,
-            AppTextField(
-              textFieldType: TextFieldType.EMAIL,
-              decoration: commonInputDecoration(),
-            ),
-            16.height,
-            Text('Password',style: primaryTextStyle()),
-            8.height,
-            AppTextField(
-              textFieldType: TextFieldType.PASSWORD,
-              decoration: commonInputDecoration(),
-            ),
-            16.height,
-            Align(alignment:Alignment.centerRight,child: Text('Forgot Password ?',style: primaryTextStyle())),
-            30.height,
-            commonButton('Login', (){},width: context.width()),
-            16.height,
-            Row(
-              children: [
-                Divider().expand(),
-                8.width,
-                Text('Or',style: secondaryTextStyle()),
-                8.width,
-                Divider().expand(),
-              ],
-            ),
-            16.height,
-            AppButton(
-              elevation: 0,
-              shapeBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius),side: BorderSide(color: Colors.grey.withOpacity(0.5))),
-              child:Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GoogleLogoWidget(),
-                  16.width,
-                  Text('Continue with Google',style: boldTextStyle()),
-                ],
-              ),
-              onTap: (){},
-            ),
-          ],
-        ),
-      ),*/
     );
   }
 }
