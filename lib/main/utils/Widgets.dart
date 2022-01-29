@@ -50,3 +50,17 @@ Widget containerWidget(BuildContext context, Widget? child) {
     child: child,
   );
 }
+
+Widget scheduleOptionWidget(bool isSelected, String imagePath, String title) {
+  return Container(
+    padding: EdgeInsets.all(16),
+    decoration: boxDecorationWithRoundedCorners(border: Border.all(color: isSelected ? colorPrimary : borderColor)),
+    child: Column(
+      children: [
+        ImageIcon(AssetImage(imagePath), size: 20, color: isSelected ? colorPrimary : Colors.grey),
+        16.height,
+        Text(title, style: boldTextStyle()),
+      ],
+    ),
+  );
+}

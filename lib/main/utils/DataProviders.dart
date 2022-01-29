@@ -6,6 +6,9 @@ import 'package:mighty_delivery/user/fragment/OrderFragment.dart';
 import 'package:mighty_delivery/user/screens/ChangePasswordScreen.dart';
 import 'package:mighty_delivery/user/screens/EditProfileScreen.dart';
 
+List<String> weightList = ['Up to 1 kg','Up to 5 kg','Up to 10 kg','Up to 15 kg','Up to 20 kg'];
+List<String> packageList = ['Documents','Food','Cloth','Groceries','Cake','Flowers'];
+
 List<WalkThroughItemModel> getWalkThroughItems(){
   List<WalkThroughItemModel> list = [];
   list.add(WalkThroughItemModel(image: 'assets/walk_through1.png',title: 'Select Pickup Location',subTitle: 'It helps us to get package from your doorstep.'));
@@ -33,3 +36,14 @@ List<SettingItemModel> getSettingItems(){
   list.add(SettingItemModel(icon: Icons.help_outline,title: 'Help & Support'));
   return list;
 }
+
+List<DateTime> getDaysList(){
+  List<DateTime> list = [];
+  DateTime todayDate = DateTime.now();
+  List.generate(15, (index){
+    list.add(todayDate.add(Duration(days: index)));
+  }).toList();
+  return list;
+}
+
+
