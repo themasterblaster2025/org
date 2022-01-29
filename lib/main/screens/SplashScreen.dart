@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localdelivery_flutter/main/screens/WalkThroughScreen.dart';
-import 'package:localdelivery_flutter/main/utils/Constants.dart';
+import 'package:mighty_delivery/main/screens/WalkThroughScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import 'LoginScreen.dart';

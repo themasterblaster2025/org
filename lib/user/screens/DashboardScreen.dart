@@ -1,14 +1,9 @@
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
-import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
-import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:localdelivery_flutter/main/models/models.dart';
-import 'package:localdelivery_flutter/main/utils/Colors.dart';
-import 'package:localdelivery_flutter/main/utils/DataProviders.dart';
-import 'package:localdelivery_flutter/main/utils/Widgets.dart';
-import 'package:localdelivery_flutter/user/fragment/AccountFragment.dart';
-import 'package:localdelivery_flutter/user/fragment/HomeFragment.dart';
-import 'package:localdelivery_flutter/user/fragment/OrderFragment.dart';
+import 'package:mighty_delivery/main/models/models.dart';
+import 'package:mighty_delivery/main/utils/Colors.dart';
+import 'package:mighty_delivery/main/utils/DataProviders.dart';
+import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class DashboardScreen extends StatefulWidget {

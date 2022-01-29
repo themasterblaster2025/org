@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mighty_delivery/main/utils/Colors.dart';
+import 'package:mighty_delivery/user/screens/CreateOrderScreen.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 class OrderFragment extends StatefulWidget {
   static String tag = '/OrderFragment';
@@ -25,8 +28,14 @@ class OrderFragmentState extends State<OrderFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return  Center(
-      child: Text('Order'),
+    return Center(
+      child: AppButton(
+        child: Text('Create Order',style: TextStyle(color: Colors.white)),
+        color: colorPrimary,
+        onTap: () {
+          CreateOrderScreen().launch(context);
+        },
+      ),
     );
   }
 }

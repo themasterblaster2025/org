@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mighty.localdelivery.localdelivery_flutter">
+    package="com.mighty.delivery.mighty_local_delievery">
    <application
-        android:label="localdelivery_flutter"
+        android:label="mighty_local_delievery"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

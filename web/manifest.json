@@ -1,6 +1,6 @@
 {
-    "name": "localdelivery_flutter",
-    "short_name": "localdelivery_flutter",
+    "name": "mighty_local_delivery",
+    "short_name": "mighty_local_delivery",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

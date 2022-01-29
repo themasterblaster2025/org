@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:localdelivery_flutter/main/models/models.dart';
-import 'package:localdelivery_flutter/user/fragment/AccountFragment.dart';
-import 'package:localdelivery_flutter/user/fragment/HomeFragment.dart';
-import 'package:localdelivery_flutter/user/fragment/OrderFragment.dart';
-import 'package:localdelivery_flutter/user/screens/ChangePasswordScreen.dart';
-import 'package:localdelivery_flutter/user/screens/EditProfileScreen.dart';
+import 'package:mighty_delivery/main/models/models.dart';
+import 'package:mighty_delivery/user/fragment/AccountFragment.dart';
+import 'package:mighty_delivery/user/fragment/HomeFragment.dart';
+import 'package:mighty_delivery/user/fragment/OrderFragment.dart';
+import 'package:mighty_delivery/user/screens/ChangePasswordScreen.dart';
+import 'package:mighty_delivery/user/screens/EditProfileScreen.dart';
 
 List<WalkThroughItemModel> getWalkThroughItems(){
   List<WalkThroughItemModel> list = [];

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:localdelivery_flutter/main/models/models.dart';
-import 'package:localdelivery_flutter/main/utils/Colors.dart';
-import 'package:localdelivery_flutter/main/utils/Constants.dart';
-import 'package:localdelivery_flutter/main/utils/DataProviders.dart';
-import 'package:localdelivery_flutter/main/utils/Widgets.dart';
+import 'package:mighty_delivery/main/models/models.dart';
+import 'package:mighty_delivery/main/utils/Colors.dart';
+import 'package:mighty_delivery/main/utils/Constants.dart';
+import 'package:mighty_delivery/main/utils/DataProviders.dart';
+import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import 'LoginScreen.dart';

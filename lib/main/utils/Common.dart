@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localdelivery_flutter/main/utils/Colors.dart';
+import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 InputDecoration commonInputDecoration({String? hintText}) {

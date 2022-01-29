@@ -3,6 +3,8 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  nb_utils
+  url_launcher_linux
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

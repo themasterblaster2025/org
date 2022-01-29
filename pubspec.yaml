@@ -1,4 +1,4 @@
-name: localdelivery_flutter
+name: mighty_delivery
 description: A new Flutter project.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -27,6 +27,7 @@ flutter:
 
   assets:
     - assets/
+    - assets/icons/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

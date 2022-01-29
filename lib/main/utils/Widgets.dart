@@ -30,7 +30,7 @@ Widget customAppBarWidget(BuildContext context, String title, {bool isShowBack =
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         isShowBack
-            ? Icon(Icons.arrow_back_outlined,color: white).onTap(() {
+            ? Icon(Icons.arrow_back_outlined, color: white).onTap(() {
                 finish(context);
               })
             : SizedBox(),
@@ -44,7 +44,7 @@ Widget customAppBarWidget(BuildContext context, String title, {bool isShowBack =
 Widget containerWidget(BuildContext context, Widget? child) {
   return Container(
     margin: EdgeInsets.only(top: 80),
-    height: context.height() - 100,
+    height: context.height(),
     width: context.width(),
     decoration: boxDecorationWithRoundedCorners(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
     child: child,

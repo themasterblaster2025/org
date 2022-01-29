@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:localdelivery_flutter/main/models/models.dart';
-import 'package:localdelivery_flutter/main/utils/Colors.dart';
-import 'package:localdelivery_flutter/main/utils/DataProviders.dart';
+import 'package:mighty_delivery/main/models/models.dart';
+import 'package:mighty_delivery/main/utils/Colors.dart';
+import 'package:mighty_delivery/main/utils/DataProviders.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -67,20 +67,6 @@ class AccountFragmentState extends State<AccountFragment> {
             separatorBuilder: (context, index) {
               return Divider(indent: 50);
             },
-            /*children: [
-              settingWidget(Icons.person_outline, 'Edit Profile'),
-              Divider(indent: 50),
-              settingWidget(Icons.lock_outline, 'Change Password'),
-              Divider(indent: 50),
-              settingWidget(Icons.language, 'Language'),
-              Divider(indent: 50),
-              settingWidget(Icons.wb_sunny_outlined, 'DarkMode'),
-              Divider(indent: 50),
-              settingWidget(Icons.info_outline, 'About Us'),
-              Divider(indent: 50),
-              settingWidget(Icons.help_outline, 'Help & Support'),
-              Divider(indent: 50),
-            ],*/
           )
         ],
       ),

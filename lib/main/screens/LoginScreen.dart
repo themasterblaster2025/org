@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:localdelivery_flutter/user/screens/DashboardScreen.dart';
-import 'package:localdelivery_flutter/main/screens/RegisterScreen.dart';
-import 'package:localdelivery_flutter/main/utils/Colors.dart';
-import 'package:localdelivery_flutter/main/utils/Common.dart';
-import 'package:localdelivery_flutter/main/utils/Constants.dart';
-import 'package:localdelivery_flutter/main/utils/Widgets.dart';
+import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
+import 'package:mighty_delivery/main/screens/RegisterScreen.dart';
+import 'package:mighty_delivery/main/utils/Colors.dart';
+import 'package:mighty_delivery/main/utils/Common.dart';
+import 'package:mighty_delivery/main/utils/Constants.dart';
+import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -98,7 +98,7 @@ class LoginScreenState extends State<LoginScreen> {
                   16.height,
                   AppButton(
                     elevation: 0,
-                    shapeBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius), side: BorderSide(color: Colors.grey.withOpacity(0.5))),
+                    shapeBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius), side: BorderSide(color: borderColor)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

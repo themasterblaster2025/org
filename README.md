@@ -1,6 +1,6 @@
-# LocalDelivery_flutter
+# mighty_local_delivery
 
-LocalDelivery_flutter
+mighty_local_delivery
 
 ## Getting started
 
@@ -15,14 +15,14 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin https://gitlab.com/mobile-app23/on-demand-local-delivery-system/localdelivery_flutter.git
+git remote add origin https://gitlab.com/mobile-app23/on-demand-local-delivery-system/mighty_local_delivery.git
 git branch -M main
 git push -uf origin main
 ```
 
 ## Integrate with your tools
 
-- [ ] [Set up project integrations](https://gitlab.com/mobile-app23/on-demand-local-delivery-system/localdelivery_flutter/-/settings/integrations)
+- [ ] [Set up project integrations](https://gitlab.com/mobile-app23/on-demand-local-delivery-system/mighty_local_delivery/-/settings/integrations)
 
 ## Collaborate with your team
 
