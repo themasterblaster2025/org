@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mighty_delivery/main/screens/WalkThroughScreen.dart';
+import 'package:mighty_delivery/main/utils/Constants.dart';
+import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import '../../main.dart';
 import 'LoginScreen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -22,15 +25,15 @@ class SplashScreenState extends State<SplashScreen> {
     Future.delayed(
       Duration(seconds: 2),
       () {
-        /* if (appStore.isLoggedIn) {
+        if (appStore.isLoggedIn) {
           DashboardScreen().launch(context, isNewTask: true);
-        } else {*/
-       // if (getBoolAsync(IS_FIRST_TIME, defaultValue: true)) {
-          WalkThroughScreen().launch(context, isNewTask: true);
-      //  } else {
-       //   LoginScreen().launch(context, isNewTask: true);
-       // }
-        // }
+        } else {
+          if (getBoolAsync(IS_FIRST_TIME, defaultValue: true)) {
+            WalkThroughScreen().launch(context, isNewTask: true);
+          } else {
+            LoginScreen().launch(context, isNewTask: true);
+          }
+        }
       },
     );
   }

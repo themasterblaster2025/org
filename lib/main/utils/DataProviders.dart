@@ -37,6 +37,7 @@ List<SettingItemModel> getSettingItems(){
   list.add(SettingItemModel(icon: Icons.wb_sunny_outlined,title: 'DarkMode'));
   list.add(SettingItemModel(icon: Icons.info_outline,title: 'About Us'));
   list.add(SettingItemModel(icon: Icons.help_outline,title: 'Help & Support'));
+  list.add(SettingItemModel(icon: Icons.logout,title: 'Logout'));
   return list;
 }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mighty_delivery/main/models/models.dart';
+import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/DataProviders.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -57,6 +58,18 @@ class AccountFragmentState extends State<AccountFragment> {
                 onTap: () async {
                   if (index == 4 || index == 5) {
                     launch('https://www.google.com/');
+                  }
+                  if(index==6) {
+                    await showConfirmDialogCustom(
+                      context,
+                      primaryColor: colorPrimary,
+                      title:'Are you sure you want to logout ?',
+                      positiveText: 'Yes',
+                      negativeText: 'Cancel',
+                      onAccept: (c) {
+                        logout(context);
+                      },
+                    );
                   }
                   if (mData.widget != null) {
                     mData.widget.launch(context);

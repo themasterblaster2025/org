@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import 'main/screens/SplashScreen.dart';
+import 'main/store/AppStore.dart';
+
+AppStore appStore = AppStore();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initialize();
 
   defaultRadius = 16.0;
+  appStore.setLogin(getBoolAsync(IS_LOGGED_IN),isInitializing: true);
 
   runApp(const MyApp());
 }
