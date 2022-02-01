@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -123,4 +124,51 @@ Future<ChangePasswordResponseModel> changePassword(Map req) async {
 
 Future<ChangePasswordResponseModel> forgotPassword(Map req) async {
   return ChangePasswordResponseModel.fromJson(await handleResponse(await buildHttpResponse('forgot-password', request: req, method: HttpMethod.POST)));
+}
+
+Future<MultipartRequest> getMultiPartRequest(String endPoint, {String? baseUrl}) async {
+  String url = '${baseUrl ?? buildBaseUrl(endPoint).toString()}';
+  log(url);
+  return MultipartRequest('POST', Uri.parse(url));
+}
+
+Future sendMultiPartRequest(MultipartRequest multiPartRequest, {Function(dynamic)? onSuccess, Function(dynamic)? onError}) async {
+  multiPartRequest.headers.addAll(buildHeaderTokens());
+
+  await multiPartRequest.send().then((res) {
+    log(res.statusCode);
+    res.stream.transform(utf8.decoder).listen((value) {
+      log(value);
+      onSuccess?.call(jsonDecode(value));
+    });
+  }).catchError((error) {
+    onError?.call(error.toString());
+  });
+}
+
+/// Profile Update
+Future updateProfile({String? userName, String? name, String? userEmail, String? address, String? contactNumber, File? file}) async {
+  MultipartRequest multiPartRequest = await getMultiPartRequest('update-profile');
+  multiPartRequest.fields['username'] = userName.validate();
+  multiPartRequest.fields['email'] = userEmail ?? appStore.userEmail;
+  multiPartRequest.fields['name'] = name.validate();
+  multiPartRequest.fields['contact_number'] = contactNumber.validate();
+  multiPartRequest.fields['address'] = address.validate();
+
+  if (file != null) multiPartRequest.files.add(await MultipartFile.fromPath('profile_image', file.path));
+
+  await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
+    if (data != null) {
+      LoginResponse res = LoginResponse.fromJson(data);
+
+      await setValue(NAME, res.data!.name.validate());
+      await setValue(USER_PROFILE_PHOTO, res.data!.profile_photo_url.validate());
+      await setValue(USER_NAME, res.data!.username.validate());
+      await setValue(USER_ADDRESS, res.data!.address.validate());
+      await setValue(USER_CONTACT_NUMBER, res.data!.contact_number.validate());
+      await appStore.setUserEmail(res.data!.email.validate());
+    }
+  }, onError: (error) {
+    toast(error.toString());
+  });
 }

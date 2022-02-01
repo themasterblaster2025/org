@@ -32,8 +32,21 @@ class UserData {
   String? updated_at;
   String? user_type;
   String? username;
+  String? address;
 
-  UserData({this.api_token, this.contact_number, this.created_at, this.email, this.id, this.name, this.profile_photo_url, this.updated_at, this.user_type, this.username});
+  UserData({
+    this.api_token,
+    this.contact_number,
+    this.created_at,
+    this.email,
+    this.id,
+    this.name,
+    this.profile_photo_url,
+    this.updated_at,
+    this.user_type,
+    this.username,
+    this.address,
+  });
 
   factory UserData.fromJson(Map<String, dynamic> json) {
     return UserData(
@@ -47,6 +60,7 @@ class UserData {
       updated_at: json['updated_at'],
       user_type: json['user_type'],
       username: json['username'],
+      address: json['address'],
     );
   }
 
@@ -62,6 +76,7 @@ class UserData {
     data['updated_at'] = this.updated_at;
     data['user_type'] = this.user_type;
     data['username'] = this.username;
+    data['address'] = this.address;
     return data;
   }
 }

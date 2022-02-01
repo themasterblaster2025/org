@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
@@ -38,6 +39,10 @@ class EditProfileScreenState extends State<EditProfileScreen> {
 
   Future<void> init() async {
     emailController.text = getStringAsync(USER_EMAIL);
+    usernameController.text = getStringAsync(USER_NAME);
+    nameController.text = getStringAsync(NAME);
+    contactNumberController.text = getStringAsync(USER_CONTACT_NUMBER);
+    addressController.text = getStringAsync(USER_ADDRESS).validate();
   }
 
   Widget profileImage() {
@@ -58,6 +63,22 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     imageProfile = null;
     imageProfile = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 100);
     setState(() {});
+  }
+
+  Future<void> save() async {
+    await updateProfile(
+      file: File(imageProfile!.path.validate()),
+      name: nameController.text.validate(),
+      userName: usernameController.text.validate(),
+      userEmail: emailController.text.validate(),
+      address: addressController.text.validate(),
+      contactNumber: contactNumberController.text.validate(),
+    ).then((value) {
+      finish(context);
+      // snackBar(context,)
+    }).catchError((error) {
+      log(error);
+    });
   }
 
   @override
@@ -155,7 +176,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                   8.height,
                   AppTextField(
                     controller: addressController,
-                    textFieldType: TextFieldType.PHONE,
+                    textFieldType: TextFieldType.ADDRESS,
                     focus: addressFocus,
                     decoration: commonInputDecoration(),
                   ),
@@ -166,9 +187,8 @@ class EditProfileScreenState extends State<EditProfileScreen> {
         ],
       ),
       bottomNavigationBar: commonButton('Save Changes', () {
-        //
-      })
-          .paddingAll(16),
+        save();
+      }).paddingAll(16),
     );
   }
 }

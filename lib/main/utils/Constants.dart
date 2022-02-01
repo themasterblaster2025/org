@@ -19,6 +19,7 @@ const USER_PROFILE_PHOTO = 'USER_PROFILE_PHOTO';
 const USER_TYPE = 'USER_TYPE';
 const USER_NAME = 'USER_NAME';
 const USER_PASSWORD = 'USER_PASSWORD';
+const USER_ADDRESS = 'USER_ADDRESS';
 
 const CLIENT = 'client';
 const DELIVERY_MAN = 'delivery_man';
