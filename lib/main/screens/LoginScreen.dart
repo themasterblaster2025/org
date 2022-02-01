@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mighty_delivery/delivery/screens/DDashboardScreen.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
-import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
+import 'package:mighty_delivery/main/screens/ForgotPasswordScreen.dart';
 import 'package:mighty_delivery/main/screens/RegisterScreen.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
+import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
@@ -49,14 +50,10 @@ class LoginScreenState extends State<LoginScreen> {
 
       appStore.setLoading(true);
 
-      Map req = {
-        "email": emailController.text,
-        "password": passController.text
-      };
+      Map req = {"email": emailController.text, "password": passController.text};
 
       await logInApi(req).then((value) async {
         appStore.setLoading(false);
-
 
         DashboardScreen().launch(context, isNewTask: true);
 
@@ -116,9 +113,15 @@ class LoginScreenState extends State<LoginScreen> {
                           focus: passFocus,
                           decoration: commonInputDecoration(),
                         ),
-                        16.height,
-                        Align(alignment: Alignment.centerRight, child: Text('Forgot Password ?', style: primaryTextStyle(color: colorPrimary))),
-                        30.height,
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            child: Text('Forgot Password ?', style: primaryTextStyle(color: colorPrimary)),
+                            onPressed: () {
+                              ForgotPasswordScreen().launch(context);
+                            },
+                          ),
+                        ),
                         commonButton('Sign In', () {
                           LoginApiCall();
                         }, width: context.width()),

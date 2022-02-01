@@ -6,8 +6,8 @@ import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/user/fragment/AccountFragment.dart';
 import 'package:mighty_delivery/user/fragment/HomeFragment.dart';
 import 'package:mighty_delivery/user/fragment/OrderFragment.dart';
-import 'package:mighty_delivery/user/screens/ChangePasswordScreen.dart';
-import 'package:mighty_delivery/user/screens/EditProfileScreen.dart';
+import 'package:mighty_delivery/main/screens/ChangePasswordScreen.dart';
+import 'package:mighty_delivery/main/screens/EditProfileScreen.dart';
 
 List<String> weightList = ['Up to 1 kg','Up to 5 kg','Up to 10 kg','Up to 15 kg','Up to 20 kg'];
 List<String> packageList = ['Documents','Food','Cloth','Groceries','Cake','Flowers'];

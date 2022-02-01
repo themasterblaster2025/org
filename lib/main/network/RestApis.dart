@@ -2,15 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:mighty_delivery/main/models/ChangePasswordResponse.dart';
 import 'package:mighty_delivery/main/models/LoginResponse.dart';
 import 'package:mighty_delivery/main/screens/LoginScreen.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
-import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
 import 'NetworkUtils.dart';
-
 
 //region Auth
 Future<LoginResponse> signUpApi(Map request) async {
@@ -87,7 +86,7 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
     await setValue(USER_TYPE, loginResponse.data!.user_type.validate());
     await setValue(USER_NAME, loginResponse.data!.username.validate());
 
-   /* await appStore.setUserName(loginResponse.userData!.username.validate());
+    /* await appStore.setUserName(loginResponse.userData!.username.validate());
     await appStore.setRole(loginResponse.userData!.user_type.validate());
     await appStore.setToken(loginResponse.userData!.api_token.validate());
     await appStore.setUserID(loginResponse.userData!.id.validate());*/
@@ -118,3 +117,10 @@ Future<void> logout(BuildContext context) async {
   LoginScreen().launch(context, isNewTask: true);
 }
 
+Future<ChangePasswordResponseModel> changePassword(Map req) async {
+  return ChangePasswordResponseModel.fromJson(await handleResponse(await buildHttpResponse('change-password', request: req, method: HttpMethod.POST)));
+}
+
+Future<ChangePasswordResponseModel> forgotPassword(Map req) async {
+  return ChangePasswordResponseModel.fromJson(await handleResponse(await buildHttpResponse('forgot-password', request: req, method: HttpMethod.POST)));
+}
