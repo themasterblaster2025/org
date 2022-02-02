@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
@@ -50,12 +52,10 @@ class EditProfileScreenState extends State<EditProfileScreen> {
       return Image.file(File(imageProfile!.path), height: 100, width: 100, fit: BoxFit.cover, alignment: Alignment.center).cornerRadiusWithClipRRect(100).center();
     } else {
       if (getStringAsync(USER_PROFILE_PHOTO).isNotEmpty) {
-        return Image.network(getStringAsync(USER_PROFILE_PHOTO), fit: BoxFit.cover, height: 100, width: 100).cornerRadiusWithClipRRect(100).center();
+        return commonCachedNetworkImage(getStringAsync(USER_PROFILE_PHOTO).validate(), fit: BoxFit.cover, height: 100, width: 100).cornerRadiusWithClipRRect(100).center();
       } else {
-        return Image.asset('assets/profile.png', height: 90, width: 90).cornerRadiusWithClipRRect(50).paddingOnly(right: 4, bottom: 4);
+        return commonCachedNetworkImage('assets/profile.png', height: 90, width: 90).cornerRadiusWithClipRRect(50).paddingOnly(right: 4, bottom: 4).center();
       }
-
-      //return commonCachedNetworkImage(getStringAsync(USER_PHOTO_URL), fit: BoxFit.cover, height: 100, width: 100).cornerRadiusWithClipRRect(100).center();
     }
   }
 
@@ -66,8 +66,9 @@ class EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future<void> save() async {
+    appStore.setLoading(true);
     await updateProfile(
-      file: File(imageProfile!.path.validate()),
+      file: imageProfile != null ? File(imageProfile!.path.validate()) : null,
       name: nameController.text.validate(),
       userName: usernameController.text.validate(),
       userEmail: emailController.text.validate(),
@@ -75,9 +76,11 @@ class EditProfileScreenState extends State<EditProfileScreen> {
       contactNumber: contactNumberController.text.validate(),
     ).then((value) {
       finish(context);
-      // snackBar(context,)
+      appStore.setLoading(false);
+      snackBar(context, title: 'Profile update sucessfully');
     }).catchError((error) {
       log(error);
+      appStore.setLoading(false);
     });
   }
 
@@ -95,7 +98,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
           containerWidget(
             context,
             SingleChildScrollView(
-              padding: EdgeInsets.only(left: 16, top: 30, right: 16),
+              padding: EdgeInsets.only(left: 16, top: 30, right: 16,bottom: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -119,24 +122,13 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                       )
                     ],
                   ),
-                  /*Stack(
-                    alignment: AlignmentDirectional.bottomEnd,
-                    children: <Widget>[
-                      Image.asset('assets/profile.png', height: 90, width: 90).cornerRadiusWithClipRRect(50).paddingOnly(right: 4, bottom: 4),
-                      Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(color: colorPrimary, shape: BoxShape.circle),
-                        child: Icon(Icons.camera_alt_outlined, color: Colors.white),
-                      ),
-                    ],
-                  ).center(),*/
                   16.height,
                   Text('Email', style: primaryTextStyle()),
                   8.height,
                   AppTextField(
+                    readOnly: true,
                     controller: emailController,
-                    textFieldType: TextFieldType.NAME,
+                    textFieldType: TextFieldType.EMAIL,
                     focus: emailFocus,
                     nextFocus: usernameFocus,
                     decoration: commonInputDecoration(),
@@ -145,8 +137,9 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                   Text('Username', style: primaryTextStyle()),
                   8.height,
                   AppTextField(
+                    readOnly: true,
                     controller: usernameController,
-                    textFieldType: TextFieldType.PHONE,
+                    textFieldType: TextFieldType.USERNAME,
                     focus: usernameFocus,
                     nextFocus: nameFocus,
                     decoration: commonInputDecoration(),
@@ -156,7 +149,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                   8.height,
                   AppTextField(
                     controller: nameController,
-                    textFieldType: TextFieldType.PHONE,
+                    textFieldType: TextFieldType.NAME,
                     focus: nameFocus,
                     nextFocus: addressFocus,
                     decoration: commonInputDecoration(),
@@ -184,6 +177,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
               ),
             ),
           ),
+          Observer(builder: (_) => Loader().visible(appStore.isLoading))
         ],
       ),
       bottomNavigationBar: commonButton('Save Changes', () {

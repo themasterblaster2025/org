@@ -28,11 +28,12 @@ class UserData {
   String? email;
   int? id;
   String? name;
-  String? profile_photo_url;
+  String? profile_image;
   String? updated_at;
   String? user_type;
   String? username;
   String? address;
+  int? status;
 
   UserData({
     this.api_token,
@@ -41,11 +42,12 @@ class UserData {
     this.email,
     this.id,
     this.name,
-    this.profile_photo_url,
+    this.profile_image,
     this.updated_at,
     this.user_type,
     this.username,
     this.address,
+    this.status,
   });
 
   factory UserData.fromJson(Map<String, dynamic> json) {
@@ -56,11 +58,12 @@ class UserData {
       email: json['email'],
       id: json['id'],
       name: json['name'],
-      profile_photo_url: json['profile_photo_url'],
+      profile_image: json['profile_image'],
       updated_at: json['updated_at'],
       user_type: json['user_type'],
       username: json['username'],
       address: json['address'],
+      status: json['status'],
     );
   }
 
@@ -72,11 +75,12 @@ class UserData {
     data['email'] = this.email;
     data['id'] = this.id;
     data['name'] = this.name;
-    data['profile_photo_url'] = this.profile_photo_url;
+    data['profile_image'] = this.profile_image;
     data['updated_at'] = this.updated_at;
     data['user_type'] = this.user_type;
     data['username'] = this.username;
     data['address'] = this.address;
+    data['status'] = this.status;
     return data;
   }
 }

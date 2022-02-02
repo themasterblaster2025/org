@@ -50,14 +50,22 @@ class LoginScreenState extends State<LoginScreen> {
 
       appStore.setLoading(true);
 
-      Map req = {"email": emailController.text, "password": passController.text};
+      Map req = {
+        "email": emailController.text,
+        "password": passController.text,
+      };
 
       await logInApi(req).then((value) async {
         appStore.setLoading(false);
-
-        DashboardScreen().launch(context, isNewTask: true);
-
-        appStore.setLogin(true);
+        if (getStringAsync(USER_TYPE) == CLIENT) {
+          DashboardScreen().launch(context, isNewTask: true);
+        } else if (getStringAsync(USER_TYPE) == DELIVERY_MAN) {
+          if (getIntAsync(STATUS) == 1) {
+            DDashboardScreen().launch(context, isNewTask: true);
+          } else {
+            toast('You profile is under review. Wait some time or contact your administrator.');
+          }
+        }
       }).catchError((e) {
         appStore.setLoading(false);
 

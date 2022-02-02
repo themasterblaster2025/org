@@ -34,7 +34,7 @@ Future<LoginResponse> signUpApi(Map request) async {
     await setValue(USER_EMAIL, loginResponse.data!.email.validate());
     await setValue(USER_TOKEN, loginResponse.data!.api_token.validate());
     await setValue(USER_CONTACT_NUMBER, loginResponse.data!.contact_number.validate());
-    await setValue(USER_PROFILE_PHOTO, loginResponse.data!.profile_photo_url.validate());
+    await setValue(USER_PROFILE_PHOTO, loginResponse.data!.profile_image.validate());
     await setValue(USER_TYPE, loginResponse.data!.user_type.validate());
     await setValue(USER_NAME, loginResponse.data!.username.validate());
 
@@ -83,9 +83,10 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
     await setValue(USER_EMAIL, loginResponse.data!.email.validate());
     await setValue(USER_TOKEN, loginResponse.data!.api_token.validate());
     await setValue(USER_CONTACT_NUMBER, loginResponse.data!.contact_number.validate());
-    await setValue(USER_PROFILE_PHOTO, loginResponse.data!.profile_photo_url.validate());
+    await setValue(USER_PROFILE_PHOTO, loginResponse.data!.profile_image.validate());
     await setValue(USER_TYPE, loginResponse.data!.user_type.validate());
     await setValue(USER_NAME, loginResponse.data!.username.validate());
+    await setValue(STATUS, loginResponse.data!.status.validate());
 
     /* await appStore.setUserName(loginResponse.userData!.username.validate());
     await appStore.setRole(loginResponse.userData!.user_type.validate());
@@ -112,6 +113,8 @@ Future<void> logout(BuildContext context) async {
   await removeKey(USER_TYPE);
   await removeKey(USER_NAME);
   await removeKey(USER_PASSWORD);
+  await removeKey(USER_ADDRESS);
+  await removeKey(STATUS);
 
   await appStore.setLogin(false);
 
@@ -162,7 +165,7 @@ Future updateProfile({String? userName, String? name, String? userEmail, String?
       LoginResponse res = LoginResponse.fromJson(data);
 
       await setValue(NAME, res.data!.name.validate());
-      await setValue(USER_PROFILE_PHOTO, res.data!.profile_photo_url.validate());
+      await setValue(USER_PROFILE_PHOTO, res.data!.profile_image.validate());
       await setValue(USER_NAME, res.data!.username.validate());
       await setValue(USER_ADDRESS, res.data!.address.validate());
       await setValue(USER_CONTACT_NUMBER, res.data!.contact_number.validate());

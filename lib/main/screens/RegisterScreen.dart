@@ -54,22 +54,25 @@ class RegisterScreenState extends State<RegisterScreen> {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
 
-      if(selectedUserType==null) return toast('Please select Usertype');
+      if (selectedUserType == null) return toast('Please select Usertype');
 
       appStore.setLoading(true);
 
       Map req = {
-      "name" : nameController.text.trim(),
-      "username" : userNameController.text.trim(),
-      "email": emailController.text.trim(),
-      "password" : passController.text.validate(),
-      "user_type" : selectedUserType,
-      "contact_number" : phoneController.text.trim(),
+        "name": nameController.text.trim(),
+        "username": userNameController.text.trim(),
+        "email": emailController.text.trim(),
+        "password": passController.text.validate(),
+        "user_type": selectedUserType,
+        "contact_number": phoneController.text.trim(),
       };
       await signUpApi(req).then((value) async {
         appStore.setLoading(false);
-
+        if (getStringAsync(USER_TYPE) == CLIENT) {
           DashboardScreen().launch(context, isNewTask: true);
+        } else {
+          LoginScreen().launch(context);
+        }
       }).catchError((error) {
         appStore.setLoading(false);
         toast(error.toString());
@@ -165,7 +168,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                               title: Text('Client'),
                               onChanged: (String? value) {
                                 selectedUserType = value;
-                                setState(() { });
+                                setState(() {});
                               },
                             ).expand(),
                             RadioListTile(
@@ -175,7 +178,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                               title: Text('Delivery Boy'),
                               onChanged: (String? value) {
                                 selectedUserType = value;
-                                setState(() { });
+                                setState(() {});
                               },
                             ).expand(),
                           ],
@@ -191,7 +194,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                             Text('Already have an account?', style: primaryTextStyle()),
                             4.width,
                             Text('Sign In', style: boldTextStyle(color: colorPrimary)).onTap(() {
-                             finish(context);
+                              finish(context);
                             }),
                           ],
                         ),

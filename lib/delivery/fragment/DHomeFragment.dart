@@ -24,20 +24,18 @@ class DHomeFragmentState extends State<DHomeFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView.builder(
-        padding: EdgeInsets.all(16),
-        shrinkWrap: true,
-        itemCount: 10,
-        itemBuilder: (_, index) {
-          return OrderWidgetsScreen(
-            name: 'Accept',
-            onTap: () {
-              //
-            },
-          );
-        },
-      ),
+    return ListView.builder(
+      padding: EdgeInsets.all(16),
+      shrinkWrap: true,
+      itemCount: 10,
+      itemBuilder: (_, index) {
+        return OrderWidgetsScreen(
+          name: 'Accept',
+          onTap: () {
+            //
+          },
+        );
+      },
     );
   }
 }

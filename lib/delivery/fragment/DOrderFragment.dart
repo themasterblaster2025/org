@@ -26,20 +26,18 @@ class DOrderFragmentState extends State<DOrderFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView.builder(
-        padding: EdgeInsets.all(16),
-        shrinkWrap: true,
-        itemCount: 10,
-        itemBuilder: (_, index) {
-          return OrderWidgetsScreen(
-            name: 'Track',
-            onTap: () {
-              DeliveryDetailScreen().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
-            },
-          );
-        },
-      ),
+    return ListView.builder(
+      padding: EdgeInsets.all(16),
+      shrinkWrap: true,
+      itemCount: 10,
+      itemBuilder: (_, index) {
+        return OrderWidgetsScreen(
+          name: 'Track',
+          onTap: () {
+            DeliveryDetailScreen().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+          },
+        );
+      },
     );
   }
 }

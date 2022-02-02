@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mighty_delivery/delivery/screens/DDashboardScreen.dart';
 import 'package:mighty_delivery/main/screens/WalkThroughScreen.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
@@ -26,7 +27,11 @@ class SplashScreenState extends State<SplashScreen> {
       Duration(seconds: 2),
       () {
         if (appStore.isLoggedIn) {
-          DashboardScreen().launch(context, isNewTask: true);
+          if (getStringAsync(USER_TYPE) == CLIENT) {
+            DashboardScreen().launch(context, isNewTask: true);
+          } else {
+            DDashboardScreen().launch(context, isNewTask: true);
+          }
         } else {
           if (getBoolAsync(IS_FIRST_TIME, defaultValue: true)) {
             WalkThroughScreen().launch(context, isNewTask: true);
