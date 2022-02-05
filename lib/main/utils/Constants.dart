@@ -24,3 +24,9 @@ const STATUS = 'STATUS';
 
 const CLIENT = 'client';
 const DELIVERY_MAN = 'delivery_man';
+
+// OrderStatus
+const COURIER_ASSIGNED = 'courier_assigned';
+const COURIER_DEPARTED = 'courier_departed';
+const RESTORE = 'restore';
+const FORCE_DELETE = 'forcedelete';

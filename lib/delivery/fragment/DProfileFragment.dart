@@ -62,7 +62,7 @@ class DProfileFragmentState extends State<DProfileFragment> {
                     if (index == 4 || index == 5) {
                       launch('https://www.google.com/');
                     }
-                    if (index == 6) {
+                    if (index == 7) {
                       await showConfirmDialogCustom(
                         context,
                         primaryColor: colorPrimary,
@@ -75,7 +75,7 @@ class DProfileFragmentState extends State<DProfileFragment> {
                       );
                     }
                     if (mData.widget != null) {
-                      mData.widget.launch(context);
+                      mData.widget.launch(context,pageRouteAnimation: PageRouteAnimation.Slide);
                     }
                   },
                 );

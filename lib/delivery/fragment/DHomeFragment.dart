@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:mighty_delivery/delivery/components/OrderWidgetsScreen.dart';
+import 'package:mighty_delivery/delivery/screens/ReceivedScreenOrderScreen.dart';
 
 class DHomeFragment extends StatefulWidget {
   @override
@@ -32,7 +34,7 @@ class DHomeFragmentState extends State<DHomeFragment> {
         return OrderWidgetsScreen(
           name: 'Accept',
           onTap: () {
-            //
+            ReceivedScreenOrderScreen().launch(context,pageRouteAnimation: PageRouteAnimation.Slide);
           },
         );
       },

@@ -1,5 +1,6 @@
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:mighty_delivery/delivery/screens/ShortingListScreen.dart';
 import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/DataProviders.dart';
@@ -7,15 +8,15 @@ import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class DDashboardScreen extends StatefulWidget {
-
   @override
   DDashboardScreenState createState() => DDashboardScreenState();
 }
+
 class DDashboardScreenState extends State<DDashboardScreen> {
   List<BottomNavigationBarItemModel> BottomNavBarItems = getDeliveryNavBarItems();
   int currentIndex = 0;
 
- @override
+  @override
   void initState() {
     super.initState();
     init();
@@ -24,6 +25,7 @@ class DDashboardScreenState extends State<DDashboardScreen> {
   void init() async {
     //
   }
+
 
   @override
   void setState(fn) {
@@ -35,8 +37,23 @@ class DDashboardScreenState extends State<DDashboardScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          customAppBarWidget(context, '${BottomNavBarItems[currentIndex].title}'),
-          containerWidget(context,BottomNavBarItems[currentIndex].widget),
+          Stack(
+            alignment: Alignment.topRight,
+            children: [
+              customAppBarWidget(context, '${BottomNavBarItems[currentIndex].title}'),
+              Positioned(
+                top: 32,
+                right: 15,
+                child: IconButton(
+                  onPressed: () {
+                    ShortingListScreen().launch(context,pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+                  },
+                  icon: Icon(Icons.search, color: white),
+                ),
+              )
+            ],
+          ),
+          containerWidget(context, BottomNavBarItems[currentIndex].widget),
         ],
       ),
       bottomNavigationBar: BubbleBottomBar(

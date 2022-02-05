@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
@@ -84,6 +86,30 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     });
   }
 
+  Future<Position> determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error('Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    return await Geolocator.getCurrentPosition();
+  }
+
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
@@ -98,7 +124,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
           containerWidget(
             context,
             SingleChildScrollView(
-              padding: EdgeInsets.only(left: 16, top: 30, right: 16,bottom: 16),
+              padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -169,10 +195,26 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                   8.height,
                   AppTextField(
                     controller: addressController,
+                    readOnly: true,
                     textFieldType: TextFieldType.ADDRESS,
                     focus: addressFocus,
                     decoration: commonInputDecoration(),
+                    onTap: () async {
+                      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+                      List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+                      log('get location ${placemarks.map((e) {
+                        addressController.text = e.locality!;
+                        return e.locality;
+                      })}');
+                    },
                   ),
+                  AppButton(
+                    text: 'location',
+                    onTap: () async {
+                      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+                      log('get location ${position.speedAccuracy}');
+                    },
+                  )
                 ],
               ),
             ),

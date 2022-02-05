@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
+import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-InputDecoration commonInputDecoration({String? hintText,IconData? suffixIcon,Function()? suffixOnTap}) {
+InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, Function()? suffixOnTap}) {
   return InputDecoration(
     contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 16.0),
     filled: true,
@@ -11,7 +12,7 @@ InputDecoration commonInputDecoration({String? hintText,IconData? suffixIcon,Fun
     hintStyle: secondaryTextStyle(),
     fillColor: Colors.grey.withOpacity(0.15),
     counterText: '',
-    suffixIcon: suffixIcon!=null ? Icon(suffixIcon,color: Colors.grey).onTap(suffixOnTap) : null,
+    suffixIcon: suffixIcon != null ? Icon(suffixIcon, color: Colors.grey).onTap(suffixOnTap) : null,
     enabledBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.none), borderRadius: BorderRadius.circular(defaultRadius)),
     focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
     errorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(defaultRadius)),
@@ -20,14 +21,14 @@ InputDecoration commonInputDecoration({String? hintText,IconData? suffixIcon,Fun
 }
 
 Widget commonCachedNetworkImage(
-    String? url, {
-      double? height,
-      double? width,
-      BoxFit? fit,
-      AlignmentGeometry? alignment,
-      bool usePlaceholderIfUrlEmpty = true,
-      double? radius,
-    }) {
+  String? url, {
+  double? height,
+  double? width,
+  BoxFit? fit,
+  AlignmentGeometry? alignment,
+  bool usePlaceholderIfUrlEmpty = true,
+  double? radius,
+}) {
   if (url.validate().isEmpty) {
     return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
   } else if (url.validate().startsWith('http')) {
@@ -52,4 +53,17 @@ Widget commonCachedNetworkImage(
 
 Widget placeHolderWidget({double? height, double? width, BoxFit? fit, AlignmentGeometry? alignment, double? radius}) {
   return Image.asset('assets/placeholder.jpg', height: height, width: width, fit: fit ?? BoxFit.cover, alignment: alignment ?? Alignment.center).cornerRadiusWithClipRRect(radius ?? defaultRadius);
+}
+
+String? getOrderStatus(String orderStatus) {
+  if (orderStatus == COURIER_ASSIGNED) {
+    return 'Assigned';
+  } else if (orderStatus == COURIER_DEPARTED) {
+    return 'Departed';
+  } else if (orderStatus == RESTORE) {
+    return 'Restore';
+  } else if (orderStatus == FORCE_DELETE) {
+    return 'Delete';
+  }
+  return orderStatus;
 }
