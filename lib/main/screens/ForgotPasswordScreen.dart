@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mighty_delivery/main.dart';
+import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
+import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -57,11 +59,10 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          customAppBarWidget(context, 'Forgot Password', isShowBack: true),
-          containerWidget(
-            context,
+      appBar: appBarWidget('Forgot Password',color: colorPrimary,textColor: white,elevation: 0),
+      body: BodyCornerWidget(
+        child: Stack(
+          children: [
             Form(
               key: formKey,
               child: SingleChildScrollView(
@@ -80,9 +81,9 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 ),
               ),
             ),
-          ),
-          Observer(builder: (context) => Loader().visible(appStore.isLoading)),
-        ],
+            Observer(builder: (context) => Loader().visible(appStore.isLoading)),
+          ],
+        ),
       ),
       bottomNavigationBar: commonButton('Send password', () {
         submit();

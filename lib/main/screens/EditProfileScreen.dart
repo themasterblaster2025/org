@@ -6,6 +6,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mighty_delivery/main.dart';
+import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
@@ -118,11 +119,10 @@ class EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          customAppBarWidget(context, 'Edit Profile', isShowBack: true),
-          containerWidget(
-            context,
+      appBar: appBarWidget('Edit Profile',color: colorPrimary,textColor: white,elevation: 0),
+      body: BodyCornerWidget(
+        child: Stack(
+          children: [
             SingleChildScrollView(
               padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
               child: Column(
@@ -218,9 +218,9 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                 ],
               ),
             ),
-          ),
-          Observer(builder: (_) => Loader().visible(appStore.isLoading))
-        ],
+            Observer(builder: (_) => Loader().visible(appStore.isLoading))
+          ],
+        ),
       ),
       bottomNavigationBar: commonButton('Save Changes', () {
         save();

@@ -50,7 +50,7 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
             },
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
-          ).paddingOnly(top: 8, right: 8),
+          ).paddingOnly(top: 16, right: 16),
         ],
       ),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
+import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -65,52 +66,49 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: appBarWidget('Change Password',color: colorPrimary,textColor: white,elevation: 0),
       body: Stack(
         children: [
-          customAppBarWidget(context, 'Change Password', isShowBack: true),
-          containerWidget(
-            context,
-            Form(
-              key: formKey,
-              child: SingleChildScrollView(
-                padding: EdgeInsets.only(left: 16, top: 30, right: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Old Password', style: primaryTextStyle()),
-                    8.height,
-                    AppTextField(
-                      controller: oldPassController,
-                      textFieldType: TextFieldType.PASSWORD,
-                      focus: oldPassFocus,
-                      nextFocus: newPassFocus,
-                      decoration: commonInputDecoration(),
-                    ),
-                    16.height,
-                    Text('New Password', style: primaryTextStyle()),
-                    8.height,
-                    AppTextField(
-                      controller: newPassController,
-                      textFieldType: TextFieldType.PASSWORD,
-                      focus: newPassFocus,
-                      nextFocus: confirmPassFocus,
-                      decoration: commonInputDecoration(),
-                    ),
-                    16.height,
-                    Text('Confirm Password', style: primaryTextStyle()),
-                    8.height,
-                    AppTextField(
-                      controller: confirmPassController,
-                      textFieldType: TextFieldType.PASSWORD,
-                      focus: confirmPassFocus,
-                      decoration: commonInputDecoration(),
-                      validator: (val) {
-                        if (val!.isEmpty) return 'This Field is required';
-                        if (val != newPassController.text) return 'Confirm Password not match';
-                      },
-                    ),
-                  ],
-                ),
+          Form(
+            key: formKey,
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(left: 16, top: 30, right: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Old Password', style: primaryTextStyle()),
+                  8.height,
+                  AppTextField(
+                    controller: oldPassController,
+                    textFieldType: TextFieldType.PASSWORD,
+                    focus: oldPassFocus,
+                    nextFocus: newPassFocus,
+                    decoration: commonInputDecoration(),
+                  ),
+                  16.height,
+                  Text('New Password', style: primaryTextStyle()),
+                  8.height,
+                  AppTextField(
+                    controller: newPassController,
+                    textFieldType: TextFieldType.PASSWORD,
+                    focus: newPassFocus,
+                    nextFocus: confirmPassFocus,
+                    decoration: commonInputDecoration(),
+                  ),
+                  16.height,
+                  Text('Confirm Password', style: primaryTextStyle()),
+                  8.height,
+                  AppTextField(
+                    controller: confirmPassController,
+                    textFieldType: TextFieldType.PASSWORD,
+                    focus: confirmPassFocus,
+                    decoration: commonInputDecoration(),
+                    validator: (val) {
+                      if (val!.isEmpty) return 'This Field is required';
+                      if (val != newPassController.text) return 'Confirm Password not match';
+                    },
+                  ),
+                ],
               ),
             ),
           ),
