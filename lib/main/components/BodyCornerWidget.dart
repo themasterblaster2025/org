@@ -18,8 +18,8 @@ class BodyCornerWidget extends StatelessWidget {
         width: context.width(),
         child: child,
       ).cornerRadiusWithClipRRectOnly(
-        topRight: 24,
-        topLeft: 24,
+        topRight: 30,
+        topLeft: 30,
       ),
     );
   }

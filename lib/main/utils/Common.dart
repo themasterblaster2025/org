@@ -8,7 +8,7 @@ import 'package:nb_utils/nb_utils.dart';
 
 InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, Function()? suffixOnTap}) {
   return InputDecoration(
-    contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 16.0),
+    contentPadding: EdgeInsets.all(12),
     filled: true,
     hintText: hintText != null ? hintText : '',
     hintStyle: secondaryTextStyle(),
