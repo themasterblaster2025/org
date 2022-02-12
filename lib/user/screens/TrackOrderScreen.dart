@@ -30,7 +30,7 @@ class TrackOrderScreenState extends State<TrackOrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget('Track Order',color: colorPrimary,textColor: white,elevation: 0),
+      appBar: appBarWidget('Track Order', color: colorPrimary, textColor: white, elevation: 0),
       body: BodyCornerWidget(
         child: ListView(
           padding: EdgeInsets.all(16),
@@ -55,9 +55,9 @@ class TrackOrderScreenState extends State<TrackOrderScreen> {
               endChild: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Order Placed',style: boldTextStyle()),
+                  Text('Order Placed', style: boldTextStyle()),
                   8.height,
-                  Text('12 may 2020, 08:00 AM',style: secondaryTextStyle()),
+                  Text('12 may 2020, 08:00 AM', style: secondaryTextStyle()),
                 ],
               ).paddingAll(24),
             );

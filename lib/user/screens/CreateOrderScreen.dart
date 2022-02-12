@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
-import 'package:mighty_delivery/user/components/SearchAddressWidget.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/DataProviders.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
+import 'package:mighty_delivery/user/components/SearchAddressWidget.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class CreateOrderScreen extends StatefulWidget {
@@ -196,7 +196,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       context: context,
                       initialTime: TimeOfDay.now(),
                     );
-                    pickFromTimeCont.text = '${picked!.hour}:${picked.minute}';
+                    if (pickFromTimeCont.text.isNotEmpty) pickFromTimeCont.text = '${picked!.hour}:${picked.minute}';
                   },
                 ).expand(),
                 16.width,
@@ -211,7 +211,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       context: context,
                       initialTime: TimeOfDay.now(),
                     );
-                    pickToTimeCont.text = '${picked!.hour}:${picked.minute}';
+                    if (pickToTimeCont.text.isNotEmpty) pickToTimeCont.text = '${picked!.hour}:${picked.minute}';
                   },
                 ).expand(),
               ],
@@ -294,7 +294,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       context: context,
                       initialTime: TimeOfDay.now(),
                     );
-                    deliverFromTimeCont.text = '${picked!.hour}:${picked.minute}';
+                    if (deliverFromTimeCont.text.isNotEmpty) deliverFromTimeCont.text = '${picked!.hour}:${picked.minute}';
                   },
                 ).expand(),
                 16.width,
@@ -309,7 +309,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       context: context,
                       initialTime: TimeOfDay.now(),
                     );
-                    deliverToTimeCont.text = '${picked!.hour}:${picked.minute}';
+                    if (deliverToTimeCont.text.isNotEmpty) deliverToTimeCont.text = '${picked!.hour}:${picked.minute}';
                   },
                 ).expand(),
               ],
@@ -496,13 +496,20 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        DateTime now = DateTime.now();
+        if (selectedIndex == 0) {
+          return true;
+        } else {
+          selectedIndex--;
+          setState(() {});
+          return false;
+        }
+        /*  DateTime now = DateTime.now();
         if (currentBackPressTime == null || now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
           currentBackPressTime = now;
           toast('Tap back again to leave Screen');
           return false;
         }
-        return true;
+        return true;*/
       },
       child: Scaffold(
         appBar: appBarWidget('Create Order', color: colorPrimary, textColor: white, elevation: 0),

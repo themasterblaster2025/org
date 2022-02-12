@@ -1,13 +1,10 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
-import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/user/components/LocationChangeDialog.dart';
 import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
-import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/DataProviders.dart';
-import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:mighty_delivery/user/screens/CreateOrderScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
