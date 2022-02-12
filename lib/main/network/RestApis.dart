@@ -37,6 +37,7 @@ Future<LoginResponse> signUpApi(Map request) async {
     await setValue(USER_PROFILE_PHOTO, loginResponse.data!.profile_image.validate());
     await setValue(USER_TYPE, loginResponse.data!.user_type.validate());
     await setValue(USER_NAME, loginResponse.data!.username.validate());
+    await setValue(USER_ADDRESS, loginResponse.data!.address.validate());
 
     await appStore.setUserEmail(loginResponse.data!.email.validate());
     await appStore.setLogin(true);
@@ -87,6 +88,7 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
     await setValue(USER_TYPE, loginResponse.data!.user_type.validate());
     await setValue(USER_NAME, loginResponse.data!.username.validate());
     await setValue(STATUS, loginResponse.data!.status.validate());
+    await setValue(USER_ADDRESS, loginResponse.data!.address.validate());
 
     /* await appStore.setUserName(loginResponse.userData!.username.validate());
     await appStore.setRole(loginResponse.userData!.user_type.validate());

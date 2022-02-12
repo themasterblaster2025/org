@@ -36,10 +36,22 @@ class NewOrderWidgetState extends State<NewOrderWidget> {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           decoration: boxDecorationDefault(),
           child: Column(
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('#1457894578', style: boldTextStyle(size: 14)),
+                  Container(
+                    padding: EdgeInsets.all(4),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(defaultRadius),color: colorPrimary),
+                    child: Text('Order Assign',style: boldTextStyle(size: 14,color: white)),
+                  ),
+                ],
+              ),
+              16.height,
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,71 +72,81 @@ class NewOrderWidgetState extends State<NewOrderWidget> {
                       Icon(Icons.credit_card, color: colorPrimary)
                     ],
                   ).expand(),
-                  16.width,
-                  Container(height: 200, width: 1, color: grey),
-                  16.width,
+                  8.width,
+                  Container(height: 230, width: 1, color: grey),
+                  8.width,
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Box with clothes', style: boldTextStyle(), maxLines: 2),
-                      16.height,
+                      8.height,
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Container(height: 10, width: 10, padding: EdgeInsets.zero, decoration: BoxDecoration(shape: BoxShape.circle, color: colorPrimary)),
+                          Icon(Icons.location_on_outlined, color: colorPrimary, size: 18),
                           8.width,
-                          Text('Amit data near raj Cinema, navsari, 3960014 ,Gujarat, india').expand()
-                        ],
-                      ),
-                      16.height,
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(height: 10, width: 10, padding: EdgeInsets.zero, decoration: BoxDecoration(shape: BoxShape.circle, color: colorPrimary)),
-                          8.width,
-                          Text('Amit data near raj Cinema, navsari, 3960014 ,Gujarat, india').expand()
-                        ],
-                      ),
-                      16.height,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Date', style: secondaryTextStyle()),
+                              Text('-: Picked :-', style: secondaryTextStyle(color: colorPrimary)),
                               8.height,
-                              Text('19.01.19', style: primaryTextStyle(size: 14)),
+                              Text('Amit data near raj Cinema, navsari, 3960014 ,Gujarat, india', style: primaryTextStyle(size: 15), maxLines: 3),
+                            ],
+                          ).expand()
+                        ],
+                      ),
+                      16.height,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Icon(Icons.location_on_outlined, color: colorPrimary, size: 18),
+                          8.width,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('-: Delivered :-', style: secondaryTextStyle(color: colorPrimary)),
+                              8.height,
+                              Text('Raj Cinema,near road, navsari, 3960014 ,Gujarat, india', style: primaryTextStyle(size: 15), maxLines: 3),
+                            ],
+                          ).expand()
+                        ],
+                      ),
+                      8.height,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(Icons.schedule_outlined, color: colorPrimary, size: 18),
+                          8.width,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('-: Date Time :-', style: secondaryTextStyle(color: colorPrimary)),
+                              8.height,
+                              Text('19.01.19 AM', style: primaryTextStyle(size: 14)),
                             ],
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Time', style: secondaryTextStyle()),
-                              8.height,
-                              Text('11:15 AM', style: primaryTextStyle(size: 14)),
-                            ],
-                          )
                         ],
-                      ).paddingOnly(left: 8, right: 8)
+                      ),
                     ],
                   ).expand(flex: 3)
                 ],
               ),
-              16.height,
+              8.height,
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   AppButton(
+                    padding: EdgeInsets.zero,
                     text: widget.name!,
                     color: colorPrimary,
                     textStyle: primaryTextStyle(color: white),
-                    width: context.width(),
+                    width: 150,
                     onTap: widget.onTap,
-                  ).expand(flex: 6),
-                  16.width,
+                  ),
                   IconButton(
                     onPressed: () {
                       showModalBottomSheet(
@@ -138,7 +160,7 @@ class NewOrderWidgetState extends State<NewOrderWidget> {
                       );
                     },
                     icon: Icon(Icons.arrow_circle_down_outlined, color: colorPrimary),
-                  ).expand()
+                  )
                 ],
               )
             ],

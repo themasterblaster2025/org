@@ -62,7 +62,7 @@ class DProfileFragmentState extends State<DProfileFragment> {
                     if (index == 4 || index == 5) {
                       launch('https://www.google.com/');
                     }
-                    if (index == 7) {
+                    if (index == 8) {
                       await showConfirmDialogCustom(
                         context,
                         primaryColor: colorPrimary,

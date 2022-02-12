@@ -1,10 +1,9 @@
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/delivery/screens/ShortingListScreen.dart';
+import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/DataProviders.dart';
-import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class DDashboardScreen extends StatefulWidget {
@@ -26,7 +25,6 @@ class DDashboardScreenState extends State<DDashboardScreen> {
     //
   }
 
-
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
@@ -35,13 +33,29 @@ class DDashboardScreenState extends State<DDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
+      appBar: appBarWidget(
+        '${BottomNavBarItems[currentIndex].title}',
+        color: colorPrimary,
+        textColor: white,
+        elevation: 0,
+        showBack: false,
+      ),
+      body: BodyCornerWidget(
+        child: Container(child: BottomNavBarItems[currentIndex].widget),
+      ),
+      /*Stack(
         children: [
           Stack(
             alignment: Alignment.topRight,
             children: [
-              customAppBarWidget(context, '${BottomNavBarItems[currentIndex].title}'),
-              Positioned(
+              appBarWidget(
+                '${BottomNavBarItems[currentIndex].title}',
+                color: colorPrimary,
+                textColor: white,
+                elevation: 0,
+                showBack: false,
+              ),
+              */ /*Positioned(
                 top: 32,
                 right: 15,
                 child: IconButton(
@@ -50,12 +64,12 @@ class DDashboardScreenState extends State<DDashboardScreen> {
                   },
                   icon: Icon(Icons.search, color: white),
                 ),
-              )
+              )*/ /*
             ],
           ),
           containerWidget(context, BottomNavBarItems[currentIndex].widget),
         ],
-      ),
+      )*/
       bottomNavigationBar: BubbleBottomBar(
         opacity: 0.2,
         currentIndex: currentIndex,

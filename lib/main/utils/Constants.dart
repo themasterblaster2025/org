@@ -1,6 +1,7 @@
 const mAppName = 'On Demand Local Delivery';
 
 const mBaseUrl = 'http://192.168.1.230/meetmighty/local-delivery-laravel/api/';
+const googleMapAPIKey = 'AIzaSyBAm_XYdWpfE2U_aLkMFGcG9H5wk1yY4yY';
 
 // font size
 const headingSize = 24;

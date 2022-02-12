@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mighty_delivery/delivery/screens/CitySelectScreen.dart';
 import 'package:mighty_delivery/delivery/screens/DDashboardScreen.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/screens/ForgotPasswordScreen.dart';
@@ -61,7 +62,8 @@ class LoginScreenState extends State<LoginScreen> {
           DashboardScreen().launch(context, isNewTask: true);
         } else if (getStringAsync(USER_TYPE) == DELIVERY_MAN) {
           if (getIntAsync(STATUS) == 1) {
-            DDashboardScreen().launch(context, isNewTask: true);
+            CitySelectScreen(isBack: false).launch(context,isNewTask: true);
+            //DDashboardScreen().launch(context, isNewTask: true);
           } else {
             toast('You profile is under review. Wait some time or contact your administrator.');
           }
@@ -156,7 +158,7 @@ class LoginScreenState extends State<LoginScreen> {
                             ],
                           ),
                           onTap: () {
-                            DDashboardScreen().launch(context);
+                           //
                           },
                         ),
                         16.height,
