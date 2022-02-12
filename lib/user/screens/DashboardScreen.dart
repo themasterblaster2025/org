@@ -2,7 +2,7 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:bubble_bottom_bar/bubble_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
-import 'package:mighty_delivery/main/components/LocationChangeDialog.dart';
+import 'package:mighty_delivery/user/components/LocationChangeDialog.dart';
 import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
@@ -29,7 +29,7 @@ class DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> init() async {
-    checkPermission();
+    //
   }
 
   @override
@@ -73,26 +73,6 @@ class DashboardScreenState extends State<DashboardScreen> {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      /*  bottomNavigationBar:BubbleBottomBar(
-        opacity: 0.2,
-        currentIndex: currentIndex,
-        onTap: (value) {
-          currentIndex = value!;
-          setState(() {});
-        },
-        borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius)),
-        elevation: 8,
-        hasNotch: true,
-        inkColor: Colors.black12,
-        items: BottomNavBarItems.map((item) {
-          return BubbleBottomBarItem(
-            backgroundColor: colorPrimary,
-            icon: Icon(item.icon, color: Colors.grey),
-            activeIcon: Icon(item.icon, color: colorPrimary),
-            title: Text(item.title!),
-          );
-        }).toList(),
-      )*/
       bottomNavigationBar: Container(
         color: Colors.white,
         child: AnimatedBottomNavigationBar(

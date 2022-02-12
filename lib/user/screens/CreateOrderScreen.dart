@@ -1,11 +1,18 @@
-import 'package:date_time_picker/date_time_picker.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:google_api_headers/google_api_headers.dart';
+import 'package:google_maps_webservice/places.dart';
 import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
+import 'package:mighty_delivery/user/components/SearchAddressWidget.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
+import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/main/utils/DataProviders.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
+import 'package:mighty_delivery/user/screens/ConfirmOrderScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class CreateOrderScreen extends StatefulWidget {
@@ -20,29 +27,25 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   TextEditingController pickAddressCont = TextEditingController();
   TextEditingController pickPhoneCont = TextEditingController();
-  TextEditingController pickDateTimeCont = TextEditingController();
+  TextEditingController pickDateCont = TextEditingController();
+  TextEditingController pickFromTimeCont = TextEditingController();
+  TextEditingController pickToTimeCont = TextEditingController();
   TextEditingController pickDesCont = TextEditingController();
+
   TextEditingController deliverAddressCont = TextEditingController();
   TextEditingController deliverPhoneCont = TextEditingController();
-  TextEditingController deliverDateTimeCont = TextEditingController();
+  TextEditingController deliverDateCont = TextEditingController();
+  TextEditingController deliverFromTimeCont = TextEditingController();
+  TextEditingController deliverToTimeCont = TextEditingController();
   TextEditingController deliverDesCont = TextEditingController();
-
-  FocusNode pickAddressFocus = FocusNode();
-  FocusNode pickPhoneFocus = FocusNode();
-  FocusNode pickDateTimeFocus = FocusNode();
-  FocusNode pickDesFocus = FocusNode();
-  FocusNode deliverAddressFocus = FocusNode();
-  FocusNode deliverPhoneFocus = FocusNode();
-  FocusNode deliverDateTimeFocus = FocusNode();
-  FocusNode deliverDesFocus = FocusNode();
 
   int selectedIndex = 0;
   int? selectedPaymentIndex;
   bool isDeliverNow = true;
   bool isCashPayment = true;
   int selectedWeightIndex = 0;
-  List<DateTime> daysList = getDaysList();
-  DateTime? selectedDate;
+
+  DateTime? currentBackPressTime;
 
   @override
   void initState() {
@@ -51,7 +54,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   }
 
   Future<void> init() async {
-    selectedDate = daysList[0];
+    //
   }
 
   @override
@@ -59,369 +62,498 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     if (mounted) super.setState(fn);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBarWidget('Create Order',color: colorPrimary,textColor: white,elevation: 0),
-      body: BodyCornerWidget(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.only(left: 16, top: 30, right: 16),
+  Widget CreateOrderWidget1() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            scheduleOptionWidget(isDeliverNow, 'assets/icons/ic_clock.png', 'Deliver Now').onTap(() {
+              isDeliverNow = true;
+              setState(() {});
+            }).expand(),
+            16.width,
+            scheduleOptionWidget(!isDeliverNow, 'assets/icons/ic_schedule.png', 'Schedule').onTap(() {
+              isDeliverNow = false;
+              setState(() {});
+            }).expand(),
+          ],
+        ),
+        16.height,
+        Text('Weight', style: boldTextStyle()),
+        8.height,
+        Wrap(
+          spacing: 16,
+          runSpacing: 16,
+          children: weightList.map((item) {
+            int index = weightList.indexOf(item);
+            return Chip(
+              backgroundColor: selectedWeightIndex == index ? colorPrimary : Colors.white,
+              label: Text(item),
+              elevation: 0,
+              labelStyle: primaryTextStyle(color: selectedWeightIndex == index ? white : Colors.grey),
+              padding: EdgeInsets.zero,
+              labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(defaultRadius),
+                side: BorderSide(color: selectedWeightIndex == index ? colorPrimary : borderColor),
+              ),
+            ).onTap(() {
+              selectedWeightIndex = index;
+              setState(() {});
+            });
+          }).toList(),
+        ),
+        16.height,
+        Text('What you are Sending?', style: boldTextStyle()),
+        8.height,
+        AppTextField(
+          controller: packageController,
+          textFieldType: TextFieldType.OTHER,
+          decoration: commonInputDecoration(),
+        ),
+        16.height,
+        Wrap(
+          spacing: 16,
+          runSpacing: 16,
+          children: packageList.map((item) {
+            int index = packageList.indexOf(item);
+            return Chip(
+              backgroundColor: Colors.white,
+              label: Text(item),
+              elevation: 0,
+              labelStyle: primaryTextStyle(color: Colors.grey),
+              padding: EdgeInsets.zero,
+              labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(defaultRadius),
+                side: BorderSide(color: borderColor),
+              ),
+            ).onTap(() {
+              packageController.text = item;
+              setState(() {});
+            });
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget CreateOrderWidget2() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Pickup Information', style: boldTextStyle()),
+        16.height,
+        Text('Address', style: primaryTextStyle()),
+        8.height,
+        AppTextField(
+          controller: pickAddressCont,
+          textInputAction: TextInputAction.next,
+          readOnly: true,
+          textFieldType: TextFieldType.ADDRESS,
+          decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+          onTap: () async {
+            String? data = await SearchAddressWidget().launch(context);
+            if (data != null && data.isNotEmpty) {
+              pickAddressCont.text = data;
+            }
+          },
+        ),
+        16.height,
+        Text('Contact Number', style: primaryTextStyle()),
+        8.height,
+        AppTextField(
+          controller: pickPhoneCont,
+          textFieldType: TextFieldType.PHONE,
+          decoration: commonInputDecoration(suffixIcon: Icons.phone),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            16.height,
+            Text('Depart Time', style: primaryTextStyle()),
+            8.height,
+            AppTextField(
+              textFieldType: TextFieldType.OTHER,
+              controller: pickDateCont,
+              readOnly: true,
+              decoration: commonInputDecoration(suffixIcon: Icons.calendar_today),
+              onTap: () async {
+                DateTime? picked = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2015, 8), lastDate: DateTime(2101));
+                if (picked != null)
+                  setState(() {
+                    pickDateCont.text = DateFormat('dd/MM/yyyy').format(picked);
+                  });
+              },
+            ),
+            16.height,
+            Row(
+              children: [
+                Text('From', style: primaryTextStyle()),
+                8.width,
+                AppTextField(
+                  textFieldType: TextFieldType.OTHER,
+                  controller: pickFromTimeCont,
+                  decoration: commonInputDecoration(suffixIcon: Icons.access_time),
+                  onTap: () async {
+                    final TimeOfDay? picked = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    );
+                    pickFromTimeCont.text = '${picked!.hour}:${picked.minute}';
+                  },
+                ).expand(),
+                16.width,
+                Text('To', style: primaryTextStyle()),
+                8.width,
+                AppTextField(
+                  textFieldType: TextFieldType.OTHER,
+                  controller: pickToTimeCont,
+                  decoration: commonInputDecoration(suffixIcon: Icons.access_time),
+                  onTap: () async {
+                    final TimeOfDay? picked = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    );
+                    pickToTimeCont.text = '${picked!.hour}:${picked.minute}';
+                  },
+                ).expand(),
+              ],
+            ),
+          ],
+        ).visible(!isDeliverNow),
+        16.height,
+        Text('Description', style: primaryTextStyle()),
+        8.height,
+        AppTextField(
+          controller: pickDesCont,
+          textFieldType: TextFieldType.OTHER,
+          decoration: commonInputDecoration(suffixIcon: Icons.notes),
+          maxLines: 3,
+          minLines: 3,
+        ),
+      ],
+    );
+  }
+
+  Widget CreateOrderWidget3() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Delivery Information', style: boldTextStyle()),
+        16.height,
+        Text('Address', style: primaryTextStyle()),
+        8.height,
+        AppTextField(
+          controller: deliverAddressCont,
+          textInputAction: TextInputAction.next,
+          readOnly: true,
+          textFieldType: TextFieldType.ADDRESS,
+          decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+          onTap: () async {
+            String? data = await SearchAddressWidget().launch(context);
+            if (data != null && data.isNotEmpty) {
+              deliverAddressCont.text = data;
+            }
+          },
+        ),
+        16.height,
+        Text('Contact Number', style: primaryTextStyle()),
+        8.height,
+        AppTextField(
+          controller: deliverPhoneCont,
+          textFieldType: TextFieldType.PHONE,
+          decoration: commonInputDecoration(suffixIcon: Icons.phone),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            16.height,
+            Text('Deliver Time', style: primaryTextStyle()),
+            8.height,
+            AppTextField(
+              textFieldType: TextFieldType.OTHER,
+              controller: deliverDateCont,
+              readOnly: true,
+              decoration: commonInputDecoration(suffixIcon: Icons.calendar_today),
+              onTap: () async {
+                DateTime? picked = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2015, 8), lastDate: DateTime(2101));
+                if (picked != null)
+                  setState(() {
+                    deliverDateCont.text = DateFormat('dd/MM/yyyy').format(picked);
+                  });
+              },
+            ),
+            16.height,
+            Row(
+              children: [
+                Text('From', style: primaryTextStyle()),
+                8.width,
+                AppTextField(
+                  textFieldType: TextFieldType.OTHER,
+                  controller: deliverFromTimeCont,
+                  decoration: commonInputDecoration(suffixIcon: Icons.access_time),
+                  onTap: () async {
+                    final TimeOfDay? picked = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    );
+                    deliverFromTimeCont.text = '${picked!.hour}:${picked.minute}';
+                  },
+                ).expand(),
+                16.width,
+                Text('To', style: primaryTextStyle()),
+                8.width,
+                AppTextField(
+                  textFieldType: TextFieldType.OTHER,
+                  controller: deliverToTimeCont,
+                  decoration: commonInputDecoration(suffixIcon: Icons.access_time),
+                  onTap: () async {
+                    final TimeOfDay? picked = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
+                    );
+                    deliverToTimeCont.text = '${picked!.hour}:${picked.minute}';
+                  },
+                ).expand(),
+              ],
+            ),
+          ],
+        ).visible(!isDeliverNow),
+        16.height,
+        Text('Description', style: primaryTextStyle()),
+        8.height,
+        AppTextField(
+          controller: deliverDesCont,
+          textFieldType: TextFieldType.OTHER,
+          decoration: commonInputDecoration(suffixIcon: Icons.notes),
+          maxLines: 3,
+          minLines: 3,
+        ),
+      ],
+    );
+  }
+
+  Widget CreateOrderWidget4() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Package Information', style: boldTextStyle()),
+        8.height,
+        Container(
+          padding: EdgeInsets.all(16),
+          decoration: boxDecorationWithRoundedCorners(
+            borderRadius: BorderRadius.circular(defaultRadius),
+            border: Border.all(color: borderColor),
+            backgroundColor: Colors.transparent,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: List.generate(4, (index) {
-                  return Container(
-                    color: selectedIndex >= index ? colorPrimary : borderColor,
-                    height: 5,
-                    width: context.width() * 0.15,
-                  );
-                }).toList(),
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Parcel Type', style: primaryTextStyle()),
+                  16.width,
+                  Text('Documents', style: primaryTextStyle()),
+                ],
               ),
-              30.height,
-              if (selectedIndex == 0)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        scheduleOptionWidget(isDeliverNow, 'assets/icons/ic_clock.png', 'Deliver Now').onTap(() {
-                          isDeliverNow = true;
-                          setState(() {});
-                        }).expand(),
-                        16.width,
-                        scheduleOptionWidget(!isDeliverNow, 'assets/icons/ic_schedule.png', 'Schedule').onTap(() {
-                          isDeliverNow = false;
-                          setState(() {});
-                        }).expand(),
-                      ],
-                    ),
-                    16.height,
-                    Text('Weight', style: boldTextStyle()),
-                    8.height,
-                    Wrap(
-                      spacing: 16,
-                      runSpacing: 16,
-                      children: weightList.map((item) {
-                        int index = weightList.indexOf(item);
-                        return Chip(
-                          backgroundColor: selectedWeightIndex == index ? colorPrimary : Colors.white,
-                          label: Text(item),
-                          elevation: 0,
-                          labelStyle: primaryTextStyle(color: selectedWeightIndex == index ? white : Colors.grey),
-                          padding: EdgeInsets.zero,
-                          labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(defaultRadius),
-                            side: BorderSide(color: selectedWeightIndex == index ? colorPrimary : borderColor),
-                          ),
-                        ).onTap(() {
-                          selectedWeightIndex = index;
-                          setState(() {});
-                        });
-                      }).toList(),
-                    ),
-                  ],
-                ),
-              if (selectedIndex == 1)
-                Column(
-                  children: [
-                    Container(
-                      decoration: boxDecorationWithRoundedCorners(
-                        borderRadius: BorderRadius.circular(defaultRadius),
-                        border: Border.all(color: borderColor),
-                      ),
-                      child: Theme(
-                        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-                        child: ExpansionTile(
-                          childrenPadding: EdgeInsets.all(16),
-                          expandedCrossAxisAlignment: CrossAxisAlignment.start,
-                          title: Text('Pick up Information'),
-                          children: [
-                            Text('Address', style: boldTextStyle()),
-                            8.height,
-                            AppTextField(
-                              controller: pickAddressCont,
-                              textInputAction: TextInputAction.next,
-                              focus: pickAddressFocus,
-                              nextFocus: pickPhoneFocus,
-                              textFieldType: TextFieldType.ADDRESS,
-                              decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
-                            ),
-                            16.height,
-                            Text('Contact Number', style: boldTextStyle()),
-                            8.height,
-                            AppTextField(
-                              controller: pickPhoneCont,
-                              focus: pickPhoneFocus,
-                              nextFocus: !isDeliverNow ? pickDateTimeFocus : pickDesFocus,
-                              textFieldType: TextFieldType.PHONE,
-                              decoration: commonInputDecoration(suffixIcon: Icons.phone),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                16.height,
-                                Text('Date & Time', style: boldTextStyle()),
-                                8.height,
-                                DateTimePicker(
-                                  controller: pickDateTimeCont,
-                                  focusNode: pickDateTimeFocus,
-                                  type: DateTimePickerType.dateTime,
-                                  firstDate: DateTime(2000),
-                                  lastDate: DateTime(2100),
-                                  decoration: commonInputDecoration(suffixIcon: Icons.date_range),
-                                  dateLabelText: 'Date',
-                                  onChanged: (val) => print(val),
-                                  validator: (val) {
-                                    print(val);
-                                    return null;
-                                  },
-                                  onSaved: (val) => print(val),
-                                ),
-                              ],
-                            ).visible(!isDeliverNow),
-                            /* Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  16.height,
-                                  Text('Depart Time', style: boldTextStyle()),
-                                  8.height,
-                                  DropdownButtonFormField<DateTime>(
-                                    value: selectedDate,
-                                    items: daysList.map(
-                                          (DateTime? item) {
-                                        int index = daysList.indexOf(item!);
-                                        return DropdownMenuItem<DateTime>(
-                                          value: item,
-                                          child: Text(index == 0
-                                              ? 'today'
-                                              : index == 1
-                                              ? 'tomorrow'
-                                              : DateFormat('d MMM').format(item)),
-                                        );
-                                      },
-                                    ).toList(),
-                                    onChanged: (value) {
-                                      selectedDate = value;
-                                      setState(() {});
-                                    },
-                                    decoration: commonInputDecoration(),
-                                  ).withWidth(150),
-                                  16.height,
-                                  Row(
-                                    children: [
-                                      Text('From', style: primaryTextStyle()),
-                                      8.width,
-                                      AppTextField(
-                                        textFieldType: TextFieldType.ADDRESS,
-                                        decoration: commonInputDecoration(),
-                                      ).expand(),
-                                      16.width,
-                                      Text('To', style: primaryTextStyle()),
-                                      8.width,
-                                      AppTextField(
-                                        textFieldType: TextFieldType.ADDRESS,
-                                        decoration: commonInputDecoration(),
-                                      ).expand(),
-                                    ],
-                                  ),
-                                ],
-                              ).visible(!isDeliverNow),*/
-                            16.height,
-                            Text('Description', style: boldTextStyle()),
-                            8.height,
-                            AppTextField(
-                              controller: pickDesCont,
-                              focus: pickDesFocus,
-                              textFieldType: TextFieldType.OTHER,
-                              decoration: commonInputDecoration(suffixIcon: Icons.notes),
-                              maxLines: 2,
-                              minLines: 2,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    16.height,
-                    Container(
-                      decoration: boxDecorationWithRoundedCorners(
-                        borderRadius: BorderRadius.circular(defaultRadius),
-                        border: Border.all(color: borderColor),
-                      ),
-                      child: Theme(
-                        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-                        child: ExpansionTile(
-                          childrenPadding: EdgeInsets.all(16),
-                          expandedCrossAxisAlignment: CrossAxisAlignment.start,
-                          title: Text('Delivery Information'),
-                          children: [
-                            Text('Address', style: boldTextStyle()),
-                            8.height,
-                            AppTextField(
-                              controller: deliverAddressCont,
-                              focus: deliverAddressFocus,
-                              nextFocus: deliverPhoneFocus,
-                              textInputAction: TextInputAction.next,
-                              textFieldType: TextFieldType.ADDRESS,
-                              decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
-                            ),
-                            16.height,
-                            Text('Contact Number', style: boldTextStyle()),
-                            8.height,
-                            AppTextField(
-                              controller: deliverPhoneCont,
-                              focus: deliverPhoneFocus,
-                              nextFocus: !isDeliverNow ? deliverDateTimeFocus : deliverDesFocus,
-                              textFieldType: TextFieldType.PHONE,
-                              decoration: commonInputDecoration(suffixIcon: Icons.phone),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                16.height,
-                                Text('Date & Time', style: boldTextStyle()),
-                                8.height,
-                                DateTimePicker(
-                                  controller: deliverDateTimeCont,
-                                  focusNode: deliverDateTimeFocus,
-                                  type: DateTimePickerType.dateTime,
-                                  firstDate: DateTime(2000),
-                                  lastDate: DateTime(2100),
-                                  decoration: commonInputDecoration(suffixIcon: Icons.date_range),
-                                  dateLabelText: 'Date',
-                                  onChanged: (val) => print(val),
-                                  validator: (val) {
-                                    print(val);
-                                    return null;
-                                  },
-                                  onSaved: (val) => print(val),
-                                ),
-                              ],
-                            ).visible(!isDeliverNow),
-                            16.height,
-                            Text('Description', style: boldTextStyle()),
-                            8.height,
-                            AppTextField(
-                              controller: deliverDesCont,
-                              focus: deliverDesFocus,
-                              textFieldType: TextFieldType.OTHER,
-                              decoration: commonInputDecoration(suffixIcon: Icons.notes),
-                              maxLines: 2,
-                              minLines: 2,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              if (selectedIndex == 2)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('What you are Sending?', style: boldTextStyle()),
-                    8.height,
-                    AppTextField(
-                      controller: packageController,
-                      textFieldType: TextFieldType.OTHER,
-                      decoration: commonInputDecoration(),
-                    ),
-                    16.height,
-                    Wrap(
-                      spacing: 16,
-                      runSpacing: 16,
-                      children: packageList.map((item) {
-                        int index = packageList.indexOf(item);
-                        return Chip(
-                          backgroundColor: Colors.white,
-                          label: Text(item),
-                          elevation: 0,
-                          labelStyle: primaryTextStyle(color: Colors.grey),
-                          padding: EdgeInsets.zero,
-                          labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(defaultRadius),
-                            side: BorderSide(color: borderColor),
-                          ),
-                        ).onTap(() {
-                          packageController.text = item;
-                          setState(() {});
-                        });
-                      }).toList(),
-                    ),
-                  ],
-                ),
-              if (selectedIndex == 3)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Payment Type', style: boldTextStyle()),
-                    16.height,
-                    Row(
-                      children: [
-                        scheduleOptionWidget(isCashPayment, 'assets/icons/ic_cash.png', 'Cash').onTap(() {
-                          isCashPayment = true;
-                          setState(() {});
-                        }).expand(),
-                        16.width,
-                        scheduleOptionWidget(!isCashPayment, 'assets/icons/ic_credit_card.png', 'Credit Card').onTap(() {
-                          isCashPayment = false;
-                          setState(() {});
-                        }).expand(),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        16.height,
-                        Text('Payment Methods', style: boldTextStyle()),
-                        16.height,
-                        ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: paymentGatewayList.length,
-                          itemBuilder: (context, index) {
-                            String mData = paymentGatewayList[index];
-                            return Container(
-                              padding: EdgeInsets.all(16),
-                              margin: EdgeInsets.only(bottom: 16),
-                              decoration: boxDecorationWithRoundedCorners(
-                                borderRadius: BorderRadius.circular(defaultRadius),
-                                border: Border.all(color: borderColor),
-                              ),
-                              child: Text(mData,style: boldTextStyle(size: 18)),
-                            );
-                          },
-                        ),
-                      ],
-                    ).visible(!isCashPayment),
-                  ],
-                ),
+              8.height,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Weight', style: primaryTextStyle()),
+                  16.width,
+                  Text('1 Kg', style: primaryTextStyle()),
+                ],
+              ),
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: Row(
-        children: [
-          if (selectedIndex != 0)
-            outlineButton(
-              'Previous',
-              () {
+        16.height,
+        Text('PickUp', style: boldTextStyle()),
+        8.height,
+        Container(
+          width: context.width(),
+          padding: EdgeInsets.all(16),
+          decoration: boxDecorationWithRoundedCorners(
+            borderRadius: BorderRadius.circular(defaultRadius),
+            border: Border.all(color: borderColor),
+            backgroundColor: Colors.transparent,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Shubham Park, Chandni Chauk, Navsari.', style: primaryTextStyle()),
+              8.height,
+              Text('6745234587', style: secondaryTextStyle()),
+            ],
+          ),
+        ),
+        16.height,
+        Text('Delivery', style: boldTextStyle()),
+        8.height,
+        Container(
+          width: context.width(),
+          padding: EdgeInsets.all(16),
+          decoration: boxDecorationWithRoundedCorners(
+            borderRadius: BorderRadius.circular(defaultRadius),
+            border: Border.all(color: borderColor),
+            backgroundColor: Colors.transparent,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Shubham Park, Chandni Chauk, Navsari.', style: primaryTextStyle()),
+              8.height,
+              Text('6745234587', style: secondaryTextStyle()),
+            ],
+          ),
+        ),
+        Divider(height: 30),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Delivery Charges', style: primaryTextStyle()),
+            16.width,
+            Text('\$10', style: boldTextStyle()),
+          ],
+        ),
+        8.height,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Express Delivery', style: primaryTextStyle()),
+            16.width,
+            Text('\$3', style: boldTextStyle()),
+          ],
+        ),
+        16.height,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Total', style: boldTextStyle()),
+            16.width,
+            Text('\$13', style: boldTextStyle(size: 20)),
+          ],
+        ),
+        Divider(height: 30),
+        Text('Payment Type', style: boldTextStyle()),
+        16.height,
+        Row(
+          children: [
+            scheduleOptionWidget(isCashPayment, 'assets/icons/ic_cash.png', 'Cash').onTap(() {
+              isCashPayment = true;
+              setState(() {});
+            }).expand(),
+            16.width,
+            scheduleOptionWidget(!isCashPayment, 'assets/icons/ic_credit_card.png', 'Credit Card').onTap(() {
+              isCashPayment = false;
+              setState(() {});
+            }).expand(),
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            16.height,
+            Text('Payment Methods', style: boldTextStyle()),
+            16.height,
+            ListView.builder(
+              primary: false,
+              shrinkWrap: true,
+              itemCount: paymentGatewayList.length,
+              itemBuilder: (context, index) {
+                String mData = paymentGatewayList[index];
+                return GestureDetector(
+                  child: Container(
+                    height: 50,
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(bottom: 16),
+                    decoration: boxDecorationWithRoundedCorners(
+                      borderRadius: BorderRadius.circular(defaultRadius),
+                      border: Border.all(color: borderColor),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(mData, style: boldTextStyle()),
+                        Icon(Icons.check_circle, color: colorPrimary).visible(index == selectedPaymentIndex),
+                      ],
+                    ),
+                  ),
+                  onTap: () {
+                    selectedPaymentIndex = index;
+                    setState(() {});
+                  },
+                );
+              },
+            ),
+          ],
+        ).visible(!isCashPayment),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async {
+        DateTime now = DateTime.now();
+        if (currentBackPressTime == null || now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
+          currentBackPressTime = now;
+          toast('Tap back again to leave Screen');
+          return false;
+        }
+        return true;
+      },
+      child: Scaffold(
+        appBar: appBarWidget('Create Order', color: colorPrimary, textColor: white, elevation: 0),
+        body: BodyCornerWidget(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: List.generate(4, (index) {
+                    return Container(
+                      color: selectedIndex >= index ? colorPrimary : borderColor,
+                      height: 5,
+                      width: context.width() * 0.15,
+                    );
+                  }).toList(),
+                ),
+                30.height,
+                if (selectedIndex == 0) CreateOrderWidget1(),
+                if (selectedIndex == 1) CreateOrderWidget2(),
+                if (selectedIndex == 2) CreateOrderWidget3(),
+                if (selectedIndex == 3) CreateOrderWidget4(),
+              ],
+            ),
+          ),
+        ),
+        bottomNavigationBar: Row(
+          children: [
+            if (selectedIndex != 0)
+              outlineButton('Previous', () {
                 selectedIndex--;
                 setState(() {});
-              },
-            ).paddingRight(16).expand(),
-          commonButton(selectedIndex != 3 ? 'Next' : 'Create Order', () {
-            if (selectedIndex != 3) {
-              selectedIndex++;
-              setState(() {});
-            } else {
-              finish(context);
-            }
-          }).expand()
-        ],
-      ).paddingAll(16),
+              }).paddingRight(16).expand(),
+            commonButton(selectedIndex != 3 ? 'Next' : 'Create Order', () {
+              if (selectedIndex != 3) {
+                selectedIndex++;
+                setState(() {});
+              } else {
+                finish(context);
+              }
+            }).expand()
+          ],
+        ).paddingAll(16),
+      ),
     );
   }
 }

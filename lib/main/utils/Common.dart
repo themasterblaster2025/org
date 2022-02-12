@@ -14,7 +14,7 @@ InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, F
     hintStyle: secondaryTextStyle(),
     fillColor: Colors.grey.withOpacity(0.15),
     counterText: '',
-    suffixIcon: suffixIcon != null ? Icon(suffixIcon, color: Colors.grey).onTap(suffixOnTap) : null,
+    suffixIcon: suffixIcon != null ? Icon(suffixIcon, color: Colors.grey,size: 22).onTap(suffixOnTap) : null,
     enabledBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.none), borderRadius: BorderRadius.circular(defaultRadius)),
     focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
     errorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(defaultRadius)),
@@ -55,28 +55,6 @@ Widget commonCachedNetworkImage(
 
 Widget placeHolderWidget({double? height, double? width, BoxFit? fit, AlignmentGeometry? alignment, double? radius}) {
   return Image.asset('assets/placeholder.jpg', height: height, width: width, fit: fit ?? BoxFit.cover, alignment: alignment ?? Alignment.center).cornerRadiusWithClipRRect(radius ?? defaultRadius);
-}
-
-Future<bool> checkPermission() async {
-  // Request app level location permission
-  LocationPermission locationPermission = await Geolocator.requestPermission();
-
-  if (locationPermission == LocationPermission.whileInUse || locationPermission == LocationPermission.always) {
-    // Check system level location permission
-    if (!await Geolocator.isLocationServiceEnabled()) {
-      return await Geolocator.openLocationSettings().then((value) => false).catchError((e) => false);
-    } else {
-      return true;
-    }
-  } else {
-    /* toast(appStore.translate('allow_location_permission'));*/
-    toast('Allow Location Permission');
-
-    // Open system level location permission
-    await Geolocator.openAppSettings();
-
-    return false;
-  }
 }
 
 String parseHtmlString(String? htmlString) {
