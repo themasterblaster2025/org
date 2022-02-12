@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:html/parser.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
@@ -7,13 +8,13 @@ import 'package:nb_utils/nb_utils.dart';
 
 InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, Function()? suffixOnTap}) {
   return InputDecoration(
-    contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 16.0),
+    contentPadding: EdgeInsets.all(12),
     filled: true,
     hintText: hintText != null ? hintText : '',
     hintStyle: secondaryTextStyle(),
     fillColor: Colors.grey.withOpacity(0.15),
     counterText: '',
-    suffixIcon: suffixIcon != null ? Icon(suffixIcon, color: Colors.grey).onTap(suffixOnTap) : null,
+    suffixIcon: suffixIcon != null ? Icon(suffixIcon, color: Colors.grey,size: 22).onTap(suffixOnTap) : null,
     enabledBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.none), borderRadius: BorderRadius.circular(defaultRadius)),
     focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
     errorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(defaultRadius)),

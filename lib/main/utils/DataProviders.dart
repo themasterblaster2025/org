@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mighty_delivery/delivery/fragment/DHomeFragment.dart';
 import 'package:mighty_delivery/delivery/fragment/DOrderFragment.dart';
 import 'package:mighty_delivery/delivery/fragment/DProfileFragment.dart';
@@ -65,15 +66,6 @@ List<SettingItemModel> getDeliverySettingItems() {
   list.add(SettingItemModel(icon: Icons.help_outline, title: 'Help & Support'));
   list.add(SettingItemModel(icon: Icons.logout, title: 'Logout'));
 
-  return list;
-}
-
-List<DateTime> getDaysList() {
-  List<DateTime> list = [];
-  DateTime todayDate = DateTime.now();
-  List.generate(15, (index) {
-    list.add(todayDate.add(Duration(days: index)));
-  }).toList();
   return list;
 }
 
