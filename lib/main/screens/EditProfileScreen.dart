@@ -93,7 +93,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget('Edit Profile', color: colorPrimary, textColor: white, elevation: 0),
+      appBar: appBarWidget('Edit Profile',color: colorPrimary,textColor: white,elevation: 0),
       body: BodyCornerWidget(
         child: Stack(
           children: [
@@ -108,15 +108,15 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: Container(
-                          margin: EdgeInsets.only(top: 50, left: 80),
-                          height: 40,
-                          width: 40,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: grey.withOpacity(0.3)),
+                          margin: EdgeInsets.only(top: 60, left: 80),
+                          height: 35,
+                          width: 35,
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: colorPrimary),
                           child: IconButton(
                             onPressed: () {
                               getImage();
                             },
-                            icon: Icon(Icons.edit, color: colorPrimary),
+                            icon: Icon(Icons.edit, color: white,size: 20,),
                           ),
                         ),
                       )
