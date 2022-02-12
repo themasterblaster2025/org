@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/main/components/LocationChangeDialog.dart';
+import 'package:mighty_delivery/user/components/LocationChangeDialog.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import 'Colors.dart';

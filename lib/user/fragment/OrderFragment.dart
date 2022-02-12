@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:mighty_delivery/user/components/OrderComponent.dart';
 import 'package:mighty_delivery/user/screens/OrderDetailScreen.dart';
@@ -37,6 +38,24 @@ class OrderFragmentState extends State<OrderFragment> {
             OrderDetailScreen().launch(context,pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
           },
         );
+        /*return Container(
+          margin: EdgeInsets.only(bottom: 16),
+          decoration: boxDecorationRoundedWithShadow(defaultRadius.toInt()),
+          padding: EdgeInsets.all(16),
+          child: OpenContainer<bool>(openElevation: 0,
+            openColor: Colors.transparent,
+            closedElevation: 0,
+            transitionType: ContainerTransitionType.fadeThrough,
+            transitionDuration :  Duration(milliseconds: 800),
+            openBuilder: (BuildContext context, VoidCallback _) {
+             return OrderDetailScreen();
+            },
+            onClosed: (data) {},
+            closedBuilder: (context, action) {
+              return OrderComponent();
+            },
+          ),
+        );*/
       }).toList(),
     );
   }
