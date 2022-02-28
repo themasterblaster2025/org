@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/delivery/screens/CitySelectScreen.dart';
-import 'package:mighty_delivery/delivery/screens/DDashboardScreen.dart';
+import 'package:mighty_delivery/main/screens/CitySelectScreen.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/screens/ForgotPasswordScreen.dart';
 import 'package:mighty_delivery/main/screens/RegisterScreen.dart';
@@ -9,7 +8,6 @@ import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
-import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
@@ -58,15 +56,11 @@ class LoginScreenState extends State<LoginScreen> {
 
       await logInApi(req).then((value) async {
         appStore.setLoading(false);
-        if (getStringAsync(USER_TYPE) == CLIENT) {
-          DashboardScreen().launch(context, isNewTask: true);
-        } else if (getStringAsync(USER_TYPE) == DELIVERY_MAN) {
-          if (getIntAsync(STATUS) == 1) {
-            CitySelectScreen(isBack: false).launch(context,isNewTask: true);
-            //DDashboardScreen().launch(context, isNewTask: true);
-          } else {
-            toast('You profile is under review. Wait some time or contact your administrator.');
-          }
+        if (getIntAsync(STATUS) == 1) {
+          CitySelectScreen(isBack: false).launch(context,isNewTask: true);
+          //DDashboardScreen().launch(context, isNewTask: true);
+        } else {
+          toast('You profile is under review. Wait some time or contact your administrator.');
         }
       }).catchError((e) {
         appStore.setLoading(false);

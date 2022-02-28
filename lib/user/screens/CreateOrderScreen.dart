@@ -1,10 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
+import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
+import 'package:mighty_delivery/main/models/ParcelTypeListModel.dart';
+import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
+import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/main/utils/DataProviders.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:mighty_delivery/user/components/SearchAddressWidget.dart';
@@ -18,6 +23,9 @@ class CreateOrderScreen extends StatefulWidget {
 }
 
 class CreateOrderScreenState extends State<CreateOrderScreen> {
+  List<ParcelTypeData> parcelTypeList = [];
+  int? selectedWeight;
+
   TextEditingController packageController = TextEditingController();
 
   TextEditingController pickAddressCont = TextEditingController();
@@ -49,8 +57,22 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   }
 
   Future<void> init() async {
-    //
+    getParcelTypeListApiCall();
   }
+
+  getParcelTypeListApiCall() async{
+    appStore.setLoading(true);
+    await getParcelTypeList().then((value) {
+      appStore.setLoading(false);
+      parcelTypeList.clear();
+      parcelTypeList.addAll(value.data!);
+      setState(() { });
+    }).catchError((error){
+      appStore.setLoading(false);
+      toast(error.toString());
+    });
+  }
+
 
   @override
   void setState(fn) {
@@ -77,7 +99,24 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         16.height,
         Text('Weight', style: boldTextStyle()),
         8.height,
-        Wrap(
+        SizedBox(
+          width: 150,
+          child: DropdownButtonFormField<int>(
+            value: selectedWeight,
+            decoration: commonInputDecoration(),
+            items: List.generate(20, (index){
+              return DropdownMenuItem(
+                value: index+1,
+                child: Text('${(index+1).toString()} Kg'),
+              );
+            }).toList(),
+            onChanged: (value) {
+              selectedWeight = value!;
+              setState(() {});
+            },
+          ),
+        ),
+      /*  Wrap(
           spacing: 16,
           runSpacing: 16,
           children: weightList.map((item) {
@@ -98,7 +137,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               setState(() {});
             });
           }).toList(),
-        ),
+        ),*/
         16.height,
         Text('What you are Sending?', style: boldTextStyle()),
         8.height,
@@ -108,14 +147,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           decoration: commonInputDecoration(),
         ),
         16.height,
-        Wrap(
-          spacing: 16,
-          runSpacing: 16,
-          children: packageList.map((item) {
-            int index = packageList.indexOf(item);
+        (appStore.isLoading && parcelTypeList.isEmpty) ? Loader() :  Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: parcelTypeList.map((item) {
             return Chip(
               backgroundColor: Colors.white,
-              label: Text(item),
+              label: Text(item.label!),
               elevation: 0,
               labelStyle: primaryTextStyle(color: Colors.grey),
               padding: EdgeInsets.zero,
@@ -125,7 +163,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 side: BorderSide(color: borderColor),
               ),
             ).onTap(() {
-              packageController.text = item;
+              packageController.text = item.value!;
               setState(() {});
             });
           }).toList(),
@@ -494,68 +532,72 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (selectedIndex == 0) {
-          return true;
-        } else {
-          selectedIndex--;
-          setState(() {});
-          return false;
-        }
-        /*  DateTime now = DateTime.now();
-        if (currentBackPressTime == null || now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
-          currentBackPressTime = now;
-          toast('Tap back again to leave Screen');
-          return false;
-        }
-        return true;*/
-      },
-      child: Scaffold(
-        appBar: appBarWidget('Create Order', color: colorPrimary, textColor: white, elevation: 0),
-        body: BodyCornerWidget(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: List.generate(4, (index) {
-                    return Container(
-                      color: selectedIndex >= index ? colorPrimary : borderColor,
-                      height: 5,
-                      width: context.width() * 0.15,
-                    );
-                  }).toList(),
+    return Observer(
+      builder: (context) {
+        return WillPopScope(
+          onWillPop: () async {
+            if (selectedIndex == 0) {
+              return true;
+            } else {
+              selectedIndex--;
+              setState(() {});
+              return false;
+            }
+            /*  DateTime now = DateTime.now();
+            if (currentBackPressTime == null || now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
+              currentBackPressTime = now;
+              toast('Tap back again to leave Screen');
+              return false;
+            }
+            return true;*/
+          },
+          child: Scaffold(
+            appBar: appBarWidget('Create Order', color: colorPrimary, textColor: white, elevation: 0),
+            body: BodyCornerWidget(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: List.generate(4, (index) {
+                        return Container(
+                          color: selectedIndex >= index ? colorPrimary : borderColor,
+                          height: 5,
+                          width: context.width() * 0.15,
+                        );
+                      }).toList(),
+                    ),
+                    30.height,
+                    if (selectedIndex == 0) CreateOrderWidget1(),
+                    if (selectedIndex == 1) CreateOrderWidget2(),
+                    if (selectedIndex == 2) CreateOrderWidget3(),
+                    if (selectedIndex == 3) CreateOrderWidget4(),
+                  ],
                 ),
-                30.height,
-                if (selectedIndex == 0) CreateOrderWidget1(),
-                if (selectedIndex == 1) CreateOrderWidget2(),
-                if (selectedIndex == 2) CreateOrderWidget3(),
-                if (selectedIndex == 3) CreateOrderWidget4(),
-              ],
+              ),
             ),
+            bottomNavigationBar: Row(
+              children: [
+                if (selectedIndex != 0)
+                  outlineButton('Previous', () {
+                    selectedIndex--;
+                    setState(() {});
+                  }).paddingRight(16).expand(),
+                commonButton(selectedIndex != 3 ? 'Next' : 'Create Order', () {
+                  if (selectedIndex != 3) {
+                    selectedIndex++;
+                    setState(() {});
+                  } else {
+                    finish(context);
+                  }
+                }).expand()
+              ],
+            ).paddingAll(16),
           ),
-        ),
-        bottomNavigationBar: Row(
-          children: [
-            if (selectedIndex != 0)
-              outlineButton('Previous', () {
-                selectedIndex--;
-                setState(() {});
-              }).paddingRight(16).expand(),
-            commonButton(selectedIndex != 3 ? 'Next' : 'Create Order', () {
-              if (selectedIndex != 3) {
-                selectedIndex++;
-                setState(() {});
-              } else {
-                finish(context);
-              }
-            }).expand()
-          ],
-        ).paddingAll(16),
-      ),
+        );
+      }
     );
   }
 }

@@ -1,4 +1,3 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:mighty_delivery/user/components/OrderComponent.dart';
 import 'package:mighty_delivery/user/screens/OrderDetailScreen.dart';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mighty_delivery/main/screens/CitySelectScreen.dart';
 import 'package:mighty_delivery/user/components/LocationChangeDialog.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -62,13 +63,14 @@ Widget customAppBarWidget(BuildContext context, String title, {bool isShowBack =
                   Text('Surat', style: primaryTextStyle(color: white)),
                 ],
               ).onTap(() {
-                showInDialog(
+                /*showInDialog(
                   context,
                   contentPadding: EdgeInsets.all(16),
                   builder: (context) {
                     return LocationChangeDialog();
                   },
-                );
+                );*/
+                CitySelectScreen(isBack: true);
               })
             : SizedBox(),
       ],

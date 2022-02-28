@@ -7,6 +7,7 @@ import 'package:mighty_delivery/main/models/ChangePasswordResponse.dart';
 import 'package:mighty_delivery/main/models/CityListModel.dart';
 import 'package:mighty_delivery/main/models/CountryListModel.dart';
 import 'package:mighty_delivery/main/models/LoginResponse.dart';
+import 'package:mighty_delivery/main/models/ParcelTypeListModel.dart';
 import 'package:mighty_delivery/main/screens/LoginScreen.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -179,6 +180,12 @@ Future updateProfile({String? userName, String? name, String? userEmail, String?
     toast(error.toString());
   });
 }
+
+// ParcelType Api
+Future<ParcelTypeListModel> getParcelTypeList({int? page}) async{
+  return ParcelTypeListModel.fromJson(await handleResponse(await buildHttpResponse('staticdata-list?type=parcel_type&per_page=-1',method: HttpMethod.GET)))  ;
+}
+
 
 Future<CountryListModel> getCountryList() async {
   return CountryListModel.fromJson(await handleResponse(await buildHttpResponse('country-list', method: HttpMethod.GET)));

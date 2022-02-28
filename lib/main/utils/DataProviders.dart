@@ -3,7 +3,7 @@ import 'package:mighty_delivery/delivery/fragment/DHomeFragment.dart';
 import 'package:mighty_delivery/delivery/fragment/DOrderFragment.dart';
 import 'package:mighty_delivery/delivery/fragment/DProfileFragment.dart';
 import 'package:mighty_delivery/delivery/screens/AddressSearchScreen.dart';
-import 'package:mighty_delivery/delivery/screens/CitySelectScreen.dart';
+import 'package:mighty_delivery/main/screens/CitySelectScreen.dart';
 import 'package:mighty_delivery/delivery/screens/OrderHistoryScreen.dart';
 import 'package:mighty_delivery/delivery/screens/SearchAddressScreen.dart';
 import 'package:mighty_delivery/main/models/models.dart';
@@ -14,7 +14,6 @@ import 'package:mighty_delivery/user/fragment/AccountFragment.dart';
 import 'package:mighty_delivery/user/fragment/OrderFragment.dart';
 
 List<String> weightList = ['Up to 1 kg', 'Up to 5 kg', 'Up to 10 kg', 'Up to 15 kg', 'Up to 20 kg'];
-List<String> packageList = ['Documents', 'Food', 'Cloth', 'Groceries', 'Cake', 'Flowers'];
 List<String> paymentGatewayList = ['Stripe', 'Razorpay', 'PayStack', 'FlutterWave'];
 
 List<WalkThroughItemModel> getWalkThroughItems() {

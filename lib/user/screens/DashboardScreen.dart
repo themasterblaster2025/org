@@ -1,6 +1,7 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
+import 'package:mighty_delivery/main/screens/CitySelectScreen.dart';
 import 'package:mighty_delivery/user/components/LocationChangeDialog.dart';
 import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
@@ -51,13 +52,14 @@ class DashboardScreenState extends State<DashboardScreen> {
               Text('Surat', style: primaryTextStyle(color: white)),
             ],
           ).onTap(() {
-            showInDialog(
+            /*showInDialog(
               context,
               contentPadding: EdgeInsets.all(16),
               builder: (context) {
                 return LocationChangeDialog();
               },
-            );
+            );*/
+            CitySelectScreen(isBack: true);
           }).paddingOnly(right: 16),
         ],
       ),
