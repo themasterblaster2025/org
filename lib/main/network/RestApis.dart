@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:mighty_delivery/main/models/ChangePasswordResponse.dart';
+import 'package:mighty_delivery/main/models/CityListModel.dart';
+import 'package:mighty_delivery/main/models/CountryListModel.dart';
 import 'package:mighty_delivery/main/models/LoginResponse.dart';
 import 'package:mighty_delivery/main/screens/LoginScreen.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
@@ -172,6 +174,32 @@ Future updateProfile({String? userName, String? name, String? userEmail, String?
       await setValue(USER_ADDRESS, res.data!.address.validate());
       await setValue(USER_CONTACT_NUMBER, res.data!.contact_number.validate());
       await appStore.setUserEmail(res.data!.email.validate());
+    }
+  }, onError: (error) {
+    toast(error.toString());
+  });
+}
+
+Future<CountryListModel> getCountryList() async {
+  return CountryListModel.fromJson(await handleResponse(await buildHttpResponse('country-list', method: HttpMethod.GET)));
+}
+
+Future<CityListModel> getCityList({required int CountryId}) async {
+  return CityListModel.fromJson(await handleResponse(await buildHttpResponse('city-list?country_id=$CountryId', method: HttpMethod.GET)));
+}
+
+/// Country
+Future updateCountry({int? countryId, int? cityId}) async {
+  MultipartRequest multiPartRequest = await getMultiPartRequest('update-profile');
+  multiPartRequest.fields['city_id'] = countryId.validate().toString();
+  multiPartRequest.fields['country_id'] = cityId.validate().toString();
+
+  await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
+    if (data != null) {
+      LoginResponse res = LoginResponse.fromJson(data);
+
+      await setValue(NAME, res.data!.name.validate());
+      await setValue(USER_PROFILE_PHOTO, res.data!.profile_image.validate());
     }
   }, onError: (error) {
     toast(error.toString());

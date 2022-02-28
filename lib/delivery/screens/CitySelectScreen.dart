@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mighty_delivery/delivery/screens/DDashboardScreen.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
+import 'package:mighty_delivery/main/models/CityListModel.dart';
+import 'package:mighty_delivery/main/models/CountryListModel.dart';
+import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
@@ -17,10 +20,11 @@ class CitySelectScreen extends StatefulWidget {
 }
 
 class CitySelectScreenState extends State<CitySelectScreen> {
-  List<String> countryList = ['India', 'Brazil', 'Turkiye'];
-  List<String> cityList = ['Navsari', 'Mumbai', 'Surat'];
-  String selectedCountry = '';
-  String selectedCity = '';
+  int? selectedCountry;
+  int? selectedCity;
+
+  List<CountryModel> countryData = [];
+  List<CityModel> cityData = [];
 
   @override
   void initState() {
@@ -29,8 +33,22 @@ class CitySelectScreenState extends State<CitySelectScreen> {
   }
 
   void init() async {
-    selectedCountry = countryList[0];
-    selectedCity = cityList[0];
+    getCountryList().then((value) {
+      countryData = value.data!;
+      //selectedCountry = value.data![0].id!;
+      setState(() {});
+    }).catchError((error) {
+      log(error);
+    });
+  }
+
+  getCityApiCall(int Id) async {
+   await getCityList(CountryId: Id).then((value) {
+      cityData = value.data!;
+      setState(() {});
+    }).catchError((error) {
+      log(error);
+    });
   }
 
   @override
@@ -62,16 +80,17 @@ class CitySelectScreenState extends State<CitySelectScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('Country', style: boldTextStyle()),
-                        DropdownButton<String>(
+                        DropdownButton<int>(
                           value: selectedCountry,
-                          items: countryList.map<DropdownMenuItem<String>>((item) {
+                          items: countryData.map<DropdownMenuItem<int>>((item) {
                             return DropdownMenuItem(
-                              value: item,
-                              child: Text(item),
+                              value: item.id,
+                              child: Text(item.name ?? ''),
                             );
                           }).toList(),
                           onChanged: (value) {
                             selectedCountry = value!;
+                            getCityApiCall(selectedCountry!);
                             setState(() {});
                           },
                         ),
@@ -82,12 +101,12 @@ class CitySelectScreenState extends State<CitySelectScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('City', style: boldTextStyle()),
-                        DropdownButton<String>(
-                          value: selectedCity.isNotEmpty ? selectedCity : null,
-                          items: cityList.map<DropdownMenuItem<String>>((item) {
+                        DropdownButton<int>(
+                          value: selectedCity,
+                          items: cityData.map<DropdownMenuItem<int>>((item) {
                             return DropdownMenuItem(
-                              value: item,
-                              child: Text(item),
+                              value: item.id,
+                              child: Text(item.name ?? ''),
                             );
                           }).toList(),
                           onChanged: (value) {

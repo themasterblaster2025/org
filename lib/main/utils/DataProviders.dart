@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mighty_delivery/delivery/fragment/DHomeFragment.dart';
 import 'package:mighty_delivery/delivery/fragment/DOrderFragment.dart';
 import 'package:mighty_delivery/delivery/fragment/DProfileFragment.dart';
+import 'package:mighty_delivery/delivery/screens/AddressSearchScreen.dart';
 import 'package:mighty_delivery/delivery/screens/CitySelectScreen.dart';
 import 'package:mighty_delivery/delivery/screens/OrderHistoryScreen.dart';
 import 'package:mighty_delivery/delivery/screens/SearchAddressScreen.dart';
@@ -61,7 +62,7 @@ List<SettingItemModel> getDeliverySettingItems() {
   list.add(SettingItemModel(icon: Icons.location_on_outlined, title: 'Change Location', widget: CitySelectScreen(isBack: true)));
   list.add(SettingItemModel(icon: Icons.language, title: 'Language'));
   list.add(SettingItemModel(icon: Icons.wb_sunny_outlined, title: 'DarkMode', widget: SearchAddressScreen()));
-  list.add(SettingItemModel(icon: Icons.info_outline, title: 'About Us'));
+  list.add(SettingItemModel(icon: Icons.info_outline, title: 'About Us',widget: AddressSearchScreen()));
   list.add(SettingItemModel(icon: Icons.help_outline, title: 'Help & Support'));
   list.add(SettingItemModel(icon: Icons.logout, title: 'Logout'));
 
