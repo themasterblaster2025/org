@@ -59,7 +59,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                 return LocationChangeDialog();
               },
             );*/
-            CitySelectScreen(isBack: true);
+            CitySelectScreen(isBack: true).launch(context);
           }).paddingOnly(right: 16),
         ],
       ),

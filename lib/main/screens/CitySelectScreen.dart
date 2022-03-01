@@ -23,6 +23,8 @@ class CitySelectScreen extends StatefulWidget {
 }
 
 class CitySelectScreenState extends State<CitySelectScreen> {
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   int? selectedCountry;
   int? selectedCity;
 
@@ -63,24 +65,13 @@ class CitySelectScreenState extends State<CitySelectScreen> {
   }
 
   Future<void> updateCountry() async {
-    if (selectedCountry == null) {
-      return toast('Please select country');
-    }
-    if (selectedCity == null) {
-      return toast('Please select city');
-    }
-
     appStore.setLoading(true);
     await updateCountryCity(countryId: selectedCountry, cityId: selectedCity).then((value) {
       appStore.setLoading(false);
       if (widget.isBack) {
         Navigator.pop(context);
       } else {
-        if (getStringAsync(USER_TYPE) == CLIENT) {
-          DashboardScreen().launch(context);
-        } else {
-          DDashboardScreen().launch(context);
-        }
+        DDashboardScreen().launch(context);
       }
     }).catchError((error) {
       appStore.setLoading(false);
@@ -107,64 +98,87 @@ class CitySelectScreenState extends State<CitySelectScreen> {
               Container(
                 padding: EdgeInsets.all(16),
                 decoration: containerDecoration(),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Select Region', style: boldTextStyle(size: 20)),
-                    30.height,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(child: Text('Country', style: boldTextStyle())),
-                        Expanded(
-                          child: DropdownButtonFormField<int>(
-                            value: selectedCountry,
-                            decoration: commonInputDecoration(),
-                            items: countryData.map<DropdownMenuItem<int>>((item) {
-                              return DropdownMenuItem(
-                                value: item.id,
-                                child: Text(item.name ?? ''),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              selectedCountry = value!;
-                              selectedCity = null;
-                              getCityApiCall(selectedCountry!);
-                              setState(() {});
-                            },
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Select Region', style: boldTextStyle(size: 20)),
+                      30.height,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(child: Text('Country', style: boldTextStyle())),
+                          Expanded(
+                            child: DropdownButtonFormField<int>(
+                              value: selectedCountry,
+                              decoration: commonInputDecoration(),
+                              items: countryData.map<DropdownMenuItem<int>>((item) {
+                                return DropdownMenuItem(
+                                  value: item.id,
+                                  child: Text(item.name ?? ''),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                selectedCountry = value!;
+                                selectedCity = null;
+                                getCityApiCall(selectedCountry!);
+                                setState(() {});
+                              },
+                              validator: (value) {
+                                if(selectedCountry==null) return errorThisFieldRequired;
+                                return null;
+                              },
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    16.height,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(child: Text('City', style: boldTextStyle())),
-                        Expanded(
-                          child: DropdownButtonFormField<int>(
-                            value: selectedCity,
-                            decoration: commonInputDecoration(),
-                            items: cityData.map<DropdownMenuItem<int>>((item) {
-                              return DropdownMenuItem(
-                                value: item.id,
-                                child: Text(item.name ?? ''),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              selectedCity = value!;
-                              setState(() {});
-                            },
+                        ],
+                      ),
+                      16.height,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(child: Text('City', style: boldTextStyle())),
+                          Expanded(
+                            child: DropdownButtonFormField<int>(
+                              value: selectedCity,
+                              decoration: commonInputDecoration(),
+                              items: cityData.map<DropdownMenuItem<int>>((item) {
+                                return DropdownMenuItem(
+                                  value: item.id,
+                                  child: Text(item.name ?? ''),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                selectedCity = value!;
+                                setState(() {});
+                              },
+                              validator: (value) {
+                                if(selectedCity==null) return errorThisFieldRequired;
+                                return null;
+                              },
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    30.height,
-                    commonButton("Change", () {
-                      updateCountry();
-                    }, width: context.width()),
-                  ],
+                        ],
+                      ),
+                      30.height,
+                      commonButton("Change", () {
+                        if(_formKey.currentState!.validate()) {
+                          if (getStringAsync(USER_TYPE) == CLIENT) {
+                            setValue(COUNTRY_ID, selectedCountry);
+                            setValue(CITY_ID, selectedCity);
+                            if (widget.isBack) {
+                              Navigator.pop(context);
+                            } else {
+                              DashboardScreen().launch(context);
+                            }
+                          } else {
+                            updateCountry();
+                          }
+                        }
+                      }, width: context.width()),
+                    ],
+                  ),
                 ),
               )
             ],
