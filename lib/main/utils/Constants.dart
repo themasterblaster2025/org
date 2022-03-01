@@ -22,8 +22,8 @@ const USER_NAME = 'USER_NAME';
 const USER_PASSWORD = 'USER_PASSWORD';
 const USER_ADDRESS = 'USER_ADDRESS';
 const STATUS = 'STATUS';
-const Country = 'Country';
-const City = 'City';
+const COUNTRY_ID = 'Country';
+const CITY_ID = 'City';
 
 const CLIENT = 'client';
 const DELIVERY_MAN = 'delivery_man';

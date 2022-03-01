@@ -6,6 +6,7 @@ import 'package:http/http.dart';
 import 'package:mighty_delivery/main/models/ChangePasswordResponse.dart';
 import 'package:mighty_delivery/main/models/CityListModel.dart';
 import 'package:mighty_delivery/main/models/CountryListModel.dart';
+import 'package:mighty_delivery/main/models/LDBaseResponse.dart';
 import 'package:mighty_delivery/main/models/LoginResponse.dart';
 import 'package:mighty_delivery/main/models/ParcelTypeListModel.dart';
 import 'package:mighty_delivery/main/screens/LoginScreen.dart';
@@ -41,8 +42,8 @@ Future<LoginResponse> signUpApi(Map request) async {
     await setValue(USER_TYPE, loginResponse.data!.user_type.validate());
     await setValue(USER_NAME, loginResponse.data!.username.validate());
     await setValue(USER_ADDRESS, loginResponse.data!.address.validate());
-    await setValue(Country, loginResponse.data!.country_id.validate());
-    await setValue(City, loginResponse.data!.city_id.validate());
+    await setValue(COUNTRY_ID, loginResponse.data!.country_id.validate());
+    await setValue(CITY_ID, loginResponse.data!.city_id.validate());
 
     await appStore.setUserEmail(loginResponse.data!.email.validate());
     await appStore.setLogin(true);
@@ -94,8 +95,8 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
     await setValue(USER_NAME, loginResponse.data!.username.validate());
     await setValue(STATUS, loginResponse.data!.status.validate());
     await setValue(USER_ADDRESS, loginResponse.data!.address.validate());
-    await setValue(Country, loginResponse.data!.country_id.validate());
-    await setValue(City, loginResponse.data!.city_id.validate());
+    await setValue(COUNTRY_ID, loginResponse.data!.country_id.validate());
+    await setValue(CITY_ID, loginResponse.data!.city_id.validate());
 
     /* await appStore.setUserName(loginResponse.userData!.username.validate());
     await appStore.setRole(loginResponse.userData!.user_type.validate());
@@ -124,8 +125,8 @@ Future<void> logout(BuildContext context) async {
   await removeKey(USER_PASSWORD);
   await removeKey(USER_ADDRESS);
   await removeKey(STATUS);
-  await removeKey(Country);
-  await removeKey(City);
+  await removeKey(COUNTRY_ID);
+  await removeKey(CITY_ID);
 
   await appStore.setLogin(false);
 
@@ -187,6 +188,11 @@ Future updateProfile({String? userName, String? name, String? userEmail, String?
   });
 }
 
+/// Create Order Api
+Future<LDBaseResponse> createOrder(Map request)async{
+  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('order-save',request: request,method: HttpMethod.POST)));
+}
+
 // ParcelType Api
 Future<ParcelTypeListModel> getParcelTypeList({int? page}) async {
   return ParcelTypeListModel.fromJson(await handleResponse(await buildHttpResponse('staticdata-list?type=parcel_type&per_page=-1', method: HttpMethod.GET)));
@@ -210,8 +216,8 @@ Future updateCountryCity({int? countryId, int? cityId}) async {
     if (data != null) {
       LoginResponse res = LoginResponse.fromJson(data);
 
-      await setValue(Country, res.data!.country_id.validate());
-      await setValue(City, res.data!.city_id.validate());
+      await setValue(COUNTRY_ID, res.data!.country_id.validate());
+      await setValue(CITY_ID, res.data!.city_id.validate());
     }
   }, onError: (error) {
     toast(error.toString());
