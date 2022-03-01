@@ -38,11 +38,11 @@ class CitySelectScreenState extends State<CitySelectScreen> {
   void init() async {
     await getCountryList().then((value) {
       countryData = value.data!;
-      var country = countryData.where((element) => element.id == getIntAsync(COUNTRY_ID));
+      var country = countryData.where((element) => element.id! == getIntAsync(COUNTRY_ID));
       if (country.length >= 1) {
         selectedCountry = getIntAsync(COUNTRY_ID);
+        getCityApiCall(selectedCountry!);
       }
-      getCityApiCall(selectedCountry!);
       setState(() {});
     }).catchError((error) {
       log(error);
@@ -52,7 +52,7 @@ class CitySelectScreenState extends State<CitySelectScreen> {
   getCityApiCall(int Id) async {
     await getCityList(CountryId: Id).then((value) {
       cityData = value.data!;
-      var city = cityData.where((element) => element.id == getIntAsync(CITY_ID));
+      var city = cityData.where((element) => element.id! == getIntAsync(CITY_ID));
       if (city.length >= 1) {
         selectedCity = getIntAsync(CITY_ID);
       }
@@ -129,6 +129,7 @@ class CitySelectScreenState extends State<CitySelectScreen> {
                             }).toList(),
                             onChanged: (value) {
                               selectedCountry = value!;
+                              selectedCity = null;
                               getCityApiCall(selectedCountry!);
                               setState(() {});
                             },
