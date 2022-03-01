@@ -14,6 +14,7 @@ import 'package:mighty_delivery/main/utils/DataProviders.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:mighty_delivery/user/components/SearchAddressWidget.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:google_maps_webservice/places.dart';
 
 class CreateOrderScreen extends StatefulWidget {
   static String tag = '/CreateOrderScreen';
@@ -23,10 +24,12 @@ class CreateOrderScreen extends StatefulWidget {
 }
 
 class CreateOrderScreenState extends State<CreateOrderScreen> {
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   List<ParcelTypeData> parcelTypeList = [];
   int? selectedWeight;
 
-  TextEditingController packageController = TextEditingController();
+  TextEditingController parcelTypeCont = TextEditingController();
 
   TextEditingController pickAddressCont = TextEditingController();
   TextEditingController pickPhoneCont = TextEditingController();
@@ -41,6 +44,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   TextEditingController deliverFromTimeCont = TextEditingController();
   TextEditingController deliverToTimeCont = TextEditingController();
   TextEditingController deliverDesCont = TextEditingController();
+
+  String? pickLat, pickLong, deliverLat, deliverLong;
 
   int selectedIndex = 0;
   int? selectedPaymentIndex;
@@ -60,19 +65,62 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     getParcelTypeListApiCall();
   }
 
-  getParcelTypeListApiCall() async{
+  createOrderApiCall() async {
+    Navigator.pop(context);
+    Map req = {
+      "client_id": getIntAsync(USER_ID).toString(),
+      "date": DateTime.now().toString(),
+      "country_id": "10",
+      "city_id": "2",
+      "pickup_point": {
+        //  "date": "2022-01-25 00:00:00",
+        "address": pickAddressCont.text,
+        "latitude": pickLat,
+        "longitude": pickLong,
+        "description": pickDesCont.text,
+        "contact_number": pickPhoneCont.text
+      },
+      "delivery_point": {
+        // "date": "2022-01-26 00:00:00",
+        "address": deliverAddressCont.text,
+        "latitude": deliverLat,
+        "longitude": deliverLong,
+        "description": deliverDesCont.text,
+        "contact_number": deliverPhoneCont.text,
+      },
+      "extra_charges": {},
+      "parcel_type": parcelTypeCont.text,
+      "total_weight": selectedWeight!.toString(),
+      "total_distance": "10",
+      "payment_collect_from": "on_client",
+      "status": "draft",
+      "payment_type": "",
+      "payment_status": "",
+      "fixed_charges": "100",
+      "parent_order_id": ""
+    };
     appStore.setLoading(true);
-    await getParcelTypeList().then((value) {
+    await createOrder(req).then((value) {
       appStore.setLoading(false);
-      parcelTypeList.clear();
-      parcelTypeList.addAll(value.data!);
-      setState(() { });
-    }).catchError((error){
+      toast(value.message);
+    }).catchError((error) {
       appStore.setLoading(false);
       toast(error.toString());
     });
   }
 
+  getParcelTypeListApiCall() async {
+    appStore.setLoading(true);
+    await getParcelTypeList().then((value) {
+      appStore.setLoading(false);
+      parcelTypeList.clear();
+      parcelTypeList.addAll(value.data!);
+      setState(() {});
+    }).catchError((error) {
+      appStore.setLoading(false);
+      toast(error.toString());
+    });
+  }
 
   @override
   void setState(fn) {
@@ -104,19 +152,23 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           child: DropdownButtonFormField<int>(
             value: selectedWeight,
             decoration: commonInputDecoration(),
-            items: List.generate(20, (index){
+            items: List.generate(20, (index) {
               return DropdownMenuItem(
-                value: index+1,
-                child: Text('${(index+1).toString()} Kg'),
+                value: index + 1,
+                child: Text('${(index + 1).toString()} Kg'),
               );
             }).toList(),
             onChanged: (value) {
               selectedWeight = value!;
               setState(() {});
             },
+            validator: (value) {
+              if (value == null) return errorThisFieldRequired;
+              return null;
+            },
           ),
         ),
-      /*  Wrap(
+        /*  Wrap(
           spacing: 16,
           runSpacing: 16,
           children: weightList.map((item) {
@@ -142,32 +194,38 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         Text('What you are Sending?', style: boldTextStyle()),
         8.height,
         AppTextField(
-          controller: packageController,
+          controller: parcelTypeCont,
           textFieldType: TextFieldType.OTHER,
           decoration: commonInputDecoration(),
+          validator: (value) {
+            if (value!.isEmpty) return errorThisFieldRequired;
+            return null;
+          },
         ),
         16.height,
-        (appStore.isLoading && parcelTypeList.isEmpty) ? Loader() :  Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: parcelTypeList.map((item) {
-            return Chip(
-              backgroundColor: Colors.white,
-              label: Text(item.label!),
-              elevation: 0,
-              labelStyle: primaryTextStyle(color: Colors.grey),
-              padding: EdgeInsets.zero,
-              labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(defaultRadius),
-                side: BorderSide(color: borderColor),
+        (appStore.isLoading && parcelTypeList.isEmpty)
+            ? Loader()
+            : Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: parcelTypeList.map((item) {
+                  return Chip(
+                    backgroundColor: Colors.white,
+                    label: Text(item.label!),
+                    elevation: 0,
+                    labelStyle: primaryTextStyle(color: Colors.grey),
+                    padding: EdgeInsets.zero,
+                    labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(defaultRadius),
+                      side: BorderSide(color: borderColor),
+                    ),
+                  ).onTap(() {
+                    parcelTypeCont.text = item.value!;
+                    setState(() {});
+                  });
+                }).toList(),
               ),
-            ).onTap(() {
-              packageController.text = item.value!;
-              setState(() {});
-            });
-          }).toList(),
-        ),
       ],
     );
   }
@@ -186,13 +244,28 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           readOnly: true,
           textFieldType: TextFieldType.ADDRESS,
           decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+          validator: (value) {
+            if (value!.isEmpty) return errorThisFieldRequired;
+            return null;
+          },
           onTap: () async {
-            String? data = await SearchAddressWidget().launch(context);
-            if (data != null && data.isNotEmpty) {
-              pickAddressCont.text = data;
+            List<dynamic> data = await SearchAddressWidget().launch(context);
+            if (data.isNotEmpty) {
+              pickAddressCont.text = data.first['address']!;
+              pickLat = data.first['late'];
+              pickLong = data.first['long'];
             }
           },
         ),
+        16.height.visible(pickLat!=null  && pickLong!=null),
+        Row(
+          children: [
+            Text('latitude: ', style: primaryTextStyle()),
+            Text(pickLat.toString(),style: primaryTextStyle(size: 14)).expand(),
+            Text('longitude: ', style: primaryTextStyle()),
+            Text(pickLong.toString(),style: primaryTextStyle(size: 14)).expand(),
+          ],
+        ).visible(pickLat!=null  && pickLong!=null),
         16.height,
         Text('Contact Number', style: primaryTextStyle()),
         8.height,
@@ -200,6 +273,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           controller: pickPhoneCont,
           textFieldType: TextFieldType.PHONE,
           decoration: commonInputDecoration(suffixIcon: Icons.phone),
+          validator: (value) {
+            return null;
+          },
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -284,13 +360,28 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           readOnly: true,
           textFieldType: TextFieldType.ADDRESS,
           decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+          validator: (value) {
+            if (value!.isEmpty) return errorThisFieldRequired;
+            return null;
+          },
           onTap: () async {
-            String? data = await SearchAddressWidget().launch(context);
-            if (data != null && data.isNotEmpty) {
-              deliverAddressCont.text = data;
+            List<dynamic> data = await SearchAddressWidget().launch(context);
+            if (data.isNotEmpty) {
+              deliverAddressCont.text = data.first['address']!;
+              deliverLat = data.first['late'];
+              deliverLong = data.first['long'];
             }
           },
         ),
+        16.height.visible(deliverLat!=null  && deliverLong!=null),
+        Row(
+          children: [
+            Text('latitude: ', style: primaryTextStyle()),
+            Text(deliverLat.toString(),style: primaryTextStyle(size: 14)).expand(),
+            Text('longitude: ', style: primaryTextStyle()),
+            Text(deliverLong.toString(),style: primaryTextStyle(size: 14)).expand(),
+          ],
+        ).visible(deliverLat!=null  && deliverLong!=null),
         16.height,
         Text('Contact Number', style: primaryTextStyle()),
         8.height,
@@ -298,6 +389,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           controller: deliverPhoneCont,
           textFieldType: TextFieldType.PHONE,
           decoration: commonInputDecoration(suffixIcon: Icons.phone),
+          validator: (value) {
+            return null;
+          },
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -389,7 +483,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 children: [
                   Text('Parcel Type', style: primaryTextStyle()),
                   16.width,
-                  Text('Documents', style: primaryTextStyle()),
+                  Text(parcelTypeCont.text, style: primaryTextStyle()),
                 ],
               ),
               8.height,
@@ -398,7 +492,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 children: [
                   Text('Weight', style: primaryTextStyle()),
                   16.width,
-                  Text('1 Kg', style: primaryTextStyle()),
+                  Text('${selectedWeight} Kg', style: primaryTextStyle()),
                 ],
               ),
             ],
@@ -418,9 +512,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Shubham Park, Chandni Chauk, Navsari.', style: primaryTextStyle()),
-              8.height,
-              Text('6745234587', style: secondaryTextStyle()),
+              Text(pickAddressCont.text, style: primaryTextStyle()),
+              8.height.visible(pickPhoneCont.text.isNotEmpty),
+              Text(pickPhoneCont.text, style: secondaryTextStyle()).visible(pickPhoneCont.text.isNotEmpty),
             ],
           ),
         ),
@@ -438,9 +532,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Shubham Park, Chandni Chauk, Navsari.', style: primaryTextStyle()),
-              8.height,
-              Text('6745234587', style: secondaryTextStyle()),
+              Text(deliverAddressCont.text, style: primaryTextStyle()),
+              8.height.visible(deliverPhoneCont.text.isNotEmpty),
+              Text(deliverPhoneCont.text, style: secondaryTextStyle()).visible(deliverPhoneCont.text.isNotEmpty),
             ],
           ),
         ),
@@ -532,72 +626,72 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Observer(
-      builder: (context) {
-        return WillPopScope(
-          onWillPop: () async {
-            if (selectedIndex == 0) {
-              return true;
-            } else {
-              selectedIndex--;
-              setState(() {});
-              return false;
-            }
-            /*  DateTime now = DateTime.now();
-            if (currentBackPressTime == null || now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
-              currentBackPressTime = now;
-              toast('Tap back again to leave Screen');
-              return false;
-            }
-            return true;*/
-          },
-          child: Scaffold(
-            appBar: appBarWidget('Create Order', color: colorPrimary, textColor: white, elevation: 0),
-            body: BodyCornerWidget(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: List.generate(4, (index) {
-                        return Container(
-                          color: selectedIndex >= index ? colorPrimary : borderColor,
-                          height: 5,
-                          width: context.width() * 0.15,
-                        );
-                      }).toList(),
-                    ),
-                    30.height,
-                    if (selectedIndex == 0) CreateOrderWidget1(),
-                    if (selectedIndex == 1) CreateOrderWidget2(),
-                    if (selectedIndex == 2) CreateOrderWidget3(),
-                    if (selectedIndex == 3) CreateOrderWidget4(),
-                  ],
-                ),
+    return WillPopScope(
+      onWillPop: () async {
+        if (selectedIndex == 0) {
+          DateTime now = DateTime.now();
+          if (currentBackPressTime == null || now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
+            currentBackPressTime = now;
+            toast('Tap back again to leave Screen');
+            return false;
+          }
+          return true;
+        } else {
+          selectedIndex--;
+          setState(() {});
+          return false;
+        }
+      },
+      child: Scaffold(
+        appBar: appBarWidget('Create Order', color: colorPrimary, textColor: white, elevation: 0),
+        body: BodyCornerWidget(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: List.generate(4, (index) {
+                      return Container(
+                        color: selectedIndex >= index ? colorPrimary : borderColor,
+                        height: 5,
+                        width: context.width() * 0.15,
+                      );
+                    }).toList(),
+                  ),
+                  30.height,
+                  if (selectedIndex == 0) CreateOrderWidget1(),
+                  if (selectedIndex == 1) CreateOrderWidget2(),
+                  if (selectedIndex == 2) CreateOrderWidget3(),
+                  if (selectedIndex == 3) CreateOrderWidget4(),
+                ],
               ),
             ),
-            bottomNavigationBar: Row(
-              children: [
-                if (selectedIndex != 0)
-                  outlineButton('Previous', () {
-                    selectedIndex--;
-                    setState(() {});
-                  }).paddingRight(16).expand(),
-                commonButton(selectedIndex != 3 ? 'Next' : 'Create Order', () {
-                  if (selectedIndex != 3) {
-                    selectedIndex++;
-                    setState(() {});
-                  } else {
-                    finish(context);
-                  }
-                }).expand()
-              ],
-            ).paddingAll(16),
           ),
-        );
-      }
+        ),
+        bottomNavigationBar: Row(
+          children: [
+            if (selectedIndex != 0)
+              outlineButton('Previous', () {
+                selectedIndex--;
+                setState(() {});
+              }).paddingRight(16).expand(),
+            commonButton(selectedIndex != 3 ? 'Next' : 'Create Order', () {
+              if (selectedIndex != 3) {
+                if (_formKey.currentState!.validate()) {
+                  selectedIndex++;
+                  setState(() {});
+                }
+              } else {
+                createOrderApiCall();
+              }
+            }).expand()
+          ],
+        ).paddingAll(16),
+      ),
     );
   }
 }

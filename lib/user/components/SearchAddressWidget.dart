@@ -31,7 +31,7 @@ class _CustomSearchScaffoldState extends PlacesAutocompleteState {
   Widget build(BuildContext context) {
     final appBar = AppBar(
       title: AppBarPlacesAutoCompleteTextField(
-        textDecoration:commonInputDecoration(suffixIcon: Icons.search),
+        textDecoration: commonInputDecoration(suffixIcon: Icons.search),
         textStyle: primaryTextStyle(color: Colors.white),
       ),
       backgroundColor: colorPrimary,
@@ -44,7 +44,7 @@ class _CustomSearchScaffoldState extends PlacesAutocompleteState {
     ));
     return WillPopScope(
       onWillPop: () async {
-        finish(context, '');
+        finish(context);
         return true;
       },
       child: Scaffold(key: searchScaffoldKey, appBar: appBar, body: body),
@@ -60,8 +60,9 @@ class _CustomSearchScaffoldState extends PlacesAutocompleteState {
       PlacesDetailsResponse detail = await _places.getDetailsByPlaceId(p.placeId!);
       final lat = detail.result.geometry!.location.lat;
       final lng = detail.result.geometry!.location.lng;
-
-      finish(context, p.description);
+      finish(context, [
+        {'address': p.description, 'late': lat.toString(), 'long': lng.toString()}
+      ]);
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("${p.description} - $lat/$lng")),
