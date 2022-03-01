@@ -41,6 +41,8 @@ Future<LoginResponse> signUpApi(Map request) async {
     await setValue(USER_TYPE, loginResponse.data!.user_type.validate());
     await setValue(USER_NAME, loginResponse.data!.username.validate());
     await setValue(USER_ADDRESS, loginResponse.data!.address.validate());
+    await setValue(Country, loginResponse.data!.country_id.validate());
+    await setValue(City, loginResponse.data!.city_id.validate());
 
     await appStore.setUserEmail(loginResponse.data!.email.validate());
     await appStore.setLogin(true);
@@ -92,6 +94,8 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
     await setValue(USER_NAME, loginResponse.data!.username.validate());
     await setValue(STATUS, loginResponse.data!.status.validate());
     await setValue(USER_ADDRESS, loginResponse.data!.address.validate());
+    await setValue(Country, loginResponse.data!.country_id.validate());
+    await setValue(City, loginResponse.data!.city_id.validate());
 
     /* await appStore.setUserName(loginResponse.userData!.username.validate());
     await appStore.setRole(loginResponse.userData!.user_type.validate());
@@ -120,6 +124,8 @@ Future<void> logout(BuildContext context) async {
   await removeKey(USER_PASSWORD);
   await removeKey(USER_ADDRESS);
   await removeKey(STATUS);
+  await removeKey(Country);
+  await removeKey(City);
 
   await appStore.setLogin(false);
 
@@ -182,10 +188,9 @@ Future updateProfile({String? userName, String? name, String? userEmail, String?
 }
 
 // ParcelType Api
-Future<ParcelTypeListModel> getParcelTypeList({int? page}) async{
-  return ParcelTypeListModel.fromJson(await handleResponse(await buildHttpResponse('staticdata-list?type=parcel_type&per_page=-1',method: HttpMethod.GET)))  ;
+Future<ParcelTypeListModel> getParcelTypeList({int? page}) async {
+  return ParcelTypeListModel.fromJson(await handleResponse(await buildHttpResponse('staticdata-list?type=parcel_type&per_page=-1', method: HttpMethod.GET)));
 }
-
 
 Future<CountryListModel> getCountryList() async {
   return CountryListModel.fromJson(await handleResponse(await buildHttpResponse('country-list', method: HttpMethod.GET)));
@@ -196,17 +201,17 @@ Future<CityListModel> getCityList({required int CountryId}) async {
 }
 
 /// Country
-Future updateCountry({int? countryId, int? cityId}) async {
+Future updateCountryCity({int? countryId, int? cityId}) async {
   MultipartRequest multiPartRequest = await getMultiPartRequest('update-profile');
-  multiPartRequest.fields['city_id'] = countryId.validate().toString();
-  multiPartRequest.fields['country_id'] = cityId.validate().toString();
+  multiPartRequest.fields['city_id'] = cityId.toString();
+  multiPartRequest.fields['country_id'] = countryId.toString();
 
   await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
     if (data != null) {
       LoginResponse res = LoginResponse.fromJson(data);
 
-      await setValue(NAME, res.data!.name.validate());
-      await setValue(USER_PROFILE_PHOTO, res.data!.profile_image.validate());
+      await setValue(Country, res.data!.country_id.validate());
+      await setValue(City, res.data!.city_id.validate());
     }
   }, onError: (error) {
     toast(error.toString());

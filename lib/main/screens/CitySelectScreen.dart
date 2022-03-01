@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mighty_delivery/delivery/screens/DDashboardScreen.dart';
+import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/models/CityListModel.dart';
 import 'package:mighty_delivery/main/models/CountryListModel.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
+import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -33,9 +35,17 @@ class CitySelectScreenState extends State<CitySelectScreen> {
   }
 
   void init() async {
-    getCountryList().then((value) {
+    if(countryData.contains(selectedCountry)) {
+      selectedCountry = getIntAsync(Country);
+    }
+
+    //selectedCity = getIntAsync(City) ;
+    await getCountryList().then((value) {
       countryData = value.data!;
+      setState(() {});
       //selectedCountry = value.data![0].id!;
+      getCityApiCall(selectedCountry!);
+
       setState(() {});
     }).catchError((error) {
       log(error);
@@ -43,10 +53,28 @@ class CitySelectScreenState extends State<CitySelectScreen> {
   }
 
   getCityApiCall(int Id) async {
-   await getCityList(CountryId: Id).then((value) {
+    await getCityList(CountryId: Id).then((value) {
       cityData = value.data!;
       setState(() {});
     }).catchError((error) {
+      log(error);
+    });
+  }
+
+  Future<void> updateCountry() async {
+    if (selectedCountry == null) {
+      return toast('Please select country');
+    }
+    if (selectedCity == null) {
+      return toast('Please select city');
+    }
+
+    appStore.setLoading(true);
+    await updateCountryCity(countryId: selectedCountry, cityId: selectedCity).then((value) {
+      appStore.setLoading(false);
+      finish(context);
+    }).catchError((error) {
+      appStore.setLoading(false);
       log(error);
     });
   }
@@ -81,7 +109,7 @@ class CitySelectScreenState extends State<CitySelectScreen> {
                       children: [
                         Text('Country', style: boldTextStyle()),
                         DropdownButton<int>(
-                          value: selectedCountry,
+                          value: selectedCountry != null ? selectedCountry : null,
                           items: countryData.map<DropdownMenuItem<int>>((item) {
                             return DropdownMenuItem(
                               value: item.id,
@@ -91,6 +119,7 @@ class CitySelectScreenState extends State<CitySelectScreen> {
                           onChanged: (value) {
                             selectedCountry = value!;
                             getCityApiCall(selectedCountry!);
+
                             setState(() {});
                           },
                         ),
@@ -102,7 +131,7 @@ class CitySelectScreenState extends State<CitySelectScreen> {
                       children: [
                         Text('City', style: boldTextStyle()),
                         DropdownButton<int>(
-                          value: selectedCity,
+                          value: selectedCity != null ? selectedCity : null,
                           items: cityData.map<DropdownMenuItem<int>>((item) {
                             return DropdownMenuItem(
                               value: item.id,
@@ -119,7 +148,7 @@ class CitySelectScreenState extends State<CitySelectScreen> {
                     30.height,
                     commonButton("Change", () {
                       if (widget.isBack) {
-                        finish(context);
+                        updateCountry();
                       } else {
                         DDashboardScreen().launch(context);
                       }

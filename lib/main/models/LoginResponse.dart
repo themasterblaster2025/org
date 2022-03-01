@@ -34,6 +34,10 @@ class UserData {
   String? username;
   String? address;
   int? status;
+  int? country_id;
+  int? city_id;
+  String? city_name;
+  String? country_name;
 
   UserData({
     this.api_token,
@@ -48,6 +52,10 @@ class UserData {
     this.username,
     this.address,
     this.status,
+    this.city_id,
+    this.country_id,
+    this.city_name,
+    this.country_name,
   });
 
   factory UserData.fromJson(Map<String, dynamic> json) {
@@ -64,6 +72,10 @@ class UserData {
       username: json['username'],
       address: json['address'],
       status: json['status'],
+      city_id: json['city_id'],
+      country_id: json['country_id'],
+      city_name: json['city_name'],
+      country_name: json['country_name'],
     );
   }
 
@@ -81,6 +93,10 @@ class UserData {
     data['username'] = this.username;
     data['address'] = this.address;
     data['status'] = this.status;
+    data['city_id'] = this.city_id;
+    data['country_id'] = this.country_id;
+    data['city_name'] = this.city_name;
+    data['country_name'] = this.country_name;
     return data;
   }
 }
