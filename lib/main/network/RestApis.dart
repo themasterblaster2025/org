@@ -8,6 +8,7 @@ import 'package:mighty_delivery/main/models/CityListModel.dart';
 import 'package:mighty_delivery/main/models/CountryListModel.dart';
 import 'package:mighty_delivery/main/models/LDBaseResponse.dart';
 import 'package:mighty_delivery/main/models/LoginResponse.dart';
+import 'package:mighty_delivery/main/models/OrderListModel.dart';
 import 'package:mighty_delivery/main/models/ParcelTypeListModel.dart';
 import 'package:mighty_delivery/main/screens/LoginScreen.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
@@ -222,4 +223,9 @@ Future updateCountryCity({int? countryId, int? cityId}) async {
   }, onError: (error) {
     toast(error.toString());
   });
+}
+
+/// get OrderList
+Future<OrderListModel> getOrderListApiCall() async{
+  return OrderListModel.fromJson(await handleResponse(await buildHttpResponse('order-list',method: HttpMethod.GET)));
 }
