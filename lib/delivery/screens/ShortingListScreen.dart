@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/delivery/components/OrderWidgetsScreen.dart';
+import 'package:mighty_delivery/delivery/components/NewOrderWidget.dart';
 import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
@@ -118,7 +118,7 @@ class ShortingListScreenState extends State<ShortingListScreen> {
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (_, index) {
-                  return OrderWidgetsScreen();
+                  return NewOrderWidget();
                 },
               ),
             ),

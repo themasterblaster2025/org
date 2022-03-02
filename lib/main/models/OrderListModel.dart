@@ -76,7 +76,7 @@ class OrderData {
   String? paymentType;
   String? paymentStatus;
   String? paymentCollectFrom;
-  String? deliveryManId;
+  int? deliveryManId;
   String? deliveryManName;
   int? fixedCharges;
   var extraCharges;
@@ -87,7 +87,39 @@ class OrderData {
   String? deliveryTimeSignature;
   String? deletedAt;
 
-  OrderData({this.id, this.clientId, this.clientName, this.date, this.pickupPoint, this.deliveryPoint, this.countryId, this.countryName, this.cityId, this.cityName, this.parcelType, this.totalWeight, this.totalDistance, this.pickupDatetime, this.deliveryDatetime, this.parentOrderId, this.status, this.paymentId, this.paymentType, this.paymentStatus, this.paymentCollectFrom, this.deliveryManId, this.deliveryManName, this.fixedCharges, this.extraCharges, this.reason, this.pickupConfirmByClient, this.pickupConfirmByDeliveryMan, this.pickupTimeSignature, this.deliveryTimeSignature, this.deletedAt});
+  OrderData({
+    this.id,
+    this.clientId,
+    this.clientName,
+    this.date,
+    this.pickupPoint,
+    this.deliveryPoint,
+    this.countryId,
+    this.countryName,
+    this.cityId,
+    this.cityName,
+    this.parcelType,
+    this.totalWeight,
+    this.totalDistance,
+    this.pickupDatetime,
+    this.deliveryDatetime,
+    this.parentOrderId,
+    this.status,
+    this.paymentId,
+    this.paymentType,
+    this.paymentStatus,
+    this.paymentCollectFrom,
+    this.deliveryManId,
+    this.deliveryManName,
+    this.fixedCharges,
+    this.extraCharges,
+    this.reason,
+    this.pickupConfirmByClient,
+    this.pickupConfirmByDeliveryMan,
+    this.pickupTimeSignature,
+    this.deliveryTimeSignature,
+    this.deletedAt,
+  });
 
   OrderData.fromJson(Map<String, dynamic> json) {
     id = json['id'];

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/delivery/components/OrderWidgetsScreen.dart';
-import 'package:mighty_delivery/delivery/screens/DeliveryDetailScreen.dart';
+import 'package:mighty_delivery/delivery/components/NewOrderWidget.dart';
+import 'package:mighty_delivery/delivery/screens/ReceivedScreenOrderScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class DOrderFragment extends StatefulWidget {
@@ -31,12 +31,12 @@ class DOrderFragmentState extends State<DOrderFragment> {
       shrinkWrap: true,
       itemCount: 10,
       itemBuilder: (_, index) {
-        return OrderWidgetsScreen(
-          name: 'Track',
+        return NewOrderWidget(
+          name: 'Take Parcel',
           onTap: () {
-            DeliveryDetailScreen().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+            ReceivedScreenOrderScreen().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
           },
-        );
+        );;
       },
     );
   }

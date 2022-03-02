@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mighty_delivery/delivery/components/OrderBottomSheetWidget.dart';
+import 'package:mighty_delivery/main/models/OrderListModel.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
@@ -8,8 +9,9 @@ import 'package:nb_utils/nb_utils.dart';
 class NewOrderWidget extends StatefulWidget {
   final String? name;
   final Function()? onTap;
+  final OrderData? orderData;
 
-  NewOrderWidget({this.name, this.onTap});
+  NewOrderWidget({this.name, this.onTap, this.orderData});
 
   @override
   NewOrderWidgetState createState() => NewOrderWidgetState();
@@ -43,11 +45,11 @@ class NewOrderWidgetState extends State<NewOrderWidget> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('#1457894578', style: boldTextStyle(size: 14)),
+                  Text('# ${widget.orderData!.id}', style: boldTextStyle(size: 14)),
                   Container(
                     padding: EdgeInsets.all(4),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(defaultRadius),color: colorPrimary),
-                    child: Text('Order Assign',style: boldTextStyle(size: 14,color: white)),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(defaultRadius), color: colorPrimary),
+                    child: Text(widget.orderData!.status ?? '-', style: boldTextStyle(size: 14, color: white)),
                   ),
                 ],
               ),
@@ -92,7 +94,7 @@ class NewOrderWidgetState extends State<NewOrderWidget> {
                             children: [
                               Text('-: Picked :-', style: secondaryTextStyle(color: colorPrimary)),
                               8.height,
-                              Text('Amit data near raj Cinema, navsari, 3960014 ,Gujarat, india', style: primaryTextStyle(size: 15), maxLines: 3),
+                              Text(widget.orderData!.pickupPoint!.address ?? '-', style: primaryTextStyle(size: 15), maxLines: 3),
                             ],
                           ).expand()
                         ],
@@ -109,7 +111,7 @@ class NewOrderWidgetState extends State<NewOrderWidget> {
                             children: [
                               Text('-: Delivered :-', style: secondaryTextStyle(color: colorPrimary)),
                               8.height,
-                              Text('Raj Cinema,near road, navsari, 3960014 ,Gujarat, india', style: primaryTextStyle(size: 15), maxLines: 3),
+                              Text(widget.orderData!.deliveryPoint!.address ?? '-', style: primaryTextStyle(size: 15), maxLines: 3),
                             ],
                           ).expand()
                         ],
@@ -126,7 +128,7 @@ class NewOrderWidgetState extends State<NewOrderWidget> {
                             children: [
                               Text('-: Date Time :-', style: secondaryTextStyle(color: colorPrimary)),
                               8.height,
-                              Text('19.01.19 AM', style: primaryTextStyle(size: 14)),
+                              Text(printDate(widget.orderData!.date ?? '-'), style: primaryTextStyle(size: 14)),
                             ],
                           ),
                         ],
@@ -155,7 +157,7 @@ class NewOrderWidgetState extends State<NewOrderWidget> {
                         ),
                         context: context,
                         builder: (_) {
-                          return OrderBottomSheetWidget();
+                          return OrderBottomSheetWidget(orderData: widget.orderData);
                         },
                       );
                     },

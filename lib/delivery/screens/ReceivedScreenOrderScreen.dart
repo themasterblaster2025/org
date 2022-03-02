@@ -1,17 +1,23 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mighty_delivery/delivery/screens/ConfirmDeliveryScreen.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
+import 'package:mighty_delivery/main/models/OrderListModel.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
+import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
 
 class ReceivedScreenOrderScreen extends StatefulWidget {
+  final OrderData? orderData;
+
+  ReceivedScreenOrderScreen({this.orderData});
+
   @override
   ReceivedScreenOrderScreenState createState() => ReceivedScreenOrderScreenState();
 }
@@ -34,8 +40,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   int val = 0;
 
   File? imageSignature;
-
-  List<String> nameData = [];
+  bool mIsUpdate = false;
 
   @override
   void initState() {
@@ -44,7 +49,11 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   }
 
   void init() async {
-    //
+    mIsUpdate = widget.orderData != null;
+    if (mIsUpdate) {
+      deliveryBoyNameController.text = widget.orderData!.deliveryManName!;
+      clientController.text = widget.orderData!.clientName!;
+    }
   }
 
   Future<void> selectPic() async {
@@ -92,6 +101,33 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
     setState(() {});
   }
 
+  Future<Widget> date() async {
+    return DateTimePicker(
+      type: DateTimePickerType.dateTimeSeparate,
+      dateMask: 'd MMM, yyyy',
+      initialValue: DateTime.now().toString(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+      icon: Icon(Icons.event),
+      dateLabelText: 'Date',
+      timeLabelText: "Hour",
+      selectableDayPredicate: (date) {
+        // Disable weekend days to select from the calendar
+        if (date.weekday == 6 || date.weekday == 7) {
+          return false;
+        }
+
+        return true;
+      },
+      onChanged: (val) => print(val),
+      validator: (val) {
+        print(val);
+        return null;
+      },
+      onSaved: (val) => print(val),
+    );
+  }
+
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
@@ -113,10 +149,42 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                 readOnly: true,
                 textFieldType: TextFieldType.PHONE,
                 controller: picUpController,
-                onTap: () {
-                  toast('Show dialog Data');
+                onTap: () async {
+                  //
                 },
-                decoration: commonInputDecoration(suffixIcon: Icons.schedule_outlined),
+                decoration: commonInputDecoration(
+                  dateTime: IconButton(
+                    onPressed: () {
+                      //
+                    },
+                    icon: DateTimePicker(
+                      type: DateTimePickerType.dateTime,
+                      dateMask: 'd MMM, yyyy',
+                      initialValue: DateTime.now().toString(),
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2100),
+                      icon: Icon(Icons.event),
+                      dateLabelText: 'Date',
+                      useRootNavigator: true,
+                      timeLabelText: "Hour",
+                      selectableDayPredicate: (date) {
+                        if (date.weekday == 6 || date.weekday == 7) {
+                          return false;
+                        }
+
+                        return true;
+                      },
+                      onChanged: (val) {
+                        print(val);
+                      },
+                      validator: (val) {
+                        print(val);
+                        return null;
+                      },
+                      onSaved: (val) => print(val),
+                    ),
+                  ),
+                ),
               ),
               16.height,
               Text('Delivery Datetime', style: boldTextStyle()),
@@ -134,6 +202,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
               Text('Client name', style: boldTextStyle()),
               8.height,
               AppTextField(
+                readOnly: true,
                 textFieldType: TextFieldType.NAME,
                 decoration: commonInputDecoration(),
                 controller: clientController,
@@ -142,6 +211,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
               Text('Delivery boy name', style: boldTextStyle()),
               8.height,
               AppTextField(
+                readOnly: true,
                 controller: deliveryBoyNameController,
                 textFieldType: TextFieldType.NAME,
                 decoration: commonInputDecoration(),
@@ -169,8 +239,8 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                   },
                 ),
               ),
-              Text('Delivery time Signature', style: boldTextStyle()),
-              8.height,
+              Text('Delivery time Signature', style: boldTextStyle()).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
+              8.height.visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
               Container(
                 height: 150,
                 width: context.width(),
@@ -184,7 +254,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                     strokeColor: colorPrimary,
                   ),
                 ),
-              ),
+              ).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
               Align(
                 alignment: Alignment.bottomRight,
                 child: TextButton(
@@ -193,7 +263,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                     //
                   },
                 ),
-              ),
+              ).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
               16.height,
               Text('Add a product image', style: boldTextStyle()),
               16.height,
@@ -234,29 +304,33 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                 controller: reasonController,
               ),
               16.height,
-              AppButton(
-                width: context.width(),
-                text: 'PicUp Delivery',
-                textStyle: primaryTextStyle(color: white),
-                color: colorPrimary,
-                onTap: () async {
-                  screenshotController.capture(delay: Duration(milliseconds: 10)).then((capturedImage) {
-                    imageSignature = File.fromRawPath(capturedImage!);
-                  }).catchError((onError) {
-                    print(onError);
-                  });
-                },
+              Row(
+                children: [
+                  AppButton(
+                    width: context.width(),
+                    text: 'PicUp Delivery',
+                    textStyle: primaryTextStyle(color: white),
+                    color: colorPrimary,
+                    onTap: () async {
+                      screenshotController.capture(delay: Duration(milliseconds: 10)).then((capturedImage) {
+                        imageSignature = File.fromRawPath(capturedImage!);
+                      }).catchError((onError) {
+                        print(onError);
+                      });
+                    },
+                  ).expand(),
+                  16.width,
+                  AppButton(
+                    width: context.width(),
+                    text: 'Cancel',
+                    textStyle: primaryTextStyle(color: white),
+                    color: colorPrimary,
+                    onTap: () async {
+                      //
+                    },
+                  ).expand(),
+                ],
               ),
-              16.height,
-              AppButton(
-                text: 'Confirm Order',
-                textStyle: primaryTextStyle(color: white),
-                color: colorPrimary,
-                width: context.width(),
-                onTap: () {
-                  ConfirmDeliveryScreen().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
-                },
-              )
             ],
           ),
         ),

@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:mighty_delivery/main/models/OrderListModel.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class OrderBottomSheetWidget extends StatefulWidget {
+  final OrderData? orderData;
+
+  OrderBottomSheetWidget({this.orderData});
 
   @override
   OrderBottomSheetWidgetState createState() => OrderBottomSheetWidgetState();
 }
-class OrderBottomSheetWidgetState extends State<OrderBottomSheetWidget> {
 
- @override
+class OrderBottomSheetWidgetState extends State<OrderBottomSheetWidget> {
+  @override
   void initState() {
     super.initState();
     init();
@@ -58,7 +62,6 @@ class OrderBottomSheetWidgetState extends State<OrderBottomSheetWidget> {
             16.width,
             Text('Payment type', style: primaryTextStyle()).expand(),
             Text('Cash On Delivery', style: secondaryTextStyle()),
-
           ],
         ),
         16.height,
@@ -66,7 +69,7 @@ class OrderBottomSheetWidgetState extends State<OrderBottomSheetWidget> {
           children: [
             Icon(Icons.home_outlined, color: colorPrimary, size: 20),
             16.width,
-            Text('Amit data near raj Cinema, navsari, 3960014 ,Gujarat, india', style: secondaryTextStyle()).expand(),
+            Text(widget.orderData!.pickupPoint!.address ?? '-', style: secondaryTextStyle()).expand(),
           ],
         ),
         16.height,
@@ -74,7 +77,7 @@ class OrderBottomSheetWidgetState extends State<OrderBottomSheetWidget> {
           children: [
             Icon(Icons.description_outlined, color: colorPrimary, size: 20),
             16.width,
-            Text('New parcel is on the way and this is new parcel is send to the nearest bus stations.', style: secondaryTextStyle()).expand(),
+            Text(widget.orderData!.deliveryPoint!.address ?? '-', style: secondaryTextStyle()).expand(),
           ],
         ),
         16.height,

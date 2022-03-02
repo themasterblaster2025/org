@@ -190,8 +190,8 @@ Future updateProfile({String? userName, String? name, String? userEmail, String?
 }
 
 /// Create Order Api
-Future<LDBaseResponse> createOrder(Map request)async{
-  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('order-save',request: request,method: HttpMethod.POST)));
+Future<LDBaseResponse> createOrder(Map request) async {
+  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('order-save', request: request, method: HttpMethod.POST)));
 }
 
 // ParcelType Api
@@ -226,6 +226,57 @@ Future updateCountryCity({int? countryId, int? cityId}) async {
 }
 
 /// get OrderList
-Future<OrderListModel> getOrderListApiCall() async{
-  return OrderListModel.fromJson(await handleResponse(await buildHttpResponse('order-list',method: HttpMethod.GET)));
+Future<OrderListModel> getOrderList({required int page}) async {
+  return OrderListModel.fromJson(await handleResponse(await buildHttpResponse('order-list', method: HttpMethod.GET)));
+}
+
+/// get deliveryBoy orderList
+Future<OrderListModel> getDeliveryBoyList({required int page, required int deliveryBoyID}) async {
+  return OrderListModel.fromJson(await handleResponse(await buildHttpResponse('order-list?delivery_man_id=$deliveryBoyID&page=$page', method: HttpMethod.GET)));
+}
+
+/// update status
+Future updateStatus({String? orderStatus, int? orderId}) async {
+  MultipartRequest multiPartRequest = await getMultiPartRequest('order-update/$orderId');
+  multiPartRequest.fields['status'] = orderStatus.validate();
+
+  await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
+    if (data != null) {
+      //
+    }
+  }, onError: (error) {
+    toast(error.toString());
+  });
+}
+
+/// update order
+Future updateOrder({
+  String? pickupDatetime,
+  String? deliveryDatetime,
+  String? clientName,
+  String? deliveryman,
+  String? orderStatus,
+  String? reason,
+  int? orderId,
+  File? picUpSignature,
+  File? deliverySignature,
+}) async {
+  MultipartRequest multiPartRequest = await getMultiPartRequest('order-update/$orderId');
+  multiPartRequest.fields['pickup_datetime'] = pickupDatetime.validate();
+  multiPartRequest.fields['delivery_datetime'] = deliveryDatetime.validate();
+  multiPartRequest.fields['pickup_confirm_by_client'] = clientName.validate();
+  multiPartRequest.fields['pickup_confirm_by_delivery_man'] = deliveryman.validate();
+  multiPartRequest.fields['reason'] = reason.validate();
+  multiPartRequest.fields['status'] = orderStatus.validate();
+
+  if (picUpSignature != null) multiPartRequest.files.add(await MultipartFile.fromPath('pickup_time_signature', picUpSignature.path));
+  if (deliverySignature != null) multiPartRequest.files.add(await MultipartFile.fromPath('delivery_time_signature', deliverySignature.path));
+
+  await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
+    if (data != null) {
+      //
+    }
+  }, onError: (error) {
+    toast(error.toString());
+  });
 }
