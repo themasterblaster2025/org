@@ -24,6 +24,7 @@ const USER_ADDRESS = 'USER_ADDRESS';
 const STATUS = 'STATUS';
 const COUNTRY_ID = 'Country';
 const CITY_ID = 'City';
+const CITY_NAME = 'CITY_NAME';
 
 const CLIENT = 'client';
 const DELIVERY_MAN = 'delivery_man';

@@ -2,9 +2,10 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:flutter/material.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/screens/CitySelectScreen.dart';
-import 'package:mighty_delivery/user/components/LocationChangeDialog.dart';
 import 'package:mighty_delivery/main/models/models.dart';
+import 'package:mighty_delivery/main/screens/CitySelectScreen2.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
+import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/main/utils/DataProviders.dart';
 import 'package:mighty_delivery/user/screens/CreateOrderScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -49,17 +50,10 @@ class DashboardScreenState extends State<DashboardScreen> {
             children: [
               Icon(Icons.location_on, color: Colors.white),
               8.width,
-              Text('Surat', style: primaryTextStyle(color: white)),
+              Text(getStringAsync(CITY_NAME), style: primaryTextStyle(color: white)),
             ],
           ).onTap(() {
-            /*showInDialog(
-              context,
-              contentPadding: EdgeInsets.all(16),
-              builder: (context) {
-                return LocationChangeDialog();
-              },
-            );*/
-            CitySelectScreen(isBack: true).launch(context);
+            CitySelectScreen2(isBack: true,onUpdate:(){setState(() { });}).launch(context);
           }).paddingOnly(right: 16),
         ],
       ),

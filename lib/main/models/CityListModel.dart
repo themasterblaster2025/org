@@ -1,109 +1,156 @@
-import 'package:mighty_delivery/main/models/PaginationModel.dart';
+import 'PaginationModel.dart';
 
 class CityListModel {
-  List<CityModel>? data;
   PaginationModel? pagination;
+  List<CityModel>? data;
 
-  CityListModel({this.data, this.pagination});
+  CityListModel({this.pagination, this.data});
 
-  factory CityListModel.fromJson(Map<String, dynamic> json) {
-    return CityListModel(
-      data: json['data'] != null ? (json['data'] as List).map((i) => CityModel.fromJson(i)).toList() : null,
-      pagination: json['pagination'] != null ? PaginationModel.fromJson(json['pagination']) : null,
-    );
+  CityListModel.fromJson(Map<String, dynamic> json) {
+    pagination = json['pagination'] != null ? new PaginationModel.fromJson(json['pagination']) : null;
+    if (json['data'] != null) {
+      data = <CityModel>[];
+      json['data'].forEach((v) {
+        data!.add(new CityModel.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
-    }
     if (this.pagination != null) {
       data['pagination'] = this.pagination!.toJson();
+    }
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class CityModel {
-  String? address;
-  int? cancel_charges;
-  int? country_id;
-  String? country_name;
-  String? created_at;
-  String? deleted_at;
-
-  //List<Object>? extra_charges;
-  int? fixed_charges;
   int? id;
-  int? min_distance;
-  int? min_weight;
   String? name;
-  int? per_distance_charges;
-  int? per_weight_charges;
+  String? address;
+  int? countryId;
+  String? countryName;
   int? status;
-  String? updated_at;
+  int? fixedCharges;
+  List<ExtraCharges>? extraCharges;
+  int? cancelCharges;
+  int? minDistance;
+  int? minWeight;
+  int? perDistanceCharges;
+  int? perWeightCharges;
+  String? createdAt;
+  String? updatedAt;
+  String? deletedAt;
 
-  CityModel({
-    this.address,
-    this.cancel_charges,
-    this.country_id,
-    this.country_name,
-    this.created_at,
-    this.deleted_at,
-    //this.extra_charges,
-    this.fixed_charges,
-    this.id,
-    this.min_distance,
-    this.min_weight,
-    this.name,
-    this.per_distance_charges,
-    this.per_weight_charges,
-    this.status,
-    this.updated_at,
-  });
+  CityModel(
+      {this.id,
+      this.name,
+      this.address,
+      this.countryId,
+      this.countryName,
+      this.status,
+      this.fixedCharges,
+      this.extraCharges,
+      this.cancelCharges,
+      this.minDistance,
+      this.minWeight,
+      this.perDistanceCharges,
+      this.perWeightCharges,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt});
 
-  factory CityModel.fromJson(Map<String, dynamic> json) {
-    return CityModel(
-      address: json['address'],
-      cancel_charges: json['cancel_charges'],
-      country_id: json['country_id'],
-      country_name: json['country_name'],
-      created_at: json['created_at'],
-      deleted_at: json['deleted_at'],
-      //extra_charges: json['extra_charges'] != null ? (json['extra_charges'] as List).map((i) => Object.fromJson(i)).toList() : null,
-      fixed_charges: json['fixed_charges'],
-      id: json['id'],
-      min_distance: json['min_distance'],
-      min_weight: json['min_weight'],
-      name: json['name'],
-      per_distance_charges: json['per_distance_charges'],
-      per_weight_charges: json['per_weight_charges'],
-      status: json['status'],
-      updated_at: json['updated_at'],
-    );
+  CityModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    address = json['address'];
+    countryId = json['country_id'];
+    countryName = json['country_name'];
+    status = json['status'];
+    fixedCharges = json['fixed_charges'];
+    if (json['extra_charges'] != null) {
+      extraCharges = <ExtraCharges>[];
+      json['extra_charges'].forEach((v) {
+        extraCharges!.add(new ExtraCharges.fromJson(v));
+      });
+    }
+    cancelCharges = json['cancel_charges'];
+    minDistance = json['min_distance'];
+    minWeight = json['min_weight'];
+    perDistanceCharges = json['per_distance_charges'];
+    perWeightCharges = json['per_weight_charges'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+    deletedAt = json['deleted_at'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['address'] = this.address;
-    data['cancel_charges'] = this.cancel_charges;
-    data['country_id'] = this.country_id;
-    data['country_name'] = this.country_name;
-    data['created_at'] = this.created_at;
-    data['deleted_at'] = this.deleted_at;
-    data['fixed_charges'] = this.fixed_charges;
     data['id'] = this.id;
-    data['min_distance'] = this.min_distance;
-    data['min_weight'] = this.min_weight;
     data['name'] = this.name;
-    data['per_distance_charges'] = this.per_distance_charges;
-    data['per_weight_charges'] = this.per_weight_charges;
+    data['address'] = this.address;
+    data['country_id'] = this.countryId;
+    data['country_name'] = this.countryName;
     data['status'] = this.status;
-    data['updated_at'] = this.updated_at;
-    /* if (this.extra_charges != null) {
-      data['extra_charges'] = this.extra_charges.map((v) => v.toJson()).toList();
-    }*/
+    data['fixed_charges'] = this.fixedCharges;
+    if (this.extraCharges != null) {
+      data['extra_charges'] = this.extraCharges!.map((v) => v.toJson()).toList();
+    }
+    data['cancel_charges'] = this.cancelCharges;
+    data['min_distance'] = this.minDistance;
+    data['min_weight'] = this.minWeight;
+    data['per_distance_charges'] = this.perDistanceCharges;
+    data['per_weight_charges'] = this.perWeightCharges;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
+    data['deleted_at'] = this.deletedAt;
+    return data;
+  }
+}
+
+class ExtraCharges {
+  int? id;
+  String? title;
+  String? chargesType;
+  int? charges;
+  int? countryId;
+  int? cityId;
+  int? status;
+  String? createdAt;
+  String? updatedAt;
+  String? deletedAt;
+
+  ExtraCharges({this.id, this.title, this.chargesType, this.charges, this.countryId, this.cityId, this.status, this.createdAt, this.updatedAt, this.deletedAt});
+
+  ExtraCharges.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    title = json['title'];
+    chargesType = json['charges_type'];
+    charges = json['charges'];
+    countryId = json['country_id'];
+    cityId = json['city_id'];
+    status = json['status'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+    deletedAt = json['deleted_at'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['title'] = this.title;
+    data['charges_type'] = this.chargesType;
+    data['charges'] = this.charges;
+    data['country_id'] = this.countryId;
+    data['city_id'] = this.cityId;
+    data['status'] = this.status;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
+    data['deleted_at'] = this.deletedAt;
     return data;
   }
 }

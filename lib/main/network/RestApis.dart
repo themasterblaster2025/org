@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:mighty_delivery/main/models/ChangePasswordResponse.dart';
+import 'package:mighty_delivery/main/models/CityDetailModel.dart';
 import 'package:mighty_delivery/main/models/CityListModel.dart';
 import 'package:mighty_delivery/main/models/CountryListModel.dart';
 import 'package:mighty_delivery/main/models/LDBaseResponse.dart';
@@ -45,6 +46,8 @@ Future<LoginResponse> signUpApi(Map request) async {
     await setValue(USER_ADDRESS, loginResponse.data!.address.validate());
     await setValue(COUNTRY_ID, loginResponse.data!.country_id.validate());
     await setValue(CITY_ID, loginResponse.data!.city_id.validate());
+    await setValue(CITY_NAME, loginResponse.data!.city_name.validate());
+
 
     await appStore.setUserEmail(loginResponse.data!.email.validate());
     await appStore.setLogin(true);
@@ -190,8 +193,8 @@ Future updateProfile({String? userName, String? name, String? userEmail, String?
 }
 
 /// Create Order Api
-Future<LDBaseResponse> createOrder(Map request) async {
-  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('order-save', request: request, method: HttpMethod.POST)));
+Future<LDBaseResponse> createOrder(Map request)async{
+  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('order-save',request: request,method: HttpMethod.POST)));
 }
 
 // ParcelType Api
@@ -203,8 +206,12 @@ Future<CountryListModel> getCountryList() async {
   return CountryListModel.fromJson(await handleResponse(await buildHttpResponse('country-list', method: HttpMethod.GET)));
 }
 
-Future<CityListModel> getCityList({required int CountryId}) async {
-  return CityListModel.fromJson(await handleResponse(await buildHttpResponse('city-list?country_id=$CountryId', method: HttpMethod.GET)));
+Future<CityListModel> getCityList({required int CountryId,String? name}) async {
+  return CityListModel.fromJson(await handleResponse(await buildHttpResponse(name!=null ? 'city-list?country_id=$CountryId&name=$name' : 'city-list?country_id=$CountryId', method: HttpMethod.GET)));
+}
+
+Future<CityDetailModel> getCityDetail(int id) async{
+  return CityDetailModel.fromJson(await handleResponse(await buildHttpResponse('city-detail?id=$id',method: HttpMethod.GET)));
 }
 
 /// Country
@@ -219,6 +226,7 @@ Future updateCountryCity({int? countryId, int? cityId}) async {
 
       await setValue(COUNTRY_ID, res.data!.country_id.validate());
       await setValue(CITY_ID, res.data!.city_id.validate());
+      await setValue(CITY_NAME, res.data!.city_name.validate());
     }
   }, onError: (error) {
     toast(error.toString());
@@ -226,8 +234,8 @@ Future updateCountryCity({int? countryId, int? cityId}) async {
 }
 
 /// get OrderList
-Future<OrderListModel> getOrderList({required int page}) async {
-  return OrderListModel.fromJson(await handleResponse(await buildHttpResponse('order-list', method: HttpMethod.GET)));
+Future<OrderListModel> getOrderList() async{
+  return OrderListModel.fromJson(await handleResponse(await buildHttpResponse('order-list',method: HttpMethod.GET)));
 }
 
 /// get deliveryBoy orderList

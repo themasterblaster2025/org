@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
+import 'package:mighty_delivery/main/models/OrderListModel.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -9,6 +11,10 @@ import 'TrackOrderScreen.dart';
 
 class OrderDetailScreen extends StatefulWidget {
   static String tag = '/OrderDetailScreen';
+
+  final OrderData orderData;
+
+  OrderDetailScreen({required this.orderData});
 
   @override
   OrderDetailScreenState createState() => OrderDetailScreenState();
@@ -43,12 +49,12 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('#8756346576', style: boldTextStyle()),
-                  Text('Completed', style: boldTextStyle(color: statusColor('completed'))),
+                  Text('#${widget.orderData.id}', style: boldTextStyle()),
+                  Text('${widget.orderData.status}', style: boldTextStyle(color: statusColor(widget.orderData.status ?? ""))),
                 ],
               ),
               8.height,
-              Text('27 June 2022', style: secondaryTextStyle()),
+              Text(DateFormat('dd MMM yyyy').format(DateTime.parse(widget.orderData.date!)), style: secondaryTextStyle()),
               16.height,
               Text('Payment Method', style: secondaryTextStyle(size: 16)),
               8.height,
@@ -67,7 +73,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                           children: [
                             Text('Picked at 14 June 2020 at 3:45 AM', style: secondaryTextStyle(size: 16)),
                             8.height,
-                            Text('467, Shubham Park, Navsari.', style: boldTextStyle()),
+                            Text('${widget.orderData.pickupPoint!.address}', style: boldTextStyle()),
                           ],
                         ).paddingAll(16),
                       ),
@@ -81,7 +87,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                           children: [
                             Text('Delivered at 14 June 2020 at 3:45 AM', style: secondaryTextStyle(size: 16)),
                             8.height,
-                            Text('467, Char rasta, Navsari.', style: boldTextStyle()),
+                            Text('${widget.orderData.deliveryPoint!.address}', style: boldTextStyle()),
                           ],
                         ).paddingAll(16),
                       ),
@@ -120,11 +126,11 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
               16.height,
               Text('Parcel Type', style: secondaryTextStyle(size: 16)),
               8.height,
-              Text('Documents', style: boldTextStyle()),
+              Text('${widget.orderData.parcelType}', style: boldTextStyle()),
               16.height,
               Text('Total Weight', style: secondaryTextStyle(size: 16)),
               8.height,
-              Text('5 Kg', style: boldTextStyle()),
+              Text('${widget.orderData.totalWeight} Kg', style: boldTextStyle()),
               Divider(height: 30, thickness: 1),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

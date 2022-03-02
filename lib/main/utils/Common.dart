@@ -94,16 +94,16 @@ Color statusColor(String status) {
 }
 
 String parcelTypeIcon(String parcelType) {
-  String icon = 'https://cdn-icons.flaticon.com/png/512/3091/premium/3091221.png?token=exp=1644317163~hmac=95a4a37d5cb8dba39e45797ae8183098';
+  String icon = 'https://cdn-icons-png.flaticon.com/512/2991/2991112.png';
   switch (parcelType) {
     case "documents":
       return 'https://cdn-icons-png.flaticon.com/512/2991/2991112.png';
     case "food":
-      return 'https://cdn-icons.flaticon.com/png/512/685/premium/685301.png?token=exp=1644315278~hmac=8ed0553ed7652a40a5e9f3f7f913f048';
+      return 'https://cdn-icons-png.flaticon.com/512/2991/2991112.png';
     case "cloths":
-      return 'https://cdn-icons.flaticon.com/png/512/2946/premium/2946695.png?token=exp=1644315298~hmac=d68698a7362fa2dd3759dff7f38f71d6';
+      return 'https://cdn-icons-png.flaticon.com/512/2991/2991112.png';
     case "groceries":
-      return 'https://cdn-icons.flaticon.com/png/512/869/premium/869712.png?token=exp=1644317033~hmac=542df9d1c85f887a1bb8f82e1e934b3a';
+      return 'https://cdn-icons-png.flaticon.com/512/2991/2991112.png';
     case "cake":
       return 'https://cdn-icons-png.flaticon.com/512/918/918234.png';
     case "flowers":
@@ -125,3 +125,4 @@ containerDecoration() {
 String printDate(String date) {
   return DateFormat.yMd().add_jm().format(DateTime.parse(date).toLocal());
 }
+

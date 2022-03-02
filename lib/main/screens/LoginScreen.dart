@@ -11,6 +11,7 @@ import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
+import 'CitySelectScreen2.dart';
 
 class LoginScreen extends StatefulWidget {
   static String tag = '/LoginScreen';
@@ -57,7 +58,7 @@ class LoginScreenState extends State<LoginScreen> {
       await logInApi(req).then((value) async {
         appStore.setLoading(false);
         if (getIntAsync(STATUS) == 1) {
-          CitySelectScreen(isBack: false).launch(context,isNewTask: true);
+          CitySelectScreen2().launch(context,isNewTask: true);
           //DDashboardScreen().launch(context, isNewTask: true);
         } else {
           toast('You profile is under review. Wait some time or contact your administrator.');

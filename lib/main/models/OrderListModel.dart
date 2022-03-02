@@ -70,9 +70,9 @@ class OrderData {
   int? totalDistance;
   String? pickupDatetime;
   String? deliveryDatetime;
-  String? parentOrderId;
+  int? parentOrderId;
   String? status;
-  String? paymentId;
+  int? paymentId;
   String? paymentType;
   String? paymentStatus;
   String? paymentCollectFrom;

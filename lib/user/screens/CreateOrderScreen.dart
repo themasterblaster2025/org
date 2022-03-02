@@ -1,10 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
+import 'package:mighty_delivery/main/models/CityListModel.dart';
 import 'package:mighty_delivery/main/models/ParcelTypeListModel.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
@@ -14,7 +13,6 @@ import 'package:mighty_delivery/main/utils/DataProviders.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:mighty_delivery/user/components/SearchAddressWidget.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:google_maps_webservice/places.dart';
 
 class CreateOrderScreen extends StatefulWidget {
   static String tag = '/CreateOrderScreen';
@@ -55,6 +53,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   DateTime? currentBackPressTime;
 
+  bool isOnDelivery = false;
+  CityModel? cityData;
+  int totalAmount = 0;
+
   @override
   void initState() {
     super.initState();
@@ -63,15 +65,49 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   Future<void> init() async {
     getParcelTypeListApiCall();
+    await getCityDetailApiCall();
+  }
+
+  getParcelTypeListApiCall() async {
+    appStore.setLoading(true);
+    await getParcelTypeList().then((value) {
+      appStore.setLoading(false);
+      parcelTypeList.clear();
+      parcelTypeList.addAll(value.data!);
+      setState(() {});
+    }).catchError((error) {
+      appStore.setLoading(false);
+      toast(error.toString());
+    });
+  }
+
+  getCityDetailApiCall() async {
+    await getCityDetail(getIntAsync(CITY_ID)).then((value) {
+      cityData = value.data;
+    }).catchError((error) {
+      toast(error.toString());
+    });
+  }
+
+  getTotalAmount() {
+    if (cityData != null) {
+      int weightCharge = 0;
+      if(selectedWeight! > cityData!.minWeight!){
+        weightCharge = (selectedWeight! - cityData!.minWeight!) * cityData!.perWeightCharges!;
+      }
+      totalAmount = cityData!.fixedCharges! + weightCharge;
+      print('total:$totalAmount');
+    }
   }
 
   createOrderApiCall() async {
+    getTotalAmount();
     Navigator.pop(context);
     Map req = {
       "client_id": getIntAsync(USER_ID).toString(),
       "date": DateTime.now().toString(),
-      "country_id": "10",
-      "city_id": "2",
+      "country_id": getIntAsync(COUNTRY_ID).toString(),
+      "city_id": getIntAsync(CITY_ID).toString(),
       "pickup_point": {
         //  "date": "2022-01-25 00:00:00",
         "address": pickAddressCont.text,
@@ -97,25 +133,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       "payment_type": "",
       "payment_status": "",
       "fixed_charges": "100",
-      "parent_order_id": ""
+      "parent_order_id": "",
+      "total_amount": totalAmount,
     };
     appStore.setLoading(true);
     await createOrder(req).then((value) {
       appStore.setLoading(false);
       toast(value.message);
-    }).catchError((error) {
-      appStore.setLoading(false);
-      toast(error.toString());
-    });
-  }
-
-  getParcelTypeListApiCall() async {
-    appStore.setLoading(true);
-    await getParcelTypeList().then((value) {
-      appStore.setLoading(false);
-      parcelTypeList.clear();
-      parcelTypeList.addAll(value.data!);
-      setState(() {});
     }).catchError((error) {
       appStore.setLoading(false);
       toast(error.toString());
@@ -257,15 +281,24 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             }
           },
         ),
-        16.height.visible(pickLat!=null  && pickLong!=null),
-        Row(
+        16.height.visible(pickLat != null && pickLong != null),
+        Column(
           children: [
-            Text('latitude: ', style: primaryTextStyle()),
-            Text(pickLat.toString(),style: primaryTextStyle(size: 14)).expand(),
-            Text('longitude: ', style: primaryTextStyle()),
-            Text(pickLong.toString(),style: primaryTextStyle(size: 14)).expand(),
+            Row(
+              children: [
+                Text('latitude: ', style: primaryTextStyle()),
+                Text(pickLat.toString(), style: primaryTextStyle(size: 14)),
+              ],
+            ).visible(pickLat != null && pickLong != null),
+            4.height,
+            Row(
+              children: [
+                Text('longitude: ', style: primaryTextStyle()),
+                Text(pickLong.toString(), style: primaryTextStyle(size: 14)),
+              ],
+            ),
           ],
-        ).visible(pickLat!=null  && pickLong!=null),
+        ).visible(pickLat != null && pickLong != null),
         16.height,
         Text('Contact Number', style: primaryTextStyle()),
         8.height,
@@ -373,15 +406,24 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             }
           },
         ),
-        16.height.visible(deliverLat!=null  && deliverLong!=null),
-        Row(
+        16.height.visible(deliverLat != null && deliverLong != null),
+        Column(
           children: [
-            Text('latitude: ', style: primaryTextStyle()),
-            Text(deliverLat.toString(),style: primaryTextStyle(size: 14)).expand(),
-            Text('longitude: ', style: primaryTextStyle()),
-            Text(deliverLong.toString(),style: primaryTextStyle(size: 14)).expand(),
+            Row(
+              children: [
+                Text('latitude: ', style: primaryTextStyle()),
+                Text(deliverLat.toString(), style: primaryTextStyle(size: 14)),
+              ],
+            ),
+            4.height,
+            Row(
+              children: [
+                Text('longitude: ', style: primaryTextStyle()),
+                Text(deliverLong.toString(), style: primaryTextStyle(size: 14)),
+              ],
+            )
           ],
-        ).visible(deliverLat!=null  && deliverLong!=null),
+        ).visible(deliverLat != null && deliverLong != null),
         16.height,
         Text('Contact Number', style: primaryTextStyle()),
         8.height,
@@ -457,6 +499,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           decoration: commonInputDecoration(suffixIcon: Icons.notes),
           maxLines: 3,
           minLines: 3,
+        ),
+        16.height,
+        CheckboxListTile(
+          title: Text('Collect Cash on delivery'),
+          controlAffinity: ListTileControlAffinity.leading,
+          value: isOnDelivery,
+          contentPadding: EdgeInsets.zero,
+          onChanged: (value) {
+            isOnDelivery = value!;
+            setState(() {});
+          },
         ),
       ],
     );
@@ -565,61 +618,66 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             Text('\$13', style: boldTextStyle(size: 20)),
           ],
         ),
-        Divider(height: 30),
-        Text('Payment Type', style: boldTextStyle()),
-        16.height,
-        Row(
-          children: [
-            scheduleOptionWidget(isCashPayment, 'assets/icons/ic_cash.png', 'Cash').onTap(() {
-              isCashPayment = true;
-              setState(() {});
-            }).expand(),
-            16.width,
-            scheduleOptionWidget(!isCashPayment, 'assets/icons/ic_credit_card.png', 'Credit Card').onTap(() {
-              isCashPayment = false;
-              setState(() {});
-            }).expand(),
-          ],
-        ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Divider(height: 30),
+            Text('Payment', style: boldTextStyle()),
             16.height,
-            Text('Payment Methods', style: boldTextStyle()),
-            16.height,
-            ListView.builder(
-              primary: false,
-              shrinkWrap: true,
-              itemCount: paymentGatewayList.length,
-              itemBuilder: (context, index) {
-                String mData = paymentGatewayList[index];
-                return GestureDetector(
-                  child: Container(
-                    height: 50,
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(bottom: 16),
-                    decoration: boxDecorationWithRoundedCorners(
-                      borderRadius: BorderRadius.circular(defaultRadius),
-                      border: Border.all(color: borderColor),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(mData, style: boldTextStyle()),
-                        Icon(Icons.check_circle, color: colorPrimary).visible(index == selectedPaymentIndex),
-                      ],
-                    ),
-                  ),
-                  onTap: () {
-                    selectedPaymentIndex = index;
-                    setState(() {});
-                  },
-                );
-              },
+            Row(
+              children: [
+                scheduleOptionWidget(isCashPayment, 'assets/icons/ic_cash.png', 'Cash').onTap(() {
+                  isCashPayment = true;
+                  setState(() {});
+                }).expand(),
+                16.width,
+                scheduleOptionWidget(!isCashPayment, 'assets/icons/ic_credit_card.png', 'Online').onTap(() {
+                  isCashPayment = false;
+                  setState(() {});
+                }).expand(),
+              ],
             ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                16.height,
+                Text('Payment Methods', style: boldTextStyle()),
+                16.height,
+                ListView.builder(
+                  primary: false,
+                  shrinkWrap: true,
+                  itemCount: paymentGatewayList.length,
+                  itemBuilder: (context, index) {
+                    String mData = paymentGatewayList[index];
+                    return GestureDetector(
+                      child: Container(
+                        height: 50,
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.only(bottom: 16),
+                        decoration: boxDecorationWithRoundedCorners(
+                          borderRadius: BorderRadius.circular(defaultRadius),
+                          border: Border.all(color: borderColor),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(mData, style: boldTextStyle()),
+                            Icon(Icons.check_circle, color: colorPrimary).visible(index == selectedPaymentIndex),
+                          ],
+                        ),
+                      ),
+                      onTap: () {
+                        selectedPaymentIndex = index;
+                        setState(() {});
+                      },
+                    );
+                  },
+                ),
+              ],
+            ).visible(!isCashPayment),
           ],
-        ).visible(!isCashPayment),
+        )
       ],
     );
   }
