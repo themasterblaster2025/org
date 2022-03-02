@@ -58,7 +58,11 @@ class LoginScreenState extends State<LoginScreen> {
       await logInApi(req).then((value) async {
         appStore.setLoading(false);
         if (getIntAsync(STATUS) == 1) {
-          CitySelectScreen2().launch(context,isNewTask: true);
+          if (getStringAsync(USER_TYPE) == DELIVERY_MAN) {
+            CitySelectScreen().launch(context, isNewTask: true);
+          } else {
+            CitySelectScreen2().launch(context, isNewTask: true);
+          }
           //DDashboardScreen().launch(context, isNewTask: true);
         } else {
           toast('You profile is under review. Wait some time or contact your administrator.');
@@ -153,7 +157,7 @@ class LoginScreenState extends State<LoginScreen> {
                             ],
                           ),
                           onTap: () {
-                           //
+                            //
                           },
                         ),
                         16.height,
