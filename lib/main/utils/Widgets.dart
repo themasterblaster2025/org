@@ -5,7 +5,7 @@ import 'package:nb_utils/nb_utils.dart';
 
 import 'Colors.dart';
 
-Widget commonButton(String title, Function() onTap, {double? width}) {
+Widget commonButton(String title, Function() onTap, {double? width,Color? color}) {
   return SizedBox(
     width: width,
     child: AppButton(
@@ -15,7 +15,7 @@ Widget commonButton(String title, Function() onTap, {double? width}) {
         title,
         style: boldTextStyle(color: white),
       ),
-      color: colorPrimary,
+      color: color ?? colorPrimary,
       onTap: onTap,
     ),
   );

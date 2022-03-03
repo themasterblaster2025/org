@@ -34,7 +34,9 @@ class CitySelectScreen2State extends State<CitySelectScreen2> {
   @override
   void initState() {
     super.initState();
-    init();
+    afterBuildCreated((){
+      init();
+    });
   }
 
   Future<void> init() async {

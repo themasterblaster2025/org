@@ -29,12 +29,16 @@ const CITY_NAME = 'CITY_NAME';
 const CLIENT = 'client';
 const DELIVERY_MAN = 'delivery_man';
 
+const CHARGE_TYPE_FIXED = 'fixed';
+const CHARGE_TYPE_PERCENTAGE = 'percentage';
+
 // OrderStatus
 const COURIER_ASSIGNED = 'courier_assigned';
 const COURIER_DEPARTED = 'courier_departed';
 const RESTORE = 'restore';
 const FORCE_DELETE = 'forcedelete';
-const ORDER_CRATE = 'create';
+
+const ORDER_CREATED = 'created';
 const ORDER_ACTIVE = 'active';
 const ORDER_CANCELLED = 'cancelled';
 const ORDER_DELAYED = 'delayed';

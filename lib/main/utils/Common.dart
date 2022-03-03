@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'dart:math';
 
 InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, Function()? suffixOnTap, Widget? dateTime}) {
   return InputDecoration(
@@ -17,8 +18,8 @@ InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, F
     suffixIcon: dateTime != null
         ? dateTime
         : suffixIcon != null
-            ? Icon(suffixIcon, color: Colors.grey, size: 22).onTap(suffixOnTap)
-            : null,
+        ? Icon(suffixIcon, color: Colors.grey, size: 22).onTap(suffixOnTap)
+        : null,
     enabledBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.none), borderRadius: BorderRadius.circular(defaultRadius)),
     focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
     errorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(defaultRadius)),
@@ -26,8 +27,7 @@ InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, F
   );
 }
 
-Widget commonCachedNetworkImage(
-  String? url, {
+Widget commonCachedNetworkImage(String? url, {
   double? height,
   double? width,
   BoxFit? fit,
@@ -35,8 +35,14 @@ Widget commonCachedNetworkImage(
   bool usePlaceholderIfUrlEmpty = true,
   double? radius,
 }) {
-  if (url.validate().isEmpty) {
-    return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
+  if (url
+      .validate()
+      .isEmpty) {
+    return placeHolderWidget(height: height,
+        width: width,
+        fit: fit,
+        alignment: alignment,
+        radius: radius);
   } else if (url.validate().startsWith('http')) {
     return CachedNetworkImage(
       imageUrl: url!,
@@ -45,11 +51,19 @@ Widget commonCachedNetworkImage(
       fit: fit,
       alignment: alignment as Alignment? ?? Alignment.center,
       errorWidget: (_, s, d) {
-        return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
+        return placeHolderWidget(height: height,
+            width: width,
+            fit: fit,
+            alignment: alignment,
+            radius: radius);
       },
       placeholder: (_, s) {
         if (!usePlaceholderIfUrlEmpty) return SizedBox();
-        return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
+        return placeHolderWidget(height: height,
+            width: width,
+            fit: fit,
+            alignment: alignment,
+            radius: radius);
       },
     );
   } else {
@@ -81,14 +95,16 @@ String? getOrderStatus(String orderStatus) {
 Color statusColor(String status) {
   Color color = colorPrimary;
   switch (status) {
-    case "active":
-      return activeColor;
-    case "canceled":
-      return cancelledColor;
-    case "completed":
-      return completeColor;
-    case "failed":
-      return failedColor;
+    case ORDER_ACTIVE:
+      return colorPrimary;
+    case ORDER_CANCELLED:
+      return Colors.red;
+    case ORDER_COMPLETED:
+      return Colors.green;
+    case ORDER_DRAFT:
+      return Colors.grey;
+    case ORDER_DELAYED:
+      return Colors.grey;
   }
   return color;
 }
@@ -125,4 +141,14 @@ containerDecoration() {
 String printDate(String date) {
   return DateFormat.yMd().add_jm().format(DateTime.parse(date).toLocal());
 }
+
+double calculateDistance(lat1, lon1, lat2, lon2) {
+  var p = 0.017453292519943295;
+  var a = 0.5 - cos((lat2 - lat1) * p) / 2 +
+      cos(lat1 * p) * cos(lat2 * p) *
+          (1 - cos((lon2 - lon1) * p)) / 2;
+  return (12742 * asin(sqrt(a))).toStringAsFixed(2).toDouble();
+}
+
+
 

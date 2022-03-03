@@ -234,8 +234,8 @@ Future updateCountryCity({int? countryId, int? cityId}) async {
 }
 
 /// get OrderList
-Future<OrderListModel> getOrderList() async{
-  return OrderListModel.fromJson(await handleResponse(await buildHttpResponse('order-list',method: HttpMethod.GET)));
+Future<OrderListModel> getOrderList({required int page,bool isDraft = false}) async{
+  return OrderListModel.fromJson(await handleResponse(await buildHttpResponse(isDraft ? 'order-list?page=$page&client_id=${getIntAsync(USER_ID)}&status=$ORDER_DRAFT' : 'order-list?page=$page&client_id=${getIntAsync(USER_ID)}',method: HttpMethod.GET)));
 }
 
 /// get deliveryBoy orderList

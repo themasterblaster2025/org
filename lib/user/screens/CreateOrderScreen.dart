@@ -1,5 +1,6 @@
-import 'dart:async';
+import 'dart:core';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
@@ -23,9 +24,8 @@ class CreateOrderScreen extends StatefulWidget {
 
 class CreateOrderScreenState extends State<CreateOrderScreen> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   List<ParcelTypeData> parcelTypeList = [];
-  int? selectedWeight;
+  CityModel? cityData;
 
   TextEditingController parcelTypeCont = TextEditingController();
 
@@ -43,24 +43,31 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   TextEditingController deliverToTimeCont = TextEditingController();
   TextEditingController deliverDesCont = TextEditingController();
 
+  int? selectedWeight;
   String? pickLat, pickLong, deliverLat, deliverLong;
 
-  int selectedIndex = 0;
+  int selectedTabIndex = 0;
+  int selectedWeightIndex = 0;
   int? selectedPaymentIndex;
+
   bool isDeliverNow = true;
   bool isCashPayment = true;
-  int selectedWeightIndex = 0;
+  bool isOnDelivery = false;
 
   DateTime? currentBackPressTime;
 
-  bool isOnDelivery = false;
-  CityModel? cityData;
-  int totalAmount = 0;
+  num totalDistance = 0;
+  num totalAmount = 0;
+
+  Map<String, num> allChargesObject = Map<String, num>();
+  Map<String, num> extraChargesObject = Map<String, num>();
 
   @override
   void initState() {
     super.initState();
-    init();
+    afterBuildCreated(() {
+      init();
+    });
   }
 
   Future<void> init() async {
@@ -91,17 +98,51 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   getTotalAmount() {
     if (cityData != null) {
-      int weightCharge = 0;
-      if(selectedWeight! > cityData!.minWeight!){
-        weightCharge = (selectedWeight! - cityData!.minWeight!) * cityData!.perWeightCharges!;
+      totalDistance = calculateDistance(pickLat.toDouble(), pickLong.toDouble(), deliverLat.toDouble(), deliverLong.toDouble());
+      num weightCharge = 0;
+      num distanceCharge = 0;
+      num totalExtraCharge = 0;
+
+      /// calculate weight Charge
+      if (selectedWeight! > cityData!.minWeight!) {
+        weightCharge = ((selectedWeight!.toDouble() - cityData!.minWeight!) * cityData!.perWeightCharges!).toStringAsFixed(2).toDouble();
       }
-      totalAmount = cityData!.fixedCharges! + weightCharge;
+
+      /// calculate distance Charge
+      if (totalDistance > cityData!.minDistance!) {
+        distanceCharge = ((totalDistance - cityData!.minDistance!) * cityData!.perDistanceCharges!).toStringAsFixed(2).toDouble();
+      }
+
+      /// total amount
+      totalAmount = cityData!.fixedCharges! + weightCharge + distanceCharge;
+
+      /// calculate extra charges
+      cityData!.extraCharges!.forEach((element) {
+        if (element.chargesType == CHARGE_TYPE_PERCENTAGE) {
+          num charge = ((totalAmount * element.charges! * 0.01)).toStringAsFixed(2).toDouble();
+          totalExtraCharge += charge;
+          if (charge > 0) extraChargesObject.addEntries({MapEntry("${element.title!.toLowerCase().replaceAll(' ', "_")}", charge)});
+        } else {
+          num charge = element.charges!.toStringAsFixed(2).toDouble();
+          totalExtraCharge += charge;
+          if (charge > 0) extraChargesObject.addEntries({MapEntry("${element.title!.toLowerCase().replaceAll(' ', "_")}", charge)});
+        }
+      });
+
+      /// All Charges
+      allChargesObject.addEntries({MapEntry("delivery_charge", cityData!.fixedCharges!)});
+      if (weightCharge > 0) allChargesObject.addEntries({MapEntry("weight_charge", weightCharge)});
+      if (distanceCharge > 0) allChargesObject.addEntries({MapEntry("distance_charge", distanceCharge)});
+      allChargesObject.addAll(extraChargesObject);
+
+      totalAmount = (totalAmount + totalExtraCharge).toStringAsFixed(2).toDouble();
       print('total:$totalAmount');
+      print('extraChargesObject : $extraChargesObject');
+      print('allChargesObject : $allChargesObject');
     }
   }
 
-  createOrderApiCall() async {
-    getTotalAmount();
+  createOrderApiCall(String status) async {
     Navigator.pop(context);
     Map req = {
       "client_id": getIntAsync(USER_ID).toString(),
@@ -124,17 +165,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         "description": deliverDesCont.text,
         "contact_number": deliverPhoneCont.text,
       },
-      "extra_charges": {},
+      "extra_charges": extraChargesObject,
       "parcel_type": parcelTypeCont.text,
       "total_weight": selectedWeight!.toString(),
-      "total_distance": "10",
-      "payment_collect_from": "on_client",
-      "status": "draft",
+      "total_distance": totalDistance.toString(),
+      "payment_collect_from": isOnDelivery ? "on_delivery" : "on_client",
+      "status": status,
       "payment_type": "",
       "payment_status": "",
-      "fixed_charges": "100",
+      "fixed_charges": cityData!.fixedCharges.toString(),
       "parent_order_id": "",
-      "total_amount": totalAmount,
+      "total_amount": totalAmount.toString(),
     };
     appStore.setLoading(true);
     await createOrder(req).then((value) {
@@ -306,9 +347,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           controller: pickPhoneCont,
           textFieldType: TextFieldType.PHONE,
           decoration: commonInputDecoration(suffixIcon: Icons.phone),
-          validator: (value) {
-            return null;
-          },
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -431,9 +469,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           controller: deliverPhoneCont,
           textFieldType: TextFieldType.PHONE,
           decoration: commonInputDecoration(suffixIcon: Icons.phone),
-          validator: (value) {
-            return null;
-          },
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -592,30 +627,27 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           ),
         ),
         Divider(height: 30),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Delivery Charges', style: primaryTextStyle()),
-            16.width,
-            Text('\$10', style: boldTextStyle()),
-          ],
-        ),
-        8.height,
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Express Delivery', style: primaryTextStyle()),
-            16.width,
-            Text('\$3', style: boldTextStyle()),
-          ],
-        ),
+        Column(
+            children: List.generate(allChargesObject.keys.length, (index) {
+          return Padding(
+            padding: EdgeInsets.only(bottom: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(allChargesObject.keys.elementAt(index).replaceAll("_", " ").capitalizeFirstLetter(), style: primaryTextStyle()),
+                16.width,
+                Text(allChargesObject.values.elementAt(index).toString(), style: boldTextStyle()),
+              ],
+            ),
+          );
+        }).toList()),
         16.height,
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Total', style: boldTextStyle()),
             16.width,
-            Text('\$13', style: boldTextStyle(size: 20)),
+            Text('$totalAmount', style: boldTextStyle(size: 20)),
           ],
         ),
         Column(
@@ -686,7 +718,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if (selectedIndex == 0) {
+        if (selectedTabIndex == 0) {
           DateTime now = DateTime.now();
           if (currentBackPressTime == null || now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
             currentBackPressTime = now;
@@ -695,61 +727,98 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           }
           return true;
         } else {
-          selectedIndex--;
+          selectedTabIndex--;
           setState(() {});
           return false;
         }
       },
-      child: Scaffold(
-        appBar: appBarWidget('Create Order', color: colorPrimary, textColor: white, elevation: 0),
-        body: BodyCornerWidget(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: List.generate(4, (index) {
-                      return Container(
-                        color: selectedIndex >= index ? colorPrimary : borderColor,
-                        height: 5,
-                        width: context.width() * 0.15,
-                      );
-                    }).toList(),
-                  ),
-                  30.height,
-                  if (selectedIndex == 0) CreateOrderWidget1(),
-                  if (selectedIndex == 1) CreateOrderWidget2(),
-                  if (selectedIndex == 2) CreateOrderWidget3(),
-                  if (selectedIndex == 3) CreateOrderWidget4(),
-                ],
+      child: Observer(builder: (context) {
+        return Scaffold(
+          appBar: appBarWidget('Create Order', color: colorPrimary, textColor: white, elevation: 0),
+          body: BodyCornerWidget(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: List.generate(4, (index) {
+                        return Container(
+                          color: selectedTabIndex >= index ? colorPrimary : borderColor,
+                          height: 5,
+                          width: context.width() * 0.15,
+                        );
+                      }).toList(),
+                    ),
+                    30.height,
+                    if (selectedTabIndex == 0) CreateOrderWidget1(),
+                    if (selectedTabIndex == 1) CreateOrderWidget2(),
+                    if (selectedTabIndex == 2) CreateOrderWidget3(),
+                    if (selectedTabIndex == 3) CreateOrderWidget4(),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        bottomNavigationBar: Row(
-          children: [
-            if (selectedIndex != 0)
-              outlineButton('Previous', () {
-                selectedIndex--;
-                setState(() {});
-              }).paddingRight(16).expand(),
-            commonButton(selectedIndex != 3 ? 'Next' : 'Create Order', () {
-              if (selectedIndex != 3) {
-                if (_formKey.currentState!.validate()) {
-                  selectedIndex++;
+          bottomNavigationBar: Row(
+            children: [
+              if (selectedTabIndex != 0)
+                outlineButton('Previous', () {
+                  selectedTabIndex--;
                   setState(() {});
+                }).paddingRight(16).expand(),
+              commonButton(selectedTabIndex != 3 ? 'Next' : 'Create Order', () async {
+                if (selectedTabIndex != 3) {
+                  if (_formKey.currentState!.validate()) {
+                    selectedTabIndex++;
+                    if (selectedTabIndex == 3) {
+                      getTotalAmount();
+                    }
+                    setState(() {});
+                  }
+                } else {
+                  await showInDialog(
+                    context,
+                    contentPadding: EdgeInsets.all(16),
+                    builder: (p0) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Confirmation', style: primaryTextStyle(size: 18)),
+                              Icon(Icons.close, color: grey).onTap(() {
+                                Navigator.pop(context);
+                              }),
+                            ],
+                          ),
+                          16.height,
+                          Text('Are you sure you want to Create Order?', style: primaryTextStyle(size: 16)),
+                        ],
+                      );
+                    },
+                    actions: [
+                      commonButton('Save Draft', () {
+                        finish(context);
+                        createOrderApiCall(ORDER_DRAFT);
+                      }, color: Colors.grey)
+                          .paddingOnly(bottom: 8, right: 8),
+                      commonButton('Create', () {
+                        finish(context);
+                        createOrderApiCall(ORDER_CREATED);
+                      }).paddingOnly(bottom: 8, right: 8),
+                    ],
+                  );
                 }
-              } else {
-                createOrderApiCall();
-              }
-            }).expand()
-          ],
-        ).paddingAll(16),
-      ),
+              }).expand()
+            ],
+          ).paddingAll(16),
+        );
+      }),
     );
   }
 }
