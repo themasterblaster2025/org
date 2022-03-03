@@ -12,6 +12,7 @@ import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/main/utils/DataProviders.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
+import 'package:mighty_delivery/user/components/CreateOrderConfirmationDialog.dart';
 import 'package:mighty_delivery/user/components/SearchAddressWidget.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -143,7 +144,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   }
 
   createOrderApiCall(String status) async {
-    Navigator.pop(context);
+    finish(context);
     Map req = {
       "client_id": getIntAsync(USER_ID).toString(),
       "date": DateTime.now().toString(),
@@ -784,34 +785,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     context,
                     contentPadding: EdgeInsets.all(16),
                     builder: (p0) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Confirmation', style: primaryTextStyle(size: 18)),
-                              Icon(Icons.close, color: grey).onTap(() {
-                                Navigator.pop(context);
-                              }),
-                            ],
-                          ),
-                          16.height,
-                          Text('Are you sure you want to Create Order?', style: primaryTextStyle(size: 16)),
-                        ],
+                      return CreateOrderConfirmationDialog(
+                        onDraft: () {
+                          finish(context);
+                          createOrderApiCall(ORDER_DRAFT);
+                        },
+                        onCreate: () {
+                          finish(context);
+                          createOrderApiCall(ORDER_CREATED);
+                        },
                       );
                     },
-                    actions: [
-                      commonButton('Save Draft', () {
-                        finish(context);
-                        createOrderApiCall(ORDER_DRAFT);
-                      }, color: Colors.grey)
-                          .paddingOnly(bottom: 8, right: 8),
-                      commonButton('Create', () {
-                        finish(context);
-                        createOrderApiCall(ORDER_CREATED);
-                      }).paddingOnly(bottom: 8, right: 8),
-                    ],
                   );
                 }
               }).expand()
