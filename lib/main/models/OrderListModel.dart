@@ -10,7 +10,9 @@ class OrderListModel {
     pagination = json['pagination'] != null ? new PaginationModel.fromJson(json['pagination']) : null;
     if (json['data'] != null) {
       data = <OrderData>[];
-      json['data'].forEach((v) { data!.add(new OrderData.fromJson(v)); });
+      json['data'].forEach((v) {
+        data!.add(new OrderData.fromJson(v));
+      });
     }
   }
 
@@ -80,6 +82,7 @@ class OrderData {
   String? deliveryManName;
   num? fixedCharges;
   var extraCharges;
+  String? totalAmount;
   String? reason;
   int? pickupConfirmByClient;
   int? pickupConfirmByDeliveryMan;
@@ -113,6 +116,7 @@ class OrderData {
     this.deliveryManName,
     this.fixedCharges,
     this.extraCharges,
+    this.totalAmount,
     this.reason,
     this.pickupConfirmByClient,
     this.pickupConfirmByDeliveryMan,
@@ -147,6 +151,7 @@ class OrderData {
     deliveryManName = json['delivery_man_name'];
     fixedCharges = json['fixed_charges'];
     extraCharges = json['extra_charges'];
+    totalAmount = json['total_amount'];
     reason = json['reason'];
     pickupConfirmByClient = json['pickup_confirm_by_client'];
     pickupConfirmByDeliveryMan = json['pickup_confirm_by_delivery_man'];
@@ -188,6 +193,7 @@ class OrderData {
     if (this.extraCharges != null) {
       data['extra_charges'] = this.extraCharges!.toJson();
     }
+    data['total_amount'] = this.totalAmount;
     data['reason'] = this.reason;
     data['pickup_confirm_by_client'] = this.pickupConfirmByClient;
     data['pickup_confirm_by_delivery_man'] = this.pickupConfirmByDeliveryMan;

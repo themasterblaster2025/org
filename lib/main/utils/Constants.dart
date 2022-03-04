@@ -38,7 +38,7 @@ const COURIER_DEPARTED = 'courier_departed';
 const RESTORE = 'restore';
 const FORCE_DELETE = 'forcedelete';
 
-const ORDER_CREATED = 'created';
+const ORDER_CREATED = 'create';
 const ORDER_ACTIVE = 'active';
 const ORDER_CANCELLED = 'cancelled';
 const ORDER_DELAYED = 'delayed';

@@ -36,7 +36,7 @@ class CityModel {
   String? countryName;
   int? status;
   num? fixedCharges;
-  List<ExtraCharges>? extraCharges;
+  List<ExtraChargesData>? extraCharges;
   num? cancelCharges;
   num? minDistance;
   num? minWeight;
@@ -73,9 +73,9 @@ class CityModel {
     status = json['status'];
     fixedCharges = json['fixed_charges'];
     if (json['extra_charges'] != null) {
-      extraCharges = <ExtraCharges>[];
+      extraCharges = <ExtraChargesData>[];
       json['extra_charges'].forEach((v) {
-        extraCharges!.add(new ExtraCharges.fromJson(v));
+        extraCharges!.add(new ExtraChargesData.fromJson(v));
       });
     }
     cancelCharges = json['cancel_charges'];
@@ -112,7 +112,7 @@ class CityModel {
   }
 }
 
-class ExtraCharges {
+class ExtraChargesData {
   int? id;
   String? title;
   String? chargesType;
@@ -124,9 +124,9 @@ class ExtraCharges {
   String? updatedAt;
   String? deletedAt;
 
-  ExtraCharges({this.id, this.title, this.chargesType, this.charges, this.countryId, this.cityId, this.status, this.createdAt, this.updatedAt, this.deletedAt});
+  ExtraChargesData({this.id, this.title, this.chargesType, this.charges, this.countryId, this.cityId, this.status, this.createdAt, this.updatedAt, this.deletedAt});
 
-  ExtraCharges.fromJson(Map<String, dynamic> json) {
+  ExtraChargesData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
     chargesType = json['charges_type'];

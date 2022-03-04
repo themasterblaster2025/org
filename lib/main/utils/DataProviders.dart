@@ -12,6 +12,7 @@ import 'package:mighty_delivery/main/screens/EditProfileScreen.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/user/fragment/AccountFragment.dart';
 import 'package:mighty_delivery/user/fragment/OrderFragment.dart';
+import 'package:mighty_delivery/user/screens/DraftOrderListScreen.dart';
 
 List<String> weightList = ['Up to 1 kg', 'Up to 5 kg', 'Up to 10 kg', 'Up to 15 kg', 'Up to 20 kg'];
 List<String> paymentGatewayList = ['Stripe', 'Razorpay', 'PayStack', 'FlutterWave'];
@@ -35,6 +36,7 @@ List<BottomNavigationBarItemModel> getNavBarItems() {
 
 List<SettingItemModel> getSettingItems() {
   List<SettingItemModel> list = [];
+  list.add(SettingItemModel(icon: Icons.drafts, title: 'Drafts', widget: DraftOrderListScreen()));
   list.add(SettingItemModel(icon: Icons.person_outline, title: 'Edit Profile', widget: EditProfileScreen()));
   list.add(SettingItemModel(icon: Icons.lock_outline, title: 'Change Password', widget: ChangePasswordScreen()));
   list.add(SettingItemModel(icon: Icons.language, title: 'Language'));

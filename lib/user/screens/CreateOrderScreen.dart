@@ -1,6 +1,6 @@
 import 'dart:core';
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
@@ -36,6 +36,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   TextEditingController pickFromTimeCont = TextEditingController();
   TextEditingController pickToTimeCont = TextEditingController();
   TextEditingController pickDesCont = TextEditingController();
+  TextEditingController pickStartTimeController = TextEditingController();
+  TextEditingController pickEndTimeController = TextEditingController();
 
   TextEditingController deliverAddressCont = TextEditingController();
   TextEditingController deliverPhoneCont = TextEditingController();
@@ -131,7 +133,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       });
 
       /// All Charges
-      allChargesObject.addEntries({MapEntry("delivery_charge", cityData!.fixedCharges!)});
+      //  allChargesObject.addEntries({MapEntry("delivery_charge", cityData!.fixedCharges!)});
       if (weightCharge > 0) allChargesObject.addEntries({MapEntry("weight_charge", weightCharge)});
       if (distanceCharge > 0) allChargesObject.addEntries({MapEntry("distance_charge", distanceCharge)});
       allChargesObject.addAll(extraChargesObject);
@@ -151,7 +153,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       "country_id": getIntAsync(COUNTRY_ID).toString(),
       "city_id": getIntAsync(CITY_ID).toString(),
       "pickup_point": {
-        //  "date": "2022-01-25 00:00:00",
+        if (!isDeliverNow) "start_time": pickStartTimeController.text,
+        if (!isDeliverNow) "end_time": pickEndTimeController.text,
         "address": pickAddressCont.text,
         "latitude": pickLat,
         "longitude": pickLong,
@@ -159,14 +162,15 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         "contact_number": pickPhoneCont.text
       },
       "delivery_point": {
-        // "date": "2022-01-26 00:00:00",
+        if (!isDeliverNow) "start_time": DateTime.now().toString(),
+        if (!isDeliverNow) "end_time": DateTime.now().toString(),
         "address": deliverAddressCont.text,
         "latitude": deliverLat,
         "longitude": deliverLong,
         "description": deliverDesCont.text,
         "contact_number": deliverPhoneCont.text,
       },
-      "extra_charges": extraChargesObject,
+      "extra_charges": allChargesObject,
       "parcel_type": parcelTypeCont.text,
       "total_weight": selectedWeight!.toString(),
       "total_distance": totalDistance.toString(),
@@ -176,7 +180,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       "payment_status": "",
       "fixed_charges": cityData!.fixedCharges.toString(),
       "parent_order_id": "",
-      "total_amount": totalAmount.toString(),
+      "total_amount": totalAmount,
     };
     appStore.setLoading(true);
     await createOrder(req).then((value) {
@@ -353,9 +357,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             16.height,
-            Text('Depart Time', style: primaryTextStyle()),
+            Text('Pickup Time', style: primaryTextStyle()),
             8.height,
-            AppTextField(
+            /* AppTextField(
               textFieldType: TextFieldType.OTHER,
               controller: pickDateCont,
               readOnly: true,
@@ -401,6 +405,55 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   },
                 ).expand(),
               ],
+            ),*/
+            8.height,
+            Container(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text('From', style: primaryTextStyle()).expand(flex: 1),
+                      8.width,
+                      DateTimePicker(
+                        controller: pickStartTimeController,
+                        type: DateTimePickerType.dateTime,
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                        decoration: commonInputDecoration(suffixIcon: Icons.date_range),
+                        dateLabelText: 'Date',
+                        onChanged: (val) => print(val),
+                        validator: (val) {
+                          if (val!.isEmpty) return errorThisFieldRequired;
+                          return null;
+                        },
+                        onSaved: (val) => print(val),
+                      ).expand(flex: 3),
+                    ],
+                  ),
+                  16.height,
+                  Row(
+                    children: [
+                      Text('To', style: primaryTextStyle()).expand(flex: 1),
+                      8.width,
+                      DateTimePicker(
+                        controller: pickEndTimeController,
+                        type: DateTimePickerType.dateTime,
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                        decoration: commonInputDecoration(suffixIcon: Icons.date_range),
+                        dateLabelText: 'Date',
+                        onChanged: (val) => print(val),
+                        validator: (val) {
+                          if (val!.isEmpty) return errorThisFieldRequired;
+                          return null;
+                        },
+                        onSaved: (val) => print(val),
+                      ).expand(flex: 3),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ).visible(!isDeliverNow),
@@ -628,6 +681,15 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           ),
         ),
         Divider(height: 30),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Delivery Charge', style: primaryTextStyle()),
+            16.width,
+            Text(cityData!.fixedCharges.toString(), style: boldTextStyle()),
+          ],
+        ),
+        8.height,
         Column(
             children: List.generate(allChargesObject.keys.length, (index) {
           return Padding(
@@ -733,76 +795,74 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           return false;
         }
       },
-      child: Observer(builder: (context) {
-        return Scaffold(
-          appBar: appBarWidget('Create Order', color: colorPrimary, textColor: white, elevation: 0),
-          body: BodyCornerWidget(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: List.generate(4, (index) {
-                        return Container(
-                          color: selectedTabIndex >= index ? colorPrimary : borderColor,
-                          height: 5,
-                          width: context.width() * 0.15,
-                        );
-                      }).toList(),
-                    ),
-                    30.height,
-                    if (selectedTabIndex == 0) CreateOrderWidget1(),
-                    if (selectedTabIndex == 1) CreateOrderWidget2(),
-                    if (selectedTabIndex == 2) CreateOrderWidget3(),
-                    if (selectedTabIndex == 3) CreateOrderWidget4(),
-                  ],
-                ),
+      child: Scaffold(
+        appBar: appBarWidget('Create Order', color: colorPrimary, textColor: white, elevation: 0),
+        body: BodyCornerWidget(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: List.generate(4, (index) {
+                      return Container(
+                        color: selectedTabIndex >= index ? colorPrimary : borderColor,
+                        height: 5,
+                        width: context.width() * 0.15,
+                      );
+                    }).toList(),
+                  ),
+                  30.height,
+                  if (selectedTabIndex == 0) CreateOrderWidget1(),
+                  if (selectedTabIndex == 1) CreateOrderWidget2(),
+                  if (selectedTabIndex == 2) CreateOrderWidget3(),
+                  if (selectedTabIndex == 3) CreateOrderWidget4(),
+                ],
               ),
             ),
           ),
-          bottomNavigationBar: Row(
-            children: [
-              if (selectedTabIndex != 0)
-                outlineButton('Previous', () {
-                  selectedTabIndex--;
-                  setState(() {});
-                }).paddingRight(16).expand(),
-              commonButton(selectedTabIndex != 3 ? 'Next' : 'Create Order', () async {
-                if (selectedTabIndex != 3) {
-                  if (_formKey.currentState!.validate()) {
-                    selectedTabIndex++;
-                    if (selectedTabIndex == 3) {
-                      getTotalAmount();
-                    }
-                    setState(() {});
+        ),
+        bottomNavigationBar: Row(
+          children: [
+            if (selectedTabIndex != 0)
+              outlineButton('Previous', () {
+                selectedTabIndex--;
+                setState(() {});
+              }).paddingRight(16).expand(),
+            commonButton(selectedTabIndex != 3 ? 'Next' : 'Create Order', () async {
+              if (selectedTabIndex != 3) {
+                if (_formKey.currentState!.validate()) {
+                  selectedTabIndex++;
+                  if (selectedTabIndex == 3) {
+                    getTotalAmount();
                   }
-                } else {
-                  await showInDialog(
-                    context,
-                    contentPadding: EdgeInsets.all(16),
-                    builder: (p0) {
-                      return CreateOrderConfirmationDialog(
-                        onDraft: () {
-                          finish(context);
-                          createOrderApiCall(ORDER_DRAFT);
-                        },
-                        onCreate: () {
-                          finish(context);
-                          createOrderApiCall(ORDER_CREATED);
-                        },
-                      );
-                    },
-                  );
+                  setState(() {});
                 }
-              }).expand()
-            ],
-          ).paddingAll(16),
-        );
-      }),
+              } else {
+                await showInDialog(
+                  context,
+                  contentPadding: EdgeInsets.all(16),
+                  builder: (p0) {
+                    return CreateOrderConfirmationDialog(
+                      onDraft: () {
+                        finish(context);
+                        createOrderApiCall(ORDER_DRAFT);
+                      },
+                      onCreate: () {
+                        finish(context);
+                        createOrderApiCall(ORDER_CREATED);
+                      },
+                    );
+                  },
+                );
+              }
+            }).expand()
+          ],
+        ).paddingAll(16),
+      ),
     );
   }
 }

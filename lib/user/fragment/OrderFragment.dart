@@ -98,7 +98,7 @@ class OrderFragmentState extends State<OrderFragment> {
                     8.height,
                     Row(
                       children: [
-                        /*  Container(
+                          Container(
                           decoration: boxDecorationWithRoundedCorners(
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(color: borderColor),
@@ -106,7 +106,7 @@ class OrderFragmentState extends State<OrderFragment> {
                           padding: EdgeInsets.all(8),
                           child: Image.network(parcelTypeIcon(item.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
                         ),
-                        8.width,*/
+                        8.width,
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -115,7 +115,7 @@ class OrderFragmentState extends State<OrderFragment> {
                             Row(
                               children: [
                                 item.date != null ? Text(printDate(item.date!), style: secondaryTextStyle()).expand() : SizedBox(),
-                                Text('\$34.00', style: boldTextStyle()),
+                                Text('\u{20B9}${item.totalAmount}', style: boldTextStyle()),
                               ],
                             ),
                           ],
@@ -139,6 +139,14 @@ class OrderFragmentState extends State<OrderFragment> {
                             Text('Picked at 4:45', style: secondaryTextStyle()),
                             4.height,
                             Text('${item.pickupPoint!.address}', style: primaryTextStyle()),
+                            4.height.visible(item.pickupPoint!.contactNumber!=null),
+                            Row(
+                              children: [
+                                Icon(Icons.call,color: Colors.green,size: 18),
+                                8.width,
+                                Text('${item.pickupPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
+                              ],
+                            ).visible(item.pickupPoint!.contactNumber!=null),
                           ],
                         ).expand(),
                       ],
@@ -160,6 +168,14 @@ class OrderFragmentState extends State<OrderFragment> {
                             Text('Delivered at 4:53', style: secondaryTextStyle()),
                             4.height,
                             Text('${item.deliveryPoint!.address}', style: primaryTextStyle()),
+                            4.height.visible(item.deliveryPoint!.contactNumber!=null),
+                            Row(
+                              children: [
+                                Icon(Icons.call,color: Colors.green,size: 18),
+                                8.width,
+                                Text('${item.deliveryPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
+                              ],
+                            ).visible(item.deliveryPoint!.contactNumber!=null),
                           ],
                         ).expand(),
                       ],
