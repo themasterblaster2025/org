@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
+import 'package:mighty_delivery/main/models/CountryListModel.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
+import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
@@ -104,7 +106,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
               16.height,
               Text('Distance', style: secondaryTextStyle(size: 16)),
               8.height,
-              Text('${widget.orderData.totalDistance} km', style: boldTextStyle()),
+              Text('${widget.orderData.totalDistance} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).distance_type}', style: boldTextStyle()),
               Divider(height: 30, thickness: 1),
               Text('Package details', style: boldTextStyle(size: 18)),
               16.height,
@@ -114,14 +116,14 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
               16.height,
               Text('Total Weight', style: secondaryTextStyle(size: 16)),
               8.height,
-              Text('${widget.orderData.totalWeight} Kg', style: boldTextStyle()),
+              Text('${widget.orderData.totalWeight} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weight_type}', style: boldTextStyle()),
               Divider(height: 30, thickness: 1),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Delivery Charge', style: primaryTextStyle()),
                   16.width,
-                  Text(widget.orderData.fixedCharges.toString(), style: boldTextStyle()),
+                  Text('$currencySymbol ${widget.orderData.fixedCharges}', style: boldTextStyle()),
                 ],
               ),
               8.height,
@@ -134,7 +136,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                         children: [
                           Text(widget.orderData.extraCharges.keys.elementAt(index).replaceAll("_", " ").toString().capitalizeFirstLetter(), style: primaryTextStyle()),
                           16.width,
-                          Text(widget.orderData.extraCharges.values.elementAt(index).toString(), style: boldTextStyle()),
+                          Text('$currencySymbol ${widget.orderData.extraCharges.values.elementAt(index)}', style: boldTextStyle()),
                         ],
                       ),
                     );
@@ -150,7 +152,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Total', style: boldTextStyle(color: white)),
-            Text('${widget.orderData.totalAmount}', style: boldTextStyle(color: white)),
+            Text('$currencySymbol ${widget.orderData.totalAmount}', style: boldTextStyle(color: white)),
           ],
         ),
       ).paddingAll(16),

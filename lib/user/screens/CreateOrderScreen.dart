@@ -1,10 +1,10 @@
 import 'dart:core';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/models/CityListModel.dart';
+import 'package:mighty_delivery/main/models/CountryListModel.dart';
 import 'package:mighty_delivery/main/models/ParcelTypeListModel.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
@@ -45,6 +45,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   TextEditingController deliverFromTimeCont = TextEditingController();
   TextEditingController deliverToTimeCont = TextEditingController();
   TextEditingController deliverDesCont = TextEditingController();
+  TextEditingController deliverStartTimeController = TextEditingController();
+  TextEditingController deliverEndTimeController = TextEditingController();
 
   int? selectedWeight;
   String? pickLat, pickLong, deliverLat, deliverLong;
@@ -145,7 +147,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     }
   }
 
-  createOrderApiCall(String status) async {
+  createOrderApiCall() async {
     finish(context);
     Map req = {
       "client_id": getIntAsync(USER_ID).toString(),
@@ -162,8 +164,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         "contact_number": pickPhoneCont.text
       },
       "delivery_point": {
-        if (!isDeliverNow) "start_time": DateTime.now().toString(),
-        if (!isDeliverNow) "end_time": DateTime.now().toString(),
+        if (!isDeliverNow) "start_time": deliverStartTimeController.text,
+        if (!isDeliverNow) "end_time": deliverEndTimeController.text,
         "address": deliverAddressCont.text,
         "latitude": deliverLat,
         "longitude": deliverLong,
@@ -175,7 +177,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       "total_weight": selectedWeight!.toString(),
       "total_distance": totalDistance.toString(),
       "payment_collect_from": isOnDelivery ? "on_delivery" : "on_client",
-      "status": status,
+      "status": ORDER_CREATED,
       "payment_type": "",
       "payment_status": "",
       "fixed_charges": cityData!.fixedCharges.toString(),
@@ -225,7 +227,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             items: List.generate(20, (index) {
               return DropdownMenuItem(
                 value: index + 1,
-                child: Text('${(index + 1).toString()} Kg'),
+                child: Text('${(index + 1).toString()} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weight_type}'),
               );
             }).toList(),
             onChanged: (value) {
@@ -274,7 +276,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         ),
         16.height,
         (appStore.isLoading && parcelTypeList.isEmpty)
-            ? Loader()
+            ? loaderWidget()
             : Wrap(
                 spacing: 8,
                 runSpacing: 8,
@@ -358,7 +360,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           children: [
             16.height,
             Text('Pickup Time', style: primaryTextStyle()),
-            8.height,
+            16.height,
             /* AppTextField(
               textFieldType: TextFieldType.OTHER,
               controller: pickDateCont,
@@ -406,9 +408,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 ).expand(),
               ],
             ),*/
-            8.height,
             Container(
               padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                border: Border.all(color: borderColor),
+                borderRadius: BorderRadius.circular(defaultRadius),
+              ),
               child: Column(
                 children: [
                   Row(
@@ -445,7 +450,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         dateLabelText: 'Date',
                         onChanged: (val) => print(val),
                         validator: (val) {
+                          var difference = DateTime.parse(pickEndTimeController.text).difference(DateTime.parse(pickStartTimeController.text));
+                          print('difference:${difference.inMinutes}');
                           if (val!.isEmpty) return errorThisFieldRequired;
+                          if (difference.inMinutes < 0) return 'EndTime must be after StartTime';
                           return null;
                         },
                         onSaved: (val) => print(val),
@@ -529,8 +537,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           children: [
             16.height,
             Text('Deliver Time', style: primaryTextStyle()),
-            8.height,
-            AppTextField(
+            16.height,
+          /*  AppTextField(
               textFieldType: TextFieldType.OTHER,
               controller: deliverDateCont,
               readOnly: true,
@@ -576,6 +584,61 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   },
                 ).expand(),
               ],
+            ),*/
+            Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                border: Border.all(color: borderColor),
+                borderRadius: BorderRadius.circular(defaultRadius),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text('From', style: primaryTextStyle()).expand(flex: 1),
+                      8.width,
+                      DateTimePicker(
+                        controller: deliverStartTimeController,
+                        type: DateTimePickerType.dateTime,
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                        decoration: commonInputDecoration(suffixIcon: Icons.date_range),
+                        dateLabelText: 'Date',
+                        onChanged: (val) => print(val),
+                        validator: (val) {
+                          if (val!.isEmpty) return errorThisFieldRequired;
+                          return null;
+                        },
+                        onSaved: (val) => print(val),
+                      ).expand(flex: 3),
+                    ],
+                  ),
+                  16.height,
+                  Row(
+                    children: [
+                      Text('To', style: primaryTextStyle()).expand(flex: 1),
+                      8.width,
+                      DateTimePicker(
+                        controller: deliverEndTimeController,
+                        type: DateTimePickerType.dateTime,
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                        decoration: commonInputDecoration(suffixIcon: Icons.date_range),
+                        dateLabelText: 'Date',
+                        onChanged: (val) => print(val),
+                        validator: (val) {
+                          var difference = DateTime.parse(deliverEndTimeController.text).difference(DateTime.parse(deliverStartTimeController.text));
+                          print('difference:${difference.inMinutes}');
+                          if (val!.isEmpty) return errorThisFieldRequired;
+                          if (difference.inMinutes < 0) return 'EndTime must be after StartTime';
+                          return null;
+                        },
+                        onSaved: (val) => print(val),
+                      ).expand(flex: 3),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ).visible(!isDeliverNow),
@@ -634,7 +697,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 children: [
                   Text('Weight', style: primaryTextStyle()),
                   16.width,
-                  Text('${selectedWeight} Kg', style: primaryTextStyle()),
+                  Text('${selectedWeight} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weight_type}', style: primaryTextStyle()),
                 ],
               ),
             ],
@@ -686,7 +749,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           children: [
             Text('Delivery Charge', style: primaryTextStyle()),
             16.width,
-            Text(cityData!.fixedCharges.toString(), style: boldTextStyle()),
+            Text('$currencySymbol ${cityData!.fixedCharges}', style: boldTextStyle()),
           ],
         ),
         8.height,
@@ -699,7 +762,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               children: [
                 Text(allChargesObject.keys.elementAt(index).replaceAll("_", " ").capitalizeFirstLetter(), style: primaryTextStyle()),
                 16.width,
-                Text(allChargesObject.values.elementAt(index).toString(), style: boldTextStyle()),
+                Text('$currencySymbol ${allChargesObject.values.elementAt(index)}', style: boldTextStyle()),
               ],
             ),
           );
@@ -710,7 +773,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           children: [
             Text('Total', style: boldTextStyle()),
             16.width,
-            Text('$totalAmount', style: boldTextStyle(size: 20)),
+            Text('$currencySymbol $totalAmount', style: boldTextStyle(size: 20)),
           ],
         ),
         Column(
@@ -847,14 +910,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   contentPadding: EdgeInsets.all(16),
                   builder: (p0) {
                     return CreateOrderConfirmationDialog(
-                      onDraft: () {
+                      onSuccess: () {
                         finish(context);
-                        createOrderApiCall(ORDER_DRAFT);
+                        createOrderApiCall();
                       },
-                      onCreate: () {
-                        finish(context);
-                        createOrderApiCall(ORDER_CREATED);
-                      },
+                      primaryText: 'Create',
                     );
                   },
                 );

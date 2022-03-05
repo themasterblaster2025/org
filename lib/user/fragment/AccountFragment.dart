@@ -64,7 +64,7 @@ class AccountFragmentState extends State<AccountFragment> {
                     if (index == 4 || index == 5) {
                       launch('https://www.google.com/');
                     }
-                    if (index == 6) {
+                    if (index == 7) {
                       await showConfirmDialogCustom(
                         context,
                         primaryColor: colorPrimary,

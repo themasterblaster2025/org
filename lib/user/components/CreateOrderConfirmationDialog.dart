@@ -4,10 +4,11 @@ import 'package:nb_utils/nb_utils.dart';
 
 class CreateOrderConfirmationDialog extends StatefulWidget {
   static String tag = '/CreateOrderConfirmationDialog';
-  final Function() onDraft;
-  final Function() onCreate;
+  final Function() onSuccess;
+  final String? message;
+  final String? primaryText;
 
-  CreateOrderConfirmationDialog({required this.onDraft,required this.onCreate});
+  CreateOrderConfirmationDialog({required this.onSuccess,this.message,this.primaryText});
 
   @override
   CreateOrderConfirmationDialogState createState() => CreateOrderConfirmationDialogState();
@@ -47,9 +48,11 @@ class CreateOrderConfirmationDialogState extends State<CreateOrderConfirmationDi
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            commonButton('Save Draft', widget.onDraft, color: Colors.grey),
+            commonButton('Cancel', (){
+              finish(context);
+            }, color: Colors.grey),
             16.width,
-            commonButton('Create', widget.onCreate),
+            commonButton(widget.primaryText ?? 'Create', widget.onSuccess),
           ],
         ),
       ],

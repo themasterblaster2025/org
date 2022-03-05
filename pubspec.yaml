@@ -19,7 +19,7 @@ dependencies:
   mobx: ^2.0.6+1
   flutter_mobx: ^2.0.4
 
-  nb_utils: ^4.4.11
+  nb_utils: ^4.4.12
   google_fonts: ^2.2.0
   bubble_bottom_bar: ^2.0.0
   url_launcher: ^6.0.18
@@ -35,8 +35,7 @@ dependencies:
   animations: ^2.0.2
   google_places_for_flutter: ^1.0.1
   geolocator: ^8.2.0
-
-
+  address_search_field: ^4.0.1
 
 dev_dependencies:
   flutter_test:

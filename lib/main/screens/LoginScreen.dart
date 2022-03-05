@@ -11,7 +11,7 @@ import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
-import 'CitySelectScreen2.dart';
+import '../../user/components/UserCitySelectScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   static String tag = '/LoginScreen';
@@ -61,9 +61,8 @@ class LoginScreenState extends State<LoginScreen> {
           if (getStringAsync(USER_TYPE) == DELIVERY_MAN) {
             CitySelectScreen().launch(context, isNewTask: true);
           } else {
-            CitySelectScreen2().launch(context, isNewTask: true);
+            UserCitySelectScreen().launch(context, isNewTask: true);
           }
-          //DDashboardScreen().launch(context, isNewTask: true);
         } else {
           toast('You profile is under review. Wait some time or contact your administrator.');
         }

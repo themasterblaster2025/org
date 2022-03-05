@@ -9,6 +9,7 @@ Widget commonButton(String title, Function() onTap, {double? width,Color? color}
   return SizedBox(
     width: width,
     child: AppButton(
+      padding: EdgeInsets.symmetric(vertical: 12,horizontal: 16),
       shapeBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius)),
       elevation: 0,
       child: Text(

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -130,4 +131,13 @@ double calculateDistance(lat1, lon1, lat2, lon2) {
   var a = 0.5 - cos((lat2 - lat1) * p) / 2 + cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
   return (12742 * asin(sqrt(a))).toStringAsFixed(2).toDouble();
 }
+
+Widget loaderWidget() {
+  return Center(child: Lottie.asset('assets/loader.json', width: 50, height: 70));
+}
+
+Widget emptyWidget() {
+  return Center(child: Lottie.asset('assets/no_data.json', width: 150, height: 250));
+}
+
 
