@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
+import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
@@ -40,7 +41,11 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   int val = 0;
 
   File? imageSignature;
+  File? deliverySignature;
   bool mIsUpdate = false;
+  int groupVal = 0;
+
+  List<String> statusList = ['Arrived', 'Delayed', 'Cancelled'];
 
   @override
   void initState() {
@@ -54,6 +59,19 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
       deliveryBoyNameController.text = widget.orderData!.deliveryManName!;
       clientController.text = widget.orderData!.clientName!;
     }
+  }
+
+  saveDelivery() async {
+    await updateOrder(
+      orderStatus: ORDER_PICKED_UP,
+      pickupDatetime: picUpController.text,
+      deliveryDatetime: deliveryDateController.text,
+      clientName: deliveryBoyNameController.text,
+      deliveryman: clientController.text,
+      picUpSignature: imageSignature,
+      deliverySignature: deliverySignature,
+      orderId: widget.orderData!.id,
+    );
   }
 
   Future<void> selectPic() async {
@@ -101,33 +119,6 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
     setState(() {});
   }
 
-  Future<Widget> date() async {
-    return DateTimePicker(
-      type: DateTimePickerType.dateTimeSeparate,
-      dateMask: 'd MMM, yyyy',
-      initialValue: DateTime.now().toString(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-      icon: Icon(Icons.event),
-      dateLabelText: 'Date',
-      timeLabelText: "Hour",
-      selectableDayPredicate: (date) {
-        // Disable weekend days to select from the calendar
-        if (date.weekday == 6 || date.weekday == 7) {
-          return false;
-        }
-
-        return true;
-      },
-      onChanged: (val) => print(val),
-      validator: (val) {
-        print(val);
-        return null;
-      },
-      onSaved: (val) => print(val),
-    );
-  }
-
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
@@ -165,17 +156,16 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                       lastDate: DateTime(2100),
                       icon: Icon(Icons.event),
                       dateLabelText: 'Date',
-                      useRootNavigator: true,
                       timeLabelText: "Hour",
-                      selectableDayPredicate: (date) {
+                      /*selectableDayPredicate: (date) {
                         if (date.weekday == 6 || date.weekday == 7) {
                           return false;
                         }
 
                         return true;
-                      },
+                      },*/
                       onChanged: (val) {
-                        print(val);
+                        picUpController.text = val;
                       },
                       validator: (val) {
                         print(val);
@@ -194,9 +184,40 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                 textFieldType: TextFieldType.PHONE,
                 controller: deliveryDateController,
                 onTap: () {
-                  toast('show dialog Data');
+                  //
                 },
-                decoration: commonInputDecoration(suffixIcon: Icons.schedule_outlined),
+                decoration: commonInputDecoration(
+                  dateTime: IconButton(
+                    onPressed: () {
+                      //
+                    },
+                    icon: DateTimePicker(
+                      type: DateTimePickerType.dateTime,
+                      dateMask: 'd MMM, yyyy',
+                      initialValue: DateTime.now().toString(),
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2100),
+                      icon: Icon(Icons.event),
+                      dateLabelText: 'Date',
+                      timeLabelText: "Hour",
+                      /*selectableDayPredicate: (date) {
+                        if (date.weekday == 6 || date.weekday == 7) {
+                          return false;
+                        }
+
+                        return true;
+                      },*/
+                      onChanged: (val) {
+                        deliveryDateController.text = val;
+                      },
+                      validator: (val) {
+                        print(val);
+                        return null;
+                      },
+                      onSaved: (val) => print(val),
+                    ),
+                  ),
+                ),
               ),
               16.height,
               Text('Client name', style: boldTextStyle()),
@@ -317,16 +338,103 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                       }).catchError((onError) {
                         print(onError);
                       });
+
+                      screenshotController.capture(delay: Duration(milliseconds: 10)).then((capturedImage) {
+                        imageSignature = File.fromRawPath(capturedImage!);
+                      }).catchError((onError) {
+                        print(onError);
+                      });
+
+
                     },
                   ).expand(),
                   16.width,
                   AppButton(
                     width: context.width(),
-                    text: 'Cancel',
+                    text: 'Status',
                     textStyle: primaryTextStyle(color: white),
                     color: colorPrimary,
                     onTap: () async {
-                      //
+                      if (reasonController.text.isEmpty) {
+                        return toast('Please select reason');
+                      }
+                      showDialog(
+                        context: context,
+                        builder: (_) {
+                          return Dialog(
+                            child: Container(
+                              width: 100,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ...statusList.map((e) {
+                                    int index = statusList.indexOf(e);
+                                    //toast(index.toString());
+                                    return RadioListTile<int>(
+                                      title: Text(e),
+                                      value: index,
+                                      groupValue: groupVal,
+                                      onChanged: (int? value) {
+                                        groupVal = value!;
+                                        setState(() {});
+                                      },
+                                    );
+                                  }).toList()
+                                  /* RadioListTile(
+                                    title: Text('Arrived'),
+                                    value: 1,
+                                    groupValue: groupVal,
+                                    onChanged: (v) {
+                                      //
+                                    },
+                                  ),
+                                  RadioListTile(
+                                    title: Text('Delayed'),
+                                    value: 2,
+                                    groupValue: groupVal,
+                                    onChanged: (v) {
+                                      //
+                                    },
+                                  ),
+                                  RadioListTile(
+                                    title: Text('Cancelled'),
+                                    value: 3,
+                                    groupValue: groupVal,
+                                    onChanged: (v) {
+                                      //
+                                    },
+                                  )*/
+                                  ,
+                                  16.height,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      AppButton(
+                                        color: Colors.red,
+                                        textStyle: boldTextStyle(color: white),
+                                        text: 'Cancel',
+                                        onTap: () {
+                                          finish(context);
+                                        },
+                                      ),
+                                      16.width,
+                                      AppButton(
+                                        color: colorPrimary,
+                                        textStyle: boldTextStyle(color: white),
+                                        text: 'Save',
+                                        onTap: () {
+                                          finish(context);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  16.height,
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
                     },
                   ).expand(),
                 ],

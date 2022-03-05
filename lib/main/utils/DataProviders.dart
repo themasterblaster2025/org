@@ -58,7 +58,7 @@ List<BottomNavigationBarItemModel> getDeliveryNavBarItems() {
 List<SettingItemModel> getDeliverySettingItems() {
   List<SettingItemModel> list = [];
   list.add(SettingItemModel(icon: Icons.person_outline, title: 'Edit Profile', widget: EditProfileScreen()));
-  list.add(SettingItemModel(icon: Icons.history_outlined, title: 'Order History', widget: OrderHistoryScreen()));
+  list.add(SettingItemModel(icon: Icons.history_outlined, title: 'Order History',));
   list.add(SettingItemModel(icon: Icons.lock_outline, title: 'Change Password', widget: ChangePasswordScreen()));
   list.add(SettingItemModel(icon: Icons.location_on_outlined, title: 'Change Location', widget: CitySelectScreen(isBack: true)));
   list.add(SettingItemModel(icon: Icons.language, title: 'Language'));

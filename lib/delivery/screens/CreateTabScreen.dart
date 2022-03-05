@@ -2,26 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mighty_delivery/delivery/components/NewOrderWidget.dart';
 import 'package:mighty_delivery/delivery/screens/ReceivedScreenOrderScreen.dart';
-import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-class DHomeFragment extends StatefulWidget {
-  @override
-  DHomeFragmentState createState() => DHomeFragmentState();
-}
+import '../../main.dart';
 
-class DHomeFragmentState extends State<DHomeFragment> {
-  ScrollController scrollController = ScrollController();
+class CreateTabScreen extends StatefulWidget {
+
+  @override
+  CreateTabScreenState createState() => CreateTabScreenState();
+}
+class CreateTabScreenState extends State<CreateTabScreen> {
+   ScrollController scrollController = ScrollController();
   int currentPage = 1;
   int totalPage = 1;
 
   bool mIsLastPage = false;
   List<OrderData> orderData = [];
 
-  @override
+ @override
   void initState() {
     super.initState();
     init();

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mighty_delivery/delivery/screens/DDashboardScreen.dart';
+import 'package:mighty_delivery/delivery/screens/DeliveryDashBoard.dart';
 import 'package:mighty_delivery/main/screens/WalkThroughScreen.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
@@ -30,7 +31,7 @@ class SplashScreenState extends State<SplashScreen> {
           if (getStringAsync(USER_TYPE) == CLIENT) {
             DashboardScreen().launch(context, isNewTask: true);
           } else {
-            DDashboardScreen().launch(context, isNewTask: true);
+            DeliveryDashBoard().launch(context, isNewTask: true);
           }
         } else {
           if (getBoolAsync(IS_FIRST_TIME, defaultValue: true)) {

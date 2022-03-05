@@ -48,7 +48,6 @@ Future<LoginResponse> signUpApi(Map request) async {
     await setValue(CITY_ID, loginResponse.data!.city_id.validate());
     await setValue(CITY_NAME, loginResponse.data!.city_name.validate());
 
-
     await appStore.setUserEmail(loginResponse.data!.email.validate());
     await appStore.setLogin(true);
 
@@ -193,8 +192,8 @@ Future updateProfile({String? userName, String? name, String? userEmail, String?
 }
 
 /// Create Order Api
-Future<LDBaseResponse> createOrder(Map request)async{
-  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('order-save',request: request,method: HttpMethod.POST)));
+Future<LDBaseResponse> createOrder(Map request) async {
+  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('order-save', request: request, method: HttpMethod.POST)));
 }
 
 // ParcelType Api
@@ -206,12 +205,12 @@ Future<CountryListModel> getCountryList() async {
   return CountryListModel.fromJson(await handleResponse(await buildHttpResponse('country-list', method: HttpMethod.GET)));
 }
 
-Future<CityListModel> getCityList({required int CountryId,String? name}) async {
-  return CityListModel.fromJson(await handleResponse(await buildHttpResponse(name!=null ? 'city-list?country_id=$CountryId&name=$name' : 'city-list?country_id=$CountryId', method: HttpMethod.GET)));
+Future<CityListModel> getCityList({required int CountryId, String? name}) async {
+  return CityListModel.fromJson(await handleResponse(await buildHttpResponse(name != null ? 'city-list?country_id=$CountryId&name=$name' : 'city-list?country_id=$CountryId', method: HttpMethod.GET)));
 }
 
-Future<CityDetailModel> getCityDetail(int id) async{
-  return CityDetailModel.fromJson(await handleResponse(await buildHttpResponse('city-detail?id=$id',method: HttpMethod.GET)));
+Future<CityDetailModel> getCityDetail(int id) async {
+  return CityDetailModel.fromJson(await handleResponse(await buildHttpResponse('city-detail?id=$id', method: HttpMethod.GET)));
 }
 
 /// Country
@@ -234,13 +233,15 @@ Future updateCountryCity({int? countryId, int? cityId}) async {
 }
 
 /// get OrderList
-Future<OrderListModel> getOrderList({required int page,bool isDraft = false}) async{
-  return OrderListModel.fromJson(await handleResponse(await buildHttpResponse(isDraft ? 'order-list?page=$page&client_id=${getIntAsync(USER_ID)}&status=$ORDER_DRAFT' : 'order-list?page=$page&client_id=${getIntAsync(USER_ID)}',method: HttpMethod.GET)));
+Future<OrderListModel> getOrderList({required int page, bool isDraft = false}) async {
+  return OrderListModel.fromJson(await handleResponse(await buildHttpResponse(
+      isDraft ? 'order-list?page=$page&client_id=${getIntAsync(USER_ID)}&status=$ORDER_DRAFT' : 'order-list?page=$page&client_id=${getIntAsync(USER_ID)}',
+      method: HttpMethod.GET)));
 }
 
 /// get deliveryBoy orderList
-Future<OrderListModel> getDeliveryBoyList({required int page, required int deliveryBoyID}) async {
-  return OrderListModel.fromJson(await handleResponse(await buildHttpResponse('order-list?delivery_man_id=$deliveryBoyID&page=$page', method: HttpMethod.GET)));
+Future<OrderListModel> getDeliveryBoyList({required int page, required int deliveryBoyID, required int countryId, required int cityId}) async {
+  return OrderListModel.fromJson(await handleResponse(await buildHttpResponse('order-list?delivery_man_id=$deliveryBoyID&page=$page&city_id=$cityId&country_id=$countryId', method: HttpMethod.GET)));
 }
 
 /// update status
