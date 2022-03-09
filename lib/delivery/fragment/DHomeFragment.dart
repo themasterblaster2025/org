@@ -41,7 +41,7 @@ class DHomeFragmentState extends State<DHomeFragment> {
 
   void init() async {
     appStore.setLoading(true);
-    getDeliveryBoyList(page: currentPage, deliveryBoyID: getIntAsync(USER_ID),cityId: getIntAsync(CITY_ID),countryId: getIntAsync(COUNTRY_ID)).then((value) {
+    getDeliveryBoyList(page: currentPage, deliveryBoyID: getIntAsync(USER_ID),cityId: getIntAsync(CITY_ID),countryId: getIntAsync(COUNTRY_ID),orderStatus: '').then((value) {
       appStore.setLoading(false);
 
       mIsLastPage = value.data!.length != value.pagination!.per_page!;

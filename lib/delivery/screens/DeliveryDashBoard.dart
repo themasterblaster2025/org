@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mighty_delivery/delivery/fragment/DProfileFragment.dart';
-import 'package:nb_utils/nb_utils.dart';
-import 'package:mighty_delivery/delivery/screens/ActiveTabScreen.dart';
-import 'package:mighty_delivery/delivery/screens/ArrivedTabScreen.dart';
-import 'package:mighty_delivery/delivery/screens/CancelledTabScreen.dart';
-import 'package:mighty_delivery/delivery/screens/CompletedTabScreen.dart';
 import 'package:mighty_delivery/delivery/screens/CreateTabScreen.dart';
-import 'package:mighty_delivery/delivery/screens/DepartedTabScreen.dart';
-import 'package:mighty_delivery/delivery/screens/PickedUpTabScreen.dart';
-import 'package:mighty_delivery/main/screens/EditProfileScreen.dart';
+import 'package:mighty_delivery/main/utils/Common.dart';
+import 'package:mighty_delivery/main/utils/Constants.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 class DeliveryDashBoard extends StatefulWidget {
   @override
@@ -26,6 +21,9 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
     //
   }
 
+  List<String> statusList = [ORDER_ASSIGNED, ORDER_ACTIVE, ORDER_ARRIVED, ORDER_PICKED_UP, ORDER_DEPARTED, ORDER_COMPLETED, ORDER_CANCELLED];
+  int currentIndex = 1;
+
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
@@ -34,46 +32,28 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 7,
+      length: statusList.length,
       child: Scaffold(
         appBar: AppBar(
           actions: [
             IconButton(
               onPressed: () {
-                EditProfileScreen().launch(context,pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
-              },
-              icon: Icon(Icons.person_outlined),
-            ),
-            IconButton(
-              onPressed: () {
-                DProfileFragment().launch(context,pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+                DProfileFragment().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
               },
               icon: Icon(Icons.settings),
             )
           ],
           bottom: TabBar(
             isScrollable: true,
-            tabs: [
-              Tab(text: 'Create'),
-              Tab(text: 'Active'),
-              Tab(text: 'Picked up'),
-              Tab(text: 'Arrived'),
-              Tab(text: 'Departed'),
-              Tab(text: 'Completed'),
-              Tab(text: 'Cancelled'),
-            ],
+            tabs: statusList.map((e) {
+              return Tab(text: orderStatus(e));
+            }).toList(),
           ),
         ),
         body: TabBarView(
-          children: [
-            CreateTabScreen(),
-            ActiveTabScreen(),
-            PickedUpTabScreen(),
-            ArrivedTabScreen(),
-            DepartedTabScreen(),
-            CompletedTabScreen(),
-            CancelledTabScreen(),
-          ],
+          children: statusList.map((e) {
+            return CreateTabScreen(orderStatus: e);
+          }).toList(),
         ),
       ),
     );

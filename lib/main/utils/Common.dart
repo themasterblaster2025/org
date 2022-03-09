@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
@@ -6,7 +8,6 @@ import 'package:lottie/lottie.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'dart:math';
 
 InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, Function()? suffixOnTap, Widget? dateTime}) {
   return InputDecoration(
@@ -140,4 +141,20 @@ Widget emptyWidget() {
   return Center(child: Lottie.asset('assets/no_data.json', width: 150, height: 250));
 }
 
-
+String? orderStatus(String orderStatus) {
+  if (orderStatus == ORDER_ASSIGNED) {
+    return 'Assign';
+  } else if (orderStatus == ORDER_ACTIVE) {
+    return 'Active';
+  } else if (orderStatus == ORDER_PICKED_UP) {
+    return 'Picked Up';
+  } else if (orderStatus == ORDER_ARRIVED) {
+    return 'Arrived';
+  } else if (orderStatus == ORDER_DEPARTED) {
+    return 'Departed';
+  } else if (orderStatus == ORDER_COMPLETED) {
+    return 'Completed';
+  } else if (orderStatus == ORDER_CANCELLED) {
+    return 'Cancelled';
+  }
+}

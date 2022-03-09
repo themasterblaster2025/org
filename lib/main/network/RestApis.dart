@@ -192,8 +192,8 @@ Future updateProfile({String? userName, String? name, String? userEmail, String?
 }
 
 /// Create Order Api
-Future<LDBaseResponse> createOrder(Map request)async{
-  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('order-save',request: request,method: HttpMethod.POST)));
+Future<LDBaseResponse> createOrder(Map request) async {
+  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('order-save', request: request, method: HttpMethod.POST)));
 }
 
 // ParcelType Api
@@ -205,16 +205,17 @@ Future<CountryListModel> getCountryList() async {
   return CountryListModel.fromJson(await handleResponse(await buildHttpResponse('country-list?per_page=-1', method: HttpMethod.GET)));
 }
 
-Future<CountryDetailModel> getCountryDetail(int id) async{
-  return CountryDetailModel.fromJson(await handleResponse(await buildHttpResponse('country-detail?id=$id',method: HttpMethod.GET)));
+Future<CountryDetailModel> getCountryDetail(int id) async {
+  return CountryDetailModel.fromJson(await handleResponse(await buildHttpResponse('country-detail?id=$id', method: HttpMethod.GET)));
 }
 
-Future<CityListModel> getCityList({required int CountryId,String? name,int? page}) async {
-  return CityListModel.fromJson(await handleResponse(await buildHttpResponse(name!=null ? 'city-list?country_id=$CountryId&name=$name&page=$page' : 'city-list?country_id=$CountryId&page=$page', method: HttpMethod.GET)));
+Future<CityListModel> getCityList({required int CountryId, String? name, int? page}) async {
+  return CityListModel.fromJson(
+      await handleResponse(await buildHttpResponse(name != null ? 'city-list?country_id=$CountryId&name=$name&page=$page' : 'city-list?country_id=$CountryId&page=$page', method: HttpMethod.GET)));
 }
 
-Future<CityDetailModel> getCityDetail(int id) async{
-  return CityDetailModel.fromJson(await handleResponse(await buildHttpResponse('city-detail?id=$id',method: HttpMethod.GET)));
+Future<CityDetailModel> getCityDetail(int id) async {
+  return CityDetailModel.fromJson(await handleResponse(await buildHttpResponse('city-detail?id=$id', method: HttpMethod.GET)));
 }
 
 /// Country
@@ -243,8 +244,9 @@ Future<OrderListModel> getOrderList({required int page, bool isDraft = false}) a
 }
 
 /// get deliveryBoy orderList
-Future<OrderListModel> getDeliveryBoyList({required int page, required int deliveryBoyID, required int countryId, required int cityId}) async {
-  return OrderListModel.fromJson(await handleResponse(await buildHttpResponse('order-list?delivery_man_id=$deliveryBoyID&page=$page&city_id=$cityId&country_id=$countryId', method: HttpMethod.GET)));
+Future<OrderListModel> getDeliveryBoyList({required int page, required int deliveryBoyID, required int countryId, required int cityId, required String orderStatus}) async {
+  return OrderListModel.fromJson(
+      await handleResponse(await buildHttpResponse('order-list?delivery_man_id=$deliveryBoyID&page=$page&city_id=$cityId&country_id=$countryId&status=$orderStatus', method: HttpMethod.GET)));
 }
 
 /// update status
@@ -274,12 +276,12 @@ Future updateOrder({
   File? deliverySignature,
 }) async {
   MultipartRequest multiPartRequest = await getMultiPartRequest('order-update/$orderId');
-  multiPartRequest.fields['pickup_datetime'] = pickupDatetime.validate();
-  multiPartRequest.fields['delivery_datetime'] = deliveryDatetime.validate();
-  multiPartRequest.fields['pickup_confirm_by_client'] = clientName.validate();
-  multiPartRequest.fields['pickup_confirm_by_delivery_man'] = deliveryman.validate();
-  multiPartRequest.fields['reason'] = reason.validate();
-  multiPartRequest.fields['status'] = orderStatus.validate();
+  if (pickupDatetime != null) multiPartRequest.fields['pickup_datetime'] = pickupDatetime;
+  if (deliveryDatetime != null) multiPartRequest.fields['delivery_datetime'] = deliveryDatetime;
+  if (clientName != null) multiPartRequest.fields['pickup_confirm_by_client'] = clientName;
+  if (deliveryman != null) multiPartRequest.fields['pickup_confirm_by_delivery_man'] = deliveryman;
+  if (reason != null) multiPartRequest.fields['reason'] = reason;
+  if (orderStatus != null) multiPartRequest.fields['status'] = orderStatus;
 
   if (picUpSignature != null) multiPartRequest.files.add(await MultipartFile.fromPath('pickup_time_signature', picUpSignature.path));
   if (deliverySignature != null) multiPartRequest.files.add(await MultipartFile.fromPath('delivery_time_signature', deliverySignature.path));
