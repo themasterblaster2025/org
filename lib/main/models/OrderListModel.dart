@@ -34,8 +34,10 @@ class PickupPoint {
   String? longitude;
   String? description;
   String? contactNumber;
+  String? startTime;
+  String? endTime;
 
-  PickupPoint({this.address, this.latitude, this.longitude, this.description, this.contactNumber});
+  PickupPoint({this.address, this.latitude, this.longitude, this.description, this.contactNumber,this.startTime,this.endTime});
 
   PickupPoint.fromJson(Map<String, dynamic> json) {
     address = json['address'];
@@ -43,6 +45,8 @@ class PickupPoint {
     longitude = json['longitude'];
     description = json['description'];
     contactNumber = json['contact_number'];
+    startTime = json['start_time'];
+    endTime = json['end_time'];
   }
 
   Map<String, dynamic> toJson() {
@@ -52,6 +56,8 @@ class PickupPoint {
     data['longitude'] = this.longitude;
     data['description'] = this.description;
     data['contact_number'] = this.contactNumber;
+    data['start_time'] = this.startTime;
+    data['end_time'] = this.endTime;
     return data;
   }
 }
@@ -82,7 +88,7 @@ class OrderData {
   String? deliveryManName;
   num? fixedCharges;
   var extraCharges;
-  String? totalAmount;
+  num? totalAmount;
   String? reason;
   int? pickupConfirmByClient;
   int? pickupConfirmByDeliveryMan;

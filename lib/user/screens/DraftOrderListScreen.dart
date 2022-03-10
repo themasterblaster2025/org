@@ -6,8 +6,7 @@ import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
-import 'package:mighty_delivery/main/utils/Widgets.dart';
-import 'package:mighty_delivery/user/components/CreateOrderConfirmationDialog.dart';
+import 'package:mighty_delivery/user/screens/CreateOrderScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
@@ -38,7 +37,7 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
 
   getOrderListApiCall() async {
     appStore.setLoading(true);
-    await getOrderList(page: page, isDraft: true).then((value) {
+    await getOrderList(page: page,orderStatus: ORDER_DRAFT).then((value) {
       appStore.setLoading(false);
       totalPage = value.pagination!.totalPages!;
       isLastPage = false;
@@ -54,17 +53,13 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
     });
   }
 
-  updateOrderApiCall(int id, String status) async {
-    Map req = {
-      "id": id.toString(),
-      "client_id": getIntAsync(USER_ID).toString(),
-      "date": DateTime.now().toString(),
-      "status": status,
-    };
+  deleteOrderApiCall(int id) async {
     appStore.setLoading(true);
-    await createOrder(req).then((value) {
+    await deleteOrder(id).then((value) {
       appStore.setLoading(false);
       toast(value.message);
+      getOrderListApiCall();
+      setState(() {});
     }).catchError((error) {
       appStore.setLoading(false);
       toast(error.toString());
@@ -78,140 +73,151 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Observer(
-      builder: (context) {
-        return Scaffold(
-          appBar: appBarWidget('Draft Order', color: colorPrimary, textColor: white, elevation: 0),
-          body: BodyCornerWidget(
-            child: Stack(
-              children: [
-                appStore.isLoading
-                    ? loaderWidget()
-                    : orderList.isNotEmpty
-                        ? ListView(
-                            shrinkWrap: true,
-                            controller: scrollController,
-                            padding: EdgeInsets.all(16),
-                            children: orderList.map((item) {
-                              return Container(
-                                margin: EdgeInsets.only(bottom: 16),
-                                padding: EdgeInsets.all(16),
-                                decoration: boxDecorationRoundedWithShadow(defaultRadius.toInt()),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Container(
-                                          decoration: boxDecorationWithRoundedCorners(
-                                            borderRadius: BorderRadius.circular(8),
-                                            border: Border.all(color: borderColor),
-                                          ),
-                                          padding: EdgeInsets.all(8),
-                                          child: Image.network(parcelTypeIcon(item.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
+    return Observer(builder: (context) {
+      return Scaffold(
+        appBar: appBarWidget('Draft Order', color: colorPrimary, textColor: white, elevation: 0),
+        body: BodyCornerWidget(
+          child: Observer(
+            builder: (context) {
+              return Stack(
+                children: [
+                  orderList.isNotEmpty
+                      ? ListView(
+                          shrinkWrap: true,
+                          controller: scrollController,
+                          padding: EdgeInsets.all(16),
+                          children: orderList.map((item) {
+                            return Container(
+                              margin: EdgeInsets.only(bottom: 16),
+                              decoration: boxDecorationRoundedWithShadow(defaultRadius.toInt()),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('#${item.id}',style: secondaryTextStyle(size: 16)).paddingOnly(left: 16),
+                                      Container(
+                                        child: Icon(Icons.delete_outline, color: Colors.red),
+                                        padding: EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          color: Colors.red.withOpacity(0.4),
+                                          borderRadius: BorderRadius.only(topRight: Radius.circular(defaultRadius), bottomLeft: Radius.circular(defaultRadius)),
                                         ),
-                                        8.width,
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                      ).onTap(() {
+                                        showConfirmDialogCustom(
+                                          context,
+                                          dialogType: DialogType.DELETE,
+                                          onAccept: (p0) {
+                                            deleteOrderApiCall(item.id!.toInt());
+                                          },
+                                        );
+                                      }),
+                                    ],
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(16),
+                                    child: Column(
+                                      children: [
+                                        Row(
                                           children: [
-                                            Text(item.parcelType.validate(), style: boldTextStyle()),
-                                            4.height,
-                                            Row(
+                                            Container(
+                                              decoration: boxDecorationWithRoundedCorners(
+                                                borderRadius: BorderRadius.circular(8),
+                                                border: Border.all(color: borderColor),
+                                              ),
+                                              padding: EdgeInsets.all(8),
+                                              child: Image.network(parcelTypeIcon(item.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
+                                            ),
+                                            8.width,
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                item.date != null ? Text(printDate(item.date!), style: secondaryTextStyle()).expand() : SizedBox(),
-                                                Text('$currencySymbol ${item.totalAmount}', style: boldTextStyle()),
+                                                Text(item.parcelType.validate(), style: boldTextStyle()),
+                                                4.height,
+                                                Row(
+                                                  children: [
+                                                    item.date != null ? Text(printDate(item.date!), style: secondaryTextStyle()).expand() : SizedBox(),
+                                                    Text('$currencySymbol ${item.totalAmount}', style: boldTextStyle()),
+                                                  ],
+                                                ),
+                                              ],
+                                            ).expand(),
+                                          ],
+                                        ),
+                                        Divider(height: 30, thickness: 1),
+                                        Row(
+                                          children: [
+                                            Row(
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              children: [
+                                                Icon(Icons.location_on, color: colorPrimary),
+                                                Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
                                               ],
                                             ),
-                                          ],
-                                        ).expand(),
-                                      ],
-                                    ),
-                                    Divider(height: 30, thickness: 1),
-                                    Row(
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment: CrossAxisAlignment.end,
-                                          children: [
-                                            Icon(Icons.location_on, color: colorPrimary),
-                                            Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
+                                            8.width,
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text('${item.pickupPoint!.address}', style: primaryTextStyle()),
+                                                4.height.visible(item.pickupPoint!.contactNumber != null),
+                                                Row(
+                                                  children: [
+                                                    Icon(Icons.call, color: Colors.green, size: 18),
+                                                    8.width,
+                                                    Text('${item.pickupPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
+                                                  ],
+                                                ).visible(item.pickupPoint!.contactNumber != null),
+                                              ],
+                                            ).expand(),
                                           ],
                                         ),
-                                        8.width,
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text('${item.pickupPoint!.address}', style: primaryTextStyle()),
-                                            4.height.visible(item.pickupPoint!.contactNumber != null),
-                                            Row(
-                                              children: [
-                                                Icon(Icons.call, color: Colors.green, size: 18),
-                                                8.width,
-                                                Text('${item.pickupPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
-                                              ],
-                                            ).visible(item.pickupPoint!.contactNumber != null),
-                                          ],
-                                        ).expand(),
-                                      ],
-                                    ),
-                                    16.height,
-                                    Row(
-                                      children: [
+                                        16.height,
                                         Row(
-                                          crossAxisAlignment: CrossAxisAlignment.end,
                                           children: [
-                                            Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
-                                            Icon(Icons.location_on, color: colorPrimary),
+                                            Row(
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              children: [
+                                                Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
+                                                Icon(Icons.location_on, color: colorPrimary),
+                                              ],
+                                            ),
+                                            8.width,
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text('${item.deliveryPoint!.address}', style: primaryTextStyle()),
+                                                4.height.visible(item.deliveryPoint!.contactNumber != null),
+                                                Row(
+                                                  children: [
+                                                    Icon(Icons.call, color: Colors.green, size: 18),
+                                                    8.width,
+                                                    Text('${item.deliveryPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
+                                                  ],
+                                                ).visible(item.deliveryPoint!.contactNumber != null),
+                                              ],
+                                            ).expand(),
                                           ],
                                         ),
-                                        8.width,
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text('${item.deliveryPoint!.address}', style: primaryTextStyle()),
-                                            4.height.visible(item.deliveryPoint!.contactNumber != null),
-                                            Row(
-                                              children: [
-                                                Icon(Icons.call, color: Colors.green, size: 18),
-                                                8.width,
-                                                Text('${item.deliveryPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
-                                              ],
-                                            ).visible(item.deliveryPoint!.contactNumber != null),
-                                          ],
-                                        ).expand(),
                                       ],
                                     ),
-                                    8.height,
-                                    Align(
-                                        alignment: Alignment.centerRight,
-                                        child: commonButton('Create', () {
-                                          showInDialog(
-                                            context,
-                                            contentPadding: EdgeInsets.all(16),
-                                            builder: (p0) {
-                                              return CreateOrderConfirmationDialog(
-                                                primaryText: 'Create',
-                                                onSuccess: () {
-                                                  finish(context);
-                                                  updateOrderApiCall(item.id!, ORDER_CREATED);
-                                                  getOrderListApiCall();
-                                                },
-                                              );
-                                            },
-                                          );
-                                        })),
-                                  ],
-                                ),
-                              );
-                            }).toList(),
-                          )
-                        : emptyWidget(),
-                Observer(builder: (context) {
-                  return loaderWidget().center().visible(appStore.isLoading);
-                }),
-              ],
-            ),
+                                  ),
+                                ],
+                              ),
+                            ).onTap(() {
+                              CreateOrderScreen(orderData: item).launch(context);
+                            });
+                          }).toList(),
+                        )
+                      : !appStore.isLoading
+                          ? emptyWidget()
+                          : SizedBox(),
+                  loaderWidget().center().visible(appStore.isLoading),
+                ],
+              );
+            }
           ),
-        );
-      }
-    );
+        ),
+      );
+    });
   }
 }

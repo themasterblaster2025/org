@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
+import 'package:mighty_delivery/main/models/CityListModel.dart';
 import 'package:mighty_delivery/main/models/CountryListModel.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
@@ -23,6 +24,10 @@ class OrderDetailScreen extends StatefulWidget {
 }
 
 class OrderDetailScreenState extends State<OrderDetailScreen> {
+  CityModel? cityData;
+  num weightCharge = 0;
+  num distanceCharge = 0;
+
   @override
   void initState() {
     super.initState();
@@ -30,7 +35,16 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
   }
 
   Future<void> init() async {
-    //
+    cityData = CityModel.fromJson(getJSONAsync(CITY_DATA));
+    /// calculate weight Charge
+    if (widget.orderData.totalWeight! > cityData!.minWeight!) {
+      weightCharge = ((widget.orderData.totalWeight!.toDouble() - cityData!.minWeight!) * cityData!.perWeightCharges!).toStringAsFixed(2).toDouble();
+    }
+
+    /// calculate distance Charge
+    if (widget.orderData.totalDistance! > cityData!.minDistance!) {
+      distanceCharge = ((widget.orderData.totalDistance! - cityData!.minDistance!) * cityData!.perDistanceCharges!).toStringAsFixed(2).toDouble();
+    }
   }
 
   @override
@@ -126,21 +140,63 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                   Text('$currencySymbol ${widget.orderData.fixedCharges}', style: boldTextStyle()),
                 ],
               ),
-              8.height,
               Column(
-                  children: List.generate(widget.orderData.extraCharges.keys.length, (index) {
-                    return Padding(
-                      padding: EdgeInsets.only(bottom: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(widget.orderData.extraCharges.keys.elementAt(index).replaceAll("_", " ").toString().capitalizeFirstLetter(), style: primaryTextStyle()),
-                          16.width,
-                          Text('$currencySymbol ${widget.orderData.extraCharges.values.elementAt(index)}', style: boldTextStyle()),
-                        ],
-                      ),
-                    );
-                  }).toList()),
+                children: [
+                  8.height,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Distance Charge', style: primaryTextStyle()),
+                      16.width,
+                      Text('$currencySymbol $distanceCharge', style: boldTextStyle()),
+                    ],
+                  )
+                ],
+              ).visible(distanceCharge != 0),
+              Column(
+                children: [
+                  8.height,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Weight Charge', style: primaryTextStyle()),
+                      16.width,
+                      Text('$currencySymbol $weightCharge', style: boldTextStyle()),
+                    ],
+                  ),
+                ],
+              ).visible(weightCharge!=0),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Column(
+                  children: [
+                    8.height,
+                    Text('$currencySymbol ${cityData!.fixedCharges! + distanceCharge + weightCharge}', style: boldTextStyle()),
+                  ],
+                ),
+              ).visible(weightCharge!=0 || distanceCharge!=0),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  16.height,
+                  Text('Extra Charges', style: boldTextStyle()),
+                  8.height,
+                  Column(
+                      children: List.generate(widget.orderData.extraCharges.keys.length, (index) {
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(widget.orderData.extraCharges.keys.elementAt(index).replaceAll("_", " "), style: primaryTextStyle()),
+                              16.width,
+                              Text('$currencySymbol ${widget.orderData.extraCharges.values.elementAt(index)}', style: boldTextStyle()),
+                            ],
+                          ),
+                        );
+                      }).toList()),
+                ],
+              ).visible(widget.orderData.extraCharges.keys.length != 0),
             ],
           ),
         ),

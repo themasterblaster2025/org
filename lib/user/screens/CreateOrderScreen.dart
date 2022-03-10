@@ -1,10 +1,12 @@
 import 'dart:core';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/models/CityListModel.dart';
 import 'package:mighty_delivery/main/models/CountryListModel.dart';
+import 'package:mighty_delivery/main/models/OrderListModel.dart';
 import 'package:mighty_delivery/main/models/ParcelTypeListModel.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
@@ -19,34 +21,39 @@ import 'package:nb_utils/nb_utils.dart';
 class CreateOrderScreen extends StatefulWidget {
   static String tag = '/CreateOrderScreen';
 
+  final OrderData? orderData;
+
+  CreateOrderScreen({this.orderData});
+
   @override
   CreateOrderScreenState createState() => CreateOrderScreenState();
 }
 
 class CreateOrderScreenState extends State<CreateOrderScreen> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  List<ParcelTypeData> parcelTypeList = [];
+
   CityModel? cityData;
+  List<ParcelTypeData> parcelTypeList = [];
 
   TextEditingController parcelTypeCont = TextEditingController();
 
   TextEditingController pickAddressCont = TextEditingController();
   TextEditingController pickPhoneCont = TextEditingController();
-  TextEditingController pickDateCont = TextEditingController();
-  TextEditingController pickFromTimeCont = TextEditingController();
-  TextEditingController pickToTimeCont = TextEditingController();
   TextEditingController pickDesCont = TextEditingController();
-  TextEditingController pickStartTimeController = TextEditingController();
-  TextEditingController pickEndTimeController = TextEditingController();
+  TextEditingController pickDateController = TextEditingController();
+  TextEditingController pickFromTimeController = TextEditingController();
+  TextEditingController pickToTimeController = TextEditingController();
 
   TextEditingController deliverAddressCont = TextEditingController();
   TextEditingController deliverPhoneCont = TextEditingController();
-  TextEditingController deliverDateCont = TextEditingController();
-  TextEditingController deliverFromTimeCont = TextEditingController();
-  TextEditingController deliverToTimeCont = TextEditingController();
   TextEditingController deliverDesCont = TextEditingController();
-  TextEditingController deliverStartTimeController = TextEditingController();
-  TextEditingController deliverEndTimeController = TextEditingController();
+  TextEditingController deliverDateController = TextEditingController();
+  TextEditingController deliverFromTimeController = TextEditingController();
+  TextEditingController deliverToTimeController = TextEditingController();
+
+  DateTime? pickFromDateTime, pickToDateTime, deliverFromDateTime, deliverToDateTime;
+  DateTime? pickDate, deliverDate;
+  TimeOfDay? pickFromTime, pickToTime, deliverFromTime, deliverToTime;
 
   int? selectedWeight;
   String? pickLat, pickLong, deliverLat, deliverLong;
@@ -64,7 +71,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   num totalDistance = 0;
   num totalAmount = 0;
 
-  Map<String, num> allChargesObject = Map<String, num>();
+  num weightCharge = 0;
+  num distanceCharge = 0;
+  num totalExtraCharge = 0;
+
   Map<String, num> extraChargesObject = Map<String, num>();
 
   @override
@@ -76,8 +86,26 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   }
 
   Future<void> init() async {
+    cityData = CityModel.fromJson(getJSONAsync(CITY_DATA));
+    if (widget.orderData != null) {
+      selectedWeight = widget.orderData!.totalWeight!.toInt();
+      parcelTypeCont.text = widget.orderData!.parcelType!;
+
+      pickAddressCont.text = widget.orderData!.pickupPoint!.address!;
+      pickLat = widget.orderData!.pickupPoint!.latitude!;
+      pickLong = widget.orderData!.pickupPoint!.longitude!;
+      pickPhoneCont.text = widget.orderData!.pickupPoint!.contactNumber!;
+      pickDesCont.text = widget.orderData!.pickupPoint!.description!;
+
+      deliverAddressCont.text = widget.orderData!.deliveryPoint!.address!;
+      pickLat = widget.orderData!.deliveryPoint!.latitude!;
+      pickLong = widget.orderData!.deliveryPoint!.longitude!;
+      deliverPhoneCont.text = widget.orderData!.deliveryPoint!.contactNumber!;
+      deliverDesCont.text = widget.orderData!.deliveryPoint!.description!;
+
+      isOnDelivery = widget.orderData!.paymentCollectFrom! == PAYMENT_ON_DELIVERY;
+    }
     getParcelTypeListApiCall();
-    await getCityDetailApiCall();
   }
 
   getParcelTypeListApiCall() async {
@@ -93,70 +121,52 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     });
   }
 
-  getCityDetailApiCall() async {
-    await getCityDetail(getIntAsync(CITY_ID)).then((value) {
-      cityData = value.data;
-    }).catchError((error) {
-      toast(error.toString());
-    });
-  }
-
   getTotalAmount() {
-    if (cityData != null) {
-      totalDistance = calculateDistance(pickLat.toDouble(), pickLong.toDouble(), deliverLat.toDouble(), deliverLong.toDouble());
-      num weightCharge = 0;
-      num distanceCharge = 0;
-      num totalExtraCharge = 0;
+    totalDistance = calculateDistance(pickLat.toDouble(), pickLong.toDouble(), deliverLat.toDouble(), deliverLong.toDouble());
 
-      /// calculate weight Charge
-      if (selectedWeight! > cityData!.minWeight!) {
-        weightCharge = ((selectedWeight!.toDouble() - cityData!.minWeight!) * cityData!.perWeightCharges!).toStringAsFixed(2).toDouble();
-      }
-
-      /// calculate distance Charge
-      if (totalDistance > cityData!.minDistance!) {
-        distanceCharge = ((totalDistance - cityData!.minDistance!) * cityData!.perDistanceCharges!).toStringAsFixed(2).toDouble();
-      }
-
-      /// total amount
-      totalAmount = cityData!.fixedCharges! + weightCharge + distanceCharge;
-
-      /// calculate extra charges
-      cityData!.extraCharges!.forEach((element) {
-        if (element.chargesType == CHARGE_TYPE_PERCENTAGE) {
-          num charge = ((totalAmount * element.charges! * 0.01)).toStringAsFixed(2).toDouble();
-          totalExtraCharge += charge;
-          if (charge > 0) extraChargesObject.addEntries({MapEntry("${element.title!.toLowerCase().replaceAll(' ', "_")}", charge)});
-        } else {
-          num charge = element.charges!.toStringAsFixed(2).toDouble();
-          totalExtraCharge += charge;
-          if (charge > 0) extraChargesObject.addEntries({MapEntry("${element.title!.toLowerCase().replaceAll(' ', "_")}", charge)});
-        }
-      });
-
-      /// All Charges
-      //  allChargesObject.addEntries({MapEntry("delivery_charge", cityData!.fixedCharges!)});
-      if (weightCharge > 0) allChargesObject.addEntries({MapEntry("weight_charge", weightCharge)});
-      if (distanceCharge > 0) allChargesObject.addEntries({MapEntry("distance_charge", distanceCharge)});
-      allChargesObject.addAll(extraChargesObject);
-
-      totalAmount = (totalAmount + totalExtraCharge).toStringAsFixed(2).toDouble();
-      print('total:$totalAmount');
-      print('extraChargesObject : $extraChargesObject');
-      print('allChargesObject : $allChargesObject');
+    /// calculate weight Charge
+    if (selectedWeight! > cityData!.minWeight!) {
+      weightCharge = ((selectedWeight!.toDouble() - cityData!.minWeight!) * cityData!.perWeightCharges!).toStringAsFixed(2).toDouble();
     }
+
+    /// calculate distance Charge
+    if (totalDistance > cityData!.minDistance!) {
+      distanceCharge = ((totalDistance - cityData!.minDistance!) * cityData!.perDistanceCharges!).toStringAsFixed(2).toDouble();
+    }
+
+    /// total amount
+    totalAmount = cityData!.fixedCharges! + weightCharge + distanceCharge;
+
+    /// calculate extra charges
+    cityData!.extraCharges!.forEach((element) {
+      if (element.chargesType == CHARGE_TYPE_PERCENTAGE) {
+        num charge = ((totalAmount * element.charges! * 0.01)).toStringAsFixed(2).toDouble();
+        totalExtraCharge += charge;
+        if (charge > 0) extraChargesObject.addEntries({MapEntry("${element.title!.toLowerCase().replaceAll(' ', "_")}", charge)});
+      } else {
+        num charge = element.charges!.toStringAsFixed(2).toDouble();
+        totalExtraCharge += charge;
+        if (charge > 0) extraChargesObject.addEntries({MapEntry("${element.title!.toLowerCase().replaceAll(' ', "_")}", charge)});
+      }
+    });
+
+    /// All Charges
+    totalAmount = (totalAmount + totalExtraCharge).toStringAsFixed(2).toDouble();
+    print('total:$totalAmount');
+    print('extraChargesObject : $extraChargesObject');
   }
 
-  createOrderApiCall() async {
+  createOrderApiCall(String orderStatus) async {
     finish(context);
     Map req = {
+      "id": widget.orderData != null ? widget.orderData!.id : "",
       "client_id": getIntAsync(USER_ID).toString(),
       "date": DateTime.now().toString(),
       "country_id": getIntAsync(COUNTRY_ID).toString(),
       "city_id": getIntAsync(CITY_ID).toString(),
       "pickup_point": {
-        if (!isDeliverNow) "start_time": pickStartTimeController.text,
-        if (!isDeliverNow) "end_time": pickEndTimeController.text,
+        "start_time": !isDeliverNow ? pickFromDateTime.toString() : DateTime.now().toString(),
+        "end_time": !isDeliverNow ? pickToDateTime.toString() : null,
         "address": pickAddressCont.text,
         "latitude": pickLat,
         "longitude": pickLong,
@@ -164,20 +174,20 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         "contact_number": pickPhoneCont.text
       },
       "delivery_point": {
-        if (!isDeliverNow) "start_time": deliverStartTimeController.text,
-        if (!isDeliverNow) "end_time": deliverEndTimeController.text,
+        "start_time": !isDeliverNow ? deliverFromDateTime.toString() : null,
+        "end_time": !isDeliverNow ? deliverToDateTime.toString() : null,
         "address": deliverAddressCont.text,
         "latitude": deliverLat,
         "longitude": deliverLong,
         "description": deliverDesCont.text,
         "contact_number": deliverPhoneCont.text,
       },
-      "extra_charges": allChargesObject,
+      "extra_charges": extraChargesObject,
       "parcel_type": parcelTypeCont.text,
-      "total_weight": selectedWeight!.toString(),
-      "total_distance": totalDistance.toString(),
-      "payment_collect_from": isOnDelivery ? "on_delivery" : "on_client",
-      "status": ORDER_CREATED,
+      "total_weight": selectedWeight.validate(),
+      "total_distance": totalDistance.validate(),
+      "payment_collect_from": isOnDelivery ? PAYMENT_ON_DELIVERY : PAYMENT_ON_CLIENT,
+      "status": orderStatus,
       "payment_type": "",
       "payment_status": "",
       "fixed_charges": cityData!.fixedCharges.toString(),
@@ -216,6 +226,148 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             }).expand(),
           ],
         ),
+        16.height,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Pick Time', style: primaryTextStyle()),
+            16.height,
+            Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                border: Border.all(color: borderColor),
+                borderRadius: BorderRadius.circular(defaultRadius),
+              ),
+              child: Column(
+                children: [
+                  DateTimePicker(
+                    controller: pickDateController,
+                    type: DateTimePickerType.date,
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime(2050),
+                    onChanged: (value) {
+                      pickDate = DateTime.parse(value);
+                      setState(() {});
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) return errorThisFieldRequired;
+                    },
+                    decoration: commonInputDecoration(suffixIcon: Icons.calendar_today),
+                  ),
+                  16.height,
+                  Row(
+                    children: [
+                      Text('From', style: primaryTextStyle()),
+                      8.width,
+                      DateTimePicker(
+                        controller: pickFromTimeController,
+                        type: DateTimePickerType.time,
+                        onChanged: (value) {
+                          pickFromTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
+                          setState(() {});
+                        },
+                        validator: (value) {
+                          if (value.validate().isEmpty) return errorThisFieldRequired;
+                        },
+                        decoration: commonInputDecoration(suffixIcon: Icons.access_time),
+                      ).expand(),
+                      16.width,
+                      Text('To', style: primaryTextStyle()),
+                      8.width,
+                      DateTimePicker(
+                        controller: pickToTimeController,
+                        type: DateTimePickerType.time,
+                        onChanged: (value) {
+                          pickToTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
+                          setState(() {});
+                        },
+                        validator: (value) {
+                          if (value.validate().isEmpty) return errorThisFieldRequired;
+                          double fromTimeInHour = pickFromTime!.hour + pickFromTime!.minute/60;
+                          double toTimeInHour = pickToTime!.hour + pickToTime!.minute/60;
+                          double difference = toTimeInHour - fromTimeInHour;
+                          print(difference);
+                          if(difference<=0){
+                            return 'EndTime must be after StartTime';
+                          }
+                        },
+                        decoration: commonInputDecoration(suffixIcon: Icons.access_time),
+                      ).expand(),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            16.height,
+            Text('Deliver Time', style: primaryTextStyle()),
+            16.height,
+            Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                border: Border.all(color: borderColor),
+                borderRadius: BorderRadius.circular(defaultRadius),
+              ),
+              child: Column(
+                children: [
+                  DateTimePicker(
+                    controller: deliverDateController,
+                    type: DateTimePickerType.date,
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime(2050),
+                    onChanged: (value) {
+                      deliverDate = DateTime.parse(value);
+                      setState(() {});
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) return errorThisFieldRequired;
+                    },
+                    decoration: commonInputDecoration(suffixIcon: Icons.calendar_today),
+                  ),
+                  16.height,
+                  Row(
+                    children: [
+                      Text('From', style: primaryTextStyle()),
+                      8.width,
+                      DateTimePicker(
+                        controller: deliverFromTimeController,
+                        type: DateTimePickerType.time,
+                        onChanged: (value) {
+                          deliverFromTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
+                          setState(() {});
+                        },
+                        validator: (value) {
+                          if (value.validate().isEmpty) return errorThisFieldRequired;
+                        },
+                        decoration: commonInputDecoration(suffixIcon: Icons.access_time),
+                      ).expand(),
+                      16.width,
+                      Text('To', style: primaryTextStyle()),
+                      8.width,
+                      DateTimePicker(
+                        controller: deliverToTimeController,
+                        type: DateTimePickerType.time,
+                        onChanged: (value) {
+                          deliverToTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
+                          setState(() {});
+                        },
+                        validator: (value) {
+                          if (value!.isEmpty) return errorThisFieldRequired;
+                          double fromTimeInHour = deliverFromTime!.hour + deliverFromTime!.minute/60;
+                          double toTimeInHour = deliverToTime!.hour + deliverToTime!.minute/60;
+                          double difference = toTimeInHour - fromTimeInHour;
+                          if(difference<0){
+                            return 'EndTime must be after StartTime';
+                          }
+                        },
+                        decoration: commonInputDecoration(suffixIcon: Icons.access_time),
+                      ).expand(),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ).visible(!isDeliverNow),
         16.height,
         Text('Weight', style: boldTextStyle()),
         8.height,
@@ -355,116 +507,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           textFieldType: TextFieldType.PHONE,
           decoration: commonInputDecoration(suffixIcon: Icons.phone),
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            16.height,
-            Text('Pickup Time', style: primaryTextStyle()),
-            16.height,
-            /* AppTextField(
-              textFieldType: TextFieldType.OTHER,
-              controller: pickDateCont,
-              readOnly: true,
-              decoration: commonInputDecoration(suffixIcon: Icons.calendar_today),
-              onTap: () async {
-                DateTime? picked = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2015, 8), lastDate: DateTime(2101));
-                if (picked != null)
-                  setState(() {
-                    pickDateCont.text = DateFormat('dd/MM/yyyy').format(picked);
-                  });
-              },
-            ),
-            16.height,
-            Row(
-              children: [
-                Text('From', style: primaryTextStyle()),
-                8.width,
-                AppTextField(
-                  textFieldType: TextFieldType.OTHER,
-                  controller: pickFromTimeCont,
-                  decoration: commonInputDecoration(suffixIcon: Icons.access_time),
-                  onTap: () async {
-                    final TimeOfDay? picked = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.now(),
-                    );
-                    if (pickFromTimeCont.text.isNotEmpty) pickFromTimeCont.text = '${picked!.hour}:${picked.minute}';
-                  },
-                ).expand(),
-                16.width,
-                Text('To', style: primaryTextStyle()),
-                8.width,
-                AppTextField(
-                  textFieldType: TextFieldType.OTHER,
-                  controller: pickToTimeCont,
-                  decoration: commonInputDecoration(suffixIcon: Icons.access_time),
-                  onTap: () async {
-                    final TimeOfDay? picked = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.now(),
-                    );
-                    if (pickToTimeCont.text.isNotEmpty) pickToTimeCont.text = '${picked!.hour}:${picked.minute}';
-                  },
-                ).expand(),
-              ],
-            ),*/
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                border: Border.all(color: borderColor),
-                borderRadius: BorderRadius.circular(defaultRadius),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Text('From', style: primaryTextStyle()).expand(flex: 1),
-                      8.width,
-                      DateTimePicker(
-                        controller: pickStartTimeController,
-                        type: DateTimePickerType.dateTime,
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2100),
-                        decoration: commonInputDecoration(suffixIcon: Icons.date_range),
-                        dateLabelText: 'Date',
-                        onChanged: (val) => print(val),
-                        validator: (val) {
-                          if (val!.isEmpty) return errorThisFieldRequired;
-                          return null;
-                        },
-                        onSaved: (val) => print(val),
-                      ).expand(flex: 3),
-                    ],
-                  ),
-                  16.height,
-                  Row(
-                    children: [
-                      Text('To', style: primaryTextStyle()).expand(flex: 1),
-                      8.width,
-                      DateTimePicker(
-                        controller: pickEndTimeController,
-                        type: DateTimePickerType.dateTime,
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2100),
-                        decoration: commonInputDecoration(suffixIcon: Icons.date_range),
-                        dateLabelText: 'Date',
-                        onChanged: (val) => print(val),
-                        validator: (val) {
-                          var difference = DateTime.parse(pickEndTimeController.text).difference(DateTime.parse(pickStartTimeController.text));
-                          print('difference:${difference.inMinutes}');
-                          if (val!.isEmpty) return errorThisFieldRequired;
-                          if (difference.inMinutes < 0) return 'EndTime must be after StartTime';
-                          return null;
-                        },
-                        onSaved: (val) => print(val),
-                      ).expand(flex: 3),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ).visible(!isDeliverNow),
         16.height,
         Text('Description', style: primaryTextStyle()),
         8.height,
@@ -532,116 +574,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           textFieldType: TextFieldType.PHONE,
           decoration: commonInputDecoration(suffixIcon: Icons.phone),
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            16.height,
-            Text('Deliver Time', style: primaryTextStyle()),
-            16.height,
-          /*  AppTextField(
-              textFieldType: TextFieldType.OTHER,
-              controller: deliverDateCont,
-              readOnly: true,
-              decoration: commonInputDecoration(suffixIcon: Icons.calendar_today),
-              onTap: () async {
-                DateTime? picked = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2015, 8), lastDate: DateTime(2101));
-                if (picked != null)
-                  setState(() {
-                    deliverDateCont.text = DateFormat('dd/MM/yyyy').format(picked);
-                  });
-              },
-            ),
-            16.height,
-            Row(
-              children: [
-                Text('From', style: primaryTextStyle()),
-                8.width,
-                AppTextField(
-                  textFieldType: TextFieldType.OTHER,
-                  controller: deliverFromTimeCont,
-                  decoration: commonInputDecoration(suffixIcon: Icons.access_time),
-                  onTap: () async {
-                    final TimeOfDay? picked = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.now(),
-                    );
-                    if (deliverFromTimeCont.text.isNotEmpty) deliverFromTimeCont.text = '${picked!.hour}:${picked.minute}';
-                  },
-                ).expand(),
-                16.width,
-                Text('To', style: primaryTextStyle()),
-                8.width,
-                AppTextField(
-                  textFieldType: TextFieldType.OTHER,
-                  controller: deliverToTimeCont,
-                  decoration: commonInputDecoration(suffixIcon: Icons.access_time),
-                  onTap: () async {
-                    final TimeOfDay? picked = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.now(),
-                    );
-                    if (deliverToTimeCont.text.isNotEmpty) deliverToTimeCont.text = '${picked!.hour}:${picked.minute}';
-                  },
-                ).expand(),
-              ],
-            ),*/
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                border: Border.all(color: borderColor),
-                borderRadius: BorderRadius.circular(defaultRadius),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Text('From', style: primaryTextStyle()).expand(flex: 1),
-                      8.width,
-                      DateTimePicker(
-                        controller: deliverStartTimeController,
-                        type: DateTimePickerType.dateTime,
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2100),
-                        decoration: commonInputDecoration(suffixIcon: Icons.date_range),
-                        dateLabelText: 'Date',
-                        onChanged: (val) => print(val),
-                        validator: (val) {
-                          if (val!.isEmpty) return errorThisFieldRequired;
-                          return null;
-                        },
-                        onSaved: (val) => print(val),
-                      ).expand(flex: 3),
-                    ],
-                  ),
-                  16.height,
-                  Row(
-                    children: [
-                      Text('To', style: primaryTextStyle()).expand(flex: 1),
-                      8.width,
-                      DateTimePicker(
-                        controller: deliverEndTimeController,
-                        type: DateTimePickerType.dateTime,
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2100),
-                        decoration: commonInputDecoration(suffixIcon: Icons.date_range),
-                        dateLabelText: 'Date',
-                        onChanged: (val) => print(val),
-                        validator: (val) {
-                          var difference = DateTime.parse(deliverEndTimeController.text).difference(DateTime.parse(deliverStartTimeController.text));
-                          print('difference:${difference.inMinutes}');
-                          if (val!.isEmpty) return errorThisFieldRequired;
-                          if (difference.inMinutes < 0) return 'EndTime must be after StartTime';
-                          return null;
-                        },
-                        onSaved: (val) => print(val),
-                      ).expand(flex: 3),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ).visible(!isDeliverNow),
         16.height,
         Text('Description', style: primaryTextStyle()),
         8.height,
@@ -752,21 +684,63 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             Text('$currencySymbol ${cityData!.fixedCharges}', style: boldTextStyle()),
           ],
         ),
-        8.height,
         Column(
-            children: List.generate(allChargesObject.keys.length, (index) {
-          return Padding(
-            padding: EdgeInsets.only(bottom: 8),
-            child: Row(
+          children: [
+            8.height,
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(allChargesObject.keys.elementAt(index).replaceAll("_", " ").capitalizeFirstLetter(), style: primaryTextStyle()),
+                Text('Distance Charge', style: primaryTextStyle()),
                 16.width,
-                Text('$currencySymbol ${allChargesObject.values.elementAt(index)}', style: boldTextStyle()),
+                Text('$currencySymbol $distanceCharge', style: boldTextStyle()),
+              ],
+            )
+          ],
+        ).visible(distanceCharge != 0),
+        Column(
+          children: [
+            8.height,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Weight Charge', style: primaryTextStyle()),
+                16.width,
+                Text('$currencySymbol $weightCharge', style: boldTextStyle()),
               ],
             ),
-          );
-        }).toList()),
+          ],
+        ).visible(weightCharge != 0),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Column(
+            children: [
+              8.height,
+              Text('$currencySymbol ${(cityData!.fixedCharges! + distanceCharge + weightCharge).toStringAsFixed(2)}', style: boldTextStyle()),
+            ],
+          ),
+        ).visible(weightCharge != 0 || distanceCharge != 0),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            16.height,
+            Text('Extra Charges', style: boldTextStyle()),
+            8.height,
+            Column(
+                children: List.generate(extraChargesObject.keys.length, (index) {
+              return Padding(
+                padding: EdgeInsets.only(bottom: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(extraChargesObject.keys.elementAt(index).replaceAll("_", " ").capitalizeFirstLetter(), style: primaryTextStyle()),
+                    16.width,
+                    Text('$currencySymbol ${extraChargesObject.values.elementAt(index)}', style: boldTextStyle()),
+                  ],
+                ),
+              );
+            }).toList()),
+          ],
+        ).visible(extraChargesObject.keys.length != 0),
         16.height,
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -789,7 +763,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   setState(() {});
                 }).expand(),
                 16.width,
-                scheduleOptionWidget(!isCashPayment, 'assets/icons/ic_credit_card.png', 'Online').onTap(() {
+                scheduleOptionWidget(!isCashPayment, 'assets/icons/ic_credit_card.png', 'Card').onTap(() {
                   isCashPayment = false;
                   setState(() {});
                 }).expand(),
@@ -845,13 +819,32 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     return WillPopScope(
       onWillPop: () async {
         if (selectedTabIndex == 0) {
-          DateTime now = DateTime.now();
+          /*DateTime now = DateTime.now();
           if (currentBackPressTime == null || now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
             currentBackPressTime = now;
             toast('Tap back again to leave Screen');
             return false;
           }
-          return true;
+          return true;*/
+          await showInDialog(
+            context,
+            contentPadding: EdgeInsets.all(16),
+            builder: (p0) {
+              return CreateOrderConfirmationDialog(
+                onCancel: () {
+                  finish(context);
+                  finish(context);
+                },
+                onSuccess: () {
+                  finish(context);
+                  createOrderApiCall(ORDER_DRAFT);
+                },
+                message: 'Are you sure you want to save as a draft?',
+                primaryText: 'Save Draft',
+              );
+            },
+          );
+          return false;
         } else {
           selectedTabIndex--;
           setState(() {});
@@ -898,6 +891,15 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             commonButton(selectedTabIndex != 3 ? 'Next' : 'Create Order', () async {
               if (selectedTabIndex != 3) {
                 if (_formKey.currentState!.validate()) {
+                  Duration difference = Duration();
+                  if (!isDeliverNow) {
+                    pickFromDateTime = pickDate!.add(Duration(hours: pickFromTime!.hour, minutes: pickFromTime!.minute));
+                    pickToDateTime = pickDate!.add(Duration(hours: pickToTime!.hour, minutes: pickToTime!.minute));
+                    deliverFromDateTime = deliverDate!.add(Duration(hours: deliverFromTime!.hour, minutes: deliverFromTime!.minute));
+                    deliverToDateTime = deliverDate!.add(Duration(hours: deliverToTime!.hour, minutes: deliverToTime!.minute));
+                    difference = pickFromDateTime!.difference(deliverFromDateTime!);
+                  }
+                  if (difference.inMinutes > 0) return toast('PickupTime must be before DeliverTime');
                   selectedTabIndex++;
                   if (selectedTabIndex == 3) {
                     getTotalAmount();
@@ -912,8 +914,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     return CreateOrderConfirmationDialog(
                       onSuccess: () {
                         finish(context);
-                        createOrderApiCall();
+                        createOrderApiCall(ORDER_CREATE);
                       },
+                      message: 'Are you sure you want to Create Order?',
                       primaryText: 'Create',
                     );
                   },

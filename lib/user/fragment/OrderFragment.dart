@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
+import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
+import 'package:mighty_delivery/user/components/FilterOrderComponent.dart';
+import 'package:mighty_delivery/user/screens/ReturnOrderScreen.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
@@ -38,16 +41,22 @@ class OrderFragmentState extends State<OrderFragment> {
   }
 
   Future<void> init() async {
-    afterBuildCreated((){
-      getOrderListApiCall();
+    afterBuildCreated(() {
+      getOrderListApiCall(filterData: FilterAttributeModel());
+    });
+    LiveStream().on('UpdateOrderData', (p0) {
+      page=1;
+      getOrderListApiCall(filterData: FilterAttributeModel.fromJson(p0 as Map<String, dynamic>));
+      setState(() {});
     });
   }
 
-  getOrderListApiCall() async {
+  getOrderListApiCall({required FilterAttributeModel filterData}) async {
     appStore.setLoading(true);
-    await getOrderList(page: page).then((value) {
+    await getOrderList(page: page, orderStatus: filterData.orderStatus, fromDate: filterData.fromDate, toDate: filterData.toDate).then((value) {
       appStore.setLoading(false);
       totalPage = value.pagination!.totalPages.validate(value: 1);
+      page = value.pagination!.currentPage.validate(value: 1);
       isLastPage = false;
       if (page == 1) {
         orderList.clear();
@@ -74,150 +83,140 @@ class OrderFragmentState extends State<OrderFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        appStore.isLoading
-            ? loaderWidget()
-            : orderList.isNotEmpty
-                ? ListView(
-                    shrinkWrap: true,
-                    controller: scrollController,
-                    padding: EdgeInsets.all(16),
-                    children: orderList.map((item) {
-                      return GestureDetector(
-                        child: Container(
-                          margin: EdgeInsets.only(bottom: 16),
-                          decoration: boxDecorationRoundedWithShadow(defaultRadius.toInt()),
-                          padding: EdgeInsets.all(16),
-                          child: Column(
-                            children: [
-                              Row(
+    return Observer(builder: (context) {
+      return Stack(
+        children: [
+          orderList.isNotEmpty
+              ? ListView(
+                  shrinkWrap: true,
+                  controller: scrollController,
+                  padding: EdgeInsets.all(16),
+                  children: orderList.map((item) {
+                    return item.status != ORDER_DRAFT
+                        ? GestureDetector(
+                            child: Container(
+                              margin: EdgeInsets.only(bottom: 16),
+                              decoration: boxDecorationRoundedWithShadow(defaultRadius.toInt()),
+                              padding: EdgeInsets.all(16),
+                              child: Column(
                                 children: [
-                                  Text('#${item.id}', style: secondaryTextStyle(size: 16)).expand(),
-                                  Container(
-                                    decoration: BoxDecoration(color: statusColor(item.status.validate()), borderRadius: BorderRadius.circular(defaultRadius)),
-                                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                    child: Text(item.status.validate(value: "draft"), style: primaryTextStyle(color: white)),
-                                  ),
-                                ],
-                              ),
-                              8.height,
-                              Row(
-                                children: [
-                                  Container(
-                                    decoration: boxDecorationWithRoundedCorners(
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(color: borderColor),
-                                    ),
-                                    padding: EdgeInsets.all(8),
-                                    child: Image.network(parcelTypeIcon(item.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
-                                  ),
-                                  8.width,
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                  Row(
                                     children: [
-                                      Text(item.parcelType.validate(), style: boldTextStyle()),
-                                      4.height,
-                                      Row(
-                                        children: [
-                                          item.date != null ? Text(printDate(item.date!), style: secondaryTextStyle()).expand() : SizedBox(),
-                                          Text('$currencySymbol ${item.totalAmount}', style: boldTextStyle()),
-                                        ],
+                                      Text('#${item.id}', style: secondaryTextStyle(size: 16)).expand(),
+                                      Container(
+                                        decoration: BoxDecoration(color: statusColor(item.status.validate()), borderRadius: BorderRadius.circular(defaultRadius)),
+                                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                        child: Text(item.status.validate(value: "draft"), style: primaryTextStyle(color: white)),
                                       ),
                                     ],
-                                  ).expand(),
-                                ],
-                              ),
-                              Divider(height: 30, thickness: 1),
-                              Row(
-                                children: [
+                                  ),
+                                  8.height,
                                   Row(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      Icon(Icons.location_on, color: colorPrimary),
-                                      Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
+                                      Container(
+                                        decoration: boxDecorationWithRoundedCorners(
+                                          borderRadius: BorderRadius.circular(8),
+                                          border: Border.all(color: borderColor),
+                                        ),
+                                        padding: EdgeInsets.all(8),
+                                        child: Image.network(parcelTypeIcon(item.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
+                                      ),
+                                      8.width,
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(item.parcelType.validate(), style: boldTextStyle()),
+                                          4.height,
+                                          Row(
+                                            children: [
+                                              item.date != null ? Text(printDate(item.date!), style: secondaryTextStyle()).expand() : SizedBox(),
+                                              Text('$currencySymbol ${item.totalAmount}', style: boldTextStyle()),
+                                            ],
+                                          ),
+                                        ],
+                                      ).expand(),
                                     ],
                                   ),
-                                  8.width,
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text('Picked at 4:45', style: secondaryTextStyle()),
-                                      4.height,
-                                      Text('${item.pickupPoint!.address}', style: primaryTextStyle()),
-                                      4.height.visible(item.pickupPoint!.contactNumber != null),
-                                      Row(
-                                        children: [
-                                          Icon(Icons.call, color: Colors.green, size: 18),
-                                          8.width,
-                                          Text('${item.pickupPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
-                                        ],
-                                      ).visible(item.pickupPoint!.contactNumber != null),
-                                    ],
-                                  ).expand(),
-                                ],
-                              ),
-                              16.height,
-                              Row(
-                                children: [
+                                  Divider(height: 30, thickness: 1),
                                   Row(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
-                                      Icon(Icons.location_on, color: colorPrimary),
+                                      Row(
+                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                        children: [
+                                          Icon(Icons.location_on, color: colorPrimary),
+                                          Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
+                                        ],
+                                      ),
+                                      8.width,
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text('Picked at 4:45', style: secondaryTextStyle()),
+                                          4.height,
+                                          Text('${item.pickupPoint!.address}', style: primaryTextStyle()),
+                                          4.height.visible(item.pickupPoint!.contactNumber != null),
+                                          Row(
+                                            children: [
+                                              Icon(Icons.call, color: Colors.green, size: 18),
+                                              8.width,
+                                              Text('${item.pickupPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
+                                            ],
+                                          ).visible(item.pickupPoint!.contactNumber != null),
+                                        ],
+                                      ).expand(),
                                     ],
                                   ),
-                                  8.width,
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                  16.height,
+                                  Row(
                                     children: [
-                                      Text('Delivered at 4:53', style: secondaryTextStyle()),
-                                      4.height,
-                                      Text('${item.deliveryPoint!.address}', style: primaryTextStyle()),
-                                      4.height.visible(item.deliveryPoint!.contactNumber != null),
                                       Row(
+                                        crossAxisAlignment: CrossAxisAlignment.end,
                                         children: [
-                                          Icon(Icons.call, color: Colors.green, size: 18),
-                                          8.width,
-                                          Text('${item.deliveryPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
+                                          Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
+                                          Icon(Icons.location_on, color: colorPrimary),
                                         ],
-                                      ).visible(item.deliveryPoint!.contactNumber != null),
+                                      ),
+                                      8.width,
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text('Delivered at 4:53', style: secondaryTextStyle()),
+                                          4.height,
+                                          Text('${item.deliveryPoint!.address}', style: primaryTextStyle()),
+                                          4.height.visible(item.deliveryPoint!.contactNumber != null),
+                                          Row(
+                                            children: [
+                                              Icon(Icons.call, color: Colors.green, size: 18),
+                                              8.width,
+                                              Text('${item.deliveryPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
+                                            ],
+                                          ).visible(item.deliveryPoint!.contactNumber != null),
+                                        ],
+                                      ).expand(),
                                     ],
-                                  ).expand(),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text('return Order', style: boldTextStyle()).onTap(() {
+                                      ReturnOrderScreen(item).launch(context);
+                                    }),
+                                  ).visible(item.status == ORDER_COMPLETED),
                                 ],
                               ),
-                            ],
-                          ),
-                        ),
-                        onTap: () {
-                          OrderDetailScreen(orderData: item).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
-                        },
-                      );
-                      /*return Container(
-              margin: EdgeInsets.only(bottom: 16),
-              decoration: boxDecorationRoundedWithShadow(defaultRadius.toInt()),
-              padding: EdgeInsets.all(16),
-              child: OpenContainer<bool>(openElevation: 0,
-                openColor: Colors.transparent,
-                closedElevation: 0,
-                transitionType: ContainerTransitionType.fadeThrough,
-                transitionDuration :  Duration(milliseconds: 800),
-                openBuilder: (BuildContext context, VoidCallback _) {
-                  return OrderDetailScreen();
-                },
-                onClosed: (data) {},
-                closedBuilder: (context, action) {
-                  return OrderComponent();
-                },
-              ),
-            );*/
-                    }).toList(),
-                  )
-                : emptyWidget(),
-        Observer(builder: (context) {
-          return loaderWidget().center().visible(appStore.isLoading);
-        }),
-      ],
-    );
+                            ),
+                            onTap: () {
+                              OrderDetailScreen(orderData: item).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+                            },
+                          )
+                        : SizedBox();
+                  }).toList(),
+                )
+              : !appStore.isLoading
+                  ? emptyWidget()
+                  : SizedBox(),
+          loaderWidget().center().visible(appStore.isLoading)
+        ],
+      );
+    });
   }
 }

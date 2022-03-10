@@ -35,13 +35,16 @@ const DELIVERY_MAN = 'delivery_man';
 const CHARGE_TYPE_FIXED = 'fixed';
 const CHARGE_TYPE_PERCENTAGE = 'percentage';
 
-// OrderStatus
-const COURIER_ASSIGNED = 'courier_assigned';
-const COURIER_DEPARTED = 'courier_departed';
+const PAYMENT_ON_DELIVERY = "on_delivery";
+const PAYMENT_ON_CLIENT = "on_client";
+
 const RESTORE = 'restore';
 const FORCE_DELETE = 'forcedelete';
 
-const ORDER_CREATED = 'create';
+// OrderStatus
+const COURIER_ASSIGNED = 'courier_assigned';
+const COURIER_DEPARTED = 'courier_departed';
+const ORDER_CREATE = 'create';
 const ORDER_ACTIVE = 'active';
 const ORDER_CANCELLED = 'cancelled';
 const ORDER_DELAYED = 'delayed';

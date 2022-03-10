@@ -6,6 +6,7 @@ import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/main/utils/DataProviders.dart';
+import 'package:mighty_delivery/user/components/FilterOrderComponent.dart';
 import 'package:mighty_delivery/user/components/UserCitySelectScreen.dart';
 import 'package:mighty_delivery/user/screens/CreateOrderScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -53,8 +54,26 @@ class DashboardScreenState extends State<DashboardScreen> {
               Text(CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate(), style: primaryTextStyle(color: white)),
             ],
           ).onTap(() {
-            UserCitySelectScreen(isBack: true,onUpdate:(){setState(() { });}).launch(context);
+            UserCitySelectScreen(
+                isBack: true,
+                onUpdate: () {
+                  setState(() {});
+                }).launch(context);
           }).paddingOnly(right: 16),
+          IconButton(
+            icon: ImageIcon(AssetImage('assets/icons/ic_filter.png')),
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(defaultRadius), topRight: Radius.circular(defaultRadius))),
+                builder: (context) {
+                  return FilterOrderComponent();
+                },
+              );
+            },
+            padding: EdgeInsets.zero,
+          ).visible(currentIndex == 0),
         ],
       ),
       body: BodyCornerWidget(child: BottomNavBarItems[currentIndex].widget!),

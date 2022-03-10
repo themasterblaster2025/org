@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main/models/ChangePasswordResponse.dart';
 import 'package:mighty_delivery/main/models/CityDetailModel.dart';
 import 'package:mighty_delivery/main/models/CityListModel.dart';
@@ -12,6 +13,7 @@ import 'package:mighty_delivery/main/models/LDBaseResponse.dart';
 import 'package:mighty_delivery/main/models/LoginResponse.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
 import 'package:mighty_delivery/main/models/ParcelTypeListModel.dart';
+import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/main/screens/LoginScreen.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -196,6 +198,10 @@ Future<LDBaseResponse> createOrder(Map request) async {
   return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('order-save', request: request, method: HttpMethod.POST)));
 }
 
+Future<LDBaseResponse> deleteOrder(int id) async {
+  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('order-delete/$id', method: HttpMethod.POST)));
+}
+
 // ParcelType Api
 Future<ParcelTypeListModel> getParcelTypeList({int? page}) async {
   return ParcelTypeListModel.fromJson(await handleResponse(await buildHttpResponse('staticdata-list?type=parcel_type&per_page=-1', method: HttpMethod.GET)));
@@ -237,10 +243,18 @@ Future updateCountryCity({int? countryId, int? cityId}) async {
 }
 
 /// get OrderList
-Future<OrderListModel> getOrderList({required int page, bool isDraft = false}) async {
-  return OrderListModel.fromJson(await handleResponse(await buildHttpResponse(
-      isDraft ? 'order-list?page=$page&client_id=${getIntAsync(USER_ID)}&status=$ORDER_DRAFT' : 'order-list?page=$page&client_id=${getIntAsync(USER_ID)}',
-      method: HttpMethod.GET)));
+Future<OrderListModel> getOrderList({required int page, String? orderStatus, String? fromDate, String? toDate}) async {
+  String endPoint = 'order-list?client_id=${getIntAsync(USER_ID)}&city_id=${getIntAsync(CITY_ID)}&page=$page';
+
+  if (orderStatus.validate().isNotEmpty) {
+    endPoint += '&status=$orderStatus';
+  }
+
+  if (fromDate.validate().isNotEmpty && toDate.validate().isNotEmpty) {
+    endPoint += '&from_date=${DateFormat('yyyy-MM-dd').format(DateTime.parse(fromDate.validate()))}&to_date=${DateFormat('yyyy-MM-dd').format(DateTime.parse(toDate.validate()))}';
+  }
+
+  return OrderListModel.fromJson(await handleResponse(await buildHttpResponse(endPoint, method: HttpMethod.GET)));
 }
 
 /// get deliveryBoy orderList
