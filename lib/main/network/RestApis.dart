@@ -308,3 +308,21 @@ Future updateOrder({
     toast(error.toString());
   });
 }
+
+/// Update Location
+Future updateLocation({String? userName, String? userEmail, String? latitude, String? longitude}) async {
+  MultipartRequest multiPartRequest = await getMultiPartRequest('update-profile');
+  //multiPartRequest.fields['username'] = userName.validate();
+  //multiPartRequest.fields['email'] = userEmail ?? appStore.userEmail;
+  multiPartRequest.fields['id'] = getIntAsync(USER_ID).toString();
+  multiPartRequest.fields['latitude'] = latitude!;
+  multiPartRequest.fields['longitude'] = longitude!;
+
+  await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
+    if (data != null) {
+      //
+    }
+  }, onError: (error) {
+    toast(error.toString());
+  });
+}

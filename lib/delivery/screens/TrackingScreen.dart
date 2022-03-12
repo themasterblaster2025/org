@@ -1,0 +1,225 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_map_polyline_new/google_map_polyline_new.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:mighty_delivery/main/models/OrderListModel.dart';
+import 'package:mighty_delivery/main/network/RestApis.dart';
+import 'package:mighty_delivery/main/utils/Colors.dart';
+import 'package:mighty_delivery/main/utils/Constants.dart';
+import 'package:nb_utils/nb_utils.dart';
+
+class TrackingScreen extends StatefulWidget {
+  final List<OrderData> order;
+  final LatLng? latLng;
+
+  TrackingScreen({required this.order, required this.latLng});
+
+  @override
+  TrackingScreenState createState() => TrackingScreenState();
+}
+
+class TrackingScreenState extends State<TrackingScreen> {
+  late GoogleMapController _controller;
+
+  late PolylinePoints polylinePoints;
+
+  List<Marker> markers = [];
+
+  late CameraPosition initialLocation;
+
+  LatLng? SOURCE_LOCATION;
+
+  double CAMERA_ZOOM = 13;
+
+  double CAMERA_TILT = 0;
+  double CAMERA_BEARING = 30;
+
+  late LatLng orderLatLong;
+
+  GoogleMapPolyline googleMapPolyline = GoogleMapPolyline(apiKey: googleMapAPIKey);
+  final Set<Polyline> polyline = {};
+  Set<Polyline> _polylines = Set<Polyline>();
+  List<LatLng> polylineCoordinates = [];
+
+  late StreamSubscription<Position> positionStream;
+
+  /*getSomePoints() async {
+    routesCoords = (await googleMapPolyline.getCoordinatesWithLocation(
+      origin: LatLng(21.1888557, 72.8252579),
+      destination: LatLng(20.924836, 72.907932),
+      mode: RouteMode.driving,
+    ))!;
+  }*/
+
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  void init() async {
+    polylinePoints = PolylinePoints();
+
+    positionStream = Geolocator.getPositionStream().listen((event)async {
+      SOURCE_LOCATION = LatLng(event.latitude, event.longitude);
+     await updateLocation(latitude: event.latitude.toString(), longitude: event.longitude.toString()).then((value) {
+        //toast('Location Update sucessfully');
+      }).catchError((error) {
+        log(event);
+      });
+      setState(() {});
+    });
+
+    //setState(() {});
+
+    markers.add(
+      Marker(
+        markerId: MarkerId('valsad'),
+        position: LatLng(20.9398446, 72.9305468),
+        infoWindow: InfoWindow(title: 'Delivery Boy'),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+      ),
+    );
+    widget.order.map((e) {
+      markers.add(
+        Marker(
+          markerId: MarkerId('valsad'),
+          position: LatLng(e.pickupPoint!.latitude.toDouble(), e.pickupPoint!.longitude.toDouble()),
+          infoWindow: InfoWindow(title: e.pickupPoint!.address),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
+        ),
+      );
+    }).toList();
+    orderLatLong = await LatLng(widget.latLng!.latitude, widget.latLng!.longitude);
+
+    await setPolyLines(orderLat: orderLatLong);
+  }
+
+  Future<void> setPolyLines({required LatLng orderLat}) async {
+    _polylines.clear();
+    polylineCoordinates.clear();
+    var result = await polylinePoints.getRouteBetweenCoordinates(
+      googleMapAPIKey,
+      PointLatLng(20.9398446, 72.9305468),
+      PointLatLng(orderLat.latitude, orderLat.longitude),
+    );
+    if (result.points.isNotEmpty) {
+      result.points.forEach((element) {
+        polylineCoordinates.add(LatLng(element.latitude, element.longitude));
+      });
+      _polylines.add(Polyline(
+        visible: true,
+        width: 5,
+        polylineId: PolylineId('poly'),
+        color: Color.fromARGB(255, 40, 122, 198),
+        points: polylineCoordinates,
+      ));
+      setState(() {});
+    }
+  }
+
+  @override
+  void setState(fn) {
+    if (mounted) super.setState(fn);
+  }
+
+  @override
+  void dispose() {
+    positionStream.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Tracking Order'),
+      ),
+      body: SOURCE_LOCATION != null
+          ? Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                GoogleMap(
+                  markers: markers.toSet(),
+                  polylines: _polylines,
+                  mapType: MapType.normal,
+                  //zoomControlsEnabled: false,
+                  //myLocationEnabled: false,
+                  //compassEnabled: true,
+                  //tiltGesturesEnabled: false,
+                  initialCameraPosition: CameraPosition(
+                    target: SOURCE_LOCATION!,
+                    zoom: CAMERA_ZOOM,
+                    tilt: CAMERA_TILT,
+                    bearing: CAMERA_BEARING,
+                  ),
+                ),
+                Container(
+                  height: 200,
+                  child: ListView.builder(
+                    itemCount: widget.order.length,
+                    itemBuilder: (_, index) {
+                      OrderData data = widget.order[index];
+
+                      return Container(
+                        padding: EdgeInsets.all(8),
+                        width: context.width(),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: colorPrimary),
+                          color: Colors.white,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Id # ${data.id}', style: boldTextStyle()),
+                                AppButton(
+                                  padding: EdgeInsets.zero,
+                                  color: colorPrimary,
+                                  text: 'Track',
+                                  textStyle: primaryTextStyle(color: Colors.white),
+                                  onTap: () async {
+                                    orderLatLong = LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble());
+                                    await setPolyLines(orderLat: orderLatLong);
+                                    setState(() {});
+                                  },
+                                )
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Icon(Icons.location_on, color: colorPrimary),
+                                Text(data.pickupPoint!.address.validate(), style: primaryTextStyle()).expand(),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            )
+          : Loader(),
+    );
+  }
+
+  getUserCurrentCity() async {
+    /*if (await checkPermission()) {
+      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+      Placemark place = placemarks[0];
+      toast(placemarks.toString());
+      return placemarks;
+    } else {
+      throw 'Location permission not allowed';
+    }*/
+  }
+}

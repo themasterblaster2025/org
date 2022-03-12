@@ -2,12 +2,15 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
+
+import '../../main.dart';
 
 InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, Function()? suffixOnTap, Widget? dateTime}) {
   return InputDecoration(
@@ -156,5 +159,26 @@ String? orderStatus(String orderStatus) {
     return 'Completed';
   } else if (orderStatus == ORDER_CANCELLED) {
     return 'Cancelled';
+  }
+}
+
+Future<bool> checkPermission() async {
+  // Request app level location permission
+  LocationPermission locationPermission = await Geolocator.requestPermission();
+
+  if (locationPermission == LocationPermission.whileInUse || locationPermission == LocationPermission.always) {
+    // Check system level location permission
+    if (!await Geolocator.isLocationServiceEnabled()) {
+      return await Geolocator.openLocationSettings().then((value) => false).catchError((e) => false);
+    } else {
+      return true;
+    }
+  } else {
+    toast('allow location permission');
+
+    // Open system level location permission
+    await Geolocator.openAppSettings();
+
+    return false;
   }
 }

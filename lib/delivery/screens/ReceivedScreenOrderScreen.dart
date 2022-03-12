@@ -69,11 +69,11 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   }
 
   saveDelivery() async {
-    if (widget.orderData!.status == ORDER_ACTIVE || widget.orderData!.status == ORDER_ARRIVED) {
+    /*if (widget.orderData!.status == ORDER_ACTIVE || widget.orderData!.status == ORDER_ARRIVED) {
       if (imageSignature == null) {
         return toast('Please PicUp Signature');
       }
-    }
+    }*/
     if (widget.orderData!.status == ORDER_DEPARTED) {
       if (deliverySignature == null) {
         return toast('Please Delivery Signature');
@@ -165,6 +165,9 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  if (widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY) Text('Payment Collect Form on delivery'),
+                  if (widget.orderData!.paymentCollectFrom == PAYMENT_ON_CLIENT) Text('Payment Collect Form on Pic Up'),
+                  16.height,
                   Text('PicUp Datetime', style: boldTextStyle()),
                   8.height,
                   AppTextField(
@@ -507,6 +510,14 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                       ).expand(),
                     ],
                   ),
+                  16.height,
+                  AppButton(
+                    text: 'Save',
+                    textStyle: boldTextStyle(),
+                    onTap: () {
+                      paymentConfirmDialog();
+                    },
+                  )
                 ],
               ),
             ),
@@ -516,6 +527,12 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
           )
         ],
       ),
+    );
+  }
+
+  paymentConfirmDialog() {
+    return AlertDialog(
+      content: Text('Are you sure collect this payment?'),
     );
   }
 }

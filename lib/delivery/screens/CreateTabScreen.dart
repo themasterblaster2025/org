@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mighty_delivery/delivery/screens/DeliveryDetailScreen.dart';
+import 'package:mighty_delivery/delivery/screens/GoogleMapTrackScreen.dart';
 import 'package:mighty_delivery/delivery/screens/ReceivedScreenOrderScreen.dart';
+import 'package:mighty_delivery/delivery/screens/TrackingScreen.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
@@ -205,9 +208,6 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                       Divider(height: 30, thickness: 1),
                       Row(
                         children: [
-
-
-
                           Container(
                             decoration: boxDecorationWithRoundedCorners(
                               borderRadius: BorderRadius.circular(8),
@@ -232,6 +232,13 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                           ).expand(),
                         ],
                       ),
+                      IconButton(
+                        onPressed: () {
+                          //GoogleMapTrackScreen().launch(context);
+                          TrackingScreen(order: orderData,latLng: LatLng(data.pickupPoint!.latitude.toDouble(),data.pickupPoint!.longitude.toDouble())).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+                        },
+                        icon: Icon(Icons.location_on_outlined, color: colorPrimary, size: 30),
+                      )
                     ],
                   ),
                 ),

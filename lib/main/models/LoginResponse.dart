@@ -38,6 +38,8 @@ class UserData {
   int? city_id;
   String? city_name;
   String? country_name;
+  String? latitude;
+  String? longitude;
 
   UserData({
     this.api_token,
@@ -56,6 +58,8 @@ class UserData {
     this.country_id,
     this.city_name,
     this.country_name,
+    this.latitude,
+    this.longitude,
   });
 
   factory UserData.fromJson(Map<String, dynamic> json) {
@@ -76,6 +80,8 @@ class UserData {
       country_id: json['country_id'],
       city_name: json['city_name'],
       country_name: json['country_name'],
+      latitude: json['latitude'],
+      longitude: json['longitude'],
     );
   }
 
@@ -97,6 +103,9 @@ class UserData {
     data['country_id'] = this.country_id;
     data['city_name'] = this.city_name;
     data['country_name'] = this.country_name;
+    data['latitude'] = this.latitude;
+    data['longitude'] = this.longitude;
+
     return data;
   }
 }
