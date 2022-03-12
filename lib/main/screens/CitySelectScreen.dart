@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mighty_delivery/delivery/screens/DDashboardScreen.dart';
+import 'package:mighty_delivery/delivery/screens/DeliveryDashBoard.dart';
 import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/models/CityListModel.dart';
@@ -71,7 +71,7 @@ class CitySelectScreenState extends State<CitySelectScreen> {
       if (widget.isBack) {
         Navigator.pop(context);
       } else {
-        DDashboardScreen().launch(context);
+        DeliveryDashBoard().launch(context);
       }
     }).catchError((error) {
       appStore.setLoading(false);
@@ -127,7 +127,7 @@ class CitySelectScreenState extends State<CitySelectScreen> {
                                 setState(() {});
                               },
                               validator: (value) {
-                                if(selectedCountry==null) return errorThisFieldRequired;
+                                if (selectedCountry == null) return errorThisFieldRequired;
                                 return null;
                               },
                             ),
@@ -154,7 +154,7 @@ class CitySelectScreenState extends State<CitySelectScreen> {
                                 setState(() {});
                               },
                               validator: (value) {
-                                if(selectedCity==null) return errorThisFieldRequired;
+                                if (selectedCity == null) return errorThisFieldRequired;
                                 return null;
                               },
                             ),
@@ -163,7 +163,7 @@ class CitySelectScreenState extends State<CitySelectScreen> {
                       ),
                       30.height,
                       commonButton("Change", () {
-                        if(_formKey.currentState!.validate()) {
+                        if (_formKey.currentState!.validate()) {
                           if (getStringAsync(USER_TYPE) == CLIENT) {
                             setValue(COUNTRY_ID, selectedCountry);
                             setValue(CITY_ID, selectedCity);

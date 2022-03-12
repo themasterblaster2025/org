@@ -143,13 +143,9 @@ class TrackingScreenState extends State<TrackingScreen> {
               alignment: Alignment.bottomCenter,
               children: [
                 GoogleMap(
-                  markers: markers.toSet(),
+                  markers: markers.map((e) => e).toSet(),
                   polylines: _polylines,
                   mapType: MapType.normal,
-                  //zoomControlsEnabled: false,
-                  //myLocationEnabled: false,
-                  //compassEnabled: true,
-                  //tiltGesturesEnabled: false,
                   initialCameraPosition: CameraPosition(
                     target: SOURCE_LOCATION!,
                     zoom: CAMERA_ZOOM,
@@ -209,17 +205,5 @@ class TrackingScreenState extends State<TrackingScreen> {
             )
           : Loader(),
     );
-  }
-
-  getUserCurrentCity() async {
-    /*if (await checkPermission()) {
-      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-      List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
-      Placemark place = placemarks[0];
-      toast(placemarks.toString());
-      return placemarks;
-    } else {
-      throw 'Location permission not allowed';
-    }*/
   }
 }

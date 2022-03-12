@@ -69,11 +69,11 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   }
 
   saveDelivery() async {
-    /*if (widget.orderData!.status == ORDER_ACTIVE || widget.orderData!.status == ORDER_ARRIVED) {
+    if (widget.orderData!.status == ORDER_ACTIVE || widget.orderData!.status == ORDER_ARRIVED) {
       if (imageSignature == null) {
         return toast('Please PicUp Signature');
       }
-    }*/
+    }
     if (widget.orderData!.status == ORDER_DEPARTED) {
       if (deliverySignature == null) {
         return toast('Please Delivery Signature');
@@ -416,7 +416,13 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                         textStyle: primaryTextStyle(color: white),
                         color: colorPrimary,
                         onTap: () async {
-                          saveDelivery();
+                          if (widget.orderData!.paymentId == null && widget.orderData!.paymentCollectFrom == PAYMENT_ON_PICKUP) {
+                            paymentConfirmDialog(widget.orderData!);
+                          } else if (widget.orderData!.paymentId == null && widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY) {
+                            paymentConfirmDialog(widget.orderData!);
+                          } else {
+                            saveDelivery();
+                          }
                         },
                       ).expand(),
                       16.width,
@@ -510,14 +516,6 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                       ).expand(),
                     ],
                   ),
-                  16.height,
-                  AppButton(
-                    text: 'Save',
-                    textStyle: boldTextStyle(),
-                    onTap: () {
-                      paymentConfirmDialog();
-                    },
-                  )
                 ],
               ),
             ),
@@ -530,9 +528,63 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
     );
   }
 
-  paymentConfirmDialog() {
-    return AlertDialog(
-      content: Text('Are you sure collect this payment?'),
+  Future<void> paymentConfirmDialog(OrderData orderData) {
+    return showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Are you sure collect this payment?'),
+              16.height,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  AppButton(
+                    color: Colors.red,
+                    textStyle: boldTextStyle(color: white),
+                    text: 'Cancel',
+                    onTap: () {
+                      finish(context);
+                    },
+                  ),
+                  16.width,
+                  AppButton(
+                    color: colorPrimary,
+                    textStyle: boldTextStyle(color: white),
+                    text: 'Save',
+                    onTap: () async {
+                      appStore.setLoading(true);
+                      Map req = {
+                        'order_id': orderData.id,
+                        'client_id': orderData.clientId,
+                        'datetime': picUpController.text,
+                        'total_amount': orderData.totalAmount,
+                        'payment_type': PAYMENT_TYPE_CASH,
+                        'payment_status': PAYMENT_PAID,
+                      };
+                      await savePayment(req).then((value) async {
+                        await saveDelivery().then((value) async {
+                          appStore.setLoading(false);
+                          finish(context);
+                          finish(context);
+                        }).catchError((error) {
+                          appStore.setLoading(false);
+                          log(error);
+                        });
+                      }).catchError((error) {
+                        appStore.setLoading(false);
+                        log(error);
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

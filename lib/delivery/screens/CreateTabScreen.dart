@@ -232,12 +232,17 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                           ).expand(),
                         ],
                       ),
-                      IconButton(
-                        onPressed: () {
-                          //GoogleMapTrackScreen().launch(context);
-                          TrackingScreen(order: orderData,latLng: LatLng(data.pickupPoint!.latitude.toDouble(),data.pickupPoint!.longitude.toDouble())).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
-                        },
-                        icon: Icon(Icons.location_on_outlined, color: colorPrimary, size: 30),
+                      Row(
+                        children: [
+                          Text('Track Order Location',style: primaryTextStyle()),
+                          IconButton(
+                            onPressed: () {
+                              //GoogleMapTrackScreen().launch(context);
+                              TrackingScreen(order: orderData,latLng: LatLng(data.pickupPoint!.latitude.toDouble(),data.pickupPoint!.longitude.toDouble())).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+                            },
+                            icon: Icon(Icons.location_on_outlined, color: colorPrimary, size: 30),
+                          ),
+                        ],
                       )
                     ],
                   ),
