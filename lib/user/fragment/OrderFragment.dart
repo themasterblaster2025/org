@@ -195,12 +195,14 @@ class OrderFragmentState extends State<OrderFragment> {
                                       ).expand(),
                                     ],
                                   ),
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Text('return Order', style: boldTextStyle()).onTap(() {
-                                      ReturnOrderScreen(item).launch(context);
-                                    }),
-                                  ).visible(item.status == ORDER_COMPLETED),
+                                  16.height,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('Payment',style: boldTextStyle()),
+                                      Text('${item.paymentStatus.validate(value: PAYMENT_PENDING)}',style: primaryTextStyle(color: paymentStatusColor(item.paymentStatus.validate(value: PAYMENT_PENDING)))),
+                                    ],
+                                  ),
                                 ],
                               ),
                             ),

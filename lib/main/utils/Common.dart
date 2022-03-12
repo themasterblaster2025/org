@@ -101,6 +101,18 @@ Color statusColor(String status) {
   return color;
 }
 
+Color paymentStatusColor(String status){
+  Color color = colorPrimary;
+  if(status==PAYMENT_PAID){
+    color = Colors.green;
+  }else if(status==PAYMENT_FAILED){
+    color = Colors.red;
+  }else if(status==PAYMENT_PENDING){
+    color = colorPrimary;
+  }
+  return color;
+}
+
 String parcelTypeIcon(String parcelType) {
   String icon = 'https://cdn-icons-png.flaticon.com/512/2312/2312803.png';
   switch (parcelType) {

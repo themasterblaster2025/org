@@ -14,7 +14,6 @@ import 'package:mighty_delivery/user/fragment/OrderFragment.dart';
 import 'package:mighty_delivery/user/screens/DraftOrderListScreen.dart';
 
 List<String> weightList = ['Up to 1 kg', 'Up to 5 kg', 'Up to 10 kg', 'Up to 15 kg', 'Up to 20 kg'];
-List<String> paymentGatewayList = ['Stripe', 'Razorpay', 'PayStack', 'FlutterWave'];
 
 List<WalkThroughItemModel> getWalkThroughItems() {
   List<WalkThroughItemModel> list = [];

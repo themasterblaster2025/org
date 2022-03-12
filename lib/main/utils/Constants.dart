@@ -1,11 +1,12 @@
 const mAppName = 'On Demand Local Delivery';
 
 const mBaseUrl = 'http://192.168.1.230/meetmighty/local-delivery-laravel/api/';
-const googleMapAPIKey = 'AIzaSyBAm_XYdWpfE2U_aLkMFGcG9H5wk1yY4yY';
+const googleMapAPIKey = 'AIzaSyC5ZYpn_O6FnMwDCaG5npxnh5xCHd5kNaA';
 
 // font size
 const headingSize = 24;
 const currencySymbol = '₹';
+const currencyCode = 'NGN';
 
 // SharedReference keys
 const IS_LOGGED_IN = 'IS_LOGIN';
@@ -35,8 +36,18 @@ const DELIVERY_MAN = 'delivery_man';
 const CHARGE_TYPE_FIXED = 'fixed';
 const CHARGE_TYPE_PERCENTAGE = 'percentage';
 
+const PAYMENT_TYPE_STRIPE = 'stripe';
+const PAYMENT_TYPE_RAZORPAY = 'razorpay';
+const PAYMENT_TYPE_PAYSTACK = 'paystack';
+const PAYMENT_TYPE_FLUTTERWAVE = 'flutterwave';
+const PAYMENT_TYPE_CASH = 'cash';
+
+const PAYMENT_PENDING = 'pending';
+const PAYMENT_FAILED = 'failed';
+const PAYMENT_PAID = 'paid';
+
 const PAYMENT_ON_DELIVERY = "on_delivery";
-const PAYMENT_ON_CLIENT = "on_client";
+const PAYMENT_ON_PICKUP = "on_pickup";
 
 const RESTORE = 'restore';
 const FORCE_DELETE = 'forcedelete';
@@ -54,3 +65,20 @@ const ORDER_PICKED_UP = 'courier_picked_up';
 const ORDER_COMPLETED = 'completed';
 const ORDER_DRAFT = 'draft';
 const ORDER_DEPARTED = 'courier_departed';
+
+///RazorPay
+const razorKey = "rzp_test_CLw7tH3O3P5eQM";
+
+///StripPayment
+const stripPaymentKey = 'sk_test_51GrhA2Bz1ljKAgF9FIJPLupBUCHFCOy5rS6LCnYHSu6Od0Qyx3TElGbxIu8BGRvq14fgidGOYyNkQPivZGnzWoVt004fCZxVdk';
+const stripPaymentPublishKey = 'pk_test_51GrhA2Bz1ljKAgF98fI6WfB2YUn4CewOB0DNQC1pSeXspUc1LlUYs3ou19oPF0ATcqa52FXTYmv6v0mkvPZb9BSD00SUpBj9tI';
+
+///FlutterWave
+const flutterWavePublicKey = 'FLWPUBK_TEST-eb3edef083c890a7e22dc7eec9e0daa5-X';
+const flutterWaveSecretKey = 'FLWSECK_TEST-d2759023efce6198a853b8e2dd3beb55-X';
+const flutterWaveEncryptionKey = 'FLWSECK_TEST8497cc2db86c';
+
+///PAY STACK DETAIL
+const payStackPublicKey = 'pk_test_c46ddf9def17e34152daa1b6e2eb940dedea41f0';
+
+

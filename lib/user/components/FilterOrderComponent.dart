@@ -142,9 +142,11 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
                     setState(() {});
                   },
                   validator: (value) {
-                    Duration difference = fromDate!.difference(toDate!);
-                    if (difference.inDays >= 0) {
-                      return 'To Date must after From Date';
+                    if(fromDate!=null && toDate!=null) {
+                      Duration difference = fromDate!.difference(toDate!);
+                      if (difference.inDays >= 0) {
+                        return 'To Date must after From Date';
+                      }
                     }
                   },
                   decoration: commonInputDecoration(suffixIcon: Icons.calendar_today),

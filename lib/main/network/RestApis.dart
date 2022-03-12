@@ -13,6 +13,7 @@ import 'package:mighty_delivery/main/models/LDBaseResponse.dart';
 import 'package:mighty_delivery/main/models/LoginResponse.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
 import 'package:mighty_delivery/main/models/ParcelTypeListModel.dart';
+import 'package:mighty_delivery/main/models/PaymentGatewayListModel.dart';
 import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/main/screens/LoginScreen.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
@@ -307,6 +308,14 @@ Future updateOrder({
   }, onError: (error) {
     toast(error.toString());
   });
+}
+
+Future<PaymentGatewayListModel> getPaymentGatewayList() async{
+  return PaymentGatewayListModel.fromJson(await handleResponse(await buildHttpResponse('paymentgateway-list',method: HttpMethod.GET)));
+}
+
+Future<LDBaseResponse> savePayment(Map request) async{
+  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('payment-save',request: request,method: HttpMethod.POST)));
 }
 
 /// Update Location

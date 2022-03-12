@@ -12,10 +12,11 @@ import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
-import 'package:mighty_delivery/main/utils/DataProviders.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:mighty_delivery/user/components/CreateOrderConfirmationDialog.dart';
+import 'package:mighty_delivery/user/components/PaymentScreen.dart';
 import 'package:mighty_delivery/user/components/SearchAddressWidget.dart';
+import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class CreateOrderScreen extends StatefulWidget {
@@ -60,11 +61,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   int selectedTabIndex = 0;
   int selectedWeightIndex = 0;
-  int? selectedPaymentIndex;
 
-  bool isDeliverNow = true;
   bool isCashPayment = true;
-  bool isOnDelivery = false;
+  bool isDeliverNow = true;
+
+  String paymentCollectFrom = PAYMENT_ON_PICKUP;
 
   DateTime? currentBackPressTime;
 
@@ -103,7 +104,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       deliverPhoneCont.text = widget.orderData!.deliveryPoint!.contactNumber!;
       deliverDesCont.text = widget.orderData!.deliveryPoint!.description!;
 
-      isOnDelivery = widget.orderData!.paymentCollectFrom! == PAYMENT_ON_DELIVERY;
+      paymentCollectFrom = widget.orderData!.paymentCollectFrom.validate(value: PAYMENT_ON_PICKUP);
     }
     getParcelTypeListApiCall();
   }
@@ -157,7 +158,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   }
 
   createOrderApiCall(String orderStatus) async {
-    finish(context);
     Map req = {
       "id": widget.orderData != null ? widget.orderData!.id : "",
       "client_id": getIntAsync(USER_ID).toString(),
@@ -186,7 +186,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       "parcel_type": parcelTypeCont.text,
       "total_weight": selectedWeight.validate(),
       "total_distance": totalDistance.validate(),
-      "payment_collect_from": isOnDelivery ? PAYMENT_ON_DELIVERY : PAYMENT_ON_CLIENT,
+      "payment_collect_from": paymentCollectFrom,
       "status": orderStatus,
       "payment_type": "",
       "payment_status": "",
@@ -198,6 +198,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     await createOrder(req).then((value) {
       appStore.setLoading(false);
       toast(value.message);
+      finish(context);
+      if(!isCashPayment){
+        PaymentScreen(orderId: value.orderId.validate(), totalAmount: totalAmount).launch(context);
+      }else{
+        DashboardScreen().launch(context,isNewTask: true);
+      }
     }).catchError((error) {
       appStore.setLoading(false);
       toast(error.toString());
@@ -283,11 +289,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         },
                         validator: (value) {
                           if (value.validate().isEmpty) return errorThisFieldRequired;
-                          double fromTimeInHour = pickFromTime!.hour + pickFromTime!.minute/60;
-                          double toTimeInHour = pickToTime!.hour + pickToTime!.minute/60;
+                          double fromTimeInHour = pickFromTime!.hour + pickFromTime!.minute / 60;
+                          double toTimeInHour = pickToTime!.hour + pickToTime!.minute / 60;
                           double difference = toTimeInHour - fromTimeInHour;
                           print(difference);
-                          if(difference<=0){
+                          if (difference <= 0) {
                             return 'EndTime must be after StartTime';
                           }
                         },
@@ -352,10 +358,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         },
                         validator: (value) {
                           if (value!.isEmpty) return errorThisFieldRequired;
-                          double fromTimeInHour = deliverFromTime!.hour + deliverFromTime!.minute/60;
-                          double toTimeInHour = deliverToTime!.hour + deliverToTime!.minute/60;
+                          double fromTimeInHour = deliverFromTime!.hour + deliverFromTime!.minute / 60;
+                          double toTimeInHour = deliverToTime!.hour + deliverToTime!.minute / 60;
                           double difference = toTimeInHour - fromTimeInHour;
-                          if(difference<0){
+                          if (difference < 0) {
                             return 'EndTime must be after StartTime';
                           }
                         },
@@ -571,6 +577,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         8.height,
         AppTextField(
           controller: deliverPhoneCont,
+          textInputAction: TextInputAction.next,
           textFieldType: TextFieldType.PHONE,
           decoration: commonInputDecoration(suffixIcon: Icons.phone),
         ),
@@ -583,17 +590,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           decoration: commonInputDecoration(suffixIcon: Icons.notes),
           maxLines: 3,
           minLines: 3,
-        ),
-        16.height,
-        CheckboxListTile(
-          title: Text('Collect Cash on delivery'),
-          controlAffinity: ListTileControlAffinity.leading,
-          value: isOnDelivery,
-          contentPadding: EdgeInsets.zero,
-          onChanged: (value) {
-            isOnDelivery = value!;
-            setState(() {});
-          },
         ),
       ],
     );
@@ -718,7 +714,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               Text('$currencySymbol ${(cityData!.fixedCharges! + distanceCharge + weightCharge).toStringAsFixed(2)}', style: boldTextStyle()),
             ],
           ),
-        ).visible(weightCharge != 0 || distanceCharge != 0),
+        ).visible((weightCharge != 0 || distanceCharge != 0) && extraChargesObject.keys.length != 0),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -750,66 +746,44 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             Text('$currencySymbol $totalAmount', style: boldTextStyle(size: 20)),
           ],
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        16.height,
+        Text('Payment', style: boldTextStyle()),
+        16.height,
+        Row(
           children: [
-            Divider(height: 30),
-            Text('Payment', style: boldTextStyle()),
-            16.height,
-            Row(
-              children: [
-                scheduleOptionWidget(isCashPayment, 'assets/icons/ic_cash.png', 'Cash').onTap(() {
-                  isCashPayment = true;
-                  setState(() {});
-                }).expand(),
-                16.width,
-                scheduleOptionWidget(!isCashPayment, 'assets/icons/ic_credit_card.png', 'Card').onTap(() {
-                  isCashPayment = false;
-                  setState(() {});
-                }).expand(),
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                16.height,
-                Text('Payment Methods', style: boldTextStyle()),
-                16.height,
-                ListView.builder(
-                  primary: false,
-                  shrinkWrap: true,
-                  itemCount: paymentGatewayList.length,
-                  itemBuilder: (context, index) {
-                    String mData = paymentGatewayList[index];
-                    return GestureDetector(
-                      child: Container(
-                        height: 50,
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        alignment: Alignment.center,
-                        margin: EdgeInsets.only(bottom: 16),
-                        decoration: boxDecorationWithRoundedCorners(
-                          borderRadius: BorderRadius.circular(defaultRadius),
-                          border: Border.all(color: borderColor),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(mData, style: boldTextStyle()),
-                            Icon(Icons.check_circle, color: colorPrimary).visible(index == selectedPaymentIndex),
-                          ],
-                        ),
-                      ),
-                      onTap: () {
-                        selectedPaymentIndex = index;
-                        setState(() {});
-                      },
-                    );
-                  },
-                ),
-              ],
-            ).visible(!isCashPayment),
+            scheduleOptionWidget(isCashPayment, 'assets/icons/ic_cash.png', 'Cash Payment').onTap(() {
+              isCashPayment = true;
+              setState(() {});
+            }).expand(),
+            16.width,
+            scheduleOptionWidget(!isCashPayment, 'assets/icons/ic_credit_card.png', 'Online Payment').onTap(() {
+              isCashPayment = false;
+              setState(() {});
+            }).expand(),
           ],
-        )
+        ),
+        16.height,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Payment Collect from', style: boldTextStyle()),
+            SizedBox(
+              width: 150,
+              child: DropdownButtonFormField<String>(
+                value: paymentCollectFrom,
+                decoration: commonInputDecoration(),
+                items: [
+                  DropdownMenuItem(value:PAYMENT_ON_PICKUP,child: Text('Pickup', style: primaryTextStyle())),
+                  DropdownMenuItem(value:PAYMENT_ON_DELIVERY,child: Text('Delivery', style: primaryTextStyle())),
+                ],
+                onChanged: (value) {
+                  paymentCollectFrom = value!;
+                  setState(() { });
+                },
+              ),
+            ),
+          ],
+        ).visible(isCashPayment),
       ],
     );
   }
@@ -819,13 +793,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     return WillPopScope(
       onWillPop: () async {
         if (selectedTabIndex == 0) {
-          /*DateTime now = DateTime.now();
-          if (currentBackPressTime == null || now.difference(currentBackPressTime!) > Duration(seconds: 2)) {
-            currentBackPressTime = now;
-            toast('Tap back again to leave Screen');
-            return false;
-          }
-          return true;*/
           await showInDialog(
             context,
             contentPadding: EdgeInsets.all(16),
