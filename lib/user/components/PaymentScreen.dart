@@ -2,20 +2,22 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutterwave_standard/core/TransactionCallBack.dart';
-import 'package:flutterwave_standard/core/flutterwave.dart';
 import 'package:flutterwave_standard/core/navigation_controller.dart';
 import 'package:flutterwave_standard/models/requests/customer.dart';
 import 'package:flutterwave_standard/models/requests/customizations.dart';
 import 'package:flutterwave_standard/models/requests/standard_request.dart';
 import 'package:flutterwave_standard/models/responses/charge_response.dart';
-import 'package:flutterwave_standard/models/subaccount.dart';
 import 'package:flutterwave_standard/view/flutterwave_style.dart';
 import 'package:flutterwave_standard/view/view_utils.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/models/PaymentGatewayListModel.dart';
+import 'package:mighty_delivery/main/models/StripePayModel.dart';
+import 'package:mighty_delivery/main/network/NetworkUtils.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
@@ -277,6 +279,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
   onCancelled() {
     toast("Transaction Cancelled");
   }
+
   @override
   onTransactionSuccess(String id, String txRef) {
     final ChargeResponse chargeResponse = ChargeResponse(status: "success", success: true, transactionId: id, txRef: txRef);
@@ -288,50 +291,64 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
     savePaymentApiCall(paymentStatus : PAYMENT_PAID,txnId: chargeResponse.transactionId,paymentType: PAYMENT_TYPE_FLUTTERWAVE,transactionDetail: req);
   }
 
+  /// StripPayment
+  void stripePay() async {
+    Map<String, String> headers = {
+      HttpHeaders.authorizationHeader: 'Bearer $stripPaymentKey',
+      HttpHeaders.contentTypeHeader: 'application/x-www-form-urlencoded',
+    };
 
- /* _handlePaymentInitialization() async {
-    final style = FlutterwaveStyle(
-      appBarText: "Flutter Wave",
-      buttonColor: colorPrimary,
-      buttonTextStyle: primaryTextStyle(),
-      appBarColor: colorPrimary,
-      dialogCancelTextStyle: boldTextStyle(),
-      dialogContinueTextStyle: boldTextStyle(color: colorPrimary),
-      mainBackgroundColor: context.scaffoldBackgroundColor,
-      mainTextStyle: TextStyle(color: Colors.indigo, fontSize: 19, letterSpacing: 2),
-      dialogBackgroundColor: Colors.white,
-      appBarIcon: Icon(Icons.arrow_back, color: Colors.white),
-      buttonText: "Pay $currencySymbol ${widget.totalAmount}",
-      appBarTitleTextStyle: boldTextStyle(color: Colors.white,size: 20),
-    );
+    var request = http.Request('POST', Uri.parse(stripeURL));
 
-    final Customer customer = Customer(name: getStringAsync(NAME), phoneNumber: getStringAsync(USER_CONTACT_NUMBER), email: getStringAsync(USER_EMAIL));
+    request.bodyFields = {
+      'amount': '${(widget.totalAmount * 100).toInt()}',
+      'currency': "INR",
+    };
 
-    final subAccounts = [
-      SubAccount(id: "RS_1A3278129B808CB588B53A14608169AD", transactionChargeType: "flat", transactionPercentage: 25),
-      SubAccount(id: "RS_C7C265B8E4B16C2D472475D7F9F4426A", transactionChargeType: "flat", transactionPercentage: 50)
-    ];
+    log(request.bodyFields);
+    request.headers.addAll(headers);
 
-    final Flutterwave flutterwave = Flutterwave(
-        context: context,
-        style: style,
-        publicKey: flutterWavePublicKey,
-        currency: "INR",
-        txRef: DateTime.now().millisecond.toString(),
-        amount: widget.totalAmount.toString(),
-        customer: customer,
-        subAccounts: subAccounts,
-        paymentOptions: "card, payattitude",
-        customization: Customization(title: "Test Payment"),
-        redirectUrl: "https://www.google.com",
-        isTestMode: true);
-    final ChargeResponse response = await flutterwave.charge();
-    if (response != null) {
-      print(response.status);
-    } else {
-      //this.showLoading("No Response!");
-    }
-  }*/
+    log(request);
+
+    appStore.setLoading(true);
+
+    await request.send().then((value) {
+      appStore.setLoading(false);
+      http.Response.fromStream(value).then((response) async {
+        if (response.statusCode == 200) {
+          var res = StripePayModel.fromJson(await handleResponse(response));
+
+          await Stripe.instance.initPaymentSheet(
+            paymentSheetParameters: SetupPaymentSheetParameters(
+              paymentIntentClientSecret: res.client_secret.validate(),
+              style: ThemeMode.light,
+              applePay: true,
+              googlePay: true,
+              testEnv: true,
+              merchantCountryCode: 'IN',
+              merchantDisplayName: 'Mighty Delivery',
+              customerId: '1',
+              customerEphemeralKeySecret: res.client_secret.validate(),
+              setupIntentClientSecret: res.client_secret.validate(),
+            ),
+          );
+          await Stripe.instance.presentPaymentSheet(parameters: PresentPaymentSheetParameters(clientSecret: res.client_secret!, confirmPayment: true)).then(
+                (value) async {
+              savePaymentApiCall(paymentType: PAYMENT_TYPE_STRIPE,paymentStatus: PAYMENT_PAID);
+            },
+          ).catchError((e) {
+            log("presentPaymentSheet ${e.toString()}");
+          });
+        }
+      }).catchError((e) {
+        appStore.setLoading(false);
+        toast(e.toString(), print: true);
+      });
+    }).catchError((e) {
+      appStore.setLoading(false);
+      toast(e.toString(), print: true);
+    });
+  }
 
   @override
   void setState(fn) {
@@ -391,7 +408,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
               alignment: Alignment.bottomCenter,
               child: commonButton('Pay Now', () {
                 if (selectedPaymentType == PAYMENT_TYPE_STRIPE) {
-                  toast('stripe');
+                  stripePay();
                 } else if (selectedPaymentType == PAYMENT_TYPE_RAZORPAY) {
                   razorPayPayment();
                 } else if (selectedPaymentType == PAYMENT_TYPE_PAYSTACK) {

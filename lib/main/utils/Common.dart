@@ -114,16 +114,16 @@ Color paymentStatusColor(String status){
 }
 
 String parcelTypeIcon(String parcelType) {
-  String icon = 'https://cdn-icons-png.flaticon.com/512/2312/2312803.png';
+  String icon = 'assets/icons/ic_product.png';
   switch (parcelType) {
     case "documents":
-      return 'https://cdn-icons-png.flaticon.com/512/2991/2991112.png';
+      return 'assets/icons/ic_document.png';
     case "food":
-      return 'https://cdn-icons-png.flaticon.com/512/1037/1037793.png';
+      return 'assets/icons/ic_food.png';
     case "cake":
-      return 'https://cdn-icons-png.flaticon.com/512/918/918234.png';
+      return 'assets/icons/ic_cake.png';
     case "flowers":
-      return 'https://cdn-icons-png.flaticon.com/512/149/149569.png';
+      return 'assets/icons/ic_flower.png';
   }
   return icon;
 }

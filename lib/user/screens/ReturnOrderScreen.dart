@@ -9,9 +9,11 @@ import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
+import 'package:mighty_delivery/user/components/PaymentScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
+import 'DashboardScreen.dart';
 
 class ReturnOrderScreen extends StatefulWidget {
   static String tag = '/ReturnOrderScreen';
@@ -29,6 +31,9 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
   bool isDeliverNow = true;
   DateTime? pickDate, deliverDate;
   TimeOfDay? pickFromTime, pickToTime, deliverFromTime, deliverToTime;
+
+  String paymentCollectFrom = PAYMENT_ON_PICKUP;
+  bool isCashPayment = true;
 
   @override
   void initState() {
@@ -65,7 +70,6 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
         widget.orderData.deliveryPoint!.endTime = null;
       }
       if (difference.inMinutes > 0) return toast('PickupTime must be before DeliverTime');
-      finish(context);
       Map req = {
         "client_id": widget.orderData.clientId!,
         "date": DateTime.now().toString(),
@@ -89,6 +93,12 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
       await createOrder(req).then((value) {
         appStore.setLoading(false);
         toast(value.message);
+        finish(context);
+        if(!isCashPayment){
+          PaymentScreen(orderId: value.orderId.validate(), totalAmount: widget.orderData.totalAmount.validate()).launch(context);
+        }else{
+          DashboardScreen().launch(context,isNewTask: true);
+        }
       }).catchError((error) {
         appStore.setLoading(false);
         toast(error.toString());
@@ -257,6 +267,53 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                     ),
                   ],
                 ).visible(!isDeliverNow),
+                16.height,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Total', style: boldTextStyle()),
+                    16.width,
+                    Text('$currencySymbol ${widget.orderData.totalAmount.validate()}', style: boldTextStyle(size: 20)),
+                  ],
+                ),
+                16.height,
+                Text('Payment', style: boldTextStyle()),
+                16.height,
+                Row(
+                  children: [
+                    scheduleOptionWidget(isCashPayment, 'assets/icons/ic_cash.png', 'Cash Payment').onTap(() {
+                      isCashPayment = true;
+                      setState(() {});
+                    }).expand(),
+                    16.width,
+                    scheduleOptionWidget(!isCashPayment, 'assets/icons/ic_credit_card.png', 'Online Payment').onTap(() {
+                      isCashPayment = false;
+                      setState(() {});
+                    }).expand(),
+                  ],
+                ),
+                16.height,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Payment Collect from', style: boldTextStyle()),
+                    SizedBox(
+                      width: 150,
+                      child: DropdownButtonFormField<String>(
+                        value: paymentCollectFrom,
+                        decoration: commonInputDecoration(),
+                        items: [
+                          DropdownMenuItem(value:PAYMENT_ON_PICKUP,child: Text('Pickup', style: primaryTextStyle())),
+                          DropdownMenuItem(value:PAYMENT_ON_DELIVERY,child: Text('Delivery', style: primaryTextStyle())),
+                        ],
+                        onChanged: (value) {
+                          paymentCollectFrom = value!;
+                          setState(() { });
+                        },
+                      ),
+                    ),
+                  ],
+                ).visible(isCashPayment),
               ],
             ),
           ),

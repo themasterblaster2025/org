@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -10,6 +11,10 @@ AppStore appStore = AppStore();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = stripPaymentPublishKey;
+  await Stripe.instance.applySettings().catchError((e) {
+    log("${e.toString()}");
+  });
   await initialize();
 
   defaultRadius = 16.0;

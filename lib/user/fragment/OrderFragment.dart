@@ -119,7 +119,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                           border: Border.all(color: borderColor),
                                         ),
                                         padding: EdgeInsets.all(8),
-                                        child: Image.network(parcelTypeIcon(item.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
+                                        child: Image.asset(parcelTypeIcon(item.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
                                       ),
                                       8.width,
                                       Column(

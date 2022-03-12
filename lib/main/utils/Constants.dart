@@ -70,6 +70,7 @@ const ORDER_DEPARTED = 'courier_departed';
 const razorKey = "rzp_test_CLw7tH3O3P5eQM";
 
 ///StripPayment
+const stripeURL = 'https://api.stripe.com/v1/payment_intents';
 const stripPaymentKey = 'sk_test_51GrhA2Bz1ljKAgF9FIJPLupBUCHFCOy5rS6LCnYHSu6Od0Qyx3TElGbxIu8BGRvq14fgidGOYyNkQPivZGnzWoVt004fCZxVdk';
 const stripPaymentPublishKey = 'pk_test_51GrhA2Bz1ljKAgF98fI6WfB2YUn4CewOB0DNQC1pSeXspUc1LlUYs3ou19oPF0ATcqa52FXTYmv6v0mkvPZb9BSD00SUpBj9tI';
 
