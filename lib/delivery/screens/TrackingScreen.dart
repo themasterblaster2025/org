@@ -46,13 +46,6 @@ class TrackingScreenState extends State<TrackingScreen> {
 
   late StreamSubscription<Position> positionStream;
 
-  /*getSomePoints() async {
-    routesCoords = (await googleMapPolyline.getCoordinatesWithLocation(
-      origin: LatLng(21.1888557, 72.8252579),
-      destination: LatLng(20.924836, 72.907932),
-      mode: RouteMode.driving,
-    ))!;
-  }*/
 
   @override
   void initState() {
@@ -66,7 +59,27 @@ class TrackingScreenState extends State<TrackingScreen> {
     positionStream = Geolocator.getPositionStream().listen((event)async {
       SOURCE_LOCATION = LatLng(event.latitude, event.longitude);
      await updateLocation(latitude: event.latitude.toString(), longitude: event.longitude.toString()).then((value) {
-        //toast('Location Update sucessfully');
+
+       markers.add(
+         Marker(
+           markerId: MarkerId('valsad'),
+           position: LatLng(SOURCE_LOCATION!.latitude, SOURCE_LOCATION!.longitude),
+           infoWindow: InfoWindow(title: 'Delivery Boy'),
+           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+         ),
+       );
+       widget.order.map((e) {
+         markers.add(
+           Marker(
+             markerId: MarkerId('valsad'),
+             position: LatLng(e.pickupPoint!.latitude.toDouble(), e.pickupPoint!.longitude.toDouble()),
+             infoWindow: InfoWindow(title: e.pickupPoint!.address),
+             icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
+           ),
+         );
+       }).toList();
+
+        setPolyLines(orderLat: orderLatLong);
       }).catchError((error) {
         log(event);
       });
@@ -75,27 +88,10 @@ class TrackingScreenState extends State<TrackingScreen> {
 
     //setState(() {});
 
-    markers.add(
-      Marker(
-        markerId: MarkerId('valsad'),
-        position: LatLng(20.9398446, 72.9305468),
-        infoWindow: InfoWindow(title: 'Delivery Boy'),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
-      ),
-    );
-    widget.order.map((e) {
-      markers.add(
-        Marker(
-          markerId: MarkerId('valsad'),
-          position: LatLng(e.pickupPoint!.latitude.toDouble(), e.pickupPoint!.longitude.toDouble()),
-          infoWindow: InfoWindow(title: e.pickupPoint!.address),
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
-        ),
-      );
-    }).toList();
+
     orderLatLong = await LatLng(widget.latLng!.latitude, widget.latLng!.longitude);
 
-    await setPolyLines(orderLat: orderLatLong);
+
   }
 
   Future<void> setPolyLines({required LatLng orderLat}) async {
@@ -103,7 +99,7 @@ class TrackingScreenState extends State<TrackingScreen> {
     polylineCoordinates.clear();
     var result = await polylinePoints.getRouteBetweenCoordinates(
       googleMapAPIKey,
-      PointLatLng(20.9398446, 72.9305468),
+      PointLatLng(SOURCE_LOCATION!.latitude, SOURCE_LOCATION!.longitude),
       PointLatLng(orderLat.latitude, orderLat.longitude),
     );
     if (result.points.isNotEmpty) {

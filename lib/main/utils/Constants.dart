@@ -3,6 +3,10 @@ const mAppName = 'On Demand Local Delivery';
 const mBaseUrl = 'http://192.168.1.230/meetmighty/local-delivery-laravel/api/';
 const googleMapAPIKey = 'AIzaSyBAm_XYdWpfE2U_aLkMFGcG9H5wk1yY4yY';
 
+const mOneSignalAppId = 'f2e9c538-d4ad-45d4-8c57-fd081c987fb6';
+const mOneSignalRestKey = 'NzcwNjExNzYtYTJjOS00NGNkLWE2ZTUtY2JmMDEyNTFhYTFm';
+const mOneSignalChannelId = '9a4cc981-4c6b-4baf-8c5c-915f907446ae';
+
 // font size
 const headingSize = 24;
 const currencySymbol = '₹';
@@ -23,6 +27,7 @@ const USER_NAME = 'USER_NAME';
 const USER_PASSWORD = 'USER_PASSWORD';
 const USER_ADDRESS = 'USER_ADDRESS';
 const STATUS = 'STATUS';
+const PLAYER_ID = 'PLAYER_ID';
 
 const COUNTRY_ID = 'COUNTRY_ID';
 const COUNTRY_DATA = 'COUNTRY_DATA';
@@ -81,5 +86,3 @@ const flutterWaveEncryptionKey = 'FLWSECK_TEST8497cc2db86c';
 
 ///PAY STACK DETAIL
 const payStackPublicKey = 'pk_test_c46ddf9def17e34152daa1b6e2eb940dedea41f0';
-
-

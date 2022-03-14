@@ -9,8 +9,7 @@ import 'package:lottie/lottie.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
-
-import '../../main.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, Function()? suffixOnTap, Widget? dateTime}) {
   return InputDecoration(
@@ -101,13 +100,13 @@ Color statusColor(String status) {
   return color;
 }
 
-Color paymentStatusColor(String status){
+Color paymentStatusColor(String status) {
   Color color = colorPrimary;
-  if(status==PAYMENT_PAID){
+  if (status == PAYMENT_PAID) {
     color = Colors.green;
-  }else if(status==PAYMENT_FAILED){
+  } else if (status == PAYMENT_FAILED) {
     color = Colors.red;
-  }else if(status==PAYMENT_PENDING){
+  } else if (status == PAYMENT_PENDING) {
     color = colorPrimary;
   }
   return color;
@@ -193,4 +192,10 @@ Future<bool> checkPermission() async {
 
     return false;
   }
+}
+
+Future<void> saveOneSignalPlayerId() async {
+  await OneSignal.shared.getDeviceState().then((value) async {
+    if (value!.userId.validate().isNotEmpty) await setValue(PLAYER_ID, value.userId.validate());
+  });
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mighty_delivery/delivery/screens/DeliveryDetailScreen.dart';
-import 'package:mighty_delivery/delivery/screens/GoogleMapTrackScreen.dart';
 import 'package:mighty_delivery/delivery/screens/ReceivedScreenOrderScreen.dart';
 import 'package:mighty_delivery/delivery/screens/TrackingScreen.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
@@ -105,8 +104,6 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                               IconButton(
                                 onPressed: () async {
                                   await updateOrder(orderStatus: ORDER_ARRIVED, orderId: data.id);
-
-                                  /// Send notification
                                   init();
                                 },
                                 icon: Icon(Icons.notifications_outlined),
@@ -214,7 +211,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                               border: Border.all(color: borderColor),
                             ),
                             padding: EdgeInsets.all(8),
-                            child: Image.network(parcelTypeIcon('document'), height: 24, width: 24, color: Colors.grey),
+                            child: Image.asset(parcelTypeIcon('document'), height: 24, width: 24, color: Colors.grey),
                           ),
                           8.width,
                           Column(
@@ -232,18 +229,27 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                           ).expand(),
                         ],
                       ),
-                      Row(
-                        children: [
-                          Text('Track Order Location',style: primaryTextStyle()),
-                          IconButton(
-                            onPressed: () {
-                              //GoogleMapTrackScreen().launch(context);
-                              TrackingScreen(order: orderData,latLng: LatLng(data.pickupPoint!.latitude.toDouble(),data.pickupPoint!.longitude.toDouble())).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
-                            },
-                            icon: Icon(Icons.location_on_outlined, color: colorPrimary, size: 30),
-                          ),
-                        ],
-                      )
+                      if (data.status == COURIER_DEPARTED) 8.height,
+                      if (data.status == COURIER_DEPARTED)
+                        Row(
+                          children: [
+                            Icon(Icons.location_on_outlined, color: colorPrimary),
+                            8.width,
+                            Text('Track Order Location', style: primaryTextStyle(color: colorPrimary)).expand(),
+                            AppButton(
+                              padding: EdgeInsets.all(0),
+                              text: 'Track',
+                              color: colorPrimary,
+                              textStyle: boldTextStyle(color: Colors.white),
+                              onTap: () async {
+                                if (await checkPermission()) {
+                                  TrackingScreen(order: orderData, latLng: LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble()))
+                                      .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+                                }
+                              },
+                            ),
+                          ],
+                        )
                     ],
                   ),
                 ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/main/screens/CitySelectScreen.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
+import 'package:mighty_delivery/main/screens/CitySelectScreen.dart';
 import 'package:mighty_delivery/main/screens/ForgotPasswordScreen.dart';
 import 'package:mighty_delivery/main/screens/RegisterScreen.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
@@ -36,6 +36,11 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> init() async {
+    if (getStringAsync(PLAYER_ID).isEmpty) {
+      await saveOneSignalPlayerId().then((value) {
+        if (getStringAsync(PLAYER_ID).isEmpty) return toast(errorMessage);
+      });
+    }
     setStatusBarColor(colorPrimary, statusBarIconBrightness: Brightness.light);
   }
 
@@ -53,6 +58,7 @@ class LoginScreenState extends State<LoginScreen> {
       Map req = {
         "email": emailController.text,
         "password": passController.text,
+        "player_id": getStringAsync(PLAYER_ID).validate(),
       };
 
       await logInApi(req).then((value) async {

@@ -57,6 +57,9 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
+    }
 }
 
 flutter {

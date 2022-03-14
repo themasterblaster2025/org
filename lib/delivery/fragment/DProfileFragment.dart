@@ -36,10 +36,10 @@ class DProfileFragmentState extends State<DProfileFragment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget('Profile'),
+      appBar: appBarWidget('Profile',color: colorPrimary,titleTextStyle: boldTextStyle(color: Colors.white)),
       body: Observer(
         builder: (_) => SingleChildScrollView(
-          padding: EdgeInsets.only(bottom: 16, top: 30),
+          padding: EdgeInsets.only(bottom: 16, top: 16),
           child: Column(
             children: [
               commonCachedNetworkImage(getStringAsync(USER_PROFILE_PHOTO).validate(), height: 90, width: 90, fit: BoxFit.cover).cornerRadiusWithClipRRect(50),
@@ -48,15 +48,14 @@ class DProfileFragmentState extends State<DProfileFragment> {
               6.height,
               Text(appStore.userEmail, style: secondaryTextStyle(size: 16)),
               16.height,
-              ListView.separated(
-                padding: EdgeInsets.zero,
+              ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: settingItems.length,
                 itemBuilder: (context, index) {
                   SettingItemModel mData = settingItems[index];
                   return ListTile(
-                    contentPadding: EdgeInsets.zero,
+                    contentPadding: EdgeInsets.only(left: 16,right: 16,top: 0,bottom: 0),
                     leading: Icon(mData.icon, size: 30, color: colorPrimary),
                     title: Text(mData.title!),
                     trailing: Icon(Icons.navigate_next, color: Colors.grey),
@@ -81,9 +80,6 @@ class DProfileFragmentState extends State<DProfileFragment> {
                       }
                     },
                   );
-                },
-                separatorBuilder: (context, index) {
-                  return Divider(indent: 50);
                 },
               )
             ],

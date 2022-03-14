@@ -34,18 +34,24 @@ dependencies:
   lottie: ^1.2.1
   timeline_tile: ^2.0.0
   animations: ^2.0.2
-  google_places_for_flutter: ^1.0.1
-  geolocator: ^8.2.0
   address_search_field: ^4.0.1
   flutter_stripe: ^2.3.0
   razorpay_flutter: ^1.2.9
   flutterwave_standard: ^1.0.3
   flutter_paystack: ^1.0.5+1
+
+  # MAP
+  geolocator: ^8.2.0
+  geocoding: ^2.0.4
   google_maps_flutter: ^2.1.2
   flutter_polyline_points: ^1.0.0
-  #geocoding: ^2.0.4
-  location: ^4.3.0
   google_map_polyline_new: ^0.3.0+2
+  google_places_for_flutter: ^1.0.1
+
+  # PUSH NOTIFICATION
+  onesignal_flutter: ^3.3.0
+
+
 
 dev_dependencies:
   flutter_test:

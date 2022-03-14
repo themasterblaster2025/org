@@ -29,6 +29,8 @@ class ReceivedScreenOrderScreen extends StatefulWidget {
 }
 
 class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
   GlobalKey<SfSignaturePadState> signaturePicUPPadKey = GlobalKey();
   GlobalKey<SfSignaturePadState> signatureDeliveryPadKey = GlobalKey();
 
@@ -69,17 +71,6 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   }
 
   saveDelivery() async {
-    if (widget.orderData!.status == ORDER_ACTIVE || widget.orderData!.status == ORDER_ARRIVED) {
-      if (imageSignature == null) {
-        return toast('Please PicUp Signature');
-      }
-    }
-    if (widget.orderData!.status == ORDER_DEPARTED) {
-      if (deliverySignature == null) {
-        return toast('Please Delivery Signature');
-      }
-    }
-
     appStore.setLoading(true);
     await updateOrder(
       orderId: widget.orderData!.id,
@@ -157,373 +148,351 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarWidget('Delivery PicUp', color: colorPrimary, textColor: white, elevation: 0),
-      body: Stack(
-        children: [
-          BodyCornerWidget(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY) Text('Payment Collect Form on delivery'),
-                  if (widget.orderData!.paymentCollectFrom == PAYMENT_ON_PICKUP) Text('Payment Collect Form on Pic Up'),
-                  16.height,
-                  Text('PicUp Datetime', style: boldTextStyle()),
-                  8.height,
-                  AppTextField(
-                    readOnly: true,
-                    textFieldType: TextFieldType.PHONE,
-                    controller: picUpController,
-                    onTap: () async {
-                      //
-                    },
-                    decoration: commonInputDecoration(
-                      dateTime: IconButton(
-                        onPressed: () {
-                          //
-                        },
-                        icon: DateTimePicker(
-                          type: DateTimePickerType.dateTime,
-                          dateMask: 'd MMM, yyyy',
-                          initialValue: DateTime.now().toString(),
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2100),
-                          icon: Icon(Icons.event),
-                          dateLabelText: 'Date',
-                          timeLabelText: "Hour",
-                          onChanged: (val) {
-                            picUpController.text = val;
+      body: Form(
+        key: formKey,
+        child: Stack(
+          children: [
+            BodyCornerWidget(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (widget.orderData!.paymentId == null)
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(defaultRadius),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(color: Colors.black, blurRadius: 0.2),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(defaultRadius),
+                                    bottomLeft: Radius.circular(defaultRadius),
+                                  ),
+                                  color: Color(0xffD9F5FF)),
+                              padding: EdgeInsets.all(8),
+                              child: Icon(Icons.info_outlined),
+                            ),
+                            16.width,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Info', style: boldTextStyle()),
+                                4.height,
+                                widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY
+                                    ? Text('Payment Collect Form on Delivery', style: secondaryTextStyle())
+                                    : Text('Payment Collect Form on Pic Up', style: secondaryTextStyle()),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    16.height,
+                    Text('PicUp Datetime', style: boldTextStyle()),
+                    8.height,
+                    AppTextField(
+                      readOnly: true,
+                      textFieldType: TextFieldType.PHONE,
+                      controller: picUpController,
+                      onTap: () async {
+                        //
+                      },
+                      decoration: commonInputDecoration(
+                        dateTime: IconButton(
+                          onPressed: () {
+                            //
                           },
-                          validator: (val) {
-                            print(val);
-                            return null;
-                          },
-                          onSaved: (val) => print(val),
+                          icon: DateTimePicker(
+                            type: DateTimePickerType.dateTime,
+                            dateMask: 'd MMM, yyyy',
+                            initialValue: DateTime.now().toString(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                            icon: Icon(Icons.event),
+                            dateLabelText: 'Date',
+                            timeLabelText: "Hour",
+                            onChanged: (val) {
+                              picUpController.text = val;
+                            },
+                            validator: (val) {
+                              print(val);
+                              return null;
+                            },
+                            onSaved: (val) => print(val),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  16.height,
-                  if (widget.orderData!.status == ORDER_DEPARTED)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Delivery Datetime', style: boldTextStyle()),
-                        8.height,
-                        AppTextField(
-                          readOnly: true,
-                          textFieldType: TextFieldType.PHONE,
-                          controller: deliveryDateController,
-                          onTap: () {
-                            //
-                          },
-                          decoration: commonInputDecoration(
-                            dateTime: IconButton(
-                              onPressed: () {
-                                //
-                              },
-                              icon: DateTimePicker(
-                                type: DateTimePickerType.dateTime,
-                                dateMask: 'd MMM, yyyy',
-                                initialValue: DateTime.now().toString(),
-                                firstDate: DateTime(2000),
-                                lastDate: DateTime(2100),
-                                icon: Icon(Icons.event),
-                                dateLabelText: 'Date',
-                                timeLabelText: "Hour",
-                                /*selectableDayPredicate: (date) {
-                                 if (date.weekday == 6 || date.weekday == 7) {
-                                  return false;
-                                }
-                                return true;
-                                },*/
-                                onChanged: (val) {
-                                  deliveryDateController.text = val;
+                    16.height,
+                    if (widget.orderData!.status == ORDER_DEPARTED)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Delivery Datetime', style: boldTextStyle()),
+                          8.height,
+                          AppTextField(
+                            readOnly: true,
+                            textFieldType: TextFieldType.PHONE,
+                            controller: deliveryDateController,
+                            onTap: () {
+                              //
+                            },
+                            decoration: commonInputDecoration(
+                              dateTime: IconButton(
+                                onPressed: () {
+                                  //
                                 },
-                                validator: (val) {
-                                  print(val);
-                                  return null;
-                                },
-                                onSaved: (val) => print(val),
+                                icon: DateTimePicker(
+                                  type: DateTimePickerType.dateTime,
+                                  dateMask: 'd MMM, yyyy',
+                                  initialValue: DateTime.now().toString(),
+                                  firstDate: DateTime(2000),
+                                  lastDate: DateTime(2100),
+                                  icon: Icon(Icons.event),
+                                  dateLabelText: 'Date',
+                                  timeLabelText: "Hour",
+                                  /*selectableDayPredicate: (date) {
+                                   if (date.weekday == 6 || date.weekday == 7) {
+                                    return false;
+                                  }
+                                  return true;
+                                  },*/
+                                  onChanged: (val) {
+                                    deliveryDateController.text = val;
+                                  },
+                                  validator: (val) {
+                                    print(val);
+                                    return null;
+                                  },
+                                  onSaved: (val) => print(val),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  16.height,
-                  Text('PicUp time Signature', style: boldTextStyle()),
-                  8.height,
-                  widget.orderData!.pickupConfirmByClient != null
-                      ? commonCachedNetworkImage(widget.orderData!.pickupTimeSignature, fit: BoxFit.cover, height: 150, width: context.width())
-                      : Container(
-                          height: 150,
-                          width: context.width(),
-                          decoration: BoxDecoration(border: Border.all(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
-                          child: Screenshot(
-                            controller: picUpScreenshotController,
-                            child: SfSignaturePad(
-                              key: signaturePicUPPadKey,
-                              minimumStrokeWidth: 1,
-                              maximumStrokeWidth: 3,
-                              strokeColor: colorPrimary,
+                        ],
+                      ),
+                    16.height,
+                    Text('PicUp time Signature', style: boldTextStyle()),
+                    8.height,
+                    widget.orderData!.pickupConfirmByClient != null
+                        ? commonCachedNetworkImage(widget.orderData!.pickupTimeSignature, fit: BoxFit.cover, height: 150, width: context.width())
+                        : Container(
+                            height: 150,
+                            width: context.width(),
+                            decoration: BoxDecoration(border: Border.all(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
+                            child: Screenshot(
+                              controller: picUpScreenshotController,
+                              child: SfSignaturePad(
+                                key: signaturePicUPPadKey,
+                                minimumStrokeWidth: 1,
+                                maximumStrokeWidth: 3,
+                                strokeColor: colorPrimary,
+                              ),
                             ),
                           ),
+                    if (widget.orderData!.pickupConfirmByClient == null)
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              child: Text('Save', style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
+                              onPressed: () async {
+                                await picUpScreenshotController.capture(delay: Duration(milliseconds: 10)).then((Uint8List? image) async {
+                                  final tempDir = await getTemporaryDirectory();
+                                  imageSignature = await File('${tempDir.path}/image.png').create();
+                                  imageSignature!.writeAsBytesSync(image!);
+                                  setState(() {});
+                                }).catchError((onError) {
+                                  print(onError);
+                                });
+                              },
+                            ),
+                            8.width,
+                            TextButton(
+                              child: Text('Clear', style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
+                              onPressed: () async {
+                                signaturePicUPPadKey.currentState!.clear();
+                              },
+                            ),
+                          ],
                         ),
-                  if (widget.orderData!.pickupConfirmByClient == null)
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            child: Text('Save', style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
-                            onPressed: () async {
-                              await picUpScreenshotController.capture(delay: Duration(milliseconds: 10)).then((Uint8List? image) async {
-                                final tempDir = await getTemporaryDirectory();
-                                imageSignature = await File('${tempDir.path}/image.png').create();
-                                imageSignature!.writeAsBytesSync(image!);
-                                setState(() {});
-                              }).catchError((onError) {
-                                print(onError);
-                              });
-                            },
-                          ),
-                          8.width,
-                          TextButton(
-                            child: Text('Clear', style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
-                            onPressed: () async {
-                              signaturePicUPPadKey.currentState!.clear();
-                            },
-                          ),
-                        ],
                       ),
-                    ),
-                  Text('Delivery time Signature', style: boldTextStyle()).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
-                  8.height.visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
-                  if (widget.orderData!.status == ORDER_DEPARTED)
+                    Text('Delivery time Signature', style: boldTextStyle()).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
+                    8.height.visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
+                    if (widget.orderData!.status == ORDER_DEPARTED)
+                      Container(
+                        height: 150,
+                        width: context.width(),
+                        decoration: BoxDecoration(border: Border.all(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
+                        child: Screenshot(
+                          controller: deliveryScreenshotController,
+                          child: SfSignaturePad(
+                            key: signatureDeliveryPadKey,
+                            minimumStrokeWidth: 1,
+                            maximumStrokeWidth: 3,
+                            strokeColor: colorPrimary,
+                          ),
+                        ),
+                      ).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
+                    if (widget.orderData!.status == ORDER_DEPARTED)
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              child: Text('Save', style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
+                              onPressed: () async {
+                                await deliveryScreenshotController.capture(delay: Duration(milliseconds: 10)).then((Uint8List? imageData) async {
+                                  final tempDir = await getTemporaryDirectory();
+                                  deliverySignature = await File('${tempDir.path}/image.png').create();
+                                  deliverySignature!.writeAsBytesSync(imageData!);
+                                  setState(() {});
+                                }).catchError((onError) {
+                                  log(onError);
+                                });
+                              },
+                            ),
+                            8.width,
+                            TextButton(
+                              child: Text('Clear', style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
+                              onPressed: () async {
+                                signatureDeliveryPadKey.currentState!.clear();
+                              },
+                            ),
+                          ],
+                        ),
+                      ).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
+                    16.height,
+                    /* Text('Add a product image', style: boldTextStyle()),
+                    16.height,
+                    imageProfile == null
+                        ? Container(
+                            height: 250,
+                            width: context.width(),
+                            decoration: BoxDecoration(border: Border.all(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.camera_alt_outlined, color: colorPrimary),
+                                16.width,
+                                Text('Upload a \nproduct image', style: primaryTextStyle()),
+                              ],
+                            ),
+                          ).onTap(() {
+                            selectPic();
+                          })
+                        : Image.file(File(imageProfile!.path), height: 250, width: context.width(), fit: BoxFit.cover).cornerRadiusWithClipRRect(defaultRadius),
+                    if (imageProfile != null)
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: TextButton(
+                          child: Text('Change Image', style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
+                          onPressed: () {
+                            selectPic();
+                          },
+                        ),
+                      ),
+                    if (imageProfile == null) 16.height,*/
+                    Text('Reason', style: boldTextStyle()),
+                    8.height,
                     Container(
-                      height: 150,
-                      width: context.width(),
                       decoration: BoxDecoration(border: Border.all(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
-                      child: Screenshot(
-                        controller: deliveryScreenshotController,
-                        child: SfSignaturePad(
-                          key: signatureDeliveryPadKey,
-                          minimumStrokeWidth: 1,
-                          maximumStrokeWidth: 3,
-                          strokeColor: colorPrimary,
-                        ),
-                      ),
-                    ).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
-                  if (widget.orderData!.status == ORDER_DEPARTED)
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            child: Text('Save', style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
-                            onPressed: () async {
-                              await deliveryScreenshotController.capture(delay: Duration(milliseconds: 10)).then((Uint8List? imageData) async {
-                                final tempDir = await getTemporaryDirectory();
-                                deliverySignature = await File('${tempDir.path}/image.png').create();
-                                deliverySignature!.writeAsBytesSync(imageData!);
-                                setState(() {});
-                              }).catchError((onError) {
-                                log(onError);
-                              });
-                              //signatureDeliveryPadKey.currentState!.clear();
-                            },
-                          ),
-                          8.width,
-                          TextButton(
-                            child: Text('Clear', style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
-                            onPressed: () async {
-                              signatureDeliveryPadKey.currentState!.clear();
-                            },
-                          ),
-                        ],
-                      ),
-                    ).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
-                  16.height,
-                  /* Text('Add a product image', style: boldTextStyle()),
-                  16.height,
-                  imageProfile == null
-                      ? Container(
-                          height: 250,
-                          width: context.width(),
-                          decoration: BoxDecoration(border: Border.all(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.camera_alt_outlined, color: colorPrimary),
-                              16.width,
-                              Text('Upload a \nproduct image', style: primaryTextStyle()),
-                            ],
-                          ),
-                        ).onTap(() {
-                          selectPic();
-                        })
-                      : Image.file(File(imageProfile!.path), height: 250, width: context.width(), fit: BoxFit.cover).cornerRadiusWithClipRRect(defaultRadius),
-                  if (imageProfile != null)
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: TextButton(
-                        child: Text('Change Image', style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
-                        onPressed: () {
-                          selectPic();
-                        },
-                      ),
+                      padding: EdgeInsets.only(left: 8, right: 8),
+                      width: context.width(),
+                      child: DropdownButton(
+                          underline: SizedBox(),
+                          style: primaryTextStyle(),
+                          borderRadius: BorderRadius.circular(8),
+                          isExpanded: true,
+                          value: reason!.isNotEmpty ? reason : null,
+                          items: list.map((e) {
+                            return DropdownMenuItem(
+                              value: e.name,
+                              child: Text(e.name!),
+                            );
+                          }).toList(),
+                          onChanged: (String? val) {
+                            reason = val;
+                            reasonController.text = val!;
+                            setState(() {});
+                          }),
                     ),
-                  if (imageProfile == null) 16.height,*/
-                  Text('Reason', style: boldTextStyle()),
-                  8.height,
-                  /* AppTextField(
-                    textFieldType: TextFieldType.NAME,
-                    decoration: commonInputDecoration(),
-                    controller: reasonController,
-                  ),*/
-                  Container(
-                    decoration: BoxDecoration(border: Border.all(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
-                    padding: EdgeInsets.only(left: 8, right: 8),
-                    width: context.width(),
-                    child: DropdownButton(
-                        underline: SizedBox(),
-                        style: primaryTextStyle(),
-                        borderRadius: BorderRadius.circular(8),
-                        isExpanded: true,
-                        value: reason!.isNotEmpty ? reason : null,
-                        items: list.map((e) {
-                          return DropdownMenuItem(
-                            value: e.name,
-                            child: Text(e.name!),
-                          );
-                        }).toList(),
-                        onChanged: (String? val) {
-                          reason = val;
-                          reasonController.text = val!;
-                          setState(() {});
-                        }),
-                  ),
-                  16.height,
-                  Row(
-                    children: [
-                      AppButton(
-                        width: context.width(),
-                        text: widget.orderData!.status == ORDER_DEPARTED ? 'Submit' : 'PicUp Delivery',
-                        textStyle: primaryTextStyle(color: white),
-                        color: colorPrimary,
-                        onTap: () async {
-                          if (widget.orderData!.paymentId == null && widget.orderData!.paymentCollectFrom == PAYMENT_ON_PICKUP) {
-                            paymentConfirmDialog(widget.orderData!);
-                          } else if (widget.orderData!.paymentId == null && widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY) {
-                            paymentConfirmDialog(widget.orderData!);
-                          } else {
-                            saveDelivery();
-                          }
-                        },
-                      ).expand(),
-                      16.width,
-                      AppButton(
-                        width: context.width(),
-                        text: 'Status',
-                        textStyle: primaryTextStyle(color: white),
-                        color: colorPrimary,
-                        onTap: () async {
-                          if (reasonController.text.isEmpty) {
-                            return toast('Please select reason');
-                          }
-                          showDialog(
-                            context: context,
-                            builder: (_) {
-                              return Dialog(
-                                child: Container(
-                                  width: 100,
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      ...statusList.map((e) {
-                                        int index = statusList.indexOf(e);
-                                        //toast(index.toString());
-                                        return RadioListTile<int>(
-                                          title: Text(e),
-                                          value: index,
-                                          groupValue: groupVal,
-                                          onChanged: (int? value) {
-                                            groupVal = value!;
-                                            setState(() {});
-                                          },
-                                        );
-                                      }).toList()
-                                      /* RadioListTile(
-                                        title: Text('Arrived'),
-                                        value: 1,
-                                        groupValue: groupVal,
-                                        onChanged: (v) {
-                                          //
-                                        },
-                                      ),
-                                      RadioListTile(
-                                        title: Text('Delayed'),
-                                        value: 2,
-                                        groupValue: groupVal,
-                                        onChanged: (v) {
-                                          //
-                                        },
-                                      ),
-                                      RadioListTile(
-                                        title: Text('Cancelled'),
-                                        value: 3,
-                                        groupValue: groupVal,
-                                        onChanged: (v) {
-                                          //
-                                        },
-                                      )*/
-                                      ,
-                                      16.height,
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          AppButton(
-                                            color: Colors.red,
-                                            textStyle: boldTextStyle(color: white),
-                                            text: 'Cancel',
-                                            onTap: () {
-                                              finish(context);
-                                            },
-                                          ),
-                                          16.width,
-                                          AppButton(
-                                            color: colorPrimary,
-                                            textStyle: boldTextStyle(color: white),
-                                            text: 'Save',
-                                            onTap: () {
-                                              finish(context);
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                      16.height,
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        },
-                      ).expand(),
-                    ],
-                  ),
-                ],
+                    16.height,
+                    Row(
+                      children: [
+                        AppButton(
+                          width: context.width(),
+                          text: widget.orderData!.status == ORDER_DEPARTED ? 'Submit' : 'PicUp Delivery',
+                          textStyle: primaryTextStyle(color: white),
+                          color: colorPrimary,
+                          onTap: () async {
+                            if (picUpController.text.isEmpty) {
+                              return toast('Please Select Pic Up Time');
+                            }
+                            if (widget.orderData!.status == ORDER_DEPARTED) {
+                              if (deliveryDateController.text.isEmpty) {
+                                return toast('Please Select delivery Time');
+                              }
+                            }
+
+                            if (widget.orderData!.status == ORDER_ACTIVE || widget.orderData!.status == ORDER_ARRIVED) {
+                              if (imageSignature == null) {
+                                return toast('Please PicUp Signature');
+                              }
+                            }
+                            if (widget.orderData!.status == ORDER_DEPARTED) {
+                              if (deliverySignature == null) {
+                                return toast('Please Delivery Signature');
+                              }
+                            }
+                            if (widget.orderData!.paymentId == null && widget.orderData!.paymentCollectFrom == PAYMENT_ON_PICKUP) {
+                              paymentConfirmDialog(widget.orderData!);
+                            } else if (widget.orderData!.paymentId == null && widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY) {
+                              paymentConfirmDialog(widget.orderData!);
+                            } else {
+                              saveDelivery();
+                            }
+                          },
+                        ).expand(),
+                        16.width,
+                        AppButton(
+                          width: context.width(),
+                          text: 'Cancel',
+                          textStyle: primaryTextStyle(color: white),
+                          color: colorPrimary,
+                          onTap: () async {
+                            if (reasonController.text.isEmpty) {
+                              return toast('Please select reason');
+                            }
+                            await updateOrder(orderId: widget.orderData!.id, reason: reasonController.text).then((value) {
+                              toast('Order cancel sucessfully');
+                              finish(context, true);
+                            }).catchError((error) {
+                              log(error);
+                            });
+                          },
+                        ).expand(),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          Observer(
-            builder: (_) => Loader().visible(appStore.isLoading),
-          )
-        ],
+            Observer(
+              builder: (_) => Loader().visible(appStore.isLoading),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import 'main/screens/SplashScreen.dart';
 import 'main/store/AppStore.dart';
@@ -20,6 +22,10 @@ void main() async {
   defaultRadius = 16.0;
   appStore.setLogin(getBoolAsync(IS_LOGGED_IN),isInitializing: true);
   appStore.setUserEmail(getStringAsync(USER_EMAIL),isInitialization: true);
+
+  await OneSignal.shared.setAppId(mOneSignalAppId);
+
+  saveOneSignalPlayerId();
 
   runApp(MyApp());
 }
