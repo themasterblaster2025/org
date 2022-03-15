@@ -4,8 +4,8 @@ import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
 import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
-import 'package:mighty_delivery/user/components/FilterOrderComponent.dart';
-import 'package:mighty_delivery/user/screens/ReturnOrderScreen.dart';
+import 'package:mighty_delivery/main/utils/Widgets.dart';
+import 'package:mighty_delivery/user/screens/OrderTrackingScreen.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
@@ -38,21 +38,22 @@ class OrderFragmentState extends State<OrderFragment> {
         }
       }
     });
-  }
-
-  Future<void> init() async {
-    afterBuildCreated(() {
-      getOrderListApiCall(filterData: FilterAttributeModel());
-    });
     LiveStream().on('UpdateOrderData', (p0) {
       page=1;
-      getOrderListApiCall(filterData: FilterAttributeModel.fromJson(p0 as Map<String, dynamic>));
+      getOrderListApiCall();
       setState(() {});
     });
   }
 
-  getOrderListApiCall({required FilterAttributeModel filterData}) async {
+  Future<void> init() async {
+    afterBuildCreated(() {
+      getOrderListApiCall();
+    });
+  }
+
+  getOrderListApiCall() async {
     appStore.setLoading(true);
+    FilterAttributeModel filterData = FilterAttributeModel.fromJson(getJSONAsync(FILTER_DATA));
     await getOrderList(page: page, orderStatus: filterData.orderStatus, fromDate: filterData.fromDate, toDate: filterData.toDate).then((value) {
       appStore.setLoading(false);
       totalPage = value.pagination!.totalPages.validate(value: 1);
@@ -99,6 +100,7 @@ class OrderFragmentState extends State<OrderFragment> {
                               decoration: boxDecorationRoundedWithShadow(defaultRadius.toInt()),
                               padding: EdgeInsets.all(16),
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
                                     children: [
@@ -106,7 +108,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                       Container(
                                         decoration: BoxDecoration(color: statusColor(item.status.validate()), borderRadius: BorderRadius.circular(defaultRadius)),
                                         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                        child: Text(item.status.validate(value: "draft"), style: primaryTextStyle(color: white)),
+                                        child: Text(orderStatus(item.status.validate()).validate(), style: primaryTextStyle(color: white)),
                                       ),
                                     ],
                                   ),
@@ -151,17 +153,15 @@ class OrderFragmentState extends State<OrderFragment> {
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text('Picked at 4:45', style: secondaryTextStyle()),
-                                          4.height,
+                                          if(item.pickupDatetime!=null) Text('Picked at ${printDate(item.pickupDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
                                           Text('${item.pickupPoint!.address}', style: primaryTextStyle()),
-                                          4.height.visible(item.pickupPoint!.contactNumber != null),
-                                          Row(
+                                          if(item.pickupPoint!.contactNumber != null) Row(
                                             children: [
                                               Icon(Icons.call, color: Colors.green, size: 18),
                                               8.width,
-                                              Text('${item.pickupPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
+                                              Text('${item.pickupPoint!.contactNumber}', style: primaryTextStyle()),
                                             ],
-                                          ).visible(item.pickupPoint!.contactNumber != null),
+                                          ).paddingOnly(top: 8),
                                         ],
                                       ).expand(),
                                     ],
@@ -180,17 +180,15 @@ class OrderFragmentState extends State<OrderFragment> {
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text('Delivered at 4:53', style: secondaryTextStyle()),
-                                          4.height,
+                                          if(item.deliveryDatetime!=null) Text('Delivered at ${printDate(item.deliveryDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
                                           Text('${item.deliveryPoint!.address}', style: primaryTextStyle()),
-                                          4.height.visible(item.deliveryPoint!.contactNumber != null),
-                                          Row(
+                                          if(item.deliveryPoint!.contactNumber != null) Row(
                                             children: [
                                               Icon(Icons.call, color: Colors.green, size: 18),
                                               8.width,
                                               Text('${item.deliveryPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
                                             ],
-                                          ).visible(item.deliveryPoint!.contactNumber != null),
+                                          ).paddingOnly(top: 8),
                                         ],
                                       ).expand(),
                                     ],
@@ -203,6 +201,10 @@ class OrderFragmentState extends State<OrderFragment> {
                                       Text('${item.paymentStatus.validate(value: PAYMENT_PENDING)}',style: primaryTextStyle(color: paymentStatusColor(item.paymentStatus.validate(value: PAYMENT_PENDING)))),
                                     ],
                                   ),
+                                  16.height,
+                                  commonButton('Track', (){
+                                    OrderTrackingScreen(orderData:item).launch(context);
+                                  }).visible(item.status== ORDER_PICKED_UP || item.status== ORDER_DEPARTED || item.status== ORDER_ARRIVED)
                                 ],
                               ),
                             ),

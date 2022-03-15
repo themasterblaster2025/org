@@ -170,6 +170,8 @@ String? orderStatus(String orderStatus) {
     return 'Completed';
   } else if (orderStatus == ORDER_CANCELLED) {
     return 'Cancelled';
+  }else if (orderStatus == ORDER_CREATE) {
+    return 'Create';
   }
 }
 

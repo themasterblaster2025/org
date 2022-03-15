@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/models/CityListModel.dart';
 import 'package:mighty_delivery/main/models/CountryListModel.dart';
@@ -8,7 +7,6 @@ import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
-import 'package:mighty_delivery/user/components/PaymentScreen.dart';
 import 'package:mighty_delivery/user/screens/ReturnOrderScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:timeline_tile/timeline_tile.dart';
@@ -72,63 +70,85 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('#${widget.orderData.id}', style: boldTextStyle()),
-                      Text('${widget.orderData.status}', style: boldTextStyle(color: statusColor(widget.orderData.status ?? ""))),
+                      Text('${orderStatus(widget.orderData.status.validate(value: ORDER_CREATE))}', style: boldTextStyle(color: statusColor(widget.orderData.status ?? ""))),
                     ],
                   ),
                   8.height,
                   Text(printDate(widget.orderData.date!), style: secondaryTextStyle()),
                   16.height,
-                  Text('Payment Method', style: secondaryTextStyle(size: 16)),
-                  8.height,
-                  Text('Cash on Delivery', style: boldTextStyle()),
-                  Row(
+                  Column(
                     children: [
-                      Column(
-                        children: [
-                          TimelineTile(
-                            alignment: TimelineAlign.start,
-                            isFirst: true,
-                            indicatorStyle: IndicatorStyle(width: 15, color: colorPrimary),
-                            afterLineStyle: LineStyle(color: colorPrimary, thickness: 3),
-                            endChild: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Picked at ${printDate(DateTime.now().toString())}', style: secondaryTextStyle(size: 16)),
-                                8.height,
-                                Text('${widget.orderData.pickupPoint!.address}', style: boldTextStyle()),
-                              ],
-                            ).paddingAll(16),
-                          ),
-                          TimelineTile(
-                            alignment: TimelineAlign.start,
-                            isLast: true,
-                            indicatorStyle: IndicatorStyle(width: 15, color: colorPrimary),
-                            beforeLineStyle: LineStyle(color: colorPrimary, thickness: 3),
-                            endChild: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Delivered at ${printDate(DateTime.now().toString())}', style: secondaryTextStyle(size: 16)),
-                                8.height,
-                                Text('${widget.orderData.deliveryPoint!.address}', style: boldTextStyle()),
-                              ],
-                            ).paddingAll(16),
-                          ),
-                        ],
-                      ).expand(),
-                      Icon(
-                        Icons.navigate_next,
-                        color: Colors.grey,
-                      ).onTap(() {
-                        TrackOrderScreen().launch(context);
-                      }),
+                      TimelineTile(
+                        alignment: TimelineAlign.start,
+                        isFirst: true,
+                        indicatorStyle: IndicatorStyle(width: 15, color: colorPrimary),
+                        afterLineStyle: LineStyle(color: colorPrimary, thickness: 3),
+                        endChild: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (widget.orderData.pickupDatetime != null) Text('Picked at ${printDate(widget.orderData.pickupDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
+                            Text('${widget.orderData.pickupPoint!.address}', style: primaryTextStyle()),
+                            if (widget.orderData.pickupPoint!.contactNumber != null)
+                              Row(
+                                children: [
+                                  Icon(Icons.call, color: Colors.green, size: 18),
+                                  8.width,
+                                  Text('${widget.orderData.pickupPoint!.contactNumber}', style: secondaryTextStyle()),
+                                ],
+                              ).paddingOnly(top: 8),
+                          ],
+                        ).paddingAll(16),
+                      ),
+                      TimelineTile(
+                        alignment: TimelineAlign.start,
+                        isLast: true,
+                        indicatorStyle: IndicatorStyle(width: 15, color: colorPrimary),
+                        beforeLineStyle: LineStyle(color: colorPrimary, thickness: 3),
+                        endChild: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (widget.orderData.deliveryDatetime != null) Text('Delivered at ${printDate(widget.orderData.deliveryDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
+                            Text('${widget.orderData.deliveryPoint!.address}', style: primaryTextStyle()),
+                            if (widget.orderData.deliveryPoint!.contactNumber != null)
+                              Row(
+                                children: [
+                                  Icon(Icons.call, color: Colors.green, size: 18),
+                                  8.width,
+                                  Text('${widget.orderData.deliveryPoint!.contactNumber}', style: secondaryTextStyle()),
+                                ],
+                              ).paddingOnly(top: 8),
+                          ],
+                        ).paddingAll(16),
+                      ),
                     ],
                   ),
                   16.height,
                   Text('Distance', style: secondaryTextStyle(size: 16)),
                   8.height,
                   Text('${widget.orderData.totalDistance} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).distance_type}', style: boldTextStyle()),
+                  16.height,
+                  Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Country', style: secondaryTextStyle(size: 16)),
+                          8.height,
+                          Text('${widget.orderData.countryName}', style: boldTextStyle()),
+                        ],
+                      ).expand(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('City', style: secondaryTextStyle(size: 16)),
+                          8.height,
+                          Text('${widget.orderData.cityName}', style: boldTextStyle()),
+                        ],
+                      ).expand()
+                    ],
+                  ),
                   Divider(height: 30, thickness: 1),
-                  Text('Package details', style: boldTextStyle(size: 18)),
+                  Text('Package details', style: boldTextStyle(size: 16)),
                   16.height,
                   Text('Parcel Type', style: secondaryTextStyle(size: 16)),
                   8.height,
