@@ -1,5 +1,6 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
@@ -18,20 +19,20 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController fromDateController = TextEditingController();
   TextEditingController toDateController = TextEditingController();
+  FilterAttributeModel? filterData;
 
   DateTime? fromDate, toDate;
   List<String> statusList = [
     ORDER_CREATE,
     ORDER_ACTIVE,
     ORDER_CANCELLED,
-    ORDER_DELAYED,
     ORDER_ASSIGNED,
     ORDER_ARRIVED,
     ORDER_PICKED_UP,
     ORDER_COMPLETED,
     ORDER_DEPARTED,
   ];
-  int? selectedStatusIndex;
+  String? selectedStatus;
 
   @override
   void initState() {
@@ -40,7 +41,22 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
   }
 
   Future<void> init() async {
-    //
+    filterData = FilterAttributeModel.fromJson(getJSONAsync(FILTER_DATA));
+    if (filterData != null) {
+      selectedStatus = filterData!.orderStatus;
+      if (filterData!.fromDate != null) {
+        fromDate = DateTime.tryParse(filterData!.fromDate!);
+        if (fromDate != null) {
+          fromDateController.text = DateFormat('MMM dd,yyyy').format(fromDate!);
+        }
+      }
+      if (filterData!.toDate != null) {
+        toDate = DateTime.tryParse(filterData!.toDate!);
+        if(toDate!=null) {
+          toDateController.text = DateFormat('MMM dd,yyyy').format(toDate!);
+        }
+      }
+    }
   }
 
   @override
@@ -72,7 +88,7 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
                   ],
                 ),
                 Text('Reset', style: primaryTextStyle()).onTap(() {
-                  selectedStatusIndex = null;
+                  selectedStatus = null;
                   fromDate = null;
                   toDate = null;
                   fromDateController.clear();
@@ -89,20 +105,19 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
               spacing: 8,
               runSpacing: 8,
               children: statusList.map((item) {
-                int index = statusList.indexOf(item);
                 return Chip(
-                  backgroundColor: selectedStatusIndex == index ? colorPrimary : Colors.white,
-                  label: Text(item),
+                  backgroundColor: selectedStatus == item ? colorPrimary : Colors.white,
+                  label: Text(orderStatus(item).validate()),
                   elevation: 0,
-                  labelStyle: primaryTextStyle(color: selectedStatusIndex == index ? white : Colors.grey),
+                  labelStyle: primaryTextStyle(color: selectedStatus == item ? white : Colors.grey),
                   padding: EdgeInsets.zero,
                   labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(defaultRadius),
-                    side: BorderSide(color: selectedStatusIndex == index ? colorPrimary : borderColor),
+                    side: BorderSide(color: selectedStatus == item ? colorPrimary : borderColor),
                   ),
                 ).onTap(() {
-                  selectedStatusIndex = index;
+                  selectedStatus = item;
                   setState(() {});
                 });
               }).toList(),
@@ -121,6 +136,7 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
                   firstDate: DateTime(2010),
                   onChanged: (value) {
                     fromDate = DateTime.parse(value);
+                    fromDateController.text = value;
                     setState(() {});
                   },
                   decoration: commonInputDecoration(suffixIcon: Icons.calendar_today),
@@ -139,10 +155,11 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
                   firstDate: DateTime(2010),
                   onChanged: (value) {
                     toDate = DateTime.parse(value);
+                    toDateController.text = value;
                     setState(() {});
                   },
                   validator: (value) {
-                    if(fromDate!=null && toDate!=null) {
+                    if (fromDate != null && toDate != null) {
                       Duration difference = fromDate!.difference(toDate!);
                       if (difference.inDays >= 0) {
                         return 'To Date must after From Date';
@@ -155,13 +172,10 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
             ),
             16.height,
             commonButton('Apply Filters', () {
-              if(_formKey.currentState!.validate()){
+              if (_formKey.currentState!.validate()) {
                 finish(context);
-                String? status;
-                if(selectedStatusIndex!=null){
-                  status = statusList[selectedStatusIndex!];
-                }
-                LiveStream().emit("UpdateOrderData", FilterAttributeModel(orderStatus: status, fromDate: fromDate.toString(), toDate: toDate.toString()).toJson());
+                setValue(FILTER_DATA, FilterAttributeModel(orderStatus: selectedStatus, fromDate: fromDate.toString(), toDate: toDate.toString()).toJson());
+                LiveStream().emit("UpdateOrderData");
               }
             }, width: context.width()),
           ],

@@ -106,6 +106,22 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
     }).catchError((error){});
   }
 
+  Future<void> updateCountryCityApiCall() async {
+    appStore.setLoading(true);
+    await updateCountryCity(countryId: selectedCountry, cityId: selectedCity).then((value) {
+      appStore.setLoading(false);
+      if (widget.isBack) {
+        finish(context);
+        widget.onUpdate!.call();
+      } else {
+        DashboardScreen().launch(context);
+      }
+    }).catchError((error) {
+      appStore.setLoading(false);
+      log(error);
+    });
+  }
+
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
@@ -198,13 +214,7 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                                       selectedCity = mData.id!;
                                       setValue(CITY_ID, selectedCity);
                                       setValue(CITY_DATA, mData.toJson());
-                                      setState(() {});
-                                      if (widget.isBack) {
-                                        finish(context);
-                                        widget.onUpdate!.call();
-                                      } else {
-                                        DashboardScreen().launch(context);
-                                      }
+                                      updateCountryCityApiCall();
                                     },
                                   );
                                 },
