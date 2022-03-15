@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
@@ -10,6 +11,7 @@ import 'package:mighty_delivery/main/models/CountryDetailModel.dart';
 import 'package:mighty_delivery/main/models/CountryListModel.dart';
 import 'package:mighty_delivery/main/models/LDBaseResponse.dart';
 import 'package:mighty_delivery/main/models/LoginResponse.dart';
+import 'package:mighty_delivery/main/models/NotificationModel.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
 import 'package:mighty_delivery/main/models/ParcelTypeListModel.dart';
 import 'package:mighty_delivery/main/models/PaymentGatewayListModel.dart';
@@ -192,9 +194,8 @@ Future updateProfile({String? userName, String? name, String? userEmail, String?
   });
 }
 
-
-Future<UserData> getUserDetail(int id)async{
-  return UserData.fromJson(await handleResponse(await buildHttpResponse('user-detail?id=$id',method: HttpMethod.GET)).then((value) => value['data']));
+Future<UserData> getUserDetail(int id) async {
+  return UserData.fromJson(await handleResponse(await buildHttpResponse('user-detail?id=$id', method: HttpMethod.GET)).then((value) => value['data']));
 }
 
 /// Create Order Api
@@ -220,8 +221,8 @@ Future<CountryDetailModel> getCountryDetail(int id) async {
 }
 
 Future<CityListModel> getCityList({required int CountryId, String? name, int? page}) async {
-  return CityListModel.fromJson(
-      await handleResponse(await buildHttpResponse(name != null ? 'city-list?country_id=$CountryId&name=$name&page=$page&per_page=-1' : 'city-list?country_id=$CountryId&page=$page&per_page=-1', method: HttpMethod.GET)));
+  return CityListModel.fromJson(await handleResponse(
+      await buildHttpResponse(name != null ? 'city-list?country_id=$CountryId&name=$name&page=$page&per_page=-1' : 'city-list?country_id=$CountryId&page=$page&per_page=-1', method: HttpMethod.GET)));
 }
 
 Future<CityDetailModel> getCityDetail(int id) async {
@@ -335,4 +336,8 @@ Future updateLocation({String? userName, String? userEmail, String? latitude, St
   }, onError: (error) {
     toast(error.toString());
   });
+}
+
+Future<NotificationModel> getNotification({required int page}) async {
+  return NotificationModel.fromJson(await handleResponse(await buildHttpResponse('notification-list?page=$page', method: HttpMethod.POST)));
 }

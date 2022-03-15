@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mighty_delivery/delivery/fragment/DProfileFragment.dart';
 import 'package:mighty_delivery/delivery/screens/CreateTabScreen.dart';
+import 'package:mighty_delivery/delivery/screens/NotificationScreen.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
@@ -40,7 +41,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
           actions: [
             IconButton(
               onPressed: () {
-                //
+                NotificationScreen().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
               },
               icon: Icon(Icons.notification_important_outlined),
             ),
