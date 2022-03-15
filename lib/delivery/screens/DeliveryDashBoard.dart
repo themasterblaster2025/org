@@ -40,13 +40,26 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
           actions: [
             IconButton(
               onPressed: () {
+                //
+              },
+              icon: Icon(Icons.notification_important_outlined),
+            ),
+            4.width,
+            IconButton(
+              onPressed: () {
                 DProfileFragment().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
               },
               icon: Icon(Icons.settings),
-            )
+            ),
           ],
           bottom: TabBar(
             isScrollable: true,
+            unselectedLabelColor: Colors.white70,
+            indicatorColor: colorPrimary,
+            labelColor: Colors.white,
+            indicatorSize: TabBarIndicatorSize.label,
+            unselectedLabelStyle: secondaryTextStyle(),
+            labelStyle: boldTextStyle(),
             tabs: statusList.map((e) {
               return Tab(text: orderStatus(e));
             }).toList(),

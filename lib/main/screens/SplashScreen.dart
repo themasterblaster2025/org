@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/delivery/screens/DDashboardScreen.dart';
 import 'package:mighty_delivery/delivery/screens/DeliveryDashBoard.dart';
 import 'package:mighty_delivery/main/screens/WalkThroughScreen.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
