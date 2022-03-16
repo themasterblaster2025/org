@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
@@ -194,8 +193,9 @@ Future updateProfile({String? userName, String? name, String? userEmail, String?
   });
 }
 
-Future<UserData> getUserDetail(int id) async {
-  return UserData.fromJson(await handleResponse(await buildHttpResponse('user-detail?id=$id', method: HttpMethod.GET)).then((value) => value['data']));
+
+Future<UserData> getUserDetail(int id)async{
+  return UserData.fromJson(await handleResponse(await buildHttpResponse('user-detail?id=$id',method: HttpMethod.GET)).then((value) => value['data']));
 }
 
 /// Create Order Api
@@ -205,6 +205,10 @@ Future<LDBaseResponse> createOrder(Map request) async {
 
 Future<LDBaseResponse> deleteOrder(int id) async {
   return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('order-delete/$id', method: HttpMethod.POST)));
+}
+
+Future<OrderData> getOrderDetails(int id)async{
+  return OrderData.fromJson(await handleResponse(await buildHttpResponse('order-detail?id=$id',method: HttpMethod.GET)).then((value) => value['data']));
 }
 
 // ParcelType Api
@@ -220,9 +224,9 @@ Future<CountryDetailModel> getCountryDetail(int id) async {
   return CountryDetailModel.fromJson(await handleResponse(await buildHttpResponse('country-detail?id=$id', method: HttpMethod.GET)));
 }
 
-Future<CityListModel> getCityList({required int CountryId, String? name, int? page}) async {
-  return CityListModel.fromJson(await handleResponse(
-      await buildHttpResponse(name != null ? 'city-list?country_id=$CountryId&name=$name&page=$page&per_page=-1' : 'city-list?country_id=$CountryId&page=$page&per_page=-1', method: HttpMethod.GET)));
+Future<CityListModel> getCityList({required int CountryId, String? name}) async {
+  return CityListModel.fromJson(
+      await handleResponse(await buildHttpResponse(name != null ? 'city-list?country_id=$CountryId&name=$name&per_page=-1' : 'city-list?country_id=$CountryId&per_page=-1', method: HttpMethod.GET)));
 }
 
 Future<CityDetailModel> getCityDetail(int id) async {

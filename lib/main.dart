@@ -19,7 +19,6 @@ void main() async {
   });
   await initialize();
 
-  defaultRadius = 16.0;
   appStore.setLogin(getBoolAsync(IS_LOGGED_IN),isInitializing: true);
   appStore.setUserEmail(getStringAsync(USER_EMAIL),isInitialization: true);
 

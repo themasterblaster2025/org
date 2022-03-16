@@ -4,6 +4,9 @@ import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/models/NotificationModel.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
+import 'package:mighty_delivery/main/utils/Common.dart';
+import 'package:mighty_delivery/main/utils/Constants.dart';
+import 'package:mighty_delivery/user/screens/OrderDetailScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
@@ -40,9 +43,10 @@ class NotificationScreenState extends State<NotificationScreen> {
   }
 
   void init() async {
+    print('call');
     getNotification(page: currentPage).then((value) {
       appStore.setLoading(false);
-
+      appStore.setAllUnreadCount(value.all_unread_count.validate());
       mIsLastPage = value.notification_data!.length < currentPage;
       if (currentPage == 1) {
         notificationData.clear();
@@ -67,40 +71,62 @@ class NotificationScreenState extends State<NotificationScreen> {
       body: Stack(
         children: [
           BodyCornerWidget(
-            child: ListView.builder(
+            child: ListView.separated(
               controller: scrollController,
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: EdgeInsets.zero,
               itemCount: notificationData.length,
               itemBuilder: (_, index) {
                 NotificationData data = notificationData[index];
                 return Container(
-                  padding: EdgeInsets.all(8),
-                  margin: EdgeInsets.only(top: 8, bottom: 8),
-                  decoration: BoxDecoration(color: Colors.grey.withOpacity(0.2), borderRadius: BorderRadius.circular(defaultRadius)),
+                  padding: EdgeInsets.all(12),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.network(
-                        'https://w7.pngwing.com/pngs/884/454/png-transparent-car-truck-delivery-transport-logistics-delivery-truck.png',
-                        fit: BoxFit.cover,
+                      Container(decoration: BoxDecoration(shape: BoxShape.circle, color: data.read_at != null ? Colors.transparent : colorPrimary), width: 10, height: 10),
+                      8.width,
+                      Container(
                         height: 50,
                         width: 50,
-                      ).cornerRadiusWithClipRRect(25),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: colorPrimary.withOpacity(0.15),
+                        ),
+                        child: Icon(notificationTypeIcon(), color: colorPrimary),
+                      ),
                       16.width,
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('# ${data.data!.id.validate()}', style: secondaryTextStyle()),
-                          2.height,
-                          Text('Courier arrived', style: boldTextStyle()),
-                          4.height,
-                          Text('New order has been created.', style: secondaryTextStyle()),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('${data.data!.subject}', style: boldTextStyle()).expand(),
+                              8.width,
+                              Text(data.created_at.validate(), style: secondaryTextStyle()),
+                            ],
+                          ),
+                          8.height,
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('${data.data!.message}', style: primaryTextStyle(size: 14)).expand(),
+                              8.width,
+                              Text('#${data.data!.id}', style: secondaryTextStyle()),
+                            ],
+                          ),
                         ],
                       ).expand(),
-                      Text(data.created_at.validate(), style: secondaryTextStyle()),
                     ],
-                  ),
+                  ).onTap(() async {
+                    bool? res = await OrderDetailScreen(orderId: data.data!.id.validate()).launch(context);
+                    if (res!) {
+                      currentPage = 1;
+                      init();
+                    }
+                  }),
                 );
+              },
+              separatorBuilder: (context, index) {
+                return Divider();
               },
             ),
           ),

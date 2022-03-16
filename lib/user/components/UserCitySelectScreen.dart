@@ -32,24 +32,11 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
   List<CountryModel> countryData = [];
   List<CityModel> cityData = [];
 
-  ScrollController scrollController = ScrollController();
-  int page = 1;
-  int totalPage = 1;
-  bool isLastPage = false;
-
   @override
   void initState() {
     super.initState();
     afterBuildCreated(() {
       init();
-      scrollController.addListener(() {
-        if (scrollController.position.pixels == scrollController.position.maxScrollExtent && !appStore.isLoading) {
-          if (page < totalPage) {
-            page++;
-            init();
-          }
-        }
-      });
     });
   }
 
@@ -64,7 +51,7 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
       countryData = value.data!;
       selectedCountry = countryData[0].id!;
       countryData.forEach((element) {
-        if(element.id! == getIntAsync(COUNTRY_ID)){
+        if (element.id! == getIntAsync(COUNTRY_ID)) {
           selectedCountry = getIntAsync(COUNTRY_ID);
         }
       });
@@ -80,16 +67,12 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
 
   getCityApiCall({String? name}) async {
     appStore.setLoading(true);
-    await getCityList(CountryId: selectedCountry!, name: name, page: page).then((value) {
+    await getCityList(CountryId: selectedCountry!, name: name).then((value) {
       appStore.setLoading(false);
-      totalPage = value.pagination!.totalPages.validate(value: 1);
-      isLastPage = false;
-      if (page == 1) {
-        cityData.clear();
-      }
+      cityData.clear();
       cityData.addAll(value.data!);
       cityData.forEach((element) {
-        if(element.id! == getIntAsync(CITY_ID)){
+        if (element.id! == getIntAsync(CITY_ID)) {
           selectedCity = getIntAsync(CITY_ID);
         }
       });
@@ -103,7 +86,7 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
   getCountryDetailApiCall() async {
     await getCountryDetail(selectedCountry!).then((value) {
       setValue(COUNTRY_DATA, value.data!.toJson());
-    }).catchError((error){});
+    }).catchError((error) {});
   }
 
   Future<void> updateCountryCityApiCall() async {
@@ -141,97 +124,91 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
       child: Scaffold(
         appBar: appBarWidget('Select Region', color: colorPrimary, textColor: white, elevation: 0, showBack: widget.isBack),
         body: BodyCornerWidget(
-          child: Stack(
-            children: [
-              SingleChildScrollView(
-                controller: scrollController,
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Lottie.asset('assets/delivery.json', height: 200, fit: BoxFit.contain, width: context.width()),
-                    16.height,
-                    Container(
-                      padding: EdgeInsets.all(16),
-                      decoration: containerDecoration(),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+          child: SingleChildScrollView(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Lottie.asset('assets/delivery.json', height: 200, fit: BoxFit.contain, width: context.width()),
+                16.height,
+                Container(
+                  padding: EdgeInsets.all(16),
+                  decoration: containerDecoration(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(child: Text('Country', style: boldTextStyle())),
-                              Expanded(
-                                child: DropdownButtonFormField<int>(
-                                  value: selectedCountry,
-                                  decoration: commonInputDecoration(),
-                                  items: countryData.map<DropdownMenuItem<int>>((item) {
-                                    return DropdownMenuItem(
-                                      value: item.id,
-                                      child: Text(item.name ?? ''),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    selectedCountry = value!;
-                                    setValue(COUNTRY_ID, selectedCountry);
-                                    getCountryDetailApiCall();
-                                    selectedCity = null;
-                                    getCityApiCall();
-                                    setState(() {});
-                                  },
-                                  validator: (value) {
-                                    if (selectedCountry == null) return errorThisFieldRequired;
-                                    return null;
-                                  },
-                                ),
-                              ),
-                            ],
+                          Expanded(child: Text('Country', style: boldTextStyle())),
+                          Expanded(
+                            child: DropdownButtonFormField<int>(
+                              value: selectedCountry,
+                              decoration: commonInputDecoration(),
+                              items: countryData.map<DropdownMenuItem<int>>((item) {
+                                return DropdownMenuItem(
+                                  value: item.id,
+                                  child: Text(item.name ?? ''),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                selectedCountry = value!;
+                                setValue(COUNTRY_ID, selectedCountry);
+                                getCountryDetailApiCall();
+                                selectedCity = null;
+                                getCityApiCall();
+                                setState(() {});
+                              },
+                              validator: (value) {
+                                if (selectedCountry == null) return errorThisFieldRequired;
+                                return null;
+                              },
+                            ),
                           ),
-                          16.height,
-                          Text('City', style: boldTextStyle()),
-                          16.height,
-                          cityData.isNotEmpty
-                              ? Column(
-                            children: [
-                              AppTextField(
-                                controller: searchCityController,
-                                textFieldType: TextFieldType.OTHER,
-                                decoration: commonInputDecoration(hintText: 'Search City', suffixIcon: Icons.search),
-                                onChanged: (value) {
-                                  getCityApiCall(name: value);
-                                },
-                              ),
-                              ListView.builder(
-                                itemCount: cityData.length,
-                                physics: NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  CityModel mData = cityData[index];
-                                  return ListTile(
-                                    contentPadding: EdgeInsets.zero,
-                                    title: Text(mData.name!, style: TextStyle(color: selectedCity == mData.id ? colorPrimary : Colors.black)),
-                                    onTap: () {
-                                      selectedCity = mData.id!;
-                                      setValue(CITY_ID, selectedCity);
-                                      setValue(CITY_DATA, mData.toJson());
-                                      updateCountryCityApiCall();
-                                    },
-                                  );
-                                },
-                              ),
-                            ],
-                          )
-                              : Text('No City Found', style: primaryTextStyle()),
                         ],
                       ),
-                    ),
-                  ],
+                      16.height,
+                      Text('City', style: boldTextStyle()),
+                      16.height,
+                      cityData.isNotEmpty
+                          ? Column(
+                              children: [
+                                AppTextField(
+                                  controller: searchCityController,
+                                  textFieldType: TextFieldType.OTHER,
+                                  decoration: commonInputDecoration(hintText: 'Search City', suffixIcon: Icons.search),
+                                  onChanged: (value) {
+                                    getCityApiCall(name: value);
+                                  },
+                                ),
+                                ListView.builder(
+                                  itemCount: cityData.length,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    CityModel mData = cityData[index];
+                                    return ListTile(
+                                      contentPadding: EdgeInsets.zero,
+                                      title: Text(mData.name!, style: TextStyle(color: selectedCity == mData.id ? colorPrimary : Colors.black)),
+                                      onTap: () {
+                                        selectedCity = mData.id!;
+                                        setValue(CITY_ID, selectedCity);
+                                        setValue(CITY_DATA, mData.toJson());
+                                        updateCountryCityApiCall();
+                                      },
+                                    );
+                                  },
+                                ),
+                              ],
+                            )
+                          : appStore.isLoading
+                              ? loaderWidget()
+                              : Text('No City Found', style: primaryTextStyle()),
+                    ],
+                  ),
                 ),
-              ),
-              Observer(
-                builder: (context) => loaderWidget().visible(appStore.isLoading),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

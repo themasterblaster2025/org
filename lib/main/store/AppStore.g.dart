@@ -54,6 +54,21 @@ mixin _$AppStore on _AppStore, Store {
     });
   }
 
+  final _$allUnreadCountAtom = Atom(name: '_AppStore.allUnreadCount');
+
+  @override
+  int get allUnreadCount {
+    _$allUnreadCountAtom.reportRead();
+    return super.allUnreadCount;
+  }
+
+  @override
+  set allUnreadCount(int value) {
+    _$allUnreadCountAtom.reportWrite(value, super.allUnreadCount, () {
+      super.allUnreadCount = value;
+    });
+  }
+
   final _$setLoadingAsyncAction = AsyncAction('_AppStore.setLoading');
 
   @override
@@ -77,12 +92,22 @@ mixin _$AppStore on _AppStore, Store {
         .run(() => super.setUserEmail(val, isInitialization: isInitialization));
   }
 
+  final _$setAllUnreadCountAsyncAction =
+      AsyncAction('_AppStore.setAllUnreadCount');
+
+  @override
+  Future<void> setAllUnreadCount(int val) {
+    return _$setAllUnreadCountAsyncAction
+        .run(() => super.setAllUnreadCount(val));
+  }
+
   @override
   String toString() {
     return '''
 isLoading: ${isLoading},
 isLoggedIn: ${isLoggedIn},
-userEmail: ${userEmail}
+userEmail: ${userEmail},
+allUnreadCount: ${allUnreadCount}
     ''';
   }
 }

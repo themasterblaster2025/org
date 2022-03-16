@@ -22,7 +22,7 @@ class NotificationModel {
 }
 
 class NotificationData {
-  OrderData? data;
+  NotificationOrderData? data;
   String? created_at;
   String? id;
   String? read_at;
@@ -31,7 +31,7 @@ class NotificationData {
 
   factory NotificationData.fromJson(Map<String, dynamic> json) {
     return NotificationData(
-      data: json['data'] != null ? OrderData.fromJson(json['data']) : null,
+      data: json['data'] != null ? NotificationOrderData.fromJson(json['data']) : null,
       created_at: json['created_at'],
       id: json['id'],
       read_at: json['read_at'],
@@ -50,16 +50,16 @@ class NotificationData {
   }
 }
 
-class OrderData {
+class NotificationOrderData {
   int? id;
   String? message;
   String? subject;
   String? type;
 
-  OrderData({this.id, this.message, this.subject, this.type});
+  NotificationOrderData({this.id, this.message, this.subject, this.type});
 
-  factory OrderData.fromJson(Map<String, dynamic> json) {
-    return OrderData(
+  factory NotificationOrderData.fromJson(Map<String, dynamic> json) {
+    return NotificationOrderData(
       id: json['id'],
       message: json['message'],
       subject: json['subject'],

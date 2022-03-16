@@ -201,3 +201,8 @@ Future<void> saveOneSignalPlayerId() async {
     if (value!.userId.validate().isNotEmpty) await setValue(PLAYER_ID, value.userId.validate());
   });
 }
+
+IconData notificationTypeIcon({String? type}){
+  IconData iconData =  Icons.notifications_none;
+  return iconData;
+}

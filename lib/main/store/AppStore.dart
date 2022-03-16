@@ -16,6 +16,9 @@ abstract class _AppStore with Store{
   @observable
   String userEmail = '';
 
+  @observable
+  int allUnreadCount = 0;
+
   @action
   Future<void> setLoading(bool val) async {
     isLoading = val;
@@ -27,9 +30,13 @@ abstract class _AppStore with Store{
     if (!isInitializing) await setValue(IS_LOGGED_IN, val);
   }
 
-
   @action
   Future<void> setUserEmail(String val, {bool isInitialization = false}) async {
     userEmail = val;
+  }
+
+  @action
+  Future<void> setAllUnreadCount(int val) async {
+    allUnreadCount = val;
   }
 }

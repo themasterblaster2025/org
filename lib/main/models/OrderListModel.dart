@@ -3,8 +3,9 @@ import 'package:mighty_delivery/main/models/PaginationModel.dart';
 class OrderListModel {
   PaginationModel? pagination;
   List<OrderData>? data;
+  int? allUnreadCount;
 
-  OrderListModel({this.pagination, this.data});
+  OrderListModel({this.pagination, this.data, this.allUnreadCount});
 
   OrderListModel.fromJson(Map<String, dynamic> json) {
     pagination = json['pagination'] != null ? new PaginationModel.fromJson(json['pagination']) : null;
@@ -14,6 +15,7 @@ class OrderListModel {
         data!.add(new OrderData.fromJson(v));
       });
     }
+    allUnreadCount = json['all_unread_count'];
   }
 
   Map<String, dynamic> toJson() {
@@ -24,6 +26,7 @@ class OrderListModel {
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
+    data['all_unread_count'] = this.allUnreadCount;
     return data;
   }
 }
@@ -37,7 +40,7 @@ class PickupPoint {
   String? startTime;
   String? endTime;
 
-  PickupPoint({this.address, this.latitude, this.longitude, this.description, this.contactNumber,this.startTime,this.endTime});
+  PickupPoint({this.address, this.latitude, this.longitude, this.description, this.contactNumber, this.startTime, this.endTime});
 
   PickupPoint.fromJson(Map<String, dynamic> json) {
     address = json['address'];
@@ -95,6 +98,7 @@ class OrderData {
   String? pickupTimeSignature;
   String? deliveryTimeSignature;
   String? deletedAt;
+  bool? returnOrderId;
 
   OrderData({
     this.id,
@@ -129,6 +133,7 @@ class OrderData {
     this.pickupTimeSignature,
     this.deliveryTimeSignature,
     this.deletedAt,
+    this.returnOrderId,
   });
 
   OrderData.fromJson(Map<String, dynamic> json) {
@@ -164,6 +169,7 @@ class OrderData {
     pickupTimeSignature = json['pickup_time_signature'];
     deliveryTimeSignature = json['delivery_time_signature'];
     deletedAt = json['deleted_at'];
+    returnOrderId = json['return_order_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -206,6 +212,7 @@ class OrderData {
     data['pickup_time_signature'] = this.pickupTimeSignature;
     data['delivery_time_signature'] = this.deliveryTimeSignature;
     data['deleted_at'] = this.deletedAt;
+    data['return_order_id'] = this.returnOrderId;
     return data;
   }
 }

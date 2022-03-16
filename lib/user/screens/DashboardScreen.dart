@@ -1,5 +1,8 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mighty_delivery/main.dart';
+import 'package:mighty_delivery/main/screens/NotificationScreen.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/models/CityListModel.dart';
 import 'package:mighty_delivery/main/models/models.dart';
@@ -60,6 +63,32 @@ class DashboardScreenState extends State<DashboardScreen> {
                   setState(() {});
                 }).launch(context);
           }).paddingOnly(right: 16),
+          Stack(
+            children: [
+              Align(
+                alignment: AlignmentDirectional.center,
+                child: Icon(Icons.notifications),
+              ),
+              Positioned(
+                right: 2,
+                top: 8,
+                child: Observer(builder: (context) {
+                  return Container(
+                    height: 20,
+                    width: 20,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Colors.orange,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text('${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}', style: primaryTextStyle(size: 8, color: Colors.white)),
+                  );
+                }),
+              ).visible(appStore.allUnreadCount != 0),
+            ],
+          ).withWidth(40).onTap(() {
+            NotificationScreen().launch(context);
+          }).visible(currentIndex == 0),
           IconButton(
             icon: ImageIcon(AssetImage('assets/icons/ic_filter.png')),
             onPressed: () {

@@ -4,7 +4,6 @@ import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
 import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
-import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:mighty_delivery/user/screens/OrderTrackingScreen.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
@@ -39,7 +38,7 @@ class OrderFragmentState extends State<OrderFragment> {
       }
     });
     LiveStream().on('UpdateOrderData', (p0) {
-      page=1;
+      page = 1;
       getOrderListApiCall();
       setState(() {});
     });
@@ -56,6 +55,7 @@ class OrderFragmentState extends State<OrderFragment> {
     FilterAttributeModel filterData = FilterAttributeModel.fromJson(getJSONAsync(FILTER_DATA));
     await getOrderList(page: page, orderStatus: filterData.orderStatus, fromDate: filterData.fromDate, toDate: filterData.toDate).then((value) {
       appStore.setLoading(false);
+      appStore.setAllUnreadCount(value.allUnreadCount.validate());
       totalPage = value.pagination!.totalPages.validate(value: 1);
       page = value.pagination!.currentPage.validate(value: 1);
       isLastPage = false;
@@ -153,15 +153,16 @@ class OrderFragmentState extends State<OrderFragment> {
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          if(item.pickupDatetime!=null) Text('Picked at ${printDate(item.pickupDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
+                                          if (item.pickupDatetime != null) Text('Picked at ${printDate(item.pickupDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
                                           Text('${item.pickupPoint!.address}', style: primaryTextStyle()),
-                                          if(item.pickupPoint!.contactNumber != null) Row(
-                                            children: [
-                                              Icon(Icons.call, color: Colors.green, size: 18),
-                                              8.width,
-                                              Text('${item.pickupPoint!.contactNumber}', style: primaryTextStyle()),
-                                            ],
-                                          ).paddingOnly(top: 8),
+                                          if (item.pickupPoint!.contactNumber != null)
+                                            Row(
+                                              children: [
+                                                Icon(Icons.call, color: Colors.green, size: 18),
+                                                8.width,
+                                                Text('${item.pickupPoint!.contactNumber}', style: primaryTextStyle()),
+                                              ],
+                                            ).paddingOnly(top: 8),
                                         ],
                                       ).expand(),
                                     ],
@@ -180,15 +181,16 @@ class OrderFragmentState extends State<OrderFragment> {
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          if(item.deliveryDatetime!=null) Text('Delivered at ${printDate(item.deliveryDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
+                                          if (item.deliveryDatetime != null) Text('Delivered at ${printDate(item.deliveryDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
                                           Text('${item.deliveryPoint!.address}', style: primaryTextStyle()),
-                                          if(item.deliveryPoint!.contactNumber != null) Row(
-                                            children: [
-                                              Icon(Icons.call, color: Colors.green, size: 18),
-                                              8.width,
-                                              Text('${item.deliveryPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
-                                            ],
-                                          ).paddingOnly(top: 8),
+                                          if (item.deliveryPoint!.contactNumber != null)
+                                            Row(
+                                              children: [
+                                                Icon(Icons.call, color: Colors.green, size: 18),
+                                                8.width,
+                                                Text('${item.deliveryPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
+                                              ],
+                                            ).paddingOnly(top: 8),
                                         ],
                                       ).expand(),
                                     ],
@@ -197,19 +199,36 @@ class OrderFragmentState extends State<OrderFragment> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text('Payment',style: boldTextStyle()),
-                                      Text('${item.paymentStatus.validate(value: PAYMENT_PENDING)}',style: primaryTextStyle(color: paymentStatusColor(item.paymentStatus.validate(value: PAYMENT_PENDING)))),
+                                      Text('Payment', style: boldTextStyle()),
+                                      Text('${item.paymentStatus.validate(value: PAYMENT_PENDING)}', style: primaryTextStyle(color: paymentStatusColor(item.paymentStatus.validate(value: PAYMENT_PENDING)))),
                                     ],
                                   ),
                                   16.height,
-                                  commonButton('Track', (){
-                                    OrderTrackingScreen(orderData:item).launch(context);
-                                  }).visible(item.status== ORDER_PICKED_UP || item.status== ORDER_DEPARTED || item.status== ORDER_ARRIVED)
+                                  AppButton(
+                                    elevation: 0,
+                                    width: 135,
+                                    height: 35,
+                                    padding: EdgeInsets.zero,
+                                    shapeBorder: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(defaultRadius),
+                                      side: BorderSide(color: colorPrimary),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text('Track Order', style: primaryTextStyle(color: colorPrimary)),
+                                        Icon(Icons.arrow_right, color: colorPrimary),
+                                      ],
+                                    ),
+                                    onTap: () {
+                                      OrderTrackingScreen(orderData: item).launch(context);
+                                    },
+                                  ).visible(item.status == ORDER_DEPARTED || item.status == ORDER_ARRIVED)
                                 ],
                               ),
                             ),
                             onTap: () {
-                              OrderDetailScreen(orderData: item).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+                              OrderDetailScreen(orderId: item.id.validate()).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
                             },
                           )
                         : SizedBox();
