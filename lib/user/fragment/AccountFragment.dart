@@ -61,7 +61,7 @@ class AccountFragmentState extends State<AccountFragment> {
                   title: Text(mData.title!),
                   trailing: Icon(Icons.navigate_next, color: Colors.grey),
                   onTap: () async {
-                    if (index == 4 || index == 5) {
+                    if (index == 5 || index == 6) {
                       launch('https://www.google.com/');
                     }
                     if (index == 7) {

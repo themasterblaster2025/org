@@ -195,6 +195,7 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                                     return ListTile(
                                       contentPadding: EdgeInsets.zero,
                                       title: Text(mData.name!, style: TextStyle(color: selectedCity == mData.id ? colorPrimary : Colors.black)),
+                                      trailing: selectedCity == mData.id ? Icon(Icons.check_circle,color: colorPrimary) : SizedBox(),
                                       onTap: () {
                                         selectedCity = mData.id!;
                                         setValue(CITY_ID, selectedCity);

@@ -110,7 +110,7 @@ class DashboardScreenState extends State<DashboardScreen> {
       body: BodyCornerWidget(child: BottomNavBarItems[currentIndex].widget!),
       floatingActionButton: FloatingActionButton(
         backgroundColor: colorPrimary,
-        child: Icon(Icons.add),
+        child: Icon(Icons.add,color: Colors.white),
         onPressed: () {
           CreateOrderScreen().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
         },

@@ -69,6 +69,36 @@ mixin _$AppStore on _AppStore, Store {
     });
   }
 
+  final _$selectedLanguageAtom = Atom(name: '_AppStore.selectedLanguage');
+
+  @override
+  String get selectedLanguage {
+    _$selectedLanguageAtom.reportRead();
+    return super.selectedLanguage;
+  }
+
+  @override
+  set selectedLanguage(String value) {
+    _$selectedLanguageAtom.reportWrite(value, super.selectedLanguage, () {
+      super.selectedLanguage = value;
+    });
+  }
+
+  final _$isDarkModeAtom = Atom(name: '_AppStore.isDarkMode');
+
+  @override
+  bool get isDarkMode {
+    _$isDarkModeAtom.reportRead();
+    return super.isDarkMode;
+  }
+
+  @override
+  set isDarkMode(bool value) {
+    _$isDarkModeAtom.reportWrite(value, super.isDarkMode, () {
+      super.isDarkMode = value;
+    });
+  }
+
   final _$setLoadingAsyncAction = AsyncAction('_AppStore.setLoading');
 
   @override
@@ -101,13 +131,30 @@ mixin _$AppStore on _AppStore, Store {
         .run(() => super.setAllUnreadCount(val));
   }
 
+  final _$setLanguageAsyncAction = AsyncAction('_AppStore.setLanguage');
+
+  @override
+  Future<void> setLanguage(String aCode, {BuildContext? context}) {
+    return _$setLanguageAsyncAction
+        .run(() => super.setLanguage(aCode, context: context));
+  }
+
+  final _$setDarkModeAsyncAction = AsyncAction('_AppStore.setDarkMode');
+
+  @override
+  Future<void> setDarkMode(bool aIsDarkMode) {
+    return _$setDarkModeAsyncAction.run(() => super.setDarkMode(aIsDarkMode));
+  }
+
   @override
   String toString() {
     return '''
 isLoading: ${isLoading},
 isLoggedIn: ${isLoggedIn},
 userEmail: ${userEmail},
-allUnreadCount: ${allUnreadCount}
+allUnreadCount: ${allUnreadCount},
+selectedLanguage: ${selectedLanguage},
+isDarkMode: ${isDarkMode}
     ''';
   }
 }
