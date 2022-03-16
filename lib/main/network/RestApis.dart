@@ -319,7 +319,7 @@ Future updateOrder({
 }
 
 Future<PaymentGatewayListModel> getPaymentGatewayList() async {
-  return PaymentGatewayListModel.fromJson(await handleResponse(await buildHttpResponse('paymentgateway-list', method: HttpMethod.GET)));
+  return PaymentGatewayListModel.fromJson(await handleResponse(await buildHttpResponse('paymentgateway-list?status=1', method: HttpMethod.GET)));
 }
 
 Future<LDBaseResponse> savePayment(Map request) async {

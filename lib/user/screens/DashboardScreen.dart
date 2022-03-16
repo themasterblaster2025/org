@@ -69,22 +69,24 @@ class DashboardScreenState extends State<DashboardScreen> {
                 alignment: AlignmentDirectional.center,
                 child: Icon(Icons.notifications),
               ),
-              Positioned(
-                right: 2,
-                top: 8,
-                child: Observer(builder: (context) {
-                  return Container(
-                    height: 20,
-                    width: 20,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Colors.orange,
-                      shape: BoxShape.circle,
+              Observer(
+                builder: (context) {
+                  return Positioned(
+                    right: 2,
+                    top: 8,
+                    child: Container(
+                      height: 20,
+                      width: 20,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.orange,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Text('${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}', style: primaryTextStyle(size: 8, color: Colors.white)),
                     ),
-                    child: Text('${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}', style: primaryTextStyle(size: 8, color: Colors.white)),
-                  );
-                }),
-              ).visible(appStore.allUnreadCount != 0),
+                  ).visible(appStore.allUnreadCount != 0);
+                }
+              ),
             ],
           ).withWidth(40).onTap(() {
             NotificationScreen().launch(context);

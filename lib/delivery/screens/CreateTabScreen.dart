@@ -9,6 +9,7 @@ import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
+import 'package:mighty_delivery/user/screens/OrderDetailScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
@@ -52,7 +53,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
   void init() async {
     getDeliveryBoyList(page: currentPage, deliveryBoyID: getIntAsync(USER_ID), cityId: getIntAsync(CITY_ID), countryId: getIntAsync(COUNTRY_ID), orderStatus: widget.orderStatus!).then((value) {
       appStore.setLoading(false);
-
+      appStore.setAllUnreadCount(value.allUnreadCount.validate());
       mIsLastPage = value.data!.length != value.pagination!.per_page!;
 
       currentPage = value.pagination!.currentPage!;
@@ -254,7 +255,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                   ),
                 ),
                 onTap: () {
-                  DeliveryDetailScreen().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+                  OrderDetailScreen(orderId: data.id!).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
                 },
               );
             },

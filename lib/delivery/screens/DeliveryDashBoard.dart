@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mighty_delivery/delivery/fragment/DProfileFragment.dart';
 import 'package:mighty_delivery/delivery/screens/CreateTabScreen.dart';
 import 'package:mighty_delivery/main/screens/NotificationScreen.dart';
@@ -6,6 +7,8 @@ import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
+
+import '../../main.dart';
 
 class DeliveryDashBoard extends StatefulWidget {
   @override
@@ -39,12 +42,34 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
         appBar: AppBar(
           backgroundColor: colorPrimary,
           actions: [
-            IconButton(
-              onPressed: () {
-                NotificationScreen().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
-              },
-              icon: Icon(Icons.notification_important_outlined),
-            ),
+            Stack(
+              children: [
+                Align(
+                  alignment: AlignmentDirectional.center,
+                  child: Icon(Icons.notifications),
+                ),
+                Observer(
+                    builder: (context) {
+                      return Positioned(
+                        right: 2,
+                        top: 8,
+                        child: Container(
+                          height: 20,
+                          width: 20,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Colors.orange,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text('${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}', style: primaryTextStyle(size: 8, color: Colors.white)),
+                        ),
+                      ).visible(appStore.allUnreadCount != 0);
+                    }
+                ),
+              ],
+            ).withWidth(40).onTap(() {
+              NotificationScreen().launch(context);
+            }),
             4.width,
             IconButton(
               onPressed: () {

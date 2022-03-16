@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:lottie/lottie.dart';
+import 'package:mighty_delivery/delivery/screens/DeliveryDashBoard.dart';
 import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/models/CityListModel.dart';
@@ -97,7 +98,11 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
         finish(context);
         widget.onUpdate!.call();
       } else {
-        DashboardScreen().launch(context);
+        if(getStringAsync(USER_TYPE) == CLIENT) {
+          DashboardScreen().launch(context);
+        }else{
+          DeliveryDashBoard().launch(context);
+        }
       }
     }).catchError((error) {
       appStore.setLoading(false);

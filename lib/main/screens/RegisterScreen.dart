@@ -157,7 +157,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           decoration: commonInputDecoration(),
                         ),
                         16.height,
-                        Text('Password', style: primaryTextStyle()),
+                        Text('User Type', style: primaryTextStyle()),
                         8.height,
                         Row(
                           children: [

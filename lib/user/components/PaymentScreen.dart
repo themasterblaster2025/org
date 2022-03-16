@@ -40,7 +40,7 @@ class PaymentScreen extends StatefulWidget {
   PaymentScreenState createState() => PaymentScreenState();
 }
 
-class PaymentScreenState extends State<PaymentScreen> implements TransactionCallBack{
+class PaymentScreenState extends State<PaymentScreen> implements TransactionCallBack {
   late NavigationController controller;
   List<PaymentGatewayData> paymentGatewayList = [];
   String? selectedPaymentType;
@@ -283,12 +283,12 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
   @override
   onTransactionSuccess(String id, String txRef) {
     final ChargeResponse chargeResponse = ChargeResponse(status: "success", success: true, transactionId: id, txRef: txRef);
-    Map<String,dynamic> req = {
-      "txn_id" : chargeResponse.transactionId.toString(),
-      "status" : chargeResponse.status.toString(),
-      "reference" : chargeResponse.txRef.toString(),
+    Map<String, dynamic> req = {
+      "txn_id": chargeResponse.transactionId.toString(),
+      "status": chargeResponse.status.toString(),
+      "reference": chargeResponse.txRef.toString(),
     };
-    savePaymentApiCall(paymentStatus : PAYMENT_PAID,txnId: chargeResponse.transactionId,paymentType: PAYMENT_TYPE_FLUTTERWAVE,transactionDetail: req);
+    savePaymentApiCall(paymentStatus: PAYMENT_PAID, txnId: chargeResponse.transactionId, paymentType: PAYMENT_TYPE_FLUTTERWAVE, transactionDetail: req);
   }
 
   /// StripPayment
@@ -333,8 +333,8 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
             ),
           );
           await Stripe.instance.presentPaymentSheet(parameters: PresentPaymentSheetParameters(clientSecret: res.client_secret!, confirmPayment: true)).then(
-                (value) async {
-              savePaymentApiCall(paymentType: PAYMENT_TYPE_STRIPE,paymentStatus: PAYMENT_PAID);
+            (value) async {
+              savePaymentApiCall(paymentType: PAYMENT_TYPE_STRIPE, paymentStatus: PAYMENT_PAID);
             },
           ).catchError((e) {
             log("presentPaymentSheet ${e.toString()}");
@@ -387,9 +387,10 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
                             border: Border.all(color: borderColor),
                           ),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              commonCachedNetworkImage('${mData.gatewayLogo}'),
+                              commonCachedNetworkImage('${mData.gatewayLogo}',width: 50,height: 50),
+                              8.width,
+                              Text('${mData.title}',style: primaryTextStyle()).expand(),
                               Icon(Icons.check_circle, color: colorPrimary).visible(mData.type == selectedPaymentType),
                             ],
                           ),

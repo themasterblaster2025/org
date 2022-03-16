@@ -4,6 +4,7 @@ import 'package:mighty_delivery/main/screens/ChangePasswordScreen.dart';
 import 'package:mighty_delivery/main/screens/CitySelectScreen.dart';
 import 'package:mighty_delivery/main/screens/EditProfileScreen.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
+import 'package:mighty_delivery/user/components/UserCitySelectScreen.dart';
 import 'package:mighty_delivery/user/fragment/AccountFragment.dart';
 import 'package:mighty_delivery/user/fragment/OrderFragment.dart';
 import 'package:mighty_delivery/user/screens/DraftOrderListScreen.dart';
@@ -45,7 +46,7 @@ List<SettingItemModel> getDeliverySettingItems() {
   List<SettingItemModel> list = [];
   list.add(SettingItemModel(icon: Icons.person_outline, title: 'Edit Profile', widget: EditProfileScreen()));
   list.add(SettingItemModel(icon: Icons.lock_outline, title: 'Change Password', widget: ChangePasswordScreen()));
-  list.add(SettingItemModel(icon: Icons.location_on_outlined, title: 'Change Location', widget: CitySelectScreen(isBack: true)));
+  list.add(SettingItemModel(icon: Icons.location_on_outlined, title: 'Change Location', widget: UserCitySelectScreen(isBack: true)));
   list.add(SettingItemModel(icon: Icons.language, title: 'Language'));
   list.add(SettingItemModel(icon: Icons.wb_sunny_outlined, title: 'DarkMode'));
   list.add(SettingItemModel(icon: Icons.info_outline, title: 'About Us'));

@@ -12,6 +12,7 @@ import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
+import 'package:mighty_delivery/main/utils/DataProviders.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:mighty_delivery/user/components/CreateOrderConfirmationDialog.dart';
 import 'package:mighty_delivery/user/components/PaymentScreen.dart';
@@ -89,20 +90,20 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   Future<void> init() async {
     cityData = CityModel.fromJson(getJSONAsync(CITY_DATA));
     if (widget.orderData != null) {
-      selectedWeight = widget.orderData!.totalWeight!.toInt();
-      parcelTypeCont.text = widget.orderData!.parcelType!;
+      if(widget.orderData!.totalWeight!=0) selectedWeight = widget.orderData!.totalWeight!.toInt();
+      parcelTypeCont.text = widget.orderData!.parcelType.validate();
 
-      pickAddressCont.text = widget.orderData!.pickupPoint!.address!;
-      pickLat = widget.orderData!.pickupPoint!.latitude!;
-      pickLong = widget.orderData!.pickupPoint!.longitude!;
-      pickPhoneCont.text = widget.orderData!.pickupPoint!.contactNumber!;
-      pickDesCont.text = widget.orderData!.pickupPoint!.description!;
+      pickAddressCont.text = widget.orderData!.pickupPoint!.address.validate();
+      pickLat = widget.orderData!.pickupPoint!.latitude.validate();
+      pickLong = widget.orderData!.pickupPoint!.longitude.validate();
+      pickPhoneCont.text = widget.orderData!.pickupPoint!.contactNumber.validate();
+      pickDesCont.text = widget.orderData!.pickupPoint!.description.validate();
 
-      deliverAddressCont.text = widget.orderData!.deliveryPoint!.address!;
-      pickLat = widget.orderData!.deliveryPoint!.latitude!;
-      pickLong = widget.orderData!.deliveryPoint!.longitude!;
-      deliverPhoneCont.text = widget.orderData!.deliveryPoint!.contactNumber!;
-      deliverDesCont.text = widget.orderData!.deliveryPoint!.description!;
+      deliverAddressCont.text = widget.orderData!.deliveryPoint!.address.validate();
+      pickLat = widget.orderData!.deliveryPoint!.latitude.validate();
+      pickLong = widget.orderData!.deliveryPoint!.longitude.validate();
+      deliverPhoneCont.text = widget.orderData!.deliveryPoint!.contactNumber.validate();
+      deliverDesCont.text = widget.orderData!.deliveryPoint!.description.validate();
 
       paymentCollectFrom = widget.orderData!.paymentCollectFrom.validate(value: PAYMENT_ON_PICKUP);
     }

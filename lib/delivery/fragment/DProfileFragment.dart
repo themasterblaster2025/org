@@ -62,10 +62,10 @@ class DProfileFragmentState extends State<DProfileFragment> {
                       title: Text(mData.title!),
                       trailing: Icon(Icons.navigate_next, color: Colors.grey),
                       onTap: () async {
-                        if (index == 4 || index == 5) {
+                        if (index == 5 || index == 6) {
                           launch('https://www.google.com/');
                         }
-                        if (index == 8) {
+                        if (index == 7) {
                           await showConfirmDialogCustom(
                             context,
                             primaryColor: colorPrimary,

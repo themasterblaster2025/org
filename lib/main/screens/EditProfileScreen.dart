@@ -93,7 +93,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget('Edit Profile',color: colorPrimary,textColor: white,elevation: 0),
+      appBar: appBarWidget('Edit Profile', color: colorPrimary, textColor: white, elevation: 0),
       body: BodyCornerWidget(
         child: Stack(
           children: [
@@ -116,7 +116,11 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                             onPressed: () {
                               getImage();
                             },
-                            icon: Icon(Icons.edit, color: white,size: 20,),
+                            icon: Icon(
+                              Icons.edit,
+                              color: white,
+                              size: 20,
+                            ),
                           ),
                         ),
                       )
@@ -132,6 +136,9 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     focus: emailFocus,
                     nextFocus: usernameFocus,
                     decoration: commonInputDecoration(),
+                    onTap: () {
+                      toast('You cannot update email id');
+                    },
                   ),
                   16.height,
                   Text('Username', style: primaryTextStyle()),
@@ -143,6 +150,9 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     focus: usernameFocus,
                     nextFocus: nameFocus,
                     decoration: commonInputDecoration(),
+                    onTap: () {
+                      toast('You cannot update username');
+                    },
                   ),
                   16.height,
                   Text('Name', style: primaryTextStyle()),
@@ -177,7 +187,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                 ],
               ),
             ),
-            Observer(builder: (_) => Loader().visible(appStore.isLoading))
+            Observer(builder: (_) => Loader().visible(appStore.isLoading)),
           ],
         ),
       ),

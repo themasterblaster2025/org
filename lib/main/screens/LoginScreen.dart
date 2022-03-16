@@ -64,11 +64,7 @@ class LoginScreenState extends State<LoginScreen> {
       await logInApi(req).then((value) async {
         appStore.setLoading(false);
         if (getIntAsync(STATUS) == 1) {
-          if (getStringAsync(USER_TYPE) == DELIVERY_MAN) {
-            CitySelectScreen().launch(context, isNewTask: true);
-          } else {
             UserCitySelectScreen().launch(context, isNewTask: true);
-          }
         } else {
           toast('You profile is under review. Wait some time or contact your administrator.');
         }
