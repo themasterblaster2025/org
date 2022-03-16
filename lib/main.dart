@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
           child: child!,
         );
       },
-      title: 'Flutter Demo',
+      title: 'Local Delivery',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,

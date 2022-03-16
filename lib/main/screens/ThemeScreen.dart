@@ -90,6 +90,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                   }
                   setValue(THEME_MODE_INDEX, index);
                   setState(() {});
+                  finish(context);
                 }),
               );
             },

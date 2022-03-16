@@ -59,6 +59,7 @@ class LanguageScreenState extends State<LanguageScreen> {
                 selectedLanguageDataModel = data;
                 appStore.setLanguage(data.languageCode!, context: context);
                 setState(() {});
+                finish(context);
               },
             );
           }),
