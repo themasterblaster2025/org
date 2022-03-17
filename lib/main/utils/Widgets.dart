@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/main/screens/CitySelectScreen.dart';
-import 'package:mighty_delivery/user/components/LocationChangeDialog.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import 'Colors.dart';
@@ -34,47 +32,6 @@ Widget outlineButton(String title, Function() onTap, {double? width}) {
       ),
       color: Colors.transparent,
       onTap: onTap,
-    ),
-  );
-}
-
-Widget customAppBarWidget(BuildContext context, String title, {bool isShowBack = false, bool isShowLocation = false}) {
-  return Container(
-    height: 120,
-    alignment: Alignment.center,
-    width: context.width(),
-    color: colorPrimary,
-    padding: EdgeInsets.all(16),
-    child: Row(
-      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        isShowBack
-            ? Icon(Icons.arrow_back_outlined, color: white).onTap(() {
-                finish(context);
-              })
-            : SizedBox(),
-        16.width,
-        Text(title, style: boldTextStyle(color: white, size: 24)).expand(),
-        16.width,
-        isShowLocation
-            ? Row(
-                children: [
-                  Icon(Icons.location_on, color: Colors.white),
-                  8.width,
-                  Text('Surat', style: primaryTextStyle(color: white)),
-                ],
-              ).onTap(() {
-                /*showInDialog(
-                  context,
-                  contentPadding: EdgeInsets.all(16),
-                  builder: (context) {
-                    return LocationChangeDialog();
-                  },
-                );*/
-                CitySelectScreen(isBack: true);
-              })
-            : SizedBox(),
-      ],
     ),
   );
 }

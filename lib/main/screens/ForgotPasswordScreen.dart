@@ -59,7 +59,7 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget('Forgot Password',color: colorPrimary,textColor: white,elevation: 0),
+      appBar: appBarWidget(language.forgot_password,color: colorPrimary,textColor: white,elevation: 0),
       body: BodyCornerWidget(
         child: Stack(
           children: [
@@ -70,7 +70,7 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Email', style: primaryTextStyle()),
+                    Text(language.email, style: primaryTextStyle()),
                     8.height,
                     AppTextField(
                       controller: forgotEmailController,
@@ -85,7 +85,7 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: commonButton('Send password', () {
+      bottomNavigationBar: commonButton(language.submit, () {
         submit();
       }).paddingAll(16),
     );

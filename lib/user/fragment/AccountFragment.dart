@@ -68,9 +68,9 @@ class AccountFragmentState extends State<AccountFragment> {
                       await showConfirmDialogCustom(
                         context,
                         primaryColor: colorPrimary,
-                        title: 'Are you sure you want to logout ?',
-                        positiveText: 'Yes',
-                        negativeText: 'Cancel',
+                        title: language.logout_confirmation_msg,
+                        positiveText: language.yes,
+                        negativeText: language.cancel,
                         onAccept: (c) {
                           logout(context);
                         },

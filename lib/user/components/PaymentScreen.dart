@@ -75,7 +75,6 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
     appStore.setLoading(true);
     await getPaymentGatewayList().then((value) {
       appStore.setLoading(false);
-      //paymentGatewayList.add(PaymentGatewayData(title: 'Cash', type: 'cash', gatewayLogo: 'assets/icons/ic_cash.png'));
       paymentGatewayList.addAll(value.data!);
       setState(() {});
     }).catchError((error) {
@@ -359,7 +358,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
   Widget build(BuildContext context) {
     controller = NavigationController(Client(), style, this);
     return Scaffold(
-      appBar: appBarWidget('Payment', color: colorPrimary, elevation: 0, textColor: white),
+      appBar: appBarWidget(language.payment, color: colorPrimary, elevation: 0, textColor: white),
       body: BodyCornerWidget(
         child: Stack(
           children: [
@@ -368,7 +367,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Payment Methods', style: boldTextStyle()),
+                  Text(language.payment_method, style: boldTextStyle()),
                   16.height,
                   ListView.builder(
                     primary: false,
@@ -407,7 +406,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
             ),
             Align(
               alignment: Alignment.bottomCenter,
-              child: commonButton('Pay Now', () {
+              child: commonButton(language.pay_now, () {
                 if (selectedPaymentType == PAYMENT_TYPE_STRIPE) {
                   stripePay();
                 } else if (selectedPaymentType == PAYMENT_TYPE_RAZORPAY) {

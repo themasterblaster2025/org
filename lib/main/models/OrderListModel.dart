@@ -99,6 +99,8 @@ class OrderData {
   String? deliveryTimeSignature;
   String? deletedAt;
   bool? returnOrderId;
+  num? weightCharge;
+  num? distanceCharge;
 
   OrderData({
     this.id,
@@ -134,6 +136,8 @@ class OrderData {
     this.deliveryTimeSignature,
     this.deletedAt,
     this.returnOrderId,
+    this.weightCharge,
+    this.distanceCharge,
   });
 
   OrderData.fromJson(Map<String, dynamic> json) {
@@ -170,6 +174,8 @@ class OrderData {
     deliveryTimeSignature = json['delivery_time_signature'];
     deletedAt = json['deleted_at'];
     returnOrderId = json['return_order_id'];
+    weightCharge = json['weight_charge'];
+    distanceCharge = json['distance_charge'];
   }
 
   Map<String, dynamic> toJson() {
@@ -213,6 +219,8 @@ class OrderData {
     data['delivery_time_signature'] = this.deliveryTimeSignature;
     data['deleted_at'] = this.deletedAt;
     data['return_order_id'] = this.returnOrderId;
+    data['weight_charge'] = this.weightCharge;
+    data['distance_charge'] = this.distanceCharge;
     return data;
   }
 }

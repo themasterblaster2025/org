@@ -153,7 +153,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          if (item.pickupDatetime != null) Text('Picked at ${printDate(item.pickupDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
+                                          if (item.pickupDatetime != null) Text('${language.picked_at} ${printDate(item.pickupDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
                                           Text('${item.pickupPoint!.address}', style: primaryTextStyle()),
                                           if (item.pickupPoint!.contactNumber != null)
                                             Row(
@@ -181,7 +181,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          if (item.deliveryDatetime != null) Text('Delivered at ${printDate(item.deliveryDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
+                                          if (item.deliveryDatetime != null) Text('${language.delivered_at} ${printDate(item.deliveryDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
                                           Text('${item.deliveryPoint!.address}', style: primaryTextStyle()),
                                           if (item.deliveryPoint!.contactNumber != null)
                                             Row(
@@ -199,7 +199,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text('Payment', style: boldTextStyle()),
+                                      Text(language.payment, style: boldTextStyle()),
                                       Text('${item.paymentStatus.validate(value: PAYMENT_PENDING)}', style: primaryTextStyle(color: paymentStatusColor(item.paymentStatus.validate(value: PAYMENT_PENDING)))),
                                     ],
                                   ),
@@ -217,7 +217,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Text('Track Order', style: primaryTextStyle(color: colorPrimary)),
+                                        Text(language.track_order, style: primaryTextStyle(color: colorPrimary)),
                                         Icon(Icons.arrow_right, color: colorPrimary),
                                       ],
                                     ),

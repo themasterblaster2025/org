@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
-import 'package:mighty_delivery/main/screens/CitySelectScreen.dart';
 import 'package:mighty_delivery/main/screens/ForgotPasswordScreen.dart';
 import 'package:mighty_delivery/main/screens/RegisterScreen.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
@@ -66,7 +65,7 @@ class LoginScreenState extends State<LoginScreen> {
         if (getIntAsync(STATUS) == 1) {
             UserCitySelectScreen().launch(context, isNewTask: true);
         } else {
-          toast('You profile is under review. Wait some time or contact your administrator.');
+          toast(language.user_not_approve_msg);
         }
       }).catchError((e) {
         appStore.setLoading(false);
@@ -101,11 +100,11 @@ class LoginScreenState extends State<LoginScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         30.height,
-                        Text('Sign in Account', style: boldTextStyle(size: headingSize)),
+                        Text(language.sign_in_account, style: boldTextStyle(size: headingSize)),
                         8.height,
-                        Text('Sign in to continue', style: secondaryTextStyle(size: 16)),
+                        Text(language.sign_in_to_continue, style: secondaryTextStyle(size: 16)),
                         30.height,
-                        Text('Email', style: primaryTextStyle()),
+                        Text(language.email, style: primaryTextStyle()),
                         8.height,
                         AppTextField(
                           controller: emailController,
@@ -115,7 +114,7 @@ class LoginScreenState extends State<LoginScreen> {
                           decoration: commonInputDecoration(),
                         ),
                         16.height,
-                        Text('Password', style: primaryTextStyle()),
+                        Text(language.password, style: primaryTextStyle()),
                         8.height,
                         AppTextField(
                           controller: passController,
@@ -126,13 +125,13 @@ class LoginScreenState extends State<LoginScreen> {
                         Align(
                           alignment: Alignment.centerRight,
                           child: TextButton(
-                            child: Text('Forgot Password ?', style: primaryTextStyle(color: colorPrimary)),
+                            child: Text(language.forgot_password_que, style: primaryTextStyle(color: colorPrimary)),
                             onPressed: () {
                               ForgotPasswordScreen().launch(context);
                             },
                           ),
                         ),
-                        commonButton('Sign In', () {
+                        commonButton(language.sign_in, () {
                           LoginApiCall();
                         }, width: context.width()),
                         16.height,
@@ -140,7 +139,7 @@ class LoginScreenState extends State<LoginScreen> {
                           children: [
                             Divider().expand(),
                             8.width,
-                            Text('Or', style: secondaryTextStyle()),
+                            Text(language.or, style: secondaryTextStyle()),
                             8.width,
                             Divider().expand(),
                           ],
@@ -154,7 +153,7 @@ class LoginScreenState extends State<LoginScreen> {
                             children: [
                               GoogleLogoWidget(),
                               16.width,
-                              Text('Continue with Google', style: boldTextStyle()),
+                              Text(language.continue_with_google, style: boldTextStyle()),
                             ],
                           ),
                           onTap: () {
@@ -165,9 +164,9 @@ class LoginScreenState extends State<LoginScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('Don\'t have an account?', style: primaryTextStyle()),
+                            Text(language.do_not_have_account, style: primaryTextStyle()),
                             4.width,
-                            Text('Sign Up', style: boldTextStyle(color: colorPrimary)).onTap(() {
+                            Text(language.sign_up, style: boldTextStyle(color: colorPrimary)).onTap(() {
                               RegisterScreen().launch(context, duration: Duration(seconds: 1), pageRouteAnimation: PageRouteAnimation.Slide);
                             }),
                           ],

@@ -78,7 +78,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     ).then((value) {
       finish(context);
       appStore.setLoading(false);
-      snackBar(context, title: 'Profile update sucessfully');
+      snackBar(context, title: language.profile_update_msg);
     }).catchError((error) {
       log(error);
       appStore.setLoading(false);
@@ -93,7 +93,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget('Edit Profile', color: colorPrimary, textColor: white, elevation: 0),
+      appBar: appBarWidget(language.edit_profile, color: colorPrimary, textColor: white, elevation: 0),
       body: BodyCornerWidget(
         child: Stack(
           children: [
@@ -127,7 +127,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     ],
                   ),
                   16.height,
-                  Text('Email', style: primaryTextStyle()),
+                  Text(language.email, style: primaryTextStyle()),
                   8.height,
                   AppTextField(
                     readOnly: true,
@@ -137,11 +137,11 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     nextFocus: usernameFocus,
                     decoration: commonInputDecoration(),
                     onTap: () {
-                      toast('You cannot update email id');
+                      toast(language.not_change_email);
                     },
                   ),
                   16.height,
-                  Text('Username', style: primaryTextStyle()),
+                  Text(language.username, style: primaryTextStyle()),
                   8.height,
                   AppTextField(
                     readOnly: true,
@@ -151,7 +151,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     nextFocus: nameFocus,
                     decoration: commonInputDecoration(),
                     onTap: () {
-                      toast('You cannot update username');
+                      toast(language.not_change_username);
                     },
                   ),
                   16.height,
@@ -165,7 +165,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     decoration: commonInputDecoration(),
                   ),
                   16.height,
-                  Text('Contact number', style: primaryTextStyle()),
+                  Text(language.contact_number, style: primaryTextStyle()),
                   8.height,
                   AppTextField(
                     controller: contactNumberController,
@@ -175,7 +175,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     decoration: commonInputDecoration(),
                   ),
                   16.height,
-                  Text('Address', style: primaryTextStyle()),
+                  Text(language.address, style: primaryTextStyle()),
                   8.height,
                   AppTextField(
                     controller: addressController,
@@ -191,7 +191,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: commonButton('Save Changes', () {
+      bottomNavigationBar: commonButton(language.save_changes, () {
         save();
       }).paddingAll(16),
     );

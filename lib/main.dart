@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
               child: child!,
             );
           },
-          title: 'Local Delivery',
+          title: language.app_name,
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,

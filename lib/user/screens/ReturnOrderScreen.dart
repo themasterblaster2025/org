@@ -69,7 +69,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
         widget.orderData.deliveryPoint!.startTime = null;
         widget.orderData.deliveryPoint!.endTime = null;
       }
-      if (difference.inMinutes > 0) return toast('PickupTime must be before DeliverTime');
+      if (difference.inMinutes > 0) return toast(language.pickup_deliver_validation_msg);
       Map req = {
         "client_id": widget.orderData.clientId!,
         "date": DateTime.now().toString(),
@@ -109,7 +109,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget('Return Order', color: colorPrimary, textColor: white, elevation: 0),
+      appBar: appBarWidget(language.return_order, color: colorPrimary, textColor: white, elevation: 0),
       body: BodyCornerWidget(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(16),
@@ -120,12 +120,12 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
               children: [
                 Row(
                   children: [
-                    scheduleOptionWidget(isDeliverNow, 'assets/icons/ic_clock.png', 'Deliver Now').onTap(() {
+                    scheduleOptionWidget(isDeliverNow, 'assets/icons/ic_clock.png', language.delivery_now).onTap(() {
                       isDeliverNow = true;
                       setState(() {});
                     }).expand(),
                     16.width,
-                    scheduleOptionWidget(!isDeliverNow, 'assets/icons/ic_schedule.png', 'Schedule').onTap(() {
+                    scheduleOptionWidget(!isDeliverNow, 'assets/icons/ic_schedule.png', language.schedule).onTap(() {
                       isDeliverNow = false;
                       setState(() {});
                     }).expand(),
@@ -135,7 +135,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Pick Time', style: primaryTextStyle()),
+                    Text(language.pick_time, style: primaryTextStyle()),
                     16.height,
                     Container(
                       padding: EdgeInsets.all(16),
@@ -161,7 +161,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                           16.height,
                           Row(
                             children: [
-                              Text('From', style: primaryTextStyle()),
+                              Text(language.from, style: primaryTextStyle()),
                               8.width,
                               DateTimePicker(
                                 type: DateTimePickerType.time,
@@ -175,7 +175,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                                 decoration: commonInputDecoration(suffixIcon: Icons.access_time),
                               ).expand(),
                               16.width,
-                              Text('To', style: primaryTextStyle()),
+                              Text(language.to, style: primaryTextStyle()),
                               8.width,
                               DateTimePicker(
                                 type: DateTimePickerType.time,
@@ -190,7 +190,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                                   double difference = toTimeInHour - fromTimeInHour;
                                   print(difference);
                                   if(difference<=0){
-                                    return 'EndTime must be after StartTime';
+                                    return language.end_time_validation_msg;
                                   }
                                 },
                                 decoration: commonInputDecoration(suffixIcon: Icons.access_time),
@@ -201,7 +201,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                       ),
                     ),
                     16.height,
-                    Text('Deliver Time', style: primaryTextStyle()),
+                    Text(language.deliver_time, style: primaryTextStyle()),
                     16.height,
                     Container(
                       padding: EdgeInsets.all(16),
@@ -227,7 +227,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                           16.height,
                           Row(
                             children: [
-                              Text('From', style: primaryTextStyle()),
+                              Text(language.from, style: primaryTextStyle()),
                               8.width,
                               DateTimePicker(
                                 type: DateTimePickerType.time,
@@ -241,7 +241,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                                 decoration: commonInputDecoration(suffixIcon: Icons.access_time),
                               ).expand(),
                               16.width,
-                              Text('To', style: primaryTextStyle()),
+                              Text(language.to, style: primaryTextStyle()),
                               8.width,
                               DateTimePicker(
                                 type: DateTimePickerType.time,
@@ -255,7 +255,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                                   double toTimeInHour = deliverToTime!.hour + deliverToTime!.minute/60;
                                   double difference = toTimeInHour - fromTimeInHour;
                                   if(difference<0){
-                                    return 'EndTime must be after StartTime';
+                                    return language.end_time_validation_msg;
                                   }
                                 },
                                 decoration: commonInputDecoration(suffixIcon: Icons.access_time),
@@ -271,22 +271,22 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Total', style: boldTextStyle()),
+                    Text(language.total, style: boldTextStyle()),
                     16.width,
                     Text('$currencySymbol ${widget.orderData.totalAmount.validate()}', style: boldTextStyle(size: 20)),
                   ],
                 ),
                 16.height,
-                Text('Payment', style: boldTextStyle()),
+                Text(language.payment, style: boldTextStyle()),
                 16.height,
                 Row(
                   children: [
-                    scheduleOptionWidget(isCashPayment, 'assets/icons/ic_cash.png', 'Cash Payment').onTap(() {
+                    scheduleOptionWidget(isCashPayment, 'assets/icons/ic_cash.png', language.cash_payment).onTap(() {
                       isCashPayment = true;
                       setState(() {});
                     }).expand(),
                     16.width,
-                    scheduleOptionWidget(!isCashPayment, 'assets/icons/ic_credit_card.png', 'Online Payment').onTap(() {
+                    scheduleOptionWidget(!isCashPayment, 'assets/icons/ic_credit_card.png', language.online_payment).onTap(() {
                       isCashPayment = false;
                       setState(() {});
                     }).expand(),
@@ -296,15 +296,15 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Payment Collect from', style: boldTextStyle()),
+                    Text(language.payment_collect_from, style: boldTextStyle()),
                     SizedBox(
                       width: 150,
                       child: DropdownButtonFormField<String>(
                         value: paymentCollectFrom,
                         decoration: commonInputDecoration(),
                         items: [
-                          DropdownMenuItem(value:PAYMENT_ON_PICKUP,child: Text('Pickup', style: primaryTextStyle())),
-                          DropdownMenuItem(value:PAYMENT_ON_DELIVERY,child: Text('Delivery', style: primaryTextStyle())),
+                          DropdownMenuItem(value:PAYMENT_ON_PICKUP,child: Text(language.pickup, style: primaryTextStyle())),
+                          DropdownMenuItem(value:PAYMENT_ON_DELIVERY,child: Text(language.delivery, style: primaryTextStyle())),
                         ],
                         onChanged: (value) {
                           paymentCollectFrom = value!;
@@ -321,7 +321,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(16),
-        child: commonButton('Return', () {
+        child: commonButton(language.lbl_return, () {
           createOrderApiCall();
         }),
       ),

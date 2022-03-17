@@ -122,12 +122,12 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
         if (selectedCity != null) {
           return true;
         } else {
-          toast('Please select City');
+          toast(language.please_select_city);
           return false;
         }
       },
       child: Scaffold(
-        appBar: appBarWidget('Select Region', color: colorPrimary, textColor: white, elevation: 0, showBack: widget.isBack),
+        appBar: appBarWidget(language.select_region, color: colorPrimary, textColor: white, elevation: 0, showBack: widget.isBack),
         body: BodyCornerWidget(
           child: SingleChildScrollView(
             padding: EdgeInsets.all(16),
@@ -145,7 +145,7 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Expanded(child: Text('Country', style: boldTextStyle())),
+                          Expanded(child: Text(language.country, style: boldTextStyle())),
                           Expanded(
                             child: DropdownButtonFormField<int>(
                               value: selectedCountry,
@@ -173,7 +173,7 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                         ],
                       ),
                       16.height,
-                      Text('City', style: boldTextStyle()),
+                      Text(language.city, style: boldTextStyle()),
                       16.height,
                       cityData.isNotEmpty
                           ? Column(
@@ -209,7 +209,7 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                             )
                           : appStore.isLoading
                               ? loaderWidget()
-                              : Text('No City Found', style: primaryTextStyle()),
+                              : emptyWidget(),
                     ],
                   ),
                 ),

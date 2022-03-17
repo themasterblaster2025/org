@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import '../../main.dart';
+
 class CreateOrderConfirmationDialog extends StatefulWidget {
   static String tag = '/CreateOrderConfirmationDialog';
   final Function() onSuccess;
@@ -39,7 +41,7 @@ class CreateOrderConfirmationDialogState extends State<CreateOrderConfirmationDi
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Confirmation', style: boldTextStyle(size: 18)),
+            Text(language.confirmation, style: boldTextStyle(size: 18)),
             CloseButton(),
           ],
         ),
@@ -49,11 +51,11 @@ class CreateOrderConfirmationDialogState extends State<CreateOrderConfirmationDi
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            commonButton('Cancel', (){
+            commonButton(language.cancel, (){
               widget.onCancel!=null ? widget.onCancel!.call() : finish(context);
             }, color: Colors.grey),
             16.width,
-            commonButton(widget.primaryText ?? 'Create', widget.onSuccess),
+            commonButton(widget.primaryText ?? language.create, widget.onSuccess),
           ],
         ),
       ],

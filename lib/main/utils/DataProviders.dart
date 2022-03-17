@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/main/screens/ChangePasswordScreen.dart';
-import 'package:mighty_delivery/main/screens/CitySelectScreen.dart';
 import 'package:mighty_delivery/main/screens/EditProfileScreen.dart';
 import 'package:mighty_delivery/main/screens/LanguageScreen.dart';
 import 'package:mighty_delivery/main/screens/ThemeScreen.dart';

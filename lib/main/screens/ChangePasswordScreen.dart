@@ -67,7 +67,7 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget('Change Password',color: colorPrimary,textColor: white,elevation: 0),
+      appBar: appBarWidget(language.change_password,color: colorPrimary,textColor: white,elevation: 0),
       body: Stack(
         children: [
           Form(
@@ -78,7 +78,7 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Old Password', style: primaryTextStyle()),
+                    Text(language.old_password, style: primaryTextStyle()),
                     8.height,
                     AppTextField(
                       controller: oldPassController,
@@ -88,7 +88,7 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       decoration: commonInputDecoration(),
                     ),
                     16.height,
-                    Text('New Password', style: primaryTextStyle()),
+                    Text(language.new_password, style: primaryTextStyle()),
                     8.height,
                     AppTextField(
                       controller: newPassController,
@@ -98,7 +98,7 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       decoration: commonInputDecoration(),
                     ),
                     16.height,
-                    Text('Confirm Password', style: primaryTextStyle()),
+                    Text(language.confirm_password, style: primaryTextStyle()),
                     8.height,
                     AppTextField(
                       controller: confirmPassController,
@@ -106,8 +106,8 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       focus: confirmPassFocus,
                       decoration: commonInputDecoration(),
                       validator: (val) {
-                        if (val!.isEmpty) return 'This Field is required';
-                        if (val != newPassController.text) return 'Confirm Password not match';
+                        if (val!.isEmpty) return errorThisFieldRequired;
+                        if (val != newPassController.text) return language.password_not_match;
                       },
                     ),
                   ],
@@ -121,7 +121,7 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
       bottomNavigationBar: Container(
         padding: EdgeInsets.all(16),
         color: context.cardColor,
-        child: commonButton('Save Changes', () {
+        child: commonButton(language.save_changes, () {
           submit();
         }),
       ),
