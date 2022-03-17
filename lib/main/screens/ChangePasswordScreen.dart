@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mighty_delivery/main.dart';
+import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
@@ -71,53 +72,59 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
         children: [
           Form(
             key: formKey,
-            child: SingleChildScrollView(
-              padding: EdgeInsets.only(left: 16, top: 30, right: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Old Password', style: primaryTextStyle()),
-                  8.height,
-                  AppTextField(
-                    controller: oldPassController,
-                    textFieldType: TextFieldType.PASSWORD,
-                    focus: oldPassFocus,
-                    nextFocus: newPassFocus,
-                    decoration: commonInputDecoration(),
-                  ),
-                  16.height,
-                  Text('New Password', style: primaryTextStyle()),
-                  8.height,
-                  AppTextField(
-                    controller: newPassController,
-                    textFieldType: TextFieldType.PASSWORD,
-                    focus: newPassFocus,
-                    nextFocus: confirmPassFocus,
-                    decoration: commonInputDecoration(),
-                  ),
-                  16.height,
-                  Text('Confirm Password', style: primaryTextStyle()),
-                  8.height,
-                  AppTextField(
-                    controller: confirmPassController,
-                    textFieldType: TextFieldType.PASSWORD,
-                    focus: confirmPassFocus,
-                    decoration: commonInputDecoration(),
-                    validator: (val) {
-                      if (val!.isEmpty) return 'This Field is required';
-                      if (val != newPassController.text) return 'Confirm Password not match';
-                    },
-                  ),
-                ],
+            child: BodyCornerWidget(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(left: 16, top: 30, right: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Old Password', style: primaryTextStyle()),
+                    8.height,
+                    AppTextField(
+                      controller: oldPassController,
+                      textFieldType: TextFieldType.PASSWORD,
+                      focus: oldPassFocus,
+                      nextFocus: newPassFocus,
+                      decoration: commonInputDecoration(),
+                    ),
+                    16.height,
+                    Text('New Password', style: primaryTextStyle()),
+                    8.height,
+                    AppTextField(
+                      controller: newPassController,
+                      textFieldType: TextFieldType.PASSWORD,
+                      focus: newPassFocus,
+                      nextFocus: confirmPassFocus,
+                      decoration: commonInputDecoration(),
+                    ),
+                    16.height,
+                    Text('Confirm Password', style: primaryTextStyle()),
+                    8.height,
+                    AppTextField(
+                      controller: confirmPassController,
+                      textFieldType: TextFieldType.PASSWORD,
+                      focus: confirmPassFocus,
+                      decoration: commonInputDecoration(),
+                      validator: (val) {
+                        if (val!.isEmpty) return 'This Field is required';
+                        if (val != newPassController.text) return 'Confirm Password not match';
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
           Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
         ],
       ),
-      bottomNavigationBar: commonButton('Save Changes', () {
-        submit();
-      }).paddingAll(16),
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.all(16),
+        color: context.cardColor,
+        child: commonButton('Save Changes', () {
+          submit();
+        }),
+      ),
     );
   }
 }

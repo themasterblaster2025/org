@@ -80,7 +80,7 @@ Future handleResponse(Response response, [bool? avoidTokenError]) async {
       };
 
       await logInApi(req).then((value) {
-        throw 'Please try again.';
+        throw '';
       }).catchError((e) {
         throw TokenException(e);
       });

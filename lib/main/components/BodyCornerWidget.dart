@@ -13,7 +13,7 @@ class BodyCornerWidget extends StatelessWidget {
     return Container(
       color: colorPrimary,
       child: Container(
-        color: color ?? context.scaffoldBackgroundColor,
+        color: color ?? context.cardColor,
         height: context.height(),
         width: context.width(),
         child: child,

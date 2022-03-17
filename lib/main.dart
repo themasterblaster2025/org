@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
@@ -47,23 +48,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      builder: (context, child) {
-        return ScrollConfiguration(
-          behavior: MyBehavior(),
-          child: child!,
+    return Observer(
+      builder: (context) {
+        return MaterialApp(
+          builder: (context, child) {
+            return ScrollConfiguration(
+              behavior: MyBehavior(),
+              child: child!,
+            );
+          },
+          title: 'Local Delivery',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: appStore.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+          home: SplashScreen(),
+          supportedLocales: LanguageDataModel.languageLocales(),
+          localizationsDelegates: [AppLocalizations(), GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate],
+          localeResolutionCallback: (locale, supportedLocales) => locale,
+          locale: Locale(appStore.selectedLanguage.validate(value: defaultLanguage)),
         );
-      },
-      title: 'Local Delivery',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: appStore.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      home: SplashScreen(),
-      supportedLocales: LanguageDataModel.languageLocales(),
-      localizationsDelegates: [AppLocalizations(), GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate],
-      localeResolutionCallback: (locale, supportedLocales) => locale,
-      locale: Locale(appStore.selectedLanguage.validate(value: defaultLanguage)),
+      }
     );
   }
 }

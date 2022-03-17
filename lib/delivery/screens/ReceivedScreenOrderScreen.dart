@@ -85,7 +85,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
     ).then((value) {
       appStore.setLoading(false);
 
-      toast('Order PicUp Sucessfully');
+      toast('Order pickup Sucessfully');
       finish(context, true);
     }).catchError((error) {
       appStore.setLoading(false);
@@ -147,7 +147,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget('Delivery PicUp', color: colorPrimary, textColor: white, elevation: 0),
+      appBar: appBarWidget(widget.orderData!.status == ORDER_DEPARTED ? 'Order Deliver' : 'Order Pickup', color: colorPrimary, textColor: white, elevation: 0),
       body: Form(
         key: formKey,
         child: Stack(
@@ -187,7 +187,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                                 4.height,
                                 widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY
                                     ? Text('Payment Collect Form on Delivery', style: secondaryTextStyle())
-                                    : Text('Payment Collect Form on Pic Up', style: secondaryTextStyle()),
+                                    : Text('Payment Collect Form on Pickup', style: secondaryTextStyle()),
                               ],
                             ),
                           ],
@@ -283,19 +283,19 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                     widget.orderData!.pickupConfirmByClient != null
                         ? commonCachedNetworkImage(widget.orderData!.pickupTimeSignature, fit: BoxFit.cover, height: 150, width: context.width())
                         : Container(
-                            height: 150,
-                            width: context.width(),
-                            decoration: BoxDecoration(border: Border.all(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
-                            child: Screenshot(
-                              controller: picUpScreenshotController,
-                              child: SfSignaturePad(
-                                key: signaturePicUPPadKey,
-                                minimumStrokeWidth: 1,
-                                maximumStrokeWidth: 3,
-                                strokeColor: colorPrimary,
-                              ),
-                            ),
-                          ),
+                      height: 150,
+                      width: context.width(),
+                      decoration: BoxDecoration(border: Border.all(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
+                      child: Screenshot(
+                        controller: picUpScreenshotController,
+                        child: SfSignaturePad(
+                          key: signaturePicUPPadKey,
+                          minimumStrokeWidth: 1,
+                          maximumStrokeWidth: 3,
+                          strokeColor: colorPrimary,
+                        ),
+                      ),
+                    ),
                     if (widget.orderData!.pickupConfirmByClient == null)
                       Align(
                         alignment: Alignment.bottomRight,
@@ -455,9 +455,11 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                                 return toast('Please Delivery Signature');
                               }
                             }
-                            if (widget.orderData!.paymentId == null && widget.orderData!.paymentCollectFrom == PAYMENT_ON_PICKUP) {
+                            if (widget.orderData!.paymentId == null &&
+                                widget.orderData!.paymentCollectFrom == PAYMENT_ON_PICKUP &&
+                                (widget.orderData!.status == ORDER_ACTIVE || widget.orderData!.status == ORDER_ARRIVED)) {
                               paymentConfirmDialog(widget.orderData!);
-                            } else if (widget.orderData!.paymentId == null && widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY) {
+                            } else if (widget.orderData!.paymentId == null && widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY && widget.orderData!.status == ORDER_DEPARTED) {
                               paymentConfirmDialog(widget.orderData!);
                             } else {
                               saveDelivery();
@@ -489,7 +491,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
               ),
             ),
             Observer(
-              builder: (_) => loaderWidget().visible(appStore.isLoading),
+              builder: (_) => Loader().visible(appStore.isLoading),
             )
           ],
         ),
@@ -502,54 +504,60 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
       context: context,
       builder: (_) {
         return AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
+          content: Stack(
             children: [
-              Text('Are you sure collect this payment?'),
-              16.height,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  AppButton(
-                    color: Colors.red,
-                    textStyle: boldTextStyle(color: white),
-                    text: 'Cancel',
-                    onTap: () {
-                      finish(context);
-                    },
-                  ),
-                  16.width,
-                  AppButton(
-                    color: colorPrimary,
-                    textStyle: boldTextStyle(color: white),
-                    text: 'Save',
-                    onTap: () async {
-                      appStore.setLoading(true);
-                      Map req = {
-                        'order_id': orderData.id,
-                        'client_id': orderData.clientId,
-                        'datetime': picUpController.text,
-                        'total_amount': orderData.totalAmount,
-                        'payment_type': PAYMENT_TYPE_CASH,
-                        'payment_status': PAYMENT_PAID,
-                      };
-                      await savePayment(req).then((value) async {
-                        await saveDelivery().then((value) async {
-                          appStore.setLoading(false);
+                  Text('Are you sure collect this payment?'),
+                  16.height,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      AppButton(
+                        color: Colors.red,
+                        textStyle: boldTextStyle(color: white),
+                        text: 'Cancel',
+                        onTap: () {
                           finish(context);
-                          finish(context);
-                        }).catchError((error) {
-                          appStore.setLoading(false);
-                          log(error);
-                        });
-                      }).catchError((error) {
-                        appStore.setLoading(false);
-                        log(error);
-                      });
-                    },
+                        },
+                      ),
+                      16.width,
+                      AppButton(
+                        color: colorPrimary,
+                        textStyle: boldTextStyle(color: white),
+                        text: 'Save',
+                        onTap: () async {
+                          appStore.setLoading(true);
+                          Map req = {
+                            'order_id': orderData.id,
+                            'client_id': orderData.clientId,
+                            'datetime': picUpController.text,
+                            'total_amount': orderData.totalAmount,
+                            'payment_type': PAYMENT_TYPE_CASH,
+                            'payment_status': PAYMENT_PAID,
+                          };
+                          await savePayment(req).then((value) async {
+                            await saveDelivery().then((value) async {
+                              appStore.setLoading(false);
+                              finish(context);
+                            }).catchError((error) {
+                              appStore.setLoading(false);
+                              log(error);
+                            });
+                          }).catchError((error) {
+                            appStore.setLoading(false);
+                            log(error);
+                          });
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),
+              Observer(
+                builder: (_) => Loader().visible(appStore.isLoading),
+              )
             ],
           ),
         );

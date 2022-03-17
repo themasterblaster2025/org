@@ -58,7 +58,7 @@ class DProfileFragmentState extends State<DProfileFragment> {
                     SettingItemModel mData = settingItems[index];
                     return ListTile(
                       contentPadding: EdgeInsets.only(left: 16, right: 16, top: 0, bottom: 0),
-                      leading: Icon(mData.icon, size: 30, color: colorPrimary),
+                      leading: Icon(mData.icon, size: 30, color: appStore.isDarkMode ? Colors.white : colorPrimary),
                       title: Text(mData.title!),
                       trailing: Icon(Icons.navigate_next, color: Colors.grey),
                       onTap: () async {
