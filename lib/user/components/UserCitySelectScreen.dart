@@ -99,9 +99,9 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
         widget.onUpdate!.call();
       } else {
         if(getStringAsync(USER_TYPE) == CLIENT) {
-          DashboardScreen().launch(context);
+          DashboardScreen().launch(context,isNewTask: true);
         }else{
-          DeliveryDashBoard().launch(context);
+          DeliveryDashBoard().launch(context,isNewTask: true);
         }
       }
     }).catchError((error) {

@@ -180,7 +180,7 @@ class LoginScreenState extends State<LoginScreen> {
               ).expand(),
             ],
           ),
-          Observer(builder: (context) => Loader().visible(appStore.isLoading)),
+          Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
         ],
       ),
     );

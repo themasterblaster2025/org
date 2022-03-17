@@ -9,6 +9,7 @@ import 'package:mighty_delivery/main/models/LoginResponse.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
+import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -128,7 +129,7 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
             tilt: CAMERA_TILT,
             bearing: CAMERA_BEARING,
           ),
-        ) : Loader(),
+        ) : loaderWidget(),
       ),
     );
   }

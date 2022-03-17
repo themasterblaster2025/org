@@ -51,16 +51,6 @@ class _ThemeScreenState extends State<ThemeScreen> {
     }
   }
 
-  Color? getSelectedColor(BuildContext context, int index) {
-    if (currentIndex == index && appStore.isDarkMode) {
-      return Colors.white54;
-    } else if (currentIndex == index && !appStore.isDarkMode) {
-      return Colors.grey;
-    } else {
-      return context.cardColor;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

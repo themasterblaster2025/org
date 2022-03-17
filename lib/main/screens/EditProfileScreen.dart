@@ -187,7 +187,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                 ],
               ),
             ),
-            Observer(builder: (_) => Loader().visible(appStore.isLoading)),
+            Observer(builder: (_) => loaderWidget().visible(appStore.isLoading)),
           ],
         ),
       ),

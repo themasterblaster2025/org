@@ -117,11 +117,17 @@ String parcelTypeIcon(String parcelType) {
   switch (parcelType) {
     case "documents":
       return 'assets/icons/ic_document.png';
+    case "document":
+      return 'assets/icons/ic_document.png';
     case "food":
+      return 'assets/icons/ic_food.png';
+    case "foods":
       return 'assets/icons/ic_food.png';
     case "cake":
       return 'assets/icons/ic_cake.png';
     case "flowers":
+      return 'assets/icons/ic_flower.png';
+    case "flower":
       return 'assets/icons/ic_flower.png';
   }
   return icon;
@@ -170,7 +176,7 @@ String? orderStatus(String orderStatus) {
     return 'Completed';
   } else if (orderStatus == ORDER_CANCELLED) {
     return 'Cancelled';
-  }else if (orderStatus == ORDER_CREATE) {
+  } else if (orderStatus == ORDER_CREATE) {
     return 'Create';
   }
 }
@@ -202,7 +208,26 @@ Future<void> saveOneSignalPlayerId() async {
   });
 }
 
-IconData notificationTypeIcon({String? type}){
-  IconData iconData =  Icons.notifications_none;
-  return iconData;
+String notificationTypeIcon({String? type}) {
+  String icon = 'assets/icons/ic_create.png';
+  if (type == ORDER_ASSIGNED) {
+    icon = 'assets/icons/ic_assign.png';
+  } else if (type == ORDER_ACTIVE) {
+    icon = 'assets/icons/ic_active.png';
+  } else if (type == ORDER_PICKED_UP) {
+    icon = 'assets/icons/ic_picked.png';
+  } else if (type == ORDER_ARRIVED) {
+    icon = 'assets/icons/ic_arrived.png';
+  } else if (type == ORDER_DEPARTED) {
+    icon = 'assets/icons/ic_departed.png';
+  } else if (type == ORDER_COMPLETED) {
+    icon = 'assets/icons/ic_completed.png';
+  } else if (type == ORDER_CANCELLED) {
+    icon = 'assets/icons/ic_cancelled.png';
+  } else if (type == ORDER_CREATE) {
+    icon = 'assets/icons/ic_create.png';
+  } else if (type == ORDER_DRAFT) {
+    icon = 'assets/icons/ic_draft.png';
+  }
+  return icon;
 }

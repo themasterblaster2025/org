@@ -28,7 +28,7 @@ class OrderDetailScreen extends StatefulWidget {
 
 class OrderDetailScreenState extends State<OrderDetailScreen> {
   CityModel? cityData;
-  UserData? deliveryBoyData;
+  UserData? userData;
   num weightCharge = 0;
   num distanceCharge = 0;
 
@@ -62,7 +62,11 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
       if (orderData!.totalDistance! > cityData!.minDistance!) {
         distanceCharge = ((orderData!.totalDistance! - cityData!.minDistance!) * cityData!.perDistanceCharges!).toStringAsFixed(2).toDouble();
       }
-      if (orderData!.deliveryManId != null) deliveryBoyDetailApiCall(orderData!.deliveryManId!);
+      if(getStringAsync(USER_TYPE) == CLIENT){
+        if (orderData!.deliveryManId != null) userDetailApiCall(orderData!.deliveryManId!);
+      }else{
+        if (orderData!.clientId != null) userDetailApiCall(orderData!.clientId!);
+      }
       setState(() {});
     }).catchError((error) {
       appStore.setLoading(false);
@@ -70,11 +74,11 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
     });
   }
 
-  deliveryBoyDetailApiCall(int id) async {
+  userDetailApiCall(int id) async {
     appStore.setLoading(true);
     await getUserDetail(id).then((value) {
       appStore.setLoading(false);
-      deliveryBoyData = value;
+      userData = value;
       setState(() {});
     }).catchError((error) {
       appStore.setLoading(false);
@@ -224,9 +228,9 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                             ),
                           ),
                           Divider(height: 30, thickness: 1),
-                          if (deliveryBoyData != null)
+                          if (userData != null)
                             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                              Text('About Delivery man', style: boldTextStyle(size: 16)),
+                              Text('${getStringAsync(USER_TYPE) == CLIENT ? 'About Delivery man' : 'About User'}', style: boldTextStyle(size: 16)),
                               16.height,
                               Container(
                                 decoration: BoxDecoration(color: colorPrimary.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
@@ -235,32 +239,32 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                   children: [
                                     Row(
                                       children: [
-                                        CircleAvatar(backgroundImage: NetworkImage(deliveryBoyData!.profile_image.validate()), radius: 30),
+                                        CircleAvatar(backgroundImage: NetworkImage(userData!.profile_image.validate()), radius: 30),
                                         16.width,
                                         Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text('${deliveryBoyData!.name.validate()}', style: boldTextStyle()),
+                                            Text('${userData!.name.validate()}', style: boldTextStyle()),
                                             8.height,
-                                            Text('${deliveryBoyData!.email.validate()}', style: primaryTextStyle()),
+                                            Text('${userData!.email.validate()}', style: primaryTextStyle()),
                                           ],
                                         ).expand(),
                                       ],
                                     ),
-                                    if (deliveryBoyData!.address != null)
+                                    if (userData!.address != null)
                                       Row(
                                         children: [
                                           Icon(Icons.location_on, color: colorPrimary, size: 22),
                                           16.width,
-                                          Text('${deliveryBoyData!.address}', style: primaryTextStyle()).expand(),
+                                          Text('${userData!.address}', style: primaryTextStyle()).expand(),
                                         ],
                                       ).paddingOnly(top: 16),
-                                    if (deliveryBoyData!.contact_number != null)
+                                    if (userData!.contact_number != null)
                                       Row(
                                         children: [
                                           Icon(Icons.phone, color: Colors.green, size: 22),
                                           16.width,
-                                          Text('${deliveryBoyData!.contact_number}', style: primaryTextStyle()).expand(),
+                                          Text('${userData!.contact_number}', style: primaryTextStyle()).expand(),
                                         ],
                                       ).paddingOnly(top: 8),
                                   ],

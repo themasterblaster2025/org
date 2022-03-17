@@ -8,6 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
+import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -199,7 +200,7 @@ class TrackingScreenState extends State<TrackingScreen> {
                 ),
               ],
             )
-          : Loader(),
+          : loaderWidget(),
     );
   }
 }

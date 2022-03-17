@@ -208,6 +208,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                     elevation: 0,
                                     width: 135,
                                     height: 35,
+                                    color: Colors.transparent,
                                     padding: EdgeInsets.zero,
                                     shapeBorder: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(defaultRadius),

@@ -56,8 +56,8 @@ List<SettingItemModel> getDeliverySettingItems() {
   list.add(SettingItemModel(icon: Icons.person_outline, title: 'Edit Profile', widget: EditProfileScreen()));
   list.add(SettingItemModel(icon: Icons.lock_outline, title: 'Change Password', widget: ChangePasswordScreen()));
   list.add(SettingItemModel(icon: Icons.location_on_outlined, title: 'Change Location', widget: UserCitySelectScreen(isBack: true)));
-  list.add(SettingItemModel(icon: Icons.language, title: 'Language'));
-  list.add(SettingItemModel(icon: Icons.wb_sunny_outlined, title: 'DarkMode'));
+  list.add(SettingItemModel(icon: Icons.language, title: 'Language',widget: LanguageScreen()));
+  list.add(SettingItemModel(icon: Icons.wb_sunny_outlined, title: 'DarkMode',widget: ThemeScreen()));
   list.add(SettingItemModel(icon: Icons.info_outline, title: 'About Us'));
   list.add(SettingItemModel(icon: Icons.help_outline, title: 'Help & Support'));
   list.add(SettingItemModel(icon: Icons.logout, title: 'Logout'));

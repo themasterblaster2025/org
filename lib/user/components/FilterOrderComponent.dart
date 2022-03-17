@@ -49,12 +49,14 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
         if (fromDate != null) {
           fromDateController.text = DateFormat('MMM dd,yyyy').format(fromDate!);
         }
+        print('from date:${fromDateController.text}');
       }
       if (filterData!.toDate != null) {
         toDate = DateTime.tryParse(filterData!.toDate!);
         if(toDate!=null) {
           toDateController.text = DateFormat('MMM dd,yyyy').format(toDate!);
         }
+        print('to date:${toDateController.text}');
       }
     }
   }

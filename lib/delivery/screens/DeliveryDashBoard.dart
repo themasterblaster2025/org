@@ -41,6 +41,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: colorPrimary,
+          automaticallyImplyLeading: false,
           actions: [
             Stack(
               children: [

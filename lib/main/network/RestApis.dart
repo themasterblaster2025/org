@@ -132,6 +132,9 @@ Future<void> logout(BuildContext context) async {
   await removeKey(STATUS);
   await removeKey(COUNTRY_ID);
   await removeKey(CITY_ID);
+  await removeKey(FILTER_DATA);
+  await removeKey(SELECTED_LANGUAGE_CODE);
+  await removeKey(THEME_MODE_INDEX);
 
   await appStore.setLogin(false);
 

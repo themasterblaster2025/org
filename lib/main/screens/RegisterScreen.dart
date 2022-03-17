@@ -65,6 +65,7 @@ class RegisterScreenState extends State<RegisterScreen> {
         "password": passController.text.validate(),
         "user_type": selectedUserType,
         "contact_number": phoneController.text.trim(),
+        "player_id": getStringAsync(PLAYER_ID).validate(),
       };
       await signUpApi(req).then((value) async {
         appStore.setLoading(false);
@@ -206,7 +207,7 @@ class RegisterScreenState extends State<RegisterScreen> {
               ).expand(),
             ],
           ),
-          Observer(builder: (context) => Loader().visible(appStore.isLoading)),
+          Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
         ],
       ).withHeight(context.height()),
     );

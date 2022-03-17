@@ -28,7 +28,6 @@ class CreateTabScreenState extends State<CreateTabScreen> {
   int currentPage = 1;
   int totalPage = 1;
 
-  bool mIsLastPage = false;
   List<OrderData> orderData = [];
 
   @override
@@ -37,7 +36,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
     init();
     scrollController.addListener(() {
       if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
-        if (!mIsLastPage) {
+        if (currentPage < totalPage) {
           appStore.setLoading(true);
 
           currentPage++;
@@ -54,7 +53,6 @@ class CreateTabScreenState extends State<CreateTabScreen> {
     getDeliveryBoyList(page: currentPage, deliveryBoyID: getIntAsync(USER_ID), cityId: getIntAsync(CITY_ID), countryId: getIntAsync(COUNTRY_ID), orderStatus: widget.orderStatus!).then((value) {
       appStore.setLoading(false);
       appStore.setAllUnreadCount(value.allUnreadCount.validate());
-      mIsLastPage = value.data!.length != value.pagination!.per_page!;
 
       currentPage = value.pagination!.currentPage!;
       totalPage = value.pagination!.totalPages!;
@@ -261,7 +259,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
             },
           ),
           if (orderData.isEmpty) appStore.isLoading ? SizedBox() : emptyWidget(),
-          Loader().visible(appStore.isLoading)
+          loaderWidget().visible(appStore.isLoading)
         ],
       ),
     );

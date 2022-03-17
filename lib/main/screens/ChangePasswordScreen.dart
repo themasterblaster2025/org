@@ -112,7 +112,7 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
               ),
             ),
           ),
-          Observer(builder: (context) => Loader().visible(appStore.isLoading)),
+          Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
         ],
       ),
       bottomNavigationBar: commonButton('Save Changes', () {

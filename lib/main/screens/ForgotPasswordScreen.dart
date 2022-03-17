@@ -81,7 +81,7 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 ),
               ),
             ),
-            Observer(builder: (context) => Loader().visible(appStore.isLoading)),
+            Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
           ],
         ),
       ),

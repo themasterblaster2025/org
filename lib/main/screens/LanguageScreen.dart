@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
+import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
@@ -50,7 +51,7 @@ class LanguageScreenState extends State<LanguageScreen> {
                       Text('${data.subTitle.validate()}', style: secondaryTextStyle()),
                     ],
                   ).expand(),
-                  if (getStringAsync(SELECTED_LANGUAGE_CODE) == data.languageCode) Icon(Icons.check_circle, color: colorPrimary),
+                  if (getStringAsync(SELECTED_LANGUAGE_CODE,defaultValue: defaultLanguage) == data.languageCode) Icon(Icons.check_circle, color: colorPrimary),
                 ],
               ),
             ).onTap(

@@ -12,7 +12,6 @@ import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
-import 'package:mighty_delivery/main/utils/DataProviders.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:mighty_delivery/user/components/CreateOrderConfirmationDialog.dart';
 import 'package:mighty_delivery/user/components/PaymentScreen.dart';
@@ -488,24 +487,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             }
           },
         ),
-        16.height.visible(pickLat != null && pickLong != null),
-        Column(
-          children: [
-            Row(
-              children: [
-                Text('latitude: ', style: primaryTextStyle()),
-                Text(pickLat.toString(), style: primaryTextStyle(size: 14)),
-              ],
-            ).visible(pickLat != null && pickLong != null),
-            4.height,
-            Row(
-              children: [
-                Text('longitude: ', style: primaryTextStyle()),
-                Text(pickLong.toString(), style: primaryTextStyle(size: 14)),
-              ],
-            ),
-          ],
-        ).visible(pickLat != null && pickLong != null),
         16.height,
         Text('Contact Number', style: primaryTextStyle()),
         8.height,
@@ -555,24 +536,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             }
           },
         ),
-        16.height.visible(deliverLat != null && deliverLong != null),
-        Column(
-          children: [
-            Row(
-              children: [
-                Text('latitude: ', style: primaryTextStyle()),
-                Text(deliverLat.toString(), style: primaryTextStyle(size: 14)),
-              ],
-            ),
-            4.height,
-            Row(
-              children: [
-                Text('longitude: ', style: primaryTextStyle()),
-                Text(deliverLong.toString(), style: primaryTextStyle(size: 14)),
-              ],
-            )
-          ],
-        ).visible(deliverLat != null && deliverLong != null),
         16.height,
         Text('Contact Number', style: primaryTextStyle()),
         8.height,
@@ -860,13 +823,16 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               if (selectedTabIndex != 3) {
                 if (_formKey.currentState!.validate()) {
                   Duration difference = Duration();
+                  Duration differenceCurrentTime = Duration();
                   if (!isDeliverNow) {
                     pickFromDateTime = pickDate!.add(Duration(hours: pickFromTime!.hour, minutes: pickFromTime!.minute));
                     pickToDateTime = pickDate!.add(Duration(hours: pickToTime!.hour, minutes: pickToTime!.minute));
                     deliverFromDateTime = deliverDate!.add(Duration(hours: deliverFromTime!.hour, minutes: deliverFromTime!.minute));
                     deliverToDateTime = deliverDate!.add(Duration(hours: deliverToTime!.hour, minutes: deliverToTime!.minute));
                     difference = pickFromDateTime!.difference(deliverFromDateTime!);
+                    differenceCurrentTime = DateTime.now().difference(pickFromDateTime!);
                   }
+                  if(differenceCurrentTime.inMinutes > 0) return toast('Pickup Time must be after Current Time');
                   if (difference.inMinutes > 0) return toast('PickupTime must be before DeliverTime');
                   selectedTabIndex++;
                   if (selectedTabIndex == 3) {

@@ -5,7 +5,6 @@ import 'package:mighty_delivery/main/models/NotificationModel.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
-import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/user/screens/OrderDetailScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -86,11 +85,12 @@ class NotificationScreenState extends State<NotificationScreen> {
                       Container(
                         height: 50,
                         width: 50,
+                        alignment:Alignment.center,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: colorPrimary.withOpacity(0.15),
                         ),
-                        child: Icon(notificationTypeIcon(), color: colorPrimary),
+                        child: ImageIcon(AssetImage(notificationTypeIcon(type: data.data!.type)),color: colorPrimary,size: 26),
                       ),
                       16.width,
                       Column(
@@ -105,14 +105,7 @@ class NotificationScreenState extends State<NotificationScreen> {
                             ],
                           ),
                           8.height,
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('${data.data!.message}', style: primaryTextStyle(size: 14)).expand(),
-                              8.width,
-                              Text('#${data.data!.id}', style: secondaryTextStyle()),
-                            ],
-                          ),
+                          Text('${data.data!.message}', style: primaryTextStyle(size: 14)),
                         ],
                       ).expand(),
                     ],
@@ -130,7 +123,7 @@ class NotificationScreenState extends State<NotificationScreen> {
               },
             ),
           ),
-          Observer(builder: (_) => Loader().visible(appStore.isLoading))
+          Observer(builder: (_) => loaderWidget().visible(appStore.isLoading))
         ],
       ),
     );

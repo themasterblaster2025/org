@@ -489,7 +489,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
               ),
             ),
             Observer(
-              builder: (_) => Loader().visible(appStore.isLoading),
+              builder: (_) => loaderWidget().visible(appStore.isLoading),
             )
           ],
         ),
