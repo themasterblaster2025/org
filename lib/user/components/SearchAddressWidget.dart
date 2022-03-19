@@ -44,7 +44,7 @@ class _CustomSearchScaffoldState extends PlacesAutocompleteState {
     ));
     return WillPopScope(
       onWillPop: () async {
-        finish(context);
+        finish(context,[{'address': '', 'late': '', 'long': ''}]);
         return true;
       },
       child: Scaffold(key: searchScaffoldKey, appBar: appBar, body: body),

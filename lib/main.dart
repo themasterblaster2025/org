@@ -6,11 +6,11 @@ import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'AppTheme.dart';
 import 'main/language/AppLocalizations.dart';
 import 'main/language/BaseLanguage.dart';
 import 'main/screens/SplashScreen.dart';
 import 'main/store/AppStore.dart';
-import 'main/utils/AppTheme.dart';
 import 'main/utils/DataProviders.dart';
 
 AppStore appStore = AppStore();

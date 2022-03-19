@@ -50,8 +50,6 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   int groupVal = 0;
   String? reason;
 
-  List<String> statusList = ['Delayed', 'Cancelled'];
-
   List<AppModel> list = getReasonList();
 
   @override
@@ -85,7 +83,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
     ).then((value) {
       appStore.setLoading(false);
 
-      toast('Order pickup Sucessfully');
+      toast(language.order_pickup_successfully);
       finish(context, true);
     }).catchError((error) {
       appStore.setLoading(false);
@@ -104,7 +102,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
             children: [
               AppButton(
                 color: colorPrimary,
-                text: 'Image Pic to Camera',
+                text: language.image_pick_to_camera,
                 textStyle: primaryTextStyle(color: white),
                 onTap: () {
                   val = 1;
@@ -115,7 +113,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
               16.height,
               AppButton(
                 color: colorPrimary,
-                text: 'Image Pic to Gallery',
+                text: language.image_pic_to_gallery,
                 textStyle: primaryTextStyle(color: white),
                 onTap: () {
                   val = 2;
@@ -147,7 +145,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(widget.orderData!.status == ORDER_DEPARTED ? 'Order Deliver' : 'Order Pickup', color: colorPrimary, textColor: white, elevation: 0),
+      appBar: appBarWidget(widget.orderData!.status == ORDER_DEPARTED ? language.order_deliver : language.order_pickup, color: colorPrimary, textColor: white, elevation: 0),
       body: Form(
         key: formKey,
         child: Stack(
@@ -183,18 +181,18 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Info', style: boldTextStyle()),
+                                Text(language.info, style: boldTextStyle()),
                                 4.height,
                                 widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY
-                                    ? Text('Payment Collect Form on Delivery', style: secondaryTextStyle())
-                                    : Text('Payment Collect Form on Pickup', style: secondaryTextStyle()),
+                                    ? Text(language.payment_collect_from_delivery, style: secondaryTextStyle())
+                                    : Text(language.payment_collect_from_pickup, style: secondaryTextStyle()),
                               ],
                             ),
                           ],
                         ),
                       ),
                     16.height,
-                    Text('PicUp Datetime', style: boldTextStyle()),
+                    Text(language.pickup_datetime, style: boldTextStyle()),
                     8.height,
                     AppTextField(
                       readOnly: true,
@@ -215,8 +213,8 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                             firstDate: DateTime(2000),
                             lastDate: DateTime(2100),
                             icon: Icon(Icons.event),
-                            dateLabelText: 'Date',
-                            timeLabelText: "Hour",
+                            dateLabelText: language.date,
+                            timeLabelText: language.hour,
                             onChanged: (val) {
                               picUpController.text = val;
                             },
@@ -234,7 +232,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Delivery Datetime', style: boldTextStyle()),
+                          Text(language.delivery_datetime, style: boldTextStyle()),
                           8.height,
                           AppTextField(
                             readOnly: true,
@@ -255,8 +253,8 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                                   firstDate: DateTime(2000),
                                   lastDate: DateTime(2100),
                                   icon: Icon(Icons.event),
-                                  dateLabelText: 'Date',
-                                  timeLabelText: "Hour",
+                                  dateLabelText: language.date,
+                                  timeLabelText: language.hour,
                                   /*selectableDayPredicate: (date) {
                                    if (date.weekday == 6 || date.weekday == 7) {
                                     return false;
@@ -278,7 +276,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                         ],
                       ),
                     16.height,
-                    Text('PicUp time Signature', style: boldTextStyle()),
+                    Text(language.pickup_time_signature, style: boldTextStyle()),
                     8.height,
                     widget.orderData!.pickupConfirmByClient != null
                         ? commonCachedNetworkImage(widget.orderData!.pickupTimeSignature, fit: BoxFit.cover, height: 150, width: context.width())
@@ -303,7 +301,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             TextButton(
-                              child: Text('Save', style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
+                              child: Text(language.save, style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
                               onPressed: () async {
                                 await picUpScreenshotController.capture(delay: Duration(milliseconds: 10)).then((Uint8List? image) async {
                                   final tempDir = await getTemporaryDirectory();
@@ -317,7 +315,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                             ),
                             8.width,
                             TextButton(
-                              child: Text('Clear', style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
+                              child: Text(language.clear, style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
                               onPressed: () async {
                                 signaturePicUPPadKey.currentState!.clear();
                               },
@@ -325,7 +323,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                           ],
                         ),
                       ),
-                    Text('Delivery time Signature', style: boldTextStyle()).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
+                    Text(language.delivery_time_signature, style: boldTextStyle()).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
                     8.height.visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
                     if (widget.orderData!.status == ORDER_DEPARTED)
                       Container(
@@ -349,7 +347,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             TextButton(
-                              child: Text('Save', style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
+                              child: Text(language.save, style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
                               onPressed: () async {
                                 await deliveryScreenshotController.capture(delay: Duration(milliseconds: 10)).then((Uint8List? imageData) async {
                                   final tempDir = await getTemporaryDirectory();
@@ -363,7 +361,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                             ),
                             8.width,
                             TextButton(
-                              child: Text('Clear', style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
+                              child: Text(language.clear, style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
                               onPressed: () async {
                                 signatureDeliveryPadKey.currentState!.clear();
                               },
@@ -372,38 +370,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                         ),
                       ).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
                     16.height,
-                    /* Text('Add a product image', style: boldTextStyle()),
-                    16.height,
-                    imageProfile == null
-                        ? Container(
-                            height: 250,
-                            width: context.width(),
-                            decoration: BoxDecoration(border: Border.all(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.camera_alt_outlined, color: colorPrimary),
-                                16.width,
-                                Text('Upload a \nproduct image', style: primaryTextStyle()),
-                              ],
-                            ),
-                          ).onTap(() {
-                            selectPic();
-                          })
-                        : Image.file(File(imageProfile!.path), height: 250, width: context.width(), fit: BoxFit.cover).cornerRadiusWithClipRRect(defaultRadius),
-                    if (imageProfile != null)
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: TextButton(
-                          child: Text('Change Image', style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
-                          onPressed: () {
-                            selectPic();
-                          },
-                        ),
-                      ),
-                    if (imageProfile == null) 16.height,*/
-                    Text('Reason', style: boldTextStyle()),
+                    Text(language.reason, style: boldTextStyle()),
                     8.height,
                     Container(
                       decoration: BoxDecoration(border: Border.all(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
@@ -432,27 +399,27 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                       children: [
                         AppButton(
                           width: context.width(),
-                          text: widget.orderData!.status == ORDER_DEPARTED ? 'Submit' : 'PicUp Delivery',
+                          text: widget.orderData!.status == ORDER_DEPARTED ? language.submit : language.pickup_delivery,
                           textStyle: primaryTextStyle(color: white),
                           color: colorPrimary,
                           onTap: () async {
                             if (picUpController.text.isEmpty) {
-                              return toast('Please Select Pic Up Time');
+                              return toast(language.select_pickup_time_msg);
                             }
                             if (widget.orderData!.status == ORDER_DEPARTED) {
                               if (deliveryDateController.text.isEmpty) {
-                                return toast('Please Select delivery Time');
+                                return toast(language.select_delivery_time_msg);
                               }
                             }
 
                             if (widget.orderData!.status == ORDER_ACTIVE || widget.orderData!.status == ORDER_ARRIVED) {
                               if (imageSignature == null) {
-                                return toast('Please PicUp Signature');
+                                return toast(language.select_pickup_sign_msg);
                               }
                             }
                             if (widget.orderData!.status == ORDER_DEPARTED) {
                               if (deliverySignature == null) {
-                                return toast('Please Delivery Signature');
+                                return toast(language.select_delivery_sign_msg);
                               }
                             }
                             if (widget.orderData!.paymentId == null &&
@@ -469,15 +436,15 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                         16.width,
                         AppButton(
                           width: context.width(),
-                          text: 'Cancel',
+                          text: language.cancel,
                           textStyle: primaryTextStyle(color: white),
                           color: colorPrimary,
                           onTap: () async {
                             if (reasonController.text.isEmpty) {
-                              return toast('Please select reason');
+                              return toast(language.select_reason_msg);
                             }
                             await updateOrder(orderId: widget.orderData!.id, reason: reasonController.text).then((value) {
-                              toast('Order cancel sucessfully');
+                              toast(language.order_cancelled_successfully);
                               finish(context, true);
                             }).catchError((error) {
                               log(error);
@@ -509,7 +476,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('Are you sure collect this payment?'),
+                  Text(language.collect_payment_confirmation_msg),
                   16.height,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -517,8 +484,9 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                       AppButton(
                         color: Colors.red,
                         textStyle: boldTextStyle(color: white),
-                        text: 'Cancel',
-                        onTap: () {
+                        text: language.cancel,
+                        onTap: () async {
+                          await updateOrder(orderStatus: ORDER_CANCELLED, orderId: orderData.id);
                           finish(context);
                         },
                       ),
@@ -526,7 +494,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                       AppButton(
                         color: colorPrimary,
                         textStyle: boldTextStyle(color: white),
-                        text: 'Save',
+                        text: language.save,
                         onTap: () async {
                           appStore.setLoading(true);
                           Map req = {

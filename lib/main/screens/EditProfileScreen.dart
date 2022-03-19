@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
@@ -155,7 +154,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     },
                   ),
                   16.height,
-                  Text('Name', style: primaryTextStyle()),
+                  Text(language.name, style: primaryTextStyle()),
                   8.height,
                   AppTextField(
                     controller: nameController,
@@ -191,9 +190,13 @@ class EditProfileScreenState extends State<EditProfileScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: commonButton(language.save_changes, () {
-        save();
-      }).paddingAll(16),
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.all(16),
+        color: context.cardColor,
+        child: commonButton(language.save_changes, () {
+          save();
+        }),
+      ),
     );
   }
 }

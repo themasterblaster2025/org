@@ -143,8 +143,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     cityData!.extraCharges!.forEach((element) {
       if (element.chargesType == CHARGE_TYPE_PERCENTAGE) {
         num charge = (totalAmount * element.charges! * 0.01).toStringAsFixed(2).toDouble();
-        print('element_charge:${element.charges!}');
-        print('charge:$charge');
         totalExtraCharge += charge;
         if (charge > 0) extraChargesObject.addEntries({MapEntry("${element.title!.toLowerCase().replaceAll(' ', "_")}", charge)});
       } else {
@@ -793,53 +791,57 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             ),
           ),
         ),
-        bottomNavigationBar: Row(
-          children: [
-            if (selectedTabIndex != 0)
-              outlineButton(language.previous, () {
-                selectedTabIndex--;
-                setState(() {});
-              }).paddingRight(16).expand(),
-            commonButton(selectedTabIndex != 3 ? 'Next' : 'Create Order', () async {
-              if (selectedTabIndex != 3) {
-                if (_formKey.currentState!.validate()) {
-                  Duration difference = Duration();
-                  Duration differenceCurrentTime = Duration();
-                  if (!isDeliverNow) {
-                    pickFromDateTime = pickDate!.add(Duration(hours: pickFromTime!.hour, minutes: pickFromTime!.minute));
-                    pickToDateTime = pickDate!.add(Duration(hours: pickToTime!.hour, minutes: pickToTime!.minute));
-                    deliverFromDateTime = deliverDate!.add(Duration(hours: deliverFromTime!.hour, minutes: deliverFromTime!.minute));
-                    deliverToDateTime = deliverDate!.add(Duration(hours: deliverToTime!.hour, minutes: deliverToTime!.minute));
-                    difference = pickFromDateTime!.difference(deliverFromDateTime!);
-                    differenceCurrentTime = DateTime.now().difference(pickFromDateTime!);
-                  }
-                  if(differenceCurrentTime.inMinutes > 0) return toast(language.pickup_current_validation_msg);
-                  if (difference.inMinutes > 0) return toast(language.pickup_deliver_validation_msg);
-                  selectedTabIndex++;
-                  if (selectedTabIndex == 3) {
-                    getTotalAmount();
-                  }
+        bottomNavigationBar: Container(
+          padding: EdgeInsets.all(16),
+          color: context.cardColor,
+          child: Row(
+            children: [
+              if (selectedTabIndex != 0)
+                outlineButton(language.previous, () {
+                  selectedTabIndex--;
                   setState(() {});
+                }).paddingRight(16).expand(),
+              commonButton(selectedTabIndex != 3 ? language.next : language.create_order, () async {
+                if (selectedTabIndex != 3) {
+                  if (_formKey.currentState!.validate()) {
+                    Duration difference = Duration();
+                    Duration differenceCurrentTime = Duration();
+                    if (!isDeliverNow) {
+                      pickFromDateTime = pickDate!.add(Duration(hours: pickFromTime!.hour, minutes: pickFromTime!.minute));
+                      pickToDateTime = pickDate!.add(Duration(hours: pickToTime!.hour, minutes: pickToTime!.minute));
+                      deliverFromDateTime = deliverDate!.add(Duration(hours: deliverFromTime!.hour, minutes: deliverFromTime!.minute));
+                      deliverToDateTime = deliverDate!.add(Duration(hours: deliverToTime!.hour, minutes: deliverToTime!.minute));
+                      difference = pickFromDateTime!.difference(deliverFromDateTime!);
+                      differenceCurrentTime = DateTime.now().difference(pickFromDateTime!);
+                    }
+                    if(differenceCurrentTime.inMinutes > 0) return toast(language.pickup_current_validation_msg);
+                    if (difference.inMinutes > 0) return toast(language.pickup_deliver_validation_msg);
+                    selectedTabIndex++;
+                    if (selectedTabIndex == 3) {
+                      getTotalAmount();
+                    }
+                    setState(() {});
+                  }
+                } else {
+                  await showInDialog(
+                    context,
+                    contentPadding: EdgeInsets.all(16),
+                    builder: (p0) {
+                      return CreateOrderConfirmationDialog(
+                        onSuccess: () {
+                          finish(context);
+                          createOrderApiCall(ORDER_CREATE);
+                        },
+                        message: language.create_order_confirmation_msg,
+                        primaryText: language.create,
+                      );
+                    },
+                  );
                 }
-              } else {
-                await showInDialog(
-                  context,
-                  contentPadding: EdgeInsets.all(16),
-                  builder: (p0) {
-                    return CreateOrderConfirmationDialog(
-                      onSuccess: () {
-                        finish(context);
-                        createOrderApiCall(ORDER_CREATE);
-                      },
-                      message: language.create_order_confirmation_msg,
-                      primaryText: language.create,
-                    );
-                  },
-                );
-              }
-            }).expand()
-          ],
-        ).paddingAll(16),
+              }).expand()
+            ],
+          ),
+        ),
       ),
     );
   }

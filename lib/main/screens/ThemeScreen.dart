@@ -32,11 +32,11 @@ class _ThemeScreenState extends State<ThemeScreen> {
   String _getName(ThemeModes themeModes) {
     switch (themeModes) {
       case ThemeModes.Light:
-        return "Light";
+        return language.light;
       case ThemeModes.Dark:
-        return "Dark";
+        return language.dark;
       case ThemeModes.SystemDefault:
-        return "System Default";
+        return language.system_default;
     }
   }
 
@@ -54,7 +54,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget("Theme", color: colorPrimary, showBack: true, elevation: 0, textColor: Colors.white),
+      appBar: appBarWidget(language.theme, color: colorPrimary, showBack: true, elevation: 0, textColor: Colors.white),
       body: BodyCornerWidget(
         child: ListView(
           children: List.generate(

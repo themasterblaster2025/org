@@ -12,6 +12,8 @@ import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import '../../main.dart';
+
 class TrackingScreen extends StatefulWidget {
   final List<OrderData> order;
   final LatLng? latLng;
@@ -133,7 +135,7 @@ class TrackingScreenState extends State<TrackingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tracking Order'),
+        title: Text(language.tracking_order),
       ),
       body: SOURCE_LOCATION != null
           ? Stack(
@@ -174,7 +176,7 @@ class TrackingScreenState extends State<TrackingScreen> {
                                 AppButton(
                                   padding: EdgeInsets.zero,
                                   color: colorPrimary,
-                                  text: 'Track',
+                                  text: language.track,
                                   textStyle: primaryTextStyle(color: Colors.white),
                                   onTap: () async {
                                     orderLatLong = LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble());

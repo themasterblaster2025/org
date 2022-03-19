@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:mighty_delivery/delivery/screens/DeliveryDetailScreen.dart';
 import 'package:mighty_delivery/delivery/screens/ReceivedScreenOrderScreen.dart';
 import 'package:mighty_delivery/delivery/screens/TrackingScreen.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
@@ -157,7 +156,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Picked at 4:45', style: secondaryTextStyle()),
+                              Text('${language.picked_at} 4:45', style: secondaryTextStyle()),
                               4.height,
                               Text(data.pickupPoint!.address.validate(), style: primaryTextStyle()),
                               4.height,
@@ -186,7 +185,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Delivered at 4:53', style: secondaryTextStyle()),
+                              Text('${language.delivered_at} 4:53', style: secondaryTextStyle()),
                               4.height,
                               Text(data.deliveryPoint!.address.validate(), style: primaryTextStyle()),
                               4.height,
@@ -234,10 +233,10 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                           children: [
                             Icon(Icons.location_on_outlined, color: colorPrimary),
                             8.width,
-                            Text('Track Order Location', style: primaryTextStyle(color: colorPrimary)).expand(),
+                            Text(language.track_order_location, style: primaryTextStyle(color: colorPrimary)).expand(),
                             AppButton(
                               padding: EdgeInsets.all(0),
-                              text: 'Track',
+                              text: language.track,
                               color: colorPrimary,
                               textStyle: boldTextStyle(color: Colors.white),
                               onTap: () async {
@@ -288,15 +287,15 @@ class CreateTabScreenState extends State<CreateTabScreen> {
 
   buttonText(String orderStatus) {
     if (orderStatus == ORDER_ASSIGNED) {
-      return 'Active';
+      return language.active;
     } else if (orderStatus == ORDER_ACTIVE) {
-      return 'Pick Up';
+      return language.pick_up;
     } else if (orderStatus == ORDER_ARRIVED) {
-      return 'Pick Up';
+      return language.pick_up;
     } else if (orderStatus == ORDER_PICKED_UP) {
-      return 'Departed';
+      return language.departed;
     } else if (orderStatus == ORDER_DEPARTED) {
-      return 'Submit';
+      return language.submit;
     }
     return '';
   }

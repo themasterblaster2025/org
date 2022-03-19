@@ -11,6 +11,8 @@ import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
+import '../../main.dart';
+
 InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, Function()? suffixOnTap, Widget? dateTime}) {
   return InputDecoration(
     contentPadding: EdgeInsets.all(12),
@@ -68,19 +70,6 @@ Widget placeHolderWidget({double? height, double? width, BoxFit? fit, AlignmentG
 
 String parseHtmlString(String? htmlString) {
   return parse(parse(htmlString).body!.text).documentElement!.text;
-}
-
-String? getOrderStatus(String orderStatus) {
-  if (orderStatus == COURIER_ASSIGNED) {
-    return 'Assigned';
-  } else if (orderStatus == COURIER_DEPARTED) {
-    return 'Departed';
-  } else if (orderStatus == RESTORE) {
-    return 'Restore';
-  } else if (orderStatus == FORCE_DELETE) {
-    return 'Delete';
-  }
-  return orderStatus;
 }
 
 Color statusColor(String status) {
@@ -163,21 +152,21 @@ Widget emptyWidget() {
 
 String? orderStatus(String orderStatus) {
   if (orderStatus == ORDER_ASSIGNED) {
-    return 'Assign';
+    return language.assign;
   } else if (orderStatus == ORDER_ACTIVE) {
-    return 'Active';
+    return language.active;
   } else if (orderStatus == ORDER_PICKED_UP) {
-    return 'Picked Up';
+    return language.picked_up;
   } else if (orderStatus == ORDER_ARRIVED) {
-    return 'Arrived';
+    return language.arrived;
   } else if (orderStatus == ORDER_DEPARTED) {
-    return 'Departed';
+    return language.departed;
   } else if (orderStatus == ORDER_COMPLETED) {
-    return 'Completed';
+    return language.completed;
   } else if (orderStatus == ORDER_CANCELLED) {
-    return 'Cancelled';
+    return language.cancelled;
   } else if (orderStatus == ORDER_CREATE) {
-    return 'Create';
+    return language.create;
   }
 }
 
@@ -193,7 +182,7 @@ Future<bool> checkPermission() async {
       return true;
     }
   } else {
-    toast('allow location permission');
+    toast(language.allow_location_permission);
 
     // Open system level location permission
     await Geolocator.openAppSettings();

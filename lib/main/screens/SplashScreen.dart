@@ -57,7 +57,7 @@ class SplashScreenState extends State<SplashScreen> {
           children: [
             FlutterLogo(size: 100),
             16.height,
-            Text('Local Delivery System', style: boldTextStyle(size: 20)),
+            Text(language.app_name, style: boldTextStyle(size: 20)),
           ],
         ),
       ),

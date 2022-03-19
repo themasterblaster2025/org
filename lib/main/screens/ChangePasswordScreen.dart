@@ -45,7 +45,7 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
       appStore.setLoading(true);
 
       await changePassword(req).then((value) {
-        toast('Password change');
+        toast(value.message.toString());
         snackBar(context, title: value.message.validate());
 
         appStore.setLoading(false);

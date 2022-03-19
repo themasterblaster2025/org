@@ -96,6 +96,7 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
       appStore.setLoading(false);
       if (widget.isBack) {
         finish(context);
+        LiveStream().emit('UpdateOrderData');
         widget.onUpdate!.call();
       } else {
         if(getStringAsync(USER_TYPE) == CLIENT) {
@@ -181,7 +182,7 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                                 AppTextField(
                                   controller: searchCityController,
                                   textFieldType: TextFieldType.OTHER,
-                                  decoration: commonInputDecoration(hintText: 'Search City', suffixIcon: Icons.search),
+                                  decoration: commonInputDecoration(hintText: language.select_city, suffixIcon: Icons.search),
                                   onChanged: (value) {
                                     getCityApiCall(name: value);
                                   },

@@ -7,6 +7,7 @@ import 'package:mighty_delivery/main/utils/DataProviders.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import '../../main.dart';
 import 'LoginScreen.dart';
 
 class WalkThroughScreen extends StatefulWidget {
@@ -43,7 +44,7 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
         showBack: false,
         color: Colors.transparent,
         actions: [
-          Text('Skip', style: boldTextStyle(color: grey)).onTap(
+          Text(language.skip, style: boldTextStyle(color: grey)).onTap(
             () async {
               await setValue(IS_FIRST_TIME, false);
               LoginScreen().launch(context, isNewTask: true, duration: Duration(seconds: 2), pageRouteAnimation: PageRouteAnimation.Scale);
@@ -108,7 +109,7 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
                   pageController.animateToPage(++currentPage, duration: Duration(milliseconds: 800), curve: Curves.easeInOut);
                 })
               : commonButton(
-                  'Get Started',
+                  language.get_started,
                   () async {
                     await setValue(IS_FIRST_TIME, false);
                     LoginScreen().launch(context, isNewTask: true, duration: Duration(seconds: 2), pageRouteAnimation: PageRouteAnimation.Scale);

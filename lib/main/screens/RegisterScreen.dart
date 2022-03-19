@@ -54,7 +54,7 @@ class RegisterScreenState extends State<RegisterScreen> {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
 
-      if (selectedUserType == null) return toast('Please select Usertype');
+      if (selectedUserType == null) return toast(language.select_usertype_msg);
 
       appStore.setLoading(true);
 
@@ -105,11 +105,11 @@ class RegisterScreenState extends State<RegisterScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         30.height,
-                        Text('Create an account', style: boldTextStyle(size: headingSize)),
+                        Text(language.create_an_account, style: boldTextStyle(size: headingSize)),
                         8.height,
-                        Text('Sign up to continue', style: secondaryTextStyle(size: 16)),
+                        Text(language.sign_up_to_continue, style: secondaryTextStyle(size: 16)),
                         30.height,
-                        Text('Name', style: primaryTextStyle()),
+                        Text(language.name, style: primaryTextStyle()),
                         8.height,
                         AppTextField(
                           controller: nameController,
@@ -119,7 +119,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           decoration: commonInputDecoration(),
                         ),
                         16.height,
-                        Text('Username', style: primaryTextStyle()),
+                        Text(language.username, style: primaryTextStyle()),
                         8.height,
                         AppTextField(
                           controller: userNameController,
@@ -129,7 +129,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           decoration: commonInputDecoration(),
                         ),
                         16.height,
-                        Text('Email', style: primaryTextStyle()),
+                        Text(language.email, style: primaryTextStyle()),
                         8.height,
                         AppTextField(
                           controller: emailController,
@@ -139,7 +139,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           decoration: commonInputDecoration(),
                         ),
                         16.height,
-                        Text('Contact Number', style: primaryTextStyle()),
+                        Text(language.contact_number, style: primaryTextStyle()),
                         8.height,
                         AppTextField(
                           controller: phoneController,
@@ -149,7 +149,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           decoration: commonInputDecoration(),
                         ),
                         16.height,
-                        Text('Password', style: primaryTextStyle()),
+                        Text(language.password, style: primaryTextStyle()),
                         8.height,
                         AppTextField(
                           controller: passController,
@@ -158,7 +158,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           decoration: commonInputDecoration(),
                         ),
                         16.height,
-                        Text('User Type', style: primaryTextStyle()),
+                        Text(language.user_type, style: primaryTextStyle()),
                         8.height,
                         Row(
                           children: [
@@ -166,7 +166,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                               contentPadding: EdgeInsets.zero,
                               groupValue: selectedUserType,
                               value: CLIENT,
-                              title: Text('Client'),
+                              title: Text(language.client),
                               onChanged: (String? value) {
                                 selectedUserType = value;
                                 setState(() {});
@@ -176,7 +176,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                               contentPadding: EdgeInsets.zero,
                               groupValue: selectedUserType,
                               value: DELIVERY_MAN,
-                              title: Text('Delivery Boy'),
+                              title: Text(language.delivery_man),
                               onChanged: (String? value) {
                                 selectedUserType = value;
                                 setState(() {});
@@ -185,16 +185,16 @@ class RegisterScreenState extends State<RegisterScreen> {
                           ],
                         ),
                         30.height,
-                        commonButton('Sign Up', () {
+                        commonButton(language.sign_up, () {
                           RegisterApiCall();
                         }, width: context.width()),
                         16.height,
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('Already have an account?', style: primaryTextStyle()),
+                            Text(language.already_have_an_account, style: primaryTextStyle()),
                             4.width,
-                            Text('Sign In', style: boldTextStyle(color: colorPrimary)).onTap(() {
+                            Text(language.sign_in, style: boldTextStyle(color: colorPrimary)).onTap(() {
                               finish(context);
                             }),
                           ],

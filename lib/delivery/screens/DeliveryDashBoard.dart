@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mighty_delivery/delivery/fragment/DProfileFragment.dart';
 import 'package:mighty_delivery/delivery/screens/CreateTabScreen.dart';
+import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/screens/NotificationScreen.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
@@ -92,10 +93,12 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
             }).toList(),
           ),
         ),
-        body: TabBarView(
-          children: statusList.map((e) {
-            return CreateTabScreen(orderStatus: e);
-          }).toList(),
+        body: BodyCornerWidget(
+          child: TabBarView(
+            children: statusList.map((e) {
+              return CreateTabScreen(orderStatus: e);
+            }).toList(),
+          ),
         ),
       ),
     );

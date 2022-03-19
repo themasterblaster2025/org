@@ -4,6 +4,7 @@ import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
+import 'package:mighty_delivery/main/screens/LanguageScreen.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
@@ -37,7 +38,7 @@ class DProfileFragmentState extends State<DProfileFragment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget('Profile', color: colorPrimary, textColor: white, elevation: 0),
+      appBar: appBarWidget(language.profile, color: colorPrimary, textColor: white, elevation: 0),
       body: Observer(
         builder: (_) => BodyCornerWidget(
           child: SingleChildScrollView(
@@ -69,9 +70,9 @@ class DProfileFragmentState extends State<DProfileFragment> {
                           await showConfirmDialogCustom(
                             context,
                             primaryColor: colorPrimary,
-                            title: 'Are you sure you want to logout ?',
-                            positiveText: 'Yes',
-                            negativeText: 'Cancel',
+                            title: language.logout_confirmation_msg,
+                            positiveText: language.yes,
+                            negativeText: language.cancel,
                             onAccept: (c) {
                               logout(context);
                             },

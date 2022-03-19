@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mighty_delivery/main.dart';
+import 'package:mighty_delivery/main.dart';
+import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/main/screens/ChangePasswordScreen.dart';
 import 'package:mighty_delivery/main/screens/EditProfileScreen.dart';
@@ -19,47 +22,46 @@ List<LanguageDataModel> languageList() {
   ];
 }
 
-List<String> weightList = ['Up to 1 kg', 'Up to 5 kg', 'Up to 10 kg', 'Up to 15 kg', 'Up to 20 kg'];
 
 List<WalkThroughItemModel> getWalkThroughItems() {
   List<WalkThroughItemModel> list = [];
-  list.add(WalkThroughItemModel(image: 'assets/walk_through1.png', title: 'Select Pickup Location', subTitle: 'It helps us to get package from your doorstep.'));
-  list.add(WalkThroughItemModel(image: 'assets/walk_through2.png', title: 'Select Drop Location', subTitle: 'So that we can deliver the package to the correct person quickly.'));
-  list.add(WalkThroughItemModel(image: 'assets/walk_through3.png', title: 'Confirm And Relax', subTitle: 'We will deliver your package on time and in perfect condition.'));
+  list.add(WalkThroughItemModel(image: 'assets/walk_through1.png', title: language.walk_through1_title, subTitle: language.walk_through1_subtitle));
+  list.add(WalkThroughItemModel(image: 'assets/walk_through2.png', title: language.walk_through2_title, subTitle: language.walk_through2_subtitle));
+  list.add(WalkThroughItemModel(image: 'assets/walk_through3.png', title: language.walk_through3_title, subTitle: language.walk_through3_subtitle));
   return list;
 }
 
 List<BottomNavigationBarItemModel> getNavBarItems() {
   List<BottomNavigationBarItemModel> list = [];
-  list.add(BottomNavigationBarItemModel(icon: Icons.shopping_bag, title: 'Order', widget: OrderFragment()));
-  list.add(BottomNavigationBarItemModel(icon: Icons.person, title: 'Account', widget: AccountFragment()));
+  list.add(BottomNavigationBarItemModel(icon: Icons.shopping_bag, title: language.order, widget: OrderFragment()));
+  list.add(BottomNavigationBarItemModel(icon: Icons.person, title: language.account, widget: AccountFragment()));
   return list;
 }
 
 List<SettingItemModel> getSettingItems() {
   List<SettingItemModel> list = [];
-  list.add(SettingItemModel(icon: Icons.drafts, title: 'Drafts', widget: DraftOrderListScreen()));
-  list.add(SettingItemModel(icon: Icons.person_outline, title: 'Edit Profile', widget: EditProfileScreen()));
-  list.add(SettingItemModel(icon: Icons.lock_outline, title: 'Change Password', widget: ChangePasswordScreen()));
-  list.add(SettingItemModel(icon: Icons.language, title: 'Language',widget: LanguageScreen()));
-  list.add(SettingItemModel(icon: Icons.wb_sunny_outlined, title: 'DarkMode',widget: ThemeScreen()));
-  list.add(SettingItemModel(icon: Icons.info_outline, title: 'About Us'));
-  list.add(SettingItemModel(icon: Icons.help_outline, title: 'Help & Support'));
-  list.add(SettingItemModel(icon: Icons.logout, title: 'Logout'));
+  list.add(SettingItemModel(icon: Icons.drafts, title: language.drafts, widget: DraftOrderListScreen()));
+  list.add(SettingItemModel(icon: Icons.person_outline, title: language.edit_profile, widget: EditProfileScreen()));
+  list.add(SettingItemModel(icon: Icons.lock_outline, title: language.change_password, widget: ChangePasswordScreen()));
+  list.add(SettingItemModel(icon: Icons.language, title: language.language));
+  list.add(SettingItemModel(icon: Icons.wb_sunny_outlined, title: language.theme,widget: ThemeScreen()));
+  list.add(SettingItemModel(icon: Icons.info_outline, title: language.about_us));
+  list.add(SettingItemModel(icon: Icons.help_outline, title: language.help_and_support));
+  list.add(SettingItemModel(icon: Icons.logout, title: language.logout));
   return list;
 }
 
 
 List<SettingItemModel> getDeliverySettingItems() {
   List<SettingItemModel> list = [];
-  list.add(SettingItemModel(icon: Icons.person_outline, title: 'Edit Profile', widget: EditProfileScreen()));
-  list.add(SettingItemModel(icon: Icons.lock_outline, title: 'Change Password', widget: ChangePasswordScreen()));
-  list.add(SettingItemModel(icon: Icons.location_on_outlined, title: 'Change Location', widget: UserCitySelectScreen(isBack: true)));
-  list.add(SettingItemModel(icon: Icons.language, title: 'Language',widget: LanguageScreen()));
-  list.add(SettingItemModel(icon: Icons.wb_sunny_outlined, title: 'DarkMode',widget: ThemeScreen()));
-  list.add(SettingItemModel(icon: Icons.info_outline, title: 'About Us'));
-  list.add(SettingItemModel(icon: Icons.help_outline, title: 'Help & Support'));
-  list.add(SettingItemModel(icon: Icons.logout, title: 'Logout'));
+  list.add(SettingItemModel(icon: Icons.person_outline, title: language.edit_profile, widget: EditProfileScreen()));
+  list.add(SettingItemModel(icon: Icons.lock_outline, title: language.change_password, widget: ChangePasswordScreen()));
+  list.add(SettingItemModel(icon: Icons.location_on_outlined, title: language.change_location, widget: UserCitySelectScreen(isBack: true)));
+  list.add(SettingItemModel(icon: Icons.language, title: language.language,widget: LanguageScreen()));
+  list.add(SettingItemModel(icon: Icons.wb_sunny_outlined, title: language.theme,widget: ThemeScreen()));
+  list.add(SettingItemModel(icon: Icons.info_outline, title: language.about_us));
+  list.add(SettingItemModel(icon: Icons.help_outline, title: language.help_and_support));
+  list.add(SettingItemModel(icon: Icons.logout, title: language.logout));
 
   return list;
 }
@@ -76,6 +78,7 @@ List<AppModel> getSearchList() {
 
 List<AppModel> getReasonList() {
   List<AppModel> list = [];
+  // TODO localization
   list.add(AppModel(name: 'Personal Reason'));
   list.add(AppModel(name: 'I have change my mind'));
   list.add(AppModel(name: 'I place duplicate order'));
