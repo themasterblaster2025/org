@@ -28,6 +28,7 @@ void main() async {
   appStore.setLogin(getBoolAsync(IS_LOGGED_IN),isInitializing: true);
   appStore.setUserEmail(getStringAsync(USER_EMAIL),isInitialization: true);
   appStore.setLanguage(getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguage));
+  print(appStore.selectedLanguage);
 
   int themeModeIndex = getIntAsync(THEME_MODE_INDEX);
   if (themeModeIndex == appThemeMode.ThemeModeLight) {
@@ -80,3 +81,4 @@ class MyBehavior extends ScrollBehavior {
     return child;
   }
 }
+

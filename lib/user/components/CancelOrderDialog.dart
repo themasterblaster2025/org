@@ -49,7 +49,7 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
       appStore.setLoading(false);
       finish(context);
       widget.onUpdate!.call();
-      toast('Order Cancel Successfully');
+      toast(language.order_cancelled_successfully);
     }).catchError((error) {
       appStore.setLoading(false);
 
@@ -76,12 +76,12 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Cancel Order', style: boldTextStyle(size: 18)),
+                  Text(language.cancel_order, style: boldTextStyle(size: 18)),
                   CloseButton(),
                 ],
               ),
               16.height,
-              Text('Reason', style: boldTextStyle()),
+              Text(language.reason, style: boldTextStyle()),
               8.height,
               DropdownButtonFormField<String>(
                 value: reason,
@@ -98,24 +98,24 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
                   setState(() {});
                 },
                 validator: (value) {
-                  if(value==null) return errorThisFieldRequired;
+                  if(value==null) return language.field_required_msg;
                 },
               ),
               16.height,
               AppTextField(
                 controller: reasonController,
                 textFieldType: TextFieldType.OTHER,
-                decoration: commonInputDecoration(hintText: 'Write reason here...'),
+                decoration: commonInputDecoration(hintText: language.write_reason_here),
                 maxLines: 3,
                 minLines: 3,
                 validator: (value) {
-                  if (value!.isEmpty) return errorThisFieldRequired;
+                  if (value!.isEmpty) return language.field_required_msg;
                 },
               ).visible(reason == 'Other'),
               16.height,
               Align(
                 alignment: Alignment.centerRight,
-                child: commonButton('Submit', () {
+                child: commonButton(language.submit, () {
                   if (formKey.currentState!.validate()) {
                     updateOrderApiCall();
                   }

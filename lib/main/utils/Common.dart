@@ -220,3 +220,19 @@ String notificationTypeIcon({String? type}) {
   }
   return icon;
 }
+
+Widget settingItemWidget(IconData icon,String title,Function() onTap,{bool isLast=false}){
+  return Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      ListTile(
+        contentPadding: EdgeInsets.zero,
+        leading: Icon(icon, size: 30, color: colorPrimary),
+        title: Text(title),
+        trailing: Icon(Icons.navigate_next, color: Colors.grey),
+        onTap:onTap
+      ),
+      if(!isLast) Divider()
+    ],
+  );
+}

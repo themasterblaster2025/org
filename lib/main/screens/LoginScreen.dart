@@ -40,7 +40,7 @@ class LoginScreenState extends State<LoginScreen> {
         if (getStringAsync(PLAYER_ID).isEmpty) return toast(errorMessage);
       });
     }
-    setStatusBarColor(colorPrimary, statusBarIconBrightness: Brightness.light);
+    setStatusBarColor(appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, statusBarIconBrightness: Brightness.light);
   }
 
   @override
@@ -78,7 +78,7 @@ class LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: colorPrimary,
+      backgroundColor: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary,
       body: Stack(
         children: [
           Column(
@@ -91,7 +91,7 @@ class LoginScreenState extends State<LoginScreen> {
               Container(
                 width: context.width(),
                 padding: EdgeInsets.only(left: 24, right: 24),
-                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
+                decoration: BoxDecoration(color: appStore.isDarkMode ? scaffoldColorDark : Colors.white, borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
                 child: SingleChildScrollView(
                   child: Form(
                     key: formKey,
@@ -112,6 +112,8 @@ class LoginScreenState extends State<LoginScreen> {
                           focus: emailFocus,
                           nextFocus: passFocus,
                           decoration: commonInputDecoration(),
+                          errorThisFieldRequired: language.field_required_msg,
+                          errorInvalidEmail: language.email_invalid,
                         ),
                         16.height,
                         Text(language.password, style: primaryTextStyle()),
@@ -121,6 +123,8 @@ class LoginScreenState extends State<LoginScreen> {
                           textFieldType: TextFieldType.PASSWORD,
                           focus: passFocus,
                           decoration: commonInputDecoration(),
+                          errorThisFieldRequired: language.field_required_msg,
+                          errorMinimumPasswordLength: language.password_invalid,
                         ),
                         Align(
                           alignment: Alignment.centerRight,
@@ -135,7 +139,7 @@ class LoginScreenState extends State<LoginScreen> {
                           LoginApiCall();
                         }, width: context.width()),
                         16.height,
-                        Row(
+                       /* Row(
                           children: [
                             Divider().expand(),
                             8.width,
@@ -160,7 +164,7 @@ class LoginScreenState extends State<LoginScreen> {
                             //
                           },
                         ),
-                        16.height,
+                        16.height,*/
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

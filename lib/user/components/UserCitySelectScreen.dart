@@ -128,7 +128,7 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
         }
       },
       child: Scaffold(
-        appBar: appBarWidget(language.select_region, color: colorPrimary, textColor: white, elevation: 0, showBack: widget.isBack),
+        appBar: appBarWidget(language.select_region, color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, textColor: white, elevation: 0, showBack: widget.isBack),
         body: BodyCornerWidget(
           child: SingleChildScrollView(
             padding: EdgeInsets.all(16),

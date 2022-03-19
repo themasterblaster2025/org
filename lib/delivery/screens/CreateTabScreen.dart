@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:mighty_delivery/delivery/screens/ReceivedScreenOrderScreen.dart';
 import 'package:mighty_delivery/delivery/screens/TrackingScreen.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
@@ -156,17 +157,17 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('${language.picked_at} 4:45', style: secondaryTextStyle()),
-                              4.height,
-                              Text(data.pickupPoint!.address.validate(), style: primaryTextStyle()),
-                              4.height,
-                              Row(
-                                children: [
-                                  Icon(Icons.call, color: Colors.green, size: 18),
-                                  8.width,
-                                  Text(data.pickupPoint!.contactNumber.validate(), style: primaryTextStyle()),
-                                ],
-                              ),
+                              if (data.pickupDatetime != null) Text('${language.picked_at} ${printDate(data.pickupDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
+                              Text('${data.pickupPoint!.address}', style: primaryTextStyle()),
+                              if (data.pickupPoint!.contactNumber != null)
+                                Row(
+                                  children: [
+                                    Icon(Icons.call, color: Colors.green, size: 18),
+                                    8.width,
+                                    Text('${data.pickupPoint!.contactNumber}', style: primaryTextStyle()),
+                                  ],
+                                ).paddingOnly(top: 8),
+                              if(data.pickupDatetime==null && data.pickupPoint!.endTime!=null && data.pickupPoint!.startTime!=null) Text('Note: Courier will pickup at ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} from ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} to ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.endTime!).toLocal())}',style: secondaryTextStyle()).paddingOnly(top: 8),
                             ],
                           ).expand(),
                         ],
@@ -185,17 +186,17 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('${language.delivered_at} 4:53', style: secondaryTextStyle()),
-                              4.height,
-                              Text(data.deliveryPoint!.address.validate(), style: primaryTextStyle()),
-                              4.height,
-                              Row(
-                                children: [
-                                  Icon(Icons.call, color: Colors.green, size: 18),
-                                  8.width,
-                                  Text(data.deliveryPoint!.contactNumber.validate(), style: primaryTextStyle()),
-                                ],
-                              ),
+                              if (data.deliveryDatetime != null) Text('${language.delivered_at} ${printDate(data.deliveryDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
+                              Text('${data.deliveryPoint!.address}', style: primaryTextStyle()),
+                              if (data.deliveryPoint!.contactNumber != null)
+                                Row(
+                                  children: [
+                                    Icon(Icons.call, color: Colors.green, size: 18),
+                                    8.width,
+                                    Text('${data.deliveryPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
+                                  ],
+                                ).paddingOnly(top: 8),
+                              if(data.deliveryDatetime==null && data.deliveryPoint!.endTime!=null && data.deliveryPoint!.startTime!=null) Text('Note: Courier will Deliver at ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} from ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} to ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.endTime!).toLocal())}',style: secondaryTextStyle()).paddingOnly(top: 8),
                             ],
                           ).expand(),
                         ],

@@ -67,7 +67,7 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(language.change_password,color: colorPrimary,textColor: white,elevation: 0),
+      appBar: appBarWidget(language.change_password, color: colorPrimary, textColor: white, elevation: 0),
       body: Stack(
         children: [
           Form(
@@ -81,11 +81,13 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     Text(language.old_password, style: primaryTextStyle()),
                     8.height,
                     AppTextField(
-                      controller: oldPassController,
-                      textFieldType: TextFieldType.PASSWORD,
-                      focus: oldPassFocus,
-                      nextFocus: newPassFocus,
-                      decoration: commonInputDecoration(),
+                        controller: oldPassController,
+                        textFieldType: TextFieldType.PASSWORD,
+                        focus: oldPassFocus,
+                        nextFocus: newPassFocus,
+                        decoration: commonInputDecoration(),
+                        errorThisFieldRequired: language.field_required_msg,
+                        errorMinimumPasswordLength: language.password_invalid,
                     ),
                     16.height,
                     Text(language.new_password, style: primaryTextStyle()),
@@ -96,6 +98,8 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       focus: newPassFocus,
                       nextFocus: confirmPassFocus,
                       decoration: commonInputDecoration(),
+                      errorThisFieldRequired: language.field_required_msg,
+                      errorMinimumPasswordLength: language.password_invalid,
                     ),
                     16.height,
                     Text(language.confirm_password, style: primaryTextStyle()),
@@ -105,8 +109,10 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       textFieldType: TextFieldType.PASSWORD,
                       focus: confirmPassFocus,
                       decoration: commonInputDecoration(),
+                      errorThisFieldRequired: language.field_required_msg,
+                      errorMinimumPasswordLength:language.password_invalid,
                       validator: (val) {
-                        if (val!.isEmpty) return errorThisFieldRequired;
+                        if (val!.isEmpty) return language.field_required_msg;
                         if (val != newPassController.text) return language.password_not_match;
                       },
                     ),

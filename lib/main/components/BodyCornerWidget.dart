@@ -11,9 +11,9 @@ class BodyCornerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: colorPrimary,
+      color: context.cardColor,
       child: Container(
-        color: color ?? context.cardColor,
+        color: context.scaffoldBackgroundColor,
         height: context.height(),
         width: context.width(),
         child: child,

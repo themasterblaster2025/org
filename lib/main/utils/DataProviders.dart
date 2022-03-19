@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mighty_delivery/main.dart';
-import 'package:mighty_delivery/main.dart';
-import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/main/screens/ChangePasswordScreen.dart';
 import 'package:mighty_delivery/main/screens/EditProfileScreen.dart';
@@ -9,9 +7,6 @@ import 'package:mighty_delivery/main/screens/LanguageScreen.dart';
 import 'package:mighty_delivery/main/screens/ThemeScreen.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/user/components/UserCitySelectScreen.dart';
-import 'package:mighty_delivery/user/fragment/AccountFragment.dart';
-import 'package:mighty_delivery/user/fragment/OrderFragment.dart';
-import 'package:mighty_delivery/user/screens/DraftOrderListScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 List<LanguageDataModel> languageList() {
@@ -22,7 +17,6 @@ List<LanguageDataModel> languageList() {
   ];
 }
 
-
 List<WalkThroughItemModel> getWalkThroughItems() {
   List<WalkThroughItemModel> list = [];
   list.add(WalkThroughItemModel(image: 'assets/walk_through1.png', title: language.walk_through1_title, subTitle: language.walk_through1_subtitle));
@@ -30,27 +24,6 @@ List<WalkThroughItemModel> getWalkThroughItems() {
   list.add(WalkThroughItemModel(image: 'assets/walk_through3.png', title: language.walk_through3_title, subTitle: language.walk_through3_subtitle));
   return list;
 }
-
-List<BottomNavigationBarItemModel> getNavBarItems() {
-  List<BottomNavigationBarItemModel> list = [];
-  list.add(BottomNavigationBarItemModel(icon: Icons.shopping_bag, title: language.order, widget: OrderFragment()));
-  list.add(BottomNavigationBarItemModel(icon: Icons.person, title: language.account, widget: AccountFragment()));
-  return list;
-}
-
-List<SettingItemModel> getSettingItems() {
-  List<SettingItemModel> list = [];
-  list.add(SettingItemModel(icon: Icons.drafts, title: language.drafts, widget: DraftOrderListScreen()));
-  list.add(SettingItemModel(icon: Icons.person_outline, title: language.edit_profile, widget: EditProfileScreen()));
-  list.add(SettingItemModel(icon: Icons.lock_outline, title: language.change_password, widget: ChangePasswordScreen()));
-  list.add(SettingItemModel(icon: Icons.language, title: language.language));
-  list.add(SettingItemModel(icon: Icons.wb_sunny_outlined, title: language.theme,widget: ThemeScreen()));
-  list.add(SettingItemModel(icon: Icons.info_outline, title: language.about_us));
-  list.add(SettingItemModel(icon: Icons.help_outline, title: language.help_and_support));
-  list.add(SettingItemModel(icon: Icons.logout, title: language.logout));
-  return list;
-}
-
 
 List<SettingItemModel> getDeliverySettingItems() {
   List<SettingItemModel> list = [];

@@ -394,7 +394,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               setState(() {});
             },
             validator: (value) {
-              if (value == null) return errorThisFieldRequired;
+              if (value == null) return language.field_required_msg;
               return null;
             },
           ),
@@ -407,7 +407,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           textFieldType: TextFieldType.OTHER,
           decoration: commonInputDecoration(),
           validator: (value) {
-            if (value!.isEmpty) return errorThisFieldRequired;
+            if (value!.isEmpty) return language.field_required_msg;
             return null;
           },
         ),
@@ -453,8 +453,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           readOnly: true,
           textFieldType: TextFieldType.ADDRESS,
           decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
-          validator: (value) {
-            if (value!.isEmpty) return errorThisFieldRequired;
+           validator: (value) {
+            if (value!.isEmpty) return language.field_required_msg;
             return null;
           },
           onTap: () async {
@@ -473,6 +473,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           controller: pickPhoneCont,
           textFieldType: TextFieldType.PHONE,
           decoration: commonInputDecoration(suffixIcon: Icons.phone),
+          errorThisFieldRequired: language.field_required_msg,
         ),
         16.height,
         Text(language.description, style: primaryTextStyle()),
@@ -503,7 +504,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           textFieldType: TextFieldType.ADDRESS,
           decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
-            if (value!.isEmpty) return errorThisFieldRequired;
+            if (value!.isEmpty) return language.field_required_msg;
             return null;
           },
           onTap: () async {
@@ -523,6 +524,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           textInputAction: TextInputAction.next,
           textFieldType: TextFieldType.PHONE,
           decoration: commonInputDecoration(suffixIcon: Icons.phone),
+          errorThisFieldRequired: language.field_required_msg,
         ),
         16.height,
         Text(language.description, style: primaryTextStyle()),

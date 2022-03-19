@@ -11,6 +11,8 @@ import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/main/utils/DataProviders.dart';
 import 'package:mighty_delivery/user/components/FilterOrderComponent.dart';
 import 'package:mighty_delivery/user/components/UserCitySelectScreen.dart';
+import 'package:mighty_delivery/user/fragment/AccountFragment.dart';
+import 'package:mighty_delivery/user/fragment/OrderFragment.dart';
 import 'package:mighty_delivery/user/screens/CreateOrderScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -22,7 +24,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class DashboardScreenState extends State<DashboardScreen> {
-  List<BottomNavigationBarItemModel> BottomNavBarItems = getNavBarItems();
+  List<BottomNavigationBarItemModel> BottomNavBarItems = [];
   int currentIndex = 0;
 
   @override
@@ -32,7 +34,11 @@ class DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> init() async {
-    //
+    BottomNavBarItems.add(BottomNavigationBarItemModel(icon: Icons.shopping_bag, title: language.order));
+    BottomNavBarItems.add(BottomNavigationBarItemModel(icon: Icons.person, title: language.account));
+    LiveStream().on('UpdateLanguage', (p0) {
+      setState(() {});
+    });
   }
 
   @override
@@ -40,11 +46,21 @@ class DashboardScreenState extends State<DashboardScreen> {
     if (mounted) super.setState(fn);
   }
 
+  String getTitle() {
+    String title = "";
+    if (currentIndex == 0) {
+      title = language.order;
+    } else if (currentIndex == 1) {
+      title = language.account;
+    }
+    return title;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarWidget(
-        '${BottomNavBarItems[currentIndex].title}',
+        '${getTitle()}',
         color: colorPrimary,
         textColor: white,
         elevation: 0,
@@ -69,24 +85,22 @@ class DashboardScreenState extends State<DashboardScreen> {
                 alignment: AlignmentDirectional.center,
                 child: Icon(Icons.notifications),
               ),
-              Observer(
-                builder: (context) {
-                  return Positioned(
-                    right: 2,
-                    top: 8,
-                    child: Container(
-                      height: 20,
-                      width: 20,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.orange,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Text('${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}', style: primaryTextStyle(size: 8, color: Colors.white)),
+              Observer(builder: (context) {
+                return Positioned(
+                  right: 2,
+                  top: 8,
+                  child: Container(
+                    height: 20,
+                    width: 20,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Colors.orange,
+                      shape: BoxShape.circle,
                     ),
-                  ).visible(appStore.allUnreadCount != 0);
-                }
-              ),
+                    child: Text('${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}', style: primaryTextStyle(size: 8, color: Colors.white)),
+                  ),
+                ).visible(appStore.allUnreadCount != 0);
+              }),
             ],
           ).withWidth(40).onTap(() {
             NotificationScreen().launch(context);
@@ -107,10 +121,10 @@ class DashboardScreenState extends State<DashboardScreen> {
           ).visible(currentIndex == 0),
         ],
       ),
-      body: BodyCornerWidget(child: BottomNavBarItems[currentIndex].widget!),
+      body: BodyCornerWidget(child: [OrderFragment(), AccountFragment()][currentIndex]),
       floatingActionButton: FloatingActionButton(
         backgroundColor: colorPrimary,
-        child: Icon(Icons.add,color: Colors.white),
+        child: Icon(Icons.add, color: Colors.white),
         onPressed: () {
           CreateOrderScreen().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
         },

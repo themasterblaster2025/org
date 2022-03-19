@@ -84,7 +84,7 @@ class RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: colorPrimary,
+      backgroundColor: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary,
       body: Stack(
         children: [
           Column(
@@ -97,7 +97,7 @@ class RegisterScreenState extends State<RegisterScreen> {
               Container(
                 width: context.width(),
                 padding: EdgeInsets.only(left: 24, right: 24),
-                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
+                decoration: BoxDecoration(color: appStore.isDarkMode ? scaffoldColorDark : Colors.white, borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
                 child: SingleChildScrollView(
                   child: Form(
                     key: formKey,
@@ -117,6 +117,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           focus: nameFocus,
                           nextFocus: userNameFocus,
                           decoration: commonInputDecoration(),
+                          errorThisFieldRequired: language.field_required_msg,
                         ),
                         16.height,
                         Text(language.username, style: primaryTextStyle()),
@@ -127,6 +128,8 @@ class RegisterScreenState extends State<RegisterScreen> {
                           focus: userNameFocus,
                           nextFocus: emailFocus,
                           decoration: commonInputDecoration(),
+                          errorThisFieldRequired: language.field_required_msg,
+                          errorInvalidUsername: language.username_invalid,
                         ),
                         16.height,
                         Text(language.email, style: primaryTextStyle()),
@@ -137,6 +140,8 @@ class RegisterScreenState extends State<RegisterScreen> {
                           focus: emailFocus,
                           nextFocus: phoneFocus,
                           decoration: commonInputDecoration(),
+                          errorThisFieldRequired: language.field_required_msg,
+                          errorInvalidEmail: language.email_invalid,
                         ),
                         16.height,
                         Text(language.contact_number, style: primaryTextStyle()),
@@ -147,6 +152,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           focus: phoneFocus,
                           nextFocus: passFocus,
                           decoration: commonInputDecoration(),
+                          errorThisFieldRequired: language.field_required_msg,
                         ),
                         16.height,
                         Text(language.password, style: primaryTextStyle()),
@@ -156,6 +162,8 @@ class RegisterScreenState extends State<RegisterScreen> {
                           textFieldType: TextFieldType.PASSWORD,
                           focus: passFocus,
                           decoration: commonInputDecoration(),
+                          errorThisFieldRequired: language.field_required_msg,
+                          errorMinimumPasswordLength: language.password_invalid,
                         ),
                         16.height,
                         Text(language.user_type, style: primaryTextStyle()),

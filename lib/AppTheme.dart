@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -11,7 +10,7 @@ class AppTheme {
   static final ThemeData lightTheme = ThemeData(
     primarySwatch: createMaterialColor(colorPrimary),
     primaryColor: colorPrimary,
-    scaffoldBackgroundColor: scaffoldLightColor,
+    scaffoldBackgroundColor: Colors.white,
     accentColor: colorPrimary,
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: Colors.white,

@@ -8,7 +8,7 @@ import '../../main.dart';
 
 class LanguageScreen extends StatefulWidget {
   static String tag = '/LanguageScreen';
-  
+
   @override
   LanguageScreenState createState() => LanguageScreenState();
 }
@@ -60,6 +60,7 @@ class LanguageScreenState extends State<LanguageScreen> {
                 selectedLanguageDataModel = data;
                 appStore.setLanguage(data.languageCode!, context: context);
                 setState(() {});
+                LiveStream().emit('UpdateLanguage');
                 finish(context);
               },
             );

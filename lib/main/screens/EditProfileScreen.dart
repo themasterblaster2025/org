@@ -19,6 +19,8 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class EditProfileScreenState extends State<EditProfileScreen> {
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   TextEditingController emailController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController nameController = TextEditingController();
@@ -98,92 +100,97 @@ class EditProfileScreenState extends State<EditProfileScreen> {
           children: [
             SingleChildScrollView(
               padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Stack(
-                    children: [
-                      profileImage(),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                          margin: EdgeInsets.only(top: 60, left: 80),
-                          height: 35,
-                          width: 35,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: colorPrimary),
-                          child: IconButton(
-                            onPressed: () {
-                              getImage();
-                            },
-                            icon: Icon(
-                              Icons.edit,
-                              color: white,
-                              size: 20,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Stack(
+                      children: [
+                        profileImage(),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Container(
+                            margin: EdgeInsets.only(top: 60, left: 80),
+                            height: 35,
+                            width: 35,
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: colorPrimary),
+                            child: IconButton(
+                              onPressed: () {
+                                getImage();
+                              },
+                              icon: Icon(
+                                Icons.edit,
+                                color: white,
+                                size: 20,
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                  16.height,
-                  Text(language.email, style: primaryTextStyle()),
-                  8.height,
-                  AppTextField(
-                    readOnly: true,
-                    controller: emailController,
-                    textFieldType: TextFieldType.EMAIL,
-                    focus: emailFocus,
-                    nextFocus: usernameFocus,
-                    decoration: commonInputDecoration(),
-                    onTap: () {
-                      toast(language.not_change_email);
-                    },
-                  ),
-                  16.height,
-                  Text(language.username, style: primaryTextStyle()),
-                  8.height,
-                  AppTextField(
-                    readOnly: true,
-                    controller: usernameController,
-                    textFieldType: TextFieldType.USERNAME,
-                    focus: usernameFocus,
-                    nextFocus: nameFocus,
-                    decoration: commonInputDecoration(),
-                    onTap: () {
-                      toast(language.not_change_username);
-                    },
-                  ),
-                  16.height,
-                  Text(language.name, style: primaryTextStyle()),
-                  8.height,
-                  AppTextField(
-                    controller: nameController,
-                    textFieldType: TextFieldType.NAME,
-                    focus: nameFocus,
-                    nextFocus: addressFocus,
-                    decoration: commonInputDecoration(),
-                  ),
-                  16.height,
-                  Text(language.contact_number, style: primaryTextStyle()),
-                  8.height,
-                  AppTextField(
-                    controller: contactNumberController,
-                    textFieldType: TextFieldType.PHONE,
-                    focus: contactFocus,
-                    nextFocus: addressFocus,
-                    decoration: commonInputDecoration(),
-                  ),
-                  16.height,
-                  Text(language.address, style: primaryTextStyle()),
-                  8.height,
-                  AppTextField(
-                    controller: addressController,
-                    textFieldType: TextFieldType.ADDRESS,
-                    focus: addressFocus,
-                    decoration: commonInputDecoration(),
-                  ),
-                  16.height,
-                ],
+                        )
+                      ],
+                    ),
+                    16.height,
+                    Text(language.email, style: primaryTextStyle()),
+                    8.height,
+                    AppTextField(
+                      readOnly: true,
+                      controller: emailController,
+                      textFieldType: TextFieldType.EMAIL,
+                      focus: emailFocus,
+                      nextFocus: usernameFocus,
+                      decoration: commonInputDecoration(),
+                      onTap: () {
+                        toast(language.not_change_email);
+                      },
+                    ),
+                    16.height,
+                    Text(language.username, style: primaryTextStyle()),
+                    8.height,
+                    AppTextField(
+                      readOnly: true,
+                      controller: usernameController,
+                      textFieldType: TextFieldType.USERNAME,
+                      focus: usernameFocus,
+                      nextFocus: nameFocus,
+                      decoration: commonInputDecoration(),
+                      onTap: () {
+                        toast(language.not_change_username);
+                      },
+                    ),
+                    16.height,
+                    Text(language.name, style: primaryTextStyle()),
+                    8.height,
+                    AppTextField(
+                      controller: nameController,
+                      textFieldType: TextFieldType.NAME,
+                      focus: nameFocus,
+                      nextFocus: addressFocus,
+                      decoration: commonInputDecoration(),
+                      errorThisFieldRequired: language.field_required_msg,
+                    ),
+                    16.height,
+                    Text(language.contact_number, style: primaryTextStyle()),
+                    8.height,
+                    AppTextField(
+                      controller: contactNumberController,
+                      textFieldType: TextFieldType.PHONE,
+                      focus: contactFocus,
+                      nextFocus: addressFocus,
+                      decoration: commonInputDecoration(),
+                      errorThisFieldRequired: language.field_required_msg,
+                    ),
+                    16.height,
+                    Text(language.address, style: primaryTextStyle()),
+                    8.height,
+                    AppTextField(
+                      controller: addressController,
+                      textFieldType: TextFieldType.ADDRESS,
+                      focus: addressFocus,
+                      decoration: commonInputDecoration(),
+                    ),
+                    16.height,
+                  ],
+                ),
               ),
             ),
             Observer(builder: (_) => loaderWidget().visible(appStore.isLoading)),
@@ -194,7 +201,9 @@ class EditProfileScreenState extends State<EditProfileScreen> {
         padding: EdgeInsets.all(16),
         color: context.cardColor,
         child: commonButton(language.save_changes, () {
-          save();
+         if(_formKey.currentState!.validate()){
+           save();
+         }
         }),
       ),
     );

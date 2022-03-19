@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mighty_delivery/delivery/screens/DeliveryDashBoard.dart';
 import 'package:mighty_delivery/main/screens/WalkThroughScreen.dart';
+import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -23,6 +24,7 @@ class SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> init() async {
+    setStatusBarColor(appStore.isDarkMode ? scaffoldColorDark : colorPrimary,statusBarBrightness: appStore.isDarkMode ? Brightness.light : Brightness.dark);
     Future.delayed(
       Duration(seconds: 2),
       () {
@@ -51,13 +53,14 @@ class SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: appStore.isDarkMode ? scaffoldColorDark : colorPrimary,
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             FlutterLogo(size: 100),
             16.height,
-            Text(language.app_name, style: boldTextStyle(size: 20)),
+            Text(language.app_name, style: boldTextStyle(size: 20,color:Colors.white)),
           ],
         ),
       ),

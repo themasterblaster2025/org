@@ -76,6 +76,8 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       controller: forgotEmailController,
                       textFieldType: TextFieldType.EMAIL,
                       decoration: commonInputDecoration(),
+                      errorThisFieldRequired: language.field_required_msg,
+                      errorInvalidEmail: language.email_invalid,
                     ),
                   ],
                 ),
@@ -85,9 +87,13 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: commonButton(language.submit, () {
-        submit();
-      }).paddingAll(16),
+      bottomNavigationBar: Container(
+        color: context.cardColor,
+        padding: EdgeInsets.all(16),
+        child: commonButton(language.submit, () {
+          submit();
+        }),
+      ),
     );
   }
 }
