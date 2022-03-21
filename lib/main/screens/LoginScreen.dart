@@ -126,6 +126,7 @@ class LoginScreenState extends State<LoginScreen> {
                           errorThisFieldRequired: language.field_required_msg,
                           errorMinimumPasswordLength: language.password_invalid,
                         ),
+                        16.height,
                         Align(
                           alignment: Alignment.centerRight,
                           child: TextButton(
@@ -135,6 +136,7 @@ class LoginScreenState extends State<LoginScreen> {
                             },
                           ),
                         ),
+                        16.height,
                         commonButton(language.sign_in, () {
                           LoginApiCall();
                         }, width: context.width()),

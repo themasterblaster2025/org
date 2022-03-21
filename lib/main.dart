@@ -19,9 +19,9 @@ late BaseLanguage language;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Stripe.publishableKey = stripPaymentPublishKey;
-  await Stripe.instance.applySettings().catchError((e) {
+  /*await Stripe.instance.applySettings().catchError((e) {
     log("${e.toString()}");
-  });
+  });*/
 
   await initialize(aLocaleLanguageList: languageList());
 
@@ -37,10 +37,10 @@ void main() async {
     appStore.setDarkMode(true);
   }
 
-  await OneSignal.shared.setAppId(mOneSignalAppId);
+  /*await OneSignal.shared.setAppId(mOneSignalAppId);
 
   saveOneSignalPlayerId();
-
+*/
   runApp(MyApp());
 }
 
