@@ -139,7 +139,13 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                 16.height,
                 Container(
                   padding: EdgeInsets.all(16),
-                  decoration: containerDecoration(),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(defaultRadius),
+                    color: context.cardColor,
+                    boxShadow: [
+                      BoxShadow(color: Colors.black.withOpacity(0.5), blurRadius: 1),
+                    ],
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -187,6 +193,7 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                                     getCityApiCall(name: value);
                                   },
                                 ),
+                                16.height,
                                 ListView.builder(
                                   itemCount: cityData.length,
                                   physics: NeverScrollableScrollPhysics(),
@@ -195,7 +202,7 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                                     CityModel mData = cityData[index];
                                     return ListTile(
                                       contentPadding: EdgeInsets.zero,
-                                      title: Text(mData.name!, style: TextStyle(color: selectedCity == mData.id ? colorPrimary : Colors.black)),
+                                      title: Text(mData.name!, style: selectedCity == mData.id ? boldTextStyle(color: colorPrimary) : primaryTextStyle()),
                                       trailing: selectedCity == mData.id ? Icon(Icons.check_circle,color: colorPrimary) : SizedBox(),
                                       onTap: () {
                                         selectedCity = mData.id!;

@@ -39,6 +39,9 @@ class DashboardScreenState extends State<DashboardScreen> {
     LiveStream().on('UpdateLanguage', (p0) {
       setState(() {});
     });
+    LiveStream().on('UpdateTheme', (p0) {
+      setState(() { });
+    });
   }
 
   @override
@@ -61,7 +64,7 @@ class DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       appBar: appBarWidget(
         '${getTitle()}',
-        color: colorPrimary,
+        color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary,
         textColor: white,
         elevation: 0,
         showBack: false,
@@ -131,8 +134,9 @@ class DashboardScreenState extends State<DashboardScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: Container(
-        color: Colors.white,
+        color: context.scaffoldBackgroundColor,
         child: AnimatedBottomNavigationBar(
+          backgroundColor: context.cardColor,
           icons: [Icons.reorder, Icons.person],
           activeIndex: currentIndex,
           gapLocation: GapLocation.center,

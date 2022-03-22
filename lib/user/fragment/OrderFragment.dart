@@ -97,7 +97,7 @@ class OrderFragmentState extends State<OrderFragment> {
                         ? GestureDetector(
                             child: Container(
                               margin: EdgeInsets.only(bottom: 16),
-                              decoration: boxDecorationRoundedWithShadow(defaultRadius.toInt()),
+                              decoration: appStore.isDarkMode ? boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(defaultRadius),backgroundColor: context.cardColor) : boxDecorationRoundedWithShadow(defaultRadius.toInt()),
                               padding: EdgeInsets.all(16),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

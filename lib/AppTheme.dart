@@ -12,11 +12,6 @@ class AppTheme {
     primaryColor: colorPrimary,
     scaffoldBackgroundColor: Colors.white,
     accentColor: colorPrimary,
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: Colors.white,
-      selectedItemColor: colorPrimary,
-      unselectedItemColor: black,
-    ),
     //fontFamily: GoogleFonts.rajdhani().fontFamily,
     iconTheme: IconThemeData(color: colorPrimary),
     dialogBackgroundColor: Colors.white,
@@ -25,13 +20,10 @@ class AppTheme {
     cardColor: Colors.white,
     tabBarTheme: TabBarTheme(labelColor: Colors.black),
     appBarTheme: AppBarTheme(
-      color: Colors.white,
+      color: colorPrimary,
       brightness: Brightness.light,
       elevation: 0,
-      systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarIconBrightness: Brightness.light,
-       statusBarColor: colorPrimary
-      ),
+      systemOverlayStyle: SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light, statusBarColor: colorPrimary),
     ),
     dialogTheme: DialogTheme(shape: dialogShape()),
     bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.white),
@@ -53,11 +45,6 @@ class AppTheme {
     primaryColor: colorPrimary,
     scaffoldBackgroundColor: scaffoldColorDark,
     accentColor: colorPrimary,
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: Colors.red,
-      unselectedItemColor: white,
-      selectedItemColor: colorPrimary,
-    ),
     //fontFamily: GoogleFonts.rajdhani().fontFamily,
     iconTheme: IconThemeData(color: Colors.white),
     dialogBackgroundColor: scaffoldSecondaryDark,
@@ -66,12 +53,12 @@ class AppTheme {
     cardColor: scaffoldSecondaryDark,
     tabBarTheme: TabBarTheme(labelColor: Colors.white),
     appBarTheme: AppBarTheme(
-      color: scaffoldColorDark,
+      color: scaffoldSecondaryDark,
       brightness: Brightness.dark,
       elevation: 0,
       systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarIconBrightness: Brightness.light,
-          statusBarColor: scaffoldSecondaryDark,
+        statusBarIconBrightness: Brightness.light,
+        statusBarColor: scaffoldSecondaryDark,
       ),
     ),
     dialogTheme: DialogTheme(shape: dialogShape()),

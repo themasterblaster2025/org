@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:google_maps_webservice/places.dart';
+import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
@@ -34,7 +35,7 @@ class _CustomSearchScaffoldState extends PlacesAutocompleteState {
         textDecoration: commonInputDecoration(suffixIcon: Icons.search),
         textStyle: primaryTextStyle(color: Colors.white),
       ),
-      backgroundColor: colorPrimary,
+      backgroundColor: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary,
       elevation: 0,
     );
     final body = BodyCornerWidget(child: PlacesAutocompleteResult(
@@ -64,9 +65,9 @@ class _CustomSearchScaffoldState extends PlacesAutocompleteState {
         {'address': p.description, 'late': lat.toString(), 'long': lng.toString()}
       ]);
 
-      ScaffoldMessenger.of(context).showSnackBar(
+     /* ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("${p.description} - $lat/$lng")),
-      );
+      );*/
     }
   }
 

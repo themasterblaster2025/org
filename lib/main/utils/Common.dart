@@ -122,16 +122,6 @@ String parcelTypeIcon(String parcelType) {
   return icon;
 }
 
-containerDecoration() {
-  return BoxDecoration(
-    borderRadius: BorderRadius.circular(defaultRadius),
-    color: Colors.white,
-    boxShadow: [
-      BoxShadow(color: Colors.black.withOpacity(0.5), blurRadius: 1),
-    ],
-  );
-}
-
 String printDate(String date) {
   return DateFormat('dd MMM yyyy').format(DateTime.parse(date).toLocal()) + " at " + DateFormat(' hh:mm a').format(DateTime.parse(date).toLocal());
 }

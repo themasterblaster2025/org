@@ -87,7 +87,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
         return false;
       },
       child: Scaffold(
-        appBar: appBarWidget(language.order_details, color: colorPrimary, textColor: white, elevation: 0),
+        appBar: appBarWidget(language.order_details, color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, textColor: white, elevation: 0),
         body: !appStore.isLoading && orderData != null
             ? BodyCornerWidget(
                 child: Stack(
@@ -192,7 +192,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                           Text(language.parcel_details, style: boldTextStyle(size: 16)),
                           16.height,
                           Container(
-                            decoration: BoxDecoration(color: colorPrimary.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
+                            decoration: BoxDecoration(color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
                             padding: EdgeInsets.all(16),
                             child: Row(
                               children: [
@@ -222,7 +222,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                               Text('${getStringAsync(USER_TYPE) == CLIENT ? language.about_delivery_man : language.about_user}', style: boldTextStyle(size: 16)),
                               16.height,
                               Container(
-                                decoration: BoxDecoration(color: colorPrimary.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
+                                decoration: BoxDecoration(color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
                                 padding: EdgeInsets.all(16),
                                 child: Column(
                                   children: [

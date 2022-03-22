@@ -28,7 +28,9 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
     init();
   }
 
-  Future<void> init() async {}
+  Future<void> init() async {
+    setStatusBarColor(appStore.isDarkMode ? scaffoldColorDark : Colors.white,statusBarBrightness: appStore.isDarkMode ? Brightness.light : Brightness.dark);
+  }
 
   @override
   void setState(fn) {

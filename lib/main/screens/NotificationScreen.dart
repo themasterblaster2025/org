@@ -66,7 +66,7 @@ class NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(language.notification, color: colorPrimary, textColor: white, elevation: 0),
+      appBar: appBarWidget(language.notification, color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, textColor: white, elevation: 0),
       body: Stack(
         children: [
           BodyCornerWidget(

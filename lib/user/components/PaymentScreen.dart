@@ -358,7 +358,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
   Widget build(BuildContext context) {
     controller = NavigationController(Client(), style, this);
     return Scaffold(
-      appBar: appBarWidget(language.payment, color: colorPrimary, elevation: 0, textColor: white),
+      appBar: appBarWidget(language.payment, color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, elevation: 0, textColor: white),
       body: BodyCornerWidget(
         child: Stack(
           children: [
@@ -382,13 +382,14 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
                           alignment: Alignment.center,
                           margin: EdgeInsets.only(bottom: 16),
                           decoration: boxDecorationWithRoundedCorners(
+                            backgroundColor: context.cardColor,
                             borderRadius: BorderRadius.circular(defaultRadius),
-                            border: Border.all(color: borderColor),
+                            border: Border.all(color: appStore.isDarkMode ? Colors.transparent : borderColor),
                           ),
                           child: Row(
                             children: [
-                              commonCachedNetworkImage('${mData.gatewayLogo}',width: 50,height: 50),
-                              8.width,
+                              commonCachedNetworkImage('${mData.gatewayLogo}',width: 40,height: 40),
+                              16.width,
                               Text('${mData.title}',style: primaryTextStyle()).expand(),
                               Icon(Icons.check_circle, color: colorPrimary).visible(mData.type == selectedPaymentType),
                             ],

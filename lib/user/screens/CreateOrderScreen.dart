@@ -222,12 +222,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       children: [
         Row(
           children: [
-            scheduleOptionWidget(isDeliverNow, 'assets/icons/ic_clock.png', language.delivery_now).onTap(() {
+            scheduleOptionWidget(context,isDeliverNow, 'assets/icons/ic_clock.png', language.delivery_now).onTap(() {
               isDeliverNow = true;
               setState(() {});
             }).expand(),
             16.width,
-            scheduleOptionWidget(!isDeliverNow, 'assets/icons/ic_schedule.png', language.schedule).onTap(() {
+            scheduleOptionWidget(context,!isDeliverNow, 'assets/icons/ic_schedule.png', language.schedule).onTap(() {
               isDeliverNow = false;
               setState(() {});
             }).expand(),
@@ -242,7 +242,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             Container(
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
-                border: Border.all(color: borderColor),
+                border: Border.all(color: borderColor,width: appStore.isDarkMode ? 0.2 : 1),
                 borderRadius: BorderRadius.circular(defaultRadius),
               ),
               child: Column(
@@ -311,7 +311,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             Container(
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
-                border: Border.all(color: borderColor),
+                border: Border.all(color: borderColor,width: appStore.isDarkMode ? 0.2 : 1),
                 borderRadius: BorderRadius.circular(defaultRadius),
               ),
               child: Column(
@@ -419,7 +419,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 runSpacing: 8,
                 children: parcelTypeList.map((item) {
                   return Chip(
-                    backgroundColor: Colors.white,
+                    backgroundColor: context.scaffoldBackgroundColor,
                     label: Text(item.label!),
                     elevation: 0,
                     labelStyle: primaryTextStyle(color: Colors.grey),
@@ -427,7 +427,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(defaultRadius),
-                      side: BorderSide(color: borderColor),
+                      side: BorderSide(color: borderColor,width: appStore.isDarkMode ? 0.2 : 1),
                     ),
                   ).onTap(() {
                     parcelTypeCont.text = item.value!;
@@ -550,7 +550,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           padding: EdgeInsets.all(16),
           decoration: boxDecorationWithRoundedCorners(
             borderRadius: BorderRadius.circular(defaultRadius),
-            border: Border.all(color: borderColor),
+            border: Border.all(color: borderColor,width: appStore.isDarkMode ? 0.2 : 1),
             backgroundColor: Colors.transparent,
           ),
           child: Column(
@@ -584,7 +584,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           padding: EdgeInsets.all(16),
           decoration: boxDecorationWithRoundedCorners(
             borderRadius: BorderRadius.circular(defaultRadius),
-            border: Border.all(color: borderColor),
+            border: Border.all(color: borderColor,width: appStore.isDarkMode ? 0.2 : 1),
             backgroundColor: Colors.transparent,
           ),
           child: Column(
@@ -604,7 +604,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           padding: EdgeInsets.all(16),
           decoration: boxDecorationWithRoundedCorners(
             borderRadius: BorderRadius.circular(defaultRadius),
-            border: Border.all(color: borderColor),
+            border: Border.all(color: borderColor,width: appStore.isDarkMode ? 0.2 : 1),
             backgroundColor: Colors.transparent,
           ),
           child: Column(
@@ -696,12 +696,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         16.height,
         Row(
           children: [
-            scheduleOptionWidget(isCashPayment, 'assets/icons/ic_cash.png', language.cash_payment).onTap(() {
+            scheduleOptionWidget(context,isCashPayment, 'assets/icons/ic_cash.png', language.cash_payment).onTap(() {
               isCashPayment = true;
               setState(() {});
             }).expand(),
             16.width,
-            scheduleOptionWidget(!isCashPayment, 'assets/icons/ic_credit_card.png', language.online_payment).onTap(() {
+            scheduleOptionWidget(context,!isCashPayment, 'assets/icons/ic_credit_card.png', language.online_payment).onTap(() {
               isCashPayment = false;
               setState(() {});
             }).expand(),
@@ -764,7 +764,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         }
       },
       child: Scaffold(
-        appBar: appBarWidget(language.create_order, color: colorPrimary, textColor: white, elevation: 0),
+        appBar: appBarWidget(language.create_order, color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, textColor: white, elevation: 0),
         body: BodyCornerWidget(
           child: SingleChildScrollView(
             padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
@@ -795,7 +795,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         ),
         bottomNavigationBar: Container(
           padding: EdgeInsets.all(16),
-          color: context.cardColor,
+          color: context.scaffoldBackgroundColor,
           child: Row(
             children: [
               if (selectedTabIndex != 0)

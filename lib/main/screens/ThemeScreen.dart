@@ -7,6 +7,7 @@ import 'package:nb_utils/nb_utils.dart';
 import '../../main.dart';
 
 class ThemeScreen extends StatefulWidget {
+
   @override
   _ThemeScreenState createState() => _ThemeScreenState();
 }
@@ -80,6 +81,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                   }
                   setValue(THEME_MODE_INDEX, index);
                   setState(() {});
+                  LiveStream().emit('UpdateTheme');
                   finish(context);
                 }),
               );
