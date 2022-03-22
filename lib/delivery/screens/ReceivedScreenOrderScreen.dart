@@ -145,7 +145,18 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(widget.orderData!.status == ORDER_DEPARTED ? language.order_deliver : language.order_pickup, color: colorPrimary, textColor: white, elevation: 0),
+      appBar: appBarWidget(
+        widget.orderData!.status == ORDER_DEPARTED ? language.order_deliver : language.order_pickup,
+        color: colorPrimary,
+        textColor: white,
+        elevation: 0,
+        backWidget: IconButton(
+          onPressed: () {
+            finish(context, false);
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
+      ),
       body: Form(
         key: formKey,
         child: Stack(
@@ -278,23 +289,23 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                     16.height,
                     Text(language.pickup_time_signature, style: boldTextStyle()),
                     8.height,
-                    widget.orderData!.pickupConfirmByClient != null
+                    widget.orderData!.pickupConfirmByClient == 1
                         ? commonCachedNetworkImage(widget.orderData!.pickupTimeSignature, fit: BoxFit.cover, height: 150, width: context.width())
                         : Container(
-                      height: 150,
-                      width: context.width(),
-                      decoration: BoxDecoration(border: Border.all(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
-                      child: Screenshot(
-                        controller: picUpScreenshotController,
-                        child: SfSignaturePad(
-                          key: signaturePicUPPadKey,
-                          minimumStrokeWidth: 1,
-                          maximumStrokeWidth: 3,
-                          strokeColor: colorPrimary,
-                        ),
-                      ),
-                    ),
-                    if (widget.orderData!.pickupConfirmByClient == null)
+                            height: 150,
+                            width: context.width(),
+                            decoration: BoxDecoration(border: Border.all(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
+                            child: Screenshot(
+                              controller: picUpScreenshotController,
+                              child: SfSignaturePad(
+                                key: signaturePicUPPadKey,
+                                minimumStrokeWidth: 1,
+                                maximumStrokeWidth: 3,
+                                strokeColor: colorPrimary,
+                              ),
+                            ),
+                          ),
+                    if (widget.orderData!.pickupConfirmByClient == 0)
                       Align(
                         alignment: Alignment.bottomRight,
                         child: Row(
@@ -443,12 +454,25 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                             if (reasonController.text.isEmpty) {
                               return toast(language.select_reason_msg);
                             }
-                            await updateOrder(orderId: widget.orderData!.id, reason: reasonController.text).then((value) {
-                              toast(language.order_cancelled_successfully);
-                              finish(context, true);
-                            }).catchError((error) {
-                              log(error);
-                            });
+                            showConfirmDialogCustom(
+                              context,
+                              primaryColor: colorPrimary,
+                              dialogType: DialogType.DELETE,
+                              title: 'Are you sure you want to cancel this order?',
+                              positiveText: language.yes,
+                              negativeText: language.cancel,
+                              onAccept: (c) async {
+                                appStore.setLoading(true);
+                                await updateOrder(orderId: widget.orderData!.id, reason: reasonController.text, orderStatus: ORDER_CANCELLED).then((value) {
+                                  toast(language.order_cancelled_successfully);
+                                  appStore.setLoading(false);
+                                  finish(context, true);
+                                }).catchError((error) {
+                                  log(error);
+                                  appStore.setLoading(false);
+                                });
+                              },
+                            );
                           },
                         ).expand(),
                       ],
@@ -458,7 +482,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
               ),
             ),
             Observer(
-              builder: (_) => Loader().visible(appStore.isLoading),
+              builder: (_) => loaderWidget().visible(appStore.isLoading),
             )
           ],
         ),
@@ -467,68 +491,39 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   }
 
   Future<void> paymentConfirmDialog(OrderData orderData) {
-    return showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          content: Stack(
-            children: [
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(language.collect_payment_confirmation_msg),
-                  16.height,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      AppButton(
-                        color: Colors.red,
-                        textStyle: boldTextStyle(color: white),
-                        text: language.cancel,
-                        onTap: () async {
-                          await updateOrder(orderStatus: ORDER_CANCELLED, orderId: orderData.id);
-                          finish(context);
-                        },
-                      ),
-                      16.width,
-                      AppButton(
-                        color: colorPrimary,
-                        textStyle: boldTextStyle(color: white),
-                        text: language.save,
-                        onTap: () async {
-                          appStore.setLoading(true);
-                          Map req = {
-                            'order_id': orderData.id,
-                            'client_id': orderData.clientId,
-                            'datetime': picUpController.text,
-                            'total_amount': orderData.totalAmount,
-                            'payment_type': PAYMENT_TYPE_CASH,
-                            'payment_status': PAYMENT_PAID,
-                          };
-                          await savePayment(req).then((value) async {
-                            await saveDelivery().then((value) async {
-                              appStore.setLoading(false);
-                              finish(context);
-                            }).catchError((error) {
-                              appStore.setLoading(false);
-                              log(error);
-                            });
-                          }).catchError((error) {
-                            appStore.setLoading(false);
-                            log(error);
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Observer(
-                builder: (_) => Loader().visible(appStore.isLoading),
-              )
-            ],
-          ),
-        );
+    return showConfirmDialogCustom(
+      context,
+      primaryColor: colorPrimary,
+      dialogType: DialogType.DELETE,
+      title: language.collect_payment_confirmation_msg,
+      positiveText: language.save,
+      negativeText: language.cancel,
+      onCancel: (c) async {
+        await updateOrder(orderStatus: ORDER_CANCELLED, orderId: orderData.id);
+        finish(context);
+      },
+      onAccept: (c) async {
+        appStore.setLoading(true);
+        Map req = {
+          'order_id': orderData.id,
+          'client_id': orderData.clientId,
+          'datetime': picUpController.text,
+          'total_amount': orderData.totalAmount,
+          'payment_type': PAYMENT_TYPE_CASH,
+          'payment_status': PAYMENT_PAID,
+        };
+        await savePayment(req).then((value) async {
+          await saveDelivery().then((value) async {
+            appStore.setLoading(false);
+            finish(context);
+          }).catchError((error) {
+            appStore.setLoading(false);
+            log(error);
+          });
+        }).catchError((error) {
+          appStore.setLoading(false);
+          log(error);
+        });
       },
     );
   }
