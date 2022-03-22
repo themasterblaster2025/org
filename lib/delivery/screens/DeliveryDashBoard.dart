@@ -88,6 +88,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
             indicatorSize: TabBarIndicatorSize.label,
             unselectedLabelStyle: secondaryTextStyle(),
             labelStyle: boldTextStyle(),
+
             tabs: statusList.map((e) {
               return Tab(text: orderStatus(e));
             }).toList(),
