@@ -20,18 +20,18 @@ dependencies:
   mobx: ^2.0.6+1
   flutter_mobx: ^2.0.4
 
-  nb_utils: ^4.4.12
-  google_fonts: ^2.2.0
+  nb_utils: ^4.4.14
+  google_fonts: ^2.3.1
   bubble_bottom_bar: ^2.0.0
-  url_launcher: ^6.0.18
+  url_launcher: ^6.0.20
   date_time_picker: ^2.1.0
   animated_bottom_navigation_bar: ^0.3.2
-  image_picker: ^0.8.4+6
+  image_picker: ^0.8.4+11
   cached_network_image: ^3.2.0
-  syncfusion_flutter_signaturepad: ^19.4.48
+  syncfusion_flutter_signaturepad: ^19.4.56
   screenshot: ^1.2.3
   flutter_google_places: ^0.3.0
-  lottie: ^1.2.1
+  lottie: ^1.2.2
   timeline_tile: ^2.0.0
   animations: ^2.0.2
   address_search_field: ^4.0.1
@@ -58,7 +58,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  build_runner: ^2.1.7
+  build_runner: ^2.1.8
   mobx_codegen: ^2.0.5+2
 
 flutter:
