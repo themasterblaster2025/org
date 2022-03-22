@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_map_polyline_new/google_map_polyline_new.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
@@ -42,7 +41,6 @@ class TrackingScreenState extends State<TrackingScreen> {
 
   late LatLng orderLatLong;
 
-  GoogleMapPolyline googleMapPolyline = GoogleMapPolyline(apiKey: googleMapAPIKey);
   final Set<Polyline> polyline = {};
   Set<Polyline> _polylines = Set<Polyline>();
   List<LatLng> polylineCoordinates = [];

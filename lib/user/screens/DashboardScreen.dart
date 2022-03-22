@@ -8,7 +8,6 @@ import 'package:mighty_delivery/main/models/CityListModel.dart';
 import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
-import 'package:mighty_delivery/main/utils/DataProviders.dart';
 import 'package:mighty_delivery/user/components/FilterOrderComponent.dart';
 import 'package:mighty_delivery/user/components/UserCitySelectScreen.dart';
 import 'package:mighty_delivery/user/fragment/AccountFragment.dart';
