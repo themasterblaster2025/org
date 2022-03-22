@@ -108,7 +108,7 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
               runSpacing: 8,
               children: statusList.map((item) {
                 return Chip(
-                  backgroundColor: selectedStatus == item ? colorPrimary : Colors.white,
+                  backgroundColor: selectedStatus == item ? colorPrimary : Colors.transparent,
                   label: Text(orderStatus(item).validate()),
                   elevation: 0,
                   labelStyle: primaryTextStyle(color: selectedStatus == item ? white : Colors.grey),
@@ -116,7 +116,7 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
                   labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(defaultRadius),
-                    side: BorderSide(color: selectedStatus == item ? colorPrimary : borderColor),
+                    side: BorderSide(color: selectedStatus == item ? colorPrimary : borderColor,width: appStore.isDarkMode ? 0.2 : 1),
                   ),
                 ).onTap(() {
                   selectedStatus = item;

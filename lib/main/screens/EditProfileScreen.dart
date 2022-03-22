@@ -94,7 +94,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(language.edit_profile, color: colorPrimary, textColor: white, elevation: 0),
+      appBar: appBarWidget(language.edit_profile, color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, textColor: white, elevation: 0),
       body: BodyCornerWidget(
         child: Stack(
           children: [
@@ -197,9 +197,8 @@ class EditProfileScreenState extends State<EditProfileScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: Container(
+      bottomNavigationBar: Padding(
         padding: EdgeInsets.all(16),
-        color: context.cardColor,
         child: commonButton(language.save_changes, () {
          if(_formKey.currentState!.validate()){
            save();

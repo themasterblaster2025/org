@@ -118,7 +118,8 @@ class OrderFragmentState extends State<OrderFragment> {
                                       Container(
                                         decoration: boxDecorationWithRoundedCorners(
                                           borderRadius: BorderRadius.circular(8),
-                                          border: Border.all(color: borderColor),
+                                          border: Border.all(color: borderColor,width: appStore.isDarkMode ? 0.2 : 1),
+                                          backgroundColor: Colors.transparent
                                         ),
                                         padding: EdgeInsets.all(8),
                                         child: Image.asset(parcelTypeIcon(item.parcelType.validate()), height: 24, width: 24, color: Colors.grey),

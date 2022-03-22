@@ -55,7 +55,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(language.theme, color: colorPrimary, showBack: true, elevation: 0, textColor: Colors.white),
+      appBar: appBarWidget(language.theme, color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, showBack: true, elevation: 0, textColor: Colors.white),
       body: BodyCornerWidget(
         child: ListView(
           children: List.generate(

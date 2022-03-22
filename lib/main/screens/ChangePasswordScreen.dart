@@ -67,7 +67,7 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(language.change_password, color: colorPrimary, textColor: white, elevation: 0),
+      appBar: appBarWidget(language.change_password, color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, textColor: white, elevation: 0),
       body: Stack(
         children: [
           Form(
@@ -124,9 +124,8 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
           Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
         ],
       ),
-      bottomNavigationBar: Container(
+      bottomNavigationBar: Padding(
         padding: EdgeInsets.all(16),
-        color: context.cardColor,
         child: commonButton(language.save_changes, () {
           submit();
         }),

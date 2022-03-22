@@ -74,7 +74,7 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(language.draft_order, color: colorPrimary, textColor: white, elevation: 0),
+      appBar: appBarWidget(language.draft_order, color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, textColor: white, elevation: 0),
       body: BodyCornerWidget(
         child: Observer(builder: (context) {
           return Stack(
@@ -87,7 +87,11 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
                       children: orderList.map((item) {
                         return Container(
                           margin: EdgeInsets.only(bottom: 16),
-                          decoration: boxDecorationRoundedWithShadow(defaultRadius.toInt()),
+                          decoration: boxDecorationRoundedWithShadow(
+                            defaultRadius.toInt(),
+                            shadowColor: appStore.isDarkMode ? Colors.transparent : null,
+                            backgroundColor: context.cardColor,
+                          ),
                           child: Column(
                             children: [
                               Row(
@@ -116,13 +120,14 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
                                 padding: EdgeInsets.all(16),
                                 child: Column(
                                   children: [
-                                    item.paymentType != null
+                                    item.parcelType != null
                                         ? Row(
                                             children: [
                                               Container(
                                                 decoration: boxDecorationWithRoundedCorners(
                                                   borderRadius: BorderRadius.circular(8),
-                                                  border: Border.all(color: borderColor),
+                                                  border: Border.all(color: borderColor,width: appStore.isDarkMode ? 0.2 : 1 ),
+                                                  backgroundColor: Colors.transparent,
                                                 ),
                                                 padding: EdgeInsets.all(8),
                                                 child: Image.asset(parcelTypeIcon(item.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
@@ -153,59 +158,61 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
                                       Column(
                                         children: [
                                           Divider(height: 30, thickness: 1),
-                                          if(item.pickupPoint!.address != null) Row(
-                                            children: [
-                                              Row(
-                                                crossAxisAlignment: CrossAxisAlignment.end,
-                                                children: [
-                                                  Icon(Icons.location_on, color: colorPrimary),
-                                                  Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
-                                                ],
-                                              ),
-                                              8.width,
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text('${item.pickupPoint!.address}', style: primaryTextStyle()),
-                                                  4.height.visible(item.pickupPoint!.contactNumber != null),
-                                                  Row(
-                                                    children: [
-                                                      Icon(Icons.call, color: Colors.green, size: 18),
-                                                      8.width,
-                                                      Text('${item.pickupPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
-                                                    ],
-                                                  ).visible(item.pickupPoint!.contactNumber != null),
-                                                ],
-                                              ).expand(),
-                                            ],
-                                          ),
+                                          if (item.pickupPoint!.address != null)
+                                            Row(
+                                              children: [
+                                                Row(
+                                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                                  children: [
+                                                    Icon(Icons.location_on, color: colorPrimary),
+                                                    Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
+                                                  ],
+                                                ),
+                                                8.width,
+                                                Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text('${item.pickupPoint!.address}', style: primaryTextStyle()),
+                                                    4.height.visible(item.pickupPoint!.contactNumber != null),
+                                                    Row(
+                                                      children: [
+                                                        Icon(Icons.call, color: Colors.green, size: 18),
+                                                        8.width,
+                                                        Text('${item.pickupPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
+                                                      ],
+                                                    ).visible(item.pickupPoint!.contactNumber != null),
+                                                  ],
+                                                ).expand(),
+                                              ],
+                                            ),
                                           16.height,
-                                          if(item.deliveryPoint!.address != null) Row(
-                                            children: [
-                                              Row(
-                                                crossAxisAlignment: CrossAxisAlignment.end,
-                                                children: [
-                                                  Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
-                                                  Icon(Icons.location_on, color: colorPrimary),
-                                                ],
-                                              ),
-                                              8.width,
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text('${item.deliveryPoint!.address}', style: primaryTextStyle()),
-                                                  4.height.visible(item.deliveryPoint!.contactNumber != null),
-                                                  Row(
-                                                    children: [
-                                                      Icon(Icons.call, color: Colors.green, size: 18),
-                                                      8.width,
-                                                      Text('${item.deliveryPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
-                                                    ],
-                                                  ).visible(item.deliveryPoint!.contactNumber != null),
-                                                ],
-                                              ).expand(),
-                                            ],
-                                          ),
+                                          if (item.deliveryPoint!.address != null)
+                                            Row(
+                                              children: [
+                                                Row(
+                                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                                  children: [
+                                                    Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
+                                                    Icon(Icons.location_on, color: colorPrimary),
+                                                  ],
+                                                ),
+                                                8.width,
+                                                Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text('${item.deliveryPoint!.address}', style: primaryTextStyle()),
+                                                    4.height.visible(item.deliveryPoint!.contactNumber != null),
+                                                    Row(
+                                                      children: [
+                                                        Icon(Icons.call, color: Colors.green, size: 18),
+                                                        8.width,
+                                                        Text('${item.deliveryPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
+                                                      ],
+                                                    ).visible(item.deliveryPoint!.contactNumber != null),
+                                                  ],
+                                                ).expand(),
+                                              ],
+                                            ),
                                         ],
                                       ),
                                   ],

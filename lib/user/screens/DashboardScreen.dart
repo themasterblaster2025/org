@@ -133,21 +133,18 @@ class DashboardScreenState extends State<DashboardScreen> {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: Container(
-        color: context.scaffoldBackgroundColor,
-        child: AnimatedBottomNavigationBar(
-          backgroundColor: context.cardColor,
-          icons: [Icons.reorder, Icons.person],
-          activeIndex: currentIndex,
-          gapLocation: GapLocation.center,
-          notchSmoothness: NotchSmoothness.defaultEdge,
-          activeColor: colorPrimary,
-          inactiveColor: Colors.grey,
-          leftCornerRadius: 32,
-          rightCornerRadius: 32,
-          onTap: (index) => setState(() => currentIndex = index),
-          //other params
-        ),
+      bottomNavigationBar: AnimatedBottomNavigationBar(
+        backgroundColor: context.cardColor,
+        icons: [Icons.reorder, Icons.person],
+        activeIndex: currentIndex,
+        gapLocation: GapLocation.center,
+        notchSmoothness: NotchSmoothness.defaultEdge,
+        activeColor: colorPrimary,
+        inactiveColor: Colors.grey,
+        leftCornerRadius: 32,
+        rightCornerRadius: 32,
+        onTap: (index) => setState(() => currentIndex = index),
+        //other params
       ),
     );
   }
