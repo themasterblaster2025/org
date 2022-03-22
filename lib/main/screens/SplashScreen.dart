@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mighty_delivery/delivery/screens/DeliveryDashBoard.dart';
+import 'package:mighty_delivery/main/models/CityListModel.dart';
 import 'package:mighty_delivery/main/screens/WalkThroughScreen.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
+import 'package:mighty_delivery/user/components/UserCitySelectScreen.dart';
 import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -24,15 +26,19 @@ class SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> init() async {
-    setStatusBarColor(appStore.isDarkMode ? scaffoldColorDark : colorPrimary,statusBarBrightness: appStore.isDarkMode ? Brightness.light : Brightness.dark);
+    setStatusBarColor(appStore.isDarkMode ? scaffoldColorDark : Colors.white,statusBarBrightness: appStore.isDarkMode ? Brightness.light : Brightness.dark);
     Future.delayed(
       Duration(seconds: 2),
       () {
         if (appStore.isLoggedIn) {
-          if (getStringAsync(USER_TYPE) == CLIENT) {
-            DashboardScreen().launch(context, isNewTask: true);
-          } else {
-            DeliveryDashBoard().launch(context, isNewTask: true);
+          if(CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
+            if (getStringAsync(USER_TYPE) == CLIENT) {
+              DashboardScreen().launch(context, isNewTask: true);
+            } else {
+              DeliveryDashBoard().launch(context, isNewTask: true);
+            }
+          }else{
+            UserCitySelectScreen().launch(context);
           }
         } else {
           if (getBoolAsync(IS_FIRST_TIME, defaultValue: true)) {
@@ -53,14 +59,14 @@ class SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: appStore.isDarkMode ? scaffoldColorDark : colorPrimary,
+      backgroundColor: context.scaffoldBackgroundColor,
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             FlutterLogo(size: 100),
             16.height,
-            Text(language.app_name, style: boldTextStyle(size: 20,color:Colors.white),textAlign: TextAlign.center),
+            Text(language.app_name, style: boldTextStyle(size: 20),textAlign: TextAlign.center),
           ],
         ),
       ),

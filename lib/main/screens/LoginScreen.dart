@@ -35,12 +35,12 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> init() async {
+    setStatusBarColor(appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, statusBarIconBrightness: Brightness.light);
     if (getStringAsync(PLAYER_ID).isEmpty) {
       await saveOneSignalPlayerId().then((value) {
         if (getStringAsync(PLAYER_ID).isEmpty) return toast(errorMessage);
       });
     }
-    setStatusBarColor(appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, statusBarIconBrightness: Brightness.light);
   }
 
   @override

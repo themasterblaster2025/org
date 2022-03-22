@@ -30,7 +30,7 @@ class CountryModel {
   String? deleted_at;
   String? distance_type;
   int? id;
-  String? links;
+  var links;
   String? name;
   int? status;
   String? updated_at;

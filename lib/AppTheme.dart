@@ -29,8 +29,8 @@ class AppTheme {
       brightness: Brightness.light,
       elevation: 0,
       systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarIconBrightness: Brightness.dark,
-        statusBarBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.light,
+       statusBarColor: colorPrimary
       ),
     ),
     dialogTheme: DialogTheme(shape: dialogShape()),
@@ -70,7 +70,8 @@ class AppTheme {
       brightness: Brightness.dark,
       elevation: 0,
       systemOverlayStyle: SystemUiOverlayStyle(
-        systemNavigationBarColor: scaffoldColorDark,
+          statusBarIconBrightness: Brightness.light,
+          statusBarColor: scaffoldSecondaryDark,
       ),
     ),
     dialogTheme: DialogTheme(shape: dialogShape()),

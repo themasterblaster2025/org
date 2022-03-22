@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -11,7 +12,7 @@ class BodyCornerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: context.cardColor,
+      color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary,
       child: Container(
         color: context.scaffoldBackgroundColor,
         height: context.height(),
