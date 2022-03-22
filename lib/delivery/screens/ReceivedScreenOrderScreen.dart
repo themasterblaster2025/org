@@ -477,6 +477,11 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                         ).expand(),
                       ],
                     ),
+                    AppButton(
+                      onTap: () {
+                        paymentConfirmDialog(widget.orderData!);
+                      },
+                    )
                   ],
                 ),
               ),
@@ -491,39 +496,91 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   }
 
   Future<void> paymentConfirmDialog(OrderData orderData) {
-    return showConfirmDialogCustom(
-      context,
-      primaryColor: colorPrimary,
-      dialogType: DialogType.DELETE,
-      title: language.collect_payment_confirmation_msg,
-      positiveText: language.save,
-      negativeText: language.cancel,
-      onCancel: (c) async {
-        await updateOrder(orderStatus: ORDER_CANCELLED, orderId: orderData.id);
-        finish(context);
-      },
-      onAccept: (c) async {
-        appStore.setLoading(true);
-        Map req = {
-          'order_id': orderData.id,
-          'client_id': orderData.clientId,
-          'datetime': picUpController.text,
-          'total_amount': orderData.totalAmount,
-          'payment_type': PAYMENT_TYPE_CASH,
-          'payment_status': PAYMENT_PAID,
-        };
-        await savePayment(req).then((value) async {
-          await saveDelivery().then((value) async {
-            appStore.setLoading(false);
-            finish(context);
-          }).catchError((error) {
-            appStore.setLoading(false);
-            log(error);
-          });
-        }).catchError((error) {
-          appStore.setLoading(false);
-          log(error);
-        });
+    return showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          content: SizedBox(
+            height: 190,
+            child: Stack(
+              children: [
+                Center(
+                  heightFactor: 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(language.confirmation, style: boldTextStyle()),
+                          IconButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: () {
+                              finish(context);
+                            },
+                            icon: Icon(Icons.close, color: context.iconColor),
+                          )
+                        ],
+                      ),
+                      Text(language.collect_payment_confirmation_msg, style: primaryTextStyle()),
+                      16.height,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          AppButton(
+                            color: Colors.red,
+                            textStyle: boldTextStyle(color: white),
+                            text: language.cancel,
+                            onTap: () async {
+                              appStore.setLoading(true);
+                              await updateOrder(orderStatus: ORDER_CANCELLED, orderId: orderData.id);
+                              appStore.setLoading(false);
+                              finish(context,true);
+                              finish(context,true);
+                            },
+                          ),
+                          16.width,
+                          AppButton(
+                            color: colorPrimary,
+                            textStyle: boldTextStyle(color: white),
+                            text: language.save,
+                            onTap: () async {
+                              appStore.setLoading(true);
+                              Map req = {
+                                'order_id': orderData.id,
+                                'client_id': orderData.clientId,
+                                'datetime': picUpController.text,
+                                'total_amount': orderData.totalAmount,
+                                'payment_type': PAYMENT_TYPE_CASH,
+                                'payment_status': PAYMENT_PAID,
+                              };
+                              await savePayment(req).then((value) async {
+                                await saveDelivery().then((value) async {
+                                  appStore.setLoading(false);
+                                  finish(context,true);
+                                }).catchError((error) {
+                                  appStore.setLoading(false);
+                                  log(error);
+                                });
+                              }).catchError((error) {
+                                appStore.setLoading(false);
+                                log(error);
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Observer(
+                  builder: (_) => loaderWidget().visible(appStore.isLoading),
+                )
+              ],
+            ),
+          ),
+        );
       },
     );
   }
