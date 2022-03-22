@@ -25,20 +25,6 @@ List<WalkThroughItemModel> getWalkThroughItems() {
   return list;
 }
 
-List<SettingItemModel> getDeliverySettingItems() {
-  List<SettingItemModel> list = [];
-  list.add(SettingItemModel(icon: Icons.person_outline, title: language.edit_profile, widget: EditProfileScreen()));
-  list.add(SettingItemModel(icon: Icons.lock_outline, title: language.change_password, widget: ChangePasswordScreen()));
-  list.add(SettingItemModel(icon: Icons.location_on_outlined, title: language.change_location, widget: UserCitySelectScreen(isBack: true)));
-  list.add(SettingItemModel(icon: Icons.language, title: language.language,widget: LanguageScreen()));
-  list.add(SettingItemModel(icon: Icons.wb_sunny_outlined, title: language.theme,widget: ThemeScreen()));
-  list.add(SettingItemModel(icon: Icons.info_outline, title: language.about_us));
-  list.add(SettingItemModel(icon: Icons.help_outline, title: language.help_and_support));
-  list.add(SettingItemModel(icon: Icons.logout, title: language.logout));
-
-  return list;
-}
-
 List<AppModel> getSearchList() {
   List<AppModel> list = [];
   list.add(AppModel(name: COURIER_ASSIGNED));

@@ -109,7 +109,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(language.return_order, color: colorPrimary, textColor: white, elevation: 0),
+      appBar: appBarWidget(language.return_order, color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, textColor: white, elevation: 0),
       body: BodyCornerWidget(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(16),
@@ -140,7 +140,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                     Container(
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        border: Border.all(color: borderColor),
+                        border: Border.all(color: borderColor,width: appStore.isDarkMode ? 0.2 : 1),
                         borderRadius: BorderRadius.circular(defaultRadius),
                       ),
                       child: Column(
@@ -206,7 +206,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                     Container(
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        border: Border.all(color: borderColor),
+                        border: Border.all(color: borderColor,width: appStore.isDarkMode ? 0.2 : 1),
                         borderRadius: BorderRadius.circular(defaultRadius),
                       ),
                       child: Column(

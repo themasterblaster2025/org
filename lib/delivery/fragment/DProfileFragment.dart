@@ -12,13 +12,17 @@ import 'package:mighty_delivery/main/utils/DataProviders.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../main/screens/ChangePasswordScreen.dart';
+import '../../main/screens/EditProfileScreen.dart';
+import '../../main/screens/ThemeScreen.dart';
+import '../../user/components/UserCitySelectScreen.dart';
+
 class DProfileFragment extends StatefulWidget {
   @override
   DProfileFragmentState createState() => DProfileFragmentState();
 }
 
 class DProfileFragmentState extends State<DProfileFragment> {
-  List<SettingItemModel> settingItems = getDeliverySettingItems();
 
   @override
   void initState() {
@@ -27,7 +31,12 @@ class DProfileFragmentState extends State<DProfileFragment> {
   }
 
   void init() async {
-    //
+    LiveStream().on('UpdateLanguage', (p0) {
+      setState(() {});
+    });
+    LiveStream().on('UpdateTheme', (p0) {
+      setState(() {});
+    });
   }
 
   @override
@@ -38,11 +47,11 @@ class DProfileFragmentState extends State<DProfileFragment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(language.profile, color: colorPrimary, textColor: white, elevation: 0),
+      appBar: appBarWidget(language.profile, color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, textColor: white, elevation: 0),
       body: Observer(
         builder: (_) => BodyCornerWidget(
           child: SingleChildScrollView(
-            padding: EdgeInsets.only(bottom: 16, top: 16),
+            padding: EdgeInsets.all(16),
             child: Column(
               children: [
                 commonCachedNetworkImage(getStringAsync(USER_PROFILE_PHOTO).validate(), height: 90, width: 90, fit: BoxFit.cover).cornerRadiusWithClipRRect(50),
@@ -51,40 +60,51 @@ class DProfileFragmentState extends State<DProfileFragment> {
                 6.height,
                 Text(appStore.userEmail, style: secondaryTextStyle(size: 16)),
                 16.height,
-                ListView.builder(
+                ListView(
+                  padding: EdgeInsets.zero,
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: settingItems.length,
-                  itemBuilder: (context, index) {
-                    SettingItemModel mData = settingItems[index];
-                    return ListTile(
-                      contentPadding: EdgeInsets.only(left: 16, right: 16, top: 0, bottom: 0),
-                      leading: Icon(mData.icon, size: 30, color: appStore.isDarkMode ? Colors.white : colorPrimary),
-                      title: Text(mData.title!),
-                      trailing: Icon(Icons.navigate_next, color: Colors.grey),
-                      onTap: () async {
-                        if (index == 5 || index == 6) {
-                          launch('https://www.google.com/');
-                        }
-                        if (index == 7) {
-                          await showConfirmDialogCustom(
-                            context,
-                            primaryColor: colorPrimary,
-                            title: language.logout_confirmation_msg,
-                            positiveText: language.yes,
-                            negativeText: language.cancel,
-                            onAccept: (c) {
-                              logout(context);
-                            },
-                          );
-                        }
-                        if (mData.widget != null) {
-                          mData.widget.launch(context, pageRouteAnimation: PageRouteAnimation.Slide);
-                        }
+                  children: [
+                    settingItemWidget(Icons.person_outline, language.edit_profile, () {
+                      EditProfileScreen().launch(context);
+                    }),
+                    settingItemWidget(Icons.lock_outline, language.change_password, () {
+                      ChangePasswordScreen().launch(context);
+                    }),
+                    settingItemWidget(Icons.location_on_outlined, language.change_location, () {
+                      UserCitySelectScreen(isBack: true).launch(context);
+                    }),
+                    settingItemWidget(Icons.language, language.language, () {
+                      LanguageScreen().launch(context);
+                    }),
+                    settingItemWidget(Icons.wb_sunny_outlined, language.theme, () {
+                      ThemeScreen().launch(context);
+                    }),
+                    settingItemWidget(Icons.info_outline, language.about_us, () {
+                      launch('https://www.google.com/');
+                    }),
+                    settingItemWidget(Icons.help_outline, language.help_and_support, () {
+                      launch('https://www.google.com/');
+                    }),
+                    settingItemWidget(
+                      Icons.logout,
+                      language.logout,
+                          () async {
+                        await showConfirmDialogCustom(
+                          context,
+                          primaryColor: colorPrimary,
+                          title: language.logout_confirmation_msg,
+                          positiveText: language.yes,
+                          negativeText: language.cancel,
+                          onAccept: (c) {
+                            logout(context);
+                          },
+                        );
                       },
-                    );
-                  },
-                )
+                      isLast: true,
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

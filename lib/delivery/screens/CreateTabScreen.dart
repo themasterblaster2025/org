@@ -88,7 +88,11 @@ class CreateTabScreenState extends State<CreateTabScreen> {
               return GestureDetector(
                 child: Container(
                   margin: EdgeInsets.only(bottom: 16),
-                  decoration: boxDecorationRoundedWithShadow(defaultRadius.toInt()),
+                  decoration: boxDecorationRoundedWithShadow(
+                    defaultRadius.toInt(),
+                    backgroundColor: context.cardColor,
+                    shadowColor: appStore.isDarkMode ? Colors.transparent : null,
+                  ),
                   padding: EdgeInsets.all(16),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -167,7 +171,10 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                     Text('${data.pickupPoint!.contactNumber}', style: primaryTextStyle()),
                                   ],
                                 ).paddingOnly(top: 8),
-                              if(data.pickupDatetime==null && data.pickupPoint!.endTime!=null && data.pickupPoint!.startTime!=null) Text('Note: Courier will pickup at ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} from ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} to ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.endTime!).toLocal())}',style: secondaryTextStyle()).paddingOnly(top: 8),
+                              if (data.pickupDatetime == null && data.pickupPoint!.endTime != null && data.pickupPoint!.startTime != null)
+                                Text('Note: Courier will pickup at ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} from ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} to ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.endTime!).toLocal())}',
+                                        style: secondaryTextStyle())
+                                    .paddingOnly(top: 8),
                             ],
                           ).expand(),
                         ],
@@ -196,7 +203,10 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                     Text('${data.deliveryPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
                                   ],
                                 ).paddingOnly(top: 8),
-                              if(data.deliveryDatetime==null && data.deliveryPoint!.endTime!=null && data.deliveryPoint!.startTime!=null) Text('Note: Courier will Deliver at ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} from ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} to ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.endTime!).toLocal())}',style: secondaryTextStyle()).paddingOnly(top: 8),
+                              if (data.deliveryDatetime == null && data.deliveryPoint!.endTime != null && data.deliveryPoint!.startTime != null)
+                                Text('Note: Courier will Deliver at ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} from ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} to ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.endTime!).toLocal())}',
+                                        style: secondaryTextStyle())
+                                    .paddingOnly(top: 8),
                             ],
                           ).expand(),
                         ],

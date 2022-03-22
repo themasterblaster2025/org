@@ -67,64 +67,70 @@ class NotificationScreenState extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarWidget(language.notification, color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, textColor: white, elevation: 0),
-      body: Stack(
-        children: [
-          BodyCornerWidget(
-            child: ListView.separated(
-              controller: scrollController,
-              padding: EdgeInsets.zero,
-              itemCount: notificationData.length,
-              itemBuilder: (_, index) {
-                NotificationData data = notificationData[index];
-                return Container(
-                  padding: EdgeInsets.all(12),
-                  child: Row(
-                    children: [
-                      Container(decoration: BoxDecoration(shape: BoxShape.circle, color: data.read_at != null ? Colors.transparent : colorPrimary), width: 10, height: 10),
-                      8.width,
-                      Container(
-                        height: 50,
-                        width: 50,
-                        alignment:Alignment.center,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: colorPrimary.withOpacity(0.15),
-                        ),
-                        child: ImageIcon(AssetImage(notificationTypeIcon(type: data.data!.type)),color: colorPrimary,size: 26),
-                      ),
-                      16.width,
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+      body: BodyCornerWidget(
+        child: Observer(builder: (context) {
+          return Stack(
+            children: [
+              notificationData.isNotEmpty
+                  ? ListView.separated(
+                      controller: scrollController,
+                      padding: EdgeInsets.zero,
+                      itemCount: notificationData.length,
+                      itemBuilder: (_, index) {
+                        NotificationData data = notificationData[index];
+                        return Container(
+                          padding: EdgeInsets.all(12),
+                          child: Row(
                             children: [
-                              Text('${data.data!.subject}', style: boldTextStyle()).expand(),
+                              Container(decoration: BoxDecoration(shape: BoxShape.circle, color: data.read_at != null ? Colors.transparent : colorPrimary), width: 10, height: 10),
                               8.width,
-                              Text(data.created_at.validate(), style: secondaryTextStyle()),
+                              Container(
+                                height: 50,
+                                width: 50,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: colorPrimary.withOpacity(0.15),
+                                ),
+                                child: ImageIcon(AssetImage(notificationTypeIcon(type: data.data!.type)), color: colorPrimary, size: 26),
+                              ),
+                              16.width,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text('${data.data!.subject}', style: boldTextStyle()).expand(),
+                                      8.width,
+                                      Text(data.created_at.validate(), style: secondaryTextStyle()),
+                                    ],
+                                  ),
+                                  8.height,
+                                  Text('${data.data!.message}', style: primaryTextStyle(size: 14)),
+                                ],
+                              ).expand(),
                             ],
-                          ),
-                          8.height,
-                          Text('${data.data!.message}', style: primaryTextStyle(size: 14)),
-                        ],
-                      ).expand(),
-                    ],
-                  ).onTap(() async {
-                    bool? res = await OrderDetailScreen(orderId: data.data!.id.validate()).launch(context);
-                    if (res!) {
-                      currentPage = 1;
-                      init();
-                    }
-                  }),
-                );
-              },
-              separatorBuilder: (context, index) {
-                return Divider();
-              },
-            ),
-          ),
-          Observer(builder: (_) => loaderWidget().visible(appStore.isLoading))
-        ],
+                          ).onTap(() async {
+                            bool? res = await OrderDetailScreen(orderId: data.data!.id.validate()).launch(context);
+                            if (res!) {
+                              currentPage = 1;
+                              init();
+                            }
+                          }),
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return Divider();
+                      },
+                    )
+                  : !appStore.isLoading
+                      ? emptyWidget()
+                      : SizedBox(),
+              loaderWidget().center().visible(appStore.isLoading)
+            ],
+          );
+        }),
       ),
     );
   }

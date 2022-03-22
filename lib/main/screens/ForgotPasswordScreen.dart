@@ -59,7 +59,7 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(language.forgot_password,color: colorPrimary,textColor: white,elevation: 0),
+      appBar: appBarWidget(language.forgot_password,color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary,textColor: white,elevation: 0),
       body: BodyCornerWidget(
         child: Stack(
           children: [
@@ -87,13 +87,9 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        color: context.cardColor,
-        padding: EdgeInsets.all(16),
-        child: commonButton(language.submit, () {
-          submit();
-        }),
-      ),
+      bottomNavigationBar: commonButton(language.submit, () {
+        submit();
+      }).paddingAll(16),
     );
   }
 }

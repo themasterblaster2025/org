@@ -24,7 +24,12 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
   }
 
   void init() async {
-    //
+    LiveStream().on('UpdateLanguage', (p0) {
+      setState(() {});
+    });
+    LiveStream().on('UpdateTheme', (p0) {
+      setState(() {});
+    });
   }
 
   List<String> statusList = [ORDER_ASSIGNED, ORDER_ACTIVE, ORDER_ARRIVED, ORDER_PICKED_UP, ORDER_DEPARTED, ORDER_COMPLETED, ORDER_CANCELLED];
@@ -41,7 +46,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
       length: statusList.length,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: colorPrimary,
+          backgroundColor: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary,
           automaticallyImplyLeading: false,
           actions: [
             Stack(
