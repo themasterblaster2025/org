@@ -74,7 +74,9 @@ const ORDER_COMPLETED = 'completed';
 const ORDER_DRAFT = 'draft';
 const ORDER_DEPARTED = 'courier_departed';
 
-///RazorPay
+const stripeURL = 'https://api.stripe.com/v1/payment_intents';
+
+/*///RazorPay
 const razorKey = "rzp_test_CLw7tH3O3P5eQM";
 
 ///StripPayment
@@ -88,7 +90,7 @@ const flutterWaveSecretKey = 'FLWSECK_TEST-d2759023efce6198a853b8e2dd3beb55-X';
 const flutterWaveEncryptionKey = 'FLWSECK_TEST8497cc2db86c';
 
 ///PAY STACK DETAIL
-const payStackPublicKey = 'pk_test_c46ddf9def17e34152daa1b6e2eb940dedea41f0';
+const payStackPublicKey = 'pk_test_c46ddf9def17e34152daa1b6e2eb940dedea41f0';*/
 
 class AppThemeMode {
   final int ThemeModeLight = 1;

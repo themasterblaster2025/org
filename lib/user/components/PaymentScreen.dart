@@ -42,9 +42,7 @@ class PaymentScreen extends StatefulWidget {
 
 class PaymentScreenState extends State<PaymentScreen> implements TransactionCallBack {
   late NavigationController controller;
-  List<PaymentGatewayData> paymentGatewayList = [];
   String? selectedPaymentType;
-
   late Razorpay _razorpay;
 
   final plugin = PaystackPlugin();
@@ -63,24 +61,11 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
   }
 
   Future<void> init() async {
-    getPaymentGatewayListApiCall();
-    plugin.initialize(publicKey: payStackPublicKey);
+    plugin.initialize(publicKey: payStackPublicKey.validate());
     _razorpay = Razorpay();
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
-  }
-
-  getPaymentGatewayListApiCall() async {
-    appStore.setLoading(true);
-    await getPaymentGatewayList().then((value) {
-      appStore.setLoading(false);
-      paymentGatewayList.addAll(value.data!);
-      setState(() {});
-    }).catchError((error) {
-      appStore.setLoading(false);
-      toast(error.toString());
-    });
   }
 
   /// Save Payment
@@ -112,7 +97,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
   /// Razor Pay
   void razorPayPayment() async {
     var options = {
-      'key': razorKey,
+      'key': razorKey.validate(),
       'amount': (widget.totalAmount * 100).toInt(),
       'theme.color': '#5957b0',
       'name': 'Local Delivery',
@@ -211,13 +196,10 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
   }
 
   final style = FlutterwaveStyle(
-      appBarText: "My Standard Blue",
-      buttonColor: Color(0xffd0ebff),
-      appBarIcon: Icon(Icons.message, color: Color(0xffd0ebff)),
+      buttonColor: Color(0xFF5957b0),
       buttonTextStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
-      appBarColor: Color(0xffd0ebff),
-      dialogCancelTextStyle: TextStyle(color: Colors.redAccent, fontSize: 18),
-      dialogContinueTextStyle: TextStyle(color: Colors.blue, fontSize: 18));
+      dialogCancelTextStyle: TextStyle(color: Colors.grey, fontSize: 18),
+      dialogContinueTextStyle: TextStyle(color: Color(0xFF5957b0), fontSize: 18));
 
   void _showConfirmDialog() {
     FlutterwaveViewUtils.showConfirmPaymentModal(
@@ -242,7 +224,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
       paymentOptions: "card, payattitude",
       customization: Customization(title: "Test Payment"),
       isTestMode: true,
-      publicKey: flutterWavePublicKey,
+      publicKey: flutterWavePublicKey.validate(),
       currency: currencyCode,
       redirectUrl: "https://www.google.com",
     );
@@ -293,7 +275,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
   /// StripPayment
   void stripePay() async {
     Map<String, String> headers = {
-      HttpHeaders.authorizationHeader: 'Bearer $stripPaymentKey',
+      HttpHeaders.authorizationHeader: 'Bearer ${stripPaymentKey.validate()}',
       HttpHeaders.contentTypeHeader: 'application/x-www-form-urlencoded',
     };
 

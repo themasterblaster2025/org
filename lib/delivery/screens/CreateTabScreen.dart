@@ -217,7 +217,8 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                           Container(
                             decoration: boxDecorationWithRoundedCorners(
                               borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: borderColor),
+                              border: Border.all(color: borderColor,width: appStore.isDarkMode ? 0.2 : 1),
+                              backgroundColor: Colors.transparent,
                             ),
                             padding: EdgeInsets.all(8),
                             child: Image.asset(parcelTypeIcon('document'), height: 24, width: 24, color: Colors.grey),

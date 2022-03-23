@@ -147,7 +147,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
     return Scaffold(
       appBar: appBarWidget(
         widget.orderData!.status == ORDER_DEPARTED ? language.order_deliver : language.order_pickup,
-        color: colorPrimary,
+        color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary,
         textColor: white,
         elevation: 0,
         backWidget: IconButton(
@@ -294,7 +294,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                         : Container(
                             height: 150,
                             width: context.width(),
-                            decoration: BoxDecoration(border: Border.all(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(defaultRadius),color: Colors.grey.withOpacity(0.15)),
                             child: Screenshot(
                               controller: picUpScreenshotController,
                               child: SfSignaturePad(
@@ -340,7 +340,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                       Container(
                         height: 150,
                         width: context.width(),
-                        decoration: BoxDecoration(border: Border.all(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(defaultRadius),color: Colors.grey.withOpacity(0.15)),
                         child: Screenshot(
                           controller: deliveryScreenshotController,
                           child: SfSignaturePad(
@@ -383,28 +383,22 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                     16.height,
                     Text(language.reason, style: boldTextStyle()),
                     8.height,
-                    Container(
-                      decoration: BoxDecoration(border: Border.all(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
-                      padding: EdgeInsets.only(left: 8, right: 8),
-                      width: context.width(),
-                      child: DropdownButton(
-                          underline: SizedBox(),
-                          style: primaryTextStyle(),
-                          borderRadius: BorderRadius.circular(8),
-                          isExpanded: true,
-                          value: reason!.isNotEmpty ? reason : null,
-                          items: list.map((e) {
-                            return DropdownMenuItem(
-                              value: e.name,
-                              child: Text(e.name!),
-                            );
-                          }).toList(),
-                          onChanged: (String? val) {
-                            reason = val;
-                            reasonController.text = val!;
-                            setState(() {});
-                          }),
-                    ),
+                    DropdownButtonFormField(
+                        style: primaryTextStyle(),
+                        isExpanded: true,
+                        value: reason!.isNotEmpty ? reason : null,
+                        decoration: commonInputDecoration(),
+                        items: list.map((e) {
+                          return DropdownMenuItem(
+                            value: e.name,
+                            child: Text(e.name!),
+                          );
+                        }).toList(),
+                        onChanged: (String? val) {
+                          reason = val;
+                          reasonController.text = val!;
+                          setState(() {});
+                        }),
                     16.height,
                     Row(
                       children: [
@@ -477,11 +471,6 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                         ).expand(),
                       ],
                     ),
-                    AppButton(
-                      onTap: () {
-                        paymentConfirmDialog(widget.orderData!);
-                      },
-                    )
                   ],
                 ),
               ),

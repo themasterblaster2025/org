@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
@@ -47,7 +48,6 @@ class TrackingScreenState extends State<TrackingScreen> {
 
   late StreamSubscription<Position> positionStream;
 
-
   @override
   void initState() {
     super.initState();
@@ -57,28 +57,27 @@ class TrackingScreenState extends State<TrackingScreen> {
   void init() async {
     polylinePoints = PolylinePoints();
 
-    positionStream = Geolocator.getPositionStream().listen((event)async {
+    positionStream = Geolocator.getPositionStream().listen((event) async {
       SOURCE_LOCATION = LatLng(event.latitude, event.longitude);
-     await updateLocation(latitude: event.latitude.toString(), longitude: event.longitude.toString()).then((value) {
-
-       markers.add(
-         Marker(
-           markerId: MarkerId('valsad'),
-           position: LatLng(SOURCE_LOCATION!.latitude, SOURCE_LOCATION!.longitude),
-           infoWindow: InfoWindow(title: 'Delivery Boy'),
-           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
-         ),
-       );
-       widget.order.map((e) {
-         markers.add(
-           Marker(
-             markerId: MarkerId('valsad'),
-             position: LatLng(e.pickupPoint!.latitude.toDouble(), e.pickupPoint!.longitude.toDouble()),
-             infoWindow: InfoWindow(title: e.pickupPoint!.address),
-             icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
-           ),
-         );
-       }).toList();
+      await updateLocation(latitude: event.latitude.toString(), longitude: event.longitude.toString()).then((value) {
+        markers.add(
+          Marker(
+            markerId: MarkerId('valsad'),
+            position: LatLng(SOURCE_LOCATION!.latitude, SOURCE_LOCATION!.longitude),
+            infoWindow: InfoWindow(title: 'Delivery Boy'),
+            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+          ),
+        );
+        widget.order.map((e) {
+          markers.add(
+            Marker(
+              markerId: MarkerId('valsad'),
+              position: LatLng(e.pickupPoint!.latitude.toDouble(), e.pickupPoint!.longitude.toDouble()),
+              infoWindow: InfoWindow(title: e.pickupPoint!.address),
+              icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
+            ),
+          );
+        }).toList();
 
         setPolyLines(orderLat: orderLatLong);
       }).catchError((error) {
@@ -89,10 +88,7 @@ class TrackingScreenState extends State<TrackingScreen> {
 
     //setState(() {});
 
-
     orderLatLong = await LatLng(widget.latLng!.latitude, widget.latLng!.longitude);
-
-
   }
 
   Future<void> setPolyLines({required LatLng orderLat}) async {
@@ -135,42 +131,38 @@ class TrackingScreenState extends State<TrackingScreen> {
       appBar: AppBar(
         title: Text(language.tracking_order),
       ),
-      body: SOURCE_LOCATION != null
-          ? Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                GoogleMap(
-                  markers: markers.map((e) => e).toSet(),
-                  polylines: _polylines,
-                  mapType: MapType.normal,
-                  initialCameraPosition: CameraPosition(
-                    target: SOURCE_LOCATION!,
-                    zoom: CAMERA_ZOOM,
-                    tilt: CAMERA_TILT,
-                    bearing: CAMERA_BEARING,
+      body: BodyCornerWidget(
+        child: SOURCE_LOCATION != null
+            ? Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  GoogleMap(
+                    markers: markers.map((e) => e).toSet(),
+                    polylines: _polylines,
+                    mapType: MapType.normal,
+                    initialCameraPosition: CameraPosition(
+                      target: SOURCE_LOCATION!,
+                      zoom: CAMERA_ZOOM,
+                      tilt: CAMERA_TILT,
+                      bearing: CAMERA_BEARING,
+                    ),
                   ),
-                ),
-                Container(
-                  height: 200,
-                  child: ListView.builder(
-                    itemCount: widget.order.length,
-                    itemBuilder: (_, index) {
-                      OrderData data = widget.order[index];
-
-                      return Container(
-                        padding: EdgeInsets.all(8),
-                        width: context.width(),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: colorPrimary),
-                          color: Colors.white,
-                        ),
-                        child: Column(
+                  Container(
+                    height: 200,
+                    color: context.scaffoldBackgroundColor,
+                    child: ListView.separated(
+                      padding: EdgeInsets.all(16),
+                      shrinkWrap: true,
+                      itemCount: widget.order.length,
+                      itemBuilder: (_, index) {
+                        OrderData data = widget.order[index];
+                        return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Id # ${data.id}', style: boldTextStyle()),
+                                Text('Id #${data.id}', style: boldTextStyle()),
                                 AppButton(
                                   padding: EdgeInsets.zero,
                                   color: colorPrimary,
@@ -193,14 +185,17 @@ class TrackingScreenState extends State<TrackingScreen> {
                               ],
                             ),
                           ],
-                        ),
-                      );
-                    },
+                        );
+                      },
+                      separatorBuilder: (_,index){
+                        return Divider();
+                      }
+                    ),
                   ),
-                ),
-              ],
-            )
-          : loaderWidget(),
+                ],
+              )
+            : loaderWidget(),
+      ),
     );
   }
 }

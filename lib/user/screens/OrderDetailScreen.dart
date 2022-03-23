@@ -344,7 +344,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                       ReturnOrderScreen(orderData!).launch(context);
                     }, width: context.width())
                         .paddingAll(16),
-                  ).visible(orderData!.status == ORDER_COMPLETED && !orderData!.returnOrderId!),
+                  ).visible(orderData!.status == ORDER_COMPLETED && !orderData!.returnOrderId! && getStringAsync(USER_TYPE) == CLIENT),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: commonButton(language.cancel_order, () {
@@ -360,7 +360,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                       );
                     }, width: context.width())
                         .paddingAll(16),
-                  ).visible(orderData!.status == ORDER_CREATE)
+                  ).visible(orderData!.status == ORDER_CREATE && getStringAsync(USER_TYPE) == CLIENT)
                 ],
               )
               : loaderWidget(),

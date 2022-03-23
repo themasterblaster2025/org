@@ -67,64 +67,67 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
   Widget build(BuildContext context) {
     return Form(
       key: formKey,
-      child: Stack(
-        children: [
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(language.cancel_order, style: boldTextStyle(size: 18)),
-                  CloseButton(),
-                ],
-              ),
-              16.height,
-              Text(language.reason, style: boldTextStyle()),
-              8.height,
-              DropdownButtonFormField<String>(
-                value: reason,
-                isExpanded: true,
-                decoration: commonInputDecoration(),
-                items: reasonList.map((e) {
-                  return DropdownMenuItem(
-                    value: e.name,
-                    child: Text(e.name!),
-                  );
-                }).toList(),
-                onChanged: (String? val) {
-                  reason = val;
-                  setState(() {});
-                },
-                validator: (value) {
-                  if(value==null) return language.field_required_msg;
-                },
-              ),
-              16.height,
-              AppTextField(
-                controller: reasonController,
-                textFieldType: TextFieldType.OTHER,
-                decoration: commonInputDecoration(hintText: language.write_reason_here),
-                maxLines: 3,
-                minLines: 3,
-                validator: (value) {
-                  if (value!.isEmpty) return language.field_required_msg;
-                },
-              ).visible(reason == 'Other'),
-              16.height,
-              Align(
-                alignment: Alignment.centerRight,
-                child: commonButton(language.submit, () {
-                  if (formKey.currentState!.validate()) {
-                    updateOrderApiCall();
-                  }
-                }),
-              )
-            ],
-          ),
-          Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
-        ],
+      child: SizedBox(
+        height:reason.validate() == 'Other' ? 330 : 230,
+        child: Stack(
+          children: [
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(language.cancel_order, style: boldTextStyle(size: 18)),
+                    CloseButton(),
+                  ],
+                ),
+                16.height,
+                Text(language.reason, style: boldTextStyle()),
+                8.height,
+                DropdownButtonFormField<String>(
+                  value: reason,
+                  isExpanded: true,
+                  decoration: commonInputDecoration(),
+                  items: reasonList.map((e) {
+                    return DropdownMenuItem(
+                      value: e.name,
+                      child: Text(e.name!),
+                    );
+                  }).toList(),
+                  onChanged: (String? val) {
+                    reason = val;
+                    setState(() {});
+                  },
+                  validator: (value) {
+                    if(value==null) return language.field_required_msg;
+                  },
+                ),
+                16.height,
+                AppTextField(
+                  controller: reasonController,
+                  textFieldType: TextFieldType.OTHER,
+                  decoration: commonInputDecoration(hintText: language.write_reason_here),
+                  maxLines: 3,
+                  minLines: 3,
+                  validator: (value) {
+                    if (value!.isEmpty) return language.field_required_msg;
+                  },
+                ).visible(reason == 'Other'),
+                16.height,
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: commonButton(language.submit, () {
+                    if (formKey.currentState!.validate()) {
+                      updateOrderApiCall();
+                    }
+                  }),
+                )
+              ],
+            ),
+            Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
+          ],
+        ),
       ),
     );
   }
