@@ -87,7 +87,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
         return false;
       },
       child: Scaffold(
-        appBar: appBarWidget(language.order_details, color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, textColor: white, elevation: 0),
+        appBar: AppBar(title: Text(language.order_details)),
         body: BodyCornerWidget(
           child: !appStore.isLoading && orderData != null
               ? Stack(

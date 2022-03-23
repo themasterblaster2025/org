@@ -340,7 +340,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
   Widget build(BuildContext context) {
     controller = NavigationController(Client(), style, this);
     return Scaffold(
-      appBar: appBarWidget(language.payment, color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, elevation: 0, textColor: white),
+      appBar: AppBar(title: Text(language.payment)),
       body: BodyCornerWidget(
         child: Stack(
           children: [

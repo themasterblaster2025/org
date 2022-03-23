@@ -145,12 +145,9 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(
-        widget.orderData!.status == ORDER_DEPARTED ? language.order_deliver : language.order_pickup,
-        color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary,
-        textColor: white,
-        elevation: 0,
-        backWidget: IconButton(
+      appBar: AppBar(
+        title : Text(widget.orderData!.status == ORDER_DEPARTED ? language.order_deliver : language.order_pickup),
+        leading: IconButton(
           onPressed: () {
             finish(context, false);
           },

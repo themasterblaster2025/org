@@ -59,7 +59,7 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(language.forgot_password,color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary,textColor: white,elevation: 0),
+      appBar: AppBar(title: Text(language.forgot_password)),
       body: BodyCornerWidget(
         child: Stack(
           children: [

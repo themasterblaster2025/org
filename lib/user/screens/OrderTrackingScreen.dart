@@ -116,7 +116,7 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(language.track_order, color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, textColor: Colors.white, elevation: 0),
+      appBar: AppBar(title: Text(language.track_order)),
       body: BodyCornerWidget(
         child: SOURCE_LOCATION != null ? GoogleMap(
           markers: markers.map((e) => e).toSet(),

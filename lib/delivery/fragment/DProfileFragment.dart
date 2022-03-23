@@ -15,7 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../main/screens/ChangePasswordScreen.dart';
 import '../../main/screens/EditProfileScreen.dart';
 import '../../main/screens/ThemeScreen.dart';
-import '../../user/components/UserCitySelectScreen.dart';
+import '../../main/components/UserCitySelectScreen.dart';
 
 class DProfileFragment extends StatefulWidget {
   @override
@@ -47,7 +47,7 @@ class DProfileFragmentState extends State<DProfileFragment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(language.profile, color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, textColor: white, elevation: 0),
+      appBar: AppBar(title: Text(language.profile)),
       body: Observer(
         builder: (_) => BodyCornerWidget(
           child: SingleChildScrollView(

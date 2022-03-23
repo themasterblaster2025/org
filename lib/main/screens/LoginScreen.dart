@@ -10,7 +10,7 @@ import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
-import '../../user/components/UserCitySelectScreen.dart';
+import '../components/UserCitySelectScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   static String tag = '/LoginScreen';

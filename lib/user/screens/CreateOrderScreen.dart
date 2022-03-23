@@ -764,7 +764,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         }
       },
       child: Scaffold(
-        appBar: appBarWidget(language.create_order, color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, textColor: white, elevation: 0),
+        appBar: AppBar(title: Text(language.create_order)),
         body: BodyCornerWidget(
           child: SingleChildScrollView(
             padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),

@@ -94,7 +94,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(language.edit_profile, color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, textColor: white, elevation: 0),
+      appBar: AppBar(title: Text(language.edit_profile)),
       body: BodyCornerWidget(
         child: Stack(
           children: [

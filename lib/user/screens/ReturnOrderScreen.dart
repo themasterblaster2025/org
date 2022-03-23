@@ -109,7 +109,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(language.return_order, color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, textColor: white, elevation: 0),
+      appBar: AppBar(title: Text(language.return_order)),
       body: BodyCornerWidget(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(16),

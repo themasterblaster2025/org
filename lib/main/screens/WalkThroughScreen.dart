@@ -29,7 +29,7 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
   }
 
   Future<void> init() async {
-    setStatusBarColor(appStore.isDarkMode ? scaffoldColorDark : Colors.white,statusBarBrightness: appStore.isDarkMode ? Brightness.light : Brightness.dark);
+    setStatusBarColor(appStore.isDarkMode ? scaffoldColorDark : Colors.white, statusBarBrightness: appStore.isDarkMode ? Brightness.light : Brightness.dark);
   }
 
   @override
@@ -40,11 +40,10 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(
-        '',
-        elevation: 0,
-        showBack: false,
-        color: Colors.transparent,
+      appBar: AppBar(
+        title: Text(''),
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.transparent,
         actions: [
           Text(language.skip, style: boldTextStyle(color: grey)).onTap(
             () async {

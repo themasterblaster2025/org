@@ -74,7 +74,7 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(language.draft_order, color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, textColor: white, elevation: 0),
+      appBar: AppBar(title: Text(language.draft_order)),
       body: BodyCornerWidget(
         child: Observer(builder: (context) {
           return Stack(

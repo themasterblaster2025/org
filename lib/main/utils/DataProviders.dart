@@ -6,7 +6,7 @@ import 'package:mighty_delivery/main/screens/EditProfileScreen.dart';
 import 'package:mighty_delivery/main/screens/LanguageScreen.dart';
 import 'package:mighty_delivery/main/screens/ThemeScreen.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
-import 'package:mighty_delivery/user/components/UserCitySelectScreen.dart';
+import 'package:mighty_delivery/main/components/UserCitySelectScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 List<LanguageDataModel> languageList() {
@@ -22,16 +22,6 @@ List<WalkThroughItemModel> getWalkThroughItems() {
   list.add(WalkThroughItemModel(image: 'assets/walk_through1.png', title: language.walk_through1_title, subTitle: language.walk_through1_subtitle));
   list.add(WalkThroughItemModel(image: 'assets/walk_through2.png', title: language.walk_through2_title, subTitle: language.walk_through2_subtitle));
   list.add(WalkThroughItemModel(image: 'assets/walk_through3.png', title: language.walk_through3_title, subTitle: language.walk_through3_subtitle));
-  return list;
-}
-
-List<AppModel> getSearchList() {
-  List<AppModel> list = [];
-  list.add(AppModel(name: COURIER_ASSIGNED));
-  list.add(AppModel(name: COURIER_DEPARTED));
-  list.add(AppModel(name: RESTORE));
-  list.add(AppModel(name: FORCE_DELETE));
-
   return list;
 }
 

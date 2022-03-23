@@ -37,16 +37,6 @@ Widget outlineButton(String title, Function() onTap, {double? width}) {
   );
 }
 
-Widget containerWidget(BuildContext context, Widget? child) {
-  return Container(
-    margin: EdgeInsets.only(top: 90),
-    height: context.height(),
-    width: context.width(),
-    decoration: boxDecorationWithRoundedCorners(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
-    child: child,
-  );
-}
-
 Widget scheduleOptionWidget(BuildContext context, bool isSelected, String imagePath, String title) {
   return Container(
     padding: EdgeInsets.all(16),

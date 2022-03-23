@@ -4,7 +4,7 @@ import 'package:mighty_delivery/main/models/CityListModel.dart';
 import 'package:mighty_delivery/main/screens/WalkThroughScreen.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
-import 'package:mighty_delivery/user/components/UserCitySelectScreen.dart';
+import 'package:mighty_delivery/main/components/UserCitySelectScreen.dart';
 import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 

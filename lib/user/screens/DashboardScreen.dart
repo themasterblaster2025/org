@@ -9,7 +9,7 @@ import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/user/components/FilterOrderComponent.dart';
-import 'package:mighty_delivery/user/components/UserCitySelectScreen.dart';
+import 'package:mighty_delivery/main/components/UserCitySelectScreen.dart';
 import 'package:mighty_delivery/user/fragment/AccountFragment.dart';
 import 'package:mighty_delivery/user/fragment/OrderFragment.dart';
 import 'package:mighty_delivery/user/screens/CreateOrderScreen.dart';
@@ -61,12 +61,8 @@ class DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarWidget(
-        '${getTitle()}',
-        color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary,
-        textColor: white,
-        elevation: 0,
-        showBack: false,
+      appBar: AppBar(
+        title: Text('${getTitle()}'),
         actions: [
           Row(
             children: [
