@@ -66,9 +66,9 @@ void main() async {
     appStore.setDarkMode(true);
   }
 
-  /*await OneSignal.shared.setAppId(mOneSignalAppId);
+  await OneSignal.shared.setAppId(mOneSignalAppId);
 
-  saveOneSignalPlayerId();*/
+  saveOneSignalPlayerId();
   runApp(MyApp());
 }
 
