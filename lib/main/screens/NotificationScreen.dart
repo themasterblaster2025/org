@@ -92,7 +92,7 @@ class NotificationScreenState extends State<NotificationScreen> {
                                   shape: BoxShape.circle,
                                   color: colorPrimary.withOpacity(0.15),
                                 ),
-                                child: ImageIcon(AssetImage(notificationTypeIcon(type: data.data!.type)), color: colorPrimary, size: 26),
+                                child: ImageIcon(AssetImage(statusTypeIcon(type: data.data!.type)), color: colorPrimary, size: 26),
                               ),
                               16.width,
                               Column(

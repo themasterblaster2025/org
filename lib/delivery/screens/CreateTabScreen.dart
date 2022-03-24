@@ -100,27 +100,69 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                     children: [
                       Row(
                         children: [
-                          Text('# ${data.id}', style: boldTextStyle(size: 16)).expand(),
+                          Text('Order #${data.id}', style: boldTextStyle(size: 16)).expand(),
                           4.height,
                           Row(
                             children: [
                               IconButton(
                                 onPressed: () async {
-                                  await updateOrder(orderStatus: ORDER_ARRIVED, orderId: data.id);
-                                  init();
+                                  showConfirmDialogCustom(
+                                    context,
+                                    primaryColor: colorPrimary,
+
+                                    /// change language
+                                    dialogType: DialogType.DELETE,
+                                    title: 'Are you sure you want to arrive?',
+                                    positiveText: language.yes,
+                                    negativeText: language.cancel,
+                                    onAccept: (c) async {
+                                      appStore.setLoading(true);
+                                      await updateOrder(orderStatus: ORDER_ARRIVED, orderId: data.id);
+                                      appStore.setLoading(false);
+                                      finish(context);
+
+                                      init();
+                                    },
+                                  );
                                 },
                                 icon: Icon(Icons.notifications_outlined),
                               ).visible(data.status == ORDER_ACTIVE),
                               widget.orderStatus != ORDER_CANCELLED
                                   ? AppButton(
-                                      text: buttonText(widget.orderStatus!),
-                                      padding: EdgeInsets.all(0),
-                                      textStyle: boldTextStyle(color: Colors.white),
-                                      color: colorPrimary,
-                                      onTap: () {
-                                        onTapData(orderData: data, orderStatus: widget.orderStatus!);
+                                text: buttonText(widget.orderStatus!),
+                                padding: EdgeInsets.all(4),
+                                textStyle: boldTextStyle(color: Colors.white),
+                                color: colorPrimary,
+                                onTap: () {
+                                  if (widget.orderStatus == ORDER_ACTIVE) {
+                                    onTapData(orderData: data, orderStatus: widget.orderStatus!);
+                                  } else if (widget.orderStatus == ORDER_ACTIVE) {
+                                    onTapData(orderData: data, orderStatus: widget.orderStatus!);
+                                  } else if (widget.orderStatus == ORDER_ARRIVED) {
+                                    onTapData(orderData: data, orderStatus: widget.orderStatus!);
+                                  } else if (widget.orderStatus == ORDER_DEPARTED) {
+                                    onTapData(orderData: data, orderStatus: widget.orderStatus!);
+                                  } else {
+                                    showConfirmDialogCustom(
+                                      context,
+                                      primaryColor: colorPrimary,
+
+                                      /// change language
+                                      dialogType: DialogType.DELETE,
+                                      title: orderTitle(widget.orderStatus!),
+                                      positiveText: language.yes,
+                                      negativeText: language.cancel,
+                                      onAccept: (c) async {
+                                        ///finish(context);
+                                        appStore.setLoading(true);
+                                        await onTapData(orderData: data, orderStatus: widget.orderStatus!);
+                                        appStore.setLoading(false);
+                                        finish(context);
                                       },
-                                    ).visible(widget.orderStatus != ORDER_COMPLETED)
+                                    );
+                                  }
+                                },
+                              ).visible(widget.orderStatus != ORDER_COMPLETED)
                                   : SizedBox(),
                             ],
                           )
@@ -173,7 +215,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                 ).paddingOnly(top: 8),
                               if (data.pickupDatetime == null && data.pickupPoint!.endTime != null && data.pickupPoint!.startTime != null)
                                 Text('Note: Courier will pickup at ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} from ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} to ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.endTime!).toLocal())}',
-                                        style: secondaryTextStyle())
+                                    style: secondaryTextStyle())
                                     .paddingOnly(top: 8),
                             ],
                           ).expand(),
@@ -205,7 +247,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                 ).paddingOnly(top: 8),
                               if (data.deliveryDatetime == null && data.deliveryPoint!.endTime != null && data.deliveryPoint!.startTime != null)
                                 Text('Note: Courier will Deliver at ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} from ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} to ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.endTime!).toLocal())}',
-                                        style: secondaryTextStyle())
+                                    style: secondaryTextStyle())
                                     .paddingOnly(top: 8),
                             ],
                           ).expand(),
@@ -217,7 +259,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                           Container(
                             decoration: boxDecorationWithRoundedCorners(
                               borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: borderColor,width: appStore.isDarkMode ? 0.2 : 1),
+                              border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
                               backgroundColor: Colors.transparent,
                             ),
                             padding: EdgeInsets.all(8),
@@ -307,7 +349,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
     } else if (orderStatus == ORDER_PICKED_UP) {
       return language.departed;
     } else if (orderStatus == ORDER_DEPARTED) {
-      return language.submit;
+      return 'Confirm Delivery';
     }
     return '';
   }

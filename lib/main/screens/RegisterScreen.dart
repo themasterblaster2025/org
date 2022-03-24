@@ -9,10 +9,16 @@ import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import '../../delivery/screens/DeliveryDashBoard.dart';
 import '../../main.dart';
+import '../components/UserCitySelectScreen.dart';
+import '../models/CityListModel.dart';
 
 class RegisterScreen extends StatefulWidget {
+  final String? userType;
   static String tag = '/RegisterScreen';
+
+  RegisterScreen({this.userType});
 
   @override
   RegisterScreenState createState() => RegisterScreenState();
@@ -33,8 +39,6 @@ class RegisterScreenState extends State<RegisterScreen> {
   FocusNode phoneFocus = FocusNode();
   FocusNode passFocus = FocusNode();
 
-  String? selectedUserType;
-
   @override
   void initState() {
     super.initState();
@@ -54,8 +58,6 @@ class RegisterScreenState extends State<RegisterScreen> {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
 
-      if (selectedUserType == null) return toast(language.select_usertype_msg);
-
       appStore.setLoading(true);
 
       Map req = {
@@ -63,17 +65,13 @@ class RegisterScreenState extends State<RegisterScreen> {
         "username": userNameController.text.trim(),
         "email": emailController.text.trim(),
         "password": passController.text.validate(),
-        "user_type": selectedUserType,
+        "user_type": widget.userType.validate(),
         "contact_number": phoneController.text.trim(),
         "player_id": getStringAsync(PLAYER_ID).validate(),
       };
       await signUpApi(req).then((value) async {
         appStore.setLoading(false);
-        if (getStringAsync(USER_TYPE) == CLIENT) {
-          DashboardScreen().launch(context, isNewTask: true);
-        } else {
-          LoginScreen().launch(context);
-        }
+          UserCitySelectScreen().launch(context, isNewTask: true);
       }).catchError((error) {
         appStore.setLoading(false);
         toast(error.toString());
@@ -164,33 +162,6 @@ class RegisterScreenState extends State<RegisterScreen> {
                           decoration: commonInputDecoration(),
                           errorThisFieldRequired: language.field_required_msg,
                           errorMinimumPasswordLength: language.password_invalid,
-                        ),
-                        16.height,
-                        Text(language.user_type, style: primaryTextStyle()),
-                        8.height,
-                        Row(
-                          children: [
-                            RadioListTile(
-                              contentPadding: EdgeInsets.zero,
-                              groupValue: selectedUserType,
-                              value: CLIENT,
-                              title: Text(language.client),
-                              onChanged: (String? value) {
-                                selectedUserType = value;
-                                setState(() {});
-                              },
-                            ).expand(),
-                            RadioListTile(
-                              contentPadding: EdgeInsets.zero,
-                              groupValue: selectedUserType,
-                              value: DELIVERY_MAN,
-                              title: Text(language.delivery_man),
-                              onChanged: (String? value) {
-                                selectedUserType = value;
-                                setState(() {});
-                              },
-                            ).expand(),
-                          ],
                         ),
                         30.height,
                         commonButton(language.sign_up, () {

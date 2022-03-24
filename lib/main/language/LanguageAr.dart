@@ -164,7 +164,7 @@ class LanguageAr extends BaseLanguage {
   String get pickup_deliver_validation_msg => "يجب أن يكون وقت الالتقاط قبل تقديم الوقت";
 
   @override
-  String get create_order_confirmation_msg => "هل أنت متأكد من أنك تريد إنشاء ترتيب؟";
+  String get create_order_confirmation_msg => "هل أنت متأكد أنك تريد وضع النظام؟";
 
   @override
   String get draft_order => "مشروع النظام";

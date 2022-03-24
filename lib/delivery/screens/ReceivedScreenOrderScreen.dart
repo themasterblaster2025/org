@@ -14,6 +14,7 @@ import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/main/utils/DataProviders.dart';
+import 'package:mighty_delivery/user/components/CancelOrderDialog.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
@@ -146,7 +147,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title : Text(widget.orderData!.status == ORDER_DEPARTED ? language.order_deliver : language.order_pickup),
+        title: Text(widget.orderData!.status == ORDER_DEPARTED ? language.order_deliver : language.order_pickup),
         leading: IconButton(
           onPressed: () {
             finish(context, false);
@@ -200,7 +201,9 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                         ),
                       ),
                     16.height,
-                    Text(language.pickup_datetime, style: boldTextStyle()),
+
+                    /// change language
+                    Text('Order ${language.pickup_datetime}', style: boldTextStyle()),
                     8.height,
                     AppTextField(
                       readOnly: true,
@@ -284,24 +287,26 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                         ],
                       ),
                     16.height,
-                    Text(language.pickup_time_signature, style: boldTextStyle()),
+
+                    /// change language
+                    Text('User\'s Signature', style: boldTextStyle()),
                     8.height,
                     widget.orderData!.pickupConfirmByClient == 1
                         ? commonCachedNetworkImage(widget.orderData!.pickupTimeSignature, fit: BoxFit.cover, height: 150, width: context.width())
                         : Container(
-                            height: 150,
-                            width: context.width(),
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(defaultRadius),color: Colors.grey.withOpacity(0.15)),
-                            child: Screenshot(
-                              controller: picUpScreenshotController,
-                              child: SfSignaturePad(
-                                key: signaturePicUPPadKey,
-                                minimumStrokeWidth: 1,
-                                maximumStrokeWidth: 3,
-                                strokeColor: colorPrimary,
-                              ),
-                            ),
-                          ),
+                      height: 150,
+                      width: context.width(),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(defaultRadius), color: Colors.grey.withOpacity(0.15)),
+                      child: Screenshot(
+                        controller: picUpScreenshotController,
+                        child: SfSignaturePad(
+                          key: signaturePicUPPadKey,
+                          minimumStrokeWidth: 1,
+                          maximumStrokeWidth: 3,
+                          strokeColor: colorPrimary,
+                        ),
+                      ),
+                    ),
                     if (widget.orderData!.pickupConfirmByClient == 0)
                       Align(
                         alignment: Alignment.bottomRight,
@@ -337,7 +342,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                       Container(
                         height: 150,
                         width: context.width(),
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(defaultRadius),color: Colors.grey.withOpacity(0.15)),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(defaultRadius), color: Colors.grey.withOpacity(0.15)),
                         child: Screenshot(
                           controller: deliveryScreenshotController,
                           child: SfSignaturePad(
@@ -378,30 +383,13 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                         ),
                       ).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
                     16.height,
-                    Text(language.reason, style: boldTextStyle()),
-                    8.height,
-                    DropdownButtonFormField(
-                        style: primaryTextStyle(),
-                        isExpanded: true,
-                        value: reason!.isNotEmpty ? reason : null,
-                        decoration: commonInputDecoration(),
-                        items: list.map((e) {
-                          return DropdownMenuItem(
-                            value: e.name,
-                            child: Text(e.name!),
-                          );
-                        }).toList(),
-                        onChanged: (String? val) {
-                          reason = val;
-                          reasonController.text = val!;
-                          setState(() {});
-                        }),
-                    16.height,
                     Row(
                       children: [
                         AppButton(
                           width: context.width(),
-                          text: widget.orderData!.status == ORDER_DEPARTED ? language.submit : language.pickup_delivery,
+
+                          /// change language
+                          text: widget.orderData!.status == ORDER_DEPARTED ? 'Confirm Delivery' : 'Confirm Pickup',
                           textStyle: primaryTextStyle(color: white),
                           color: colorPrimary,
                           onTap: () async {
@@ -427,41 +415,48 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                             if (widget.orderData!.paymentId == null &&
                                 widget.orderData!.paymentCollectFrom == PAYMENT_ON_PICKUP &&
                                 (widget.orderData!.status == ORDER_ACTIVE || widget.orderData!.status == ORDER_ARRIVED)) {
-                              paymentConfirmDialog(widget.orderData!);
+                              appStore.setLoading(true);
+                              await paymentConfirmDialog(widget.orderData!);
+                              appStore.setLoading(false);
                             } else if (widget.orderData!.paymentId == null && widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY && widget.orderData!.status == ORDER_DEPARTED) {
-                              paymentConfirmDialog(widget.orderData!);
+                              appStore.setLoading(true);
+                              await paymentConfirmDialog(widget.orderData!);
+                              appStore.setLoading(false);
                             } else {
-                              saveDelivery();
+                              //saveDelivery();
+                              showConfirmDialogCustom(
+                                context,
+                                primaryColor: colorPrimary,
+                                dialogType: DialogType.DELETE,
+
+                                /// change language
+                                title: orderTitle(widget.orderData!.status!),
+                                positiveText: language.yes,
+                                negativeText: language.cancel,
+                                onAccept: (c) async {
+                                  saveDelivery();
+                                },
+                              );
                             }
                           },
                         ).expand(),
                         16.width,
                         AppButton(
                           width: context.width(),
-                          text: language.cancel,
+                          text: language.cancel_order,
                           textStyle: primaryTextStyle(color: white),
                           color: colorPrimary,
                           onTap: () async {
-                            if (reasonController.text.isEmpty) {
-                              return toast(language.select_reason_msg);
-                            }
-                            showConfirmDialogCustom(
+                            showInDialog(
                               context,
-                              primaryColor: colorPrimary,
-                              dialogType: DialogType.DELETE,
-                              title: 'Are you sure you want to cancel this order?',
-                              positiveText: language.yes,
-                              negativeText: language.cancel,
-                              onAccept: (c) async {
-                                appStore.setLoading(true);
-                                await updateOrder(orderId: widget.orderData!.id, reason: reasonController.text, orderStatus: ORDER_CANCELLED).then((value) {
-                                  toast(language.order_cancelled_successfully);
-                                  appStore.setLoading(false);
-                                  finish(context, true);
-                                }).catchError((error) {
-                                  log(error);
-                                  appStore.setLoading(false);
-                                });
+                              contentPadding: EdgeInsets.all(16),
+                              builder: (p0) {
+                                return CancelOrderDialog(
+                                  orderId: widget.orderData!.id.validate(),
+                                  onUpdate: () {
+                                    finish(context);
+                                  },
+                                );
                               },
                             );
                           },
@@ -482,92 +477,37 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   }
 
   Future<void> paymentConfirmDialog(OrderData orderData) {
-    return showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          content: SizedBox(
-            height: 190,
-            child: Stack(
-              children: [
-                Center(
-                  heightFactor: 1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(language.confirmation, style: boldTextStyle()),
-                          IconButton(
-                            padding: EdgeInsets.zero,
-                            onPressed: () {
-                              finish(context);
-                            },
-                            icon: Icon(Icons.close, color: context.iconColor),
-                          )
-                        ],
-                      ),
-                      Text(language.collect_payment_confirmation_msg, style: primaryTextStyle()),
-                      16.height,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          AppButton(
-                            color: Colors.red,
-                            textStyle: boldTextStyle(color: white),
-                            text: language.cancel,
-                            onTap: () async {
-                              appStore.setLoading(true);
-                              await updateOrder(orderStatus: ORDER_CANCELLED, orderId: orderData.id);
-                              appStore.setLoading(false);
-                              finish(context,true);
-                              finish(context,true);
-                            },
-                          ),
-                          16.width,
-                          AppButton(
-                            color: colorPrimary,
-                            textStyle: boldTextStyle(color: white),
-                            text: language.save,
-                            onTap: () async {
-                              appStore.setLoading(true);
-                              Map req = {
-                                'order_id': orderData.id,
-                                'client_id': orderData.clientId,
-                                'datetime': picUpController.text,
-                                'total_amount': orderData.totalAmount,
-                                'payment_type': PAYMENT_TYPE_CASH,
-                                'payment_status': PAYMENT_PAID,
-                              };
-                              await savePayment(req).then((value) async {
-                                await saveDelivery().then((value) async {
-                                  appStore.setLoading(false);
-                                  finish(context,true);
-                                }).catchError((error) {
-                                  appStore.setLoading(false);
-                                  log(error);
-                                });
-                              }).catchError((error) {
-                                appStore.setLoading(false);
-                                log(error);
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Observer(
-                  builder: (_) => loaderWidget().visible(appStore.isLoading),
-                )
-              ],
-            ),
-          ),
-        );
-      },
-    );
+    return showConfirmDialogCustom(context,
+        primaryColor: colorPrimary,
+        dialogType: DialogType.DELETE,
+
+        /// change language
+        title: orderTitle(orderData.status!),
+        positiveText: language.yes,
+        negativeText: language.cancel, onAccept: (c) async {
+          appStore.setLoading(true);
+          Map req = {
+            'order_id': orderData.id,
+            'client_id': orderData.clientId,
+            'datetime': picUpController.text,
+            'total_amount': orderData.totalAmount,
+            'payment_type': PAYMENT_TYPE_CASH,
+            'payment_status': PAYMENT_PAID,
+          };
+          await savePayment(req).then((value) async {
+            await saveDelivery().then((value) async {
+              appStore.setLoading(false);
+              finish(context, true);
+            }).catchError((error) {
+              appStore.setLoading(false);
+              log(error);
+            });
+          }).catchError((error) {
+            appStore.setLoading(false);
+            log(error);
+          });
+        }, onCancel: (v) {
+          finish(context, false);
+        });
   }
 }

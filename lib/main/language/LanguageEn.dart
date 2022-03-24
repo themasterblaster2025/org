@@ -164,7 +164,7 @@ class LanguageEn extends BaseLanguage {
   String get pickup_deliver_validation_msg => "Pickup Time must be before Deliver Time'";
 
   @override
-  String get create_order_confirmation_msg => "Are you sure you want to Create Order?";
+  String get create_order_confirmation_msg => "Are you sure you want to place order?";
 
   @override
   String get draft_order => "Draft Order";

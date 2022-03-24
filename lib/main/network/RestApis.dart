@@ -19,6 +19,7 @@ import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
+import '../models/OrderDetailModel.dart';
 import 'NetworkUtils.dart';
 
 //region Auth
@@ -121,18 +122,21 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
 Future<void> logout(BuildContext context) async {
   await removeKey(USER_ID);
   await removeKey(NAME);
-  await removeKey(USER_EMAIL);
   await removeKey(USER_TOKEN);
   await removeKey(USER_CONTACT_NUMBER);
   await removeKey(USER_PROFILE_PHOTO);
   await removeKey(USER_TYPE);
   await removeKey(USER_NAME);
-  await removeKey(USER_PASSWORD);
   await removeKey(USER_ADDRESS);
   await removeKey(STATUS);
   await removeKey(COUNTRY_ID);
   await removeKey(CITY_ID);
+  await removeKey(CITY_DATA);
   await removeKey(FILTER_DATA);
+  if (!getBoolAsync(REMEMBER_ME)) {
+    await removeKey(USER_EMAIL);
+    await removeKey(USER_PASSWORD);
+  }
 
   await appStore.setLogin(false);
 
@@ -208,8 +212,8 @@ Future<LDBaseResponse> deleteOrder(int id) async {
   return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('order-delete/$id', method: HttpMethod.POST)));
 }
 
-Future<OrderData> getOrderDetails(int id)async{
-  return OrderData.fromJson(await handleResponse(await buildHttpResponse('order-detail?id=$id',method: HttpMethod.GET)).then((value) => value['data']));
+Future<OrderDetailModel> getOrderDetails(int id)async{
+  return OrderDetailModel.fromJson(await handleResponse(await buildHttpResponse('order-detail?id=$id',method: HttpMethod.GET)));
 }
 
 // ParcelType Api

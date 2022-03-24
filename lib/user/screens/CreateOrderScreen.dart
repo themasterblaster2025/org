@@ -89,7 +89,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   Future<void> init() async {
     cityData = CityModel.fromJson(getJSONAsync(CITY_DATA));
     if (widget.orderData != null) {
-      if(widget.orderData!.totalWeight!=0) selectedWeight = widget.orderData!.totalWeight!.toInt();
+      if (widget.orderData!.totalWeight != 0) selectedWeight = widget.orderData!.totalWeight!.toInt();
       parcelTypeCont.text = widget.orderData!.parcelType.validate();
 
       pickAddressCont.text = widget.orderData!.pickupPoint!.address.validate();
@@ -192,18 +192,18 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       "fixed_charges": cityData!.fixedCharges.toString(),
       "parent_order_id": "",
       "total_amount": totalAmount,
-      "weight_charge" : weightCharge,
-      "distance_charge" : distanceCharge,
+      "weight_charge": weightCharge,
+      "distance_charge": distanceCharge,
     };
     appStore.setLoading(true);
     await createOrder(req).then((value) {
       appStore.setLoading(false);
       toast(value.message);
       finish(context);
-      if(!isCashPayment){
+      if (!isCashPayment) {
         PaymentScreen(orderId: value.orderId.validate(), totalAmount: totalAmount).launch(context);
-      }else{
-        DashboardScreen().launch(context,isNewTask: true);
+      } else {
+        DashboardScreen().launch(context, isNewTask: true);
       }
     }).catchError((error) {
       appStore.setLoading(false);
@@ -222,12 +222,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       children: [
         Row(
           children: [
-            scheduleOptionWidget(context,isDeliverNow, 'assets/icons/ic_clock.png', language.delivery_now).onTap(() {
+            scheduleOptionWidget(context, isDeliverNow, 'assets/icons/ic_clock.png', language.delivery_now).onTap(() {
               isDeliverNow = true;
               setState(() {});
             }).expand(),
             16.width,
-            scheduleOptionWidget(context,!isDeliverNow, 'assets/icons/ic_schedule.png', language.schedule).onTap(() {
+            scheduleOptionWidget(context, !isDeliverNow, 'assets/icons/ic_schedule.png', language.schedule).onTap(() {
               isDeliverNow = false;
               setState(() {});
             }).expand(),
@@ -242,7 +242,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             Container(
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
-                border: Border.all(color: borderColor,width: appStore.isDarkMode ? 0.2 : 1),
+                border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
                 borderRadius: BorderRadius.circular(defaultRadius),
               ),
               child: Column(
@@ -264,7 +264,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   16.height,
                   Row(
                     children: [
-                      Text(language.from, style: primaryTextStyle()),
+                      Text(language.from, style: primaryTextStyle()).expand(flex: 1),
                       8.width,
                       DateTimePicker(
                         controller: pickFromTimeController,
@@ -277,9 +277,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           if (value.validate().isEmpty) return errorThisFieldRequired;
                         },
                         decoration: commonInputDecoration(suffixIcon: Icons.access_time),
-                      ).expand(),
-                      16.width,
-                      Text(language.to, style: primaryTextStyle()),
+                      ).expand(flex: 2),
+                    ],
+                  ),
+                  16.height,
+                  Row(
+                    children: [
+                      Text(language.to, style: primaryTextStyle()).expand(flex: 1),
                       8.width,
                       DateTimePicker(
                         controller: pickToTimeController,
@@ -299,9 +303,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           }
                         },
                         decoration: commonInputDecoration(suffixIcon: Icons.access_time),
-                      ).expand(),
+                      ).expand(flex: 2)
                     ],
-                  ),
+                  )
                 ],
               ),
             ),
@@ -311,7 +315,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             Container(
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
-                border: Border.all(color: borderColor,width: appStore.isDarkMode ? 0.2 : 1),
+                border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
                 borderRadius: BorderRadius.circular(defaultRadius),
               ),
               child: Column(
@@ -333,7 +337,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   16.height,
                   Row(
                     children: [
-                      Text(language.from, style: primaryTextStyle()),
+                      Text(language.from, style: primaryTextStyle()).expand(flex: 1),
                       8.width,
                       DateTimePicker(
                         controller: deliverFromTimeController,
@@ -346,9 +350,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           if (value.validate().isEmpty) return errorThisFieldRequired;
                         },
                         decoration: commonInputDecoration(suffixIcon: Icons.access_time),
-                      ).expand(),
-                      16.width,
-                      Text(language.to, style: primaryTextStyle()),
+                      ).expand(flex: 2),
+                    ],
+                  ),
+                  16.height,
+                  Row(
+                    children: [
+                      Text(language.to, style: primaryTextStyle()).expand(flex: 1),
                       8.width,
                       DateTimePicker(
                         controller: deliverToTimeController,
@@ -367,9 +375,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           }
                         },
                         decoration: commonInputDecoration(suffixIcon: Icons.access_time),
-                      ).expand(),
+                      ).expand(flex: 2)
                     ],
-                  ),
+                  )
                 ],
               ),
             ),
@@ -427,7 +435,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(defaultRadius),
-                      side: BorderSide(color: borderColor,width: appStore.isDarkMode ? 0.2 : 1),
+                      side: BorderSide(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
                     ),
                   ).onTap(() {
                     parcelTypeCont.text = item.value!;
@@ -453,7 +461,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           readOnly: true,
           textFieldType: TextFieldType.ADDRESS,
           decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
-           validator: (value) {
+          validator: (value) {
             if (value!.isEmpty) return language.field_required_msg;
             return null;
           },
@@ -550,7 +558,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           padding: EdgeInsets.all(16),
           decoration: boxDecorationWithRoundedCorners(
             borderRadius: BorderRadius.circular(defaultRadius),
-            border: Border.all(color: borderColor,width: appStore.isDarkMode ? 0.2 : 1),
+            border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
             backgroundColor: Colors.transparent,
           ),
           child: Column(
@@ -584,7 +592,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           padding: EdgeInsets.all(16),
           decoration: boxDecorationWithRoundedCorners(
             borderRadius: BorderRadius.circular(defaultRadius),
-            border: Border.all(color: borderColor,width: appStore.isDarkMode ? 0.2 : 1),
+            border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
             backgroundColor: Colors.transparent,
           ),
           child: Column(
@@ -604,7 +612,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           padding: EdgeInsets.all(16),
           decoration: boxDecorationWithRoundedCorners(
             borderRadius: BorderRadius.circular(defaultRadius),
-            border: Border.all(color: borderColor,width: appStore.isDarkMode ? 0.2 : 1),
+            border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
             backgroundColor: Colors.transparent,
           ),
           child: Column(
@@ -696,12 +704,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         16.height,
         Row(
           children: [
-            scheduleOptionWidget(context,isCashPayment, 'assets/icons/ic_cash.png', language.cash_payment).onTap(() {
+            scheduleOptionWidget(context, isCashPayment, 'assets/icons/ic_cash.png', language.cash_payment).onTap(() {
               isCashPayment = true;
               setState(() {});
             }).expand(),
             16.width,
-            scheduleOptionWidget(context,!isCashPayment, 'assets/icons/ic_credit_card.png', language.online_payment).onTap(() {
+            scheduleOptionWidget(context, !isCashPayment, 'assets/icons/ic_credit_card.png', language.online_payment).onTap(() {
               isCashPayment = false;
               setState(() {});
             }).expand(),
@@ -718,12 +726,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 value: paymentCollectFrom,
                 decoration: commonInputDecoration(),
                 items: [
-                  DropdownMenuItem(value:PAYMENT_ON_PICKUP,child: Text(language.pickup, style: primaryTextStyle())),
-                  DropdownMenuItem(value:PAYMENT_ON_DELIVERY,child: Text(language.delivery, style: primaryTextStyle())),
+                  DropdownMenuItem(value: PAYMENT_ON_PICKUP, child: Text(language.pickup, style: primaryTextStyle())),
+                  DropdownMenuItem(value: PAYMENT_ON_DELIVERY, child: Text(language.delivery, style: primaryTextStyle())),
                 ],
                 onChanged: (value) {
                   paymentCollectFrom = value!;
-                  setState(() { });
+                  setState(() {});
                 },
               ),
             ),
@@ -816,7 +824,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       difference = pickFromDateTime!.difference(deliverFromDateTime!);
                       differenceCurrentTime = DateTime.now().difference(pickFromDateTime!);
                     }
-                    if(differenceCurrentTime.inMinutes > 0) return toast(language.pickup_current_validation_msg);
+                    if (differenceCurrentTime.inMinutes > 0) return toast(language.pickup_current_validation_msg);
                     if (difference.inMinutes > 0) return toast(language.pickup_deliver_validation_msg);
                     selectedTabIndex++;
                     if (selectedTabIndex == 3) {
@@ -825,18 +833,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     setState(() {});
                   }
                 } else {
-                  await showInDialog(
+                  showConfirmDialog(
                     context,
-                    contentPadding: EdgeInsets.all(16),
-                    builder: (p0) {
-                      return CreateOrderConfirmationDialog(
-                        onSuccess: () {
-                          finish(context);
-                          createOrderApiCall(ORDER_CREATE);
-                        },
-                        message: language.create_order_confirmation_msg,
-                        primaryText: language.create,
-                      );
+                    language.create_order_confirmation_msg,
+                    onAccept: () {
+                      createOrderApiCall(ORDER_CREATE);
                     },
                   );
                 }

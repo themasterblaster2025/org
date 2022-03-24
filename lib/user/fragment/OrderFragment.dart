@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
 import 'package:mighty_delivery/main/models/models.dart';
@@ -164,6 +165,12 @@ class OrderFragmentState extends State<OrderFragment> {
                                                 Text('${item.pickupPoint!.contactNumber}', style: primaryTextStyle()),
                                               ],
                                             ).paddingOnly(top: 8),
+                                          // TODO localization
+                                          if (item.pickupDatetime == null && item.pickupPoint!.endTime != null && item.pickupPoint!.startTime != null)
+                                            Text('Note: Courier will pickup at ${DateFormat('dd MMM yyyy').format(DateTime.parse(item.pickupPoint!.startTime!).toLocal())} from ${DateFormat('hh:mm').format(DateTime.parse(item.pickupPoint!.startTime!).toLocal())} to ${DateFormat('hh:mm').format(DateTime.parse(item.pickupPoint!.endTime!).toLocal())}',
+                                                style: secondaryTextStyle())
+                                                .paddingOnly(top: 8),
+
                                         ],
                                       ).expand(),
                                     ],
@@ -192,6 +199,11 @@ class OrderFragmentState extends State<OrderFragment> {
                                                 Text('${item.deliveryPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
                                               ],
                                             ).paddingOnly(top: 8),
+                                          // TODO localization
+                                          if (item.deliveryDatetime == null && item.deliveryPoint!.endTime != null && item.deliveryPoint!.startTime != null)
+                                            Text('Note: Courier will Deliver at ${DateFormat('dd MMM yyyy').format(DateTime.parse(item.deliveryPoint!.startTime!).toLocal())} from ${DateFormat('hh:mm').format(DateTime.parse(item.deliveryPoint!.startTime!).toLocal())} to ${DateFormat('hh:mm').format(DateTime.parse(item.deliveryPoint!.endTime!).toLocal())}',
+                                                style: secondaryTextStyle())
+                                                .paddingOnly(top: 8),
                                         ],
                                       ).expand(),
                                     ],

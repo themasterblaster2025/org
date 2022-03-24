@@ -8,6 +8,8 @@ import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import '../utils/Constants.dart';
+
 class ChangePasswordScreen extends StatefulWidget {
   static String tag = '/ChangePasswordScreen';
 
@@ -43,6 +45,8 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
         'new_password': newPassController.text.trim(),
       };
       appStore.setLoading(true);
+
+      await setValue(USER_PASSWORD, newPassController.text.trim());
 
       await changePassword(req).then((value) {
         toast(value.message.toString());

@@ -72,8 +72,8 @@ class TrackingScreenState extends State<TrackingScreen> {
           markers.add(
             Marker(
               markerId: MarkerId('valsad'),
-              position: LatLng(e.pickupPoint!.latitude.toDouble(), e.pickupPoint!.longitude.toDouble()),
-              infoWindow: InfoWindow(title: e.pickupPoint!.address),
+              position: LatLng(e.deliveryPoint!.latitude.toDouble(), e.deliveryPoint!.longitude.toDouble()),
+              infoWindow: InfoWindow(title: e.deliveryPoint!.address),
               icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
             ),
           );

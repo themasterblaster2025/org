@@ -68,7 +68,7 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
     return Form(
       key: formKey,
       child: SizedBox(
-        height:reason.validate() == 'Other' ? 330 : 230,
+        height:reason.validate() == 'Other' ? 330 : 245,
         child: Stack(
           children: [
             Column(

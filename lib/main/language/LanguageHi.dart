@@ -164,7 +164,7 @@ class LanguageHi extends BaseLanguage {
   String get pickup_deliver_validation_msg => "पिकअप समय समय देने से पहले होना चाहिए '";
 
   @override
-  String get create_order_confirmation_msg => "क्या आप वाकई ऑर्डर बनाना चाहते हैं?";
+  String get create_order_confirmation_msg => "क्या आप वाकई ऑर्डर देना चाहते हैं?";
 
   @override
   String get draft_order => "ड्राफ्ट आदेश";

@@ -99,3 +99,5 @@ class AppThemeMode {
 }
 
 AppThemeMode appThemeMode = AppThemeMode();
+
+const REMEMBER_ME = 'REMEMBER_ME';

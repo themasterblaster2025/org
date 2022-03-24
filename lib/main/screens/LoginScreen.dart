@@ -9,8 +9,11 @@ import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import '../../delivery/screens/DeliveryDashBoard.dart';
 import '../../main.dart';
+import '../../user/screens/DashboardScreen.dart';
 import '../components/UserCitySelectScreen.dart';
+import '../models/CityListModel.dart';
 
 class LoginScreen extends StatefulWidget {
   static String tag = '/LoginScreen';
@@ -28,6 +31,8 @@ class LoginScreenState extends State<LoginScreen> {
   FocusNode emailFocus = FocusNode();
   FocusNode passFocus = FocusNode();
 
+  bool mIsCheck = false;
+
   @override
   void initState() {
     super.initState();
@@ -40,6 +45,11 @@ class LoginScreenState extends State<LoginScreen> {
       await saveOneSignalPlayerId().then((value) {
         if (getStringAsync(PLAYER_ID).isEmpty) return toast(errorMessage);
       });
+    }
+    mIsCheck = getBoolAsync(REMEMBER_ME, defaultValue: false);
+    if (mIsCheck) {
+      emailController.text = getStringAsync(USER_EMAIL);
+      passController.text = getStringAsync(USER_PASSWORD);
     }
   }
 
@@ -60,10 +70,16 @@ class LoginScreenState extends State<LoginScreen> {
         "player_id": getStringAsync(PLAYER_ID).validate(),
       };
 
+      if (mIsCheck) {
+        await setValue(REMEMBER_ME, mIsCheck);
+        await setValue(USER_EMAIL, emailController.text);
+        await setValue(USER_PASSWORD, passController.text);
+      }
+
       await logInApi(req).then((value) async {
         appStore.setLoading(false);
         if (getIntAsync(STATUS) == 1) {
-            UserCitySelectScreen().launch(context, isNewTask: true);
+          getCityDetailApiCall(value.data!.city_id.validate());
         } else {
           toast(language.user_not_approve_msg);
         }
@@ -73,6 +89,21 @@ class LoginScreenState extends State<LoginScreen> {
         toast(e.toString());
       });
     }
+  }
+
+  getCityDetailApiCall(int cityId) async {
+    await getCityDetail(cityId).then((value) async{
+      await setValue(CITY_DATA, value.data!.toJson());
+      if(CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
+        if(getStringAsync(USER_TYPE) == CLIENT) {
+          DashboardScreen().launch(context,isNewTask: true);
+        }else{
+          DeliveryDashBoard().launch(context,isNewTask: true);
+        }
+      }else{
+        UserCitySelectScreen().launch(context, isNewTask: true);
+      }
+    }).catchError((error) {});
   }
 
   @override
@@ -126,7 +157,18 @@ class LoginScreenState extends State<LoginScreen> {
                           errorThisFieldRequired: language.field_required_msg,
                           errorMinimumPasswordLength: language.password_invalid,
                         ),
-                        16.height,
+                        CheckboxListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: Text('Remember Me', style: primaryTextStyle()),
+                          value: mIsCheck,
+                          onChanged: (val) async {
+                            mIsCheck = val!;
+                            if (!mIsCheck) {
+                              removeKey(REMEMBER_ME);
+                            }
+                            setState(() {});
+                          },
+                        ),
                         Align(
                           alignment: Alignment.centerRight,
                           child: TextButton(
@@ -173,7 +215,7 @@ class LoginScreenState extends State<LoginScreen> {
                             Text(language.do_not_have_account, style: primaryTextStyle()),
                             4.width,
                             Text(language.sign_up, style: boldTextStyle(color: colorPrimary)).onTap(() {
-                              RegisterScreen().launch(context, duration: Duration(seconds: 1), pageRouteAnimation: PageRouteAnimation.Slide);
+                              RegisterScreen().launch(context, duration: Duration(milliseconds: 500), pageRouteAnimation: PageRouteAnimation.Slide);
                             }),
                           ],
                         ),
@@ -187,6 +229,20 @@ class LoginScreenState extends State<LoginScreen> {
           ),
           Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
         ],
+      ),
+      bottomNavigationBar: Container(
+        color: context.cardColor,
+        padding: EdgeInsets.all(16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Become a delivery boy', style: primaryTextStyle()),
+            4.width,
+            Text(language.sign_up, style: boldTextStyle(color: colorPrimary)).onTap(() {
+              RegisterScreen(userType: DELIVERY_MAN).launch(context, duration: Duration(milliseconds: 500), pageRouteAnimation: PageRouteAnimation.Slide);
+            }),
+          ],
+        ),
       ),
     );
   }
