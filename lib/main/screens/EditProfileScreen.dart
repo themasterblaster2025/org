@@ -21,7 +21,6 @@ class EditProfileScreen extends StatefulWidget {
 
 class EditProfileScreenState extends State<EditProfileScreen> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   String countryCode = '+91';
 
   TextEditingController emailController = TextEditingController();
@@ -84,7 +83,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
       userName: usernameController.text.validate(),
       userEmail: emailController.text.validate(),
       address: addressController.text.validate(),
-      contactNumber: '${countryCode} ${contactNumberController.text.trim()}',
+      contactNumber: '$countryCode ${contactNumberController.text.trim()}',
     ).then((value) {
       finish(context);
       appStore.setLoading(false);
