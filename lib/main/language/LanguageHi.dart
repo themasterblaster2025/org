@@ -480,4 +480,52 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get write_reason_here => "यहां कारण लिखें ... '";
+
+  @override
+  String get are_you_sure_want_to_arrive => "क्या आप वाकई पहुंचना चाहते हैं?";
+
+  @override
+  String get note => "ध्यान दें:";
+
+  @override
+  String get courier_will_pickup_at => "कूरियर पर पिकअप होगा";
+
+  @override
+  String get courier_will_deliver_at => "कूरियर पर पहुंचा देगा";
+
+  @override
+  String get confirm_delivery => "डिलिवरी की पुष्टि";
+
+  @override
+  String get order_assign_confirmation => "क्या आप वाकई इस आदेश को सक्रिय करना चाहते हैं?";
+
+  @override
+  String get order_pickup_confirmation => "क्या आप वाकई इस आदेश को चुनना चाहते हैं?";
+
+  @override
+  String get order_departed_confirmation => "क्या आप वाकई इस आदेश को छोड़ना चाहते हैं?";
+
+  @override
+  String get order_create_confirmation => "क्या आप वाकई इस आदेश को बनाना चाहते हैं?";
+
+  @override
+  String get order_complete_confirmation => "क्या आप वाकई इस आदेश को पूरा करना चाहते हैं?";
+
+  @override
+  String get order_cancel_confirmation => "क्या आप वाकई इस आदेश को रद्द करना चाहते हैं?";
+
+  @override
+  String get id => "पहचान";
+
+  @override
+  String get contact_number_validation => "संपर्क संख्या में 15 अंकों से अधिक नहीं हो सकते। '";
+
+  @override
+  String get remember_me => "मुझे याद रखें";
+
+  @override
+  String get become_a_delivery_boy => "एक डिलीवरी लड़का बनें";
+
+  @override
+  String get order_history => "आदेश इतिहास";
 }

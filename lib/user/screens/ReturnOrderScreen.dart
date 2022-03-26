@@ -161,7 +161,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                           16.height,
                           Row(
                             children: [
-                              Text(language.from, style: primaryTextStyle()),
+                              Text(language.from, style: primaryTextStyle()).expand(flex: 1),
                               8.width,
                               DateTimePicker(
                                 type: DateTimePickerType.time,
@@ -173,9 +173,13 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                                   if (value.validate().isEmpty) return errorThisFieldRequired;
                                 },
                                 decoration: commonInputDecoration(suffixIcon: Icons.access_time),
-                              ).expand(),
-                              16.width,
-                              Text(language.to, style: primaryTextStyle()),
+                              ).expand(flex: 2),
+                            ],
+                          ),
+                          16.height,
+                          Row(
+                            children: [
+                              Text(language.to, style: primaryTextStyle()).expand(flex: 1),
                               8.width,
                               DateTimePicker(
                                 type: DateTimePickerType.time,
@@ -194,9 +198,9 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                                   }
                                 },
                                 decoration: commonInputDecoration(suffixIcon: Icons.access_time),
-                              ).expand(),
+                              ).expand(flex: 2),
                             ],
-                          ),
+                          )
                         ],
                       ),
                     ),
@@ -227,7 +231,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                           16.height,
                           Row(
                             children: [
-                              Text(language.from, style: primaryTextStyle()),
+                              Text(language.from, style: primaryTextStyle()).expand(flex: 1),
                               8.width,
                               DateTimePicker(
                                 type: DateTimePickerType.time,
@@ -239,9 +243,13 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                                   if (value.validate().isEmpty) return errorThisFieldRequired;
                                 },
                                 decoration: commonInputDecoration(suffixIcon: Icons.access_time),
-                              ).expand(),
-                              16.width,
-                              Text(language.to, style: primaryTextStyle()),
+                              ).expand(flex: 2),
+                            ],
+                          ),
+                          16.height,
+                          Row(
+                            children: [
+                              Text(language.to, style: primaryTextStyle()).expand(flex: 1),
                               8.width,
                               DateTimePicker(
                                 type: DateTimePickerType.time,
@@ -259,9 +267,9 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                                   }
                                 },
                                 decoration: commonInputDecoration(suffixIcon: Icons.access_time),
-                              ).expand(),
+                              ).expand(flex: 2),
                             ],
-                          ),
+                          )
                         ],
                       ),
                     ),

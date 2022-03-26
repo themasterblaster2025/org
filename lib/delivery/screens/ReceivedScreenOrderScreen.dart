@@ -423,13 +423,10 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                               await paymentConfirmDialog(widget.orderData!);
                               appStore.setLoading(false);
                             } else {
-                              //saveDelivery();
                               showConfirmDialogCustom(
                                 context,
                                 primaryColor: colorPrimary,
                                 dialogType: DialogType.DELETE,
-
-                                /// change language
                                 title: orderTitle(widget.orderData!.status!),
                                 positiveText: language.yes,
                                 negativeText: language.cancel,
@@ -480,8 +477,6 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
     return showConfirmDialogCustom(context,
         primaryColor: colorPrimary,
         dialogType: DialogType.DELETE,
-
-        /// change language
         title: orderTitle(orderData.status!),
         positiveText: language.yes,
         negativeText: language.cancel, onAccept: (c) async {

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
@@ -21,6 +22,8 @@ class EditProfileScreen extends StatefulWidget {
 class EditProfileScreenState extends State<EditProfileScreen> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  String countryCode = '+91';
+
   TextEditingController emailController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController nameController = TextEditingController();
@@ -42,10 +45,16 @@ class EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future<void> init() async {
+    String phoneNum = getStringAsync(USER_CONTACT_NUMBER);
     emailController.text = getStringAsync(USER_EMAIL);
     usernameController.text = getStringAsync(USER_NAME);
     nameController.text = getStringAsync(NAME);
-    contactNumberController.text = getStringAsync(USER_CONTACT_NUMBER);
+    if (phoneNum.split(" ").length == 1) {
+      contactNumberController.text = phoneNum.split(" ").last;
+    } else {
+      countryCode = phoneNum.split(" ").first;
+      contactNumberController.text = phoneNum.split(" ").last;
+    }
     addressController.text = getStringAsync(USER_ADDRESS).validate();
   }
 
@@ -75,7 +84,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
       userName: usernameController.text.validate(),
       userEmail: emailController.text.validate(),
       address: addressController.text.validate(),
-      contactNumber: contactNumberController.text.validate(),
+      contactNumber: '${countryCode} ${contactNumberController.text.trim()}',
     ).then((value) {
       finish(context);
       appStore.setLoading(false);
@@ -171,13 +180,42 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     16.height,
                     Text(language.contact_number, style: primaryTextStyle()),
                     8.height,
-                    AppTextField(
-                      controller: contactNumberController,
-                      textFieldType: TextFieldType.PHONE,
-                      focus: contactFocus,
-                      nextFocus: addressFocus,
-                      decoration: commonInputDecoration(),
-                      errorThisFieldRequired: language.field_required_msg,
+                    Container(
+                      height: 100,
+                      child: Row(
+                        children: [
+                          CountryCodePicker(
+                            initialSelection: countryCode,
+                            showCountryOnly: false,
+                            showFlag: false,
+                            showFlagDialog: true,
+                            showOnlyCountryWhenClosed: false,
+                            alignLeft: false,
+                            textStyle: primaryTextStyle(),
+                            onInit: (c) {
+                              countryCode = c!.dialCode!;
+                            },
+                            onChanged: (c) {
+                              countryCode = c.dialCode!;
+                            },
+                          ),
+                          8.width,
+                          AppTextField(
+                            controller: contactNumberController,
+                            textFieldType: TextFieldType.PHONE,
+                            focus: contactFocus,
+                            nextFocus: addressFocus,
+                            decoration: commonInputDecoration(),
+                            validator: (s){
+                              if (s!.trim().isEmpty)
+                                return language.field_required_msg;
+                              if (s.trim().length > 15)
+                                return language.contact_number_validation;
+                              return null;
+                            },
+                          ).expand(),
+                        ],
+                      ),
                     ),
                     16.height,
                     Text(language.address, style: primaryTextStyle()),
@@ -200,9 +238,9 @@ class EditProfileScreenState extends State<EditProfileScreen> {
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(16),
         child: commonButton(language.save_changes, () {
-         if(_formKey.currentState!.validate()){
-           save();
-         }
+          if (_formKey.currentState!.validate()) {
+            save();
+          }
         }),
       ),
     );

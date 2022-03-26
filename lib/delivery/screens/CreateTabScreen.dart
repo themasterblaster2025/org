@@ -100,7 +100,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                     children: [
                       Row(
                         children: [
-                          Text('Order #${data.id}', style: boldTextStyle(size: 16)).expand(),
+                          Text('${language.order} #${data.id}', style: boldTextStyle(size: 16)).expand(),
                           4.height,
                           Row(
                             children: [
@@ -109,10 +109,8 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                   showConfirmDialogCustom(
                                     context,
                                     primaryColor: colorPrimary,
-
-                                    /// change language
                                     dialogType: DialogType.DELETE,
-                                    title: 'Are you sure you want to arrive?',
+                                    title: language.are_you_sure_want_to_arrive,
                                     positiveText: language.yes,
                                     negativeText: language.cancel,
                                     onAccept: (c) async {
@@ -146,14 +144,11 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                     showConfirmDialogCustom(
                                       context,
                                       primaryColor: colorPrimary,
-
-                                      /// change language
                                       dialogType: DialogType.DELETE,
                                       title: orderTitle(widget.orderStatus!),
                                       positiveText: language.yes,
                                       negativeText: language.cancel,
                                       onAccept: (c) async {
-                                        ///finish(context);
                                         appStore.setLoading(true);
                                         await onTapData(orderData: data, orderStatus: widget.orderStatus!);
                                         appStore.setLoading(false);
@@ -214,7 +209,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                   ],
                                 ).paddingOnly(top: 8),
                               if (data.pickupDatetime == null && data.pickupPoint!.endTime != null && data.pickupPoint!.startTime != null)
-                                Text('Note: Courier will pickup at ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} from ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} to ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.endTime!).toLocal())}',
+                                Text('${language.note} ${language.courier_will_pickup_at} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.endTime!).toLocal())}',
                                     style: secondaryTextStyle())
                                     .paddingOnly(top: 8),
                             ],
@@ -246,7 +241,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                   ],
                                 ).paddingOnly(top: 8),
                               if (data.deliveryDatetime == null && data.deliveryPoint!.endTime != null && data.deliveryPoint!.startTime != null)
-                                Text('Note: Courier will Deliver at ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} from ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} to ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.endTime!).toLocal())}',
+                                Text('${language.note} ${language.courier_will_deliver_at} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.endTime!).toLocal())}',
                                     style: secondaryTextStyle())
                                     .paddingOnly(top: 8),
                             ],
@@ -263,7 +258,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                               backgroundColor: Colors.transparent,
                             ),
                             padding: EdgeInsets.all(8),
-                            child: Image.asset(parcelTypeIcon('document'), height: 24, width: 24, color: Colors.grey),
+                            child: Image.asset(parcelTypeIcon(data.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
                           ),
                           8.width,
                           Column(
@@ -349,7 +344,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
     } else if (orderStatus == ORDER_PICKED_UP) {
       return language.departed;
     } else if (orderStatus == ORDER_DEPARTED) {
-      return 'Confirm Delivery';
+      return language.confirm_delivery;
     }
     return '';
   }

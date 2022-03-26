@@ -55,24 +55,22 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
                   alignment: AlignmentDirectional.center,
                   child: Icon(Icons.notifications),
                 ),
-                Observer(
-                    builder: (context) {
-                      return Positioned(
-                        right: 2,
-                        top: 8,
-                        child: Container(
-                          height: 20,
-                          width: 20,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Colors.orange,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Text('${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}', style: primaryTextStyle(size: 8, color: Colors.white)),
-                        ),
-                      ).visible(appStore.allUnreadCount != 0);
-                    }
-                ),
+                Observer(builder: (context) {
+                  return Positioned(
+                    right: 2,
+                    top: 8,
+                    child: Container(
+                      height: 20,
+                      width: 20,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.orange,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Text('${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}', style: primaryTextStyle(size: 8, color: Colors.white)),
+                    ),
+                  ).visible(appStore.allUnreadCount != 0);
+                }),
               ],
             ).withWidth(40).onTap(() {
               NotificationScreen().launch(context);
@@ -93,7 +91,6 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
             indicatorSize: TabBarIndicatorSize.label,
             unselectedLabelStyle: secondaryTextStyle(),
             labelStyle: boldTextStyle(),
-
             tabs: statusList.map((e) {
               return Tab(text: orderStatus(e));
             }).toList(),

@@ -480,4 +480,52 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get write_reason_here => "Write reason here...";
+
+  @override
+  String get are_you_sure_want_to_arrive => "Are you sure you want to arrive?";
+
+  @override
+  String get note => "Note:";
+
+  @override
+  String get courier_will_pickup_at => "Courier will pickup at";
+
+  @override
+  String get courier_will_deliver_at => "Courier will Deliver at";
+
+  @override
+  String get confirm_delivery => "Confirm Delivery";
+
+  @override
+  String get order_assign_confirmation => "Are you sure you want to active this order?";
+
+  @override
+  String get order_pickup_confirmation => "Are you sure you want to pick up this order?";
+
+  @override
+  String get order_departed_confirmation => "Are you sure you want to departed this order?";
+
+  @override
+  String get order_create_confirmation => "Are you sure you want to create this order?";
+
+  @override
+  String get order_complete_confirmation => "Are you sure you want to complete this order?";
+
+  @override
+  String get order_cancel_confirmation => "Are you sure you want to cancel this order?";
+
+  @override
+  String get id => "Id";
+
+  @override
+  String get contact_number_validation => "Contact number cannot contain more than 15 digits.'";
+
+  @override
+  String get remember_me => "Remember Me";
+
+  @override
+  String get become_a_delivery_boy => "Become a delivery boy";
+
+  @override
+  String get order_history => "Order History";
 }

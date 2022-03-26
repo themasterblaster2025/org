@@ -322,4 +322,36 @@ abstract class BaseLanguage {
   String get username_invalid;
 
   String get write_reason_here;
+
+  String get are_you_sure_want_to_arrive;
+
+  String get note;
+
+  String get courier_will_pickup_at;
+
+  String get courier_will_deliver_at;
+
+  String get confirm_delivery;
+
+  String get order_assign_confirmation;
+
+  String get order_pickup_confirmation;
+
+  String get order_departed_confirmation;
+
+  String get order_create_confirmation;
+
+  String get order_complete_confirmation;
+
+  String get order_cancel_confirmation;
+
+  String get id;
+
+  String get contact_number_validation;
+
+  String get remember_me;
+
+  String get become_a_delivery_boy;
+
+  String get order_history;
 }

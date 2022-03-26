@@ -130,6 +130,7 @@ Future<void> logout(BuildContext context) async {
   await removeKey(USER_ADDRESS);
   await removeKey(STATUS);
   await removeKey(COUNTRY_ID);
+  await removeKey(COUNTRY_DATA);
   await removeKey(CITY_ID);
   await removeKey(CITY_DATA);
   await removeKey(FILTER_DATA);

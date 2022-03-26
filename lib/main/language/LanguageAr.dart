@@ -480,4 +480,52 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get write_reason_here => "اكتب سبب هنا ...";
+
+  @override
+  String get are_you_sure_want_to_arrive => "هل أنت متأكد أنك تريد الوصول؟";
+
+  @override
+  String get note => "ملحوظة:";
+
+  @override
+  String get courier_will_pickup_at => "سوف ساعي التقاط في";
+
+  @override
+  String get courier_will_deliver_at => "سوف تسليم ساعي في";
+
+  @override
+  String get confirm_delivery => "تأكيد التوصيل";
+
+  @override
+  String get order_assign_confirmation => "هل أنت متأكد أنك تريد نشطة هذا الطلب؟";
+
+  @override
+  String get order_pickup_confirmation => "هل أنت متأكد أنك تريد التقاط هذا الطلب؟";
+
+  @override
+  String get order_departed_confirmation => "هل أنت متأكد من أنك تريد أن تغادر هذا الطلب؟";
+
+  @override
+  String get order_create_confirmation => "هل أنت متأكد أنك تريد إنشاء هذا الطلب؟";
+
+  @override
+  String get order_complete_confirmation => "هل أنت متأكد أنك تريد إكمال هذا الطلب؟";
+
+  @override
+  String get order_cancel_confirmation => "هل أنت متأكد أنك تريد إلغاء هذا الطلب؟";
+
+  @override
+  String get id => "هوية شخصية";
+
+  @override
+  String get contact_number_validation => "لا يمكن أن يحتوي رقم الاتصال على أكثر من 15 رقما.";
+
+  @override
+  String get remember_me => "تذكرنى";
+
+  @override
+  String get become_a_delivery_boy => "تصبح صبي التسليم";
+
+  @override
+  String get order_history => "تاريخ الطلب";
 }

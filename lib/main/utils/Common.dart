@@ -229,21 +229,21 @@ Widget settingItemWidget(IconData icon,String title,Function() onTap,{bool isLas
 
 String? orderTitle(String orderStatus) {
   if (orderStatus == ORDER_ASSIGNED) {
-    return 'Are you sure you want to active this order?';
+    return language.order_assign_confirmation;
   } else if (orderStatus == ORDER_ACTIVE) {
-    return 'Are you sure you want to pick up this order?';
+    return language.order_pickup_confirmation;
   } else if (orderStatus == ORDER_PICKED_UP) {
-    return 'Are you sure you want to departed this order?';
+    return language.order_departed_confirmation;
   } else if (orderStatus == ORDER_ARRIVED) {
-    return 'Are you sure you want to pick up this order?';
+    return language.order_pickup_confirmation;
   } else if (orderStatus == ORDER_DEPARTED) {
-    return 'Are you sure you want to complete this order?';
+    return language.order_complete_confirmation;
   } else if (orderStatus == ORDER_COMPLETED) {
     return '';
   } else if (orderStatus == ORDER_CANCELLED) {
-    return 'Are you sure you want to cancel this order?';
+    return language.order_cancel_confirmation;
   } else if (orderStatus == ORDER_CREATE) {
-    return 'Are you sure you want to create this order?';
+    return language.order_create_confirmation;
   }
   return '';
 }

@@ -11,7 +11,7 @@ class CreateOrderConfirmationDialog extends StatefulWidget {
   final String? message;
   final String? primaryText;
 
-  CreateOrderConfirmationDialog({required this.onSuccess,required this.message,this.primaryText,this.onCancel});
+  CreateOrderConfirmationDialog({required this.onSuccess, required this.message, this.primaryText, this.onCancel});
 
   @override
   CreateOrderConfirmationDialogState createState() => CreateOrderConfirmationDialogState();
@@ -35,7 +35,7 @@ class CreateOrderConfirmationDialogState extends State<CreateOrderConfirmationDi
 
   @override
   Widget build(BuildContext context) {
-    return  Column(
+    return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Row(
@@ -51,8 +51,8 @@ class CreateOrderConfirmationDialogState extends State<CreateOrderConfirmationDi
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            commonButton(language.cancel, (){
-              widget.onCancel!=null ? widget.onCancel!.call() : finish(context);
+            commonButton(language.cancel, () {
+              widget.onCancel != null ? widget.onCancel!.call() : finish(context);
             }, color: Colors.grey),
             16.width,
             commonButton(widget.primaryText ?? language.create, widget.onSuccess),

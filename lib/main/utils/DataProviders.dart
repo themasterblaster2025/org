@@ -35,6 +35,5 @@ List<AppModel> getReasonList() {
   list.add(AppModel(name: 'I do not need this order any more'));
   list.add(AppModel(name: 'Payment declined'));
   list.add(AppModel(name: 'Delivery date missed'));
-
   return list;
 }

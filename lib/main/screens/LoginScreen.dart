@@ -77,6 +77,7 @@ class LoginScreenState extends State<LoginScreen> {
       }
 
       await logInApi(req).then((value) async {
+        await getCountryDetailApiCall(value.data!.country_id.validate());
         appStore.setLoading(false);
         if (getIntAsync(STATUS) == 1) {
           getCityDetailApiCall(value.data!.city_id.validate());
@@ -91,16 +92,22 @@ class LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  getCountryDetailApiCall(int countryId) async {
+    await getCountryDetail(countryId).then((value) {
+      setValue(COUNTRY_DATA, value.data!.toJson());
+    }).catchError((error) {});
+  }
+
   getCityDetailApiCall(int cityId) async {
-    await getCityDetail(cityId).then((value) async{
+    await getCityDetail(cityId).then((value) async {
       await setValue(CITY_DATA, value.data!.toJson());
-      if(CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
-        if(getStringAsync(USER_TYPE) == CLIENT) {
-          DashboardScreen().launch(context,isNewTask: true);
-        }else{
-          DeliveryDashBoard().launch(context,isNewTask: true);
+      if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
+        if (getStringAsync(USER_TYPE) == CLIENT) {
+          DashboardScreen().launch(context, isNewTask: true);
+        } else {
+          DeliveryDashBoard().launch(context, isNewTask: true);
         }
-      }else{
+      } else {
         UserCitySelectScreen().launch(context, isNewTask: true);
       }
     }).catchError((error) {});
@@ -117,7 +124,14 @@ class LoginScreenState extends State<LoginScreen> {
             children: [
               Container(
                 height: context.height() * 0.25,
-                child: FlutterLogo(size: 70),
+                child: Container(
+                    height: 90,
+                    width: 90,
+                    decoration: BoxDecoration(
+                      color: context.cardColor,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Image.asset('assets/app_logo_primary.png', height: 50, width: 50)),
               ),
               Container(
                 width: context.width(),
@@ -159,7 +173,8 @@ class LoginScreenState extends State<LoginScreen> {
                         ),
                         CheckboxListTile(
                           contentPadding: EdgeInsets.zero,
-                          title: Text('Remember Me', style: primaryTextStyle()),
+                          controlAffinity: ListTileControlAffinity.leading,
+                          title: Text(language.remember_me, style: primaryTextStyle()),
                           value: mIsCheck,
                           onChanged: (val) async {
                             mIsCheck = val!;
@@ -183,7 +198,7 @@ class LoginScreenState extends State<LoginScreen> {
                           LoginApiCall();
                         }, width: context.width()),
                         16.height,
-                       /* Row(
+                        /* Row(
                           children: [
                             Divider().expand(),
                             8.width,
@@ -236,7 +251,7 @@ class LoginScreenState extends State<LoginScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Become a delivery boy', style: primaryTextStyle()),
+            Text(language.become_a_delivery_boy, style: primaryTextStyle()),
             4.width,
             Text(language.sign_up, style: boldTextStyle(color: colorPrimary)).onTap(() {
               RegisterScreen(userType: DELIVERY_MAN).launch(context, duration: Duration(milliseconds: 500), pageRouteAnimation: PageRouteAnimation.Slide);

@@ -64,7 +64,7 @@ class SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            FlutterLogo(size: 100),
+            Image.asset('assets/app_logo.png',height:100,width:100).cornerRadiusWithClipRRect(defaultRadius),
             16.height,
             Text(language.app_name, style: boldTextStyle(size: 20),textAlign: TextAlign.center),
           ],

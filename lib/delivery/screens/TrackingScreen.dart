@@ -162,7 +162,7 @@ class TrackingScreenState extends State<TrackingScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Id #${data.id}', style: boldTextStyle()),
+                                Text('${language.id} #${data.id}', style: boldTextStyle()),
                                 AppButton(
                                   padding: EdgeInsets.zero,
                                   color: colorPrimary,

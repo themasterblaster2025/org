@@ -258,6 +258,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     },
                     validator: (value) {
                       if (value!.isEmpty) return errorThisFieldRequired;
+                      return null;
                     },
                     decoration: commonInputDecoration(suffixIcon: Icons.calendar_today),
                   ),

@@ -1,12 +1,11 @@
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
-import 'package:mighty_delivery/main/screens/LoginScreen.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
-import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../delivery/screens/DeliveryDashBoard.dart';
@@ -26,6 +25,8 @@ class RegisterScreen extends StatefulWidget {
 
 class RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  String countryCode = '+91';
 
   TextEditingController nameController = TextEditingController();
   TextEditingController userNameController = TextEditingController();
@@ -66,12 +67,12 @@ class RegisterScreenState extends State<RegisterScreen> {
         "email": emailController.text.trim(),
         "password": passController.text.validate(),
         "user_type": widget.userType.validate(),
-        "contact_number": phoneController.text.trim(),
+        "contact_number":  '${countryCode} ${phoneController.text.trim()}',
         "player_id": getStringAsync(PLAYER_ID).validate(),
       };
       await signUpApi(req).then((value) async {
         appStore.setLoading(false);
-          UserCitySelectScreen().launch(context, isNewTask: true);
+        UserCitySelectScreen().launch(context, isNewTask: true);
       }).catchError((error) {
         appStore.setLoading(false);
         toast(error.toString());
@@ -90,7 +91,14 @@ class RegisterScreenState extends State<RegisterScreen> {
             children: [
               Container(
                 height: context.height() * 0.25,
-                child: FlutterLogo(size: 70),
+                child: Container(
+                    height: 90,
+                    width: 90,
+                    decoration: BoxDecoration(
+                      color: context.cardColor,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Image.asset('assets/app_logo_primary.png', height: 50, width: 50)),
               ),
               Container(
                 width: context.width(),
@@ -144,13 +152,42 @@ class RegisterScreenState extends State<RegisterScreen> {
                         16.height,
                         Text(language.contact_number, style: primaryTextStyle()),
                         8.height,
-                        AppTextField(
-                          controller: phoneController,
-                          textFieldType: TextFieldType.PHONE,
-                          focus: phoneFocus,
-                          nextFocus: passFocus,
-                          decoration: commonInputDecoration(),
-                          errorThisFieldRequired: language.field_required_msg,
+                        Container(
+                          height: 100,
+                          child: Row(
+                            children: [
+                              CountryCodePicker(
+                                initialSelection: countryCode,
+                                showCountryOnly: false,
+                                showFlag: false,
+                                showFlagDialog: true,
+                                showOnlyCountryWhenClosed: false,
+                                alignLeft: false,
+                                textStyle: primaryTextStyle(),
+                                onInit: (c) {
+                                  countryCode = c!.dialCode!;
+                                },
+                                onChanged: (c) {
+                                  countryCode = c.dialCode!;
+                                },
+                              ),
+                              8.width,
+                              AppTextField(
+                                controller: phoneController,
+                                textFieldType: TextFieldType.PHONE,
+                                focus: phoneFocus,
+                                nextFocus: passFocus,
+                                decoration: commonInputDecoration(),
+                                validator: (s){
+                                  if (s!.trim().isEmpty)
+                                    return language.field_required_msg;
+                                  if (s.trim().length > 15)
+                                    return language.contact_number_validation;
+                                  return null;
+                                },
+                              ).expand(),
+                            ],
+                          ),
                         ),
                         16.height,
                         Text(language.password, style: primaryTextStyle()),

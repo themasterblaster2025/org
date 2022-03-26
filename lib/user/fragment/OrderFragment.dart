@@ -98,7 +98,9 @@ class OrderFragmentState extends State<OrderFragment> {
                         ? GestureDetector(
                             child: Container(
                               margin: EdgeInsets.only(bottom: 16),
-                              decoration: appStore.isDarkMode ? boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(defaultRadius),backgroundColor: context.cardColor) : boxDecorationRoundedWithShadow(defaultRadius.toInt()),
+                              decoration: appStore.isDarkMode
+                                  ? boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(defaultRadius), backgroundColor: context.cardColor)
+                                  : boxDecorationRoundedWithShadow(defaultRadius.toInt()),
                               padding: EdgeInsets.all(16),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,10 +120,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                     children: [
                                       Container(
                                         decoration: boxDecorationWithRoundedCorners(
-                                          borderRadius: BorderRadius.circular(8),
-                                          border: Border.all(color: borderColor,width: appStore.isDarkMode ? 0.2 : 1),
-                                          backgroundColor: Colors.transparent
-                                        ),
+                                            borderRadius: BorderRadius.circular(8), border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), backgroundColor: Colors.transparent),
                                         padding: EdgeInsets.all(8),
                                         child: Image.asset(parcelTypeIcon(item.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
                                       ),
@@ -165,12 +164,10 @@ class OrderFragmentState extends State<OrderFragment> {
                                                 Text('${item.pickupPoint!.contactNumber}', style: primaryTextStyle()),
                                               ],
                                             ).paddingOnly(top: 8),
-                                          // TODO localization
                                           if (item.pickupDatetime == null && item.pickupPoint!.endTime != null && item.pickupPoint!.startTime != null)
-                                            Text('Note: Courier will pickup at ${DateFormat('dd MMM yyyy').format(DateTime.parse(item.pickupPoint!.startTime!).toLocal())} from ${DateFormat('hh:mm').format(DateTime.parse(item.pickupPoint!.startTime!).toLocal())} to ${DateFormat('hh:mm').format(DateTime.parse(item.pickupPoint!.endTime!).toLocal())}',
-                                                style: secondaryTextStyle())
+                                            Text('${language.note} ${language.courier_will_pickup_at} ${DateFormat('dd MMM yyyy').format(DateTime.parse(item.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(item.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(item.pickupPoint!.endTime!).toLocal())}',
+                                                    style: secondaryTextStyle())
                                                 .paddingOnly(top: 8),
-
                                         ],
                                       ).expand(),
                                     ],
@@ -199,10 +196,9 @@ class OrderFragmentState extends State<OrderFragment> {
                                                 Text('${item.deliveryPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
                                               ],
                                             ).paddingOnly(top: 8),
-                                          // TODO localization
                                           if (item.deliveryDatetime == null && item.deliveryPoint!.endTime != null && item.deliveryPoint!.startTime != null)
-                                            Text('Note: Courier will Deliver at ${DateFormat('dd MMM yyyy').format(DateTime.parse(item.deliveryPoint!.startTime!).toLocal())} from ${DateFormat('hh:mm').format(DateTime.parse(item.deliveryPoint!.startTime!).toLocal())} to ${DateFormat('hh:mm').format(DateTime.parse(item.deliveryPoint!.endTime!).toLocal())}',
-                                                style: secondaryTextStyle())
+                                            Text('${language.note} ${language.courier_will_deliver_at} ${DateFormat('dd MMM yyyy').format(DateTime.parse(item.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(item.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(item.deliveryPoint!.endTime!).toLocal())}',
+                                                    style: secondaryTextStyle())
                                                 .paddingOnly(top: 8),
                                         ],
                                       ).expand(),

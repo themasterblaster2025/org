@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
+import '../../main.dart';
 import '../../main/models/OrderDetailModel.dart';
 import '../../main/utils/Colors.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -39,8 +40,7 @@ class OrderHistoryScreenState extends State<OrderHistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // TODO Localization
-        title: Text('Order History'),
+        title: Text(language.order_history),
       ),
       body: BodyCornerWidget(
         child: ListView.builder(
@@ -62,11 +62,11 @@ class OrderHistoryScreenState extends State<OrderHistoryScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('${mData.historyType!.replaceAll("_"," ").capitalizeFirstLetter()}', style: boldTextStyle()),
+                      Text('${mData.historyType!.replaceAll("_", " ").capitalizeFirstLetter()}', style: boldTextStyle()),
                       8.height,
-                      Text('${mData.historyMessage}',style: primaryTextStyle()),
+                      Text('${mData.historyMessage}', style: primaryTextStyle()),
                       8.height,
-                      Text('${printDate('${mData.createdAt}')}',style: secondaryTextStyle()),
+                      Text('${printDate('${mData.createdAt}')}', style: secondaryTextStyle()),
                     ],
                   ).expand(),
                 ],

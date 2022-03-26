@@ -152,7 +152,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                               ],
                                             ).paddingOnly(top: 8),
                                           if (orderData!.pickupDatetime == null && orderData!.pickupPoint!.endTime != null && orderData!.pickupPoint!.startTime != null)
-                                            Text('Note: Courier will pickup at ${DateFormat('dd MMM yyyy').format(DateTime.parse(orderData!.pickupPoint!.startTime!).toLocal())} from ${DateFormat('hh:mm').format(DateTime.parse(orderData!.pickupPoint!.startTime!).toLocal())} to ${DateFormat('hh:mm').format(DateTime.parse(orderData!.pickupPoint!.endTime!).toLocal())}',
+                                            Text('${language.note} ${language.courier_will_pickup_at} ${DateFormat('dd MMM yyyy').format(DateTime.parse(orderData!.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.pickupPoint!.endTime!).toLocal())}',
                                                     style: secondaryTextStyle())
                                                 .paddingOnly(top: 8),
                                         ],
@@ -178,9 +178,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                 Text('${orderData!.deliveryPoint!.contactNumber}', style: secondaryTextStyle()),
                                               ],
                                             ).paddingOnly(top: 8),
-                                          // TODO localization
                                           if (orderData!.deliveryDatetime == null && orderData!.deliveryPoint!.endTime != null && orderData!.deliveryPoint!.startTime != null)
-                                            Text('Note: Courier will Deliver at ${DateFormat('dd MMM yyyy').format(DateTime.parse(orderData!.deliveryPoint!.startTime!).toLocal())} from ${DateFormat('hh:mm').format(DateTime.parse(orderData!.deliveryPoint!.startTime!).toLocal())} to ${DateFormat('hh:mm').format(DateTime.parse(orderData!.deliveryPoint!.endTime!).toLocal())}',
+                                            Text('${language.note} ${language.courier_will_deliver_at}${DateFormat('dd MMM yyyy').format(DateTime.parse(orderData!.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.deliveryPoint!.endTime!).toLocal())}',
                                                     style: secondaryTextStyle())
                                                 .paddingOnly(top: 8),
                                         ],
