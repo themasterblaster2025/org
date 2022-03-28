@@ -837,6 +837,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   showConfirmDialog(
                     context,
                     language.create_order_confirmation_msg,
+                    positiveText: language.yes,
+                    negativeText: language.no,
                     onAccept: () {
                       createOrderApiCall(ORDER_CREATE);
                     },

@@ -528,4 +528,8 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get order_history => "Order History";
+
+  @override
+  String get no => "No";
+
 }

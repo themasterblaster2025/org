@@ -35,6 +35,7 @@ class CountryModel {
   int? status;
   String? updated_at;
   String? weight_type;
+  String? code;
 
   CountryModel({
     this.created_at,
@@ -46,6 +47,7 @@ class CountryModel {
     this.status,
     this.updated_at,
     this.weight_type,
+    this.code,
   });
 
   factory CountryModel.fromJson(Map<String, dynamic> json) {
@@ -59,6 +61,7 @@ class CountryModel {
       status: json['status'],
       updated_at: json['updated_at'],
       weight_type: json['weight_type'],
+      code: json['code'],
     );
   }
 
@@ -73,6 +76,7 @@ class CountryModel {
     data['status'] = this.status;
     data['updated_at'] = this.updated_at;
     data['weight_type'] = this.weight_type;
+    data['code'] = this.code;
     return data;
   }
 }

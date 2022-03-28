@@ -11,6 +11,7 @@ import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/user/screens/OrderDetailScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../main.dart';
 
@@ -127,63 +128,51 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                               ).visible(data.status == ORDER_ACTIVE),
                               widget.orderStatus != ORDER_CANCELLED
                                   ? AppButton(
-                                text: buttonText(widget.orderStatus!),
-                                padding: EdgeInsets.all(4),
-                                textStyle: boldTextStyle(color: Colors.white),
-                                color: colorPrimary,
-                                onTap: () {
-                                  if (widget.orderStatus == ORDER_ACTIVE) {
-                                    onTapData(orderData: data, orderStatus: widget.orderStatus!);
-                                  } else if (widget.orderStatus == ORDER_ACTIVE) {
-                                    onTapData(orderData: data, orderStatus: widget.orderStatus!);
-                                  } else if (widget.orderStatus == ORDER_ARRIVED) {
-                                    onTapData(orderData: data, orderStatus: widget.orderStatus!);
-                                  } else if (widget.orderStatus == ORDER_DEPARTED) {
-                                    onTapData(orderData: data, orderStatus: widget.orderStatus!);
-                                  } else {
-                                    showConfirmDialogCustom(
-                                      context,
-                                      primaryColor: colorPrimary,
-                                      dialogType: DialogType.DELETE,
-                                      title: orderTitle(widget.orderStatus!),
-                                      positiveText: language.yes,
-                                      negativeText: language.cancel,
-                                      onAccept: (c) async {
-                                        appStore.setLoading(true);
-                                        await onTapData(orderData: data, orderStatus: widget.orderStatus!);
-                                        appStore.setLoading(false);
-                                        finish(context);
+                                      text: buttonText(widget.orderStatus!),
+                                      padding: EdgeInsets.all(4),
+                                      textStyle: boldTextStyle(color: Colors.white),
+                                      color: colorPrimary,
+                                      onTap: () {
+                                        if (widget.orderStatus == ORDER_ACTIVE) {
+                                          onTapData(orderData: data, orderStatus: widget.orderStatus!);
+                                        } else if (widget.orderStatus == ORDER_ACTIVE) {
+                                          onTapData(orderData: data, orderStatus: widget.orderStatus!);
+                                        } else if (widget.orderStatus == ORDER_ARRIVED) {
+                                          onTapData(orderData: data, orderStatus: widget.orderStatus!);
+                                        } else if (widget.orderStatus == ORDER_DEPARTED) {
+                                          onTapData(orderData: data, orderStatus: widget.orderStatus!);
+                                        } else {
+                                          showConfirmDialogCustom(
+                                            context,
+                                            primaryColor: colorPrimary,
+                                            dialogType: DialogType.DELETE,
+                                            title: orderTitle(widget.orderStatus!),
+                                            positiveText: language.yes,
+                                            negativeText: language.cancel,
+                                            onAccept: (c) async {
+                                              appStore.setLoading(true);
+                                              await onTapData(orderData: data, orderStatus: widget.orderStatus!);
+                                              appStore.setLoading(false);
+                                              finish(context);
+                                            },
+                                          );
+                                        }
                                       },
-                                    );
-                                  }
-                                },
-                              ).visible(widget.orderStatus != ORDER_COMPLETED)
+                                    ).visible(widget.orderStatus != ORDER_COMPLETED)
                                   : SizedBox(),
                             ],
                           )
                         ],
                       ),
                       4.height,
-                      Row(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Image.network(
-                            'https://www.diethelmtravel.com/wp-content/uploads/2016/04/bill-gates-wealthiest-person.jpg',
-                            height: 30,
-                            width: 30,
-                            fit: BoxFit.cover,
-                          ).cornerRadiusWithClipRRect(4),
-                          8.width,
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(data.clientName ?? '', style: boldTextStyle()),
-                              4.height,
-                              data.date != null ? Text(printDate(data.date ?? ''), style: secondaryTextStyle()) : SizedBox(),
-                            ],
-                          ).expand(),
+                          Text(data.clientName ?? '', style: boldTextStyle()),
+                          4.height,
+                          data.date != null ? Text(printDate(data.date ?? ''), style: secondaryTextStyle()) : SizedBox(),
                         ],
-                      ),
+                      ).expand(),
                       Divider(height: 30, thickness: 1),
                       Row(
                         children: [
@@ -203,14 +192,16 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                               if (data.pickupPoint!.contactNumber != null)
                                 Row(
                                   children: [
-                                    Icon(Icons.call, color: Colors.green, size: 18),
+                                    Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
+                                      launch('tel://${data.pickupPoint!.contactNumber}');
+                                    }),
                                     8.width,
                                     Text('${data.pickupPoint!.contactNumber}', style: primaryTextStyle()),
                                   ],
                                 ).paddingOnly(top: 8),
                               if (data.pickupDatetime == null && data.pickupPoint!.endTime != null && data.pickupPoint!.startTime != null)
                                 Text('${language.note} ${language.courier_will_pickup_at} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.endTime!).toLocal())}',
-                                    style: secondaryTextStyle())
+                                        style: secondaryTextStyle())
                                     .paddingOnly(top: 8),
                             ],
                           ).expand(),
@@ -242,7 +233,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                 ).paddingOnly(top: 8),
                               if (data.deliveryDatetime == null && data.deliveryPoint!.endTime != null && data.deliveryPoint!.startTime != null)
                                 Text('${language.note} ${language.courier_will_deliver_at} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.endTime!).toLocal())}',
-                                    style: secondaryTextStyle())
+                                        style: secondaryTextStyle())
                                     .paddingOnly(top: 8),
                             ],
                           ).expand(),

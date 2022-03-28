@@ -354,4 +354,6 @@ abstract class BaseLanguage {
   String get become_a_delivery_boy;
 
   String get order_history;
+
+  String get no;
 }

@@ -528,4 +528,7 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get order_history => "تاريخ الطلب";
+
+  @override
+  String get no => "رقم";
 }

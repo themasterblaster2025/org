@@ -8,6 +8,7 @@ import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/user/screens/CreateOrderScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../main.dart';
 
@@ -126,7 +127,7 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
                                               Container(
                                                 decoration: boxDecorationWithRoundedCorners(
                                                   borderRadius: BorderRadius.circular(8),
-                                                  border: Border.all(color: borderColor,width: appStore.isDarkMode ? 0.2 : 1 ),
+                                                  border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
                                                   backgroundColor: Colors.transparent,
                                                 ),
                                                 padding: EdgeInsets.all(8),
@@ -176,7 +177,9 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
                                                     4.height.visible(item.pickupPoint!.contactNumber != null),
                                                     Row(
                                                       children: [
-                                                        Icon(Icons.call, color: Colors.green, size: 18),
+                                                        Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
+                                                          launch('tel://${item.pickupPoint!.contactNumber}');
+                                                        }),
                                                         8.width,
                                                         Text('${item.pickupPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
                                                       ],
@@ -204,7 +207,9 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
                                                     4.height.visible(item.deliveryPoint!.contactNumber != null),
                                                     Row(
                                                       children: [
-                                                        Icon(Icons.call, color: Colors.green, size: 18),
+                                                        Icon(Icons.call, color: Colors.green, size: 18).onTap((){
+                                                          launch('tel://${item.deliveryPoint!.contactNumber}');
+                                                        }),
                                                         8.width,
                                                         Text('${item.deliveryPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
                                                       ],

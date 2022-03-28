@@ -15,6 +15,7 @@ import 'package:mighty_delivery/user/components/CancelOrderDialog.dart';
 import 'package:mighty_delivery/user/screens/ReturnOrderScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:timeline_tile/timeline_tile.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../main/models/OrderDetailModel.dart';
 import 'OrderHistoryScreen.dart';
@@ -146,7 +147,9 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                           if (orderData!.pickupPoint!.contactNumber != null)
                                             Row(
                                               children: [
-                                                Icon(Icons.call, color: Colors.green, size: 18),
+                                                Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
+                                                  launch('tel://${orderData!.pickupPoint!.contactNumber}');
+                                                }),
                                                 8.width,
                                                 Text('${orderData!.pickupPoint!.contactNumber}', style: secondaryTextStyle()),
                                               ],
@@ -173,7 +176,9 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                           if (orderData!.deliveryPoint!.contactNumber != null)
                                             Row(
                                               children: [
-                                                Icon(Icons.call, color: Colors.green, size: 18),
+                                                Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
+                                                  launch('tel://${orderData!.deliveryPoint!.contactNumber}');
+                                                }),
                                                 8.width,
                                                 Text('${orderData!.deliveryPoint!.contactNumber}', style: secondaryTextStyle()),
                                               ],

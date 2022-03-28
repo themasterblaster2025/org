@@ -11,6 +11,7 @@ import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/user/screens/OrderDetailScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OrderFragment extends StatefulWidget {
   static String tag = '/OrderFragment';
@@ -159,7 +160,9 @@ class OrderFragmentState extends State<OrderFragment> {
                                           if (item.pickupPoint!.contactNumber != null)
                                             Row(
                                               children: [
-                                                Icon(Icons.call, color: Colors.green, size: 18),
+                                                Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
+                                                  launch('tel://${item.pickupPoint!.contactNumber}');
+                                                }),
                                                 8.width,
                                                 Text('${item.pickupPoint!.contactNumber}', style: primaryTextStyle()),
                                               ],
@@ -191,7 +194,9 @@ class OrderFragmentState extends State<OrderFragment> {
                                           if (item.deliveryPoint!.contactNumber != null)
                                             Row(
                                               children: [
-                                                Icon(Icons.call, color: Colors.green, size: 18),
+                                                Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
+                                                  launch('tel://${item.deliveryPoint!.contactNumber}');
+                                                }),
                                                 8.width,
                                                 Text('${item.deliveryPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
                                               ],

@@ -528,4 +528,7 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get order_history => "आदेश इतिहास";
+
+  @override
+  String get no => "नहीं";
 }

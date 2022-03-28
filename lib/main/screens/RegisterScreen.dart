@@ -8,10 +8,8 @@ import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-import '../../delivery/screens/DeliveryDashBoard.dart';
 import '../../main.dart';
 import '../components/UserCitySelectScreen.dart';
-import '../models/CityListModel.dart';
 
 class RegisterScreen extends StatefulWidget {
   final String? userType;
@@ -55,7 +53,7 @@ class RegisterScreenState extends State<RegisterScreen> {
     if (mounted) super.setState(fn);
   }
 
-  Future<void> RegisterApiCall() async {
+  Future<void> registerApiCall() async {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
 
@@ -67,7 +65,7 @@ class RegisterScreenState extends State<RegisterScreen> {
         "email": emailController.text.trim(),
         "password": passController.text.validate(),
         "user_type": widget.userType.validate(),
-        "contact_number":  '${countryCode} ${phoneController.text.trim()}',
+        "contact_number":  '$countryCode ${phoneController.text.trim()}',
         "player_id": getStringAsync(PLAYER_ID).validate(),
       };
       await signUpApi(req).then((value) async {
@@ -96,7 +94,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                     width: 90,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: context.cardColor,
+                      color: Colors.white,
                       shape: BoxShape.circle,
                     ),
                     child: Image.asset('assets/app_logo_primary.png', height: 70, width: 70)),
@@ -203,7 +201,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                         ),
                         30.height,
                         commonButton(language.sign_up, () {
-                          RegisterApiCall();
+                          registerApiCall();
                         }, width: context.width()),
                         16.height,
                         Row(

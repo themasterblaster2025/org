@@ -8,6 +8,8 @@ import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
+import '';
+import '../../main/models/CountryListModel.dart';
 
 class SearchAddressWidget extends PlacesAutocompleteWidget {
   SearchAddressWidget({Key? key})
@@ -18,7 +20,7 @@ class SearchAddressWidget extends PlacesAutocompleteWidget {
           types: [],
           strictbounds: false,
           region: 'Navsari',
-          components: [Component(Component.country, "IN")],
+          components: [Component(Component.country, CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate(value: 'IN'))],
         );
 
   @override
@@ -45,7 +47,9 @@ class _CustomSearchScaffoldState extends PlacesAutocompleteState {
     ));
     return WillPopScope(
       onWillPop: () async {
-        finish(context,[{'address': '', 'late': '', 'long': ''}]);
+        finish(context, [
+          {'address': '', 'late': '', 'long': ''}
+        ]);
         return true;
       },
       child: Scaffold(key: searchScaffoldKey, appBar: appBar, body: body),
@@ -64,7 +68,7 @@ class _CustomSearchScaffoldState extends PlacesAutocompleteState {
       finish(context, [
         {'address': p.description, 'late': lat.toString(), 'long': lng.toString()}
       ]);
-     /* ScaffoldMessenger.of(context).showSnackBar(
+      /* ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("${p.description} - $lat/$lng")),
       );*/
     }

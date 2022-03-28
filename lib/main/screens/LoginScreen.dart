@@ -129,7 +129,7 @@ class LoginScreenState extends State<LoginScreen> {
                     width: 90,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: context.cardColor,
+                      color: Colors.white,
                       shape: BoxShape.circle,
                     ),
                     child: Image.asset('assets/app_logo_primary.png', height: 70, width: 70)),
@@ -247,7 +247,7 @@ class LoginScreenState extends State<LoginScreen> {
         ],
       ),
       bottomNavigationBar: Container(
-        color: context.cardColor,
+        color: context.scaffoldBackgroundColor,
         padding: EdgeInsets.all(16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
