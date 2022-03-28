@@ -193,7 +193,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                 Row(
                                   children: [
                                     Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
-                                      launch('tel://${data.pickupPoint!.contactNumber}');
+                                      launch('tel:${data.pickupPoint!.contactNumber}');
                                     }),
                                     8.width,
                                     Text('${data.pickupPoint!.contactNumber}', style: primaryTextStyle()),

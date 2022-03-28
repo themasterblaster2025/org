@@ -161,7 +161,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                             Row(
                                               children: [
                                                 Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
-                                                  launch('tel://${item.pickupPoint!.contactNumber}');
+                                                  launch('tel:${item.pickupPoint!.contactNumber}');
                                                 }),
                                                 8.width,
                                                 Text('${item.pickupPoint!.contactNumber}', style: primaryTextStyle()),
@@ -195,7 +195,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                             Row(
                                               children: [
                                                 Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
-                                                  launch('tel://${item.deliveryPoint!.contactNumber}');
+                                                  launch('tel:${item.deliveryPoint!.contactNumber}');
                                                 }),
                                                 8.width,
                                                 Text('${item.deliveryPoint!.contactNumber ?? ""}', style: primaryTextStyle()),

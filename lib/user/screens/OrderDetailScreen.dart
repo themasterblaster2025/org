@@ -148,7 +148,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                             Row(
                                               children: [
                                                 Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
-                                                  launch('tel://${orderData!.pickupPoint!.contactNumber}');
+                                                  launch('tel:${orderData!.pickupPoint!.contactNumber}');
                                                 }),
                                                 8.width,
                                                 Text('${orderData!.pickupPoint!.contactNumber}', style: secondaryTextStyle()),
@@ -177,7 +177,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                             Row(
                                               children: [
                                                 Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
-                                                  launch('tel://${orderData!.deliveryPoint!.contactNumber}');
+                                                  launch('tel:${orderData!.deliveryPoint!.contactNumber}');
                                                 }),
                                                 8.width,
                                                 Text('${orderData!.deliveryPoint!.contactNumber}', style: secondaryTextStyle()),
