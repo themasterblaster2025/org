@@ -59,14 +59,9 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   }
 
   Future<void> init() async {
-    print(widget.orderData != null);
-    picUpController.text = DateFormat('dd-MM-yyyy hh:mm').format(DateTime.now());
-
-    print(picUpController.text);
-    toast(picUpController.text);
     mIsUpdate = widget.orderData != null;
     if (mIsUpdate) {
-      picUpController.text = widget.orderData!.pickupDatetime.validate();
+      picUpController.text = widget.orderData!.pickupDatetime.validate().isEmpty ? DateFormat('dd-MM-yyyy hh:mm').format(DateTime.now()) : widget.orderData!.pickupDatetime.validate();
       reasonController.text = widget.orderData!.reason.validate();
       reason = widget.orderData!.reason.validate();
       log(picUpController);
@@ -87,8 +82,8 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
     appStore.setLoading(true);
     await updateOrder(
       orderId: widget.orderData!.id,
-      pickupDatetime: mIsUpdate ? picUpController.text : DateTime.now().toString(),
-      deliveryDatetime: deliveryDateController.text.isNotEmpty ? DateTime.now().toString() : null,
+      pickupDatetime: picUpController.text,
+      deliveryDatetime: deliveryDateController.text,
       clientName: imageSignature != null ? '1' : '0',
       deliveryman: deliverySignature != null ? '1' : '0',
       picUpSignature: imageSignature,
@@ -159,7 +154,6 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (mIsUpdate) picUpController.text = DateFormat('dd-MM-yyyy hh:mm').format(DateTime.now());
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.orderData!.status == ORDER_DEPARTED ? language.order_deliver : language.order_pickup),
