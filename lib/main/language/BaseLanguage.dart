@@ -356,4 +356,6 @@ abstract class BaseLanguage {
   String get order_history;
 
   String get no;
+
+  String get confirm_Pickup;
 }

@@ -85,18 +85,21 @@ class OrderHistory {
 class HistoryData {
   String? clientId;
   String? clientName;
+  String? deliveryManName;
 
-  HistoryData({this.clientId, this.clientName});
+  HistoryData({this.clientId, this.clientName,this.deliveryManName});
 
   HistoryData.fromJson(Map<String, dynamic> json) {
     clientId = json['client_id'];
     clientName = json['client_name'];
+    deliveryManName = json['delivery_man_name'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['client_id'] = this.clientId;
     data['client_name'] = this.clientName;
+    data['delivery_man_name'] = this.deliveryManName;
     return data;
   }
 }

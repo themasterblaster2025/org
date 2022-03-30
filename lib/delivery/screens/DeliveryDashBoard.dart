@@ -77,7 +77,8 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
             }),
             4.width,
             IconButton(
-              onPressed: () {
+              padding: EdgeInsets.only(right: 8),
+              onPressed: () async {
                 DProfileFragment().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
               },
               icon: Icon(Icons.settings),

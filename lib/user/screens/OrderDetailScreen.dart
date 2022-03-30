@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
-import 'package:mighty_delivery/main/models/CityListModel.dart';
 import 'package:mighty_delivery/main/models/CountryListModel.dart';
 import 'package:mighty_delivery/main/models/LoginResponse.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
@@ -14,7 +13,6 @@ import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:mighty_delivery/user/components/CancelOrderDialog.dart';
 import 'package:mighty_delivery/user/screens/ReturnOrderScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:timeline_tile/timeline_tile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../main/models/OrderDetailModel.dart';
@@ -126,7 +124,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text('${orderData!.paymentType.validate(value: PAYMENT_TYPE_CASH)}', style: boldTextStyle()),
-                              Text('${orderData!.paymentStatus.validate(value: PAYMENT_PENDING)}', style: boldTextStyle(color: paymentStatusColor(orderData!.paymentStatus.validate(value: PAYMENT_PENDING)))),
+                              Text('${orderData!.paymentStatus.validate(value: PAYMENT_PENDING)}',
+                                  style: boldTextStyle(color: paymentStatusColor(orderData!.paymentStatus.validate(value: PAYMENT_PENDING)))),
                             ],
                           ),
                           24.height,
@@ -142,7 +141,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          if (orderData!.pickupDatetime != null) Text('${language.picked_at} ${printDate(orderData!.pickupDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
+                                          if (orderData!.pickupDatetime != null)
+                                            Text('${language.picked_at} ${printDate(orderData!.pickupDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
                                           Text('${orderData!.pickupPoint!.address}', style: primaryTextStyle()),
                                           if (orderData!.pickupPoint!.contactNumber != null)
                                             Row(
@@ -171,7 +171,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          if (orderData!.deliveryDatetime != null) Text('${language.delivered_at} ${printDate(orderData!.deliveryDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
+                                          if (orderData!.deliveryDatetime != null)
+                                            Text('${language.delivered_at} ${printDate(orderData!.deliveryDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
                                           Text('${orderData!.deliveryPoint!.address}', style: primaryTextStyle()),
                                           if (orderData!.deliveryPoint!.contactNumber != null)
                                             Row(
@@ -234,8 +235,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                             child: Row(
                               children: [
                                 Container(
-                                  decoration:
-                                      boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(8), border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), backgroundColor: Colors.transparent),
+                                  decoration: boxDecorationWithRoundedCorners(
+                                      borderRadius: BorderRadius.circular(8), border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), backgroundColor: Colors.transparent),
                                   padding: EdgeInsets.all(8),
                                   child: Image.asset(parcelTypeIcon(orderData!.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
                                 ),
@@ -253,25 +254,50 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                           ),
                           Divider(height: 30, thickness: 1),
                           if (userData != null)
-                            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                              Text('${getStringAsync(USER_TYPE) == CLIENT ? language.about_delivery_man : language.about_user}', style: boldTextStyle(size: 16)),
-                              16.height,
-                              Container(
-                                decoration: BoxDecoration(color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
-                                padding: EdgeInsets.all(16),
-                                child: Row(
-                                  children: [
-                                    CircleAvatar(backgroundImage: NetworkImage(userData!.profile_image.validate()), radius: 30),
-                                    16.width,
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [Text('${userData!.name.validate()}', style: boldTextStyle()), 8.height, if (userData!.contact_number != null) Text('${userData!.contact_number}', style: primaryTextStyle())],
-                                    ).expand(),
-                                  ],
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('${getStringAsync(USER_TYPE) == CLIENT ? language.about_delivery_man : language.about_user}', style: boldTextStyle(size: 16)),
+                                16.height,
+                                Container(
+                                  decoration: BoxDecoration(color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
+                                  padding: EdgeInsets.all(16),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          CircleAvatar(backgroundImage: NetworkImage(userData!.profile_image.validate()), radius: 30),
+                                          16.width,
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Text('${userData!.name.validate()}', style: boldTextStyle()),
+                                              4.height,
+                                              Text('${userData!.email.validate()}', style: secondaryTextStyle()),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      8.height,
+                                      if (userData!.contact_number != null)
+                                      Row(
+                                        children: [
+                                          Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
+                                            launch('tel:${userData!.contact_number}');
+                                          }),
+                                          16.width,
+                                          Text('${userData!.contact_number}', style: primaryTextStyle())
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Divider(height: 30, thickness: 1),
-                            ]),
+                                Divider(height: 30, thickness: 1),
+                              ],
+                            ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -280,7 +306,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                               Text('$currencySymbol ${orderData!.fixedCharges}', style: boldTextStyle()),
                             ],
                           ),
-                          if (orderData!.distanceCharge.validate() != 0)
+                          //if (orderData!.distanceCharge.validate() != 0)
                             Column(
                               children: [
                                 8.height,

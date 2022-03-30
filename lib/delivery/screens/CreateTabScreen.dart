@@ -110,7 +110,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                   showConfirmDialogCustom(
                                     context,
                                     primaryColor: colorPrimary,
-                                    dialogType: DialogType.DELETE,
+                                    dialogType: DialogType.CONFIRMATION,
                                     title: language.are_you_sure_want_to_arrive,
                                     positiveText: language.yes,
                                     negativeText: language.cancel,
@@ -145,7 +145,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                           showConfirmDialogCustom(
                                             context,
                                             primaryColor: colorPrimary,
-                                            dialogType: DialogType.DELETE,
+                                            dialogType: DialogType.ACCEPT,
                                             title: orderTitle(widget.orderStatus!),
                                             positiveText: language.yes,
                                             negativeText: language.cancel,
@@ -172,7 +172,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                           4.height,
                           data.date != null ? Text(printDate(data.date ?? ''), style: secondaryTextStyle()) : SizedBox(),
                         ],
-                      ).expand(),
+                      ),
                       Divider(height: 30, thickness: 1),
                       Row(
                         children: [
@@ -226,7 +226,9 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                               if (data.deliveryPoint!.contactNumber != null)
                                 Row(
                                   children: [
-                                    Icon(Icons.call, color: Colors.green, size: 18),
+                                    Icon(Icons.call, color: Colors.green, size: 18).onTap((){
+                                      launch('tel:${data.deliveryPoint!.contactNumber}');
+                                    }),
                                     8.width,
                                     Text('${data.deliveryPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
                                   ],

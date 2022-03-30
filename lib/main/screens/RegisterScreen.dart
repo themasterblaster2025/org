@@ -180,7 +180,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                                 validator: (s){
                                   if (s!.trim().isEmpty)
                                     return language.field_required_msg;
-                                  if (s.trim().length > 15)
+                                  if (s.trim().length > 10)
                                     return language.contact_number_validation;
                                   return null;
                                 },

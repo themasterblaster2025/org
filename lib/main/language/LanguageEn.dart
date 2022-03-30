@@ -532,4 +532,7 @@ class LanguageEn extends BaseLanguage {
   @override
   String get no => "No";
 
+  @override
+  String get confirm_Pickup => "Confirm Pickup";
+
 }

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
+import 'package:mighty_delivery/main/utils/Constants.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 import '../../main.dart';
 import '../../main/models/OrderDetailModel.dart';
 import '../../main/utils/Colors.dart';
-import 'package:nb_utils/nb_utils.dart';
-
 import '../../main/utils/Common.dart';
 
 class OrderHistoryScreen extends StatefulWidget {
@@ -64,7 +64,7 @@ class OrderHistoryScreenState extends State<OrderHistoryScreen> {
                     children: [
                       Text('${mData.historyType!.replaceAll("_", " ").capitalizeFirstLetter()}', style: boldTextStyle()),
                       8.height,
-                      Text('${mData.historyMessage}', style: primaryTextStyle()),
+                      Text(messageData(mData)),
                       8.height,
                       Text('${printDate('${mData.createdAt}')}', style: secondaryTextStyle()),
                     ],
@@ -76,5 +76,13 @@ class OrderHistoryScreenState extends State<OrderHistoryScreen> {
         ),
       ),
     );
+  }
+
+  messageData(OrderHistory orderData) {
+    if (orderData.historyType == COURIER_ASSIGNED && (getStringAsync(USER_TYPE) == CLIENT)) {
+      return 'Your Order#${orderData.orderId} has been assigned to ${orderData.historyData!.deliveryManName}.';
+    } else {
+      return '${orderData.historyMessage}';
+    }
   }
 }

@@ -7,7 +7,6 @@ import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/models/LoginResponse.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -62,7 +61,7 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
         Marker(
           markerId: MarkerId(deliveryBoyData!.city_name.validate()),
           position: LatLng(deliveryBoyData!.latitude.toDouble(), deliveryBoyData!.longitude.toDouble()),
-          infoWindow: InfoWindow(title: deliveryBoyData!.name.validate()),
+          infoWindow: InfoWindow(title: '${deliveryBoyData!.name.validate()}',snippet: 'Last update at ${dateParse(deliveryBoyData!.updated_at!)}'),
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
         ),
         Marker(

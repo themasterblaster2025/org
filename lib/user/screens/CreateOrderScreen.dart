@@ -570,7 +570,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 children: [
                   Text(language.parcel_type, style: primaryTextStyle()),
                   16.width,
-                  Text(parcelTypeCont.text, style: primaryTextStyle()),
+                  Text(parcelTypeCont.text, style: primaryTextStyle(),maxLines: 3,textAlign: TextAlign.end,overflow: TextOverflow.ellipsis).expand(),
                 ],
               ),
               8.height,
@@ -579,7 +579,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 children: [
                   Text(language.weight, style: primaryTextStyle()),
                   16.width,
-                  Text('${selectedWeight} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weight_type}', style: primaryTextStyle()),
+                  Text('$selectedWeight ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weight_type}', style: primaryTextStyle()),
                 ],
               ),
             ],

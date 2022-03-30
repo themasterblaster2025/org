@@ -531,4 +531,7 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get no => "رقم";
+
+  @override
+  String get confirm_Pickup => "تأكيد بيك اب";
 }

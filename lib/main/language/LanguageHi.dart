@@ -531,4 +531,7 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get no => "नहीं";
+
+  @override
+  String get confirm_Pickup => "पिकअप की पुष्टि करें";
 }
