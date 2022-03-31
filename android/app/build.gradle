@@ -59,11 +59,16 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
     packagingOptions {
         resources.excludes.add("META-INF/*")
     }
 
     googleServices { disableVersionCheck = true }
+
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
 }
 
 flutter {
