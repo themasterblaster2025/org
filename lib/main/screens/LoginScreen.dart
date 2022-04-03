@@ -58,7 +58,7 @@ class LoginScreenState extends State<LoginScreen> {
     if (mounted) super.setState(fn);
   }
 
-  Future<void> LoginApiCall() async {
+  Future<void> loginApiCall() async {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
 
@@ -77,12 +77,12 @@ class LoginScreenState extends State<LoginScreen> {
       }
 
       await logInApi(req).then((value) async {
-        await getCountryDetailApiCall(value.data!.country_id.validate());
+        await getCountryDetailApiCall(value.data!.countryId.validate());
         appStore.setLoading(false);
         if (getIntAsync(STATUS) == 1) {
-          getCityDetailApiCall(value.data!.city_id.validate());
+          getCityDetailApiCall(value.data!.cityId.validate());
         } else {
-          toast(language.user_not_approve_msg);
+          toast(language.userNotApproveMsg);
         }
       }).catchError((e) {
         appStore.setLoading(false);
@@ -146,9 +146,9 @@ class LoginScreenState extends State<LoginScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         30.height,
-                        Text(language.sign_in_account, style: boldTextStyle(size: headingSize)),
+                        Text(language.signInAccount, style: boldTextStyle(size: headingSize)),
                         8.height,
-                        Text(language.sign_in_to_continue, style: secondaryTextStyle(size: 16)),
+                        Text(language.signInToContinue, style: secondaryTextStyle(size: 16)),
                         30.height,
                         Text(language.email, style: primaryTextStyle()),
                         8.height,
@@ -158,8 +158,8 @@ class LoginScreenState extends State<LoginScreen> {
                           focus: emailFocus,
                           nextFocus: passFocus,
                           decoration: commonInputDecoration(),
-                          errorThisFieldRequired: language.field_required_msg,
-                          errorInvalidEmail: language.email_invalid,
+                          errorThisFieldRequired: language.fieldRequiredMsg,
+                          errorInvalidEmail: language.emailInvalid,
                         ),
                         16.height,
                         Text(language.password, style: primaryTextStyle()),
@@ -169,13 +169,13 @@ class LoginScreenState extends State<LoginScreen> {
                           textFieldType: TextFieldType.PASSWORD,
                           focus: passFocus,
                           decoration: commonInputDecoration(),
-                          errorThisFieldRequired: language.field_required_msg,
-                          errorMinimumPasswordLength: language.password_invalid,
+                          errorThisFieldRequired: language.fieldRequiredMsg,
+                          errorMinimumPasswordLength: language.passwordInvalid,
                         ),
                         CheckboxListTile(
                           contentPadding: EdgeInsets.zero,
                           controlAffinity: ListTileControlAffinity.leading,
-                          title: Text(language.remember_me, style: primaryTextStyle()),
+                          title: Text(language.rememberMe, style: primaryTextStyle()),
                           value: mIsCheck,
                           onChanged: (val) async {
                             mIsCheck = val!;
@@ -188,15 +188,15 @@ class LoginScreenState extends State<LoginScreen> {
                         Align(
                           alignment: Alignment.centerRight,
                           child: TextButton(
-                            child: Text(language.forgot_password_que, style: primaryTextStyle(color: colorPrimary)),
+                            child: Text(language.forgotPasswordQue, style: primaryTextStyle(color: colorPrimary)),
                             onPressed: () {
                               ForgotPasswordScreen().launch(context);
                             },
                           ),
                         ),
                         16.height,
-                        commonButton(language.sign_in, () {
-                          LoginApiCall();
+                        commonButton(language.signIn, () {
+                          loginApiCall();
                         }, width: context.width()),
                         16.height,
                         /* Row(
@@ -228,9 +228,9 @@ class LoginScreenState extends State<LoginScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(language.do_not_have_account, style: primaryTextStyle()),
+                            Text(language.doNotHaveAccount, style: primaryTextStyle()),
                             4.width,
-                            Text(language.sign_up, style: boldTextStyle(color: colorPrimary)).onTap(() {
+                            Text(language.signUp, style: boldTextStyle(color: colorPrimary)).onTap(() {
                               RegisterScreen().launch(context, duration: Duration(milliseconds: 500), pageRouteAnimation: PageRouteAnimation.Slide);
                             }),
                           ],
@@ -252,9 +252,9 @@ class LoginScreenState extends State<LoginScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(language.become_a_delivery_boy, style: primaryTextStyle()),
+            Text(language.becomeADeliveryBoy, style: primaryTextStyle()),
             4.width,
-            Text(language.sign_up, style: boldTextStyle(color: colorPrimary)).onTap(() {
+            Text(language.signUp, style: boldTextStyle(color: colorPrimary)).onTap(() {
               RegisterScreen(userType: DELIVERY_MAN).launch(context, duration: Duration(milliseconds: 500), pageRouteAnimation: PageRouteAnimation.Slide);
             }),
           ],

@@ -1,26 +1,26 @@
 class PaginationModel {
   int? currentPage;
-  var per_page;
+  var perPage;
   int? totalPages;
-  int? total_items;
+  int? totalItems;
 
-  PaginationModel({this.currentPage, this.per_page, this.totalPages, this.total_items});
+  PaginationModel({this.currentPage, this.perPage, this.totalPages, this.totalItems});
 
   factory PaginationModel.fromJson(Map<String, dynamic> json) {
     return PaginationModel(
       currentPage: json['currentPage'],
-      per_page: json['per_page'],
+      perPage: json['per_page'],
       totalPages: json['totalPages'],
-      total_items: json['total_items'],
+      totalItems: json['total_items'],
     );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['currentPage'] = this.currentPage;
-    data['per_page'] = this.per_page;
+    data['per_page'] = this.perPage;
     data['totalPages'] = this.totalPages;
-    data['total_items'] = this.total_items;
+    data['total_items'] = this.totalItems;
     return data;
   }
 }

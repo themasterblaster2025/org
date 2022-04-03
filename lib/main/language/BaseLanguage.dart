@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 abstract class BaseLanguage {
   static BaseLanguage? of(BuildContext context) => Localizations.of<BaseLanguage>(context, BaseLanguage);
 
-  String get app_name;
+  String get appName;
 
   String get language;
 
@@ -23,257 +23,257 @@ abstract class BaseLanguage {
 
   String get from;
 
+  String get applyFilter;
+
   String get to;
 
-  String get to_date_validation_msg;
-
-  String get apply_filter;
+  String get toDateValidationMsg;
 
   String get payment;
 
-  String get payment_method;
+  String get paymentMethod;
 
-  String get pay_now;
+  String get payNow;
 
-  String get please_select_city;
+  String get pleaseSelectCity;
 
-  String get select_region;
+  String get selectRegion;
 
   String get country;
 
   String get city;
 
-  String get logout_confirmation_msg;
+  String get logoutConfirmationMsg;
 
   String get yes;
 
-  String get picked_at;
+  String get pickedAt;
 
-  String get delivered_at;
+  String get deliveredAt;
 
-  String get track_order;
+  String get trackOrder;
 
-  String get delivery_now;
+  String get deliveryNow;
 
   String get schedule;
 
-  String get pick_time;
+  String get pickTime;
 
-  String get end_time_validation_msg;
+  String get endTimeValidationMsg;
 
-  String get deliver_time;
+  String get deliverTime;
 
   String get weight;
 
-  String get parcel_type;
+  String get parcelType;
 
-  String get pick_up_information;
+  String get pickupInformation;
 
   String get address;
 
-  String get contact_number;
+  String get contactNumber;
 
   String get description;
 
-  String get delivery_information;
+  String get deliveryInformation;
 
-  String get package_information;
+  String get packageInformation;
 
   String get pickup;
 
   String get delivery;
 
-  String get delivery_charge;
+  String get deliveryCharge;
 
-  String get distance_charge;
+  String get distanceCharge;
 
-  String get weight_charge;
+  String get weightCharge;
 
-  String get extra_charges;
+  String get extraCharges;
 
   String get total;
 
-  String get cash_payment;
+  String get cashPayment;
 
-  String get online_payment;
+  String get onlinePayment;
 
-  String get payment_collect_from;
+  String get paymentCollectFrom;
 
-  String get save_draft_confirmation_msg;
+  String get saveDraftConfirmationMsg;
 
-  String get save_draft;
+  String get saveDraft;
 
-  String get create_order;
+  String get createOrder;
 
   String get previous;
 
-  String get pickup_current_validation_msg;
+  String get pickupCurrentValidationMsg;
 
-  String get pickup_deliver_validation_msg;
+  String get pickupDeliverValidationMsg;
 
-  String get create_order_confirmation_msg;
+  String get createOrderConfirmationMsg;
 
-  String get draft_order;
+  String get draftOrder;
 
-  String get order_details;
+  String get orderDetails;
 
   String get distance;
 
-  String get parcel_details;
+  String get parcelDetails;
 
-  String get about_delivery_man;
+  String get aboutDeliveryMan;
 
-  String get about_user;
+  String get aboutUser;
 
-  String get return_order;
+  String get returnOrder;
 
-  String get cancel_order;
+  String get cancelOrder;
 
-  String get lbl_return;
+  String get lblReturn;
 
-  String get change_password;
+  String get changePassword;
 
-  String get old_password;
+  String get oldPassword;
 
-  String get new_password;
+  String get newPassword;
 
-  String get confirm_password;
+  String get confirmPassword;
 
-  String get password_not_match;
+  String get passwordNotMatch;
 
-  String get save_changes;
+  String get saveChanges;
 
-  String get profile_update_msg;
+  String get profileUpdateMsg;
 
-  String get edit_profile;
+  String get editProfile;
 
-  String get not_change_email;
+  String get notChangeEmail;
 
   String get username;
 
-  String get not_change_username;
+  String get notChangeUsername;
 
-  String get forgot_password;
+  String get forgotPassword;
 
   String get email;
 
   String get submit;
 
-  String get user_not_approve_msg;
+  String get userNotApproveMsg;
 
-  String get sign_in_account;
+  String get signInAccount;
 
-  String get sign_in_to_continue;
+  String get signInToContinue;
 
   String get password;
 
-  String get forgot_password_que;
+  String get forgotPasswordQue;
 
-  String get sign_in;
+  String get signIn;
 
   String get or;
 
-  String get continue_with_google;
+  String get continueWithGoogle;
 
-  String get do_not_have_account;
+  String get doNotHaveAccount;
 
-  String get sign_up;
+  String get signUp;
 
   String get name;
 
   String get notification;
 
-  String get select_usertype_msg;
+  String get selectUsertypeMsg;
 
-  String get create_an_account;
+  String get createAnAccount;
 
-  String get sign_up_to_continue;
+  String get signUpToContinue;
 
-  String get user_type;
+  String get userType;
 
   String get client;
 
-  String get delivery_man;
+  String get deliveryMan;
 
-  String get already_have_an_account;
+  String get alreadyHaveAnAccount;
 
   String get light;
 
   String get dark;
 
-  String get system_default;
+  String get systemDefault;
 
   String get theme;
 
   String get skip;
 
-  String get get_started;
+  String get getStarted;
 
   String get profile;
 
-  String get track_order_location;
+  String get trackOrderLocation;
 
   String get track;
 
   String get active;
 
-  String get pick_up;
+  String get pickUp;
 
   String get departed;
 
-  String get order_pickup_successfully;
+  String get orderPickupSuccessfully;
 
-  String get image_pick_to_camera;
+  String get imagePickToCamera;
 
-  String get image_pic_to_gallery;
+  String get imagePicToGallery;
 
-  String get order_deliver;
+  String get orderDeliver;
 
-  String get order_pickup;
+  String get orderPickup;
 
   String get info;
 
-  String get payment_collect_from_delivery;
+  String get paymentCollectFromDelivery;
 
-  String get payment_collect_from_pickup;
+  String get paymentCollectFromPickup;
 
-  String get pickup_datetime;
+  String get pickupDatetime;
 
   String get hour;
 
-  String get delivery_datetime;
+  String get deliveryDatetime;
 
-  String get pickup_time_signature;
+  String get pickupTimeSignature;
 
   String get save;
 
   String get clear;
 
-  String get delivery_time_signature;
+  String get deliveryTimeSignature;
 
   String get reason;
 
-  String get pickup_delivery;
+  String get pickupDelivery;
 
-  String get select_pickup_time_msg;
+  String get selectPickupTimeMsg;
 
-  String get select_delivery_time_msg;
+  String get selectDeliveryTimeMsg;
 
-  String get select_pickup_sign_msg;
+  String get selectPickupSignMsg;
 
-  String get select_delivery_sign_msg;
+  String get selectDeliverySignMsg;
 
-  String get select_reason_msg;
+  String get selectReasonMsg;
 
-  String get order_cancelled_successfully;
+  String get orderCancelledSuccessfully;
 
-  String get collect_payment_confirmation_msg;
+  String get collectPaymentConfirmationMsg;
 
-  String get tracking_order;
+  String get trackingOrder;
 
   String get assign;
 
-  String get picked_up;
+  String get pickedUp;
 
   String get arrived;
 
@@ -281,19 +281,19 @@ abstract class BaseLanguage {
 
   String get cancelled;
 
-  String get allow_location_permission;
+  String get allowLocationPermission;
 
-  String get walk_through1_title;
+  String get walkThrough1Title;
 
-  String get walk_through2_title;
+  String get walkThrough2Title;
 
-  String get walk_through3_title;
+  String get walkThrough3Title;
 
-  String get walk_through1_subtitle;
+  String get walkThrough1Subtitle;
 
-  String get walk_through2_subtitle;
+  String get walkThrough2Subtitle;
 
-  String get walk_through3_subtitle;
+  String get walkThrough3Subtitle;
 
   String get order;
 
@@ -301,61 +301,61 @@ abstract class BaseLanguage {
 
   String get drafts;
 
-  String get about_us;
+  String get aboutUs;
 
-  String get help_and_support;
+  String get helpAndSupport;
 
   String get logout;
 
-  String get change_location;
+  String get changeLocation;
 
-  String get select_city;
+  String get selectCity;
 
   String get next;
 
-  String get field_required_msg;
+  String get fieldRequiredMsg;
 
-  String get email_invalid;
+  String get emailInvalid;
 
-  String get password_invalid;
+  String get passwordInvalid;
 
-  String get username_invalid;
+  String get usernameInvalid;
 
-  String get write_reason_here;
+  String get writeReasonHere;
 
-  String get are_you_sure_want_to_arrive;
+  String get areYouSureWantToArrive;
 
   String get note;
 
-  String get courier_will_pickup_at;
+  String get courierWillPickupAt;
 
-  String get courier_will_deliver_at;
+  String get courierWillDeliverAt;
 
-  String get confirm_delivery;
+  String get confirmDelivery;
 
-  String get order_assign_confirmation;
+  String get orderAssignConfirmation;
 
-  String get order_pickup_confirmation;
+  String get orderPickupConfirmation;
 
-  String get order_departed_confirmation;
+  String get orderDepartedConfirmation;
 
-  String get order_create_confirmation;
+  String get orderCreateConfirmation;
 
-  String get order_complete_confirmation;
+  String get orderCompleteConfirmation;
 
-  String get order_cancel_confirmation;
+  String get orderCancelConfirmation;
 
   String get id;
 
-  String get contact_number_validation;
+  String get contactNumberValidation;
 
-  String get remember_me;
+  String get rememberMe;
 
-  String get become_a_delivery_boy;
+  String get becomeADeliveryBoy;
 
-  String get order_history;
+  String get orderHistory;
 
   String get no;
 
-  String get confirm_Pickup;
+  String get confirmPickup;
 }

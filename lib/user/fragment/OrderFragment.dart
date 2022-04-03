@@ -155,7 +155,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          if (item.pickupDatetime != null) Text('${language.picked_at} ${printDate(item.pickupDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
+                                          if (item.pickupDatetime != null) Text('${language.pickedAt} ${printDate(item.pickupDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
                                           Text('${item.pickupPoint!.address}', style: primaryTextStyle()),
                                           if (item.pickupPoint!.contactNumber != null)
                                             Row(
@@ -168,7 +168,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                               ],
                                             ).paddingOnly(top: 8),
                                           if (item.pickupDatetime == null && item.pickupPoint!.endTime != null && item.pickupPoint!.startTime != null)
-                                            Text('${language.note} ${language.courier_will_pickup_at} ${DateFormat('dd MMM yyyy').format(DateTime.parse(item.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(item.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(item.pickupPoint!.endTime!).toLocal())}',
+                                            Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(item.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(item.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(item.pickupPoint!.endTime!).toLocal())}',
                                                     style: secondaryTextStyle())
                                                 .paddingOnly(top: 8),
                                         ],
@@ -189,7 +189,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          if (item.deliveryDatetime != null) Text('${language.delivered_at} ${printDate(item.deliveryDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
+                                          if (item.deliveryDatetime != null) Text('${language.deliveredAt} ${printDate(item.deliveryDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
                                           Text('${item.deliveryPoint!.address}', style: primaryTextStyle()),
                                           if (item.deliveryPoint!.contactNumber != null)
                                             Row(
@@ -202,7 +202,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                               ],
                                             ).paddingOnly(top: 8),
                                           if (item.deliveryDatetime == null && item.deliveryPoint!.endTime != null && item.deliveryPoint!.startTime != null)
-                                            Text('${language.note} ${language.courier_will_deliver_at} ${DateFormat('dd MMM yyyy').format(DateTime.parse(item.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(item.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(item.deliveryPoint!.endTime!).toLocal())}',
+                                            Text('${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(item.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(item.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(item.deliveryPoint!.endTime!).toLocal())}',
                                                     style: secondaryTextStyle())
                                                 .paddingOnly(top: 8),
                                         ],
@@ -231,7 +231,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Text(language.track_order, style: primaryTextStyle(color: colorPrimary)),
+                                        Text(language.trackOrder, style: primaryTextStyle(color: colorPrimary)),
                                         Icon(Icons.arrow_right, color: colorPrimary),
                                       ],
                                     ),

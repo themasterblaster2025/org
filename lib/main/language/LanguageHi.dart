@@ -2,7 +2,7 @@ import 'BaseLanguage.dart';
 
 class LanguageHi extends BaseLanguage {
   @override
-  String get app_name => "मांग पर स्थानीय वितरण प्रणाली";
+  String get appName => "मांग पर स्थानीय वितरण प्रणाली";
 
   @override
   String get language => "भाषा";
@@ -35,25 +35,25 @@ class LanguageHi extends BaseLanguage {
   String get to => "प्रति";
 
   @override
-  String get to_date_validation_msg => "तारीख से तारीख के बाद होना चाहिए";
+  String get toDateValidationMsg => "तारीख से तारीख के बाद होना चाहिए";
 
   @override
-  String get apply_filter => "फिल्टर लागू करें";
+  String get applyFilter => "फिल्टर लागू करें";
 
   @override
   String get payment => "भुगतान";
 
   @override
-  String get payment_method => "भुगतान की विधि";
+  String get paymentMethod => "भुगतान की विधि";
 
   @override
-  String get pay_now => "अब भुगतान करें";
+  String get payNow => "अब भुगतान करें";
 
   @override
-  String get please_select_city => "कृपया शहर का चयन करें";
+  String get pleaseSelectCity => "कृपया शहर का चयन करें";
 
   @override
-  String get select_region => "क्षेत्र का चयन करें";
+  String get selectRegion => "क्षेत्र का चयन करें";
 
   @override
   String get country => "देश";
@@ -62,58 +62,58 @@ class LanguageHi extends BaseLanguage {
   String get city => "शहर";
 
   @override
-  String get logout_confirmation_msg => "क्या आप लॉग आउट करना चाहते हैं ?";
+  String get logoutConfirmationMsg => "क्या आप लॉग आउट करना चाहते हैं ?";
 
   @override
   String get yes => "हां";
 
   @override
-  String get picked_at => "पर चुना";
+  String get pickedAt => "पर चुना";
 
   @override
-  String get delivered_at => "पर सुपुर्दगी";
+  String get deliveredAt => "पर सुपुर्दगी";
 
   @override
-  String get track_order => "ऑर्डर पर नज़र रखें";
+  String get trackOrder => "ऑर्डर पर नज़र रखें";
 
   @override
-  String get delivery_now => "अब वितरित करना";
+  String get deliveryNow => "अब वितरित करना";
 
   @override
   String get schedule => "अनुसूची";
 
   @override
-  String get pick_time => "समय निकालना";
+  String get pickTime => "समय निकालना";
 
   @override
-  String get end_time_validation_msg => "एंडटाइम स्टार्टटाइम के बाद होना चाहिए";
+  String get endTimeValidationMsg => "एंडटाइम स्टार्टटाइम के बाद होना चाहिए";
 
   @override
-  String get deliver_time => "समय प्रदान करना";
+  String get deliverTime => "समय प्रदान करना";
 
   @override
   String get weight => "वज़न";
 
   @override
-  String get parcel_type => "पार्सल प्रकार";
+  String get parcelType => "पार्सल प्रकार";
 
   @override
-  String get pick_up_information => "पिकअप जानकारी";
+  String get pickupInformation => "पिकअप जानकारी";
 
   @override
   String get address => "पता";
 
   @override
-  String get contact_number => "संपर्क संख्या";
+  String get contactNumber => "संपर्क संख्या";
 
   @override
   String get description => "विवरण";
 
   @override
-  String get delivery_information => "वितरण की जानकारी";
+  String get deliveryInformation => "वितरण की जानकारी";
 
   @override
-  String get package_information => "पैकेज जानकारी";
+  String get packageInformation => "पैकेज जानकारी";
 
   @override
   String get pickup => "पिक अप";
@@ -122,112 +122,112 @@ class LanguageHi extends BaseLanguage {
   String get delivery => "वितरण";
 
   @override
-  String get delivery_charge => "डिलीवरी चार्ज";
+  String get deliveryCharge => "डिलीवरी चार्ज";
 
   @override
-  String get distance_charge => "दूरी प्रभार";
+  String get distanceCharge => "दूरी प्रभार";
 
   @override
-  String get weight_charge => "वजन प्रभार";
+  String get weightCharge => "वजन प्रभार";
 
   @override
-  String get extra_charges => "अतिरिक्त शुल्क";
+  String get extraCharges => "अतिरिक्त शुल्क";
 
   @override
   String get total => "संपूर्ण";
 
   @override
-  String get cash_payment => "नकद भुगतान";
+  String get cashPayment => "नकद भुगतान";
 
   @override
-  String get online_payment => "ऑनलाइन भुगतान";
+  String get onlinePayment => "ऑनलाइन भुगतान";
 
   @override
-  String get payment_collect_from => "से भुगतान एकत्रित करें";
+  String get paymentCollectFrom => "से भुगतान एकत्रित करें";
 
   @override
-  String get save_draft_confirmation_msg => "क्या आप वाकई ड्राफ्ट के रूप में सहेजना चाहते हैं?";
+  String get saveDraftConfirmationMsg => "क्या आप वाकई ड्राफ्ट के रूप में सहेजना चाहते हैं?";
 
   @override
-  String get save_draft => "मसौदा सेव करें";
+  String get saveDraft => "मसौदा सेव करें";
 
   @override
-  String get create_order => "आदेश बनाएँ";
+  String get createOrder => "आदेश बनाएँ";
 
   @override
   String get previous => "पहले का";
 
   @override
-  String get pickup_current_validation_msg => "पिकअप समय वर्तमान समय के बाद होना चाहिए";
+  String get pickupCurrentValidationMsg => "पिकअप समय वर्तमान समय के बाद होना चाहिए";
 
   @override
-  String get pickup_deliver_validation_msg => "पिकअप समय समय देने से पहले होना चाहिए '";
+  String get pickupDeliverValidationMsg => "पिकअप समय समय देने से पहले होना चाहिए '";
 
   @override
-  String get create_order_confirmation_msg => "क्या आप वाकई ऑर्डर देना चाहते हैं?";
+  String get createOrderConfirmationMsg => "क्या आप वाकई ऑर्डर देना चाहते हैं?";
 
   @override
-  String get draft_order => "ड्राफ्ट आदेश";
+  String get draftOrder => "ड्राफ्ट आदेश";
 
   @override
-  String get order_details => "ऑर्डर का विवरण";
+  String get orderDetails => "ऑर्डर का विवरण";
 
   @override
   String get distance => "दूरी";
 
   @override
-  String get parcel_details => "पार्सल विवरण";
+  String get parcelDetails => "पार्सल विवरण";
 
   @override
-  String get about_delivery_man => "डिलीवरी मैन के बारे में";
+  String get aboutDeliveryMan => "डिलीवरी मैन के बारे में";
 
   @override
-  String get about_user => "उपयोगकर्ता के बारे में";
+  String get aboutUser => "उपयोगकर्ता के बारे में";
 
   @override
-  String get return_order => "वापसी आदेश";
+  String get returnOrder => "वापसी आदेश";
 
   @override
-  String get cancel_order => "आदेश रद्द";
+  String get cancelOrder => "आदेश रद्द";
 
   @override
-  String get lbl_return => "वापसी";
+  String get lblReturn => "वापसी";
 
   @override
-  String get change_password => "पासवर्ड बदलें";
+  String get changePassword => "पासवर्ड बदलें";
 
   @override
-  String get old_password => "पुराना पासवर्ड";
+  String get oldPassword => "पुराना पासवर्ड";
 
   @override
-  String get new_password => "नया पासवर्ड";
+  String get newPassword => "नया पासवर्ड";
 
   @override
-  String get confirm_password => "पासवर्ड की पुष्टि कीजिये";
+  String get confirmPassword => "पासवर्ड की पुष्टि कीजिये";
 
   @override
-  String get password_not_match => "पासवर्ड मैच नहीं कर रहा है";
+  String get passwordNotMatch => "पासवर्ड मैच नहीं कर रहा है";
 
   @override
-  String get save_changes => "परिवर्तनों को सुरक्षित करें";
+  String get saveChanges => "परिवर्तनों को सुरक्षित करें";
 
   @override
-  String get profile_update_msg => "प्रोफाइल को सफलतापूर्वक अपडेट किया गया";
+  String get profileUpdateMsg => "प्रोफाइल को सफलतापूर्वक अपडेट किया गया";
 
   @override
-  String get edit_profile => "प्रोफ़ाइल संपादित करें";
+  String get editProfile => "प्रोफ़ाइल संपादित करें";
 
   @override
-  String get not_change_email => "आप ईमेल आईडी नहीं बदल सकते";
+  String get notChangeEmail => "आप ईमेल आईडी नहीं बदल सकते";
 
   @override
   String get username => "उपयोगकर्ता नाम";
 
   @override
-  String get not_change_username => "आप उपयोगकर्ता नाम नहीं बदल सकते";
+  String get notChangeUsername => "आप उपयोगकर्ता नाम नहीं बदल सकते";
 
   @override
-  String get forgot_password => "पासवर्ड भूल गए";
+  String get forgotPassword => "पासवर्ड भूल गए";
 
   @override
   String get email => "ईमेल";
@@ -236,34 +236,34 @@ class LanguageHi extends BaseLanguage {
   String get submit => "प्रस्तुत करना";
 
   @override
-  String get user_not_approve_msg => "आप प्रोफ़ाइल समीक्षा अधीन हैं। कुछ समय प्रतीक्षा करें या अपने व्यवस्थापक से संपर्क करें।";
+  String get userNotApproveMsg => "आप प्रोफ़ाइल समीक्षा अधीन हैं। कुछ समय प्रतीक्षा करें या अपने व्यवस्थापक से संपर्क करें।";
 
   @override
-  String get sign_in_account => "साइन इन खाता";
+  String get signInAccount => "साइन इन खाता";
 
   @override
-  String get sign_in_to_continue => "जारी रखने के लिए साइन इन करें";
+  String get signInToContinue => "जारी रखने के लिए साइन इन करें";
 
   @override
   String get password => "कुंजिका";
 
   @override
-  String get forgot_password_que => "पासवर्ड भूल गए ?";
+  String get forgotPasswordQue => "पासवर्ड भूल गए ?";
 
   @override
-  String get sign_in => "साइन इन करें";
+  String get signIn => "साइन इन करें";
 
   @override
   String get or => "या";
 
   @override
-  String get continue_with_google => "Google के साथ जारी रखें";
+  String get continueWithGoogle => "Google के साथ जारी रखें";
 
   @override
-  String get do_not_have_account => "खाता नहीं है?";
+  String get doNotHaveAccount => "खाता नहीं है?";
 
   @override
-  String get sign_up => "साइन अप करें";
+  String get signUp => "साइन अप करें";
 
   @override
   String get name => "नाम";
@@ -272,25 +272,25 @@ class LanguageHi extends BaseLanguage {
   String get notification => "अधिसूचना";
 
   @override
-  String get select_usertype_msg => "कृपया UserType का चयन करें";
+  String get selectUsertypeMsg => "कृपया UserType का चयन करें";
 
   @override
-  String get create_an_account => "खाता बनाएं";
+  String get createAnAccount => "खाता बनाएं";
 
   @override
-  String get sign_up_to_continue => "जारी रखने के लिए साइन अप करें";
+  String get signUpToContinue => "जारी रखने के लिए साइन अप करें";
 
   @override
-  String get user_type => "उपयोगकर्ता का प्रकार";
+  String get userType => "उपयोगकर्ता का प्रकार";
 
   @override
   String get client => "ग्राहक";
 
   @override
-  String get delivery_man => "डिलीवरी मैन";
+  String get deliveryMan => "डिलीवरी मैन";
 
   @override
-  String get already_have_an_account => "पहले से ही एक खाता है?";
+  String get alreadyHaveAnAccount => "पहले से ही एक खाता है?";
 
   @override
   String get light => "रोशनी";
@@ -299,7 +299,7 @@ class LanguageHi extends BaseLanguage {
   String get dark => "अंधेरा";
 
   @override
-  String get system_default => "प्रणालीगत चूक";
+  String get systemDefault => "प्रणालीगत चूक";
 
   @override
   String get theme => "विषय";
@@ -308,13 +308,13 @@ class LanguageHi extends BaseLanguage {
   String get skip => "छोड़ें";
 
   @override
-  String get get_started => "शुरू हो जाओ";
+  String get getStarted => "शुरू हो जाओ";
 
   @override
   String get profile => "प्रोफ़ाइल";
 
   @override
-  String get track_order_location => "ट्रैक ऑर्डर स्थान";
+  String get trackOrderLocation => "ट्रैक ऑर्डर स्थान";
 
   @override
   String get track => "संकरा रास्ता";
@@ -323,46 +323,46 @@ class LanguageHi extends BaseLanguage {
   String get active => "सक्रिय";
 
   @override
-  String get pick_up => "पिक अप";
+  String get pickUp => "पिक अप";
 
   @override
   String get departed => "स्वर्गवासी";
 
   @override
-  String get order_pickup_successfully => "ऑर्डर पिकअप सफलतापूर्वक";
+  String get orderPickupSuccessfully => "ऑर्डर पिकअप सफलतापूर्वक";
 
   @override
-  String get image_pick_to_camera => "कैमरा के लिए छवि तस्वीर";
+  String get imagePickToCamera => "कैमरा के लिए छवि तस्वीर";
 
   @override
-  String get image_pic_to_gallery => "गैलरी के लिए छवि तस्वीर";
+  String get imagePicToGallery => "गैलरी के लिए छवि तस्वीर";
 
   @override
-  String get order_deliver => "आदेश देना";
+  String get orderDeliver => "आदेश देना";
 
   @override
-  String get order_pickup => "आदेश पिकअप";
+  String get orderPickup => "आदेश पिकअप";
 
   @override
   String get info => "जानकारी";
 
   @override
-  String get payment_collect_from_delivery => "भुगतान डिलीवरी पर फॉर्म ले लीजिए";
+  String get paymentCollectFromDelivery => "भुगतान डिलीवरी पर फॉर्म ले लीजिए";
 
   @override
-  String get payment_collect_from_pickup => "पिकअप पर भुगतान एकत्रित फॉर्म";
+  String get paymentCollectFromPickup => "पिकअप पर भुगतान एकत्रित फॉर्म";
 
   @override
-  String get pickup_datetime => "पिकअप डेटाटाइम";
+  String get pickupDatetime => "पिकअप डेटाटाइम";
 
   @override
   String get hour => "घंटा";
 
   @override
-  String get delivery_datetime => "डिलिवरी डेटटाइम";
+  String get deliveryDatetime => "डिलिवरी डेटटाइम";
 
   @override
-  String get pickup_time_signature => "पिकअप समय हस्ताक्षर";
+  String get pickupTimeSignature => "पिकअप समय हस्ताक्षर";
 
   @override
   String get save => "सहेजें";
@@ -371,43 +371,43 @@ class LanguageHi extends BaseLanguage {
   String get clear => "स्पष्ट";
 
   @override
-  String get delivery_time_signature => "वितरण समय हस्ताक्षर";
+  String get deliveryTimeSignature => "वितरण समय हस्ताक्षर";
 
   @override
   String get reason => "कारण";
 
   @override
-  String get pickup_delivery => "पिकप डिलीवरी";
+  String get pickupDelivery => "पिकप डिलीवरी";
 
   @override
-  String get select_pickup_time_msg => "कृपया पिक अप टाइम चुनें";
+  String get selectPickupTimeMsg => "कृपया पिक अप टाइम चुनें";
 
   @override
-  String get select_delivery_time_msg => "कृपया प्रसव के समय का चयन करें";
+  String get selectDeliveryTimeMsg => "कृपया प्रसव के समय का चयन करें";
 
   @override
-  String get select_pickup_sign_msg => "कृपया पिकअप हस्ताक्षर";
+  String get selectPickupSignMsg => "कृपया पिकअप हस्ताक्षर";
 
   @override
-  String get select_delivery_sign_msg => "कृपया वितरण हस्ताक्षर";
+  String get selectDeliverySignMsg => "कृपया वितरण हस्ताक्षर";
 
   @override
-  String get select_reason_msg => "कृपया कारण चुनें";
+  String get selectReasonMsg => "कृपया कारण चुनें";
 
   @override
-  String get order_cancelled_successfully => "ऑर्डर रद्द कर दिया गया";
+  String get orderCancelledSuccessfully => "ऑर्डर रद्द कर दिया गया";
 
   @override
-  String get collect_payment_confirmation_msg => "क्या आप निश्चित रूप से इस भुगतान को इकट्ठा कर रहे हैं?";
+  String get collectPaymentConfirmationMsg => "क्या आप निश्चित रूप से इस भुगतान को इकट्ठा कर रहे हैं?";
 
   @override
-  String get tracking_order => "ट्रैकिंग आदेश";
+  String get trackingOrder => "ट्रैकिंग आदेश";
 
   @override
   String get assign => "असाइन";
 
   @override
-  String get picked_up => "उठाया";
+  String get pickedUp => "उठाया";
 
   @override
   String get arrived => "पहुंच गए";
@@ -419,25 +419,25 @@ class LanguageHi extends BaseLanguage {
   String get cancelled => "रद्द";
 
   @override
-  String get allow_location_permission => "स्थान अनुमति दें";
+  String get allowLocationPermission => "स्थान अनुमति दें";
 
   @override
-  String get walk_through1_title => "पिकअप स्थान का चयन करें";
+  String get walkThrough1Title => "पिकअप स्थान का चयन करें";
 
   @override
-  String get walk_through2_title => "ड्रॉप स्थान का चयन करें";
+  String get walkThrough2Title => "ड्रॉप स्थान का चयन करें";
 
   @override
-  String get walk_through3_title => "पुष्टि करें और आराम करें";
+  String get walkThrough3Title => "पुष्टि करें और आराम करें";
 
   @override
-  String get walk_through1_subtitle => "यह हमें आपके दरवाजे से पैकेज प्राप्त करने में मदद करता है।";
+  String get walkThrough1Subtitle => "यह हमें आपके दरवाजे से पैकेज प्राप्त करने में मदद करता है।";
 
   @override
-  String get walk_through2_subtitle => "ताकि हम पैकेज को सही व्यक्ति को जल्दी से वितरित कर सकें।";
+  String get walkThrough2Subtitle => "ताकि हम पैकेज को सही व्यक्ति को जल्दी से वितरित कर सकें।";
 
   @override
-  String get walk_through3_subtitle => "हम आपके पैकेज को समय पर और सही स्थिति में वितरित करेंगे।";
+  String get walkThrough3Subtitle => "हम आपके पैकेज को समय पर और सही स्थिति में वितरित करेंगे।";
 
   @override
   String get order => "आदेश";
@@ -449,89 +449,89 @@ class LanguageHi extends BaseLanguage {
   String get drafts => "ड्राफ्ट";
 
   @override
-  String get about_us => "हमारे बारे में";
+  String get aboutUs => "हमारे बारे में";
 
   @override
-  String get help_and_support => "मदद समर्थन";
+  String get helpAndSupport => "मदद समर्थन";
 
   @override
   String get logout => "लॉग आउट";
 
   @override
-  String get change_location => "स्थान बदलें";
+  String get changeLocation => "स्थान बदलें";
 
   @override
-  String get select_city => "शहर चुनें";
+  String get selectCity => "शहर चुनें";
 
   @override
   String get next => "अगला";
 
   @override
-  String get field_required_msg => "यह फ़ील्ड आवश्यक है";
+  String get fieldRequiredMsg => "यह फ़ील्ड आवश्यक है";
 
   @override
-  String get email_invalid => "ईमेल अमान्य है";
+  String get emailInvalid => "ईमेल अमान्य है";
 
   @override
-  String get password_invalid => "न्यूनतम पासवर्ड की लंबाई 6 होनी चाहिए";
+  String get passwordInvalid => "न्यूनतम पासवर्ड की लंबाई 6 होनी चाहिए";
 
   @override
-  String get username_invalid => "उपयोगकर्ता नाम में स्थान नहीं होना चाहिए";
+  String get usernameInvalid => "उपयोगकर्ता नाम में स्थान नहीं होना चाहिए";
 
   @override
-  String get write_reason_here => "यहां कारण लिखें ... '";
+  String get writeReasonHere => "यहां कारण लिखें ... '";
 
   @override
-  String get are_you_sure_want_to_arrive => "क्या आप वाकई पहुंचना चाहते हैं?";
+  String get areYouSureWantToArrive => "क्या आप वाकई पहुंचना चाहते हैं?";
 
   @override
   String get note => "ध्यान दें:";
 
   @override
-  String get courier_will_pickup_at => "कूरियर पर पिकअप होगा";
+  String get courierWillPickupAt => "कूरियर पर पिकअप होगा";
 
   @override
-  String get courier_will_deliver_at => "कूरियर पर पहुंचा देगा";
+  String get courierWillDeliverAt => "कूरियर पर पहुंचा देगा";
 
   @override
-  String get confirm_delivery => "डिलिवरी की पुष्टि";
+  String get confirmDelivery => "डिलिवरी की पुष्टि";
 
   @override
-  String get order_assign_confirmation => "क्या आप वाकई इस आदेश को सक्रिय करना चाहते हैं?";
+  String get orderAssignConfirmation => "क्या आप वाकई इस आदेश को सक्रिय करना चाहते हैं?";
 
   @override
-  String get order_pickup_confirmation => "क्या आप वाकई इस आदेश को चुनना चाहते हैं?";
+  String get orderPickupConfirmation => "क्या आप वाकई इस आदेश को चुनना चाहते हैं?";
 
   @override
-  String get order_departed_confirmation => "क्या आप वाकई इस आदेश को छोड़ना चाहते हैं?";
+  String get orderDepartedConfirmation => "क्या आप वाकई इस आदेश को छोड़ना चाहते हैं?";
 
   @override
-  String get order_create_confirmation => "क्या आप वाकई इस आदेश को बनाना चाहते हैं?";
+  String get orderCreateConfirmation => "क्या आप वाकई इस आदेश को बनाना चाहते हैं?";
 
   @override
-  String get order_complete_confirmation => "क्या आप वाकई इस आदेश को पूरा करना चाहते हैं?";
+  String get orderCompleteConfirmation => "क्या आप वाकई इस आदेश को पूरा करना चाहते हैं?";
 
   @override
-  String get order_cancel_confirmation => "क्या आप वाकई इस आदेश को रद्द करना चाहते हैं?";
+  String get orderCancelConfirmation => "क्या आप वाकई इस आदेश को रद्द करना चाहते हैं?";
 
   @override
   String get id => "पहचान";
 
   @override
-  String get contact_number_validation => "संपर्क संख्या में 15 अंकों से अधिक नहीं हो सकते। '";
+  String get contactNumberValidation => "संपर्क संख्या में 10 अंकों से अधिक नहीं हो सकते हैं।";
 
   @override
-  String get remember_me => "मुझे याद रखें";
+  String get rememberMe => "मुझे याद रखें";
 
   @override
-  String get become_a_delivery_boy => "एक डिलीवरी लड़का बनें";
+  String get becomeADeliveryBoy => "एक डिलीवरी लड़का बनें";
 
   @override
-  String get order_history => "आदेश इतिहास";
+  String get orderHistory => "आदेश इतिहास";
 
   @override
   String get no => "नहीं";
 
   @override
-  String get confirm_Pickup => "पिकअप की पुष्टि करें";
+  String get confirmPickup => "पिकअप की पुष्टि करें";
 }

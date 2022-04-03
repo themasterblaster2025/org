@@ -26,56 +26,56 @@ class CountryListModel {
 }
 
 class CountryModel {
-  String? created_at;
-  String? deleted_at;
-  String? distance_type;
+  String? createdAt;
+  String? deletedAt;
+  String? distanceType;
   int? id;
   var links;
   String? name;
   int? status;
-  String? updated_at;
-  String? weight_type;
+  String? updatedAt;
+  String? weightType;
   String? code;
 
   CountryModel({
-    this.created_at,
-    this.deleted_at,
-    this.distance_type,
+    this.createdAt,
+    this.deletedAt,
+    this.distanceType,
     this.id,
     this.links,
     this.name,
     this.status,
-    this.updated_at,
-    this.weight_type,
+    this.updatedAt,
+    this.weightType,
     this.code,
   });
 
   factory CountryModel.fromJson(Map<String, dynamic> json) {
     return CountryModel(
-      created_at: json['created_at'],
-      deleted_at: json['deleted_at'],
-      distance_type: json['distance_type'],
+      createdAt: json['created_at'],
+      deletedAt: json['deleted_at'],
+      distanceType: json['distance_type'],
       id: json['id'],
       links: json['links'],
       name: json['name'],
       status: json['status'],
-      updated_at: json['updated_at'],
-      weight_type: json['weight_type'],
+      updatedAt: json['updated_at'],
+      weightType: json['weight_type'],
       code: json['code'],
     );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['created_at'] = this.created_at;
-    data['deleted_at'] = this.deleted_at;
-    data['distance_type'] = this.distance_type;
+    data['created_at'] = this.createdAt;
+    data['deleted_at'] = this.deletedAt;
+    data['distance_type'] = this.distanceType;
     data['id'] = this.id;
     data['links'] = this.links;
     data['name'] = this.name;
     data['status'] = this.status;
-    data['updated_at'] = this.updated_at;
-    data['weight_type'] = this.weight_type;
+    data['updated_at'] = this.updatedAt;
+    data['weight_type'] = this.weightType;
     data['code'] = this.code;
     return data;
   }

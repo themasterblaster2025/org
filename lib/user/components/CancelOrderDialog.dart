@@ -49,7 +49,7 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
       appStore.setLoading(false);
       finish(context);
       widget.onUpdate!.call();
-      toast(language.order_cancelled_successfully);
+      toast(language.orderCancelledSuccessfully);
     }).catchError((error) {
       appStore.setLoading(false);
 
@@ -78,7 +78,7 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(language.cancel_order, style: boldTextStyle(size: 18)),
+                    Text(language.cancelOrder, style: boldTextStyle(size: 18)),
                     CloseButton(),
                   ],
                 ),
@@ -100,18 +100,20 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
                     setState(() {});
                   },
                   validator: (value) {
-                    if(value==null) return language.field_required_msg;
+                    if(value==null) return language.fieldRequiredMsg;
+                    return null;
                   },
                 ),
                 16.height,
                 AppTextField(
                   controller: reasonController,
                   textFieldType: TextFieldType.OTHER,
-                  decoration: commonInputDecoration(hintText: language.write_reason_here),
+                  decoration: commonInputDecoration(hintText: language.writeReasonHere),
                   maxLines: 3,
                   minLines: 3,
                   validator: (value) {
-                    if (value!.isEmpty) return language.field_required_msg;
+                    if (value!.isEmpty) return language.fieldRequiredMsg;
+                    return null;
                   },
                 ).visible(reason == 'Other'),
                 16.height,

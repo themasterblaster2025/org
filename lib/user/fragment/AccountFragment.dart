@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mighty_delivery/main.dart';
-import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/screens/ChangePasswordScreen.dart';
 import 'package:mighty_delivery/main/screens/EditProfileScreen.dart';
@@ -10,7 +9,6 @@ import 'package:mighty_delivery/main/screens/ThemeScreen.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
-import 'package:mighty_delivery/main/utils/DataProviders.dart';
 import 'package:mighty_delivery/user/screens/DraftOrderListScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -59,10 +57,10 @@ class AccountFragmentState extends State<AccountFragment> {
                 settingItemWidget(Icons.drafts, language.drafts, () {
                   DraftOrderListScreen().launch(context);
                 }),
-                settingItemWidget(Icons.person_outline, language.edit_profile, () {
+                settingItemWidget(Icons.person_outline, language.editProfile, () {
                   EditProfileScreen().launch(context);
                 }),
-                settingItemWidget(Icons.lock_outline, language.change_password, () {
+                settingItemWidget(Icons.lock_outline, language.changePassword, () {
                   ChangePasswordScreen().launch(context);
                 }),
                 settingItemWidget(Icons.language, language.language, () {
@@ -71,10 +69,10 @@ class AccountFragmentState extends State<AccountFragment> {
                 settingItemWidget(Icons.wb_sunny_outlined, language.theme, () {
                   ThemeScreen().launch(context);
                 }),
-                settingItemWidget(Icons.info_outline, language.about_us, () {
+                settingItemWidget(Icons.info_outline, language.aboutUs, () {
                   launch('https://www.google.com/');
                 }),
-                settingItemWidget(Icons.help_outline, language.help_and_support, () {
+                settingItemWidget(Icons.help_outline, language.helpAndSupport, () {
                   launch('https://www.google.com/');
                 }),
                 settingItemWidget(
@@ -84,7 +82,7 @@ class AccountFragmentState extends State<AccountFragment> {
                     await showConfirmDialogCustom(
                       context,
                       primaryColor: colorPrimary,
-                      title: language.logout_confirmation_msg,
+                      title: language.logoutConfirmationMsg,
                       positiveText: language.yes,
                       negativeText: language.cancel,
                       onAccept: (c) {

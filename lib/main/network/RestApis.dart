@@ -42,14 +42,14 @@ Future<LoginResponse> signUpApi(Map request) async {
     await setValue(USER_ID, loginResponse.data!.id.validate());
     await setValue(NAME, loginResponse.data!.name.validate());
     await setValue(USER_EMAIL, loginResponse.data!.email.validate());
-    await setValue(USER_TOKEN, loginResponse.data!.api_token.validate());
-    await setValue(USER_CONTACT_NUMBER, loginResponse.data!.contact_number.validate());
-    await setValue(USER_PROFILE_PHOTO, loginResponse.data!.profile_image.validate());
-    await setValue(USER_TYPE, loginResponse.data!.user_type.validate());
+    await setValue(USER_TOKEN, loginResponse.data!.apiToken.validate());
+    await setValue(USER_CONTACT_NUMBER, loginResponse.data!.contactNumber.validate());
+    await setValue(USER_PROFILE_PHOTO, loginResponse.data!.profileImage.validate());
+    await setValue(USER_TYPE, loginResponse.data!.userType.validate());
     await setValue(USER_NAME, loginResponse.data!.username.validate());
     await setValue(USER_ADDRESS, loginResponse.data!.address.validate());
-    await setValue(COUNTRY_ID, loginResponse.data!.country_id.validate());
-    await setValue(CITY_ID, loginResponse.data!.city_id.validate());
+    await setValue(COUNTRY_ID, loginResponse.data!.countryId.validate());
+    await setValue(CITY_ID, loginResponse.data!.cityId.validate());
 
     await appStore.setUserEmail(loginResponse.data!.email.validate());
     await appStore.setLogin(true);
@@ -94,15 +94,15 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
     await setValue(USER_ID, loginResponse.data!.id.validate());
     await setValue(NAME, loginResponse.data!.name.validate());
     await setValue(USER_EMAIL, loginResponse.data!.email.validate());
-    await setValue(USER_TOKEN, loginResponse.data!.api_token.validate());
-    await setValue(USER_CONTACT_NUMBER, loginResponse.data!.contact_number.validate());
-    await setValue(USER_PROFILE_PHOTO, loginResponse.data!.profile_image.validate());
-    await setValue(USER_TYPE, loginResponse.data!.user_type.validate());
+    await setValue(USER_TOKEN, loginResponse.data!.apiToken.validate());
+    await setValue(USER_CONTACT_NUMBER, loginResponse.data!.contactNumber.validate());
+    await setValue(USER_PROFILE_PHOTO, loginResponse.data!.profileImage.validate());
+    await setValue(USER_TYPE, loginResponse.data!.userType.validate());
     await setValue(USER_NAME, loginResponse.data!.username.validate());
     await setValue(STATUS, loginResponse.data!.status.validate());
     await setValue(USER_ADDRESS, loginResponse.data!.address.validate());
-    await setValue(COUNTRY_ID, loginResponse.data!.country_id.validate());
-    await setValue(CITY_ID, loginResponse.data!.city_id.validate());
+    await setValue(COUNTRY_ID, loginResponse.data!.countryId.validate());
+    await setValue(CITY_ID, loginResponse.data!.cityId.validate());
 
     /* await appStore.setUserName(loginResponse.userData!.username.validate());
     await appStore.setRole(loginResponse.userData!.user_type.validate());
@@ -188,10 +188,10 @@ Future updateProfile({String? userName, String? name, String? userEmail, String?
       LoginResponse res = LoginResponse.fromJson(data);
 
       await setValue(NAME, res.data!.name.validate());
-      await setValue(USER_PROFILE_PHOTO, res.data!.profile_image.validate());
+      await setValue(USER_PROFILE_PHOTO, res.data!.profileImage.validate());
       await setValue(USER_NAME, res.data!.username.validate());
       await setValue(USER_ADDRESS, res.data!.address.validate());
-      await setValue(USER_CONTACT_NUMBER, res.data!.contact_number.validate());
+      await setValue(USER_CONTACT_NUMBER, res.data!.contactNumber.validate());
       await appStore.setUserEmail(res.data!.email.validate());
     }
   }, onError: (error) {
@@ -230,9 +230,9 @@ Future<CountryDetailModel> getCountryDetail(int id) async {
   return CountryDetailModel.fromJson(await handleResponse(await buildHttpResponse('country-detail?id=$id', method: HttpMethod.GET)));
 }
 
-Future<CityListModel> getCityList({required int CountryId, String? name}) async {
+Future<CityListModel> getCityList({required int countryId, String? name}) async {
   return CityListModel.fromJson(
-      await handleResponse(await buildHttpResponse(name != null ? 'city-list?country_id=$CountryId&name=$name&per_page=-1' : 'city-list?country_id=$CountryId&per_page=-1', method: HttpMethod.GET)));
+      await handleResponse(await buildHttpResponse(name != null ? 'city-list?country_id=$countryId&name=$name&per_page=-1' : 'city-list?country_id=$countryId&per_page=-1', method: HttpMethod.GET)));
 }
 
 Future<CityDetailModel> getCityDetail(int id) async {
@@ -249,8 +249,8 @@ Future updateCountryCity({int? countryId, int? cityId}) async {
     if (data != null) {
       LoginResponse res = LoginResponse.fromJson(data);
 
-      await setValue(COUNTRY_ID, res.data!.country_id.validate());
-      await setValue(CITY_ID, res.data!.city_id.validate());
+      await setValue(COUNTRY_ID, res.data!.countryId.validate());
+      await setValue(CITY_ID, res.data!.cityId.validate());
     }
   }, onError: (error) {
     toast(error.toString());

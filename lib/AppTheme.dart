@@ -11,7 +11,6 @@ class AppTheme {
     primarySwatch: createMaterialColor(colorPrimary),
     primaryColor: colorPrimary,
     scaffoldBackgroundColor: Colors.white,
-    accentColor: colorPrimary,
     //fontFamily: GoogleFonts.rajdhani().fontFamily,
     iconTheme: IconThemeData(color: colorPrimary),
     dialogBackgroundColor: Colors.white,
@@ -21,7 +20,6 @@ class AppTheme {
     tabBarTheme: TabBarTheme(labelColor: Colors.black),
     appBarTheme: AppBarTheme(
       color: colorPrimary,
-      brightness: Brightness.light,
       elevation: 0,
       systemOverlayStyle: SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light, statusBarColor: colorPrimary),
     ),
@@ -44,7 +42,6 @@ class AppTheme {
     primarySwatch: createMaterialColor(colorPrimary),
     primaryColor: colorPrimary,
     scaffoldBackgroundColor: scaffoldColorDark,
-    accentColor: colorPrimary,
     //fontFamily: GoogleFonts.rajdhani().fontFamily,
     iconTheme: IconThemeData(color: Colors.white),
     dialogBackgroundColor: scaffoldSecondaryDark,
@@ -54,7 +51,6 @@ class AppTheme {
     tabBarTheme: TabBarTheme(labelColor: Colors.white),
     appBarTheme: AppBarTheme(
       color: scaffoldSecondaryDark,
-      brightness: Brightness.dark,
       elevation: 0,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarIconBrightness: Brightness.light,

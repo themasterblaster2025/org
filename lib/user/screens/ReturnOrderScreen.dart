@@ -69,7 +69,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
         widget.orderData.deliveryPoint!.startTime = null;
         widget.orderData.deliveryPoint!.endTime = null;
       }
-      if (difference.inMinutes > 0) return toast(language.pickup_deliver_validation_msg);
+      if (difference.inMinutes > 0) return toast(language.pickupDeliverValidationMsg);
       Map req = {
         "client_id": widget.orderData.clientId!,
         "date": DateTime.now().toString(),
@@ -109,7 +109,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(language.return_order)),
+      appBar: AppBar(title: Text(language.returnOrder)),
       body: BodyCornerWidget(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(16),
@@ -120,7 +120,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
               children: [
                 Row(
                   children: [
-                    scheduleOptionWidget(context,isDeliverNow, 'assets/icons/ic_clock.png', language.delivery_now).onTap(() {
+                    scheduleOptionWidget(context,isDeliverNow, 'assets/icons/ic_clock.png', language.deliveryNow).onTap(() {
                       isDeliverNow = true;
                       setState(() {});
                     }).expand(),
@@ -135,7 +135,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(language.pick_time, style: primaryTextStyle()),
+                    Text(language.pickTime, style: primaryTextStyle()),
                     16.height,
                     Container(
                       padding: EdgeInsets.all(16),
@@ -155,6 +155,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                             },
                             validator: (value) {
                               if (value!.isEmpty) return errorThisFieldRequired;
+                              return null;
                             },
                             decoration: commonInputDecoration(suffixIcon: Icons.calendar_today),
                           ),
@@ -171,6 +172,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                                 },
                                 validator: (value) {
                                   if (value.validate().isEmpty) return errorThisFieldRequired;
+                                  return null;
                                 },
                                 decoration: commonInputDecoration(suffixIcon: Icons.access_time),
                               ).expand(flex: 2),
@@ -194,8 +196,9 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                                   double difference = toTimeInHour - fromTimeInHour;
                                   print(difference);
                                   if(difference<=0){
-                                    return language.end_time_validation_msg;
+                                    return language.endTimeValidationMsg;
                                   }
+                                  return null;
                                 },
                                 decoration: commonInputDecoration(suffixIcon: Icons.access_time),
                               ).expand(flex: 2),
@@ -205,7 +208,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                       ),
                     ),
                     16.height,
-                    Text(language.deliver_time, style: primaryTextStyle()),
+                    Text(language.deliverTime, style: primaryTextStyle()),
                     16.height,
                     Container(
                       padding: EdgeInsets.all(16),
@@ -225,6 +228,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                             },
                             validator: (value) {
                               if (value!.isEmpty) return errorThisFieldRequired;
+                              return null;
                             },
                             decoration: commonInputDecoration(suffixIcon: Icons.calendar_today),
                           ),
@@ -241,6 +245,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                                 },
                                 validator: (value) {
                                   if (value.validate().isEmpty) return errorThisFieldRequired;
+                                  return null;
                                 },
                                 decoration: commonInputDecoration(suffixIcon: Icons.access_time),
                               ).expand(flex: 2),
@@ -263,8 +268,9 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                                   double toTimeInHour = deliverToTime!.hour + deliverToTime!.minute/60;
                                   double difference = toTimeInHour - fromTimeInHour;
                                   if(difference<0){
-                                    return language.end_time_validation_msg;
+                                    return language.endTimeValidationMsg;
                                   }
+                                  return null;
                                 },
                                 decoration: commonInputDecoration(suffixIcon: Icons.access_time),
                               ).expand(flex: 2),
@@ -289,12 +295,12 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                 16.height,
                 Row(
                   children: [
-                    scheduleOptionWidget(context,isCashPayment, 'assets/icons/ic_cash.png', language.cash_payment).onTap(() {
+                    scheduleOptionWidget(context,isCashPayment, 'assets/icons/ic_cash.png', language.cashPayment).onTap(() {
                       isCashPayment = true;
                       setState(() {});
                     }).expand(),
                     16.width,
-                    scheduleOptionWidget(context,!isCashPayment, 'assets/icons/ic_credit_card.png', language.online_payment).onTap(() {
+                    scheduleOptionWidget(context,!isCashPayment, 'assets/icons/ic_credit_card.png', language.onlinePayment).onTap(() {
                       isCashPayment = false;
                       setState(() {});
                     }).expand(),
@@ -304,7 +310,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(language.payment_collect_from, style: boldTextStyle()),
+                    Text(language.paymentCollectFrom, style: boldTextStyle()),
                     SizedBox(
                       width: 150,
                       child: DropdownButtonFormField<String>(
@@ -329,7 +335,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(16),
-        child: commonButton(language.lbl_return, () {
+        child: commonButton(language.lblReturn, () {
           createOrderApiCall();
         }),
       ),

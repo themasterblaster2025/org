@@ -23,7 +23,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class DashboardScreenState extends State<DashboardScreen> {
-  List<BottomNavigationBarItemModel> BottomNavBarItems = [];
+  List<BottomNavigationBarItemModel> bottomNavBarItems = [];
   int currentIndex = 0;
 
   @override
@@ -33,8 +33,8 @@ class DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> init() async {
-    BottomNavBarItems.add(BottomNavigationBarItemModel(icon: Icons.shopping_bag, title: language.order));
-    BottomNavBarItems.add(BottomNavigationBarItemModel(icon: Icons.person, title: language.account));
+    bottomNavBarItems.add(BottomNavigationBarItemModel(icon: Icons.shopping_bag, title: language.order));
+    bottomNavBarItems.add(BottomNavigationBarItemModel(icon: Icons.person, title: language.account));
     LiveStream().on('UpdateLanguage', (p0) {
       setState(() {});
     });

@@ -93,9 +93,9 @@ const flutterWaveEncryptionKey = 'FLWSECK_TEST8497cc2db86c';
 const payStackPublicKey = 'pk_test_c46ddf9def17e34152daa1b6e2eb940dedea41f0';*/
 
 class AppThemeMode {
-  final int ThemeModeLight = 1;
-  final int ThemeModeDark = 2;
-  final int ThemeModeSystem = 0;
+  final int themeModeLight = 1;
+  final int themeModeDark = 2;
+  final int themeModeSystem = 0;
 }
 
 AppThemeMode appThemeMode = AppThemeMode();

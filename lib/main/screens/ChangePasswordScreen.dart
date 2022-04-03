@@ -3,7 +3,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -71,7 +70,7 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(language.change_password)),
+      appBar: AppBar(title: Text(language.changePassword)),
       body: Stack(
         children: [
           Form(
@@ -82,7 +81,7 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(language.old_password, style: primaryTextStyle()),
+                    Text(language.oldPassword, style: primaryTextStyle()),
                     8.height,
                     AppTextField(
                       controller: oldPassController,
@@ -90,11 +89,11 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       focus: oldPassFocus,
                       nextFocus: newPassFocus,
                       decoration: commonInputDecoration(),
-                      errorThisFieldRequired: language.field_required_msg,
-                      errorMinimumPasswordLength: language.password_invalid,
+                      errorThisFieldRequired: language.fieldRequiredMsg,
+                      errorMinimumPasswordLength: language.passwordInvalid,
                     ),
                     16.height,
-                    Text(language.new_password, style: primaryTextStyle()),
+                    Text(language.newPassword, style: primaryTextStyle()),
                     8.height,
                     AppTextField(
                       controller: newPassController,
@@ -102,22 +101,23 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       focus: newPassFocus,
                       nextFocus: confirmPassFocus,
                       decoration: commonInputDecoration(),
-                      errorThisFieldRequired: language.field_required_msg,
-                      errorMinimumPasswordLength: language.password_invalid,
+                      errorThisFieldRequired: language.fieldRequiredMsg,
+                      errorMinimumPasswordLength: language.passwordInvalid,
                     ),
                     16.height,
-                    Text(language.confirm_password, style: primaryTextStyle()),
+                    Text(language.confirmPassword, style: primaryTextStyle()),
                     8.height,
                     AppTextField(
                       controller: confirmPassController,
                       textFieldType: TextFieldType.PASSWORD,
                       focus: confirmPassFocus,
                       decoration: commonInputDecoration(),
-                      errorThisFieldRequired: language.field_required_msg,
-                      errorMinimumPasswordLength: language.password_invalid,
+                      errorThisFieldRequired: language.fieldRequiredMsg,
+                      errorMinimumPasswordLength: language.passwordInvalid,
                       validator: (val) {
-                        if (val!.isEmpty) return language.field_required_msg;
-                        if (val != newPassController.text) return language.password_not_match;
+                        if (val!.isEmpty) return language.fieldRequiredMsg;
+                        if (val != newPassController.text) return language.passwordNotMatch;
+                        return null;
                       },
                     ),
                   ],
@@ -130,7 +130,7 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(16),
-        child: commonButton(language.save_changes, () {
+        child: commonButton(language.saveChanges, () {
           submit();
         }),
       ),

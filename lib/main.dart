@@ -60,9 +60,9 @@ void main() async {
   print(appStore.selectedLanguage);
 
   int themeModeIndex = getIntAsync(THEME_MODE_INDEX);
-  if (themeModeIndex == appThemeMode.ThemeModeLight) {
+  if (themeModeIndex == appThemeMode.themeModeLight) {
     appStore.setDarkMode(false);
-  } else if (themeModeIndex == appThemeMode.ThemeModeDark) {
+  } else if (themeModeIndex == appThemeMode.themeModeDark) {
     appStore.setDarkMode(true);
   }
 
@@ -85,7 +85,7 @@ class MyApp extends StatelessWidget {
             child: child!,
           );
         },
-        title: language.app_name,
+        title: language.appName,
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,

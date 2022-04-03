@@ -1,12 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/models/models.dart';
-import 'package:mighty_delivery/main/screens/ChangePasswordScreen.dart';
-import 'package:mighty_delivery/main/screens/EditProfileScreen.dart';
-import 'package:mighty_delivery/main/screens/LanguageScreen.dart';
-import 'package:mighty_delivery/main/screens/ThemeScreen.dart';
-import 'package:mighty_delivery/main/utils/Constants.dart';
-import 'package:mighty_delivery/main/components/UserCitySelectScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 List<LanguageDataModel> languageList() {
@@ -19,9 +12,9 @@ List<LanguageDataModel> languageList() {
 
 List<WalkThroughItemModel> getWalkThroughItems() {
   List<WalkThroughItemModel> list = [];
-  list.add(WalkThroughItemModel(image: 'assets/walk_through1.png', title: language.walk_through1_title, subTitle: language.walk_through1_subtitle));
-  list.add(WalkThroughItemModel(image: 'assets/walk_through2.png', title: language.walk_through2_title, subTitle: language.walk_through2_subtitle));
-  list.add(WalkThroughItemModel(image: 'assets/walk_through3.png', title: language.walk_through3_title, subTitle: language.walk_through3_subtitle));
+  list.add(WalkThroughItemModel(image: 'assets/walk_through1.png', title: language.walkThrough1Title, subTitle: language.walkThrough1Subtitle));
+  list.add(WalkThroughItemModel(image: 'assets/walk_through2.png', title: language.walkThrough2Title, subTitle: language.walkThrough2Subtitle));
+  list.add(WalkThroughItemModel(image: 'assets/walk_through3.png', title: language.walkThrough3Title, subTitle: language.walkThrough3Subtitle));
   return list;
 }
 

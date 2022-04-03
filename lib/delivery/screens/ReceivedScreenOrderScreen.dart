@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
@@ -93,7 +92,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
     ).then((value) {
       appStore.setLoading(false);
 
-      toast(language.order_pickup_successfully);
+      toast(language.orderPickupSuccessfully);
       finish(context, true);
     }).catchError((error) {
       appStore.setLoading(false);
@@ -112,7 +111,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
             children: [
               AppButton(
                 color: colorPrimary,
-                text: language.image_pick_to_camera,
+                text: language.imagePickToCamera,
                 textStyle: primaryTextStyle(color: white),
                 onTap: () {
                   val = 1;
@@ -123,7 +122,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
               16.height,
               AppButton(
                 color: colorPrimary,
-                text: language.image_pic_to_gallery,
+                text: language.imagePicToGallery,
                 textStyle: primaryTextStyle(color: white),
                 onTap: () {
                   val = 2;
@@ -156,7 +155,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.orderData!.status == ORDER_DEPARTED ? language.order_deliver : language.order_pickup),
+        title: Text(widget.orderData!.status == ORDER_DEPARTED ? language.orderDeliver : language.orderPickup),
         leading: IconButton(
           onPressed: () {
             finish(context, false);
@@ -199,8 +198,8 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                                 Text(language.info, style: boldTextStyle()),
                                 4.height,
                                 widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY
-                                    ? Text(language.payment_collect_from_delivery, style: secondaryTextStyle())
-                                    : Text(language.payment_collect_from_pickup, style: secondaryTextStyle()),
+                                    ? Text(language.paymentCollectFromDelivery, style: secondaryTextStyle())
+                                    : Text(language.paymentCollectFromPickup, style: secondaryTextStyle()),
                               ],
                             ).paddingAll(8),
                           ],
@@ -209,7 +208,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                     16.height,
 
                     /// change language
-                    Text('Order ${language.pickup_datetime}', style: boldTextStyle()),
+                    Text('Order ${language.pickupDatetime}', style: boldTextStyle()),
                     8.height,
                     AppTextField(
                       readOnly: true,
@@ -222,7 +221,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(language.delivery_datetime, style: boldTextStyle()),
+                          Text(language.deliveryDatetime, style: boldTextStyle()),
                           8.height,
                           AppTextField(
                             readOnly: true,
@@ -282,7 +281,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                           ],
                         ),
                       ),
-                    Text(language.delivery_time_signature, style: boldTextStyle()).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
+                    Text(language.deliveryTimeSignature, style: boldTextStyle()).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
                     8.height.visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
                     if (widget.orderData!.status == ORDER_DEPARTED)
                       Container(
@@ -335,13 +334,13 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                           width: context.width(),
 
                           /// ToDo change language
-                          text: widget.orderData!.status == ORDER_DEPARTED ? language.confirm_delivery : language.confirm_Pickup,
+                          text: widget.orderData!.status == ORDER_DEPARTED ? language.confirmDelivery : language.confirmPickup,
                           textStyle: primaryTextStyle(color: white),
                           color: colorPrimary,
                           onTap: () async {
                             if (widget.orderData!.status == ORDER_DEPARTED) {
                               if (deliveryDateController.text.isEmpty) {
-                                return toast(language.select_delivery_time_msg);
+                                return toast(language.selectDeliveryTimeMsg);
                               }
                             }
 
@@ -387,7 +386,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                         16.width,
                         AppButton(
                           width: context.width(),
-                          text: language.cancel_order,
+                          text: language.cancelOrder,
                           textStyle: primaryTextStyle(color: white),
                           color: colorPrimary,
                           onTap: () async {

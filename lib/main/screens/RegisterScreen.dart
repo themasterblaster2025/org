@@ -110,9 +110,9 @@ class RegisterScreenState extends State<RegisterScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         30.height,
-                        Text(language.create_an_account, style: boldTextStyle(size: headingSize)),
+                        Text(language.createAnAccount, style: boldTextStyle(size: headingSize)),
                         8.height,
-                        Text(language.sign_up_to_continue, style: secondaryTextStyle(size: 16)),
+                        Text(language.signUpToContinue, style: secondaryTextStyle(size: 16)),
                         30.height,
                         Text(language.name, style: primaryTextStyle()),
                         8.height,
@@ -122,7 +122,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           focus: nameFocus,
                           nextFocus: userNameFocus,
                           decoration: commonInputDecoration(),
-                          errorThisFieldRequired: language.field_required_msg,
+                          errorThisFieldRequired: language.fieldRequiredMsg,
                         ),
                         16.height,
                         Text(language.username, style: primaryTextStyle()),
@@ -133,8 +133,8 @@ class RegisterScreenState extends State<RegisterScreen> {
                           focus: userNameFocus,
                           nextFocus: emailFocus,
                           decoration: commonInputDecoration(),
-                          errorThisFieldRequired: language.field_required_msg,
-                          errorInvalidUsername: language.username_invalid,
+                          errorThisFieldRequired: language.fieldRequiredMsg,
+                          errorInvalidUsername: language.usernameInvalid,
                         ),
                         16.height,
                         Text(language.email, style: primaryTextStyle()),
@@ -145,11 +145,11 @@ class RegisterScreenState extends State<RegisterScreen> {
                           focus: emailFocus,
                           nextFocus: phoneFocus,
                           decoration: commonInputDecoration(),
-                          errorThisFieldRequired: language.field_required_msg,
-                          errorInvalidEmail: language.email_invalid,
+                          errorThisFieldRequired: language.fieldRequiredMsg,
+                          errorInvalidEmail: language.emailInvalid,
                         ),
                         16.height,
-                        Text(language.contact_number, style: primaryTextStyle()),
+                        Text(language.contactNumber, style: primaryTextStyle()),
                         8.height,
                         Container(
                           height: 100,
@@ -179,9 +179,9 @@ class RegisterScreenState extends State<RegisterScreen> {
                                 decoration: commonInputDecoration(),
                                 validator: (s){
                                   if (s!.trim().isEmpty)
-                                    return language.field_required_msg;
+                                    return language.fieldRequiredMsg;
                                   if (s.trim().length > 10)
-                                    return language.contact_number_validation;
+                                    return language.contactNumberValidation;
                                   return null;
                                 },
                               ).expand(),
@@ -196,20 +196,20 @@ class RegisterScreenState extends State<RegisterScreen> {
                           textFieldType: TextFieldType.PASSWORD,
                           focus: passFocus,
                           decoration: commonInputDecoration(),
-                          errorThisFieldRequired: language.field_required_msg,
-                          errorMinimumPasswordLength: language.password_invalid,
+                          errorThisFieldRequired: language.fieldRequiredMsg,
+                          errorMinimumPasswordLength: language.passwordInvalid,
                         ),
                         30.height,
-                        commonButton(language.sign_up, () {
+                        commonButton(language.signUp, () {
                           registerApiCall();
                         }, width: context.width()),
                         16.height,
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(language.already_have_an_account, style: primaryTextStyle()),
+                            Text(language.alreadyHaveAnAccount, style: primaryTextStyle()),
                             4.width,
-                            Text(language.sign_in, style: boldTextStyle(color: colorPrimary)).onTap(() {
+                            Text(language.signIn, style: boldTextStyle(color: colorPrimary)).onTap(() {
                               finish(context);
                             }),
                           ],

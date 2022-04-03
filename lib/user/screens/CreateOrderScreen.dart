@@ -216,13 +216,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     if (mounted) super.setState(fn);
   }
 
-  Widget CreateOrderWidget1() {
+  Widget createOrderWidget1() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            scheduleOptionWidget(context, isDeliverNow, 'assets/icons/ic_clock.png', language.delivery_now).onTap(() {
+            scheduleOptionWidget(context, isDeliverNow, 'assets/icons/ic_clock.png', language.deliveryNow).onTap(() {
               isDeliverNow = true;
               setState(() {});
             }).expand(),
@@ -237,7 +237,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(language.pick_time, style: primaryTextStyle()),
+            Text(language.pickTime, style: primaryTextStyle()),
             16.height,
             Container(
               padding: EdgeInsets.all(16),
@@ -276,6 +276,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         },
                         validator: (value) {
                           if (value.validate().isEmpty) return errorThisFieldRequired;
+                          return null;
                         },
                         decoration: commonInputDecoration(suffixIcon: Icons.access_time),
                       ).expand(flex: 2),
@@ -300,8 +301,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           double difference = toTimeInHour - fromTimeInHour;
                           print(difference);
                           if (difference <= 0) {
-                            return language.end_time_validation_msg;
+                            return language.endTimeValidationMsg;
                           }
+                          return null;
                         },
                         decoration: commonInputDecoration(suffixIcon: Icons.access_time),
                       ).expand(flex: 2)
@@ -311,7 +313,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               ),
             ),
             16.height,
-            Text(language.deliver_time, style: primaryTextStyle()),
+            Text(language.deliverTime, style: primaryTextStyle()),
             16.height,
             Container(
               padding: EdgeInsets.all(16),
@@ -332,6 +334,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     },
                     validator: (value) {
                       if (value!.isEmpty) return errorThisFieldRequired;
+                      return null;
                     },
                     decoration: commonInputDecoration(suffixIcon: Icons.calendar_today),
                   ),
@@ -349,6 +352,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         },
                         validator: (value) {
                           if (value.validate().isEmpty) return errorThisFieldRequired;
+                          return null;
                         },
                         decoration: commonInputDecoration(suffixIcon: Icons.access_time),
                       ).expand(flex: 2),
@@ -372,8 +376,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           double toTimeInHour = deliverToTime!.hour + deliverToTime!.minute / 60;
                           double difference = toTimeInHour - fromTimeInHour;
                           if (difference < 0) {
-                            return language.end_time_validation_msg;
+                            return language.endTimeValidationMsg;
                           }
+                          return null;
                         },
                         decoration: commonInputDecoration(suffixIcon: Icons.access_time),
                       ).expand(flex: 2)
@@ -395,7 +400,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             items: List.generate(20, (index) {
               return DropdownMenuItem(
                 value: index + 1,
-                child: Text('${(index + 1).toString()} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weight_type}'),
+                child: Text('${(index + 1).toString()} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weightType}'),
               );
             }).toList(),
             onChanged: (value) {
@@ -403,20 +408,20 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               setState(() {});
             },
             validator: (value) {
-              if (value == null) return language.field_required_msg;
+              if (value == null) return language.fieldRequiredMsg;
               return null;
             },
           ),
         ),
         16.height,
-        Text(language.parcel_type, style: boldTextStyle()),
+        Text(language.parcelType, style: boldTextStyle()),
         8.height,
         AppTextField(
           controller: parcelTypeCont,
           textFieldType: TextFieldType.OTHER,
           decoration: commonInputDecoration(),
           validator: (value) {
-            if (value!.isEmpty) return language.field_required_msg;
+            if (value!.isEmpty) return language.fieldRequiredMsg;
             return null;
           },
         ),
@@ -448,11 +453,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     );
   }
 
-  Widget CreateOrderWidget2() {
+  Widget createOrderWidget2() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(language.pick_up_information, style: boldTextStyle()),
+        Text(language.pickupInformation, style: boldTextStyle()),
         16.height,
         Text(language.address, style: primaryTextStyle()),
         8.height,
@@ -460,10 +465,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           controller: pickAddressCont,
           textInputAction: TextInputAction.next,
           readOnly: true,
-          textFieldType: TextFieldType.ADDRESS,
+          textFieldType: TextFieldType.MULTILINE,
           decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
-            if (value!.isEmpty) return language.field_required_msg;
+            if (value!.isEmpty) return language.fieldRequiredMsg;
             return null;
           },
           onTap: () async {
@@ -476,13 +481,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           },
         ),
         16.height,
-        Text(language.contact_number, style: primaryTextStyle()),
+        Text(language.contactNumber, style: primaryTextStyle()),
         8.height,
         AppTextField(
           controller: pickPhoneCont,
           textFieldType: TextFieldType.PHONE,
           decoration: commonInputDecoration(suffixIcon: Icons.phone),
-          errorThisFieldRequired: language.field_required_msg,
+          validator: (value) {
+            if (value!.trim().isEmpty) return language.fieldRequiredMsg;
+            if (value.trim().length > 10) return language.contactNumberValidation;
+            return null;
+          },
         ),
         16.height,
         Text(language.description, style: primaryTextStyle()),
@@ -498,11 +507,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     );
   }
 
-  Widget CreateOrderWidget3() {
+  Widget createOrderWidget3() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(language.delivery_information, style: boldTextStyle()),
+        Text(language.deliveryInformation, style: boldTextStyle()),
         16.height,
         Text(language.address, style: primaryTextStyle()),
         8.height,
@@ -510,10 +519,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           controller: deliverAddressCont,
           textInputAction: TextInputAction.next,
           readOnly: true,
-          textFieldType: TextFieldType.ADDRESS,
+          textFieldType: TextFieldType.MULTILINE,
           decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
-            if (value!.isEmpty) return language.field_required_msg;
+            if (value!.isEmpty) return language.fieldRequiredMsg;
             return null;
           },
           onTap: () async {
@@ -526,14 +535,18 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           },
         ),
         16.height,
-        Text(language.contact_number, style: primaryTextStyle()),
+        Text(language.contactNumber, style: primaryTextStyle()),
         8.height,
         AppTextField(
           controller: deliverPhoneCont,
           textInputAction: TextInputAction.next,
           textFieldType: TextFieldType.PHONE,
           decoration: commonInputDecoration(suffixIcon: Icons.phone),
-          errorThisFieldRequired: language.field_required_msg,
+          validator: (value) {
+            if (value!.trim().isEmpty) return language.fieldRequiredMsg;
+            if (value.trim().length > 10) return language.contactNumberValidation;
+            return null;
+          },
         ),
         16.height,
         Text(language.description, style: primaryTextStyle()),
@@ -549,11 +562,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     );
   }
 
-  Widget CreateOrderWidget4() {
+  Widget createOrderWidget4() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(language.package_information, style: boldTextStyle()),
+        Text(language.packageInformation, style: boldTextStyle()),
         8.height,
         Container(
           padding: EdgeInsets.all(16),
@@ -568,9 +581,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(language.parcel_type, style: primaryTextStyle()),
+                  Text(language.parcelType, style: primaryTextStyle()),
                   16.width,
-                  Text(parcelTypeCont.text, style: primaryTextStyle(),maxLines: 3,textAlign: TextAlign.end,overflow: TextOverflow.ellipsis).expand(),
+                  Text(parcelTypeCont.text, style: primaryTextStyle(), maxLines: 3, textAlign: TextAlign.end, overflow: TextOverflow.ellipsis).expand(),
                 ],
               ),
               8.height,
@@ -579,7 +592,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 children: [
                   Text(language.weight, style: primaryTextStyle()),
                   16.width,
-                  Text('$selectedWeight ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weight_type}', style: primaryTextStyle()),
+                  Text('$selectedWeight ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weightType}', style: primaryTextStyle()),
                 ],
               ),
             ],
@@ -629,7 +642,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(language.delivery_charge, style: primaryTextStyle()),
+            Text(language.deliveryCharge, style: primaryTextStyle()),
             16.width,
             Text('$currencySymbol ${cityData!.fixedCharges}', style: boldTextStyle()),
           ],
@@ -638,9 +651,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           children: [
             8.height,
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(language.distance_charge, style: primaryTextStyle()),
+                Text(language.distanceCharge, style: primaryTextStyle()),
+                4.width,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text('(${(totalDistance - cityData!.minDistance.validate()).toStringAsFixed(2)}', style: secondaryTextStyle()),
+                    Icon(Icons.close,color: Colors.grey,size: 12),
+                    Text('${cityData!.perDistanceCharges.validate()})',style: secondaryTextStyle()),
+                  ],
+                ).expand(),
                 16.width,
                 Text('$currencySymbol $distanceCharge', style: boldTextStyle()),
               ],
@@ -651,9 +672,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           children: [
             8.height,
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(language.weight_charge, style: primaryTextStyle()),
+                Text(language.weightCharge, style: primaryTextStyle()),
+                4.width,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text('(${selectedWeight! - cityData!.minWeight.validate()}', style: secondaryTextStyle()),
+                    Icon(Icons.close,color: Colors.grey,size: 12),
+                    Text('${cityData!.perWeightCharges.validate()})',style: secondaryTextStyle()),
+                  ],
+                ).expand(),
                 16.width,
                 Text('$currencySymbol $weightCharge', style: boldTextStyle()),
               ],
@@ -673,7 +702,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             16.height,
-            Text(language.extra_charges, style: boldTextStyle()),
+            Text(language.extraCharges, style: boldTextStyle()),
             8.height,
             Column(
                 children: List.generate(extraChargesObject.keys.length, (index) {
@@ -705,12 +734,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         16.height,
         Row(
           children: [
-            scheduleOptionWidget(context, isCashPayment, 'assets/icons/ic_cash.png', language.cash_payment).onTap(() {
+            scheduleOptionWidget(context, isCashPayment, 'assets/icons/ic_cash.png', language.cashPayment).onTap(() {
               isCashPayment = true;
               setState(() {});
             }).expand(),
             16.width,
-            scheduleOptionWidget(context, !isCashPayment, 'assets/icons/ic_credit_card.png', language.online_payment).onTap(() {
+            scheduleOptionWidget(context, !isCashPayment, 'assets/icons/ic_credit_card.png', language.onlinePayment).onTap(() {
               isCashPayment = false;
               setState(() {});
             }).expand(),
@@ -720,7 +749,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(language.payment_collect_from, style: boldTextStyle()),
+            Text(language.paymentCollectFrom, style: boldTextStyle()),
             SizedBox(
               width: 150,
               child: DropdownButtonFormField<String>(
@@ -760,8 +789,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   finish(context);
                   createOrderApiCall(ORDER_DRAFT);
                 },
-                message: language.save_draft_confirmation_msg,
-                primaryText: language.save_draft,
+                message: language.saveDraftConfirmationMsg,
+                primaryText: language.saveDraft,
               );
             },
           );
@@ -773,7 +802,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(title: Text(language.create_order)),
+        appBar: AppBar(title: Text(language.createOrder)),
         body: BodyCornerWidget(
           child: SingleChildScrollView(
             padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
@@ -793,10 +822,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     }).toList(),
                   ),
                   30.height,
-                  if (selectedTabIndex == 0) CreateOrderWidget1(),
-                  if (selectedTabIndex == 1) CreateOrderWidget2(),
-                  if (selectedTabIndex == 2) CreateOrderWidget3(),
-                  if (selectedTabIndex == 3) CreateOrderWidget4(),
+                  if (selectedTabIndex == 0) createOrderWidget1(),
+                  if (selectedTabIndex == 1) createOrderWidget2(),
+                  if (selectedTabIndex == 2) createOrderWidget3(),
+                  if (selectedTabIndex == 3) createOrderWidget4(),
                 ],
               ),
             ),
@@ -812,7 +841,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   selectedTabIndex--;
                   setState(() {});
                 }).paddingRight(16).expand(),
-              commonButton(selectedTabIndex != 3 ? language.next : language.create_order, () async {
+              commonButton(selectedTabIndex != 3 ? language.next : language.createOrder, () async {
                 if (selectedTabIndex != 3) {
                   if (_formKey.currentState!.validate()) {
                     Duration difference = Duration();
@@ -825,8 +854,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       difference = pickFromDateTime!.difference(deliverFromDateTime!);
                       differenceCurrentTime = DateTime.now().difference(pickFromDateTime!);
                     }
-                    if (differenceCurrentTime.inMinutes > 0) return toast(language.pickup_current_validation_msg);
-                    if (difference.inMinutes > 0) return toast(language.pickup_deliver_validation_msg);
+                    if (differenceCurrentTime.inMinutes > 0) return toast(language.pickupCurrentValidationMsg);
+                    if (difference.inMinutes > 0) return toast(language.pickupDeliverValidationMsg);
                     selectedTabIndex++;
                     if (selectedTabIndex == 3) {
                       getTotalAmount();
@@ -836,7 +865,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 } else {
                   showConfirmDialog(
                     context,
-                    language.create_order_confirmation_msg,
+                    language.createOrderConfirmationMsg,
                     positiveText: language.yes,
                     negativeText: language.no,
                     onAccept: () {

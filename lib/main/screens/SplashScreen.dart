@@ -66,7 +66,7 @@ class SplashScreenState extends State<SplashScreen> {
           children: [
             Image.asset('assets/app_logo.png',height:80,width:80,fit: BoxFit.fill).cornerRadiusWithClipRRect(defaultRadius),
             16.height,
-            Text(language.app_name, style: boldTextStyle(size: 20),textAlign: TextAlign.center),
+            Text(language.appName, style: boldTextStyle(size: 20),textAlign: TextAlign.center),
           ],
         ),
       ),

@@ -75,7 +75,7 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(language.draft_order)),
+      appBar: AppBar(title: Text(language.draftOrder)),
       body: BodyCornerWidget(
         child: Observer(builder: (context) {
           return Stack(

@@ -2,7 +2,7 @@ import 'BaseLanguage.dart';
 
 class LanguageAr extends BaseLanguage {
   @override
-  String get app_name => "عند الطلب نظام التسليم المحلي";
+  String get appName => "عند الطلب نظام التسليم المحلي";
 
   @override
   String get language => "لغة";
@@ -35,25 +35,25 @@ class LanguageAr extends BaseLanguage {
   String get to => "ل";
 
   @override
-  String get to_date_validation_msg => "حتى الآن يجب أن يكون بعد تاريخ";
+  String get toDateValidationMsg => "حتى الآن يجب أن يكون بعد تاريخ";
 
   @override
-  String get apply_filter => "تطبيق مرشح";
+  String get applyFilter => "تطبيق مرشح";
 
   @override
   String get payment => "دفع";
 
   @override
-  String get payment_method => "طرق الدفع";
+  String get paymentMethod => "طرق الدفع";
 
   @override
-  String get pay_now => "ادفع الآن";
+  String get payNow => "ادفع الآن";
 
   @override
-  String get please_select_city => "يرجى اختيار المدينة";
+  String get pleaseSelectCity => "يرجى اختيار المدينة";
 
   @override
-  String get select_region => "اختر المنطقة'";
+  String get selectRegion => "اختر المنطقة'";
 
   @override
   String get country => "دولة";
@@ -62,58 +62,58 @@ class LanguageAr extends BaseLanguage {
   String get city => "مدينة";
 
   @override
-  String get logout_confirmation_msg => "هل أنت متأكد أنك تريد تسجيل الخروج ؟";
+  String get logoutConfirmationMsg => "هل أنت متأكد أنك تريد تسجيل الخروج ؟";
 
   @override
   String get yes => "نعم";
 
   @override
-  String get picked_at => "اختار في";
+  String get pickedAt => "اختار في";
 
   @override
-  String get delivered_at => "تسليمها في";
+  String get deliveredAt => "تسليمها في";
 
   @override
-  String get track_order => "ترتيب المسار";
+  String get trackOrder => "ترتيب المسار";
 
   @override
-  String get delivery_now => "تقديم الآن";
+  String get deliveryNow => "تقديم الآن";
 
   @override
   String get schedule => "برنامج";
 
   @override
-  String get pick_time => "اختر وقت";
+  String get pickTime => "اختر وقت";
 
   @override
-  String get end_time_validation_msg => "يجب أن يكون الوقت بعد وقت البدء";
+  String get endTimeValidationMsg => "يجب أن يكون الوقت بعد وقت البدء";
 
   @override
-  String get deliver_time => "وقت التوصيل";
+  String get deliverTime => "وقت التوصيل";
 
   @override
   String get weight => "وزن";
 
   @override
-  String get parcel_type => "الطردال نوع";
+  String get parcelType => "الطردال نوع";
 
   @override
-  String get pick_up_information => "معلومات بيك اب";
+  String get pickupInformation => "معلومات بيك اب";
 
   @override
   String get address => "عنوان";
 
   @override
-  String get contact_number => "رقم الاتصال";
+  String get contactNumber => "رقم الاتصال";
 
   @override
   String get description => "وصف";
 
   @override
-  String get delivery_information => "معلومات التوصيل";
+  String get deliveryInformation => "معلومات التوصيل";
 
   @override
-  String get package_information => "حزمة معلومات";
+  String get packageInformation => "حزمة معلومات";
 
   @override
   String get pickup => "يلتقط";
@@ -122,112 +122,112 @@ class LanguageAr extends BaseLanguage {
   String get delivery => "توصيل";
 
   @override
-  String get delivery_charge => "رسوم التوصيل";
+  String get deliveryCharge => "رسوم التوصيل";
 
   @override
-  String get distance_charge => "تهمة المسافة";
+  String get distanceCharge => "تهمة المسافة";
 
   @override
-  String get weight_charge => "تهمة الوزن";
+  String get weightCharge => "تهمة الوزن";
 
   @override
-  String get extra_charges => "رسوم إضافية";
+  String get extraCharges => "رسوم إضافية";
 
   @override
   String get total => "المجموع";
 
   @override
-  String get cash_payment => "دفع نقدا";
+  String get cashPayment => "دفع نقدا";
 
   @override
-  String get online_payment => "الدفع الالكتروني";
+  String get onlinePayment => "الدفع الالكتروني";
 
   @override
-  String get payment_collect_from => "يجمع الدفع من";
+  String get paymentCollectFrom => "يجمع الدفع من";
 
   @override
-  String get save_draft_confirmation_msg => "هل أنت متأكد أنك تريد حفظ كمسودة؟";
+  String get saveDraftConfirmationMsg => "هل أنت متأكد أنك تريد حفظ كمسودة؟";
 
   @override
-  String get save_draft => "حفظ المسودة";
+  String get saveDraft => "حفظ المسودة";
 
   @override
-  String get create_order => "إنشاء النظام";
+  String get createOrder => "إنشاء النظام";
 
   @override
   String get previous => "سابق";
 
   @override
-  String get pickup_current_validation_msg => "يجب أن يكون وقت الالتقاط بعد الوقت الحالي";
+  String get pickupCurrentValidationMsg => "يجب أن يكون وقت الالتقاط بعد الوقت الحالي";
 
   @override
-  String get pickup_deliver_validation_msg => "يجب أن يكون وقت الالتقاط قبل تقديم الوقت";
+  String get pickupDeliverValidationMsg => "يجب أن يكون وقت الالتقاط قبل تقديم الوقت";
 
   @override
-  String get create_order_confirmation_msg => "هل أنت متأكد أنك تريد وضع النظام؟";
+  String get createOrderConfirmationMsg => "هل أنت متأكد أنك تريد وضع النظام؟";
 
   @override
-  String get draft_order => "مشروع النظام";
+  String get draftOrder => "مشروع النظام";
 
   @override
-  String get order_details => "تفاصيل الطلب";
+  String get orderDetails => "تفاصيل الطلب";
 
   @override
   String get distance => "مسافه: بعد";
 
   @override
-  String get parcel_details => "تفاصيل الطرود";
+  String get parcelDetails => "تفاصيل الطرود";
 
   @override
-  String get about_delivery_man => "حول رجل التسليم";
+  String get aboutDeliveryMan => "حول رجل التسليم";
 
   @override
-  String get about_user => "عن المستخدم";
+  String get aboutUser => "عن المستخدم";
 
   @override
-  String get return_order => "ترتيب العودة";
+  String get returnOrder => "ترتيب العودة";
 
   @override
-  String get cancel_order => "الغاء الطلب";
+  String get cancelOrder => "الغاء الطلب";
 
   @override
-  String get lbl_return => "إرجاع";
+  String get lblReturn => "إرجاع";
 
   @override
-  String get change_password => "تغيير كلمة المرور";
+  String get changePassword => "تغيير كلمة المرور";
 
   @override
-  String get old_password => "كلمة المرور القديمة";
+  String get oldPassword => "كلمة المرور القديمة";
 
   @override
-  String get new_password => "كلمة مرور جديدة";
+  String get newPassword => "كلمة مرور جديدة";
 
   @override
-  String get confirm_password => "تأكيد كلمة المرور";
+  String get confirmPassword => "تأكيد كلمة المرور";
 
   @override
-  String get password_not_match => "كلمة السر غير متطابقة";
+  String get passwordNotMatch => "كلمة السر غير متطابقة";
 
   @override
-  String get save_changes => "حفظ التغييرات";
+  String get saveChanges => "حفظ التغييرات";
 
   @override
-  String get profile_update_msg => "تم تحديث الملف الشخصي بنجاح";
+  String get profileUpdateMsg => "تم تحديث الملف الشخصي بنجاح";
 
   @override
-  String get edit_profile => "تعديل الملف الشخصي";
+  String get editProfile => "تعديل الملف الشخصي";
 
   @override
-  String get not_change_email => "لا يمكنك تغيير معرف البريد الإلكتروني";
+  String get notChangeEmail => "لا يمكنك تغيير معرف البريد الإلكتروني";
 
   @override
   String get username => "اسم المستخدم";
 
   @override
-  String get not_change_username => "لا يمكنك تغيير اسم المستخدم";
+  String get notChangeUsername => "لا يمكنك تغيير اسم المستخدم";
 
   @override
-  String get forgot_password => "هل نسيت كلمة السر";
+  String get forgotPassword => "هل نسيت كلمة السر";
 
   @override
   String get email => "بريد الالكتروني";
@@ -236,34 +236,34 @@ class LanguageAr extends BaseLanguage {
   String get submit => "يقدم";
 
   @override
-  String get user_not_approve_msg => "أنت ملف التعريف قيد المراجعة. انتظر بعض الوقت أو جهة اتصال المسؤول الخاص بك.";
+  String get userNotApproveMsg => "أنت ملف التعريف قيد المراجعة. انتظر بعض الوقت أو جهة اتصال المسؤول الخاص بك.";
 
   @override
-  String get sign_in_account => "تسجيل الدخول";
+  String get signInAccount => "تسجيل الدخول";
 
   @override
-  String get sign_in_to_continue => "تسجيل الدخول للمتابعة";
+  String get signInToContinue => "تسجيل الدخول للمتابعة";
 
   @override
   String get password => "كلمة المرور";
 
   @override
-  String get forgot_password_que => "هل نسيت كلمة السر ؟";
+  String get forgotPasswordQue => "هل نسيت كلمة السر ؟";
 
   @override
-  String get sign_in => "تسجيل الدخول";
+  String get signIn => "تسجيل الدخول";
 
   @override
   String get or => "أو";
 
   @override
-  String get continue_with_google => "تواصل مع جوجل";
+  String get continueWithGoogle => "تواصل مع جوجل";
 
   @override
-  String get do_not_have_account => "لا يوجد حساب؟";
+  String get doNotHaveAccount => "لا يوجد حساب؟";
 
   @override
-  String get sign_up => "اشتراك";
+  String get signUp => "اشتراك";
 
   @override
   String get name => "اسم";
@@ -272,25 +272,25 @@ class LanguageAr extends BaseLanguage {
   String get notification => "تنبيه";
 
   @override
-  String get select_usertype_msg => "يرجى اختيار Usertype.";
+  String get selectUsertypeMsg => "يرجى اختيار Usertype.";
 
   @override
-  String get create_an_account => "إنشاء حساب";
+  String get createAnAccount => "إنشاء حساب";
 
   @override
-  String get sign_up_to_continue => "اشترك للمتابعة";
+  String get signUpToContinue => "اشترك للمتابعة";
 
   @override
-  String get user_type => "نوع المستخدم";
+  String get userType => "نوع المستخدم";
 
   @override
   String get client => "عميل";
 
   @override
-  String get delivery_man => "رجل التوصيل";
+  String get deliveryMan => "رجل التوصيل";
 
   @override
-  String get already_have_an_account => "هل لديك حساب؟";
+  String get alreadyHaveAnAccount => "هل لديك حساب؟";
 
   @override
   String get light => "خفيفة";
@@ -299,7 +299,7 @@ class LanguageAr extends BaseLanguage {
   String get dark => "مظلم";
 
   @override
-  String get system_default => "النظام الافتراضي";
+  String get systemDefault => "النظام الافتراضي";
 
   @override
   String get theme => "سمة";
@@ -308,13 +308,13 @@ class LanguageAr extends BaseLanguage {
   String get skip => "يتخطى";
 
   @override
-  String get get_started => "البدء";
+  String get getStarted => "البدء";
 
   @override
   String get profile => "حساب تعريفي";
 
   @override
-  String get track_order_location => "تتبع طلب النظام";
+  String get trackOrderLocation => "تتبع طلب النظام";
 
   @override
   String get track => "مسار";
@@ -323,46 +323,46 @@ class LanguageAr extends BaseLanguage {
   String get active => "نشيط";
 
   @override
-  String get pick_up => "يلتقط";
+  String get pickUp => "يلتقط";
 
   @override
   String get departed => "الراحل";
 
   @override
-  String get order_pickup_successfully => "طلب بيك آي بنجاح";
+  String get orderPickupSuccessfully => "طلب بيك آي بنجاح";
 
   @override
-  String get image_pick_to_camera => "صورة الموافقة المسبقة عن علم إلى الكاميرا";
+  String get imagePickToCamera => "صورة الموافقة المسبقة عن علم إلى الكاميرا";
 
   @override
-  String get image_pic_to_gallery => "صورة الموافقة المسبقة عن علم إلى المعرض";
+  String get imagePicToGallery => "صورة الموافقة المسبقة عن علم إلى المعرض";
 
   @override
-  String get order_deliver => "طلب التسليم";
+  String get orderDeliver => "طلب التسليم";
 
   @override
-  String get order_pickup => "طلب بيك اب";
+  String get orderPickup => "طلب بيك اب";
 
   @override
   String get info => "معلومات";
 
   @override
-  String get payment_collect_from_delivery => "جمع الدفع النموذج عند التسليم";
+  String get paymentCollectFromDelivery => "جمع الدفع النموذج عند التسليم";
 
   @override
-  String get payment_collect_from_pickup => "دفع نموذج الاستمارة على بيك اب";
+  String get paymentCollectFromPickup => "دفع نموذج الاستمارة على بيك اب";
 
   @override
-  String get pickup_datetime => "Pickup DateTime.";
+  String get pickupDatetime => "Pickup DateTime.";
 
   @override
   String get hour => "ساعة";
 
   @override
-  String get delivery_datetime => "وقت التسليم";
+  String get deliveryDatetime => "وقت التسليم";
 
   @override
-  String get pickup_time_signature => "توقيع وقت الاستقبال";
+  String get pickupTimeSignature => "توقيع وقت الاستقبال";
 
   @override
   String get save => "يحفظ";
@@ -371,43 +371,43 @@ class LanguageAr extends BaseLanguage {
   String get clear => "صافي";
 
   @override
-  String get delivery_time_signature => "وقت التسليم التوقيع";
+  String get deliveryTimeSignature => "وقت التسليم التوقيع";
 
   @override
   String get reason => "سبب";
 
   @override
-  String get pickup_delivery => "تسليم picup";
+  String get pickupDelivery => "تسليم picup";
 
   @override
-  String get select_pickup_time_msg => "يرجى اختيار وقت التقاط";
+  String get selectPickupTimeMsg => "يرجى اختيار وقت التقاط";
 
   @override
-  String get select_delivery_time_msg => "يرجى اختيار وقت التسليم";
+  String get selectDeliveryTimeMsg => "يرجى اختيار وقت التسليم";
 
   @override
-  String get select_pickup_sign_msg => "يرجى توقيع picup";
+  String get selectPickupSignMsg => "يرجى توقيع picup";
 
   @override
-  String get select_delivery_sign_msg => "يرجى تسليم التوقيع";
+  String get selectDeliverySignMsg => "يرجى تسليم التوقيع";
 
   @override
-  String get select_reason_msg => "يرجى اختيار السبب";
+  String get selectReasonMsg => "يرجى اختيار السبب";
 
   @override
-  String get order_cancelled_successfully => "تم إلغاء الطلب بنجاح";
+  String get orderCancelledSuccessfully => "تم إلغاء الطلب بنجاح";
 
   @override
-  String get collect_payment_confirmation_msg => "هل أنت متأكد من جمع هذه الدفعة؟";
+  String get collectPaymentConfirmationMsg => "هل أنت متأكد من جمع هذه الدفعة؟";
 
   @override
-  String get tracking_order => "تتبع النظام";
+  String get trackingOrder => "تتبع النظام";
 
   @override
   String get assign => "تعيين";
 
   @override
-  String get picked_up => "التقطت";
+  String get pickedUp => "التقطت";
 
   @override
   String get arrived => "وصل";
@@ -419,25 +419,25 @@ class LanguageAr extends BaseLanguage {
   String get cancelled => "ألغيت";
 
   @override
-  String get allow_location_permission => "السماح بإذن الموقع";
+  String get allowLocationPermission => "السماح بإذن الموقع";
 
   @override
-  String get walk_through1_title => "حدد موقع الالتقاط";
+  String get walkThrough1Title => "حدد موقع الالتقاط";
 
   @override
-  String get walk_through2_title => "حدد انخفاض الموقع";
+  String get walkThrough2Title => "حدد انخفاض الموقع";
 
   @override
-  String get walk_through3_title => "تأكيد والاسترخاء";
+  String get walkThrough3Title => "تأكيد والاسترخاء";
 
   @override
-  String get walk_through1_subtitle => "إنها تساعدنا على الحصول على حزمة من عتبة داركم.";
+  String get walkThrough1Subtitle => "إنها تساعدنا على الحصول على حزمة من عتبة داركم.";
 
   @override
-  String get walk_through2_subtitle => "حتى نتمكن من تسليم الحزمة إلى الشخص الصحيح بسرعة.";
+  String get walkThrough2Subtitle => "حتى نتمكن من تسليم الحزمة إلى الشخص الصحيح بسرعة.";
 
   @override
-  String get walk_through3_subtitle => "سنقوم بتسليم الحزمة الخاصة بك في الوقت المحدد وفي حالة ممتازة.";
+  String get walkThrough3Subtitle => "سنقوم بتسليم الحزمة الخاصة بك في الوقت المحدد وفي حالة ممتازة.";
 
   @override
   String get order => "ترتيب";
@@ -449,89 +449,89 @@ class LanguageAr extends BaseLanguage {
   String get drafts => "المسودات";
 
   @override
-  String get about_us => "معلومات عنا";
+  String get aboutUs => "معلومات عنا";
 
   @override
-  String get help_and_support => "ساعد لدعم";
+  String get helpAndSupport => "ساعد لدعم";
 
   @override
   String get logout => "تسجيل خروج";
 
   @override
-  String get change_location => "تغيير الموقع";
+  String get changeLocation => "تغيير الموقع";
 
   @override
-  String get select_city => "اختر مدينة";
+  String get selectCity => "اختر مدينة";
 
   @override
   String get next => "التالي";
 
   @override
-  String get field_required_msg => "هذه الخانة مطلوبه";
+  String get fieldRequiredMsg => "هذه الخانة مطلوبه";
 
   @override
-  String get email_invalid => "البريد الإلكتروني غير صالح";
+  String get emailInvalid => "البريد الإلكتروني غير صالح";
 
   @override
-  String get password_invalid => "يجب أن يكون الحد الأدنى لطول كلمة المرور 6";
+  String get passwordInvalid => "يجب أن يكون الحد الأدنى لطول كلمة المرور 6";
 
   @override
-  String get username_invalid => "يجب ألا يحتوي اسم المستخدم على مساحة";
+  String get usernameInvalid => "يجب ألا يحتوي اسم المستخدم على مساحة";
 
   @override
-  String get write_reason_here => "اكتب سبب هنا ...";
+  String get writeReasonHere => "اكتب سبب هنا ...";
 
   @override
-  String get are_you_sure_want_to_arrive => "هل أنت متأكد أنك تريد الوصول؟";
+  String get areYouSureWantToArrive => "هل أنت متأكد أنك تريد الوصول؟";
 
   @override
   String get note => "ملحوظة:";
 
   @override
-  String get courier_will_pickup_at => "سوف ساعي التقاط في";
+  String get courierWillPickupAt => "سوف ساعي التقاط في";
 
   @override
-  String get courier_will_deliver_at => "سوف تسليم ساعي في";
+  String get courierWillDeliverAt => "سوف تسليم ساعي في";
 
   @override
-  String get confirm_delivery => "تأكيد التوصيل";
+  String get confirmDelivery => "تأكيد التوصيل";
 
   @override
-  String get order_assign_confirmation => "هل أنت متأكد أنك تريد نشطة هذا الطلب؟";
+  String get orderAssignConfirmation => "هل أنت متأكد أنك تريد نشطة هذا الطلب؟";
 
   @override
-  String get order_pickup_confirmation => "هل أنت متأكد أنك تريد التقاط هذا الطلب؟";
+  String get orderPickupConfirmation => "هل أنت متأكد أنك تريد التقاط هذا الطلب؟";
 
   @override
-  String get order_departed_confirmation => "هل أنت متأكد من أنك تريد أن تغادر هذا الطلب؟";
+  String get orderDepartedConfirmation => "هل أنت متأكد من أنك تريد أن تغادر هذا الطلب؟";
 
   @override
-  String get order_create_confirmation => "هل أنت متأكد أنك تريد إنشاء هذا الطلب؟";
+  String get orderCreateConfirmation => "هل أنت متأكد أنك تريد إنشاء هذا الطلب؟";
 
   @override
-  String get order_complete_confirmation => "هل أنت متأكد أنك تريد إكمال هذا الطلب؟";
+  String get orderCompleteConfirmation => "هل أنت متأكد أنك تريد إكمال هذا الطلب؟";
 
   @override
-  String get order_cancel_confirmation => "هل أنت متأكد أنك تريد إلغاء هذا الطلب؟";
+  String get orderCancelConfirmation => "هل أنت متأكد أنك تريد إلغاء هذا الطلب؟";
 
   @override
   String get id => "هوية شخصية";
 
   @override
-  String get contact_number_validation => "لا يمكن أن يحتوي رقم الاتصال على أكثر من 15 رقما.";
+  String get contactNumberValidation => "لا يمكن أن يحتوي رقم الاتصال على أكثر من 10 أرقام.";
 
   @override
-  String get remember_me => "تذكرنى";
+  String get rememberMe => "تذكرنى";
 
   @override
-  String get become_a_delivery_boy => "تصبح صبي التسليم";
+  String get becomeADeliveryBoy => "تصبح صبي التسليم";
 
   @override
-  String get order_history => "تاريخ الطلب";
+  String get orderHistory => "تاريخ الطلب";
 
   @override
   String get no => "رقم";
 
   @override
-  String get confirm_Pickup => "تأكيد بيك اب";
+  String get confirmPickup => "تأكيد بيك اب";
 }

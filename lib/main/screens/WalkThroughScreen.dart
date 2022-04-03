@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mighty_delivery/main/models/models.dart';
-import 'package:mighty_delivery/main/screens/RegisterScreen.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/main/utils/DataProviders.dart';
@@ -110,7 +109,7 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
                   pageController.animateToPage(++currentPage, duration: Duration(milliseconds: 800), curve: Curves.easeInOut);
                 })
               : commonButton(
-                  language.get_started,
+                  language.getStarted,
                   () async {
                     await setValue(IS_FIRST_TIME, false);
                     LoginScreen().launch(context, isNewTask: true, duration: Duration(seconds: 2), pageRouteAnimation: PageRouteAnimation.Scale);

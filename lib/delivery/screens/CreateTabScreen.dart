@@ -111,7 +111,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                     context,
                                     primaryColor: colorPrimary,
                                     dialogType: DialogType.CONFIRMATION,
-                                    title: language.are_you_sure_want_to_arrive,
+                                    title: language.areYouSureWantToArrive,
                                     positiveText: language.yes,
                                     negativeText: language.cancel,
                                     onAccept: (c) async {
@@ -187,7 +187,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              if (data.pickupDatetime != null) Text('${language.picked_at} ${printDate(data.pickupDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
+                              if (data.pickupDatetime != null) Text('${language.pickedAt} ${printDate(data.pickupDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
                               Text('${data.pickupPoint!.address}', style: primaryTextStyle()),
                               if (data.pickupPoint!.contactNumber != null)
                                 Row(
@@ -200,7 +200,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                   ],
                                 ).paddingOnly(top: 8),
                               if (data.pickupDatetime == null && data.pickupPoint!.endTime != null && data.pickupPoint!.startTime != null)
-                                Text('${language.note} ${language.courier_will_pickup_at} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.endTime!).toLocal())}',
+                                Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.endTime!).toLocal())}',
                                         style: secondaryTextStyle())
                                     .paddingOnly(top: 8),
                             ],
@@ -221,7 +221,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              if (data.deliveryDatetime != null) Text('${language.delivered_at} ${printDate(data.deliveryDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
+                              if (data.deliveryDatetime != null) Text('${language.deliveredAt} ${printDate(data.deliveryDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
                               Text('${data.deliveryPoint!.address}', style: primaryTextStyle()),
                               if (data.deliveryPoint!.contactNumber != null)
                                 Row(
@@ -234,7 +234,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                   ],
                                 ).paddingOnly(top: 8),
                               if (data.deliveryDatetime == null && data.deliveryPoint!.endTime != null && data.deliveryPoint!.startTime != null)
-                                Text('${language.note} ${language.courier_will_deliver_at} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.endTime!).toLocal())}',
+                                Text('${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.endTime!).toLocal())}',
                                         style: secondaryTextStyle())
                                     .paddingOnly(top: 8),
                             ],
@@ -275,7 +275,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                           children: [
                             Icon(Icons.location_on_outlined, color: colorPrimary),
                             8.width,
-                            Text(language.track_order_location, style: primaryTextStyle(color: colorPrimary)).expand(),
+                            Text(language.trackOrderLocation, style: primaryTextStyle(color: colorPrimary)).expand(),
                             AppButton(
                               padding: EdgeInsets.all(0),
                               text: language.track,
@@ -331,13 +331,13 @@ class CreateTabScreenState extends State<CreateTabScreen> {
     if (orderStatus == ORDER_ASSIGNED) {
       return language.active;
     } else if (orderStatus == ORDER_ACTIVE) {
-      return language.pick_up;
+      return language.pickUp;
     } else if (orderStatus == ORDER_ARRIVED) {
-      return language.pick_up;
+      return language.pickUp;
     } else if (orderStatus == ORDER_PICKED_UP) {
       return language.departed;
     } else if (orderStatus == ORDER_DEPARTED) {
-      return language.confirm_delivery;
+      return language.confirmDelivery;
     }
     return '';
   }

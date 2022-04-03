@@ -1,21 +1,21 @@
 class NotificationModel {
-  int? all_unread_count;
-  List<NotificationData>? notification_data;
+  int? allUnreadCount;
+  List<NotificationData>? notificationData;
 
-  NotificationModel({this.all_unread_count, this.notification_data});
+  NotificationModel({this.allUnreadCount, this.notificationData});
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
     return NotificationModel(
-      all_unread_count: json['all_unread_count'],
-      notification_data: json['notification_data'] != null ? (json['notification_data'] as List).map((i) => NotificationData.fromJson(i)).toList() : null,
+      allUnreadCount: json['all_unread_count'],
+      notificationData: json['notification_data'] != null ? (json['notification_data'] as List).map((i) => NotificationData.fromJson(i)).toList() : null,
     );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['all_unread_count'] = this.all_unread_count;
-    if (this.notification_data != null) {
-      data['notification_data'] = this.notification_data!.map((v) => v.toJson()).toList();
+    data['all_unread_count'] = this.allUnreadCount;
+    if (this.notificationData != null) {
+      data['notification_data'] = this.notificationData!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -23,26 +23,26 @@ class NotificationModel {
 
 class NotificationData {
   NotificationOrderData? data;
-  String? created_at;
+  String? createdAt;
   String? id;
-  String? read_at;
+  String? readAt;
 
-  NotificationData({this.data, this.created_at, this.id, this.read_at});
+  NotificationData({this.data, this.createdAt, this.id, this.readAt});
 
   factory NotificationData.fromJson(Map<String, dynamic> json) {
     return NotificationData(
       data: json['data'] != null ? NotificationOrderData.fromJson(json['data']) : null,
-      created_at: json['created_at'],
+      createdAt: json['created_at'],
       id: json['id'],
-      read_at: json['read_at'],
+      readAt: json['read_at'],
     );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['created_at'] = this.created_at;
+    data['created_at'] = this.createdAt;
     data['id'] = this.id;
-    data['read_at'] = this.read_at;
+    data['read_at'] = this.readAt;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }

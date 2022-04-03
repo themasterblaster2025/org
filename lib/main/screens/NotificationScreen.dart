@@ -45,12 +45,12 @@ class NotificationScreenState extends State<NotificationScreen> {
     print('call');
     getNotification(page: currentPage).then((value) {
       appStore.setLoading(false);
-      appStore.setAllUnreadCount(value.all_unread_count.validate());
-      mIsLastPage = value.notification_data!.length < currentPage;
+      appStore.setAllUnreadCount(value.allUnreadCount.validate());
+      mIsLastPage = value.notificationData!.length < currentPage;
       if (currentPage == 1) {
         notificationData.clear();
       }
-      notificationData.addAll(value.notification_data!);
+      notificationData.addAll(value.notificationData!);
       setState(() {});
     }).catchError((error) {
       appStore.setLoading(false);
@@ -82,7 +82,7 @@ class NotificationScreenState extends State<NotificationScreen> {
                           padding: EdgeInsets.all(12),
                           child: Row(
                             children: [
-                              Container(decoration: BoxDecoration(shape: BoxShape.circle, color: data.read_at != null ? Colors.transparent : colorPrimary), width: 10, height: 10),
+                              Container(decoration: BoxDecoration(shape: BoxShape.circle, color: data.readAt != null ? Colors.transparent : colorPrimary), width: 10, height: 10),
                               8.width,
                               Container(
                                 height: 50,
@@ -103,7 +103,7 @@ class NotificationScreenState extends State<NotificationScreen> {
                                     children: [
                                       Text('${data.data!.subject}', style: boldTextStyle()).expand(),
                                       8.width,
-                                      Text(data.created_at.validate(), style: secondaryTextStyle()),
+                                      Text(data.createdAt.validate(), style: secondaryTextStyle()),
                                     ],
                                   ),
                                   8.height,

@@ -89,7 +89,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
         return false;
       },
       child: Scaffold(
-        appBar: AppBar(title: Text(language.order_details)),
+        appBar: AppBar(title: Text(language.orderDetails)),
         body: BodyCornerWidget(
           child: !appStore.isLoading && orderData != null
               ? Stack(
@@ -118,7 +118,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                               16.height,
                             ],
                           ).visible(orderData!.status == ORDER_CANCELLED),
-                          Text(language.payment_method, style: secondaryTextStyle(size: 16)),
+                          Text(language.paymentMethod, style: secondaryTextStyle(size: 16)),
                           8.height,
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -142,7 +142,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           if (orderData!.pickupDatetime != null)
-                                            Text('${language.picked_at} ${printDate(orderData!.pickupDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
+                                            Text('${language.pickedAt} ${printDate(orderData!.pickupDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
                                           Text('${orderData!.pickupPoint!.address}', style: primaryTextStyle()),
                                           if (orderData!.pickupPoint!.contactNumber != null)
                                             Row(
@@ -155,7 +155,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                               ],
                                             ).paddingOnly(top: 8),
                                           if (orderData!.pickupDatetime == null && orderData!.pickupPoint!.endTime != null && orderData!.pickupPoint!.startTime != null)
-                                            Text('${language.note} ${language.courier_will_pickup_at} ${DateFormat('dd MMM yyyy').format(DateTime.parse(orderData!.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.pickupPoint!.endTime!).toLocal())}',
+                                            Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(orderData!.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.pickupPoint!.endTime!).toLocal())}',
                                                     style: secondaryTextStyle())
                                                 .paddingOnly(top: 8),
                                         ],
@@ -172,7 +172,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           if (orderData!.deliveryDatetime != null)
-                                            Text('${language.delivered_at} ${printDate(orderData!.deliveryDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
+                                            Text('${language.deliveredAt} ${printDate(orderData!.deliveryDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
                                           Text('${orderData!.deliveryPoint!.address}', style: primaryTextStyle()),
                                           if (orderData!.deliveryPoint!.contactNumber != null)
                                             Row(
@@ -185,7 +185,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                               ],
                                             ).paddingOnly(top: 8),
                                           if (orderData!.deliveryDatetime == null && orderData!.deliveryPoint!.endTime != null && orderData!.deliveryPoint!.startTime != null)
-                                            Text('${language.note} ${language.courier_will_deliver_at}${DateFormat('dd MMM yyyy').format(DateTime.parse(orderData!.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.deliveryPoint!.endTime!).toLocal())}',
+                                            Text('${language.note} ${language.courierWillDeliverAt}${DateFormat('dd MMM yyyy').format(DateTime.parse(orderData!.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.deliveryPoint!.endTime!).toLocal())}',
                                                     style: secondaryTextStyle())
                                                 .paddingOnly(top: 8),
                                         ],
@@ -204,7 +204,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                           24.height,
                           Text(language.distance, style: secondaryTextStyle(size: 16)),
                           8.height,
-                          Text('${orderData!.totalDistance} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).distance_type}', style: boldTextStyle()),
+                          Text('${orderData!.totalDistance} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).distanceType}', style: boldTextStyle()),
                           16.height,
                           Row(
                             children: [
@@ -227,7 +227,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                             ],
                           ),
                           Divider(height: 30, thickness: 1),
-                          Text(language.parcel_details, style: boldTextStyle(size: 16)),
+                          Text(language.parcelDetails, style: boldTextStyle(size: 16)),
                           16.height,
                           Container(
                             decoration: BoxDecoration(color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
@@ -246,7 +246,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                   children: [
                                     Text(orderData!.parcelType.validate(), style: boldTextStyle()),
                                     4.height,
-                                    Text('${orderData!.totalWeight} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weight_type}', style: secondaryTextStyle()),
+                                    Text('${orderData!.totalWeight} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weightType}', style: secondaryTextStyle()),
                                   ],
                                 ).expand(),
                               ],
@@ -257,7 +257,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('${getStringAsync(USER_TYPE) == CLIENT ? language.about_delivery_man : language.about_user}', style: boldTextStyle(size: 16)),
+                                Text('${getStringAsync(USER_TYPE) == CLIENT ? language.aboutDeliveryMan : language.aboutUser}', style: boldTextStyle(size: 16)),
                                 16.height,
                                 Container(
                                   decoration: BoxDecoration(color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
@@ -268,7 +268,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     children: [
                                       Row(
                                         children: [
-                                          CircleAvatar(backgroundImage: NetworkImage(userData!.profile_image.validate()), radius: 30),
+                                          CircleAvatar(backgroundImage: NetworkImage(userData!.profileImage.validate()), radius: 30),
                                           16.width,
                                           Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,14 +282,14 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                         ],
                                       ),
                                       8.height,
-                                      if (userData!.contact_number != null)
+                                      if (userData!.contactNumber != null)
                                       Row(
                                         children: [
                                           Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
-                                            launch('tel:${userData!.contact_number}');
+                                            launch('tel:${userData!.contactNumber}');
                                           }),
                                           16.width,
-                                          Text('${userData!.contact_number}', style: primaryTextStyle())
+                                          Text('${userData!.contactNumber}', style: primaryTextStyle())
                                         ],
                                       ),
                                     ],
@@ -301,19 +301,19 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(language.delivery_charge, style: primaryTextStyle()),
+                              Text(language.deliveryCharge, style: primaryTextStyle()),
                               16.width,
                               Text('$currencySymbol ${orderData!.fixedCharges}', style: boldTextStyle()),
                             ],
                           ),
-                          //if (orderData!.distanceCharge.validate() != 0)
+                          if (orderData!.distanceCharge.validate() != 0)
                             Column(
                               children: [
                                 8.height,
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(language.distance_charge, style: primaryTextStyle()),
+                                    Text(language.distanceCharge, style: primaryTextStyle()),
                                     16.width,
                                     Text('$currencySymbol ${orderData!.distanceCharge}', style: boldTextStyle()),
                                   ],
@@ -327,7 +327,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(language.weight_charge, style: primaryTextStyle()),
+                                    Text(language.weightCharge, style: primaryTextStyle()),
                                     16.width,
                                     Text('$currencySymbol ${orderData!.weightCharge}', style: boldTextStyle()),
                                   ],
@@ -347,7 +347,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               16.height,
-                              Text(language.extra_charges, style: boldTextStyle()),
+                              Text(language.extraCharges, style: boldTextStyle()),
                               8.height,
                               Column(
                                   children: List.generate(orderData!.extraCharges.keys.length, (index) {
@@ -378,14 +378,14 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                     ),
                     Align(
                       alignment: Alignment.bottomCenter,
-                      child: commonButton(language.return_order, () {
+                      child: commonButton(language.returnOrder, () {
                         ReturnOrderScreen(orderData!).launch(context);
                       }, width: context.width())
                           .paddingAll(16),
                     ).visible(orderData!.status == ORDER_COMPLETED && !orderData!.returnOrderId! && getStringAsync(USER_TYPE) == CLIENT),
                     Align(
                       alignment: Alignment.bottomCenter,
-                      child: commonButton(language.cancel_order, () {
+                      child: commonButton(language.cancelOrder, () {
                         showInDialog(
                           context,
                           contentPadding: EdgeInsets.all(16),

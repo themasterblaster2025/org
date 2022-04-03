@@ -3,7 +3,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -59,7 +58,7 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(language.forgot_password)),
+      appBar: AppBar(title: Text(language.forgotPassword)),
       body: BodyCornerWidget(
         child: Stack(
           children: [
@@ -76,8 +75,8 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       controller: forgotEmailController,
                       textFieldType: TextFieldType.EMAIL,
                       decoration: commonInputDecoration(),
-                      errorThisFieldRequired: language.field_required_msg,
-                      errorInvalidEmail: language.email_invalid,
+                      errorThisFieldRequired: language.fieldRequiredMsg,
+                      errorInvalidEmail: language.emailInvalid,
                     ),
                   ],
                 ),

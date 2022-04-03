@@ -1,6 +1,5 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
@@ -164,16 +163,17 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
                     if (fromDate != null && toDate != null) {
                       Duration difference = fromDate!.difference(toDate!);
                       if (difference.inDays >= 0) {
-                        return language.to_date_validation_msg;
+                        return language.toDateValidationMsg;
                       }
                     }
+                    return null;
                   },
                   decoration: commonInputDecoration(suffixIcon: Icons.calendar_today),
                 ).expand(),
               ],
             ),
             16.height,
-            commonButton(language.apply_filter, () {
+            commonButton(language.applyFilter, () {
               if (_formKey.currentState!.validate()) {
                 finish(context);
                 setValue(FILTER_DATA, FilterAttributeModel(orderStatus: selectedStatus, fromDate: fromDate.toString(), toDate: toDate.toString()).toJson());

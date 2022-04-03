@@ -38,7 +38,7 @@ class OrderHistory {
   HistoryData? historyData;
   String? createdAt;
   String? updatedAt;
-  Null? deletedAt;
+  String? deletedAt;
 
   OrderHistory(
       {this.id,

@@ -25,20 +25,18 @@ class TrackingScreen extends StatefulWidget {
 }
 
 class TrackingScreenState extends State<TrackingScreen> {
-  late GoogleMapController _controller;
-
   late PolylinePoints polylinePoints;
 
   List<Marker> markers = [];
 
   late CameraPosition initialLocation;
 
-  LatLng? SOURCE_LOCATION;
+  LatLng? sourceLocation;
 
-  double CAMERA_ZOOM = 13;
+  double cameraZoom = 13;
 
-  double CAMERA_TILT = 0;
-  double CAMERA_BEARING = 30;
+  double cameraTilt = 0;
+  double cameraBearing = 30;
 
   late LatLng orderLatLong;
 
@@ -58,12 +56,12 @@ class TrackingScreenState extends State<TrackingScreen> {
     polylinePoints = PolylinePoints();
 
     positionStream = Geolocator.getPositionStream().listen((event) async {
-      SOURCE_LOCATION = LatLng(event.latitude, event.longitude);
+      sourceLocation = LatLng(event.latitude, event.longitude);
       await updateLocation(latitude: event.latitude.toString(), longitude: event.longitude.toString()).then((value) {
         markers.add(
           Marker(
             markerId: MarkerId('valsad'),
-            position: LatLng(SOURCE_LOCATION!.latitude, SOURCE_LOCATION!.longitude),
+            position: LatLng(sourceLocation!.latitude, sourceLocation!.longitude),
             infoWindow: InfoWindow(title: 'Delivery Boy'),
             icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
           ),
@@ -88,7 +86,7 @@ class TrackingScreenState extends State<TrackingScreen> {
 
     //setState(() {});
 
-    orderLatLong = await LatLng(widget.latLng!.latitude, widget.latLng!.longitude);
+    orderLatLong = LatLng(widget.latLng!.latitude, widget.latLng!.longitude);
   }
 
   Future<void> setPolyLines({required LatLng orderLat}) async {
@@ -96,7 +94,7 @@ class TrackingScreenState extends State<TrackingScreen> {
     polylineCoordinates.clear();
     var result = await polylinePoints.getRouteBetweenCoordinates(
       googleMapAPIKey,
-      PointLatLng(SOURCE_LOCATION!.latitude, SOURCE_LOCATION!.longitude),
+      PointLatLng(sourceLocation!.latitude, sourceLocation!.longitude),
       PointLatLng(orderLat.latitude, orderLat.longitude),
     );
     if (result.points.isNotEmpty) {
@@ -129,10 +127,10 @@ class TrackingScreenState extends State<TrackingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(language.tracking_order),
+        title: Text(language.trackingOrder),
       ),
       body: BodyCornerWidget(
-        child: SOURCE_LOCATION != null
+        child: sourceLocation != null
             ? Stack(
                 alignment: Alignment.bottomCenter,
                 children: [
@@ -141,10 +139,10 @@ class TrackingScreenState extends State<TrackingScreen> {
                     polylines: _polylines,
                     mapType: MapType.normal,
                     initialCameraPosition: CameraPosition(
-                      target: SOURCE_LOCATION!,
-                      zoom: CAMERA_ZOOM,
-                      tilt: CAMERA_TILT,
-                      bearing: CAMERA_BEARING,
+                      target: sourceLocation!,
+                      zoom: cameraZoom,
+                      tilt: cameraTilt,
+                      bearing: cameraBearing,
                     ),
                   ),
                   Container(

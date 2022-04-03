@@ -37,7 +37,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
       case ThemeModes.Dark:
         return language.dark;
       case ThemeModes.SystemDefault:
-        return language.system_default;
+        return language.systemDefault;
     }
   }
 
@@ -72,11 +72,11 @@ class _ThemeScreenState extends State<ThemeScreen> {
                   ],
                 ).onTap(() async {
                   currentIndex = index;
-                  if (index == appThemeMode.ThemeModeSystem) {
+                  if (index == appThemeMode.themeModeSystem) {
                     appStore.setDarkMode(MediaQuery.of(context).platformBrightness == Brightness.dark);
-                  } else if (index == appThemeMode.ThemeModeLight) {
+                  } else if (index == appThemeMode.themeModeLight) {
                     appStore.setDarkMode(false);
-                  } else if (index == appThemeMode.ThemeModeDark) {
+                  } else if (index == appThemeMode.themeModeDark) {
                     appStore.setDarkMode(true);
                   }
                   setValue(THEME_MODE_INDEX, index);

@@ -40,7 +40,7 @@ class OrderHistoryScreenState extends State<OrderHistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(language.order_history),
+        title: Text(language.orderHistory),
       ),
       body: BodyCornerWidget(
         child: ListView.builder(

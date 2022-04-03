@@ -31,12 +31,12 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
 
   late PolylinePoints polylinePoints;
 
-  LatLng? SOURCE_LOCATION;
+  LatLng? sourceLocation;
 
-  double CAMERA_ZOOM = 13;
+  double cameraZoom = 13;
 
-  double CAMERA_TILT = 0;
-  double CAMERA_BEARING = 30;
+  double cameraTilt = 0;
+  double cameraBearing = 30;
 
   UserData? deliveryBoyData;
 
@@ -56,12 +56,12 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
     getUserDetail(widget.orderData.deliveryManId.validate()).then((value) {
       appStore.setLoading(false);
       deliveryBoyData = value;
-      SOURCE_LOCATION = LatLng(deliveryBoyData!.latitude.toDouble(), deliveryBoyData!.longitude.toDouble());
+      sourceLocation = LatLng(deliveryBoyData!.latitude.toDouble(), deliveryBoyData!.longitude.toDouble());
       markers = [
         Marker(
-          markerId: MarkerId(deliveryBoyData!.city_name.validate()),
+          markerId: MarkerId(deliveryBoyData!.cityName.validate()),
           position: LatLng(deliveryBoyData!.latitude.toDouble(), deliveryBoyData!.longitude.toDouble()),
-          infoWindow: InfoWindow(title: '${deliveryBoyData!.name.validate()}',snippet: 'Last update at ${dateParse(deliveryBoyData!.updated_at!)}'),
+          infoWindow: InfoWindow(title: '${deliveryBoyData!.name.validate()}',snippet: 'Last update at ${dateParse(deliveryBoyData!.updatedAt!)}'),
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
         ),
         Marker(
@@ -115,17 +115,17 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(language.track_order)),
+      appBar: AppBar(title: Text(language.trackOrder)),
       body: BodyCornerWidget(
-        child: SOURCE_LOCATION != null ? GoogleMap(
+        child: sourceLocation != null ? GoogleMap(
           markers: markers.map((e) => e).toSet(),
           polylines: _polylines,
           mapType: MapType.normal,
           initialCameraPosition: CameraPosition(
-            target: SOURCE_LOCATION!,
-            zoom: CAMERA_ZOOM,
-            tilt: CAMERA_TILT,
-            bearing: CAMERA_BEARING,
+            target: sourceLocation!,
+            zoom: cameraZoom,
+            tilt: cameraTilt,
+            bearing: cameraBearing,
           ),
         ) : loaderWidget(),
       ),

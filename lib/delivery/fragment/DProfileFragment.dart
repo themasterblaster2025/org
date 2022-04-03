@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
-import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/screens/LanguageScreen.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
-import 'package:mighty_delivery/main/utils/DataProviders.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -65,13 +63,13 @@ class DProfileFragmentState extends State<DProfileFragment> {
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   children: [
-                    settingItemWidget(Icons.person_outline, language.edit_profile, () {
+                    settingItemWidget(Icons.person_outline, language.editProfile, () {
                       EditProfileScreen().launch(context);
                     }),
-                    settingItemWidget(Icons.lock_outline, language.change_password, () {
+                    settingItemWidget(Icons.lock_outline, language.changePassword, () {
                       ChangePasswordScreen().launch(context);
                     }),
-                    settingItemWidget(Icons.location_on_outlined, language.change_location, () {
+                    settingItemWidget(Icons.location_on_outlined, language.changeLocation, () {
                       UserCitySelectScreen(isBack: true).launch(context);
                     }),
                     settingItemWidget(Icons.language, language.language, () {
@@ -80,10 +78,10 @@ class DProfileFragmentState extends State<DProfileFragment> {
                     settingItemWidget(Icons.wb_sunny_outlined, language.theme, () {
                       ThemeScreen().launch(context);
                     }),
-                    settingItemWidget(Icons.info_outline, language.about_us, () {
+                    settingItemWidget(Icons.info_outline, language.aboutUs, () {
                       launch('https://www.google.com/');
                     }),
-                    settingItemWidget(Icons.help_outline, language.help_and_support, () {
+                    settingItemWidget(Icons.help_outline, language.helpAndSupport, () {
                       launch('https://www.google.com/');
                     }),
                     settingItemWidget(
@@ -93,7 +91,7 @@ class DProfileFragmentState extends State<DProfileFragment> {
                         await showConfirmDialogCustom(
                           context,
                           primaryColor: colorPrimary,
-                          title: language.logout_confirmation_msg,
+                          title: language.logoutConfirmationMsg,
                           positiveText: language.yes,
                           negativeText: language.cancel,
                           onAccept: (c) {

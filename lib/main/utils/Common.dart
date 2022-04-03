@@ -146,7 +146,7 @@ String? orderStatus(String orderStatus) {
   } else if (orderStatus == ORDER_ACTIVE) {
     return language.active;
   } else if (orderStatus == ORDER_PICKED_UP) {
-    return language.picked_up;
+    return language.pickedUp;
   } else if (orderStatus == ORDER_ARRIVED) {
     return language.arrived;
   } else if (orderStatus == ORDER_DEPARTED) {
@@ -158,6 +158,7 @@ String? orderStatus(String orderStatus) {
   } else if (orderStatus == ORDER_CREATE) {
     return language.create;
   }
+  return '';
 }
 
 Future<bool> checkPermission() async {
@@ -172,7 +173,7 @@ Future<bool> checkPermission() async {
       return true;
     }
   } else {
-    toast(language.allow_location_permission);
+    toast(language.allowLocationPermission);
 
     // Open system level location permission
     await Geolocator.openAppSettings();
@@ -229,21 +230,21 @@ Widget settingItemWidget(IconData icon,String title,Function() onTap,{bool isLas
 
 String? orderTitle(String orderStatus) {
   if (orderStatus == ORDER_ASSIGNED) {
-    return language.order_assign_confirmation;
+    return language.orderAssignConfirmation;
   } else if (orderStatus == ORDER_ACTIVE) {
-    return language.order_pickup_confirmation;
+    return language.orderPickupConfirmation;
   } else if (orderStatus == ORDER_PICKED_UP) {
-    return language.order_departed_confirmation;
+    return language.orderDepartedConfirmation;
   } else if (orderStatus == ORDER_ARRIVED) {
-    return language.order_pickup_confirmation;
+    return language.orderPickupConfirmation;
   } else if (orderStatus == ORDER_DEPARTED) {
-    return language.order_complete_confirmation;
+    return language.orderCompleteConfirmation;
   } else if (orderStatus == ORDER_COMPLETED) {
     return '';
   } else if (orderStatus == ORDER_CANCELLED) {
-    return language.order_cancel_confirmation;
+    return language.orderCancelConfirmation;
   } else if (orderStatus == ORDER_CREATE) {
-    return language.order_create_confirmation;
+    return language.orderCreateConfirmation;
   }
   return '';
 }

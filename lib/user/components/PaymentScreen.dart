@@ -301,7 +301,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
 
           await Stripe.instance.initPaymentSheet(
             paymentSheetParameters: SetupPaymentSheetParameters(
-              paymentIntentClientSecret: res.client_secret.validate(),
+              paymentIntentClientSecret: res.clientSecret.validate(),
               style: ThemeMode.light,
               applePay: true,
               googlePay: true,
@@ -309,11 +309,11 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
               merchantCountryCode: 'IN',
               merchantDisplayName: 'Mighty Delivery',
               customerId: '1',
-              customerEphemeralKeySecret: res.client_secret.validate(),
-              setupIntentClientSecret: res.client_secret.validate(),
+              customerEphemeralKeySecret: res.clientSecret.validate(),
+              setupIntentClientSecret: res.clientSecret.validate(),
             ),
           );
-          await Stripe.instance.presentPaymentSheet(parameters: PresentPaymentSheetParameters(clientSecret: res.client_secret!, confirmPayment: true)).then(
+          await Stripe.instance.presentPaymentSheet(parameters: PresentPaymentSheetParameters(clientSecret: res.clientSecret!, confirmPayment: true)).then(
             (value) async {
               savePaymentApiCall(paymentType: PAYMENT_TYPE_STRIPE, paymentStatus: PAYMENT_PAID);
             },
@@ -349,7 +349,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(language.payment_method, style: boldTextStyle()),
+                  Text(language.paymentMethod, style: boldTextStyle()),
                   16.height,
                   ListView.builder(
                     primary: false,
@@ -389,7 +389,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
             ),
             Align(
               alignment: Alignment.bottomCenter,
-              child: commonButton(language.pay_now, () {
+              child: commonButton(language.payNow, () {
                 if (selectedPaymentType == PAYMENT_TYPE_STRIPE) {
                   stripePay();
                 } else if (selectedPaymentType == PAYMENT_TYPE_RAZORPAY) {

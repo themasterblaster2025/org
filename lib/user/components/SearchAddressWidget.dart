@@ -8,7 +8,6 @@ import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
-import '';
 import '../../main/models/CountryListModel.dart';
 
 class SearchAddressWidget extends PlacesAutocompleteWidget {
@@ -20,7 +19,10 @@ class SearchAddressWidget extends PlacesAutocompleteWidget {
           types: [],
           strictbounds: false,
           region: 'Navsari',
-          components: [Component(Component.country, CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate(value: 'IN'))],
+          components: [
+            Component(Component.country, CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate(value: 'IN')),
+           // Component(Component.administrativeArea,'Navsari'),
+          ],
         );
 
   @override

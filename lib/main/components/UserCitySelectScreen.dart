@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mighty_delivery/delivery/screens/DeliveryDashBoard.dart';
 import 'package:mighty_delivery/main.dart';
@@ -68,7 +67,7 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
 
   getCityApiCall({String? name}) async {
     appStore.setLoading(true);
-    await getCityList(CountryId: selectedCountry!, name: name).then((value) {
+    await getCityList(countryId: selectedCountry!, name: name).then((value) {
       appStore.setLoading(false);
       cityData.clear();
       cityData.addAll(value.data!);
@@ -123,12 +122,12 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
         if (selectedCity != null) {
           return true;
         } else {
-          toast(language.please_select_city);
+          toast(language.pleaseSelectCity);
           return false;
         }
       },
       child: Scaffold(
-        appBar: AppBar(title: Text(language.select_region),automaticallyImplyLeading: widget.isBack),
+        appBar: AppBar(title: Text(language.selectRegion),automaticallyImplyLeading: widget.isBack),
         body: BodyCornerWidget(
           child: SingleChildScrollView(
             padding: EdgeInsets.all(16),
@@ -188,7 +187,7 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                                 AppTextField(
                                   controller: searchCityController,
                                   textFieldType: TextFieldType.OTHER,
-                                  decoration: commonInputDecoration(hintText: language.select_city, suffixIcon: Icons.search),
+                                  decoration: commonInputDecoration(hintText: language.selectCity, suffixIcon: Icons.search),
                                   onChanged: (value) {
                                     getCityApiCall(name: value);
                                   },

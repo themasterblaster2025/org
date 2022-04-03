@@ -87,7 +87,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     ).then((value) {
       finish(context);
       appStore.setLoading(false);
-      snackBar(context, title: language.profile_update_msg);
+      snackBar(context, title: language.profileUpdateMsg);
     }).catchError((error) {
       log(error);
       appStore.setLoading(false);
@@ -102,7 +102,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(language.edit_profile)),
+      appBar: AppBar(title: Text(language.editProfile)),
       body: BodyCornerWidget(
         child: Stack(
           children: [
@@ -148,7 +148,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                       nextFocus: usernameFocus,
                       decoration: commonInputDecoration(),
                       onTap: () {
-                        toast(language.not_change_email);
+                        toast(language.notChangeEmail);
                       },
                     ),
                     16.height,
@@ -162,7 +162,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                       nextFocus: nameFocus,
                       decoration: commonInputDecoration(),
                       onTap: () {
-                        toast(language.not_change_username);
+                        toast(language.notChangeUsername);
                       },
                     ),
                     16.height,
@@ -174,10 +174,10 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                       focus: nameFocus,
                       nextFocus: addressFocus,
                       decoration: commonInputDecoration(),
-                      errorThisFieldRequired: language.field_required_msg,
+                      errorThisFieldRequired: language.fieldRequiredMsg,
                     ),
                     16.height,
-                    Text(language.contact_number, style: primaryTextStyle()),
+                    Text(language.contactNumber, style: primaryTextStyle()),
                     8.height,
                     Container(
                       height: 100,
@@ -207,9 +207,9 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                             decoration: commonInputDecoration(),
                             validator: (s){
                               if (s!.trim().isEmpty)
-                                return language.field_required_msg;
+                                return language.fieldRequiredMsg;
                               if (s.trim().length > 15)
-                                return language.contact_number_validation;
+                                return language.contactNumberValidation;
                               return null;
                             },
                           ).expand(),
@@ -221,7 +221,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     8.height,
                     AppTextField(
                       controller: addressController,
-                      textFieldType: TextFieldType.ADDRESS,
+                      textFieldType: TextFieldType.MULTILINE,
                       focus: addressFocus,
                       decoration: commonInputDecoration(),
                     ),
@@ -236,7 +236,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(16),
-        child: commonButton(language.save_changes, () {
+        child: commonButton(language.saveChanges, () {
           if (_formKey.currentState!.validate()) {
             save();
           }

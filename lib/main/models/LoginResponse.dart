@@ -22,64 +22,64 @@ class LoginResponse {
 }
 
 class UserData {
-  String? api_token;
-  String? contact_number;
-  String? created_at;
+  String? apiToken;
+  String? contactNumber;
+  String? createdAt;
   String? email;
   int? id;
   String? name;
-  String? profile_image;
-  String? updated_at;
-  String? user_type;
+  String? profileImage;
+  String? updatedAt;
+  String? userType;
   String? username;
   String? address;
   int? status;
-  int? country_id;
-  int? city_id;
-  String? city_name;
-  String? country_name;
+  int? countryId;
+  int? cityId;
+  String? cityName;
+  String? countryName;
   String? latitude;
   String? longitude;
 
   UserData({
-    this.api_token,
-    this.contact_number,
-    this.created_at,
+    this.apiToken,
+    this.contactNumber,
+    this.createdAt,
     this.email,
     this.id,
     this.name,
-    this.profile_image,
-    this.updated_at,
-    this.user_type,
+    this.profileImage,
+    this.updatedAt,
+    this.userType,
     this.username,
     this.address,
     this.status,
-    this.city_id,
-    this.country_id,
-    this.city_name,
-    this.country_name,
+    this.cityId,
+    this.countryId,
+    this.cityName,
+    this.countryName,
     this.latitude,
     this.longitude,
   });
 
   factory UserData.fromJson(Map<String, dynamic> json) {
     return UserData(
-      api_token: json['api_token'],
-      contact_number: json['contact_number'],
-      created_at: json['created_at'],
+      apiToken: json['api_token'],
+      contactNumber: json['contact_number'],
+      createdAt: json['created_at'],
       email: json['email'],
       id: json['id'],
       name: json['name'],
-      profile_image: json['profile_image'],
-      updated_at: json['updated_at'],
-      user_type: json['user_type'],
+      profileImage: json['profile_image'],
+      updatedAt: json['updated_at'],
+      userType: json['user_type'],
       username: json['username'],
       address: json['address'],
       status: json['status'],
-      city_id: json['city_id'],
-      country_id: json['country_id'],
-      city_name: json['city_name'],
-      country_name: json['country_name'],
+      cityId: json['city_id'],
+      countryId: json['country_id'],
+      cityName: json['city_name'],
+      countryName: json['country_name'],
       latitude: json['latitude'],
       longitude: json['longitude'],
     );
@@ -87,22 +87,22 @@ class UserData {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['api_token'] = this.api_token;
-    data['contact_number'] = this.contact_number;
-    data['created_at'] = this.created_at;
+    data['api_token'] = this.apiToken;
+    data['contact_number'] = this.contactNumber;
+    data['created_at'] = this.createdAt;
     data['email'] = this.email;
     data['id'] = this.id;
     data['name'] = this.name;
-    data['profile_image'] = this.profile_image;
-    data['updated_at'] = this.updated_at;
-    data['user_type'] = this.user_type;
+    data['profile_image'] = this.profileImage;
+    data['updated_at'] = this.updatedAt;
+    data['user_type'] = this.userType;
     data['username'] = this.username;
     data['address'] = this.address;
     data['status'] = this.status;
-    data['city_id'] = this.city_id;
-    data['country_id'] = this.country_id;
-    data['city_name'] = this.city_name;
-    data['country_name'] = this.country_name;
+    data['city_id'] = this.cityId;
+    data['country_id'] = this.countryId;
+    data['city_name'] = this.cityName;
+    data['country_name'] = this.countryName;
     data['latitude'] = this.latitude;
     data['longitude'] = this.longitude;
 
