@@ -70,17 +70,12 @@ class _CustomSearchScaffoldState extends PlacesAutocompleteState {
       finish(context, [
         {'address': p.description, 'late': lat.toString(), 'long': lng.toString()}
       ]);
-      /* ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("${p.description} - $lat/$lng")),
-      );*/
     }
   }
 
   @override
   void onResponseError(PlacesAutocompleteResponse response) {
     super.onResponseError(response);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(response.errorMessage!)),
-    );
+    toast(response.errorMessage!);
   }
 }

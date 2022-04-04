@@ -332,8 +332,6 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                       children: [
                         AppButton(
                           width: context.width(),
-
-                          /// ToDo change language
                           text: widget.orderData!.status == ORDER_DEPARTED ? language.confirmDelivery : language.confirmPickup,
                           textStyle: primaryTextStyle(color: white),
                           color: colorPrimary,

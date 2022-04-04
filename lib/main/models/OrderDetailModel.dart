@@ -22,8 +22,7 @@ class OrderDetailModel {
       data['data'] = this.data!.toJson();
     }
     if (this.orderHistory != null) {
-      data['order_history'] =
-          this.orderHistory!.map((v) => v.toJson()).toList();
+      data['order_history'] = this.orderHistory!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -40,16 +39,7 @@ class OrderHistory {
   String? updatedAt;
   String? deletedAt;
 
-  OrderHistory(
-      {this.id,
-        this.orderId,
-        this.datetime,
-        this.historyType,
-        this.historyMessage,
-        this.historyData,
-        this.createdAt,
-        this.updatedAt,
-        this.deletedAt});
+  OrderHistory({this.id, this.orderId, this.datetime, this.historyType, this.historyMessage, this.historyData, this.createdAt, this.updatedAt, this.deletedAt});
 
   OrderHistory.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -57,9 +47,7 @@ class OrderHistory {
     datetime = json['datetime'];
     historyType = json['history_type'];
     historyMessage = json['history_message'];
-    historyData = json['history_data'] != null
-        ? new HistoryData.fromJson(json['history_data'])
-        : null;
+    historyData = json['history_data'] != null ? new HistoryData.fromJson(json['history_data']) : null;
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
@@ -83,23 +71,32 @@ class OrderHistory {
 }
 
 class HistoryData {
-  String? clientId;
+  var clientId;
   String? clientName;
+  var deliveryManId;
   String? deliveryManName;
+  var orderId;
+  String? paymentStatus;
 
-  HistoryData({this.clientId, this.clientName,this.deliveryManName});
+  HistoryData({this.clientId, this.clientName, this.deliveryManName});
 
   HistoryData.fromJson(Map<String, dynamic> json) {
     clientId = json['client_id'];
     clientName = json['client_name'];
+    deliveryManId = json['delivery_man_id'];
     deliveryManName = json['delivery_man_name'];
+    orderId = json['order_id'];
+    paymentStatus = json['payment_status'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['client_id'] = this.clientId;
     data['client_name'] = this.clientName;
+    data['delivery_man_id'] = this.deliveryManId;
     data['delivery_man_name'] = this.deliveryManName;
+    data['order_id'] = this.orderId;
+    data['payment_status'] = this.paymentStatus;
     return data;
   }
 }

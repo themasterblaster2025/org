@@ -1,4 +1,11 @@
 const mAppName = 'On Demand Local Delivery';
+const mAppDes =
+    'mAppName Piping hot food at your doorstep is like a dream come true with the Mighty Food App. Build a user-friendly and appetizing Food Delivery mobile app for your cafe or restaurant business. It is packed with features and functions which get you going in literally no time! With 3 different modules - Mighty User, Mighty Admin and Mighty Delivery, you can stick to either of and manage your food delivery service with excellence. So take your business to next level by offering food deliveries anytime, anywhere for your customers. Mighty Food App is a complete solution when it comes to food delivery, bakery or even fast food businesses.';
+const mPrivacyPolicy = 'https://www.google.com/';
+const mTermAndCondition = 'https://www.google.com/';
+const mHelpAndSupport = 'https://support.meetmighty.com/';
+const mContactPref = 'hello@meetmighty.com';
+const mCodeCanyonURL = 'https://codecanyon.net/user/meetmighty/portfolio/';
 
 const mBaseUrl = 'https://meetmighty.com/mobile/mighty-local-delivery/api/';
 const googleMapAPIKey = 'AIzaSyBAm_XYdWpfE2U_aLkMFGcG9H5wk1yY4yY';

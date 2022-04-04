@@ -20,7 +20,6 @@ List<WalkThroughItemModel> getWalkThroughItems() {
 
 List<AppModel> getReasonList() {
   List<AppModel> list = [];
-  // TODO localization
   list.add(AppModel(name: 'Personal Reason'));
   list.add(AppModel(name: 'I have change my mind'));
   list.add(AppModel(name: 'I place duplicate order'));

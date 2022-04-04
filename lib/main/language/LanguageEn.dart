@@ -535,4 +535,18 @@ class LanguageEn extends BaseLanguage {
   @override
   String get confirmPickup => "Confirm Pickup";
 
+  @override
+  String get version => "Version";
+
+  @override
+  String get contactUs => "Contact Us";
+
+  @override
+  String get purchase => "Purchase";
+
+  @override
+  String get privacyPolicy => "Privacy Policy";
+
+  @override
+  String get termAndCondition => "Terms & Condition";
 }

@@ -37,6 +37,7 @@ dependencies:
   flutterwave_standard: ^1.0.3
   flutter_paystack: ^1.0.5+1
   country_code_picker: ^2.0.2
+  package_info_plus: ^1.4.0
 
   # MAP
   geolocator: ^8.2.0

@@ -10,6 +10,7 @@ import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../main/screens/AboutUsScreen.dart';
 import '../../main/screens/ChangePasswordScreen.dart';
 import '../../main/screens/EditProfileScreen.dart';
 import '../../main/screens/ThemeScreen.dart';
@@ -21,7 +22,6 @@ class DProfileFragment extends StatefulWidget {
 }
 
 class DProfileFragmentState extends State<DProfileFragment> {
-
   @override
   void initState() {
     super.initState();
@@ -78,16 +78,22 @@ class DProfileFragmentState extends State<DProfileFragment> {
                     settingItemWidget(Icons.wb_sunny_outlined, language.theme, () {
                       ThemeScreen().launch(context);
                     }),
-                    settingItemWidget(Icons.info_outline, language.aboutUs, () {
-                      launch('https://www.google.com/');
+                    settingItemWidget(Icons.assignment_outlined,language.privacyPolicy, () {
+                      launch(mPrivacyPolicy);
                     }),
                     settingItemWidget(Icons.help_outline, language.helpAndSupport, () {
-                      launch('https://www.google.com/');
+                      launch(mHelpAndSupport);
+                    }),
+                    settingItemWidget(Icons.assignment_outlined, language.termAndCondition, () {
+                      launch(mTermAndCondition);
+                    }),
+                    settingItemWidget(Icons.info_outline, language.aboutUs, () {
+                      AboutUsScreen().launch(context);
                     }),
                     settingItemWidget(
                       Icons.logout,
                       language.logout,
-                          () async {
+                      () async {
                         await showConfirmDialogCustom(
                           context,
                           primaryColor: colorPrimary,

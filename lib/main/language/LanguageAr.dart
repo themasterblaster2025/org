@@ -534,4 +534,19 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get confirmPickup => "تأكيد بيك اب";
+
+  @override
+  String get version => "الإصدار";
+
+  @override
+  String get contactUs => "اتصل بنا";
+
+  @override
+  String get purchase => "شراء";
+
+  @override
+  String get privacyPolicy => "سياسة خاصة";
+
+  @override
+  String get termAndCondition => "الشروط والحالة";
 }

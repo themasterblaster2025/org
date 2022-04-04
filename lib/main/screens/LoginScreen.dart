@@ -199,32 +199,6 @@ class LoginScreenState extends State<LoginScreen> {
                           loginApiCall();
                         }, width: context.width()),
                         16.height,
-                        /* Row(
-                          children: [
-                            Divider().expand(),
-                            8.width,
-                            Text(language.or, style: secondaryTextStyle()),
-                            8.width,
-                            Divider().expand(),
-                          ],
-                        ),
-                        16.height,
-                        AppButton(
-                          elevation: 0,
-                          shapeBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius), side: BorderSide(color: borderColor)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              GoogleLogoWidget(),
-                              16.width,
-                              Text(language.continue_with_google, style: boldTextStyle()),
-                            ],
-                          ),
-                          onTap: () {
-                            //
-                          },
-                        ),
-                        16.height,*/
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

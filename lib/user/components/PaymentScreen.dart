@@ -86,7 +86,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
 
     savePayment(req).then((value) {
       appStore.setLoading(false);
-      snackBar(context, title: value.message.toString());
+      toast(value.message.toString());
       DashboardScreen().launch(context, isNewTask: true);
     }).catchError((error) {
       appStore.setLoading(false);
@@ -162,7 +162,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
       if (response.message == 'Success') {
         savePaymentApiCall(paymentType: PAYMENT_TYPE_PAYSTACK, paymentStatus: PAYMENT_PAID, transactionDetail: req);
       } else {
-        snackBar(context, title: 'Payment Failed');
+        toast('Payment Failed');
       }
     } catch (e) {
       payStackShowMessage("Check console for error");
@@ -175,7 +175,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
   }
 
   void payStackShowMessage(String message, [Duration duration = const Duration(seconds: 4)]) {
-    snackBar(context, title: message);
+    toast(message);
     log(message);
   }
 

@@ -87,7 +87,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     ).then((value) {
       finish(context);
       appStore.setLoading(false);
-      snackBar(context, title: language.profileUpdateMsg);
+      toast(language.profileUpdateMsg);
     }).catchError((error) {
       log(error);
       appStore.setLoading(false);

@@ -37,7 +37,7 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       appStore.setLoading(true);
 
       await forgotPassword(req).then((value) {
-        snackBar(context, title: value.message.validate());
+        toast(value.message.validate());
 
         appStore.setLoading(false);
 

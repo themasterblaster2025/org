@@ -358,4 +358,14 @@ abstract class BaseLanguage {
   String get no;
 
   String get confirmPickup;
+
+  String get version;
+
+  String get contactUs;
+
+  String get purchase;
+
+  String get privacyPolicy;
+
+  String get termAndCondition;
 }

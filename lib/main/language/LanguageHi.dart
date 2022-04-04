@@ -534,4 +534,19 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get confirmPickup => "पिकअप की पुष्टि करें";
+
+  @override
+  String get version => "संस्करण";
+
+  @override
+  String get contactUs => "संपर्क करें";
+
+  @override
+  String get purchase => "खरीदना";
+
+  @override
+  String get privacyPolicy => "गोपनीयता नीति";
+
+  @override
+  String get termAndCondition => "नियम व शर्त";
 }
