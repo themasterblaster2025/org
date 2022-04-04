@@ -44,7 +44,7 @@ void main() async {
       });
     }
   }).catchError((error) {
-    toast(error.toString());
+    log(error.toString());
   });
 
   Stripe.publishableKey = stripPaymentPublishKey.validate();
@@ -57,7 +57,6 @@ void main() async {
   appStore.setLogin(getBoolAsync(IS_LOGGED_IN), isInitializing: true);
   appStore.setUserEmail(getStringAsync(USER_EMAIL), isInitialization: true);
   appStore.setLanguage(getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguage));
-  print(appStore.selectedLanguage);
 
   int themeModeIndex = getIntAsync(THEME_MODE_INDEX);
   if (themeModeIndex == appThemeMode.themeModeLight) {
