@@ -39,33 +39,20 @@ class AboutUsScreenState extends State<AboutUsScreen> {
         child: Container(
           padding: EdgeInsets.all(16),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(mAppName, style: primaryTextStyle(size: 24)),
+              Image.asset('assets/app_logo.png',height: 80,width: 80).cornerRadiusWithClipRRect(16),
               16.height,
-              Container(
-                decoration: BoxDecoration(color: colorPrimary, borderRadius: radius(4)),
-                height: 4,
-                width: 100,
-              ),
-              16.height,
-              Text(language.version, style: secondaryTextStyle()),
-              4.height,
+              Text(mAppName, style: primaryTextStyle(size: 20)),
+              8.height,
               FutureBuilder<PackageInfo>(
                 future: PackageInfo.fromPlatform(),
                 builder: (_, snap) {
                   if (snap.hasData) {
-                    return Text('${snap.data!.version.validate()}', style: secondaryTextStyle());
+                    return Text('v${snap.data!.version.validate()}', style: secondaryTextStyle());
                   }
                   return SizedBox();
                 },
-              ),
-              16.height,
-              Text(
-                mAppDes,
-                style: primaryTextStyle(size: 14),
-                textAlign: TextAlign.justify,
               ),
             ],
           ),

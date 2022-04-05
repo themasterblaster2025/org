@@ -161,7 +161,7 @@ class LanguageEn extends BaseLanguage {
   String get pickupCurrentValidationMsg => "Pickup Time must be after Current Time";
 
   @override
-  String get pickupDeliverValidationMsg => "Pickup Time must be before Deliver Time'";
+  String get pickupDeliverValidationMsg => "Pickup Time must be before Deliver Time";
 
   @override
   String get createOrderConfirmationMsg => "Are you sure you want to place order?";

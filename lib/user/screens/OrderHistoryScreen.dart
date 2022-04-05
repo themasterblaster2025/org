@@ -79,8 +79,14 @@ class OrderHistoryScreenState extends State<OrderHistoryScreen> {
   }
 
   messageData(OrderHistory orderData) {
-    if (orderData.historyType == COURIER_ASSIGNED && (getStringAsync(USER_TYPE) == CLIENT)) {
-      return 'Your Order#${orderData.orderId} has been assigned to ${orderData.historyData!.deliveryManName}.';
+    if (getStringAsync(USER_TYPE) == CLIENT) {
+      if (orderData.historyType == COURIER_ASSIGNED) {
+        return 'Your Order#${orderData.orderId} has been assigned to ${orderData.historyData!.deliveryManName}.';
+      }else if (orderData.historyType == COURIER_TRANSFER) {
+        return 'Your Order#${orderData.orderId} has been transfered to ${orderData.historyData!.deliveryManName}.';
+      }else {
+        return '${orderData.historyMessage}';
+      }
     } else {
       return '${orderData.historyMessage}';
     }

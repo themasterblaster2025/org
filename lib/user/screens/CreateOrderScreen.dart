@@ -184,7 +184,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       "extra_charges": extraChargesObject,
       "parcel_type": parcelTypeCont.text,
       "total_weight": selectedWeight.validate(),
-      "total_distance": totalDistance.validate(),
+      "total_distance": totalDistance.toStringAsFixed(2).validate(),
       "payment_collect_from": paymentCollectFrom,
       "status": orderStatus,
       "payment_type": "",
