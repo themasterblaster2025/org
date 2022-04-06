@@ -47,7 +47,7 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
           Text(language.skip, style: boldTextStyle(color: grey)).onTap(
             () async {
               await setValue(IS_FIRST_TIME, false);
-              LoginScreen().launch(context, isNewTask: true, duration: Duration(seconds: 2), pageRouteAnimation: PageRouteAnimation.Scale);
+              LoginScreen().launch(context, isNewTask: true, duration: Duration(milliseconds: 1000), pageRouteAnimation: PageRouteAnimation.Scale);
             },
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
@@ -112,7 +112,7 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
                   language.getStarted,
                   () async {
                     await setValue(IS_FIRST_TIME, false);
-                    LoginScreen().launch(context, isNewTask: true, duration: Duration(seconds: 2), pageRouteAnimation: PageRouteAnimation.Scale);
+                    LoginScreen().launch(context, isNewTask: true, duration: Duration(milliseconds: 1000), pageRouteAnimation: PageRouteAnimation.Scale);
                   },
                 ),
         ],

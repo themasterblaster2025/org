@@ -99,6 +99,21 @@ mixin _$AppStore on _AppStore, Store {
     });
   }
 
+  final _$isFilteringAtom = Atom(name: '_AppStore.isFiltering');
+
+  @override
+  bool get isFiltering {
+    _$isFilteringAtom.reportRead();
+    return super.isFiltering;
+  }
+
+  @override
+  set isFiltering(bool value) {
+    _$isFilteringAtom.reportWrite(value, super.isFiltering, () {
+      super.isFiltering = value;
+    });
+  }
+
   final _$setLoadingAsyncAction = AsyncAction('_AppStore.setLoading');
 
   @override
@@ -146,6 +161,13 @@ mixin _$AppStore on _AppStore, Store {
     return _$setDarkModeAsyncAction.run(() => super.setDarkMode(aIsDarkMode));
   }
 
+  final _$setFilteringAsyncAction = AsyncAction('_AppStore.setFiltering');
+
+  @override
+  Future<void> setFiltering(bool val) {
+    return _$setFilteringAsyncAction.run(() => super.setFiltering(val));
+  }
+
   @override
   String toString() {
     return '''
@@ -154,7 +176,8 @@ isLoggedIn: ${isLoggedIn},
 userEmail: ${userEmail},
 allUnreadCount: ${allUnreadCount},
 selectedLanguage: ${selectedLanguage},
-isDarkMode: ${isDarkMode}
+isDarkMode: ${isDarkMode},
+isFiltering: ${isFiltering}
     ''';
   }
 }

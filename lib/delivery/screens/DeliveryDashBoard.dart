@@ -67,7 +67,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
                         color: Colors.orange,
                         shape: BoxShape.circle,
                       ),
-                      child: Text('${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}', style: primaryTextStyle(size: 8, color: Colors.white)),
+                      child: Text('${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}', style: primaryTextStyle(size: appStore.allUnreadCount < 99 ? 12 : 8, color: Colors.white)),
                     ),
                   ).visible(appStore.allUnreadCount != 0);
                 }),

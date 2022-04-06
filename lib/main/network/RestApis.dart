@@ -140,6 +140,7 @@ Future<void> logout(BuildContext context) async {
   }
 
   await appStore.setLogin(false);
+  appStore.setFiltering(false);
 
   LoginScreen().launch(context, isNewTask: true);
 }
@@ -149,7 +150,7 @@ Future<ChangePasswordResponseModel> changePassword(Map req) async {
 }
 
 Future<ChangePasswordResponseModel> forgotPassword(Map req) async {
-  return ChangePasswordResponseModel.fromJson(await handleResponse(await buildHttpResponse('forgot-password', request: req, method: HttpMethod.POST)));
+  return ChangePasswordResponseModel.fromJson(await handleResponse(await buildHttpResponse('forget-password', request: req, method: HttpMethod.POST)));
 }
 
 Future<MultipartRequest> getMultiPartRequest(String endPoint, {String? baseUrl}) async {

@@ -108,16 +108,18 @@ class OrderFragmentState extends State<OrderFragment> {
                                 children: [
                                   Row(
                                     children: [
-                                      Text('#${item.id}', style: secondaryTextStyle(size: 16)).expand(),
+                                      // TODO Localization
+                                      Text('${language.order}# ${item.id}', style: secondaryTextStyle(size: 16)).expand(),
                                       Container(
-                                        decoration: BoxDecoration(color: statusColor(item.status.validate()), borderRadius: BorderRadius.circular(defaultRadius)),
+                                        decoration: BoxDecoration(color: statusColor(item.status.validate()).withOpacity(0.15), borderRadius: BorderRadius.circular(defaultRadius)),
                                         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                        child: Text(orderStatus(item.status.validate()).validate(), style: primaryTextStyle(color: white)),
+                                        child: Text(item.status!.replaceAll("_", " ").capitalizeFirstLetter(), style: boldTextStyle(color: statusColor(item.status.validate()))),
                                       ),
                                     ],
                                   ),
                                   8.height,
                                   Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Container(
                                         decoration: boxDecorationWithRoundedCorners(
@@ -129,7 +131,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text(item.parcelType.validate(), style: boldTextStyle()),
+                                          Text(item.parcelType.validate(), style: boldTextStyle(),maxLines: 1,overflow: TextOverflow.ellipsis),
                                           4.height,
                                           Row(
                                             children: [
@@ -210,35 +212,30 @@ class OrderFragmentState extends State<OrderFragment> {
                                     ],
                                   ),
                                   16.height,
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(language.payment, style: boldTextStyle()),
-                                      Text('${item.paymentStatus.validate(value: PAYMENT_PENDING)}', style: primaryTextStyle(color: paymentStatusColor(item.paymentStatus.validate(value: PAYMENT_PENDING)))),
-                                    ],
-                                  ),
-                                  16.height,
-                                  AppButton(
-                                    elevation: 0,
-                                    width: 135,
-                                    height: 35,
-                                    color: Colors.transparent,
-                                    padding: EdgeInsets.zero,
-                                    shapeBorder: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(defaultRadius),
-                                      side: BorderSide(color: colorPrimary),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(language.trackOrder, style: primaryTextStyle(color: colorPrimary)),
-                                        Icon(Icons.arrow_right, color: colorPrimary),
-                                      ],
-                                    ),
-                                    onTap: () {
-                                      OrderTrackingScreen(orderData: item).launch(context);
-                                    },
-                                  ).visible(item.status == ORDER_DEPARTED || item.status == ORDER_ARRIVED)
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: AppButton(
+                                      elevation: 0,
+                                      width: 135,
+                                      height: 35,
+                                      color: Colors.transparent,
+                                      padding: EdgeInsets.zero,
+                                      shapeBorder: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(defaultRadius),
+                                        side: BorderSide(color: colorPrimary),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(language.trackOrder, style: primaryTextStyle(color: colorPrimary)),
+                                          Icon(Icons.arrow_right, color: colorPrimary),
+                                        ],
+                                      ),
+                                      onTap: () {
+                                        OrderTrackingScreen(orderData: item).launch(context);
+                                      },
+                                    ).visible(item.status == ORDER_DEPARTED || item.status == ORDER_ARRIVED),
+                                  )
                                 ],
                               ),
                             ),

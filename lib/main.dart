@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -57,6 +58,8 @@ void main() async {
   appStore.setLogin(getBoolAsync(IS_LOGGED_IN), isInitializing: true);
   appStore.setUserEmail(getStringAsync(USER_EMAIL), isInitialization: true);
   appStore.setLanguage(getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguage));
+  FilterAttributeModel? filterData = FilterAttributeModel.fromJson(getJSONAsync(FILTER_DATA));
+  appStore.setFiltering(filterData.orderStatus!=null || !filterData.fromDate.isEmptyOrNull || !filterData.toDate.isEmptyOrNull);
 
   int themeModeIndex = getIntAsync(THEME_MODE_INDEX);
   if (themeModeIndex == appThemeMode.themeModeLight) {

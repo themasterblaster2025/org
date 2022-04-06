@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
@@ -60,13 +61,13 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   Future<void> init() async {
     mIsUpdate = widget.orderData != null;
     if (mIsUpdate) {
-      picUpController.text = widget.orderData!.pickupDatetime.validate().isEmpty ? DateTime.now().toString() : widget.orderData!.pickupDatetime.validate();
+      picUpController.text = DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.parse(widget.orderData!.pickupDatetime.validate().isEmpty ? DateTime.now().toString() : widget.orderData!.pickupDatetime.validate()));
       reasonController.text = widget.orderData!.reason.validate();
       reason = widget.orderData!.reason.validate();
       log(picUpController);
     }
 
-    if (widget.orderData!.status == ORDER_DEPARTED) deliveryDateController.text = DateTime.now().toString();
+    if (widget.orderData!.status == ORDER_DEPARTED) deliveryDateController.text = DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.now());
   }
 
   Future<File> saveSignature(ScreenshotController screenshotController) async {
@@ -207,7 +208,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                       ),
                     16.height,
 
-                    /// change language
+                    /// TODO change language
                     Text('Order ${language.pickupDatetime}', style: boldTextStyle()),
                     8.height,
                     AppTextField(
@@ -233,7 +234,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                       ),
                     16.height,
 
-                    /// change language
+                    /// TODO change language
                     Text('User\'s Signature', style: boldTextStyle()),
                     8.height,
                     widget.orderData!.pickupConfirmByClient == 1 || widget.orderData!.status == ORDER_DEPARTED
@@ -370,10 +371,10 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                               showConfirmDialogCustom(
                                 context,
                                 primaryColor: colorPrimary,
-                                dialogType: DialogType.DELETE,
+                                dialogType: DialogType.CONFIRMATION,
                                 title: orderTitle(widget.orderData!.status!),
                                 positiveText: language.yes,
-                                negativeText: language.cancel,
+                                negativeText: language.no,
                                 onAccept: (c) async {
                                   saveDelivery();
                                 },
@@ -418,7 +419,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   }
 
   Future<void> paymentConfirmDialog(OrderData orderData) {
-    return showConfirmDialogCustom(context, primaryColor: colorPrimary, dialogType: DialogType.DELETE, title: orderTitle(orderData.status!), positiveText: language.yes, negativeText: language.cancel,
+    return showConfirmDialogCustom(context, primaryColor: colorPrimary, dialogType: DialogType.CONFIRMATION, title: orderTitle(orderData.status!), positiveText: language.yes, negativeText: language.cancel,
         onAccept: (c) async {
       appStore.setLoading(true);
       Map req = {

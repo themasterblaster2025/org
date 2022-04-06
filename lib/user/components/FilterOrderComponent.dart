@@ -108,7 +108,7 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
               children: statusList.map((item) {
                 return Chip(
                   backgroundColor: selectedStatus == item ? colorPrimary : Colors.transparent,
-                  label: Text(orderStatus(item).validate()),
+                  label: Text(item.replaceAll("_", " ").capitalizeFirstLetter()),
                   elevation: 0,
                   labelStyle: primaryTextStyle(color: selectedStatus == item ? white : Colors.grey),
                   padding: EdgeInsets.zero,
@@ -177,6 +177,7 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
               if (_formKey.currentState!.validate()) {
                 finish(context);
                 setValue(FILTER_DATA, FilterAttributeModel(orderStatus: selectedStatus, fromDate: fromDate.toString(), toDate: toDate.toString()).toJson());
+                appStore.setFiltering(selectedStatus!=null || fromDate!=null || toDate!=null);
                 LiveStream().emit("UpdateOrderData");
               }
             }, width: context.width()),

@@ -33,13 +33,14 @@ class DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> init() async {
-    bottomNavBarItems.add(BottomNavigationBarItemModel(icon: Icons.shopping_bag, title: language.order));
+    // TODO Localization
+    bottomNavBarItems.add(BottomNavigationBarItemModel(icon: Icons.shopping_bag, title: "My Orders"));
     bottomNavBarItems.add(BottomNavigationBarItemModel(icon: Icons.person, title: language.account));
     LiveStream().on('UpdateLanguage', (p0) {
       setState(() {});
     });
     LiveStream().on('UpdateTheme', (p0) {
-      setState(() { });
+      setState(() {});
     });
   }
 
@@ -51,7 +52,8 @@ class DashboardScreenState extends State<DashboardScreen> {
   String getTitle() {
     String title = "";
     if (currentIndex == 0) {
-      title = language.order;
+      // TODO Localization
+      title = "My Orders";
     } else if (currentIndex == 1) {
       title = language.account;
     }
@@ -95,7 +97,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                       color: Colors.orange,
                       shape: BoxShape.circle,
                     ),
-                    child: Text('${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}', style: primaryTextStyle(size: 8, color: Colors.white)),
+                    child: Text('${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}', style: primaryTextStyle(size: appStore.allUnreadCount > 99 ? 8 : 12, color: Colors.white)),
                   ),
                 ).visible(appStore.allUnreadCount != 0);
               }),
@@ -103,20 +105,40 @@ class DashboardScreenState extends State<DashboardScreen> {
           ).withWidth(40).onTap(() {
             NotificationScreen().launch(context);
           }).visible(currentIndex == 0),
-          IconButton(
-            icon: ImageIcon(AssetImage('assets/icons/ic_filter.png')),
-            onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(defaultRadius), topRight: Radius.circular(defaultRadius))),
+          Stack(
+            children: [
+              Align(
+                alignment: AlignmentDirectional.center,
+                child: Icon(Icons.filter_list),
+              ),
+              // TODO Filter Condition added
+              Observer(
                 builder: (context) {
-                  return FilterOrderComponent();
-                },
-              );
-            },
-            padding: EdgeInsets.zero,
-          ).visible(currentIndex == 0),
+                  return Positioned(
+                    right: 8,
+                    top: 16,
+                    child: Container(
+                      height: 10,
+                      width: 10,
+                      decoration: BoxDecoration(
+                        color: Colors.orange,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ).visible(appStore.isFiltering);
+                }
+              ),
+            ],
+          ).withWidth(40).onTap(() {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(defaultRadius), topRight: Radius.circular(defaultRadius))),
+              builder: (context) {
+                return FilterOrderComponent();
+              },
+            );
+          }).visible(currentIndex == 0),
         ],
       ),
       body: BodyCornerWidget(child: [OrderFragment(), AccountFragment()][currentIndex]),

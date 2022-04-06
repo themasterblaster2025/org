@@ -66,7 +66,8 @@ class NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(language.notification)),
+      // TODO Localization
+      appBar: AppBar(title: Text('Notifications')),
       body: BodyCornerWidget(
         child: Observer(builder: (context) {
           return Stack(
@@ -80,10 +81,9 @@ class NotificationScreenState extends State<NotificationScreen> {
                         NotificationData data = notificationData[index];
                         return Container(
                           padding: EdgeInsets.all(12),
+                          color: data.readAt != null ? Colors.transparent : Colors.grey.withOpacity(0.2),
                           child: Row(
                             children: [
-                              Container(decoration: BoxDecoration(shape: BoxShape.circle, color: data.readAt != null ? Colors.transparent : colorPrimary), width: 10, height: 10),
-                              8.width,
                               Container(
                                 height: 50,
                                 width: 50,

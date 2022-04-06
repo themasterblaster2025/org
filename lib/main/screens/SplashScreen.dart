@@ -41,11 +41,11 @@ class SplashScreenState extends State<SplashScreen> {
             UserCitySelectScreen().launch(context);
           }
         } else {
-          if (getBoolAsync(IS_FIRST_TIME, defaultValue: true)) {
+        //  if (getBoolAsync(IS_FIRST_TIME, defaultValue: true)) {
             WalkThroughScreen().launch(context, isNewTask: true);
-          } else {
-            LoginScreen().launch(context, isNewTask: true);
-          }
+        //  } else {
+         //   LoginScreen().launch(context, isNewTask: true);
+          //}
         }
       },
     );

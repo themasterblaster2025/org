@@ -35,6 +35,7 @@ class _CustomSearchScaffoldState extends PlacesAutocompleteState {
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
+      toolbarHeight: 80,
       title: AppBarPlacesAutoCompleteTextField(
         textDecoration: commonInputDecoration(suffixIcon: Icons.search),
         textStyle: primaryTextStyle(color: Colors.white),

@@ -101,7 +101,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                     children: [
                       Row(
                         children: [
-                          Text('${language.order} #${data.id}', style: boldTextStyle(size: 16)).expand(),
+                          Text('${language.order}# ${data.id}', style: boldTextStyle(size: 16)).expand(),
                           4.height,
                           Row(
                             children: [
@@ -135,8 +135,6 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                       onTap: () {
                                         if (widget.orderStatus == ORDER_ACTIVE) {
                                           onTapData(orderData: data, orderStatus: widget.orderStatus!);
-                                        } else if (widget.orderStatus == ORDER_ACTIVE) {
-                                          onTapData(orderData: data, orderStatus: widget.orderStatus!);
                                         } else if (widget.orderStatus == ORDER_ARRIVED) {
                                           onTapData(orderData: data, orderStatus: widget.orderStatus!);
                                         } else if (widget.orderStatus == ORDER_DEPARTED) {
@@ -145,10 +143,10 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                           showConfirmDialogCustom(
                                             context,
                                             primaryColor: colorPrimary,
-                                            dialogType: DialogType.ACCEPT,
+                                            dialogType: DialogType.CONFIRMATION,
                                             title: orderTitle(widget.orderStatus!),
                                             positiveText: language.yes,
-                                            negativeText: language.cancel,
+                                            negativeText: language.no,
                                             onAccept: (c) async {
                                               appStore.setLoading(true);
                                               await onTapData(orderData: data, orderStatus: widget.orderStatus!);
@@ -164,16 +162,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                           )
                         ],
                       ),
-                      4.height,
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(data.clientName ?? '', style: boldTextStyle()),
-                          4.height,
-                          data.date != null ? Text(printDate(data.date ?? ''), style: secondaryTextStyle()) : SizedBox(),
-                        ],
-                      ),
-                      Divider(height: 30, thickness: 1),
+                      16.height,
                       Row(
                         children: [
                           Row(
@@ -290,6 +279,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                             ),
                           ],
                         )
+
                     ],
                   ),
                 ),

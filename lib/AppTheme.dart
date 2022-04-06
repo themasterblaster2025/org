@@ -12,7 +12,7 @@ class AppTheme {
     primaryColor: colorPrimary,
     scaffoldBackgroundColor: Colors.white,
     //fontFamily: GoogleFonts.rajdhani().fontFamily,
-    iconTheme: IconThemeData(color: colorPrimary),
+    iconTheme: IconThemeData(color: Colors.black),
     dialogBackgroundColor: Colors.white,
     unselectedWidgetColor: Colors.black,
     dividerColor: viewLineColor,

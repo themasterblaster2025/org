@@ -123,7 +123,7 @@ String parcelTypeIcon(String parcelType) {
 }
 
 String printDate(String date) {
-  return DateFormat('dd MMM yyyy').format(DateTime.parse(date).toLocal()) + " at " + DateFormat(' hh:mm a').format(DateTime.parse(date).toLocal());
+  return DateFormat('dd MMM yyyy').format(DateTime.parse(date).toLocal()) + " at " + DateFormat('hh:mm a').format(DateTime.parse(date).toLocal());
 }
 
 double calculateDistance(lat1, lon1, lat2, lon2) {

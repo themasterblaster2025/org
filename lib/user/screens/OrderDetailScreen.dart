@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
@@ -89,320 +90,329 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
         return false;
       },
       child: Scaffold(
-        appBar: AppBar(title: Text(language.orderDetails)),
+        // TODO Localization
+        appBar: AppBar(title: Text('${orderData != null ? orderData!.status!.replaceAll("_", " ").capitalizeFirstLetter() : ''}')),
         body: BodyCornerWidget(
           child: !appStore.isLoading && orderData != null
               ? Stack(
+            children: [
+              SingleChildScrollView(
+                padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 100),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SingleChildScrollView(
-                      padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 100),
-                      child: Column(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Order Id', style: boldTextStyle(size: 20)),
+                        Text('#${orderData!.id}', style: boldTextStyle(size: 20)),
+                      ],
+                    ),
+                    16.height,
+                    Text('Created at: ${printDate(orderData!.date.toString())}', style: secondaryTextStyle()),
+                    Divider(height: 30, thickness: 1),
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Icon(Icons.location_on, color: colorPrimary),
+                            Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
+                            16.width,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (orderData!.pickupDatetime != null) Text('${language.pickedAt} ${printDate(orderData!.pickupDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
+                                Text('${orderData!.pickupPoint!.address}', style: primaryTextStyle()),
+                                if (orderData!.pickupPoint!.contactNumber != null)
+                                  Row(
+                                    children: [
+                                      Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
+                                        launch('tel:${orderData!.pickupPoint!.contactNumber}');
+                                      }),
+                                      8.width,
+                                      Text('${orderData!.pickupPoint!.contactNumber}', style: secondaryTextStyle()),
+                                    ],
+                                  ).paddingOnly(top: 8),
+                                if (orderData!.pickupDatetime == null && orderData!.pickupPoint!.endTime != null && orderData!.pickupPoint!.startTime != null)
+                                  Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(orderData!.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm')
+                                      .format(DateTime.parse(orderData!.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.pickupPoint!.endTime!).toLocal())}',
+                                      style: secondaryTextStyle())
+                                      .paddingOnly(top: 8),
+                              ],
+                            ).expand(),
+                          ],
+                        ),
+                        16.height,
+                        Row(
+                          children: [
+                            Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
+                            Icon(Icons.location_on, color: colorPrimary),
+                            16.width,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (orderData!.deliveryDatetime != null) Text('${language.deliveredAt} ${printDate(orderData!.deliveryDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
+                                Text('${orderData!.deliveryPoint!.address}', style: primaryTextStyle()),
+                                if (orderData!.deliveryPoint!.contactNumber != null)
+                                  Row(
+                                    children: [
+                                      Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
+                                        launch('tel:${orderData!.deliveryPoint!.contactNumber}');
+                                      }),
+                                      8.width,
+                                      Text('${orderData!.deliveryPoint!.contactNumber}', style: secondaryTextStyle()),
+                                    ],
+                                  ).paddingOnly(top: 8),
+                                if (orderData!.deliveryDatetime == null && orderData!.deliveryPoint!.endTime != null && orderData!.deliveryPoint!.startTime != null)
+                                  Text('${language.note} ${language.courierWillDeliverAt}${DateFormat('dd MMM yyyy').format(DateTime.parse(orderData!.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm')
+                                      .format(DateTime.parse(orderData!.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.deliveryPoint!.endTime!).toLocal())}',
+                                      style: secondaryTextStyle())
+                                      .paddingOnly(top: 8),
+                              ],
+                            ).expand(),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: AppButton(
+                        elevation: 0,
+                        width: 135,
+                        height: 35,
+                        color: Colors.transparent,
+                        padding: EdgeInsets.zero,
+                        shapeBorder: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(defaultRadius),
+                          side: BorderSide(color: colorPrimary),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // TODO Localization
+                            Text('View History', style: primaryTextStyle(color: colorPrimary)),
+                            Icon(Icons.arrow_right, color: colorPrimary),
+                          ],
+                        ),
+                        onTap: () {
+                          OrderHistoryScreen(orderHistory: orderHistory.validate()).launch(context);
+                        },
+                      ),
+                    ),
+                    Divider(height: 30, thickness: 1),
+                    Text(language.parcelDetails, style: boldTextStyle(size: 16)),
+                    12.height,
+                    Container(
+                      decoration: BoxDecoration(color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
+                      padding: EdgeInsets.all(12),
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            decoration:
+                            boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(8), border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), backgroundColor: Colors.transparent),
+                            padding: EdgeInsets.all(8),
+                            child: Image.asset(parcelTypeIcon(orderData!.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
+                          ),
+                          8.width,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(orderData!.parcelType.validate(), style: boldTextStyle()),
+                              4.height,
+                              Text('${orderData!.totalWeight} ${CountryModel
+                                  .fromJson(getJSONAsync(COUNTRY_DATA))
+                                  .weightType}', style: secondaryTextStyle()),
+                            ],
+                          ).expand(),
+                        ],
+                      ),
+                    ),
+                    24.height,
+                    // TODO Localization
+                    Text('Payment Details', style: boldTextStyle(size: 16)),
+                    12.height,
+                    Container(
+                      decoration: BoxDecoration(color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
+                      padding: EdgeInsets.all(12),
+                      child: Column(
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('#${orderData!.id}', style: boldTextStyle()),
-                              Text('${orderStatus(orderData!.status.validate(value: ORDER_CREATE))}', style: boldTextStyle(color: statusColor(orderData!.status ?? ""))),
+                              //TODO Localization
+                              Text('Payment Type', style: primaryTextStyle()),
+                              Text('${orderData!.paymentType.validate(value: PAYMENT_TYPE_CASH)}', style: primaryTextStyle()),
                             ],
                           ),
-                          8.height,
-                          Text(printDate(orderData!.date!), style: secondaryTextStyle()),
-                          16.height,
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(language.reason, style: secondaryTextStyle(size: 16)),
-                              8.height,
-                              Text('${orderData!.reason}', style: boldTextStyle()),
-                              16.height,
-                            ],
-                          ).visible(orderData!.status == ORDER_CANCELLED),
-                          Text(language.paymentMethod, style: secondaryTextStyle(size: 16)),
-                          8.height,
+                          Divider(height: 30),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('${orderData!.paymentType.validate(value: PAYMENT_TYPE_CASH)}', style: boldTextStyle()),
-                              Text('${orderData!.paymentStatus.validate(value: PAYMENT_PENDING)}',
-                                  style: boldTextStyle(color: paymentStatusColor(orderData!.paymentStatus.validate(value: PAYMENT_PENDING)))),
-                            ],
-                          ),
-                          24.height,
-                          Row(
-                            children: [
-                              Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(Icons.location_on, color: colorPrimary),
-                                      Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
-                                      16.width,
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          if (orderData!.pickupDatetime != null)
-                                            Text('${language.pickedAt} ${printDate(orderData!.pickupDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
-                                          Text('${orderData!.pickupPoint!.address}', style: primaryTextStyle()),
-                                          if (orderData!.pickupPoint!.contactNumber != null)
-                                            Row(
-                                              children: [
-                                                Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
-                                                  launch('tel:${orderData!.pickupPoint!.contactNumber}');
-                                                }),
-                                                8.width,
-                                                Text('${orderData!.pickupPoint!.contactNumber}', style: secondaryTextStyle()),
-                                              ],
-                                            ).paddingOnly(top: 8),
-                                          if (orderData!.pickupDatetime == null && orderData!.pickupPoint!.endTime != null && orderData!.pickupPoint!.startTime != null)
-                                            Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(orderData!.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.pickupPoint!.endTime!).toLocal())}',
-                                                    style: secondaryTextStyle())
-                                                .paddingOnly(top: 8),
-                                        ],
-                                      ).expand(),
-                                    ],
-                                  ),
-                                  16.height,
-                                  Row(
-                                    children: [
-                                      Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
-                                      Icon(Icons.location_on, color: colorPrimary),
-                                      16.width,
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          if (orderData!.deliveryDatetime != null)
-                                            Text('${language.deliveredAt} ${printDate(orderData!.deliveryDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
-                                          Text('${orderData!.deliveryPoint!.address}', style: primaryTextStyle()),
-                                          if (orderData!.deliveryPoint!.contactNumber != null)
-                                            Row(
-                                              children: [
-                                                Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
-                                                  launch('tel:${orderData!.deliveryPoint!.contactNumber}');
-                                                }),
-                                                8.width,
-                                                Text('${orderData!.deliveryPoint!.contactNumber}', style: secondaryTextStyle()),
-                                              ],
-                                            ).paddingOnly(top: 8),
-                                          if (orderData!.deliveryDatetime == null && orderData!.deliveryPoint!.endTime != null && orderData!.deliveryPoint!.startTime != null)
-                                            Text('${language.note} ${language.courierWillDeliverAt}${DateFormat('dd MMM yyyy').format(DateTime.parse(orderData!.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.deliveryPoint!.endTime!).toLocal())}',
-                                                    style: secondaryTextStyle())
-                                                .paddingOnly(top: 8),
-                                        ],
-                                      ).expand(),
-                                    ],
-                                  ),
-                                ],
-                              ).expand(),
-                              16.width,
-                              Icon(Icons.navigate_next, color: Colors.grey).onTap(() {
-                                print(orderHistory!.length.toString());
-                                OrderHistoryScreen(orderHistory: orderHistory.validate()).launch(context);
-                              }),
-                            ],
-                          ),
-                          24.height,
-                          Text(language.distance, style: secondaryTextStyle(size: 16)),
-                          8.height,
-                          Text('${orderData!.totalDistance} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).distanceType}', style: boldTextStyle()),
-                          16.height,
-                          Row(
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(language.country, style: secondaryTextStyle(size: 16)),
-                                  8.height,
-                                  Text('${orderData!.countryName}', style: boldTextStyle()),
-                                ],
-                              ).expand(),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(language.city, style: secondaryTextStyle(size: 16)),
-                                  8.height,
-                                  Text('${orderData!.cityName}', style: boldTextStyle()),
-                                ],
-                              ).expand()
-                            ],
-                          ),
-                          Divider(height: 30, thickness: 1),
-                          Text(language.parcelDetails, style: boldTextStyle(size: 16)),
-                          16.height,
-                          Container(
-                            decoration: BoxDecoration(color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
-                            padding: EdgeInsets.all(16),
-                            child: Row(
-                              children: [
-                                Container(
-                                  decoration: boxDecorationWithRoundedCorners(
-                                      borderRadius: BorderRadius.circular(8), border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), backgroundColor: Colors.transparent),
-                                  padding: EdgeInsets.all(8),
-                                  child: Image.asset(parcelTypeIcon(orderData!.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
-                                ),
-                                8.width,
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(orderData!.parcelType.validate(), style: boldTextStyle()),
-                                    4.height,
-                                    Text('${orderData!.totalWeight} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weightType}', style: secondaryTextStyle()),
-                                  ],
-                                ).expand(),
-                              ],
-                            ),
-                          ),
-                          Divider(height: 30, thickness: 1),
-                          if (userData != null)
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('${getStringAsync(USER_TYPE) == CLIENT ? language.aboutDeliveryMan : language.aboutUser}', style: boldTextStyle(size: 16)),
-                                16.height,
-                                Container(
-                                  decoration: BoxDecoration(color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
-                                  padding: EdgeInsets.all(16),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          CircleAvatar(backgroundImage: NetworkImage(userData!.profileImage.validate()), radius: 30),
-                                          16.width,
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: [
-                                              Text('${userData!.name.validate()}', style: boldTextStyle()),
-                                              4.height,
-                                              Text('${userData!.email.validate()}', style: secondaryTextStyle()),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      8.height,
-                                      if (userData!.contactNumber != null)
-                                      Row(
-                                        children: [
-                                          Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
-                                            launch('tel:${userData!.contactNumber}');
-                                          }),
-                                          16.width,
-                                          Text('${userData!.contactNumber}', style: primaryTextStyle())
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Divider(height: 30, thickness: 1),
-                              ],
-                            ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(language.deliveryCharge, style: primaryTextStyle()),
-                              16.width,
-                              Text('$currencySymbol ${orderData!.fixedCharges}', style: boldTextStyle()),
-                            ],
-                          ),
-                          if (orderData!.distanceCharge.validate() != 0)
-                            Column(
-                              children: [
-                                8.height,
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(language.distanceCharge, style: primaryTextStyle()),
-                                    16.width,
-                                    Text('$currencySymbol ${orderData!.distanceCharge}', style: boldTextStyle()),
-                                  ],
-                                )
-                              ],
-                            ),
-                          if (orderData!.weightCharge.validate() != 0)
-                            Column(
-                              children: [
-                                8.height,
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(language.weightCharge, style: primaryTextStyle()),
-                                    16.width,
-                                    Text('$currencySymbol ${orderData!.weightCharge}', style: boldTextStyle()),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: Column(
-                              children: [
-                                8.height,
-                                Text('$currencySymbol ${orderData!.fixedCharges.validate() + orderData!.distanceCharge.validate() + orderData!.weightCharge.validate()}', style: boldTextStyle()),
-                              ],
-                            ),
-                          ).visible((orderData!.distanceCharge.validate() != 0 || orderData!.weightCharge.validate() != 0) && orderData!.extraCharges.keys.length != 0),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              16.height,
-                              Text(language.extraCharges, style: boldTextStyle()),
-                              8.height,
-                              Column(
-                                  children: List.generate(orderData!.extraCharges.keys.length, (index) {
-                                return Padding(
-                                  padding: EdgeInsets.only(bottom: 8),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(orderData!.extraCharges.keys.elementAt(index).replaceAll("_", " "), style: primaryTextStyle()),
-                                      16.width,
-                                      Text('$currencySymbol ${orderData!.extraCharges.values.elementAt(index)}', style: boldTextStyle()),
-                                    ],
-                                  ),
-                                );
-                              }).toList()),
-                            ],
-                          ).visible(orderData!.extraCharges.keys.length != 0),
-                          16.height,
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(language.total, style: boldTextStyle(size: 18)),
-                              Text('$currencySymbol ${orderData!.totalAmount}', style: boldTextStyle(size: 18, color: colorPrimary)),
+                              //TODO Localization
+                              Text('Payment Status', style: primaryTextStyle()),
+                              Text('${orderData!.paymentStatus.validate(value: PAYMENT_PENDING)}', style: primaryTextStyle()),
                             ],
                           ),
                         ],
                       ),
                     ),
+                    if (userData != null)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          24.height,
+                          Text('${getStringAsync(USER_TYPE) == CLIENT ? language.aboutDeliveryMan : language.aboutUser}', style: boldTextStyle(size: 16)),
+                          12.height,
+                          Container(
+                            decoration: BoxDecoration(color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
+                            padding: EdgeInsets.all(12),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Image.network(userData!.profileImage.validate(),height: 60,width: 60,fit: BoxFit.cover,alignment: Alignment.center).cornerRadiusWithClipRRect(60),
+                                    16.width,
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Text('${userData!.name.validate()}', style: boldTextStyle()),
+                                        userData!.contactNumber != null ? Text('${userData!.contactNumber}', style: secondaryTextStyle()).paddingOnly(top: 4).onTap(() {
+                                          launch('tel:${userData!.contactNumber}');
+                                        }) : SizedBox()
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    if(orderData!.status==ORDER_CANCELLED || orderData!.returnOrderId!)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          24.height,
+                          Text(orderData!.status==ORDER_CANCELLED ? 'Cancelled reason' : 'Return reason',style: boldTextStyle()),
+                          12.height,
+                          Container(
+                            width: context.width(),
+                            decoration: BoxDecoration(color: Colors.red.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
+                            padding: EdgeInsets.all(12),
+                            child: Text('${orderData!.reason.validate(value: "-")}',style: primaryTextStyle(color: Colors.red)),
+                          ),
+                        ],
+                      ),
+                    Divider(height: 30, thickness: 1),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(language.deliveryCharge, style: primaryTextStyle()),
+                        16.width,
+                        Text('$currencySymbol ${orderData!.fixedCharges}', style: primaryTextStyle()),
+                      ],
+                    ),
+                    if (orderData!.distanceCharge.validate() != 0)
+                      Column(
+                        children: [
+                          8.height,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(language.distanceCharge, style: primaryTextStyle()),
+                              16.width,
+                              Text('$currencySymbol ${orderData!.distanceCharge}', style: primaryTextStyle()),
+                            ],
+                          )
+                        ],
+                      ),
+                    if (orderData!.weightCharge.validate() != 0)
+                      Column(
+                        children: [
+                          8.height,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(language.weightCharge, style: primaryTextStyle()),
+                              16.width,
+                              Text('$currencySymbol ${orderData!.weightCharge}', style: primaryTextStyle()),
+                            ],
+                          ),
+                        ],
+                      ),
                     Align(
-                      alignment: Alignment.bottomCenter,
-                      child: commonButton(language.returnOrder, () {
-                        ReturnOrderScreen(orderData!).launch(context);
-                      }, width: context.width())
-                          .paddingAll(16),
-                    ).visible(orderData!.status == ORDER_COMPLETED && !orderData!.returnOrderId! && getStringAsync(USER_TYPE) == CLIENT),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: commonButton(language.cancelOrder, () {
-                        showInDialog(
-                          context,
-                          contentPadding: EdgeInsets.all(16),
-                          builder: (p0) {
-                            return CancelOrderDialog(
-                                orderId: orderData!.id.validate(),
-                                onUpdate: () {
-                                  orderDetailApiCall();
-                                  LiveStream().emit('UpdateOrderData');
-                                });
-                          },
-                        );
-                      }, width: context.width())
-                          .paddingAll(16),
-                    ).visible(orderData!.status == ORDER_CREATE && getStringAsync(USER_TYPE) == CLIENT)
+                      alignment: Alignment.bottomRight,
+                      child: Column(
+                        children: [
+                          8.height,
+                          Text('$currencySymbol ${orderData!.fixedCharges.validate() + orderData!.distanceCharge.validate() + orderData!.weightCharge.validate()}', style: primaryTextStyle()),
+                        ],
+                      ),
+                    ).visible((orderData!.distanceCharge.validate() != 0 || orderData!.weightCharge.validate() != 0) && orderData!.extraCharges.keys.length != 0),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        16.height,
+                        Text(language.extraCharges, style: boldTextStyle()),
+                        8.height,
+                        Column(
+                            children: List.generate(orderData!.extraCharges.keys.length, (index) {
+                              return Padding(
+                                padding: EdgeInsets.only(bottom: 8),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(orderData!.extraCharges.keys.elementAt(index).replaceAll("_", " "), style: primaryTextStyle()),
+                                    16.width,
+                                    Text('$currencySymbol ${orderData!.extraCharges.values.elementAt(index)}', style: primaryTextStyle()),
+                                  ],
+                                ),
+                              );
+                            }).toList()),
+                      ],
+                    ).visible(orderData!.extraCharges.keys.length != 0),
+                    16.height,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(language.total, style: boldTextStyle(size: 20)),
+                        Text('$currencySymbol ${orderData!.totalAmount}', style: boldTextStyle(size: 20, color: colorPrimary)),
+                      ],
+                    ),
                   ],
-                )
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: commonButton(language.returnOrder, () {
+                  ReturnOrderScreen(orderData!).launch(context);
+                }, width: context.width())
+                    .paddingAll(16),
+              ).visible(orderData!.status == ORDER_COMPLETED && !orderData!.returnOrderId! && getStringAsync(USER_TYPE) == CLIENT),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: commonButton(language.cancelOrder, () {
+                  showInDialog(
+                    context,
+                    contentPadding: EdgeInsets.all(16),
+                    builder: (p0) {
+                      return CancelOrderDialog(
+                          orderId: orderData!.id.validate(),
+                          onUpdate: () {
+                            orderDetailApiCall();
+                            LiveStream().emit('UpdateOrderData');
+                          });
+                    },
+                  );
+                }, width: context.width())
+                    .paddingAll(16),
+              ).visible(orderData!.status == ORDER_CREATE && getStringAsync(USER_TYPE) == CLIENT)
+            ],
+          )
               : loaderWidget(),
         ),
       ),

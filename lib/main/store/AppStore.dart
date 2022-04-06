@@ -31,6 +31,9 @@ abstract class _AppStore with Store{
   @observable
   bool isDarkMode = false;
 
+  @observable
+  bool isFiltering = false;
+
   @action
   Future<void> setLoading(bool val) async {
     isLoading = val;
@@ -81,5 +84,10 @@ abstract class _AppStore with Store{
       appButtonBackgroundColorGlobal = colorPrimary;
       shadowColorGlobal = Colors.black12;
     }
+  }
+
+  @action
+  Future<void> setFiltering(bool val) async {
+    isFiltering = val;
   }
 }
