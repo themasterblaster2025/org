@@ -114,7 +114,6 @@ class OrderFragmentState extends State<OrderFragment> {
                                   children: [
                                     Row(
                                       children: [
-                                        // TODO Localization
                                         Text('${language.order}# ${item.id}', style: secondaryTextStyle(size: 16)).expand(),
                                         Container(
                                           decoration: BoxDecoration(color: statusColor(item.status.validate()).withOpacity(0.15), borderRadius: BorderRadius.circular(defaultRadius)),

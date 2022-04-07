@@ -61,7 +61,8 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   Future<void> init() async {
     mIsUpdate = widget.orderData != null;
     if (mIsUpdate) {
-      picUpController.text = DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.parse(widget.orderData!.pickupDatetime.validate().isEmpty ? DateTime.now().toString() : widget.orderData!.pickupDatetime.validate()));
+      picUpController.text =
+          DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.parse(widget.orderData!.pickupDatetime.validate().isEmpty ? DateTime.now().toString() : widget.orderData!.pickupDatetime.validate()));
       reasonController.text = widget.orderData!.reason.validate();
       reason = widget.orderData!.reason.validate();
       log(picUpController);
@@ -207,9 +208,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                         ),
                       ),
                     16.height,
-
-                    /// TODO change language
-                    Text('Order ${language.pickupDatetime}', style: boldTextStyle()),
+                    Text('${language.order} ${language.pickupDatetime}', style: boldTextStyle()),
                     8.height,
                     AppTextField(
                       readOnly: true,
@@ -233,9 +232,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                         ],
                       ),
                     16.height,
-
-                    /// TODO change language
-                    Text('User\'s Signature', style: boldTextStyle()),
+                    Text(language.userSignature, style: boldTextStyle()),
                     8.height,
                     widget.orderData!.pickupConfirmByClient == 1 || widget.orderData!.status == ORDER_DEPARTED
                         ? commonCachedNetworkImage(widget.orderData!.pickupTimeSignature, fit: BoxFit.cover, height: 150, width: context.width())
@@ -420,8 +417,8 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   }
 
   Future<void> paymentConfirmDialog(OrderData orderData) {
-    return showConfirmDialogCustom(context, primaryColor: colorPrimary, dialogType: DialogType.CONFIRMATION, title: orderTitle(orderData.status!), positiveText: language.yes, negativeText: language.cancel,
-        onAccept: (c) async {
+    return showConfirmDialogCustom(context,
+        primaryColor: colorPrimary, dialogType: DialogType.CONFIRMATION, title: orderTitle(orderData.status!), positiveText: language.yes, negativeText: language.cancel, onAccept: (c) async {
       appStore.setLoading(true);
       Map req = {
         'order_id': orderData.id,

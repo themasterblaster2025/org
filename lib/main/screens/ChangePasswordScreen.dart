@@ -39,7 +39,6 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   Future<void> submit() async {
     if (formKey.currentState!.validate()) {
-      // TODO Localization
       Map req = {
         'old_password': oldPassController.text.trim(),
         'new_password': newPassController.text.trim(),

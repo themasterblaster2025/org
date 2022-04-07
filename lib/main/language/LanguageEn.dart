@@ -549,4 +549,49 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get termAndCondition => "Terms & Condition";
+
+  @override
+  String get notifyUser => "Notify User";
+
+  @override
+  String get userSignature => "User\'s Signature";
+
+  @override
+  String get notifications => "Notifications";
+
+  @override
+  String get contactLength => "Contact number length must be of 10 to 14 digit.";
+
+  @override
+  String get pickupLocation => "Pickup Location";
+
+  @override
+  String get deliveryLocation => "Delivery Location";
+
+  @override
+  String get myOrders => "My Orders";
+
+  @override
+  String get paymentType => "Payment Type";
+
+  @override
+  String get orderId => "Order Id";
+
+  @override
+  String get createdAt => "UCreated at: ";
+
+  @override
+  String get viewHistory => "View History";
+
+  @override
+  String get paymentDetails => "Payment Details";
+
+  @override
+  String get paymentStatus => "Payment Status";
+
+  @override
+  String get cancelledReason => "Cancelled reason";
+
+  @override
+  String get returnReason => "Return reason";
 }

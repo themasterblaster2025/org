@@ -254,14 +254,13 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                   Icon(Icons.arrow_right, color: colorPrimary),
                                 ],
                               ),
-                              onTap: () async{
+                              onTap: () async {
                                 if (await checkPermission()) {
-                                TrackingScreen(order: orderData, latLng: LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble()))
-                                    .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+                                  TrackingScreen(order: orderData, latLng: LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble()))
+                                      .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
                                 }
                               },
-                            )
-                        ),
+                            )),
                       16.height,
                       Align(
                         alignment: Alignment.topRight,
@@ -275,11 +274,10 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                             borderRadius: BorderRadius.circular(defaultRadius),
                             side: BorderSide(color: colorPrimary),
                           ),
-                          // TODO Localization
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Text('Notify User', style: primaryTextStyle(color: colorPrimary)),
+                              Text(language.notifyUser, style: primaryTextStyle(color: colorPrimary)),
                               Icon(Icons.arrow_right, color: colorPrimary),
                             ],
                           ),
@@ -307,7 +305,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                   ),
                 ),
                 onTap: () {
-                  OrderDetailScreen(orderId: data.id!).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+                  OrderDetailScreen(orderId: data.id!).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop,duration: 400.milliseconds);
                 },
               );
             },

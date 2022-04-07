@@ -66,8 +66,9 @@ class NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // TODO Localization
-      appBar: AppBar(title: Text('Notifications')),
+      appBar: AppBar(
+        title: Text(language.notifications),
+      ),
       body: BodyCornerWidget(
         child: Observer(builder: (context) {
           return Stack(

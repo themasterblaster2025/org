@@ -549,4 +549,49 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get termAndCondition => "الشروط والحالة";
+
+  @override
+  String get notifyUser => "إخطار المستخدم";
+
+  @override
+  String get userSignature => "توقيع المستخدم";
+
+  @override
+  String get notifications => "إشعارات";
+
+  @override
+  String get contactLength => "يجب أن يكون طول رقم الاتصال من 10 إلى 14 رقما.";
+
+  @override
+  String get pickupLocation => "اختر موقعا";
+
+  @override
+  String get deliveryLocation => "موقع التسليم";
+
+  @override
+  String get myOrders => "طلباتي";
+
+  @override
+  String get paymentType => "نوع الدفع";
+
+  @override
+  String get orderId => "رقم التعريف الخاص بالطلب";
+
+  @override
+  String get createdAt => "أنشئت في:";
+
+  @override
+  String get viewHistory => "عرض السجل";
+
+  @override
+  String get paymentDetails => "بيانات الدفع";
+
+  @override
+  String get paymentStatus => "حالة السداد";
+
+  @override
+  String get cancelledReason => "السبب الملغى";
+
+  @override
+  String get returnReason => "سبب عودة";
 }

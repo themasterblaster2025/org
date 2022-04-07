@@ -549,4 +549,49 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get termAndCondition => "नियम व शर्त";
+
+  @override
+  String get notifyUser => "उपयोगकर्ता को सूचित करें";
+
+  @override
+  String get userSignature => "उपयोगकर्ता के हस्ताक्षर";
+
+  @override
+  String get notifications => "अधिसूचनाएं";
+
+  @override
+  String get contactLength => "संपर्क संख्या लंबाई 10 से 14 अंकों का होना चाहिए।";
+
+  @override
+  String get pickupLocation => "लेने की जगह";
+
+  @override
+  String get deliveryLocation => "प्रसव का स्थान";
+
+  @override
+  String get myOrders => "मेरे आदेश";
+
+  @override
+  String get paymentType => "भुगतान प्रकार";
+
+  @override
+  String get orderId => "आदेश पहचान";
+
+  @override
+  String get createdAt => "पर बनाया गया:: ";
+
+  @override
+  String get viewHistory => "इतिहास देखें";
+
+  @override
+  String get paymentDetails => "भुगतान विवरण";
+
+  @override
+  String get paymentStatus => "भुगतान की स्थिति";
+
+  @override
+  String get cancelledReason => "रद्द कर दिया";
+
+  @override
+  String get returnReason => "रिटर्न वजह";
 }

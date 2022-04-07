@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -11,7 +12,7 @@ class AppTheme {
     primarySwatch: createMaterialColor(colorPrimary),
     primaryColor: colorPrimary,
     scaffoldBackgroundColor: Colors.white,
-    //fontFamily: GoogleFonts.rajdhani().fontFamily,
+    fontFamily: GoogleFonts.roboto().fontFamily,
     iconTheme: IconThemeData(color: Colors.black),
     dialogBackgroundColor: Colors.white,
     unselectedWidgetColor: Colors.grey,
@@ -42,7 +43,7 @@ class AppTheme {
     primarySwatch: createMaterialColor(colorPrimary),
     primaryColor: colorPrimary,
     scaffoldBackgroundColor: scaffoldColorDark,
-    //fontFamily: GoogleFonts.rajdhani().fontFamily,
+    fontFamily: GoogleFonts.roboto().fontFamily,
     iconTheme: IconThemeData(color: Colors.white),
     dialogBackgroundColor: scaffoldSecondaryDark,
     unselectedWidgetColor: Colors.white60,

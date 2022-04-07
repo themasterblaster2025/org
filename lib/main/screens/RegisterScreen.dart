@@ -101,9 +101,12 @@ class RegisterScreenState extends State<RegisterScreen> {
                         ),
                         child: Image.asset('assets/app_logo_primary.png', height: 70, width: 70)),
                   ),
-                  Positioned(top:30,left: 16,child: Icon(Icons.arrow_back).onTap((){
-                    finish(context);
-                  })),
+                  Positioned(
+                      top: 30,
+                      left: 16,
+                      child: Icon(Icons.arrow_back).onTap(() {
+                        finish(context);
+                      })),
                 ],
               ).withHeight(
                 context.height() * 0.25,
@@ -188,8 +191,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                                 decoration: commonInputDecoration(),
                                 validator: (value) {
                                   if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-                                  // TODO Localization
-                                  if (value.trim().length < 10  || value.trim().length>14) return 'Contact number length must be of 10 to 14 digit.';
+                                  if (value.trim().length < 10 || value.trim().length > 14) return language.contactLength;
                                   return null;
                                 },
                               ).expand(),

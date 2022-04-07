@@ -1,4 +1,5 @@
 import 'dart:core';
+
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -403,7 +404,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('Weight', style: primaryTextStyle()).paddingAll(12).expand(),
+                Text(language.weight, style: primaryTextStyle()).paddingAll(12).expand(),
                 VerticalDivider(thickness: 1),
                 Icon(Icons.remove, color: appStore.isDarkMode ? Colors.white : Colors.grey).paddingAll(12).onTap(() {
                   if (weightController.text.toInt() > 1) {
@@ -477,8 +478,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       children: [
         Text(language.pickupInformation, style: boldTextStyle()),
         16.height,
-        // TODO Localization
-        Text('Pickup Location', style: primaryTextStyle()),
+        Text(language.pickupLocation, style: primaryTextStyle()),
         8.height,
         AppTextField(
           controller: pickAddressCont,
@@ -508,8 +508,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           decoration: commonInputDecoration(suffixIcon: Icons.phone),
           validator: (value) {
             if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-            // TODO Localization
-            if (value.trim().length < 10  || value.trim().length>14) return 'Contact number length must be of 10 to 14 digit.';
+            if (value.trim().length < 10 || value.trim().length > 14) return language.contactNumber;
             return null;
           },
         ),
@@ -533,8 +532,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       children: [
         Text(language.deliveryInformation, style: boldTextStyle()),
         16.height,
-        // TODO Localization
-        Text('Delivery Location', style: primaryTextStyle()),
+        Text(language.deliveryLocation, style: primaryTextStyle()),
         8.height,
         AppTextField(
           controller: deliverAddressCont,
@@ -565,8 +563,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           decoration: commonInputDecoration(suffixIcon: Icons.phone),
           validator: (value) {
             if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-            // TODO Localization
-            if (value.trim().length < 10  || value.trim().length>14) return 'Contact number length must be of 10 to 14 digit.';
+            if (value.trim().length < 10 || value.trim().length > 14) return language.contactLength;
             return null;
           },
         ),
@@ -621,8 +618,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           ),
         ),
         16.height,
-        //TODO Localization
-        Text("Pickup Location", style: boldTextStyle()),
+        Text(language.pickupLocation, style: boldTextStyle()),
         8.height,
         Container(
           width: context.width(),
@@ -642,8 +638,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           ),
         ),
         16.height,
-        //TODO Localization
-        Text("Delivery Location", style: boldTextStyle()),
+        Text(language.deliveryLocation, style: boldTextStyle()),
         8.height,
         Container(
           width: context.width(),
@@ -778,9 +773,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               value: paymentCollectFrom,
               decoration: commonInputDecoration(),
               items: [
-                // TODO Localization
-                DropdownMenuItem(value: PAYMENT_ON_PICKUP, child: Text("Pickup Location", style: primaryTextStyle())),
-                DropdownMenuItem(value: PAYMENT_ON_DELIVERY, child: Text("Delivery Location", style: primaryTextStyle())),
+                DropdownMenuItem(value: PAYMENT_ON_PICKUP, child: Text(language.pickupLocation, style: primaryTextStyle())),
+                DropdownMenuItem(value: PAYMENT_ON_DELIVERY, child: Text(language.deliveryLocation, style: primaryTextStyle())),
               ],
               onChanged: (value) {
                 paymentCollectFrom = value!;
@@ -826,36 +820,34 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       child: Scaffold(
         appBar: AppBar(title: Text(language.createOrder)),
         body: BodyCornerWidget(
-          child: Observer(
-            builder: (context) {
-              return SingleChildScrollView(
-                padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: List.generate(4, (index) {
-                          return Container(
-                            color: selectedTabIndex >= index ? colorPrimary : borderColor,
-                            height: 5,
-                            width: context.width() * 0.15,
-                          );
-                        }).toList(),
-                      ),
-                      30.height,
-                      if (selectedTabIndex == 0) createOrderWidget1(),
-                      if (selectedTabIndex == 1) createOrderWidget2(),
-                      if (selectedTabIndex == 2) createOrderWidget3(),
-                      if (selectedTabIndex == 3) createOrderWidget4(),
-                    ],
-                  ),
+          child: Observer(builder: (context) {
+            return SingleChildScrollView(
+              padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: List.generate(4, (index) {
+                        return Container(
+                          color: selectedTabIndex >= index ? colorPrimary : borderColor,
+                          height: 5,
+                          width: context.width() * 0.15,
+                        );
+                      }).toList(),
+                    ),
+                    30.height,
+                    if (selectedTabIndex == 0) createOrderWidget1(),
+                    if (selectedTabIndex == 1) createOrderWidget2(),
+                    if (selectedTabIndex == 2) createOrderWidget3(),
+                    if (selectedTabIndex == 3) createOrderWidget4(),
+                  ],
                 ),
-              );
-            }
-          ),
+              ),
+            );
+          }),
         ),
         bottomNavigationBar: Container(
           padding: EdgeInsets.all(16),

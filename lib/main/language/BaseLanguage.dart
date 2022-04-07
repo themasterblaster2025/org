@@ -368,4 +368,34 @@ abstract class BaseLanguage {
   String get privacyPolicy;
 
   String get termAndCondition;
+
+  String get notifyUser;
+
+  String get userSignature;
+
+  String get notifications;
+
+  String get contactLength;
+
+  String get pickupLocation;
+
+  String get deliveryLocation;
+
+  String get myOrders;
+
+  String get paymentType;
+
+  String get orderId;
+
+  String get createdAt;
+
+  String get viewHistory;
+
+  String get paymentDetails;
+
+  String get paymentStatus;
+
+  String get cancelledReason;
+
+  String get returnReason;
 }
