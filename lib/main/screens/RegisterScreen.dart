@@ -65,7 +65,7 @@ class RegisterScreenState extends State<RegisterScreen> {
         "email": emailController.text.trim(),
         "password": passController.text.validate(),
         "user_type": widget.userType.validate(),
-        "contact_number":  '$countryCode ${phoneController.text.trim()}',
+        "contact_number": '$countryCode ${phoneController.text.trim()}',
         "player_id": getStringAsync(PLAYER_ID).validate(),
       };
       await signUpApi(req).then((value) async {
@@ -87,17 +87,26 @@ class RegisterScreenState extends State<RegisterScreen> {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                height: context.height() * 0.25,
-                child: Container(
-                    height: 90,
-                    width: 90,
+              Stack(
+                children: [
+                  Align(
                     alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Image.asset('assets/app_logo_primary.png', height: 70, width: 70)),
+                    child: Container(
+                        height: 90,
+                        width: 90,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Image.asset('assets/app_logo_primary.png', height: 70, width: 70)),
+                  ),
+                  Positioned(top:30,left: 16,child: Icon(Icons.arrow_back).onTap((){
+                    finish(context);
+                  })),
+                ],
+              ).withHeight(
+                context.height() * 0.25,
               ),
               Container(
                 width: context.width(),
@@ -177,11 +186,9 @@ class RegisterScreenState extends State<RegisterScreen> {
                                 focus: phoneFocus,
                                 nextFocus: passFocus,
                                 decoration: commonInputDecoration(),
-                                validator: (s){
-                                  if (s!.trim().isEmpty)
-                                    return language.fieldRequiredMsg;
-                                  if (s.trim().length > 10)
-                                    return language.contactNumberValidation;
+                                validator: (s) {
+                                  if (s!.trim().isEmpty) return language.fieldRequiredMsg;
+                                  if (s.trim().length > 10) return language.contactNumberValidation;
                                   return null;
                                 },
                               ).expand(),

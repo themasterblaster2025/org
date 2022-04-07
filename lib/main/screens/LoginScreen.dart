@@ -175,6 +175,7 @@ class LoginScreenState extends State<LoginScreen> {
                         CheckboxListTile(
                           contentPadding: EdgeInsets.zero,
                           controlAffinity: ListTileControlAffinity.leading,
+                          activeColor: colorPrimary,
                           title: Text(language.rememberMe, style: primaryTextStyle()),
                           value: mIsCheck,
                           onChanged: (val) async {

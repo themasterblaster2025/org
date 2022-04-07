@@ -103,63 +103,38 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                         children: [
                           Text('${language.order}# ${data.id}', style: boldTextStyle(size: 16)).expand(),
                           4.height,
-                          Row(
-                            children: [
-                              IconButton(
-                                onPressed: () async {
-                                  showConfirmDialogCustom(
-                                    context,
-                                    primaryColor: colorPrimary,
-                                    dialogType: DialogType.CONFIRMATION,
-                                    title: language.areYouSureWantToArrive,
-                                    positiveText: language.yes,
-                                    negativeText: language.cancel,
-                                    onAccept: (c) async {
-                                      appStore.setLoading(true);
-                                      await updateOrder(orderStatus: ORDER_ARRIVED, orderId: data.id);
-                                      appStore.setLoading(false);
-                                      finish(context);
-
-                                      init();
-                                    },
-                                  );
-                                },
-                                icon: Icon(Icons.notifications_outlined),
-                              ).visible(data.status == ORDER_ACTIVE),
-                              widget.orderStatus != ORDER_CANCELLED
-                                  ? AppButton(
-                                      text: buttonText(widget.orderStatus!),
-                                      padding: EdgeInsets.all(4),
-                                      textStyle: boldTextStyle(color: Colors.white),
-                                      color: colorPrimary,
-                                      onTap: () {
-                                        if (widget.orderStatus == ORDER_ACTIVE) {
-                                          onTapData(orderData: data, orderStatus: widget.orderStatus!);
-                                        } else if (widget.orderStatus == ORDER_ARRIVED) {
-                                          onTapData(orderData: data, orderStatus: widget.orderStatus!);
-                                        } else if (widget.orderStatus == ORDER_DEPARTED) {
-                                          onTapData(orderData: data, orderStatus: widget.orderStatus!);
-                                        } else {
-                                          showConfirmDialogCustom(
-                                            context,
-                                            primaryColor: colorPrimary,
-                                            dialogType: DialogType.CONFIRMATION,
-                                            title: orderTitle(widget.orderStatus!),
-                                            positiveText: language.yes,
-                                            negativeText: language.no,
-                                            onAccept: (c) async {
-                                              appStore.setLoading(true);
-                                              await onTapData(orderData: data, orderStatus: widget.orderStatus!);
-                                              appStore.setLoading(false);
-                                              finish(context);
-                                            },
-                                          );
-                                        }
-                                      },
-                                    ).visible(widget.orderStatus != ORDER_COMPLETED)
-                                  : SizedBox(),
-                            ],
-                          )
+                          widget.orderStatus != ORDER_CANCELLED
+                              ? AppButton(
+                                  text: buttonText(widget.orderStatus!),
+                                  padding: EdgeInsets.all(4),
+                                  textStyle: boldTextStyle(color: Colors.white),
+                                  color: colorPrimary,
+                                  onTap: () {
+                                    if (widget.orderStatus == ORDER_ACTIVE) {
+                                      onTapData(orderData: data, orderStatus: widget.orderStatus!);
+                                    } else if (widget.orderStatus == ORDER_ARRIVED) {
+                                      onTapData(orderData: data, orderStatus: widget.orderStatus!);
+                                    } else if (widget.orderStatus == ORDER_DEPARTED) {
+                                      onTapData(orderData: data, orderStatus: widget.orderStatus!);
+                                    } else {
+                                      showConfirmDialogCustom(
+                                        context,
+                                        primaryColor: colorPrimary,
+                                        dialogType: DialogType.CONFIRMATION,
+                                        title: orderTitle(widget.orderStatus!),
+                                        positiveText: language.yes,
+                                        negativeText: language.no,
+                                        onAccept: (c) async {
+                                          appStore.setLoading(true);
+                                          await onTapData(orderData: data, orderStatus: widget.orderStatus!);
+                                          appStore.setLoading(false);
+                                          finish(context);
+                                        },
+                                      );
+                                    }
+                                  },
+                                ).visible(widget.orderStatus != ORDER_COMPLETED)
+                              : SizedBox()
                         ],
                       ),
                       16.height,
@@ -215,7 +190,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                               if (data.deliveryPoint!.contactNumber != null)
                                 Row(
                                   children: [
-                                    Icon(Icons.call, color: Colors.green, size: 18).onTap((){
+                                    Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
                                       launch('tel:${data.deliveryPoint!.contactNumber}');
                                     }),
                                     8.width,
@@ -260,26 +235,74 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                       ),
                       if (data.status == COURIER_DEPARTED) 8.height,
                       if (data.status == COURIER_DEPARTED)
-                        Row(
-                          children: [
-                            Icon(Icons.location_on_outlined, color: colorPrimary),
-                            8.width,
-                            Text(language.trackOrderLocation, style: primaryTextStyle(color: colorPrimary)).expand(),
-                            AppButton(
-                              padding: EdgeInsets.all(0),
-                              text: language.track,
-                              color: colorPrimary,
-                              textStyle: boldTextStyle(color: Colors.white),
-                              onTap: () async {
+                        Align(
+                            alignment: Alignment.topRight,
+                            child: AppButton(
+                              elevation: 0,
+                              width: 135,
+                              height: 35,
+                              color: Colors.transparent,
+                              padding: EdgeInsets.zero,
+                              shapeBorder: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(defaultRadius),
+                                side: BorderSide(color: colorPrimary),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(language.trackOrder, style: primaryTextStyle(color: colorPrimary)),
+                                  Icon(Icons.arrow_right, color: colorPrimary),
+                                ],
+                              ),
+                              onTap: () async{
                                 if (await checkPermission()) {
-                                  TrackingScreen(order: orderData, latLng: LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble()))
-                                      .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+                                TrackingScreen(order: orderData, latLng: LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble()))
+                                    .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
                                 }
                               },
-                            ),
-                          ],
-                        )
+                            )
+                        ),
+                      16.height,
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: AppButton(
+                          elevation: 0,
+                          width: 130,
+                          height: 35,
+                          color: Colors.transparent,
+                          padding: EdgeInsets.zero,
+                          shapeBorder: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(defaultRadius),
+                            side: BorderSide(color: colorPrimary),
+                          ),
+                          // TODO Localization
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('Notify User', style: primaryTextStyle(color: colorPrimary)),
+                              Icon(Icons.arrow_right, color: colorPrimary),
+                            ],
+                          ),
+                          onTap: () {
+                            showConfirmDialogCustom(
+                              context,
+                              primaryColor: colorPrimary,
+                              dialogType: DialogType.CONFIRMATION,
+                              title: language.areYouSureWantToArrive,
+                              positiveText: language.yes,
+                              negativeText: language.cancel,
+                              onAccept: (c) async {
+                                appStore.setLoading(true);
+                                await updateOrder(orderStatus: ORDER_ARRIVED, orderId: data.id);
+                                appStore.setLoading(false);
+                                finish(context);
 
+                                init();
+                              },
+                            );
+                          },
+                        ),
+                      ).visible(data.status == ORDER_ACTIVE),
                     ],
                   ),
                 ),

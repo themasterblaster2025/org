@@ -387,7 +387,8 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                           width: context.width(),
                           text: language.cancelOrder,
                           textStyle: primaryTextStyle(color: white),
-                          color: colorPrimary,
+                          elevation: 0,
+                          color: Colors.red,
                           onTap: () async {
                             showInDialog(
                               context,

@@ -14,7 +14,7 @@ class AppTheme {
     //fontFamily: GoogleFonts.rajdhani().fontFamily,
     iconTheme: IconThemeData(color: Colors.black),
     dialogBackgroundColor: Colors.white,
-    unselectedWidgetColor: Colors.black,
+    unselectedWidgetColor: Colors.grey,
     dividerColor: viewLineColor,
     cardColor: Colors.white,
     tabBarTheme: TabBarTheme(labelColor: Colors.black),

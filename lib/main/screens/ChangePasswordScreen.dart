@@ -39,6 +39,7 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   Future<void> submit() async {
     if (formKey.currentState!.validate()) {
+      // TODO Localization
       Map req = {
         'old_password': oldPassController.text.trim(),
         'new_password': newPassController.text.trim(),
@@ -49,7 +50,6 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
       await changePassword(req).then((value) {
         toast(value.message.toString());
-
         appStore.setLoading(false);
 
         finish(context);

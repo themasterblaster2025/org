@@ -56,7 +56,7 @@ class AccountFragmentState extends State<AccountFragment> {
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               children: [
-                settingItemWidget(Icons.drafts, language.drafts, () {
+                settingItemWidget(Icons.drafts_outlined, language.drafts, () {
                   DraftOrderListScreen().launch(context);
                 }),
                 settingItemWidget(Icons.person_outline, language.editProfile, () {

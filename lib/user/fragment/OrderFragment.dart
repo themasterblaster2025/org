@@ -131,7 +131,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text(item.parcelType.validate(), style: boldTextStyle(),maxLines: 1,overflow: TextOverflow.ellipsis),
+                                          Text(item.parcelType.validate(), style: boldTextStyle(), maxLines: 1, overflow: TextOverflow.ellipsis),
                                           4.height,
                                           Row(
                                             children: [
