@@ -186,9 +186,10 @@ class RegisterScreenState extends State<RegisterScreen> {
                                 focus: phoneFocus,
                                 nextFocus: passFocus,
                                 decoration: commonInputDecoration(),
-                                validator: (s) {
-                                  if (s!.trim().isEmpty) return language.fieldRequiredMsg;
-                                  if (s.trim().length > 10) return language.contactNumberValidation;
+                                validator: (value) {
+                                  if (value!.trim().isEmpty) return language.fieldRequiredMsg;
+                                  // TODO Localization
+                                  if (value.trim().length < 10  || value.trim().length>14) return 'Contact number length must be of 10 to 14 digit.';
                                   return null;
                                 },
                               ).expand(),

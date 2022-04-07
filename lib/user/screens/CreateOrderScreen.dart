@@ -1,6 +1,7 @@
 import 'dart:core';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
@@ -825,31 +826,35 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       child: Scaffold(
         appBar: AppBar(title: Text(language.createOrder)),
         body: BodyCornerWidget(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: List.generate(4, (index) {
-                      return Container(
-                        color: selectedTabIndex >= index ? colorPrimary : borderColor,
-                        height: 5,
-                        width: context.width() * 0.15,
-                      );
-                    }).toList(),
+          child: Observer(
+            builder: (context) {
+              return SingleChildScrollView(
+                padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: List.generate(4, (index) {
+                          return Container(
+                            color: selectedTabIndex >= index ? colorPrimary : borderColor,
+                            height: 5,
+                            width: context.width() * 0.15,
+                          );
+                        }).toList(),
+                      ),
+                      30.height,
+                      if (selectedTabIndex == 0) createOrderWidget1(),
+                      if (selectedTabIndex == 1) createOrderWidget2(),
+                      if (selectedTabIndex == 2) createOrderWidget3(),
+                      if (selectedTabIndex == 3) createOrderWidget4(),
+                    ],
                   ),
-                  30.height,
-                  if (selectedTabIndex == 0) createOrderWidget1(),
-                  if (selectedTabIndex == 1) createOrderWidget2(),
-                  if (selectedTabIndex == 2) createOrderWidget3(),
-                  if (selectedTabIndex == 3) createOrderWidget4(),
-                ],
-              ),
-            ),
+                ),
+              );
+            }
           ),
         ),
         bottomNavigationBar: Container(

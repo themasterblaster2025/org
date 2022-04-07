@@ -52,7 +52,7 @@ class DProfileFragmentState extends State<DProfileFragment> {
             padding: EdgeInsets.all(16),
             child: Column(
               children: [
-                commonCachedNetworkImage(getStringAsync(USER_PROFILE_PHOTO).validate(), height: 90, width: 90, fit: BoxFit.cover).cornerRadiusWithClipRRect(50),
+                commonCachedNetworkImage(getStringAsync(USER_PROFILE_PHOTO).validate(), height: 90, width: 90, fit: BoxFit.cover,alignment: Alignment.center).cornerRadiusWithClipRRect(50),
                 12.height,
                 Text(getStringAsync(NAME).validate(), style: boldTextStyle(size: 20)),
                 6.height,

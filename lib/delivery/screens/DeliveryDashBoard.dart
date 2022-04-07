@@ -87,7 +87,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
           bottom: TabBar(
             isScrollable: true,
             unselectedLabelColor: Colors.white70,
-            indicatorColor: colorPrimary,
+            indicator: BoxDecoration(color: Colors.transparent),
             labelColor: Colors.white,
             indicatorSize: TabBarIndicatorSize.label,
             unselectedLabelStyle: secondaryTextStyle(),

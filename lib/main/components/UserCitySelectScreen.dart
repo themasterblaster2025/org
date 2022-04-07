@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mighty_delivery/delivery/screens/DeliveryDashBoard.dart';
 import 'package:mighty_delivery/main.dart';
@@ -98,10 +99,10 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
         LiveStream().emit('UpdateOrderData');
         widget.onUpdate!.call();
       } else {
-        if(getStringAsync(USER_TYPE) == CLIENT) {
-          DashboardScreen().launch(context,isNewTask: true);
-        }else{
-          DeliveryDashBoard().launch(context,isNewTask: true);
+        if (getStringAsync(USER_TYPE) == CLIENT) {
+          DashboardScreen().launch(context, isNewTask: true);
+        } else {
+          DeliveryDashBoard().launch(context, isNewTask: true);
         }
       }
     }).catchError((error) {
@@ -127,103 +128,101 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(title: Text(language.selectRegion),automaticallyImplyLeading: widget.isBack),
-        body: BodyCornerWidget(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Lottie.asset('assets/delivery.json', height: 200, fit: BoxFit.contain, width: context.width()),
-                16.height,
-                Container(
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(defaultRadius),
-                    color: context.cardColor,
-                    boxShadow: [
-                      BoxShadow(color: Colors.black.withOpacity(0.5), blurRadius: 1),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(child: Text(language.country, style: boldTextStyle())),
-                          Expanded(
-                            child: DropdownButtonFormField<int>(
-                              value: selectedCountry,
-                              decoration: commonInputDecoration(),
-                              items: countryData.map<DropdownMenuItem<int>>((item) {
-                                return DropdownMenuItem(
-                                  value: item.id,
-                                  child: Text(item.name ?? ''),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                selectedCountry = value!;
-                                setValue(COUNTRY_ID, selectedCountry);
-                                getCountryDetailApiCall();
-                                selectedCity = null;
-                                getCityApiCall();
-                                setState(() {});
-                              },
-                              validator: (value) {
-                                if (selectedCountry == null) return errorThisFieldRequired;
-                                return null;
-                              },
-                            ),
+        appBar: AppBar(title: Text(language.selectRegion), automaticallyImplyLeading: widget.isBack),
+        body: Observer(builder: (context) {
+          return BodyCornerWidget(
+            child: appStore.isLoading && countryData.isEmpty
+                ? loaderWidget()
+                : SingleChildScrollView(
+                    padding: EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Lottie.asset('assets/delivery.json', height: 200, fit: BoxFit.contain, width: context.width()),
+                        16.height,
+                        Container(
+                          padding: EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(defaultRadius),
+                            color: context.cardColor,
+                            boxShadow: [
+                              BoxShadow(color: Colors.black.withOpacity(0.5), blurRadius: 1),
+                            ],
                           ),
-                        ],
-                      ),
-                      16.height,
-                      Text(language.city, style: boldTextStyle()),
-                      16.height,
-                      cityData.isNotEmpty
-                          ? Column(
-                              children: [
-                                AppTextField(
-                                  controller: searchCityController,
-                                  textFieldType: TextFieldType.OTHER,
-                                  decoration: commonInputDecoration(hintText: language.selectCity, suffixIcon: Icons.search),
-                                  onChanged: (value) {
-                                    getCityApiCall(name: value);
-                                  },
-                                ),
-                                16.height,
-                                ListView.builder(
-                                  itemCount: cityData.length,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, index) {
-                                    CityModel mData = cityData[index];
-                                    return ListTile(
-                                      contentPadding: EdgeInsets.zero,
-                                      title: Text(mData.name!, style: selectedCity == mData.id ? boldTextStyle(color: colorPrimary) : primaryTextStyle()),
-                                      trailing: selectedCity == mData.id ? Icon(Icons.check_circle,color: colorPrimary) : SizedBox(),
-                                      onTap: () {
-                                        selectedCity = mData.id!;
-                                        setValue(CITY_ID, selectedCity);
-                                        setValue(CITY_DATA, mData.toJson());
-                                        updateCountryCityApiCall();
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(child: Text(language.country, style: boldTextStyle())),
+                                  Expanded(
+                                    child: DropdownButtonFormField<int>(
+                                      value: selectedCountry,
+                                      decoration: commonInputDecoration(),
+                                      items: countryData.map<DropdownMenuItem<int>>((item) {
+                                        return DropdownMenuItem(
+                                          value: item.id,
+                                          child: Text(item.name ?? ''),
+                                        );
+                                      }).toList(),
+                                      onChanged: (value) {
+                                        selectedCountry = value!;
+                                        setValue(COUNTRY_ID, selectedCountry);
+                                        getCountryDetailApiCall();
+                                        selectedCity = null;
+                                        getCityApiCall();
+                                        setState(() {});
                                       },
-                                    );
-                                  },
-                                ),
-                              ],
-                            )
-                          : appStore.isLoading
-                              ? loaderWidget()
-                              : emptyWidget(),
-                    ],
+                                      validator: (value) {
+                                        if (selectedCountry == null) return errorThisFieldRequired;
+                                        return null;
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              16.height,
+                              Text(language.city, style: boldTextStyle()),
+                              16.height,
+                              AppTextField(
+                                controller: searchCityController,
+                                textFieldType: TextFieldType.OTHER,
+                                decoration: commonInputDecoration(hintText: language.selectCity, suffixIcon: Icons.search),
+                                onChanged: (value) {
+                                  getCityApiCall(name: value);
+                                },
+                              ),
+                              16.height,
+                              appStore.isLoading && cityData.isEmpty
+                                  ? loaderWidget()
+                                  : ListView.builder(
+                                      itemCount: cityData.length,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemBuilder: (context, index) {
+                                        CityModel mData = cityData[index];
+                                        return ListTile(
+                                          contentPadding: EdgeInsets.zero,
+                                          title: Text(mData.name!, style: selectedCity == mData.id ? boldTextStyle(color: colorPrimary) : primaryTextStyle()),
+                                          trailing: selectedCity == mData.id ? Icon(Icons.check_circle, color: colorPrimary) : SizedBox(),
+                                          onTap: () {
+                                            selectedCity = mData.id!;
+                                            setValue(CITY_ID, selectedCity);
+                                            setValue(CITY_DATA, mData.toJson());
+                                            updateCountryCityApiCall();
+                                          },
+                                        );
+                                      },
+                                    )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-        ),
+          );
+        }),
       ),
     );
   }
