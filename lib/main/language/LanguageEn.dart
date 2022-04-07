@@ -353,13 +353,13 @@ class LanguageEn extends BaseLanguage {
   String get paymentCollectFromPickup => "Payment Collect Form on Pickup";
 
   @override
-  String get pickupDatetime => "PickUp Date and time";
+  String get pickupDatetime => "PickUp date and time";
 
   @override
   String get hour => "Hour";
 
   @override
-  String get deliveryDatetime => "Delivery Datetime";
+  String get deliveryDatetime => "Delivery date and time";
 
   @override
   String get pickupTimeSignature => "PickUp time Signature";

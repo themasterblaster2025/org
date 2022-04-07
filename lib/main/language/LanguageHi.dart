@@ -359,7 +359,7 @@ class LanguageHi extends BaseLanguage {
   String get hour => "घंटा";
 
   @override
-  String get deliveryDatetime => "डिलिवरी डेटटाइम";
+  String get deliveryDatetime => "डवितरण दिनांक और समय";
 
   @override
   String get pickupTimeSignature => "पिकअप समय हस्ताक्षर";

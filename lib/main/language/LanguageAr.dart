@@ -359,7 +359,7 @@ class LanguageAr extends BaseLanguage {
   String get hour => "ساعة";
 
   @override
-  String get deliveryDatetime => "وقت التسليم";
+  String get deliveryDatetime => "تاريخ التسليم والوقت";
 
   @override
   String get pickupTimeSignature => "توقيع وقت الاستقبال";
