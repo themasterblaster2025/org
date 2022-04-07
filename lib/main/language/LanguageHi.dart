@@ -353,7 +353,7 @@ class LanguageHi extends BaseLanguage {
   String get paymentCollectFromPickup => "पिकअप पर भुगतान एकत्रित फॉर्म";
 
   @override
-  String get pickupDatetime => "पिकअप डेटाटाइम";
+  String get pickupDatetime => "पपिकअप दिनांक और समय";
 
   @override
   String get hour => "घंटा";

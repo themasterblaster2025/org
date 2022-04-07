@@ -353,7 +353,7 @@ class LanguageAr extends BaseLanguage {
   String get paymentCollectFromPickup => "دفع نموذج الاستمارة على بيك اب";
 
   @override
-  String get pickupDatetime => "Pickup DateTime.";
+  String get pickupDatetime => "تاريخ الالتقاط والوقت";
 
   @override
   String get hour => "ساعة";

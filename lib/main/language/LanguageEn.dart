@@ -323,7 +323,7 @@ class LanguageEn extends BaseLanguage {
   String get active => "Active";
 
   @override
-  String get pickUp => "Pick Up";
+  String get pickUp => "PickUp";
 
   @override
   String get departed => "Departed";
@@ -353,7 +353,7 @@ class LanguageEn extends BaseLanguage {
   String get paymentCollectFromPickup => "Payment Collect Form on Pickup";
 
   @override
-  String get pickupDatetime => "PickUp Datetime";
+  String get pickupDatetime => "PickUp Date and time";
 
   @override
   String get hour => "Hour";
@@ -380,7 +380,7 @@ class LanguageEn extends BaseLanguage {
   String get pickupDelivery => "PicUp Delivery";
 
   @override
-  String get selectPickupTimeMsg => "Please Select Pick Up Time";
+  String get selectPickupTimeMsg => "Please Select PickUp Time";
 
   @override
   String get selectDeliveryTimeMsg => "Please Select delivery Time";
