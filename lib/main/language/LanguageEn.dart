@@ -594,4 +594,7 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get returnReason => "Return reason";
+
+  @override
+  String get pleaseConfirmPayment => "Please confirm payment";
 }

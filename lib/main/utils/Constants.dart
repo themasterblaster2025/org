@@ -1,6 +1,6 @@
 const mAppName = 'On Demand Local Delivery';
-const mPrivacyPolicy = 'https://www.google.com/';
-const mTermAndCondition = 'https://www.google.com/';
+const mPrivacyPolicy = 'https://meetmighty.com/codecanyon/document/mighty-delivery/';
+const mTermAndCondition = 'https://meetmighty.com/codecanyon/document/mighty-delivery/';
 const mHelpAndSupport = 'https://support.meetmighty.com/';
 const mContactPref = 'hello@meetmighty.com';
 const mCodeCanyonURL = 'https://codecanyon.net/user/meetmighty/portfolio/';

@@ -305,7 +305,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                   ),
                 ),
                 onTap: () {
-                  OrderDetailScreen(orderId: data.id!).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop,duration: 400.milliseconds);
+                  OrderDetailScreen(orderId: data.id!).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
                 },
               );
             },
@@ -322,10 +322,12 @@ class CreateTabScreenState extends State<CreateTabScreen> {
       await updateOrder(orderStatus: ORDER_ACTIVE, orderId: orderData.id);
       init();
     } else if (orderStatus == ORDER_ACTIVE) {
-      await ReceivedScreenOrderScreen(orderData: orderData).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+      await ReceivedScreenOrderScreen(orderData: orderData, isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_PICKUP)
+          .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
       init();
     } else if (orderStatus == ORDER_ARRIVED) {
-      bool isCheck = await ReceivedScreenOrderScreen(orderData: orderData).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+      bool isCheck = await ReceivedScreenOrderScreen(orderData: orderData, isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_PICKUP)
+          .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
       if (isCheck) {
         init();
       }
@@ -333,7 +335,8 @@ class CreateTabScreenState extends State<CreateTabScreen> {
       await updateOrder(orderStatus: ORDER_DEPARTED, orderId: orderData.id);
       init();
     } else if (orderStatus == ORDER_DEPARTED) {
-      await ReceivedScreenOrderScreen(orderData: orderData).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+      await ReceivedScreenOrderScreen(orderData: orderData, isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_DELIVERY)
+          .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
       init();
     }
   }

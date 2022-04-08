@@ -21,8 +21,9 @@ import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
 
 class ReceivedScreenOrderScreen extends StatefulWidget {
   final OrderData? orderData;
+  final bool isShowPayment;
 
-  ReceivedScreenOrderScreen({this.orderData});
+  ReceivedScreenOrderScreen({this.orderData, this.isShowPayment = false});
 
   @override
   ReceivedScreenOrderScreenState createState() => ReceivedScreenOrderScreenState();
@@ -49,6 +50,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   bool mIsUpdate = false;
   int groupVal = 0;
   String? reason;
+  bool mIsCheck = false;
 
   List<AppModel> list = getReasonList();
 
@@ -256,19 +258,6 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            /*TextButton(
-                              child: Text(language.save, style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
-                              onPressed: () async {
-                                await picUpScreenshotController.capture(delay: Duration(milliseconds: 10)).then((Uint8List? image) async {
-                                  final tempDir = await getTemporaryDirectory();
-                                  imageSignature = await File('${tempDir.path}/image.png').create();
-                                  imageSignature!.writeAsBytesSync(image!);
-                                  setState(() {});
-                                }).catchError((onError) {
-                                  print(onError);
-                                });
-                              },
-                            ),*/
                             8.width,
                             TextButton(
                               child: Text(language.clear, style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
@@ -302,19 +291,6 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            /*TextButton(
-                              child: Text(language.save, style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
-                              onPressed: () async {
-                                await deliveryScreenshotController.capture(delay: Duration(milliseconds: 10)).then((Uint8List? imageData) async {
-                                  final tempDir = await getTemporaryDirectory();
-                                  deliverySignature = await File('${tempDir.path}/image.png').create();
-                                  deliverySignature!.writeAsBytesSync(imageData!);
-                                  setState(() {});
-                                }).catchError((onError) {
-                                  log(onError);
-                                });
-                              },
-                            ),*/
                             8.width,
                             TextButton(
                               child: Text(language.clear, style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
@@ -326,6 +302,15 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                         ),
                       ).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
                     16.height,
+                    CheckboxListTile(
+                      value: mIsCheck,
+                      title: Text(language.paymentCollectFromPickup, style: primaryTextStyle()),
+                      onChanged: (val) {
+                        mIsCheck = val!;
+                        setState(() {});
+                      },
+                    ).visible(widget.isShowPayment),
+                    16.height,
                     Row(
                       children: [
                         AppButton(
@@ -334,48 +319,10 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                           textStyle: primaryTextStyle(color: white),
                           color: colorPrimary,
                           onTap: () async {
-                            if (widget.orderData!.status == ORDER_DEPARTED) {
-                              if (deliveryDateController.text.isEmpty) {
-                                return toast(language.selectDeliveryTimeMsg);
-                              }
-                            }
-
-                            if (widget.orderData!.status == ORDER_ACTIVE || widget.orderData!.status == ORDER_ARRIVED) {
-                              if (imageSignature == null) {
-                                // return toast(language.select_pickup_sign_msg);
-                                imageSignature = await saveSignature(pickupScreenshotController);
-                                log(imageSignature!.path);
-                              }
-                            }
-                            if (widget.orderData!.status == ORDER_DEPARTED) {
-                              if (deliverySignature == null) {
-                                deliverySignature = await saveSignature(deliveryScreenshotController);
-                                log(deliverySignature!.path);
-                                //return toast(language.select_delivery_sign_msg);
-                              }
-                            }
-                            if (widget.orderData!.paymentId == null &&
-                                widget.orderData!.paymentCollectFrom == PAYMENT_ON_PICKUP &&
-                                (widget.orderData!.status == ORDER_ACTIVE || widget.orderData!.status == ORDER_ARRIVED)) {
-                              appStore.setLoading(true);
-                              await paymentConfirmDialog(widget.orderData!);
-                              appStore.setLoading(false);
-                            } else if (widget.orderData!.paymentId == null && widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY && widget.orderData!.status == ORDER_DEPARTED) {
-                              appStore.setLoading(true);
-                              await paymentConfirmDialog(widget.orderData!);
-                              appStore.setLoading(false);
+                            if (!mIsCheck && widget.orderData!.paymentId == null && widget.isShowPayment) {
+                              return toast(language.pleaseConfirmPayment);
                             } else {
-                              showConfirmDialogCustom(
-                                context,
-                                primaryColor: colorPrimary,
-                                dialogType: DialogType.CONFIRMATION,
-                                title: orderTitle(widget.orderData!.status!),
-                                positiveText: language.yes,
-                                negativeText: language.no,
-                                onAccept: (c) async {
-                                  saveDelivery();
-                                },
-                              );
+                              saveOrderData();
                             }
                           },
                         ).expand(),
@@ -414,6 +361,48 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> saveOrderData() async {
+    if (widget.orderData!.status == ORDER_DEPARTED) {
+      if (deliveryDateController.text.isEmpty) {
+        return toast(language.selectDeliveryTimeMsg);
+      }
+    }
+
+    if (widget.orderData!.status == ORDER_ACTIVE || widget.orderData!.status == ORDER_ARRIVED) {
+      if (imageSignature == null) {
+        imageSignature = await saveSignature(pickupScreenshotController);
+        log(imageSignature!.path);
+      }
+    }
+    if (widget.orderData!.status == ORDER_DEPARTED) {
+      if (deliverySignature == null) {
+        deliverySignature = await saveSignature(deliveryScreenshotController);
+        log(deliverySignature!.path);
+      }
+    }
+    if (widget.orderData!.paymentId == null && widget.orderData!.paymentCollectFrom == PAYMENT_ON_PICKUP && (widget.orderData!.status == ORDER_ACTIVE || widget.orderData!.status == ORDER_ARRIVED)) {
+      appStore.setLoading(true);
+      await paymentConfirmDialog(widget.orderData!);
+      appStore.setLoading(false);
+    } else if (widget.orderData!.paymentId == null && widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY && widget.orderData!.status == ORDER_DEPARTED) {
+      appStore.setLoading(true);
+      await paymentConfirmDialog(widget.orderData!);
+      appStore.setLoading(false);
+    } else {
+      showConfirmDialogCustom(
+        context,
+        primaryColor: colorPrimary,
+        dialogType: DialogType.CONFIRMATION,
+        title: orderTitle(widget.orderData!.status!),
+        positiveText: language.yes,
+        negativeText: language.no,
+        onAccept: (c) async {
+          saveDelivery();
+        },
+      );
+    }
   }
 
   Future<void> paymentConfirmDialog(OrderData orderData) {

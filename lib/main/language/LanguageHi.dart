@@ -594,4 +594,7 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get returnReason => "रिटर्न वजह";
+
+  @override
+  String get pleaseConfirmPayment => "कृपया भुगतान की पुष्टि करें";
 }

@@ -102,8 +102,10 @@ class RegisterScreenState extends State<RegisterScreen> {
                         child: Image.asset('assets/app_logo_primary.png', height: 70, width: 70)),
                   ),
                   Container(
-                    padding: EdgeInsets.only(top: 40,left: 16),
-                    child: Icon(Icons.arrow_back,color: Colors.white).onTap(() {
+                    margin: EdgeInsets.only(top: 40, left: 16),
+                    padding: EdgeInsets.all(4),
+                    decoration: BoxDecoration(color: context.cardColor, shape: BoxShape.circle),
+                    child: Icon(Icons.arrow_back).onTap(() {
                       finish(context);
                     }),
                   ),

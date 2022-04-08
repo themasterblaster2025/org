@@ -398,4 +398,6 @@ abstract class BaseLanguage {
   String get cancelledReason;
 
   String get returnReason;
+
+  String get pleaseConfirmPayment;
 }

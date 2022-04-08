@@ -594,4 +594,7 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get returnReason => "سبب عودة";
+
+  @override
+  String get pleaseConfirmPayment => "يرجى تأكيد الدفع";
 }

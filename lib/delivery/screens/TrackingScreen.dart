@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
@@ -25,6 +26,8 @@ class TrackingScreen extends StatefulWidget {
 }
 
 class TrackingScreenState extends State<TrackingScreen> {
+  late GoogleMapController controller;
+
   late PolylinePoints polylinePoints;
 
   List<Marker> markers = [];
@@ -33,11 +36,11 @@ class TrackingScreenState extends State<TrackingScreen> {
 
   LatLng? sourceLocation;
 
-  double cameraZoom = 13;
+  double cameraZoom = 14;
 
   double cameraTilt = 0;
   double cameraBearing = 30;
-
+  late Marker deliveryBoy;
   late LatLng orderLatLong;
 
   final Set<Polyline> polyline = {};
@@ -58,18 +61,20 @@ class TrackingScreenState extends State<TrackingScreen> {
     positionStream = Geolocator.getPositionStream().listen((event) async {
       sourceLocation = LatLng(event.latitude, event.longitude);
       await updateLocation(latitude: event.latitude.toString(), longitude: event.longitude.toString()).then((value) {
-        markers.add(
-          Marker(
-            markerId: MarkerId('valsad'),
-            position: LatLng(sourceLocation!.latitude, sourceLocation!.longitude),
-            infoWindow: InfoWindow(title: 'Delivery Boy'),
-            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
-          ),
+        MarkerId id = MarkerId("DeliveryBoy");
+        markers.remove(id);
+        deliveryBoy = Marker(
+          markerId: id,
+          position: LatLng(event.latitude, event.longitude),
+          infoWindow: InfoWindow(title: 'Your Location', snippet: 'Last update at ${DateFormat('yyyy-MM-dd hh:mm').format(DateTime.now())}'),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
         );
+
+        markers.add(deliveryBoy);
         widget.order.map((e) {
           markers.add(
             Marker(
-              markerId: MarkerId('valsad'),
+              markerId: MarkerId('Destination'),
               position: LatLng(e.deliveryPoint!.latitude.toDouble(), e.deliveryPoint!.longitude.toDouble()),
               infoWindow: InfoWindow(title: e.deliveryPoint!.address),
               icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
@@ -78,13 +83,12 @@ class TrackingScreenState extends State<TrackingScreen> {
         }).toList();
 
         setPolyLines(orderLat: orderLatLong);
+        onMapCreated(controller);
       }).catchError((error) {
         log(event);
       });
       setState(() {});
     });
-
-    //setState(() {});
 
     orderLatLong = LatLng(widget.latLng!.latitude, widget.latLng!.longitude);
   }
@@ -110,6 +114,10 @@ class TrackingScreenState extends State<TrackingScreen> {
       ));
       setState(() {});
     }
+  }
+
+  Future<void> onMapCreated(GoogleMapController controller) async {
+    controller.moveCamera(CameraUpdate.newLatLngZoom(LatLng(sourceLocation!.latitude, sourceLocation!.longitude), 14));
   }
 
   @override
@@ -144,51 +152,51 @@ class TrackingScreenState extends State<TrackingScreen> {
                       tilt: cameraTilt,
                       bearing: cameraBearing,
                     ),
+                    onMapCreated: onMapCreated,
                   ),
                   Container(
                     height: 200,
                     color: context.scaffoldBackgroundColor,
                     child: ListView.separated(
-                      padding: EdgeInsets.all(16),
-                      shrinkWrap: true,
-                      itemCount: widget.order.length,
-                      itemBuilder: (_, index) {
-                        OrderData data = widget.order[index];
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('${language.id} #${data.id}', style: boldTextStyle()),
-                                AppButton(
-                                  padding: EdgeInsets.zero,
-                                  color: colorPrimary,
-                                  text: language.track,
-                                  textStyle: primaryTextStyle(color: Colors.white),
-                                  onTap: () async {
-                                    orderLatLong = LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble());
-                                    await setPolyLines(orderLat: orderLatLong);
-                                    setState(() {});
-                                  },
-                                )
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Icon(Icons.location_on, color: colorPrimary),
-                                Text(data.pickupPoint!.address.validate(), style: primaryTextStyle()).expand(),
-                              ],
-                            ),
-                          ],
-                        );
-                      },
-                      separatorBuilder: (_,index){
-                        return Divider();
-                      }
-                    ),
+                        padding: EdgeInsets.all(16),
+                        shrinkWrap: true,
+                        itemCount: widget.order.length,
+                        itemBuilder: (_, index) {
+                          OrderData data = widget.order[index];
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('${language.order}# ${data.id}', style: boldTextStyle()),
+                                  AppButton(
+                                    padding: EdgeInsets.zero,
+                                    color: colorPrimary,
+                                    text: language.track,
+                                    textStyle: primaryTextStyle(color: Colors.white),
+                                    onTap: () async {
+                                      orderLatLong = LatLng(data.deliveryPoint!.latitude.toDouble(), data.deliveryPoint!.longitude.toDouble());
+                                      await setPolyLines(orderLat: orderLatLong);
+                                      setState(() {});
+                                    },
+                                  )
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(Icons.location_on, color: colorPrimary),
+                                  Text(data.deliveryPoint!.address.validate(), style: primaryTextStyle()).expand(),
+                                ],
+                              ),
+                            ],
+                          );
+                        },
+                        separatorBuilder: (_, index) {
+                          return Divider();
+                        }),
                   ),
                 ],
               )
