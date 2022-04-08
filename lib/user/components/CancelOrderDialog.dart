@@ -75,7 +75,7 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(language.cancelOrder, style: boldTextStyle(size: 18)),
-              Icon(Icons.clear,color: Colors.grey,).onTap((){
+              Icon(Icons.clear).onTap((){
                 finish(context);
               }),
             ],

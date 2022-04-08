@@ -2,7 +2,7 @@ import 'BaseLanguage.dart';
 
 class LanguageEn extends BaseLanguage {
   @override
-  String get appName => "On Demand Local Delivery System";
+  String get appName => "Mighty Delivery";
 
   @override
   String get language => "Language";
@@ -116,7 +116,7 @@ class LanguageEn extends BaseLanguage {
   String get packageInformation => "Package Information";
 
   @override
-  String get pickup => "PickUp";
+  String get pickup => "Pickup";
 
   @override
   String get delivery => "Delivery";
@@ -323,7 +323,7 @@ class LanguageEn extends BaseLanguage {
   String get active => "Active";
 
   @override
-  String get pickUp => "PickUp";
+  String get pickUp => "Pickup";
 
   @override
   String get departed => "Departed";
@@ -353,7 +353,7 @@ class LanguageEn extends BaseLanguage {
   String get paymentCollectFromPickup => "Payment Collect Form on Pickup";
 
   @override
-  String get pickupDatetime => "PickUp date and time";
+  String get pickupDatetime => "Pickup date and time";
 
   @override
   String get hour => "Hour";
@@ -362,7 +362,7 @@ class LanguageEn extends BaseLanguage {
   String get deliveryDatetime => "Delivery date and time";
 
   @override
-  String get pickupTimeSignature => "PickUp time Signature";
+  String get pickupTimeSignature => "Pickup time Signature";
 
   @override
   String get save => "Save";
@@ -377,7 +377,7 @@ class LanguageEn extends BaseLanguage {
   String get reason => "Reason";
 
   @override
-  String get pickupDelivery => "PicUp Delivery";
+  String get pickupDelivery => "Pickup Delivery";
 
   @override
   String get selectPickupTimeMsg => "Please Select PickUp Time";
@@ -386,7 +386,7 @@ class LanguageEn extends BaseLanguage {
   String get selectDeliveryTimeMsg => "Please Select delivery Time";
 
   @override
-  String get selectPickupSignMsg => "Please PicUp Signature";
+  String get selectPickupSignMsg => "Please Pickup Signature";
 
   @override
   String get selectDeliverySignMsg => "Please Delivery Signature";

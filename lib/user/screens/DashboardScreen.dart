@@ -32,7 +32,7 @@ class DashboardScreenState extends State<DashboardScreen> {
     init();
   }
 
-  Future<void> init() async {
+  Future<void> init() async  {
     bottomNavBarItems.add(BottomNavigationBarItemModel(icon: Icons.shopping_bag, title: language.myOrders));
     bottomNavBarItems.add(BottomNavigationBarItemModel(icon: Icons.person, title: language.account));
     LiveStream().on('UpdateLanguage', (p0) {

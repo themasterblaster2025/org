@@ -2,7 +2,7 @@ import 'BaseLanguage.dart';
 
 class LanguageHi extends BaseLanguage {
   @override
-  String get appName => "मांग पर स्थानीय वितरण प्रणाली";
+  String get appName => "शक्तिशाली वितरण";
 
   @override
   String get language => "भाषा";

@@ -101,12 +101,12 @@ class RegisterScreenState extends State<RegisterScreen> {
                         ),
                         child: Image.asset('assets/app_logo_primary.png', height: 70, width: 70)),
                   ),
-                  Positioned(
-                      top: 30,
-                      left: 16,
-                      child: Icon(Icons.arrow_back).onTap(() {
-                        finish(context);
-                      })),
+                  Container(
+                    padding: EdgeInsets.only(top: 40,left: 16),
+                    child: Icon(Icons.arrow_back,color: Colors.white).onTap(() {
+                      finish(context);
+                    }),
+                  ),
                 ],
               ).withHeight(
                 context.height() * 0.25,

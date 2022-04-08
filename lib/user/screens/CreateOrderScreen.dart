@@ -414,11 +414,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 VerticalDivider(thickness: 1),
                 Container(
                   width: 50,
-                  child: TextField(
+                  child: AppTextField(
                     controller: weightController,
                     textAlign: TextAlign.center,
-                    style: primaryTextStyle(),
+                    maxLength: 2,
+                    textFieldType: TextFieldType.PHONE,
                     decoration: InputDecoration(
+                      counterText: '',
                       focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: colorPrimary)),
                       border: InputBorder.none,
                     ),
@@ -463,7 +465,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       side: BorderSide(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
                     ),
                   ).onTap(() {
-                    parcelTypeCont.text = item.value!;
+                    parcelTypeCont.text = item.label!;
                     setState(() {});
                   });
                 }).toList(),
