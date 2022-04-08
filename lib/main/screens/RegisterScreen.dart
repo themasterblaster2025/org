@@ -1,7 +1,6 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
@@ -9,7 +8,7 @@ import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
-import '../components/UserCitySelectScreen.dart';
+import '../Services/AuthSertvices.dart';
 
 class RegisterScreen extends StatefulWidget {
   final String? userType;
@@ -23,7 +22,7 @@ class RegisterScreen extends StatefulWidget {
 
 class RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
+  AuthServices authService = AuthServices();
   String countryCode = '+91';
 
   TextEditingController nameController = TextEditingController();
@@ -45,7 +44,7 @@ class RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> init() async {
-    //
+    log(widget.userType);
   }
 
   @override
@@ -59,21 +58,39 @@ class RegisterScreenState extends State<RegisterScreen> {
 
       appStore.setLoading(true);
 
-      Map req = {
-        "name": nameController.text.trim(),
-        "username": userNameController.text.trim(),
-        "email": emailController.text.trim(),
-        "password": passController.text.validate(),
-        "user_type": widget.userType.validate(),
-        "contact_number": '$countryCode ${phoneController.text.trim()}',
-        "player_id": getStringAsync(PLAYER_ID).validate(),
-      };
-      await signUpApi(req).then((value) async {
+      // Map req = {
+      //   "name": nameController.text.trim(),
+      //   "username": userNameController.text.trim(),
+      //   "email": emailController.text.trim(),
+      //   "password": passController.text.validate(),
+      //   "user_type": widget.userType.validate(),
+      //   "contact_number": '$countryCode ${phoneController.text.trim()}',
+      //   "player_id": getStringAsync(PLAYER_ID).validate(),
+      // };
+      // await signUpApi(req).then((value) async {
+      //   appStore.setLoading(false);
+      //   UserCitySelectScreen().launch(context, isNewTask: true);
+      // }).catchError((error) {
+      //   appStore.setLoading(false);
+      //   toast(error.toString());
+      // });
+
+      appStore.setLoading(true);
+      authService
+          .signUpWithEmailPassword(context,
+              lName: nameController.text,
+              userName: userNameController.text,
+              name: nameController.text.trim(),
+              email: emailController.text.trim(),
+              password: passController.text.trim(),
+              mobileNumber: '$countryCode ${phoneController.text.trim()}',
+              userType: widget.userType)
+          .then((res) async {
         appStore.setLoading(false);
-        UserCitySelectScreen().launch(context, isNewTask: true);
-      }).catchError((error) {
+        //
+      }).catchError((e) {
         appStore.setLoading(false);
-        toast(error.toString());
+        toast(e.toString());
       });
     }
   }
@@ -102,8 +119,8 @@ class RegisterScreenState extends State<RegisterScreen> {
                         child: Image.asset('assets/app_logo_primary.png', height: 70, width: 70)),
                   ),
                   Container(
-                    padding: EdgeInsets.only(top: 40,left: 16),
-                    child: Icon(Icons.arrow_back,color: Colors.white).onTap(() {
+                    padding: EdgeInsets.only(top: 40, left: 16),
+                    child: Icon(Icons.arrow_back, color: Colors.white).onTap(() {
                       finish(context);
                     }),
                   ),

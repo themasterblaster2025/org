@@ -114,6 +114,21 @@ mixin _$AppStore on _AppStore, Store {
     });
   }
 
+  final _$uidAtom = Atom(name: '_AppStore.uid');
+
+  @override
+  String get uid {
+    _$uidAtom.reportRead();
+    return super.uid;
+  }
+
+  @override
+  set uid(String value) {
+    _$uidAtom.reportWrite(value, super.uid, () {
+      super.uid = value;
+    });
+  }
+
   final _$setLoadingAsyncAction = AsyncAction('_AppStore.setLoading');
 
   @override
@@ -135,6 +150,14 @@ mixin _$AppStore on _AppStore, Store {
   Future<void> setUserEmail(String val, {bool isInitialization = false}) {
     return _$setUserEmailAsyncAction
         .run(() => super.setUserEmail(val, isInitialization: isInitialization));
+  }
+
+  final _$setUIdAsyncAction = AsyncAction('_AppStore.setUId');
+
+  @override
+  Future<void> setUId(String val, {bool isInitializing = false}) {
+    return _$setUIdAsyncAction
+        .run(() => super.setUId(val, isInitializing: isInitializing));
   }
 
   final _$setAllUnreadCountAsyncAction =
@@ -177,7 +200,8 @@ userEmail: ${userEmail},
 allUnreadCount: ${allUnreadCount},
 selectedLanguage: ${selectedLanguage},
 isDarkMode: ${isDarkMode},
-isFiltering: ${isFiltering}
+isFiltering: ${isFiltering},
+uid: ${uid}
     ''';
   }
 }

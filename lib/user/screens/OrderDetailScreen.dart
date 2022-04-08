@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main.dart';
+import 'package:mighty_delivery/main/Chat/ChatScreen.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/models/CountryListModel.dart';
 import 'package:mighty_delivery/main/models/LoginResponse.dart';
@@ -290,7 +290,13 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                         })
                                                       : SizedBox()
                                                 ],
-                                              ),
+                                              ).expand(),
+                                              IconButton(
+                                                      onPressed: () {
+                                                        ChatScreen(userData: userData).launch(context);
+                                                      },
+                                                      icon: Icon(Icons.chat_bubble_outline))
+                                                  .visible(orderData!.status != ORDER_COMPLETED && orderData!.status != ORDER_CANCELLED)
                                             ],
                                           ),
                                         ],
