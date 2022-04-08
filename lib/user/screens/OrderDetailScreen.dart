@@ -188,10 +188,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                 alignment: Alignment.topRight,
                                 child: AppButton(
                                   elevation: 0,
-                                  width: 135,
-                                  height: 35,
                                   color: Colors.transparent,
-                                  padding: EdgeInsets.zero,
+                                  padding: EdgeInsets.all(6),
                                   shapeBorder: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(defaultRadius),
                                     side: BorderSide(color: colorPrimary),
