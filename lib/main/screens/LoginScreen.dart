@@ -135,7 +135,7 @@ class LoginScreenState extends State<LoginScreen> {
                     width: 90,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                    child: Image.asset('assets/app_logo_primary.jpg', height: 70, width: 70)),
+                    child: Image.asset('assets/app_logo_primary.png', height: 70, width: 70)),
               ),
               Container(
                 width: context.width(),

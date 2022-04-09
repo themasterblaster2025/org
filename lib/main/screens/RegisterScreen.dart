@@ -208,7 +208,11 @@ class RegisterScreenState extends State<RegisterScreen> {
                                 decoration: commonInputDecoration(),
                                 validator: (value) {
                                   if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-                                  if (value.trim().length < 10 || value.trim().length > 14) return language.contactLength;
+                                  if (value
+                                      .trim()
+                                      .length < 10 || value
+                                      .trim()
+                                      .length > 14) return language.contactLength;
                                   return null;
                                 },
                               ).expand(),
