@@ -125,7 +125,6 @@ class _ChatScreenState extends State<ChatScreen> {
           stream: UserService().singleUser(widget.userData!.uid),
           builder: (context, snap) {
             if (snap.hasData) {
-              UserData data = snap.data!;
               return Row(
                 children: [
                   Icon(Icons.arrow_back, color: whiteColor).paddingSymmetric(vertical: 16).onTap(() => finish(context)),

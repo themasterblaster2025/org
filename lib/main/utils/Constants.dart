@@ -128,7 +128,7 @@ const VIDEO = "VIDEO";
 const AUDIO = "AUDIO";
 
 //chat
-List<String> RTLLanguage = ['ar', 'ur'];
+List<String> rtlLanguage = ['ar', 'ur'];
 
 enum MessageType {
   TEXT,

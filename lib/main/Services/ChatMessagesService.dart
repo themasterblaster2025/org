@@ -44,8 +44,12 @@ class ChatMessageService extends BaseService {
           imageUrl = value;
 
           fileList.removeWhere((element) => element.id == senderDoc.id);
-        }).catchError(log);
-      }).catchError(log);
+        }).catchError((e){
+          log(e);
+        });
+      }).catchError((e){
+        log(e);
+      });
     }
 
     updateChatDocument(senderDoc, image: image, imageUrl: imageUrl);

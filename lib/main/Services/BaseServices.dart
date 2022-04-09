@@ -33,6 +33,7 @@ abstract class BaseService {
     Query query = ref!.limit(1).where('email', isEqualTo: email);
     var res = await query.get();
 
+    // ignore: unnecessary_null_comparison
     if (res.docs != null) {
       return res.docs.length == 1;
     } else {

@@ -23,11 +23,10 @@ class AuthServices {
 
   Future<void> signUpWithEmailPassword(context, {String? name, String? email, String? password, String? mobileNumber, String? lName, String? userName, bool? isOTP, String? userType}) async {
     UserCredential? userCredential = await _auth.createUserWithEmailAndPassword(email: email!, password: password!);
-    if (userCredential != null && userCredential.user != null) {
+    if (userCredential.user != null) {
       User currentUser = userCredential.user!;
 
       UserData userModel = UserData();
-      var displayName = name! + lName!;
 
       /// Create user
       userModel.uid = currentUser.uid;
