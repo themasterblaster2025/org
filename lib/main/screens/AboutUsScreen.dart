@@ -41,7 +41,7 @@ class AboutUsScreenState extends State<AboutUsScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/app_logo.png',height: 80,width: 80).cornerRadiusWithClipRRect(16),
+              Image.asset('assets/app_logo.jpg',height: 80,width: 80).cornerRadiusWithClipRRect(16),
               16.height,
               Text(mAppName, style: primaryTextStyle(size: 20)),
               8.height,

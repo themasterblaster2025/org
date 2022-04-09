@@ -59,13 +59,13 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
   @override
   void initState() {
     super.initState();
-    init();
+    afterBuildCreated((){
+      init();
+    });
   }
 
   Future<void> init() async {
-    afterBuildCreated(() async {
-      await paymentListApiCall();
-    });
+    await paymentListApiCall();
     Stripe.publishableKey = stripPaymentPublishKey.validate();
     await Stripe.instance.applySettings().catchError((e) {
       log("${e.toString()}");
