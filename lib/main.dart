@@ -27,9 +27,7 @@ late BaseLanguage language;
 UserService userService = UserService();
 ChatMessageService chatMessageService = ChatMessageService();
 NotificationService notificationService = NotificationService();
-List<PaymentGatewayData> paymentGatewayList = [];
 late List<FileModel> fileList = [];
-String? razorKey, stripPaymentKey, stripPaymentPublishKey, flutterWavePublicKey, flutterWaveSecretKey, flutterWaveEncryptionKey, payStackPublicKey;
 
 bool mIsEnterKey = false;
 String mSelectedImage = "assets/default_wallpaper.png";
@@ -38,34 +36,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Firebase.initializeApp().then((value) {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-  });
-
-  /// Get Payment Gateway Api Call
-  await getPaymentGatewayList().then((value) {
-    paymentGatewayList.addAll(value.data!);
-    if (paymentGatewayList.isNotEmpty) {
-      paymentGatewayList.forEach((element) {
-        if (element.type == PAYMENT_TYPE_STRIPE) {
-          stripPaymentKey = element.isTest == 1 ? element.testValue!.secretKey : element.liveValue!.secretKey;
-          stripPaymentPublishKey = element.isTest == 1 ? element.testValue!.publishableKey : element.liveValue!.publishableKey;
-        } else if (element.type == PAYMENT_TYPE_PAYSTACK) {
-          payStackPublicKey = element.isTest == 1 ? element.testValue!.publicKey : element.liveValue!.publicKey;
-        } else if (element.type == PAYMENT_TYPE_RAZORPAY) {
-          razorKey = element.isTest == 1 ? element.testValue!.keyId.validate() : element.liveValue!.keyId.validate();
-        } else if (element.type == PAYMENT_TYPE_FLUTTERWAVE) {
-          flutterWavePublicKey = element.isTest == 1 ? element.testValue!.publicKey : element.liveValue!.publicKey;
-          flutterWaveSecretKey = element.isTest == 1 ? element.testValue!.secretKey : element.liveValue!.secretKey;
-          flutterWaveEncryptionKey = element.isTest == 1 ? element.testValue!.encryptionKey : element.liveValue!.encryptionKey;
-        }
-      });
-    }
-  }).catchError((error) {
-    log(error.toString());
-  });
-
-  Stripe.publishableKey = stripPaymentPublishKey.validate();
-  await Stripe.instance.applySettings().catchError((e) {
-    log("${e.toString()}");
   });
 
   await initialize(aLocaleLanguageList: languageList());

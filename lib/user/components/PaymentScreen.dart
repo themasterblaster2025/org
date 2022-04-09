@@ -41,6 +41,8 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class PaymentScreenState extends State<PaymentScreen> implements TransactionCallBack {
+  String? razorKey, stripPaymentKey, stripPaymentPublishKey, flutterWavePublicKey, flutterWaveSecretKey, flutterWaveEncryptionKey, payStackPublicKey;
+  List<PaymentGatewayData> paymentGatewayList = [];
   late NavigationController controller;
   String? selectedPaymentType;
   late Razorpay _razorpay;
@@ -61,11 +63,47 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
   }
 
   Future<void> init() async {
+    afterBuildCreated(() async {
+      await paymentListApiCall();
+    });
+    Stripe.publishableKey = stripPaymentPublishKey.validate();
+    await Stripe.instance.applySettings().catchError((e) {
+      log("${e.toString()}");
+    });
     plugin.initialize(publicKey: payStackPublicKey.validate());
     _razorpay = Razorpay();
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+
+  /// Get Payment Gateway Api Call
+  Future<void> paymentListApiCall() async {
+    appStore.setLoading(true);
+    await getPaymentGatewayList().then((value) {
+      appStore.setLoading(false);
+      paymentGatewayList.addAll(value.data!);
+      if (paymentGatewayList.isNotEmpty) {
+        paymentGatewayList.forEach((element) {
+          if (element.type == PAYMENT_TYPE_STRIPE) {
+            stripPaymentKey = element.isTest == 1 ? element.testValue!.secretKey : element.liveValue!.secretKey;
+            stripPaymentPublishKey = element.isTest == 1 ? element.testValue!.publishableKey : element.liveValue!.publishableKey;
+          } else if (element.type == PAYMENT_TYPE_PAYSTACK) {
+            payStackPublicKey = element.isTest == 1 ? element.testValue!.publicKey : element.liveValue!.publicKey;
+          } else if (element.type == PAYMENT_TYPE_RAZORPAY) {
+            razorKey = element.isTest == 1 ? element.testValue!.keyId.validate() : element.liveValue!.keyId.validate();
+          } else if (element.type == PAYMENT_TYPE_FLUTTERWAVE) {
+            flutterWavePublicKey = element.isTest == 1 ? element.testValue!.publicKey : element.liveValue!.publicKey;
+            flutterWaveSecretKey = element.isTest == 1 ? element.testValue!.secretKey : element.liveValue!.secretKey;
+            flutterWaveEncryptionKey = element.isTest == 1 ? element.testValue!.encryptionKey : element.liveValue!.encryptionKey;
+          }
+        });
+        setState(() {});
+      }
+    }).catchError((error) {
+      appStore.setLoading(false);
+      log(error.toString());
+    });
   }
 
   /// Save Payment
@@ -344,64 +382,72 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
       body: BodyCornerWidget(
         child: Stack(
           children: [
-            SingleChildScrollView(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(language.paymentMethod, style: boldTextStyle()),
-                  16.height,
-                  ListView.builder(
-                    primary: false,
-                    shrinkWrap: true,
-                    itemCount: paymentGatewayList.length,
-                    itemBuilder: (context, index) {
-                      PaymentGatewayData mData = paymentGatewayList[index];
-                      return GestureDetector(
-                        child: Container(
-                          height: 70,
-                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          alignment: Alignment.center,
-                          margin: EdgeInsets.only(bottom: 16),
-                          decoration: boxDecorationWithRoundedCorners(
-                            backgroundColor: context.cardColor,
-                            borderRadius: BorderRadius.circular(defaultRadius),
-                            border: Border.all(color: appStore.isDarkMode ? Colors.transparent : borderColor),
-                          ),
-                          child: Row(
-                            children: [
-                              commonCachedNetworkImage('${mData.gatewayLogo}',width: 40,height: 40),
-                              16.width,
-                              Text('${mData.title}',style: primaryTextStyle()).expand(),
-                              Icon(Icons.check_circle, color: colorPrimary).visible(mData.type == selectedPaymentType),
-                            ],
-                          ),
+            paymentGatewayList.isNotEmpty
+                ? Stack(
+                    children: [
+                      SingleChildScrollView(
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(language.paymentMethod, style: boldTextStyle()),
+                            16.height,
+                            ListView.builder(
+                              primary: false,
+                              shrinkWrap: true,
+                              itemCount: paymentGatewayList.length,
+                              itemBuilder: (context, index) {
+                                PaymentGatewayData mData = paymentGatewayList[index];
+                                return GestureDetector(
+                                  child: Container(
+                                    height: 70,
+                                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    alignment: Alignment.center,
+                                    margin: EdgeInsets.only(bottom: 16),
+                                    decoration: boxDecorationWithRoundedCorners(
+                                      backgroundColor: context.cardColor,
+                                      borderRadius: BorderRadius.circular(defaultRadius),
+                                      border: Border.all(color: appStore.isDarkMode ? Colors.transparent : borderColor),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        commonCachedNetworkImage('${mData.gatewayLogo}', width: 40, height: 40),
+                                        16.width,
+                                        Text('${mData.title}', style: primaryTextStyle()).expand(),
+                                        Icon(Icons.check_circle, color: colorPrimary).visible(mData.type == selectedPaymentType),
+                                      ],
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    selectedPaymentType = mData.type;
+                                    setState(() {});
+                                  },
+                                );
+                              },
+                            ),
+                          ],
                         ),
-                        onTap: () {
-                          selectedPaymentType = mData.type;
-                          setState(() {});
-                        },
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: commonButton(language.payNow, () {
-                if (selectedPaymentType == PAYMENT_TYPE_STRIPE) {
-                  stripePay();
-                } else if (selectedPaymentType == PAYMENT_TYPE_RAZORPAY) {
-                  razorPayPayment();
-                } else if (selectedPaymentType == PAYMENT_TYPE_PAYSTACK) {
-                  payStackPayment(context);
-                } else if (selectedPaymentType == PAYMENT_TYPE_FLUTTERWAVE) {
-                  flutterWaveCheckout();
-                }
-              }, width: context.width())
-                  .paddingAll(16),
-            ),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: commonButton(language.payNow, () {
+                          if (selectedPaymentType == PAYMENT_TYPE_STRIPE) {
+                            stripePay();
+                          } else if (selectedPaymentType == PAYMENT_TYPE_RAZORPAY) {
+                            razorPayPayment();
+                          } else if (selectedPaymentType == PAYMENT_TYPE_PAYSTACK) {
+                            payStackPayment(context);
+                          } else if (selectedPaymentType == PAYMENT_TYPE_FLUTTERWAVE) {
+                            flutterWaveCheckout();
+                          }
+                        }, width: context.width())
+                            .paddingAll(16),
+                      ),
+                    ],
+                  )
+                : !appStore.isLoading
+                    ? emptyWidget()
+                    : SizedBox(),
             Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
           ],
         ),

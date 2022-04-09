@@ -78,7 +78,6 @@ class LoginScreenState extends State<LoginScreen> {
         await setValue(USER_PASSWORD, passController.text);
       }
       authService.signInWithEmailPassword(context, email: emailController.text, password: passController.text).then((value) async {
-        appStore.setLoading(false);
         await logInApi(req).then((value) async {
           await getCountryDetailApiCall(value.data!.countryId.validate());
           appStore.setLoading(false);
@@ -104,7 +103,11 @@ class LoginScreenState extends State<LoginScreen> {
   getCityDetailApiCall(int cityId) async {
     await getCityDetail(cityId).then((value) async {
       await setValue(CITY_DATA, value.data!.toJson());
-      if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
+      if (CityModel
+          .fromJson(getJSONAsync(CITY_DATA))
+          .name
+          .validate()
+          .isNotEmpty) {
         if (getStringAsync(USER_TYPE) == CLIENT) {
           DashboardScreen().launch(context, isNewTask: true);
         } else {
@@ -188,11 +191,11 @@ class LoginScreenState extends State<LoginScreen> {
                         ),
                         commonButton(language.signIn, () {
                           loginApiCall();
-                        }, width: context.width()),
+                        }, width: context.width(),),
                         6.height,
                         Align(
                           alignment: Alignment.topRight,
-                          child: Text(language.forgotPasswordQue, style: primaryTextStyle(color: colorPrimary)).onTap((){
+                          child: Text(language.forgotPasswordQue, style: primaryTextStyle(color: colorPrimary)).onTap(() {
                             ForgotPasswordScreen().launch(context);
                           }),
                         ),
@@ -224,7 +227,7 @@ class LoginScreenState extends State<LoginScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(language.becomeADeliveryBoy, style: primaryTextStyle()),
+            Text("Become a delivery boy?", style: primaryTextStyle()),
             4.width,
             Text(language.signUp, style: boldTextStyle(color: colorPrimary)).onTap(() {
               RegisterScreen(userType: DELIVERY_MAN).launch(context, duration: Duration(milliseconds: 500), pageRouteAnimation: PageRouteAnimation.Slide);

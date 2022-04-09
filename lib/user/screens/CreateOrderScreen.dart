@@ -399,7 +399,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         Text(language.weight, style: boldTextStyle()),
         8.height,
         Container(
-          decoration: BoxDecoration(border: Border.all(color: borderColor), borderRadius: BorderRadius.circular(defaultRadius)),
+          decoration: BoxDecoration(border: Border.all(color: borderColor,width: appStore.isDarkMode ? 0.2 : 1), borderRadius: BorderRadius.circular(defaultRadius)),
           child: IntrinsicHeight(
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -772,11 +772,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             Text(language.paymentCollectFrom, style: boldTextStyle()),
             16.width,
             DropdownButtonFormField<String>(
+              isExpanded: true,
               value: paymentCollectFrom,
               decoration: commonInputDecoration(),
               items: [
-                DropdownMenuItem(value: PAYMENT_ON_PICKUP, child: Text(language.pickupLocation, style: primaryTextStyle())),
-                DropdownMenuItem(value: PAYMENT_ON_DELIVERY, child: Text(language.deliveryLocation, style: primaryTextStyle())),
+                DropdownMenuItem(value: PAYMENT_ON_PICKUP, child: Text(language.pickupLocation, style: primaryTextStyle(),maxLines: 1)),
+                DropdownMenuItem(value: PAYMENT_ON_DELIVERY, child: Text(language.deliveryLocation, style: primaryTextStyle(),maxLines: 1)),
               ],
               onChanged: (value) {
                 paymentCollectFrom = value!;

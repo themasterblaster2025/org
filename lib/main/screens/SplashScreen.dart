@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mighty_delivery/delivery/screens/DeliveryDashBoard.dart';
 import 'package:mighty_delivery/main/models/CityListModel.dart';
+import 'package:mighty_delivery/main/screens/LoginScreen.dart';
 import 'package:mighty_delivery/main/screens/WalkThroughScreen.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/main/components/UserCitySelectScreen.dart';
@@ -24,26 +25,30 @@ class SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> init() async {
-    setStatusBarColor(appStore.isDarkMode ? Colors.black : Colors.white,statusBarBrightness: appStore.isDarkMode ? Brightness.light : Brightness.dark);
+    setStatusBarColor(appStore.isDarkMode ? Colors.black : Colors.white, statusBarBrightness: appStore.isDarkMode ? Brightness.light : Brightness.dark);
     Future.delayed(
-      Duration(seconds: 2),
-      () {
+      Duration(seconds: 1),
+          () {
         if (appStore.isLoggedIn) {
-          if(CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
+          if (CityModel
+              .fromJson(getJSONAsync(CITY_DATA))
+              .name
+              .validate()
+              .isNotEmpty) {
             if (getStringAsync(USER_TYPE) == CLIENT) {
               DashboardScreen().launch(context, isNewTask: true);
             } else {
               DeliveryDashBoard().launch(context, isNewTask: true);
             }
-          }else{
+          } else {
             UserCitySelectScreen().launch(context);
           }
         } else {
-        //  if (getBoolAsync(IS_FIRST_TIME, defaultValue: true)) {
+          if (getBoolAsync(IS_FIRST_TIME, defaultValue: true)) {
             WalkThroughScreen().launch(context, isNewTask: true);
-        //  } else {
-         //   LoginScreen().launch(context, isNewTask: true);
-          //}
+          } else {
+            LoginScreen().launch(context, isNewTask: true);
+          }
         }
       },
     );
@@ -62,9 +67,9 @@ class SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset('assets/app_logo.png',height:80,width:80,fit: BoxFit.fill).cornerRadiusWithClipRRect(defaultRadius),
+            Image.asset('assets/app_logo.png', height: 80, width: 80, fit: BoxFit.fill).cornerRadiusWithClipRRect(defaultRadius),
             16.height,
-            Text(language.appName, style: boldTextStyle(size: 20),textAlign: TextAlign.center),
+            Text(language.appName, style: boldTextStyle(size: 20), textAlign: TextAlign.center),
           ],
         ),
       ),

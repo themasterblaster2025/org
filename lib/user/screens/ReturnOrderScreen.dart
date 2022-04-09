@@ -305,24 +305,22 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                 ),
                 16.height,
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(language.paymentCollectFrom, style: boldTextStyle()),
-                    SizedBox(
-                      width: 150,
-                      child: DropdownButtonFormField<String>(
-                        value: paymentCollectFrom,
-                        decoration: commonInputDecoration(),
-                        items: [
-                          DropdownMenuItem(value: PAYMENT_ON_PICKUP, child: Text(language.pickup, style: primaryTextStyle())),
-                          DropdownMenuItem(value: PAYMENT_ON_DELIVERY, child: Text(language.delivery, style: primaryTextStyle())),
-                        ],
-                        onChanged: (value) {
-                          paymentCollectFrom = value!;
-                          setState(() {});
-                        },
-                      ),
-                    ),
+                    16.width,
+                    DropdownButtonFormField<String>(
+                      isExpanded: true,
+                      value: paymentCollectFrom,
+                      decoration: commonInputDecoration(),
+                      items: [
+                        DropdownMenuItem(value: PAYMENT_ON_PICKUP, child: Text(language.pickupLocation, style: primaryTextStyle(),maxLines: 1)),
+                        DropdownMenuItem(value: PAYMENT_ON_DELIVERY, child: Text(language.deliveryLocation, style: primaryTextStyle(),maxLines: 1)),
+                      ],
+                      onChanged: (value) {
+                        paymentCollectFrom = value!;
+                        setState(() {});
+                      },
+                    ).expand(),
                   ],
                 ).visible(isCashPayment),
                 16.height,
