@@ -245,7 +245,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                 ),
                               ),
                               onTap: () {
-                                OrderDetailScreen(orderId: item.id.validate()).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+                                OrderDetailScreen(orderId: item.id.validate()).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop,duration: 400.milliseconds);
                               },
                             )
                           : SizedBox();

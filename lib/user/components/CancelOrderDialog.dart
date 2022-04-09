@@ -25,7 +25,6 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   TextEditingController reasonController = TextEditingController();
-  List<AppModel> reasonList = getReasonList();
   String? reason;
 
   @override
@@ -35,7 +34,7 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
   }
 
   Future<void> init() async {
-    reasonList.add(AppModel(name: 'Other'));
+   //
   }
 
   updateOrderApiCall() async {
@@ -86,10 +85,10 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
             value: reason,
             isExpanded: true,
             decoration: commonInputDecoration(),
-            items: reasonList.map((e) {
+            items: (getStringAsync(USER_TYPE)==CLIENT ? userCancelOrderReasonList : deliveryBoyCancelOrderReasonList).map((e) {
               return DropdownMenuItem(
-                value: e.name,
-                child: Text(e.name!),
+                value: e,
+                child: Text(e),
               );
             }).toList(),
             onChanged: (String? val) {

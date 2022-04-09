@@ -153,8 +153,8 @@ class DashboardScreenState extends State<DashboardScreen> {
         notchSmoothness: NotchSmoothness.defaultEdge,
         activeColor: colorPrimary,
         inactiveColor: Colors.grey,
-        leftCornerRadius: 32,
-        rightCornerRadius: 32,
+        leftCornerRadius: 30,
+        rightCornerRadius: 30,
         onTap: (index) => setState(() => currentIndex = index),
         //other params
       ),

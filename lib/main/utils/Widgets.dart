@@ -41,11 +41,11 @@ Widget scheduleOptionWidget(BuildContext context, bool isSelected, String imageP
   return Container(
     padding: EdgeInsets.all(16),
     decoration: boxDecorationWithRoundedCorners(border: Border.all(color: isSelected ? colorPrimary : appStore.isDarkMode ? Colors.transparent : borderColor), backgroundColor: context.cardColor),
-    child: Column(
+    child: Row(
       children: [
         ImageIcon(AssetImage(imagePath), size: 20, color: isSelected ? colorPrimary : Colors.grey),
-        16.height,
-        Text(title, style: boldTextStyle()),
+        16.width,
+        Text(title, style: boldTextStyle()).expand(),
       ],
     ),
   );

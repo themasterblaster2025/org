@@ -256,6 +256,14 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                         Text('${orderData!.paymentStatus.validate(value: PAYMENT_PENDING)}', style: primaryTextStyle()),
                                       ],
                                     ),
+                                    Divider(height: 30).visible(orderData!.paymentType.validate(value: PAYMENT_TYPE_CASH) == PAYMENT_TYPE_CASH),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(language.paymentCollectFrom, style: primaryTextStyle()),
+                                        Text('${orderData!.paymentCollectFrom!.replaceAll("_", " ").capitalizeFirstLetter()}', style: primaryTextStyle()),
+                                      ],
+                                    ).visible(orderData!.paymentType.validate(value: PAYMENT_TYPE_CASH) == PAYMENT_TYPE_CASH),
                                   ],
                                 ),
                               ),
@@ -302,12 +310,27 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     ),
                                   ],
                                 ),
-                              if (orderData!.status == ORDER_CANCELLED || orderData!.returnOrderId!)
+                              if (orderData!.reason.validate().isNotEmpty && orderData!.status != ORDER_CANCELLED)
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     24.height,
-                                    Text(orderData!.status == ORDER_CANCELLED ? language.cancelledReason : language.returnReason, style: boldTextStyle()),
+                                    Text(language.returnReason, style: boldTextStyle()),
+                                    12.height,
+                                    Container(
+                                      width: context.width(),
+                                      decoration: BoxDecoration(color: Colors.red.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
+                                      padding: EdgeInsets.all(12),
+                                      child: Text('${orderData!.reason.validate(value: "-")}', style: primaryTextStyle(color: Colors.red)),
+                                    ),
+                                  ],
+                                ),
+                              if (orderData!.status == ORDER_CANCELLED)
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    24.height,
+                                    Text(language.cancelledReason, style: boldTextStyle()),
                                     12.height,
                                     Container(
                                       width: context.width(),

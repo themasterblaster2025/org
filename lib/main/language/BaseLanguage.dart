@@ -93,9 +93,9 @@ abstract class BaseLanguage {
 
   String get total;
 
-  String get cashPayment;
+  String get cash;
 
-  String get onlinePayment;
+  String get online;
 
   String get paymentCollectFrom;
 

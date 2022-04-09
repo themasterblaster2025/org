@@ -8,11 +8,13 @@ import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
+import 'package:mighty_delivery/main/utils/DataProviders.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:mighty_delivery/user/components/PaymentScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
+import '../../main/models/models.dart';
 import 'DashboardScreen.dart';
 
 class ReturnOrderScreen extends StatefulWidget {
@@ -35,6 +37,9 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
   String paymentCollectFrom = PAYMENT_ON_PICKUP;
   bool isCashPayment = true;
 
+  TextEditingController reasonController = TextEditingController();
+  String? reason;
+
   @override
   void initState() {
     super.initState();
@@ -42,7 +47,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
   }
 
   Future<void> init() async {
-    //
+   //
   }
 
   @override
@@ -88,16 +93,17 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
         "fixed_charges": widget.orderData.fixedCharges!,
         "parent_order_id": widget.orderData.id!,
         "total_amount": widget.orderData.totalAmount!,
+        "reason": reason! != 'Other' ? reason : reasonController.text
       };
       appStore.setLoading(true);
       await createOrder(req).then((value) {
         appStore.setLoading(false);
         toast(value.message);
         finish(context);
-        if(!isCashPayment){
+        if (!isCashPayment) {
           PaymentScreen(orderId: value.orderId.validate(), totalAmount: widget.orderData.totalAmount.validate()).launch(context);
-        }else{
-          DashboardScreen().launch(context,isNewTask: true);
+        } else {
+          DashboardScreen().launch(context, isNewTask: true);
         }
       }).catchError((error) {
         appStore.setLoading(false);
@@ -120,12 +126,12 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
               children: [
                 Row(
                   children: [
-                    scheduleOptionWidget(context,isDeliverNow, 'assets/icons/ic_clock.png', language.deliveryNow).onTap(() {
+                    scheduleOptionWidget(context, isDeliverNow, 'assets/icons/ic_clock.png', language.deliveryNow).onTap(() {
                       isDeliverNow = true;
                       setState(() {});
                     }).expand(),
                     16.width,
-                    scheduleOptionWidget(context,!isDeliverNow, 'assets/icons/ic_schedule.png', language.schedule).onTap(() {
+                    scheduleOptionWidget(context, !isDeliverNow, 'assets/icons/ic_schedule.png', language.schedule).onTap(() {
                       isDeliverNow = false;
                       setState(() {});
                     }).expand(),
@@ -140,7 +146,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                     Container(
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        border: Border.all(color: borderColor,width: appStore.isDarkMode ? 0.2 : 1),
+                        border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
                         borderRadius: BorderRadius.circular(defaultRadius),
                       ),
                       child: Column(
@@ -191,11 +197,11 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                                 },
                                 validator: (value) {
                                   if (value.validate().isEmpty) return errorThisFieldRequired;
-                                  double fromTimeInHour = pickFromTime!.hour + pickFromTime!.minute/60;
-                                  double toTimeInHour = pickToTime!.hour + pickToTime!.minute/60;
+                                  double fromTimeInHour = pickFromTime!.hour + pickFromTime!.minute / 60;
+                                  double toTimeInHour = pickToTime!.hour + pickToTime!.minute / 60;
                                   double difference = toTimeInHour - fromTimeInHour;
                                   print(difference);
-                                  if(difference<=0){
+                                  if (difference <= 0) {
                                     return language.endTimeValidationMsg;
                                   }
                                   return null;
@@ -213,7 +219,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                     Container(
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        border: Border.all(color: borderColor,width: appStore.isDarkMode ? 0.2 : 1),
+                        border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
                         borderRadius: BorderRadius.circular(defaultRadius),
                       ),
                       child: Column(
@@ -264,10 +270,10 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                                 },
                                 validator: (value) {
                                   if (value!.isEmpty) return errorThisFieldRequired;
-                                  double fromTimeInHour = deliverFromTime!.hour + deliverFromTime!.minute/60;
-                                  double toTimeInHour = deliverToTime!.hour + deliverToTime!.minute/60;
+                                  double fromTimeInHour = deliverFromTime!.hour + deliverFromTime!.minute / 60;
+                                  double toTimeInHour = deliverToTime!.hour + deliverToTime!.minute / 60;
                                   double difference = toTimeInHour - fromTimeInHour;
-                                  if(difference<0){
+                                  if (difference < 0) {
                                     return language.endTimeValidationMsg;
                                   }
                                   return null;
@@ -282,25 +288,16 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                   ],
                 ).visible(!isDeliverNow),
                 16.height,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(language.total, style: boldTextStyle()),
-                    16.width,
-                    Text('$currencySymbol ${widget.orderData.totalAmount.validate()}', style: boldTextStyle(size: 20)),
-                  ],
-                ),
-                16.height,
                 Text(language.payment, style: boldTextStyle()),
                 16.height,
                 Row(
                   children: [
-                    scheduleOptionWidget(context,isCashPayment, 'assets/icons/ic_cash.png', language.cashPayment).onTap(() {
+                    scheduleOptionWidget(context, isCashPayment, 'assets/icons/ic_cash.png', language.cash).onTap(() {
                       isCashPayment = true;
                       setState(() {});
                     }).expand(),
                     16.width,
-                    scheduleOptionWidget(context,!isCashPayment, 'assets/icons/ic_credit_card.png', language.onlinePayment).onTap(() {
+                    scheduleOptionWidget(context, !isCashPayment, 'assets/icons/ic_credit_card.png', language.online).onTap(() {
                       isCashPayment = false;
                       setState(() {});
                     }).expand(),
@@ -317,17 +314,60 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                         value: paymentCollectFrom,
                         decoration: commonInputDecoration(),
                         items: [
-                          DropdownMenuItem(value:PAYMENT_ON_PICKUP,child: Text(language.pickup, style: primaryTextStyle())),
-                          DropdownMenuItem(value:PAYMENT_ON_DELIVERY,child: Text(language.delivery, style: primaryTextStyle())),
+                          DropdownMenuItem(value: PAYMENT_ON_PICKUP, child: Text(language.pickup, style: primaryTextStyle())),
+                          DropdownMenuItem(value: PAYMENT_ON_DELIVERY, child: Text(language.delivery, style: primaryTextStyle())),
                         ],
                         onChanged: (value) {
                           paymentCollectFrom = value!;
-                          setState(() { });
+                          setState(() {});
                         },
                       ),
                     ),
                   ],
                 ).visible(isCashPayment),
+                16.height,
+                Text(language.reason, style: boldTextStyle()),
+                8.height,
+                DropdownButtonFormField<String>(
+                  value: reason,
+                  isExpanded: true,
+                  decoration: commonInputDecoration(),
+                  items: returnOrderReasonList.map((e) {
+                    return DropdownMenuItem(
+                      value: e,
+                      child: Text(e),
+                    );
+                  }).toList(),
+                  onChanged: (String? val) {
+                    reason = val;
+                    setState(() {});
+                  },
+                  validator: (value) {
+                    if (value == null) return language.fieldRequiredMsg;
+                    return null;
+                  },
+                ),
+                16.height,
+                AppTextField(
+                  controller: reasonController,
+                  textFieldType: TextFieldType.OTHER,
+                  decoration: commonInputDecoration(hintText: language.writeReasonHere),
+                  maxLines: 3,
+                  minLines: 3,
+                  validator: (value) {
+                    if (value!.isEmpty) return language.fieldRequiredMsg;
+                    return null;
+                  },
+                ).visible(reason == 'Other'),
+                16.height,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(language.total, style: boldTextStyle()),
+                    16.width,
+                    Text('$currencySymbol ${widget.orderData.totalAmount.validate()}', style: boldTextStyle(size: 20)),
+                  ],
+                ),
               ],
             ),
           ),

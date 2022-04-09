@@ -137,10 +137,10 @@ class LanguageHi extends BaseLanguage {
   String get total => "संपूर्ण";
 
   @override
-  String get cashPayment => "नकद भुगतान";
+  String get cash => "नकद";
 
   @override
-  String get onlinePayment => "ऑनलाइन भुगतान";
+  String get online => "ऑनलाइन";
 
   @override
   String get paymentCollectFrom => "से भुगतान एकत्रित करें";

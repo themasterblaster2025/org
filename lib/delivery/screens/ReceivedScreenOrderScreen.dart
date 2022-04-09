@@ -52,8 +52,6 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   String? reason;
   bool mIsCheck = false;
 
-  List<AppModel> list = getReasonList();
-
   @override
   void initState() {
     super.initState();

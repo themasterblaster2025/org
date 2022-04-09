@@ -146,9 +146,9 @@ class LoginScreenState extends State<LoginScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         30.height,
-                        Text(language.signInAccount, style: boldTextStyle(size: headingSize)),
+                        Text("Sign In", style: boldTextStyle(size: headingSize)),
                         8.height,
-                        Text(language.signInToContinue, style: secondaryTextStyle(size: 16)),
+                        Text("Sign In with your credentials", style: secondaryTextStyle(size: 16)),
                         30.height,
                         Text(language.email, style: primaryTextStyle()),
                         8.height,
@@ -186,19 +186,16 @@ class LoginScreenState extends State<LoginScreen> {
                             setState(() {});
                           },
                         ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            child: Text(language.forgotPasswordQue, style: primaryTextStyle(color: colorPrimary)),
-                            onPressed: () {
-                              ForgotPasswordScreen().launch(context);
-                            },
-                          ),
-                        ),
-                        16.height,
                         commonButton(language.signIn, () {
                           loginApiCall();
                         }, width: context.width()),
+                        6.height,
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: Text(language.forgotPasswordQue, style: primaryTextStyle(color: colorPrimary)).onTap((){
+                            ForgotPasswordScreen().launch(context);
+                          }),
+                        ),
                         16.height,
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,

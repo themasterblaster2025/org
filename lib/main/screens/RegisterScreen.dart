@@ -139,9 +139,9 @@ class RegisterScreenState extends State<RegisterScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         30.height,
-                        Text(language.createAnAccount, style: boldTextStyle(size: headingSize)),
+                        Text("Sign Up", style: boldTextStyle(size: headingSize)),
                         8.height,
-                        Text(language.signUpToContinue, style: secondaryTextStyle(size: 16)),
+                        Text("Sing Up with your credentials", style: secondaryTextStyle(size: 16)),
                         30.height,
                         Text(language.name, style: primaryTextStyle()),
                         8.height,

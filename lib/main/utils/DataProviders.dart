@@ -2,6 +2,35 @@ import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/models/models.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+List<String> userCancelOrderReasonList = [
+  "Place order by mistake",
+  "Delivery time is too long",
+  "Duplicate order",
+  "Change of mind",
+  "Change order",
+  "Incorrect/incomplete address",
+  "Other",
+];
+
+List<String> deliveryBoyCancelOrderReasonList = [
+  "Incorrect/incomplete address",
+  "Wrong contact information",
+  "Damage courier",
+  "Payment issue",
+  "Person not available on location",
+  "Invalid courier package",
+  "Courier package is not as per order",
+  "Other",
+];
+
+List<String> returnOrderReasonList = [
+  "Invalid order",
+  "Damage courier",
+  "Sent wrong courier",
+  "Not as order",
+  "Other",
+];
+
 List<LanguageDataModel> languageList() {
   return [
     LanguageDataModel(id: 1, name: 'English', subTitle: 'English', languageCode: 'en', fullLanguageCode: 'en-US', flag: 'assets/flag/ic_us.png'),
@@ -18,14 +47,3 @@ List<WalkThroughItemModel> getWalkThroughItems() {
   return list;
 }
 
-List<AppModel> getReasonList() {
-  List<AppModel> list = [];
-  list.add(AppModel(name: 'Personal Reason'));
-  list.add(AppModel(name: 'I have change my mind'));
-  list.add(AppModel(name: 'I place duplicate order'));
-  list.add(AppModel(name: 'Tutoring no longer needed'));
-  list.add(AppModel(name: 'I do not need this order any more'));
-  list.add(AppModel(name: 'Payment declined'));
-  list.add(AppModel(name: 'Delivery date missed'));
-  return list;
-}

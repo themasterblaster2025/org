@@ -1,4 +1,4 @@
-const mAppName = 'On Demand Local Delivery';
+const mAppName = 'Mighty Delivery';
 const mPrivacyPolicy = 'https://meetmighty.com/codecanyon/document/mighty-delivery/';
 const mTermAndCondition = 'https://meetmighty.com/codecanyon/document/mighty-delivery/';
 const mHelpAndSupport = 'https://support.meetmighty.com/';

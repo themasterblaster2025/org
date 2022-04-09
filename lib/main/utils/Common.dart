@@ -103,7 +103,7 @@ Color paymentStatusColor(String status) {
 
 String parcelTypeIcon(String parcelType) {
   String icon = 'assets/icons/ic_product.png';
-  switch (parcelType) {
+  switch (parcelType.toLowerCase()) {
     case "documents":
       return 'assets/icons/ic_document.png';
     case "document":

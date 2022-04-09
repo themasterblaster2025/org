@@ -40,10 +40,12 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
 
   UserData? deliveryBoyData;
 
+  late Marker deliveryBoyMarker;
+
   @override
   void initState() {
     super.initState();
-     init();
+    init();
   }
 
   Future<void> init() async {
@@ -52,29 +54,30 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
   }
 
   getDeliveryBoyDetails() {
-    appStore.setLoading(true);
     getUserDetail(widget.orderData.deliveryManId.validate()).then((value) {
-      appStore.setLoading(false);
       deliveryBoyData = value;
       sourceLocation = LatLng(deliveryBoyData!.latitude.toDouble(), deliveryBoyData!.longitude.toDouble());
-      markers = [
-        Marker(
-          markerId: MarkerId(deliveryBoyData!.cityName.validate()),
-          position: LatLng(deliveryBoyData!.latitude.toDouble(), deliveryBoyData!.longitude.toDouble()),
-          infoWindow: InfoWindow(title: '${deliveryBoyData!.name.validate()}',snippet: 'Last update at ${dateParse(deliveryBoyData!.updatedAt!)}'),
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
-        ),
+      MarkerId id = MarkerId("DeliveryBoy");
+      markers.remove(id);
+      deliveryBoyMarker = Marker(
+        markerId: id,
+        position: LatLng(deliveryBoyData!.latitude.toDouble(), deliveryBoyData!.longitude.toDouble()),
+        infoWindow: InfoWindow(title: '${deliveryBoyData!.name.validate()}', snippet: 'Last update at ${dateParse(deliveryBoyData!.updatedAt!)}'),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+      );
+      markers.add(deliveryBoyMarker);
+      markers.add(
         Marker(
           markerId: MarkerId(widget.orderData.cityName.validate()),
           position: LatLng(widget.orderData.deliveryPoint!.latitude.toDouble(), widget.orderData.deliveryPoint!.longitude.toDouble()),
           infoWindow: InfoWindow(title: widget.orderData.deliveryPoint!.address.validate()),
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
         ),
-      ];
+      );
       setPolyLines(deliveryLatLng: LatLng(deliveryBoyData!.latitude.toDouble(), deliveryBoyData!.longitude.toDouble()));
       setState(() {});
     }).catchError((error) {
-      appStore.setLoading(false);
+      print(error);
     });
   }
 
@@ -117,17 +120,19 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(language.trackOrder)),
       body: BodyCornerWidget(
-        child: sourceLocation != null ? GoogleMap(
-          markers: markers.map((e) => e).toSet(),
-          polylines: _polylines,
-          mapType: MapType.normal,
-          initialCameraPosition: CameraPosition(
-            target: sourceLocation!,
-            zoom: cameraZoom,
-            tilt: cameraTilt,
-            bearing: cameraBearing,
-          ),
-        ) : loaderWidget(),
+        child: sourceLocation != null
+            ? GoogleMap(
+                markers: markers.map((e) => e).toSet(),
+                polylines: _polylines,
+                mapType: MapType.normal,
+                initialCameraPosition: CameraPosition(
+                  target: sourceLocation!,
+                  zoom: cameraZoom,
+                  tilt: cameraTilt,
+                  bearing: cameraBearing,
+                ),
+              )
+            : loaderWidget(),
       ),
     );
   }

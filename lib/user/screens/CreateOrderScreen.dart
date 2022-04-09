@@ -755,12 +755,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         16.height,
         Row(
           children: [
-            scheduleOptionWidget(context, isCashPayment, 'assets/icons/ic_cash.png', language.cashPayment).onTap(() {
+            scheduleOptionWidget(context, isCashPayment, 'assets/icons/ic_cash.png', language.cash).onTap(() {
               isCashPayment = true;
               setState(() {});
             }).expand(),
             16.width,
-            scheduleOptionWidget(context, !isCashPayment, 'assets/icons/ic_credit_card.png', language.onlinePayment).onTap(() {
+            scheduleOptionWidget(context, !isCashPayment, 'assets/icons/ic_credit_card.png', language.online).onTap(() {
               isCashPayment = false;
               setState(() {});
             }).expand(),

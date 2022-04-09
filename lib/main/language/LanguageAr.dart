@@ -137,10 +137,10 @@ class LanguageAr extends BaseLanguage {
   String get total => "المجموع";
 
   @override
-  String get cashPayment => "دفع نقدا";
+  String get cash => "نقدي";
 
   @override
-  String get onlinePayment => "الدفع الالكتروني";
+  String get online => "متصل";
 
   @override
   String get paymentCollectFrom => "يجمع الدفع من";

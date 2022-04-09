@@ -137,10 +137,10 @@ class LanguageEn extends BaseLanguage {
   String get total => "Total";
 
   @override
-  String get cashPayment => "Cash Payment";
+  String get cash => "Cash";
 
   @override
-  String get onlinePayment => "Online Payment";
+  String get online => "Online";
 
   @override
   String get paymentCollectFrom => "Payment Collect from";
@@ -407,7 +407,7 @@ class LanguageEn extends BaseLanguage {
   String get assign => "Assign";
 
   @override
-  String get pickedUp => "Picked Up";
+  String get pickedUp => "Picked up";
 
   @override
   String get arrived => "Arrived";
@@ -578,7 +578,7 @@ class LanguageEn extends BaseLanguage {
   String get orderId => "Order Id";
 
   @override
-  String get createdAt => "UCreated at: ";
+  String get createdAt => "Created at: ";
 
   @override
   String get viewHistory => "View History";

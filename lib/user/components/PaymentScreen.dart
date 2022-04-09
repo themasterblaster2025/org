@@ -100,7 +100,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
       'key': razorKey.validate(),
       'amount': (widget.totalAmount * 100).toInt(),
       'theme.color': '#5957b0',
-      'name': 'Local Delivery',
+      'name': 'Mighty Delivery',
       'description': 'On Demand Local Delivery System',
       'retry': {'enabled': true, 'max_count': 1},
       'send_sms_hash': true,
