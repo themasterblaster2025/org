@@ -60,13 +60,13 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
     mIsUpdate = widget.orderData != null;
     if (mIsUpdate) {
       picUpController.text =
-          DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.parse(widget.orderData!.pickupDatetime.validate().isEmpty ? DateTime.now().toString() : widget.orderData!.pickupDatetime.validate()));
+          DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.orderData!.pickupDatetime.validate().isEmpty ? DateTime.now().toString() : widget.orderData!.pickupDatetime.validate()));
       reasonController.text = widget.orderData!.reason.validate();
       reason = widget.orderData!.reason.validate();
       log(picUpController);
     }
 
-    if (widget.orderData!.status == ORDER_DEPARTED) deliveryDateController.text = DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.now());
+    if (widget.orderData!.status == ORDER_DEPARTED) deliveryDateController.text = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
   }
 
   Future<File> saveSignature(ScreenshotController screenshotController) async {

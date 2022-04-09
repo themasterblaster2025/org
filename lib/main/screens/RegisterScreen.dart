@@ -116,7 +116,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           color: Colors.white,
                           shape: BoxShape.circle,
                         ),
-                        child: Image.asset('assets/app_logo_primary.jpg', height: 70, width: 70)),
+                        child: Image.asset('assets/app_logo_primary.png', height: 70, width: 70)),
                   ),
                   Container(
                     padding: EdgeInsets.only(top: 40, left: 16),
