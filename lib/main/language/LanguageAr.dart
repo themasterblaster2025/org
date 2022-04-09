@@ -242,7 +242,7 @@ class LanguageAr extends BaseLanguage {
   String get signInAccount => "تسجيل الدخول";
 
   @override
-  String get signInToContinue => "تسجيل الدخول للمتابعة";
+  String get signInWithYourCredential => "تسجيل الدخول باستخدام بيانات الاعتماد الخاصة بك";
 
   @override
   String get password => "كلمة المرور";
@@ -278,7 +278,7 @@ class LanguageAr extends BaseLanguage {
   String get createAnAccount => "إنشاء حساب";
 
   @override
-  String get signUpToContinue => "اشترك للمتابعة";
+  String get signUpWithYourCredential => "الاشتراك مع بيانات الاعتماد الخاصة بك";
 
   @override
   String get userType => "نوع المستخدم";

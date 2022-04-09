@@ -109,7 +109,7 @@ AppThemeMode appThemeMode = AppThemeMode();
 
 const REMEMBER_ME = 'REMEMBER_ME';
 
-const mAppIconUrl = "assets/app_logo.png";
+const mAppIconUrl = "assets/app_logo.jpg";
 
 ///FireBase Collection Name
 const MESSAGES_COLLECTION = "messages";

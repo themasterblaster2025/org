@@ -131,8 +131,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          if (orderData!.pickupDatetime != null)
-                                            Text('${language.pickedAt} ${printDate(orderData!.pickupDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
+                                          if (orderData!.pickupDatetime != null) Text('${language.pickedAt} ${printDate(orderData!.pickupDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
                                           Text('${orderData!.pickupPoint!.address}', style: primaryTextStyle()),
                                           if (orderData!.pickupPoint!.contactNumber != null)
                                             Row(
@@ -161,8 +160,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          if (orderData!.deliveryDatetime != null)
-                                            Text('${language.deliveredAt} ${printDate(orderData!.deliveryDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
+                                          if (orderData!.deliveryDatetime != null) Text('${language.deliveredAt} ${printDate(orderData!.deliveryDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
                                           Text('${orderData!.deliveryPoint!.address}', style: primaryTextStyle()),
                                           if (orderData!.deliveryPoint!.contactNumber != null)
                                             Row(
@@ -216,8 +214,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Container(
-                                      decoration: boxDecorationWithRoundedCorners(
-                                          borderRadius: BorderRadius.circular(8), border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), backgroundColor: Colors.transparent),
+                                      decoration:
+                                          boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(8), border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), backgroundColor: Colors.transparent),
                                       padding: EdgeInsets.all(8),
                                       child: Image.asset(parcelTypeIcon(orderData!.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
                                     ),
@@ -301,7 +299,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                       onPressed: () {
                                                         ChatScreen(userData: userData).launch(context);
                                                       },
-                                                      icon: Icon(Icons.chat_bubble_outline))
+                                                      icon: Icon(Icons.chat))
                                                   .visible(orderData!.status != ORDER_COMPLETED && orderData!.status != ORDER_CANCELLED)
                                             ],
                                           ),
@@ -382,8 +380,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                 child: Column(
                                   children: [
                                     8.height,
-                                    Text('$currencySymbol ${orderData!.fixedCharges.validate() + orderData!.distanceCharge.validate() + orderData!.weightCharge.validate()}',
-                                        style: primaryTextStyle()),
+                                    Text('$currencySymbol ${orderData!.fixedCharges.validate() + orderData!.distanceCharge.validate() + orderData!.weightCharge.validate()}', style: primaryTextStyle()),
                                   ],
                                 ),
                               ).visible((orderData!.distanceCharge.validate() != 0 || orderData!.weightCharge.validate() != 0) && orderData!.extraCharges.keys.length != 0),

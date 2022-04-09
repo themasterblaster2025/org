@@ -242,7 +242,7 @@ class LanguageHi extends BaseLanguage {
   String get signInAccount => "साइन इन खाता";
 
   @override
-  String get signInToContinue => "जारी रखने के लिए साइन इन करें";
+  String get signInWithYourCredential => "अपने क्रेडेंशियल्स के साथ साइन इन करें";
 
   @override
   String get password => "कुंजिका";
@@ -278,7 +278,7 @@ class LanguageHi extends BaseLanguage {
   String get createAnAccount => "खाता बनाएं";
 
   @override
-  String get signUpToContinue => "जारी रखने के लिए साइन अप करें";
+  String get signUpWithYourCredential => "अपने क्रेडेंशियल्स के साथ साइन अप करें";
 
   @override
   String get userType => "उपयोगकर्ता का प्रकार";

@@ -242,7 +242,7 @@ class LanguageEn extends BaseLanguage {
   String get signInAccount => "Sign in Account";
 
   @override
-  String get signInToContinue => "Sign in to continue";
+  String get signInWithYourCredential => "Sign In with your credentials";
 
   @override
   String get password => "Password";
@@ -278,7 +278,7 @@ class LanguageEn extends BaseLanguage {
   String get createAnAccount => "Create an account";
 
   @override
-  String get signUpToContinue => "Sign up to continue";
+  String get signUpWithYourCredential => "Sign Up with your credentials";
 
   @override
   String get userType => "User Type";

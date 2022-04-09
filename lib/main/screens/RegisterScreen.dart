@@ -116,7 +116,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           color: Colors.white,
                           shape: BoxShape.circle,
                         ),
-                        child: Image.asset('assets/app_logo_primary.png', height: 70, width: 70)),
+                        child: Image.asset('assets/app_logo_primary.jpg', height: 70, width: 70)),
                   ),
                   Container(
                     padding: EdgeInsets.only(top: 40, left: 16),
@@ -139,9 +139,9 @@ class RegisterScreenState extends State<RegisterScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         30.height,
-                        Text("Sign Up", style: boldTextStyle(size: headingSize)),
+                        Text(language.signUp, style: boldTextStyle(size: headingSize)),
                         8.height,
-                        Text("Sing Up with your credentials", style: secondaryTextStyle(size: 16)),
+                        Text(language.signUpWithYourCredential, style: secondaryTextStyle(size: 16)),
                         30.height,
                         Text(language.name, style: primaryTextStyle()),
                         8.height,

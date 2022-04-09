@@ -220,7 +220,7 @@ Widget settingItemWidget(IconData icon,String title,Function() onTap,{bool isLas
         contentPadding: EdgeInsets.zero,
         leading: Icon(icon, size: 30, color: colorPrimary),
         title: Text(title),
-        trailing: Icon(Icons.navigate_next, color: Colors.grey),
+        trailing: Icon(Icons.navigate_next, color: appStore.isDarkMode ? Colors.white : Colors.grey),
         onTap:onTap
       ),
       if(!isLast) Divider()

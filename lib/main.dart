@@ -79,7 +79,7 @@ class MyApp extends StatelessWidget {
         themeMode: appStore.isDarkMode ? ThemeMode.dark : ThemeMode.light,
         home: SplashScreen(),
         supportedLocales: LanguageDataModel.languageLocales(),
-        localizationsDelegates: [AppLocalizations(), GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate],
+        localizationsDelegates: [AppLocalizations(), GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate,GlobalCupertinoLocalizations.delegate],
         localeResolutionCallback: (locale, supportedLocales) => locale,
         locale: Locale(appStore.selectedLanguage.validate(value: defaultLanguage)),
       );

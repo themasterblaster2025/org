@@ -163,7 +163,7 @@ abstract class BaseLanguage {
 
   String get signInAccount;
 
-  String get signInToContinue;
+  String get signInWithYourCredential;
 
   String get password;
 
@@ -187,7 +187,7 @@ abstract class BaseLanguage {
 
   String get createAnAccount;
 
-  String get signUpToContinue;
+  String get signUpWithYourCredential;
 
   String get userType;
 

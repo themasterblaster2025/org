@@ -149,9 +149,9 @@ class LoginScreenState extends State<LoginScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         30.height,
-                        Text("Sign In", style: boldTextStyle(size: headingSize)),
+                        Text(language.signIn, style: boldTextStyle(size: headingSize)),
                         8.height,
-                        Text("Sign In with your credentials", style: secondaryTextStyle(size: 16)),
+                        Text(language.signInWithYourCredential, style: secondaryTextStyle(size: 16)),
                         30.height,
                         Text(language.email, style: primaryTextStyle()),
                         8.height,
@@ -227,7 +227,7 @@ class LoginScreenState extends State<LoginScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Become a delivery boy?", style: primaryTextStyle()),
+            Text("${language.becomeADeliveryBoy} ?", style: primaryTextStyle()),
             4.width,
             Text(language.signUp, style: boldTextStyle(color: colorPrimary)).onTap(() {
               RegisterScreen(userType: DELIVERY_MAN).launch(context, duration: Duration(milliseconds: 500), pageRouteAnimation: PageRouteAnimation.Slide);
