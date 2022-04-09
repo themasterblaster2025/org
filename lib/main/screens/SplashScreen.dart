@@ -9,7 +9,6 @@ import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
-import 'LoginScreen.dart';
 
 class SplashScreen extends StatefulWidget {
   static String tag = '/SplashScreen';
