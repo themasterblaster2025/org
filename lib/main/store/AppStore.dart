@@ -7,12 +7,12 @@ import 'package:mobx/mobx.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
+
 part 'AppStore.g.dart';
 
 class AppStore = _AppStore with _$AppStore;
 
-abstract class _AppStore with Store{
-
+abstract class _AppStore with Store {
   @observable
   bool isLoading = false;
 
@@ -34,6 +34,9 @@ abstract class _AppStore with Store{
   @observable
   bool isFiltering = false;
 
+  @observable
+  String uid = '';
+
   @action
   Future<void> setLoading(bool val) async {
     isLoading = val;
@@ -48,6 +51,12 @@ abstract class _AppStore with Store{
   @action
   Future<void> setUserEmail(String val, {bool isInitialization = false}) async {
     userEmail = val;
+  }
+
+  @action
+  Future<void> setUId(String val, {bool isInitializing = false}) async {
+    uid = val;
+    if (!isInitializing) await setValue(UID, val);
   }
 
   @action

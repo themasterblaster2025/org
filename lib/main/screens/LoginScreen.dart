@@ -12,6 +12,7 @@ import 'package:nb_utils/nb_utils.dart';
 import '../../delivery/screens/DeliveryDashBoard.dart';
 import '../../main.dart';
 import '../../user/screens/DashboardScreen.dart';
+import '../Services/AuthSertvices.dart';
 import '../components/UserCitySelectScreen.dart';
 import '../models/CityListModel.dart';
 
@@ -24,6 +25,7 @@ class LoginScreen extends StatefulWidget {
 
 class LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  AuthServices authService = AuthServices();
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
@@ -75,19 +77,20 @@ class LoginScreenState extends State<LoginScreen> {
         await setValue(USER_EMAIL, emailController.text);
         await setValue(USER_PASSWORD, passController.text);
       }
-
-      await logInApi(req).then((value) async {
-        await getCountryDetailApiCall(value.data!.countryId.validate());
+      authService.signInWithEmailPassword(context, email: emailController.text, password: passController.text).then((value) async {
         appStore.setLoading(false);
-        if (getIntAsync(STATUS) == 1) {
-          getCityDetailApiCall(value.data!.cityId.validate());
-        } else {
-          toast(language.userNotApproveMsg);
-        }
-      }).catchError((e) {
-        appStore.setLoading(false);
-
-        toast(e.toString());
+        await logInApi(req).then((value) async {
+          await getCountryDetailApiCall(value.data!.countryId.validate());
+          appStore.setLoading(false);
+          if (getIntAsync(STATUS) == 1) {
+            getCityDetailApiCall(value.data!.cityId.validate());
+          } else {
+            toast(language.userNotApproveMsg);
+          }
+        }).catchError((e) {
+          appStore.setLoading(false);
+          toast(e.toString());
+        });
       });
     }
   }
@@ -128,10 +131,7 @@ class LoginScreenState extends State<LoginScreen> {
                     height: 90,
                     width: 90,
                     alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
+                    decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle),
                     child: Image.asset('assets/app_logo_primary.png', height: 70, width: 70)),
               ),
               Container(

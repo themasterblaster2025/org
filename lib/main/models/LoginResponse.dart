@@ -40,6 +40,14 @@ class UserData {
   String? countryName;
   String? latitude;
   String? longitude;
+  String? emailVerifiedAt;
+  String? playerId;
+  String? lastNotificationSeen;
+  String? uid;
+  String? currentTeamId;
+  String? profilePhotoPath;
+  String? deletedAt;
+  String? profilePhotoUrl;
 
   UserData({
     this.apiToken,
@@ -60,6 +68,12 @@ class UserData {
     this.countryName,
     this.latitude,
     this.longitude,
+    this.emailVerifiedAt,
+    this.playerId,
+    this.uid,
+    this.currentTeamId,
+    this.profilePhotoPath,
+    this.deletedAt,
   });
 
   factory UserData.fromJson(Map<String, dynamic> json) {
@@ -82,6 +96,12 @@ class UserData {
       countryName: json['country_name'],
       latitude: json['latitude'],
       longitude: json['longitude'],
+      emailVerifiedAt: json['email_verified_at'],
+      playerId: json['player_id'],
+      uid: json['uid'],
+      currentTeamId: json['current_team_id'],
+      profilePhotoPath: json['profile_photo_path'],
+      deletedAt: json['deleted_at'],
     );
   }
 
@@ -105,6 +125,12 @@ class UserData {
     data['country_name'] = this.countryName;
     data['latitude'] = this.latitude;
     data['longitude'] = this.longitude;
+    data['email_verified_at'] = this.emailVerifiedAt;
+    data['player_id'] = this.playerId;
+    data['uid'] = this.uid;
+    data['current_team_id'] = this.currentTeamId;
+    data['profile_photo_path'] = this.profilePhotoPath;
+    data['deleted_at'] = this.deletedAt;
 
     return data;
   }

@@ -36,6 +36,7 @@ const USER_ADDRESS = 'USER_ADDRESS';
 const STATUS = 'STATUS';
 const PLAYER_ID = 'PLAYER_ID';
 const FILTER_DATA = 'FILTER_DATA';
+const UID='UID';
 
 const COUNTRY_ID = 'COUNTRY_ID';
 const COUNTRY_DATA = 'COUNTRY_DATA';
@@ -107,3 +108,48 @@ class AppThemeMode {
 AppThemeMode appThemeMode = AppThemeMode();
 
 const REMEMBER_ME = 'REMEMBER_ME';
+
+const mAppIconUrl = "assets/app_logo.png";
+
+///FireBase Collection Name
+const MESSAGES_COLLECTION = "messages";
+const USER_COLLECTION = "users";
+const CONTACT_COLLECTION = "contact";
+const CHAT_DATA_IMAGES = "chatImages";
+
+const IS_ENTER_KEY = "IS_ENTER_KEY";
+const SELECTED_WALLPAPER = "SELECTED_WALLPAPER";
+const PER_PAGE_CHAT_COUNT = 50;
+
+const TEXT = "TEXT";
+const IMAGE = "IMAGE";
+
+const VIDEO = "VIDEO";
+const AUDIO = "AUDIO";
+
+//chat
+List<String> RTLLanguage = ['ar', 'ur'];
+
+enum MessageType {
+  TEXT,
+  IMAGE,
+  VIDEO,
+  AUDIO,
+}
+
+extension MessageExtension on MessageType {
+  String? get name {
+    switch (this) {
+      case MessageType.TEXT:
+        return 'TEXT';
+      case MessageType.IMAGE:
+        return 'IMAGE';
+      case MessageType.VIDEO:
+        return 'VIDEO';
+      case MessageType.AUDIO:
+        return 'AUDIO';
+      default:
+        return null;
+    }
+  }
+}

@@ -253,4 +253,4 @@ String dateParse(String date) {
   return DateFormat.yMd().add_jm().format(DateTime.parse(date).toLocal());
 }
 
-
+bool get isRTL => RTLLanguage.contains(appStore.selectedLanguage);

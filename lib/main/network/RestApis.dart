@@ -50,6 +50,7 @@ Future<LoginResponse> signUpApi(Map request) async {
     await setValue(USER_ADDRESS, loginResponse.data!.address.validate());
     await setValue(COUNTRY_ID, loginResponse.data!.countryId.validate());
     await setValue(CITY_ID, loginResponse.data!.cityId.validate());
+    await setValue(UID, loginResponse.data!.uid.validate());
 
     await appStore.setUserEmail(loginResponse.data!.email.validate());
     await appStore.setLogin(true);
@@ -65,7 +66,6 @@ Future<LoginResponse> signUpApi(Map request) async {
 
 Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async {
   Response response = await buildHttpResponse('login', request: request, method: HttpMethod.POST);
-
   if (!response.statusCode.isSuccessful()) {
     if (response.body.isJson()) {
       var json = jsonDecode(response.body);
@@ -103,6 +103,8 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
     await setValue(USER_ADDRESS, loginResponse.data!.address.validate());
     await setValue(COUNTRY_ID, loginResponse.data!.countryId.validate());
     await setValue(CITY_ID, loginResponse.data!.cityId.validate());
+    await setValue(UID, loginResponse.data!.uid.validate());
+
 
     /* await appStore.setUserName(loginResponse.userData!.username.validate());
     await appStore.setRole(loginResponse.userData!.user_type.validate());
