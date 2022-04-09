@@ -83,7 +83,7 @@ class TrackingScreenState extends State<TrackingScreen> {
         }).toList();
 
         setPolyLines(orderLat: orderLatLong);
-        //onMapCreated(controller);
+        onMapCreated(controller);
       }).catchError((error) {
         log(event);
       });
@@ -152,7 +152,7 @@ class TrackingScreenState extends State<TrackingScreen> {
                       tilt: cameraTilt,
                       bearing: cameraBearing,
                     ),
-                    //onMapCreated: onMapCreated,
+                    onMapCreated: onMapCreated,
                   ),
                   Container(
                     height: 200,
