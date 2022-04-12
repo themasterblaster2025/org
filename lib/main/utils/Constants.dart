@@ -36,7 +36,7 @@ const USER_ADDRESS = 'USER_ADDRESS';
 const STATUS = 'STATUS';
 const PLAYER_ID = 'PLAYER_ID';
 const FILTER_DATA = 'FILTER_DATA';
-const UID='UID';
+const UID = 'UID';
 
 const COUNTRY_ID = 'COUNTRY_ID';
 const COUNTRY_DATA = 'COUNTRY_DATA';
@@ -65,6 +65,7 @@ const PAYMENT_ON_PICKUP = "on_pickup";
 
 const RESTORE = 'restore';
 const FORCE_DELETE = 'forcedelete';
+const DELETE_USER = 'deleted_at';
 
 // OrderStatus
 const COURIER_ASSIGNED = 'courier_assigned';

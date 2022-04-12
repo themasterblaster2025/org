@@ -79,12 +79,17 @@ class LoginScreenState extends State<LoginScreen> {
       }
       authService.signInWithEmailPassword(context, email: emailController.text, password: passController.text).then((value) async {
         await logInApi(req).then((value) async {
-          await getCountryDetailApiCall(value.data!.countryId.validate());
-          appStore.setLoading(false);
           if (getIntAsync(STATUS) == 1) {
-            getCityDetailApiCall(value.data!.cityId.validate());
+            if (value.data!.countryId != null && value.data!.cityId != null) {
+              await getCountryDetailApiCall(value.data!.countryId.validate());
+              getCityDetailApiCall(value.data!.cityId.validate());
+              appStore.setLoading(false);
+            } else {
+              UserCitySelectScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+            }
           } else {
             toast(language.userNotApproveMsg);
+            appStore.setLoading(false);
           }
         }).catchError((e) {
           appStore.setLoading(false);
@@ -103,11 +108,7 @@ class LoginScreenState extends State<LoginScreen> {
   getCityDetailApiCall(int cityId) async {
     await getCityDetail(cityId).then((value) async {
       await setValue(CITY_DATA, value.data!.toJson());
-      if (CityModel
-          .fromJson(getJSONAsync(CITY_DATA))
-          .name
-          .validate()
-          .isNotEmpty) {
+      if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
         if (getStringAsync(USER_TYPE) == CLIENT) {
           DashboardScreen().launch(context, isNewTask: true);
         } else {
@@ -189,9 +190,13 @@ class LoginScreenState extends State<LoginScreen> {
                             setState(() {});
                           },
                         ),
-                        commonButton(language.signIn, () {
-                          loginApiCall();
-                        }, width: context.width(),),
+                        commonButton(
+                          language.signIn,
+                          () {
+                            loginApiCall();
+                          },
+                          width: context.width(),
+                        ),
                         6.height,
                         Align(
                           alignment: Alignment.topRight,

@@ -111,7 +111,12 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
     await appStore.setToken(loginResponse.userData!.api_token.validate());
     await appStore.setUserID(loginResponse.userData!.id.validate());*/
     await appStore.setUserEmail(loginResponse.data!.email.validate());
-    await appStore.setLogin(true);
+    if(getIntAsync(STATUS) == 1){
+      await appStore.setLogin(true);
+    }else{
+      await appStore.setLogin(false);
+
+    }
 
     await setValue(USER_PASSWORD, request['password']);
 

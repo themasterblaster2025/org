@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mighty_delivery/main/screens/LoginScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../delivery/screens/DeliveryDashBoard.dart';
@@ -61,11 +62,16 @@ class AuthServices {
         //   "player_id": getStringAsync(PLAYER_ID).validate(),
         // };
         await signUpApi(request).then((res) async {
-          await logInApi(request).then((res) async {
-            UserCitySelectScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
-          }).catchError((e) {
-            toast(e.toString());
-          });
+          if (getStringAsync(USER_TYPE) == DELIVERY_MAN) {
+            appStore.setLogin(false);
+            LoginScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+          } else {
+            await logInApi(request).then((res) async {
+              UserCitySelectScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+            }).catchError((e) {
+              toast(e.toString());
+            });
+          }
         }).catchError((e) {
           toast(e.toString());
           return;
