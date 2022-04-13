@@ -2,9 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import 'BaseLanguage.dart';
+import 'LanguageAf.dart';
 import 'LanguageAr.dart';
+import 'LanguageDe.dart';
 import 'LanguageEn.dart';
+import 'LanguageEs.dart';
+import 'LanguageFr.dart';
 import 'LanguageHi.dart';
+import 'LanguageId.dart';
+import 'LanguageNl.dart';
+import 'LanguagePt.dart';
+import 'LanguageTr.dart';
+import 'LanguageVi.dart';
 
 class AppLocalizations extends LocalizationsDelegate<BaseLanguage> {
   const AppLocalizations();
@@ -18,6 +27,24 @@ class AppLocalizations extends LocalizationsDelegate<BaseLanguage> {
         return LanguageHi();
       case 'ar':
         return LanguageAr();
+      case 'es' :
+        return LanguageEs();
+      case 'af' :
+        return LanguageAf();
+      case 'fr' :
+        return LanguageFr();
+      case 'de' :
+        return LanguageDe();
+      case 'id' :
+        return LanguageId();
+      case 'pt' :
+        return LanguagePt();
+      case 'tr' :
+        return LanguageTr();
+      case 'vi' :
+        return LanguageVi();
+      case 'nl' :
+        return LanguageNl();
       default:
         return LanguageEn();
     }
