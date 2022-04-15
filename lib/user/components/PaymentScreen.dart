@@ -59,7 +59,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
   @override
   void initState() {
     super.initState();
-    afterBuildCreated((){
+    afterBuildCreated(() {
       init();
     });
   }
@@ -380,79 +380,75 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
     return Scaffold(
       appBar: AppBar(title: Text(language.payment)),
       body: BodyCornerWidget(
-        child: Observer(
-          builder: (context) {
-            return Stack(
-              children: [
-                paymentGatewayList.isNotEmpty
-                    ? Stack(
-                        children: [
-                          SingleChildScrollView(
-                            padding: EdgeInsets.all(16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(language.paymentMethod, style: boldTextStyle()),
-                                16.height,
-                                ListView.builder(
-                                  primary: false,
-                                  shrinkWrap: true,
-                                  itemCount: paymentGatewayList.length,
-                                  itemBuilder: (context, index) {
-                                    PaymentGatewayData mData = paymentGatewayList[index];
-                                    return GestureDetector(
-                                      child: Container(
-                                        height: 70,
-                                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                        alignment: Alignment.center,
-                                        margin: EdgeInsets.only(bottom: 16),
-                                        decoration: boxDecorationWithRoundedCorners(
-                                          backgroundColor: context.cardColor,
-                                          borderRadius: BorderRadius.circular(defaultRadius),
-                                          border: Border.all(color: appStore.isDarkMode ? Colors.transparent : borderColor),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            commonCachedNetworkImage('${mData.gatewayLogo}', width: 40, height: 40),
-                                            16.width,
-                                            Text('${mData.title}', style: primaryTextStyle()).expand(),
-                                            Icon(Icons.check_circle, color: colorPrimary).visible(mData.type == selectedPaymentType),
-                                          ],
-                                        ),
+        child: Observer(builder: (context) {
+          return Stack(
+            children: [
+              paymentGatewayList.isNotEmpty
+                  ? Stack(
+                      children: [
+                        SingleChildScrollView(
+                          padding: EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(language.paymentMethod, style: boldTextStyle()),
+                              16.height,
+                              Wrap(
+                                spacing: 16,
+                                runSpacing: 16,
+                                children: paymentGatewayList.map((mData) {
+                                  return GestureDetector(
+                                    child: Container(
+                                      width: (context.width() - 50) * 0.5,
+                                      padding: EdgeInsets.symmetric(horizontal: 12,vertical: 16),
+                                      alignment: Alignment.center,
+                                      decoration: boxDecorationWithRoundedCorners(
+                                        backgroundColor: context.cardColor,
+                                        borderRadius: BorderRadius.circular(defaultRadius),
+                                        border: Border.all(color: mData.type == selectedPaymentType ? colorPrimary : appStore.isDarkMode ? Colors.transparent : borderColor),
                                       ),
-                                      onTap: () {
-                                        selectedPaymentType = mData.type;
-                                        setState(() {});
-                                      },
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
+                                      child: Row(
+                                        children: [
+                                          commonCachedNetworkImage('${mData.gatewayLogo}', width: 40, height: 40),
+                                          12.width,
+                                          Text('${mData.title}', style: primaryTextStyle()),
+                                        ],
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      selectedPaymentType = mData.type;
+                                      setState(() {});
+                                    },
+                                  );
+                                }).toList(),
+                              ),
+                            ],
                           ),
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: commonButton(language.payNow, () {
-                              if (selectedPaymentType == PAYMENT_TYPE_STRIPE) {
-                                stripePay();
-                              } else if (selectedPaymentType == PAYMENT_TYPE_RAZORPAY) {
-                                razorPayPayment();
-                              } else if (selectedPaymentType == PAYMENT_TYPE_PAYSTACK) {
-                                payStackPayment(context);
-                              } else if (selectedPaymentType == PAYMENT_TYPE_FLUTTERWAVE) {
-                                flutterWaveCheckout();
-                              }
-                            }, width: context.width())
-                                .paddingAll(16),
-                          ),
-                        ],
-                      )
-                    : !appStore.isLoading ? emptyWidget() : SizedBox(),
-                loaderWidget().visible(appStore.isLoading),
-              ],
-            );
-          }
-        ),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: commonButton(language.payNow, () {
+                            if (selectedPaymentType == PAYMENT_TYPE_STRIPE) {
+                              stripePay();
+                            } else if (selectedPaymentType == PAYMENT_TYPE_RAZORPAY) {
+                              razorPayPayment();
+                            } else if (selectedPaymentType == PAYMENT_TYPE_PAYSTACK) {
+                              payStackPayment(context);
+                            } else if (selectedPaymentType == PAYMENT_TYPE_FLUTTERWAVE) {
+                              flutterWaveCheckout();
+                            }
+                          }, width: context.width())
+                              .paddingAll(16),
+                        ),
+                      ],
+                    )
+                  : !appStore.isLoading
+                      ? emptyWidget()
+                      : SizedBox(),
+              loaderWidget().visible(appStore.isLoading),
+            ],
+          );
+        }),
       ),
     );
   }

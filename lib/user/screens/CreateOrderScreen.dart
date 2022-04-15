@@ -268,13 +268,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           if (value!.isEmpty) return errorThisFieldRequired;
                           return null;
                         },
-                        decoration: commonInputDecoration(suffixIcon: Icons.calendar_today),
+                        decoration: commonInputDecoration(suffixIcon: Icons.calendar_today,hintText: language.date),
                       ),
                       16.height,
                       Row(
                         children: [
-                          Text(language.from, style: primaryTextStyle()).expand(flex: 1),
-                          8.width,
                           DateTimePicker(
                             controller: pickFromTimeController,
                             type: DateTimePickerType.time,
@@ -286,15 +284,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                               if (value.validate().isEmpty) return errorThisFieldRequired;
                               return null;
                             },
-                            decoration: commonInputDecoration(suffixIcon: Icons.access_time),
-                          ).expand(flex: 2),
-                        ],
-                      ),
-                      16.height,
-                      Row(
-                        children: [
-                          Text(language.to, style: primaryTextStyle()).expand(flex: 1),
-                          8.width,
+                            decoration: commonInputDecoration(suffixIcon: Icons.access_time,hintText: language.from),
+                          ).expand(),
+                          16.width,
                           DateTimePicker(
                             controller: pickToTimeController,
                             type: DateTimePickerType.time,
@@ -312,10 +304,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                               }
                               return null;
                             },
-                            decoration: commonInputDecoration(suffixIcon: Icons.access_time),
-                          ).expand(flex: 2)
+                            decoration: commonInputDecoration(suffixIcon: Icons.access_time,hintText: language.to),
+                          ).expand()
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -344,13 +336,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           if (value!.isEmpty) return errorThisFieldRequired;
                           return null;
                         },
-                        decoration: commonInputDecoration(suffixIcon: Icons.calendar_today),
+                        decoration: commonInputDecoration(suffixIcon: Icons.calendar_today,hintText: language.date),
                       ),
                       16.height,
                       Row(
                         children: [
-                          Text(language.from, style: primaryTextStyle()).expand(flex: 1),
-                          8.width,
                           DateTimePicker(
                             controller: deliverFromTimeController,
                             type: DateTimePickerType.time,
@@ -362,15 +352,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                               if (value.validate().isEmpty) return errorThisFieldRequired;
                               return null;
                             },
-                            decoration: commonInputDecoration(suffixIcon: Icons.access_time),
-                          ).expand(flex: 2),
-                        ],
-                      ),
-                      16.height,
-                      Row(
-                        children: [
-                          Text(language.to, style: primaryTextStyle()).expand(flex: 1),
-                          8.width,
+                            decoration: commonInputDecoration(suffixIcon: Icons.access_time,hintText: language.from),
+                          ).expand(),
+                          16.width,
                           DateTimePicker(
                             controller: deliverToTimeController,
                             type: DateTimePickerType.time,
@@ -388,10 +372,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                               }
                               return null;
                             },
-                            decoration: commonInputDecoration(suffixIcon: Icons.access_time),
-                          ).expand(flex: 2)
+                            decoration: commonInputDecoration(suffixIcon: Icons.access_time,hintText:language.to),
+                          ).expand()
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),

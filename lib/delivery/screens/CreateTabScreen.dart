@@ -102,11 +102,10 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                       Row(
                         children: [
                           Text('${language.order}# ${data.id}', style: boldTextStyle(size: 16)).expand(),
-                          4.height,
                           widget.orderStatus != ORDER_CANCELLED
                               ? AppButton(
                                   text: buttonText(widget.orderStatus!),
-                                  padding: EdgeInsets.all(4),
+                                  padding: EdgeInsets.symmetric(vertical: 4,horizontal: 8),
                                   textStyle: boldTextStyle(color: Colors.white),
                                   color: colorPrimary,
                                   onTap: () {
@@ -137,72 +136,84 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                               : SizedBox()
                         ],
                       ),
-                      16.height,
-                      Row(
+                      Divider(height: 30, thickness: 1),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          if (data.pickupDatetime != null)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // TODO Localization
+                                Text(/*'${language.pickedAt}'*/ 'Picked', style: boldTextStyle(size: 18)),
+                                4.height,
+                                Text('At ${printDate(data.pickupDatetime!)}', style: secondaryTextStyle()),
+                                16.height,
+                              ],
+                            ),
                           Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Icon(Icons.location_on, color: colorPrimary),
-                              Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
-                            ],
-                          ),
-                          8.width,
-                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              if (data.pickupDatetime != null) Text('${language.pickedAt} ${printDate(data.pickupDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
-                              Text('${data.pickupPoint!.address}', style: primaryTextStyle()),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Icon(Icons.location_on, color: colorPrimary),
+                                  Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
+                                ],
+                              ),
+                              12.width,
+                              Text('${data.pickupPoint!.address}', style: primaryTextStyle()).expand(),
+                              12.width,
                               if (data.pickupPoint!.contactNumber != null)
-                                Row(
-                                  children: [
-                                    Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
-                                      launch('tel:${data.pickupPoint!.contactNumber}');
-                                    }),
-                                    8.width,
-                                    Text('${data.pickupPoint!.contactNumber}', style: primaryTextStyle()),
-                                  ],
-                                ).paddingOnly(top: 8),
-                              if (data.pickupDatetime == null && data.pickupPoint!.endTime != null && data.pickupPoint!.startTime != null)
-                                Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.endTime!).toLocal())}',
-                                        style: secondaryTextStyle())
-                                    .paddingOnly(top: 8),
+                                Image.asset('assets/icons/ic_call.png', width: 24, height: 24).onTap(() {
+                                  launch('tel:${data.pickupPoint!.contactNumber}');
+                                }),
                             ],
-                          ).expand(),
+                          ),
+                          if (data.pickupDatetime == null && data.pickupPoint!.endTime != null && data.pickupPoint!.startTime != null)
+                            Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.endTime!).toLocal())}',
+                                style: secondaryTextStyle())
+                                .paddingOnly(top: 8),
                         ],
                       ),
-                      16.height,
-                      Row(
+                      Divider(height: 30),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          if (data.deliveryDatetime != null)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // TODO Localization
+                                Text(/*'${language.deliveredAt}'*/ 'Delivered', style: boldTextStyle(size: 18)),
+                                4.height,
+                                Text('At ${printDate(data.deliveryDatetime!)}', style: secondaryTextStyle()),
+                                16.height,
+                              ],
+                            ),
                           Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
-                              Icon(Icons.location_on, color: colorPrimary),
-                            ],
-                          ),
-                          8.width,
-                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              if (data.deliveryDatetime != null) Text('${language.deliveredAt} ${printDate(data.deliveryDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
-                              Text('${data.deliveryPoint!.address}', style: primaryTextStyle()),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
+                                  Icon(Icons.location_on, color: colorPrimary),
+                                ],
+                              ),
+                              12.width,
+                              Text('${data.deliveryPoint!.address}', style: primaryTextStyle()).expand(),
+                              12.width,
                               if (data.deliveryPoint!.contactNumber != null)
-                                Row(
-                                  children: [
-                                    Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
-                                      launch('tel:${data.deliveryPoint!.contactNumber}');
-                                    }),
-                                    8.width,
-                                    Text('${data.deliveryPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
-                                  ],
-                                ).paddingOnly(top: 8),
-                              if (data.deliveryDatetime == null && data.deliveryPoint!.endTime != null && data.deliveryPoint!.startTime != null)
-                                Text('${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.endTime!).toLocal())}',
-                                        style: secondaryTextStyle())
-                                    .paddingOnly(top: 8),
+                                Image.asset('assets/icons/ic_call.png', width: 24, height: 24).onTap(() {
+                                  launch('tel:${data.deliveryPoint!.contactNumber}');
+                                }),
                             ],
-                          ).expand(),
+                          ),
+                          if (data.deliveryDatetime == null && data.deliveryPoint!.endTime != null && data.deliveryPoint!.startTime != null)
+                            Text('${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.endTime!).toLocal())}',
+                                style: secondaryTextStyle())
+                                .paddingOnly(top: 8),
                         ],
                       ),
                       Divider(height: 30, thickness: 1),
@@ -233,7 +244,6 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                           ).expand(),
                         ],
                       ),
-                      if (data.status == COURIER_DEPARTED) 8.height,
                       if (data.status == COURIER_DEPARTED)
                         Align(
                             alignment: Alignment.topRight,
@@ -258,8 +268,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                       .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
                                 }
                               },
-                            )),
-                      16.height,
+                            )).paddingOnly(top: 12),
                       Align(
                         alignment: Alignment.topRight,
                         child: AppButton(
@@ -296,7 +305,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                             );
                           },
                         ),
-                      ).visible(data.status == ORDER_ACTIVE),
+                      ).paddingOnly(top: 12).visible(data.status == ORDER_ACTIVE),
                     ],
                   ),
                 ),
@@ -318,8 +327,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
       await updateOrder(orderStatus: ORDER_ACTIVE, orderId: orderData.id);
       init();
     } else if (orderStatus == ORDER_ACTIVE) {
-      await ReceivedScreenOrderScreen(orderData: orderData, isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_PICKUP)
-          .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+      await ReceivedScreenOrderScreen(orderData: orderData, isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_PICKUP).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
       init();
     } else if (orderStatus == ORDER_ARRIVED) {
       bool isCheck = await ReceivedScreenOrderScreen(orderData: orderData, isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_PICKUP)
@@ -331,8 +339,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
       await updateOrder(orderStatus: ORDER_DEPARTED, orderId: orderData.id);
       init();
     } else if (orderStatus == ORDER_DEPARTED) {
-      await ReceivedScreenOrderScreen(orderData: orderData, isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_DELIVERY)
-          .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+      await ReceivedScreenOrderScreen(orderData: orderData, isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_DELIVERY).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
       init();
     }
   }

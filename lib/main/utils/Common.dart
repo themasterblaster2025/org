@@ -18,7 +18,7 @@ InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, F
     contentPadding: EdgeInsets.all(12),
     filled: true,
     hintText: hintText != null ? hintText : '',
-    hintStyle: secondaryTextStyle(),
+    hintStyle: secondaryTextStyle(size: 16,color: Colors.grey),
     fillColor: Colors.grey.withOpacity(0.15),
     counterText: '',
     suffixIcon: dateTime != null

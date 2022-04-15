@@ -149,74 +149,85 @@ class OrderFragmentState extends State<OrderFragment> {
                                       ],
                                     ),
                                     Divider(height: 30, thickness: 1),
-                                    Row(
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
+                                        if (item.pickupDatetime != null)
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              // TODO Localization
+                                              Text(/*'${language.pickedAt}'*/ 'Picked', style: boldTextStyle(size: 18)),
+                                              4.height,
+                                              Text('At ${printDate(item.pickupDatetime!)}', style: secondaryTextStyle()),
+                                              16.height,
+                                            ],
+                                          ),
                                         Row(
-                                          crossAxisAlignment: CrossAxisAlignment.end,
-                                          children: [
-                                            Icon(Icons.location_on, color: colorPrimary),
-                                            Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
-                                          ],
-                                        ),
-                                        8.width,
-                                        Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            if (item.pickupDatetime != null) Text('${language.pickedAt} ${printDate(item.pickupDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
-                                            Text('${item.pickupPoint!.address}', style: primaryTextStyle()),
+                                            Row(
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              children: [
+                                                Icon(Icons.location_on, color: colorPrimary),
+                                                Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
+                                              ],
+                                            ),
+                                            12.width,
+                                            Text('${item.pickupPoint!.address}', style: primaryTextStyle()).expand(),
+                                            12.width,
                                             if (item.pickupPoint!.contactNumber != null)
-                                              Row(
-                                                children: [
-                                                  Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
-                                                    launch('tel:${item.pickupPoint!.contactNumber}');
-                                                  }),
-                                                  8.width,
-                                                  Text('${item.pickupPoint!.contactNumber}', style: primaryTextStyle()),
-                                                ],
-                                              ).paddingOnly(top: 8),
-                                            if (item.pickupDatetime == null && item.pickupPoint!.endTime != null && item.pickupPoint!.startTime != null)
-                                              Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(item.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(item.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(item.pickupPoint!.endTime!).toLocal())}',
-                                                      style: secondaryTextStyle())
-                                                  .paddingOnly(top: 8),
-                                          ],
-                                        ).expand(),
-                                      ],
-                                    ),
-                                    16.height,
-                                    Row(
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment: CrossAxisAlignment.end,
-                                          children: [
-                                            Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
-                                            Icon(Icons.location_on, color: colorPrimary),
+                                              Image.asset('assets/icons/ic_call.png', width: 24, height: 24).onTap(() {
+                                                launch('tel:${item.pickupPoint!.contactNumber}');
+                                              }),
                                           ],
                                         ),
-                                        8.width,
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            if (item.deliveryDatetime != null) Text('${language.deliveredAt} ${printDate(item.deliveryDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
-                                            Text('${item.deliveryPoint!.address}', style: primaryTextStyle()),
-                                            if (item.deliveryPoint!.contactNumber != null)
-                                              Row(
-                                                children: [
-                                                  Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
-                                                    launch('tel:${item.deliveryPoint!.contactNumber}');
-                                                  }),
-                                                  8.width,
-                                                  Text('${item.deliveryPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
-                                                ],
-                                              ).paddingOnly(top: 8),
-                                            if (item.deliveryDatetime == null && item.deliveryPoint!.endTime != null && item.deliveryPoint!.startTime != null)
-                                              Text('${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(item.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(item.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(item.deliveryPoint!.endTime!).toLocal())}',
-                                                      style: secondaryTextStyle())
-                                                  .paddingOnly(top: 8),
-                                          ],
-                                        ).expand(),
+                                        if (item.pickupDatetime == null && item.pickupPoint!.endTime != null && item.pickupPoint!.startTime != null)
+                                          Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(item.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(item.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(item.pickupPoint!.endTime!).toLocal())}',
+                                                  style: secondaryTextStyle())
+                                              .paddingOnly(top: 8),
                                       ],
                                     ),
-                                    16.height,
+                                    Divider(height: 30),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        if (item.deliveryDatetime != null)
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              // TODO Localization
+                                              Text(/*'${language.deliveredAt}'*/ 'Delivered', style: boldTextStyle(size: 18)),
+                                              4.height,
+                                              Text('At ${printDate(item.deliveryDatetime!)}', style: secondaryTextStyle()),
+                                              16.height,
+                                            ],
+                                          ),
+                                        Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              crossAxisAlignment: CrossAxisAlignment.end,
+                                              children: [
+                                                Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
+                                                Icon(Icons.location_on, color: colorPrimary),
+                                              ],
+                                            ),
+                                            12.width,
+                                            Text('${item.deliveryPoint!.address}', style: primaryTextStyle()).expand(),
+                                            12.width,
+                                            if (item.deliveryPoint!.contactNumber != null)
+                                              Image.asset('assets/icons/ic_call.png', width: 24, height: 24).onTap(() {
+                                                launch('tel:${item.deliveryPoint!.contactNumber}');
+                                              }),
+                                          ],
+                                        ),
+                                        if (item.deliveryDatetime == null && item.deliveryPoint!.endTime != null && item.deliveryPoint!.startTime != null)
+                                          Text('${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(item.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(item.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(item.deliveryPoint!.endTime!).toLocal())}',
+                                                  style: secondaryTextStyle())
+                                              .paddingOnly(top: 8),
+                                      ],
+                                    ),
                                     Align(
                                       alignment: Alignment.topRight,
                                       child: AppButton(
@@ -239,13 +250,13 @@ class OrderFragmentState extends State<OrderFragment> {
                                         onTap: () {
                                           OrderTrackingScreen(orderData: item).launch(context);
                                         },
-                                      ).visible(item.status == ORDER_DEPARTED || item.status == ORDER_ARRIVED),
-                                    )
+                                      ),
+                                    ).paddingOnly(top: 16).visible(item.status == ORDER_DEPARTED || item.status == ORDER_ARRIVED)
                                   ],
                                 ),
                               ),
                               onTap: () {
-                                OrderDetailScreen(orderId: item.id.validate()).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop,duration: 400.milliseconds);
+                                OrderDetailScreen(orderId: item.id.validate()).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
                               },
                             )
                           : SizedBox();

@@ -155,8 +155,10 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Expanded(child: Text(language.country, style: boldTextStyle())),
+                                  Expanded(flex:1,child: Text(language.country, style: boldTextStyle())),
+                                  16.width,
                                   Expanded(
+                                    flex:2,
                                     child: DropdownButtonFormField<int>(
                                       value: selectedCountry,
                                       decoration: commonInputDecoration(),
@@ -183,15 +185,22 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                                 ],
                               ),
                               16.height,
-                              Text(language.city, style: boldTextStyle()),
-                              16.height,
-                              AppTextField(
-                                controller: searchCityController,
-                                textFieldType: TextFieldType.OTHER,
-                                decoration: commonInputDecoration(hintText: language.selectCity, suffixIcon: Icons.search),
-                                onChanged: (value) {
-                                  getCityApiCall(name: value);
-                                },
+                              Row(
+                                children:[
+                                  Expanded(flex:1,child: Text(language.city, style: boldTextStyle())),
+                                  16.width,
+                                  Expanded(
+                                    flex: 2,
+                                    child:AppTextField(
+                                      controller: searchCityController,
+                                      textFieldType: TextFieldType.OTHER,
+                                      decoration: commonInputDecoration(hintText: language.selectCity, suffixIcon: Icons.search),
+                                      onChanged: (value) {
+                                        getCityApiCall(name: value);
+                                      },
+                                    ),
+                                  ),
+                                ]
                               ),
                               16.height,
                               appStore.isLoading && cityData.isEmpty
