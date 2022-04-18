@@ -8,6 +8,8 @@ import 'package:mighty_delivery/main/models/CityDetailModel.dart';
 import 'package:mighty_delivery/main/models/CityListModel.dart';
 import 'package:mighty_delivery/main/models/CountryDetailModel.dart';
 import 'package:mighty_delivery/main/models/CountryListModel.dart';
+import 'package:mighty_delivery/main/models/DeliveryDocumentListModel.dart';
+import 'package:mighty_delivery/main/models/DocumentListModel.dart';
 import 'package:mighty_delivery/main/models/LDBaseResponse.dart';
 import 'package:mighty_delivery/main/models/LoginResponse.dart';
 import 'package:mighty_delivery/main/models/NotificationModel.dart';
@@ -225,7 +227,7 @@ Future<OrderDetailModel> getOrderDetails(int id)async{
   return OrderDetailModel.fromJson(await handleResponse(await buildHttpResponse('order-detail?id=$id',method: HttpMethod.GET)));
 }
 
-// ParcelType Api
+/// ParcelType Api
 Future<ParcelTypeListModel> getParcelTypeList({int? page}) async {
   return ParcelTypeListModel.fromJson(await handleResponse(await buildHttpResponse('staticdata-list?type=parcel_type&per_page=-1', method: HttpMethod.GET)));
 }
@@ -356,6 +358,25 @@ Future updateLocation({String? userName, String? userEmail, String? latitude, St
   });
 }
 
+/// Get Notification List
 Future<NotificationModel> getNotification({required int page}) async {
   return NotificationModel.fromJson(await handleResponse(await buildHttpResponse('notification-list?page=$page', method: HttpMethod.POST)));
 }
+
+/// Get Document List
+Future<DocumentListModel> getDocumentList({int? page}) async {
+  return DocumentListModel.fromJson(await handleResponse(await buildHttpResponse('document-list?status=1&per_page=-1', method: HttpMethod.GET)));
+}
+
+/// Get Delivery Document List
+Future<DeliveryDocumentListModel> getDeliveryPersonDocumentList({int? page}) async {
+  return DeliveryDocumentListModel.fromJson(await handleResponse(await buildHttpResponse('delivery-man-document-list?per_page=-1', method: HttpMethod.GET)));
+}
+
+Future<LDBaseResponse> deleteDeliveryDoc(int id) async {
+  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('delivery-man-document-delete/$id', method: HttpMethod.POST)));
+}
+
+
+
+

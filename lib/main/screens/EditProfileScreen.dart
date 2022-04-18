@@ -3,6 +3,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mighty_delivery/delivery/screens/VerifyDeliveryPersonScreen.dart';
 import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
@@ -236,11 +237,18 @@ class EditProfileScreenState extends State<EditProfileScreen> {
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(16),
-        child: commonButton(language.saveChanges, () {
-          if (_formKey.currentState!.validate()) {
-            save();
-          }
-        }),
+        child: Row(
+          children: [
+            commonButton("Verify", () {
+              VerifyDeliveryPersonScreen().launch(context);
+            }).paddingRight(16).expand(),
+            commonButton(language.saveChanges, () {
+              if (_formKey.currentState!.validate()) {
+                save();
+              }
+            }).expand(),
+          ],
+        ),
       ),
     );
   }

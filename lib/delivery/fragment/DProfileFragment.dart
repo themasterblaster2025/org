@@ -99,7 +99,7 @@ class DProfileFragmentState extends State<DProfileFragment> {
                           primaryColor: colorPrimary,
                           title: language.logoutConfirmationMsg,
                           positiveText: language.yes,
-                          negativeText: language.cancel,
+                          negativeText: language.no,
                           onAccept: (c) {
                             logout(context);
                           },

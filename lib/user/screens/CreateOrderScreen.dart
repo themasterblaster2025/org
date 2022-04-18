@@ -88,7 +88,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   }
 
   Future<void> init() async {
-    cityData = CityModel.fromJson(getJSONAsync(CITY_DATA));
+    await getCityDetailApiCall(getIntAsync(CITY_ID));
     if (widget.orderData != null) {
       if (widget.orderData!.totalWeight != 0) weightController.text = widget.orderData!.totalWeight!.toString();
       parcelTypeCont.text = widget.orderData!.parcelType.validate();
@@ -108,6 +108,14 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       paymentCollectFrom = widget.orderData!.paymentCollectFrom.validate(value: PAYMENT_ON_PICKUP);
     }
     getParcelTypeListApiCall();
+  }
+
+  getCityDetailApiCall(int cityId) async {
+    await getCityDetail(cityId).then((value) async {
+      await setValue(CITY_DATA, value.data!.toJson());
+      cityData = value.data!;
+      setState(() { });
+    }).catchError((error) {});
   }
 
   getParcelTypeListApiCall() async {

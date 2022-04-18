@@ -92,7 +92,7 @@ class AccountFragmentState extends State<AccountFragment> {
                       primaryColor: colorPrimary,
                       title: language.logoutConfirmationMsg,
                       positiveText: language.yes,
-                      negativeText: language.cancel,
+                      negativeText: language.no,
                       onAccept: (c) {
                         logout(context);
                       },
