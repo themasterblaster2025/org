@@ -597,4 +597,37 @@ class LanguageId extends BaseLanguage {
 
   @override
   String get pleaseConfirmPayment => "Harap konfirmasi pembayaran";
+
+  @override
+  String get picked => "Dipetik";
+
+  @override
+  String get at => "Pada";
+
+  @override
+  String get delivered => "Terkirim";
+
+  @override
+  String get yourLocation => "Lokasimu";
+
+  @override
+  String get lastUpdateAt => "Pembaruan terakhir di.";
+
+  @override
+  String get uploadFileConfirmationMsg => "Apakah Anda yakin ingin mengunggah file ini?";
+
+  @override
+  String get verifyDocument => "Verifikasi Dokumen";
+
+  @override
+  String get selectDocument => "Pilih Dokumen";
+
+  @override
+  String get addDocument => "Tambahkan dokumen";
+
+  @override
+  String get deleteMessage => "Hapus pesan?";
+
+  @override
+  String get writeAMessage => "Menulis pesan...";
 }

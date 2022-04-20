@@ -177,7 +177,7 @@ class _ChatItemWidgetState extends State<ChatItemWidget> {
       onLongPress: !widget.data!.isMe!
           ? null
           : () async {
-              bool? res = await showConfirmDialog(context, "Delete message?", positiveText: "Yes", negativeText: "No", buttonColor: colorPrimary);
+              bool? res = await showConfirmDialog(context, language.deleteMessage, positiveText: language.yes, negativeText: language.no, buttonColor: colorPrimary);
               if (res ?? false) {
                 hideKeyboard(context);
                 chatMessageService.deleteSingleMessage(senderId: widget.data!.senderId, receiverId: widget.data!.receiverId!, documentId: widget.data!.id).then((value) {

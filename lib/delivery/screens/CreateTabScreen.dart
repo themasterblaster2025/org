@@ -144,10 +144,9 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // TODO Localization
-                                Text(/*'${language.pickedAt}'*/ 'Picked', style: boldTextStyle(size: 18)),
+                                Text(language.picked, style: boldTextStyle(size: 18)),
                                 4.height,
-                                Text('At ${printDate(data.pickupDatetime!)}', style: secondaryTextStyle()),
+                                Text('${language.at} ${printDate(data.pickupDatetime!)}', style: secondaryTextStyle()),
                                 16.height,
                               ],
                             ),
@@ -184,10 +183,9 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // TODO Localization
-                                Text(/*'${language.deliveredAt}'*/ 'Delivered', style: boldTextStyle(size: 18)),
+                                Text(language.delivered, style: boldTextStyle(size: 18)),
                                 4.height,
-                                Text('At ${printDate(data.deliveryDatetime!)}', style: secondaryTextStyle()),
+                                Text('${language.at} ${printDate(data.deliveryDatetime!)}', style: secondaryTextStyle()),
                                 16.height,
                               ],
                             ),

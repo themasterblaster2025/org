@@ -597,4 +597,37 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get pleaseConfirmPayment => "يرجى تأكيد الدفع";
+
+  @override
+  String get picked => "اختار";
+
+  @override
+  String get at => "في";
+
+  @override
+  String get delivered => "تم التوصيل";
+
+  @override
+  String get yourLocation => "موقعك";
+
+  @override
+  String get lastUpdateAt => "آخر تحديث في";
+
+  @override
+  String get uploadFileConfirmationMsg => "هل أنت متأكد من أنك تريد تحميل هذا الملف؟";
+
+  @override
+  String get verifyDocument => "تحقق من المستند";
+
+  @override
+  String get selectDocument => "حدد المستند";
+
+  @override
+  String get addDocument => "إضافة المستند";
+
+  @override
+  String get deleteMessage => "حذف رسالة؟";
+
+  @override
+  String get writeAMessage => "اكتب رسالة...";
 }

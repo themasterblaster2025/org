@@ -597,4 +597,37 @@ class LanguageAf extends BaseLanguage {
 
   @override
   String get pleaseConfirmPayment => "Bevestig asseblief betaling";
+
+  @override
+  String get picked => "Gepluk";
+
+  @override
+  String get at => "By";
+
+  @override
+  String get delivered => "Aflewer";
+
+  @override
+  String get yourLocation => "Jou posisie";
+
+  @override
+  String get lastUpdateAt => "Laaste opdatering by";
+
+  @override
+  String get uploadFileConfirmationMsg => "Is jy seker jy wil hierdie lêer oplaai?";
+
+  @override
+  String get verifyDocument => "Verifieer dokument";
+
+  @override
+  String get selectDocument => "Kies dokument";
+
+  @override
+  String get addDocument => "Voeg dokument by";
+
+  @override
+  String get deleteMessage => "Verwyder boodskap?";
+
+  @override
+  String get writeAMessage => "Skryf 'n boodskap ...";
 }

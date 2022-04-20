@@ -183,7 +183,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       controller: messageCont,
                       decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: "Write a message...",
+                        hintText: language.writeAMessage,
                         hintStyle: secondaryTextStyle(),
                         contentPadding: EdgeInsets.symmetric(vertical: 18, horizontal: 4),
                       ),

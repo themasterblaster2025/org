@@ -129,6 +129,12 @@ const IMAGE = "IMAGE";
 const VIDEO = "VIDEO";
 const AUDIO = "AUDIO";
 
+const FIXED_CHARGES = "fixed_charges";
+const MIN_DISTANCE = "min_distance";
+const MIN_WEIGHT = "min_weight";
+const PER_DISTANCE_CHARGE = "per_distance_charges";
+const PER_WEIGHT_CHARGE = "per_weight_charges";
+
 //chat
 List<String> rtlLanguage = ['ar', 'ur'];
 

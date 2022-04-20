@@ -597,4 +597,37 @@ class LanguagePt extends BaseLanguage {
 
   @override
   String get pleaseConfirmPayment => "Por favor, confirme o pagamento";
+
+  @override
+  String get picked => "Escolhido";
+
+  @override
+  String get at => "No";
+
+  @override
+  String get delivered => "Entregue";
+
+  @override
+  String get yourLocation => "Sua localização";
+
+  @override
+  String get lastUpdateAt => "Última atualização em.";
+
+  @override
+  String get uploadFileConfirmationMsg => "Tem certeza de que deseja carregar este arquivo?";
+
+  @override
+  String get verifyDocument => "Verifique o documento";
+
+  @override
+  String get selectDocument => "Selecione Documento.";
+
+  @override
+  String get addDocument => "Adicionar documento";
+
+  @override
+  String get deleteMessage => "Apagar mensagem?";
+
+  @override
+  String get writeAMessage => "Escreve uma mensagem...";
 }

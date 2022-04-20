@@ -597,4 +597,37 @@ class LanguageNl extends BaseLanguage {
 
   @override
   String get pleaseConfirmPayment => "Bevestig de betaling";
+
+  @override
+  String get picked => "Geplukt";
+
+  @override
+  String get at => "Bij";
+
+  @override
+  String get delivered => "Afgeleverd";
+
+  @override
+  String get yourLocation => "Uw locatie";
+
+  @override
+  String get lastUpdateAt => "Laatste update bij";
+
+  @override
+  String get uploadFileConfirmationMsg => "Weet je zeker dat je dit bestand wilt uploaden?";
+
+  @override
+  String get verifyDocument => "Controleer het document";
+
+  @override
+  String get selectDocument => "Selecteer Document";
+
+  @override
+  String get addDocument => "Document toevoegen";
+
+  @override
+  String get deleteMessage => "Verwijder bericht?";
+
+  @override
+  String get writeAMessage => "Schrijf een bericht...";
 }

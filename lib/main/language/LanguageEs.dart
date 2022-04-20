@@ -597,4 +597,37 @@ class LanguageEs extends BaseLanguage {
 
   @override
   String get pleaseConfirmPayment => "Por favor confirme el pago";
+
+  @override
+  String get picked => "Escogido";
+
+  @override
+  String get at => "En";
+
+  @override
+  String get delivered => "Entregado";
+
+  @override
+  String get yourLocation => "Tu ubicación";
+
+  @override
+  String get lastUpdateAt => "Última actualización en";
+
+  @override
+  String get uploadFileConfirmationMsg => "¿Está seguro de que desea subir este archivo?";
+
+  @override
+  String get verifyDocument => "Verificar el documento";
+
+  @override
+  String get selectDocument => "Seleccione Documento";
+
+  @override
+  String get addDocument => "Añadir documento";
+
+  @override
+  String get deleteMessage => "¿Borrar mensaje?";
+
+  @override
+  String get writeAMessage => "Escribe un mensaje...";
 }

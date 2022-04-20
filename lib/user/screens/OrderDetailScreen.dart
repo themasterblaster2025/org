@@ -17,6 +17,7 @@ import 'package:mighty_delivery/user/screens/ReturnOrderScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../main/components/OrderSummeryWidget.dart';
 import '../../main/models/OrderDetailModel.dart';
 import 'OrderHistoryScreen.dart';
 
@@ -339,81 +340,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                   ],
                                 ),
                               Divider(height: 30, thickness: 1),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(language.deliveryCharge, style: primaryTextStyle()),
-                                  16.width,
-                                  Text('$currencySymbol ${orderData!.fixedCharges}', style: primaryTextStyle()),
-                                ],
-                              ),
-                              if (orderData!.distanceCharge.validate() != 0)
-                                Column(
-                                  children: [
-                                    8.height,
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(language.distanceCharge, style: primaryTextStyle()),
-                                        16.width,
-                                        Text('$currencySymbol ${orderData!.distanceCharge}', style: primaryTextStyle()),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              if (orderData!.weightCharge.validate() != 0)
-                                Column(
-                                  children: [
-                                    8.height,
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(language.weightCharge, style: primaryTextStyle()),
-                                        16.width,
-                                        Text('$currencySymbol ${orderData!.weightCharge}', style: primaryTextStyle()),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              Align(
-                                alignment: Alignment.bottomRight,
-                                child: Column(
-                                  children: [
-                                    8.height,
-                                    Text('$currencySymbol ${orderData!.fixedCharges.validate() + orderData!.distanceCharge.validate() + orderData!.weightCharge.validate()}', style: primaryTextStyle()),
-                                  ],
-                                ),
-                              ).visible((orderData!.distanceCharge.validate() != 0 || orderData!.weightCharge.validate() != 0) && orderData!.extraCharges.keys.length != 0),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  16.height,
-                                  Text(language.extraCharges, style: boldTextStyle()),
-                                  8.height,
-                                  Column(
-                                      children: List.generate(orderData!.extraCharges.keys.length, (index) {
-                                    return Padding(
-                                      padding: EdgeInsets.only(bottom: 8),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(orderData!.extraCharges.keys.elementAt(index).replaceAll("_", " "), style: primaryTextStyle()),
-                                          16.width,
-                                          Text('$currencySymbol ${orderData!.extraCharges.values.elementAt(index)}', style: primaryTextStyle()),
-                                        ],
-                                      ),
-                                    );
-                                  }).toList()),
-                                ],
-                              ).visible(orderData!.extraCharges.keys.length != 0),
-                              16.height,
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(language.total, style: boldTextStyle(size: 20)),
-                                  Text('$currencySymbol ${orderData!.totalAmount}', style: boldTextStyle(size: 20, color: colorPrimary)),
-                                ],
-                              ),
+                              OrderSummeryWidget(extraChargesList: orderData!.extraCharges!, totalDistance: orderData!.totalDistance!, totalWeight: orderData!.totalWeight!, distanceCharge: orderData!.distanceCharge!, weightCharge: orderData!.weightCharge!, totalAmount: orderData!.totalAmount!),
                             ],
                           ),
                         ),

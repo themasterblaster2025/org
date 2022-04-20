@@ -597,4 +597,37 @@ class LanguageFr extends BaseLanguage {
 
   @override
   String get pleaseConfirmPayment => "S'il vous plaît confirmer le paiement";
+
+  @override
+  String get picked => "Choisi";
+
+  @override
+  String get at => "À";
+
+  @override
+  String get delivered => "Livré";
+
+  @override
+  String get yourLocation => "Votre emplacement";
+
+  @override
+  String get lastUpdateAt => "Dernière mise à jour à";
+
+  @override
+  String get uploadFileConfirmationMsg => "Êtes-vous sûr de vouloir télécharger ce fichier?";
+
+  @override
+  String get verifyDocument => "Vérifier le document";
+
+  @override
+  String get selectDocument => "Sélectionner le document";
+
+  @override
+  String get addDocument => "Ajouter du document";
+
+  @override
+  String get deleteMessage => "Supprimer le message?";
+
+  @override
+  String get writeAMessage => "Écrire un message...";
 }

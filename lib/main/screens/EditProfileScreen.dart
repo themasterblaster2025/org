@@ -239,7 +239,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
         padding: EdgeInsets.all(16),
         child: Row(
           children: [
-            commonButton("Verify", () {
+            commonButton(language.verifyDocument, () {
               VerifyDeliveryPersonScreen().launch(context);
             }).paddingRight(16).expand(),
             commonButton(language.saveChanges, () {

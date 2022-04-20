@@ -85,7 +85,7 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
     if (filePickerResult != null) {
       showConfirmDialogCustom(
         context,
-        title: "Are you sure you want to upload this file?",
+        title: language.uploadFileConfirmationMsg,
         onAccept: (BuildContext context) {
           setState(() {
             imageFiles = filePickerResult!.paths.map((path) => File(path!)).toList();
@@ -93,8 +93,8 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
           });
           addDocument(docId, updateId: updateId);
         },
-        positiveText: "Yes",
-        negativeText: "No",
+        positiveText: language.yes,
+        negativeText: language.no,
         primaryColor: colorPrimary,
       );
     } else {}
@@ -154,7 +154,7 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Verify Document")),
+      appBar: AppBar(title: Text(language.verifyDocument)),
       body: BodyCornerWidget(
         child: Observer(
           builder: (_) => Stack(
@@ -171,7 +171,7 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
                             decoration: BoxDecoration(borderRadius: BorderRadius.circular(defaultRadius), color: Colors.grey.withOpacity(0.15)),
                             child: DropdownButtonFormField<DocumentData>(
                               decoration: InputDecoration.collapsed(hintText: null),
-                              hint: Text("Select Document", style: primaryTextStyle()),
+                              hint: Text(language.selectDocument, style: primaryTextStyle()),
                               value: selectedDoc,
                               dropdownColor: context.cardColor,
                               items: documents.map((DocumentData e) {
@@ -188,13 +188,13 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
                           Container(
                             padding: EdgeInsets.all(12),
                             margin: EdgeInsets.only(left: 16),
-                            decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary.withOpacity(0.1), borderRadius: BorderRadius.circular(defaultRadius)),
+                            decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary, borderRadius: BorderRadius.circular(defaultRadius)),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(Icons.add, color: colorPrimary, size: 24),
+                                Icon(Icons.add, color: Colors.white, size: 24),
                                 8.width,
-                                Text("Add", style: secondaryTextStyle(color: colorPrimary)),
+                                Text(language.addDocument, style: secondaryTextStyle(color: Colors.white)),
                               ],
                             ),
                           ).onTap(() {

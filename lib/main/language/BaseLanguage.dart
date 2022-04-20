@@ -400,4 +400,26 @@ abstract class BaseLanguage {
   String get returnReason;
 
   String get pleaseConfirmPayment;
+
+  String get picked;
+
+  String get at;
+
+  String get delivered;
+
+  String get yourLocation;
+
+  String get lastUpdateAt;
+
+  String get uploadFileConfirmationMsg;
+
+  String get verifyDocument;
+
+  String get selectDocument;
+
+  String get addDocument;
+
+  String get deleteMessage;
+
+  String get writeAMessage;
 }

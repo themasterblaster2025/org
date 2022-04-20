@@ -597,4 +597,37 @@ class LanguageTr extends BaseLanguage {
 
   @override
   String get pleaseConfirmPayment => "Lütfen ödemeyi onaylayın";
+
+  @override
+  String get picked => "Seçilmiş";
+
+  @override
+  String get at => "İçinde";
+
+  @override
+  String get delivered => "Teslim edilmiş";
+
+  @override
+  String get yourLocation => "Konumunuz";
+
+  @override
+  String get lastUpdateAt => "Son güncelleme";
+
+  @override
+  String get uploadFileConfirmationMsg => "Bu dosyayı yüklemek istediğinizden emin misiniz?";
+
+  @override
+  String get verifyDocument => "Belgeyi Doğrula";
+
+  @override
+  String get selectDocument => "Belge'yi seçin";
+
+  @override
+  String get addDocument => "Belge ekle";
+
+  @override
+  String get deleteMessage => "Mesajı sil?";
+
+  @override
+  String get writeAMessage => "Bir mesaj yaz...";
 }

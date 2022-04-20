@@ -597,4 +597,37 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get pleaseConfirmPayment => "Please confirm payment";
+
+  @override
+  String get picked => "Picked";
+
+  @override
+  String get at => "At";
+
+  @override
+  String get delivered => "Delivered";
+
+  @override
+  String get yourLocation => "Your Location";
+
+  @override
+  String get lastUpdateAt => "Last update at";
+
+  @override
+  String get uploadFileConfirmationMsg => "Are you sure you want to upload this file?";
+
+  @override
+  String get verifyDocument => "Verify Document";
+
+  @override
+  String get selectDocument => "Select Document";
+
+  @override
+  String get addDocument => "Add Document";
+
+  @override
+  String get deleteMessage => "Delete message?";
+
+  @override
+  String get writeAMessage => "Write a message...";
 }

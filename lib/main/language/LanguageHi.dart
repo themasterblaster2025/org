@@ -597,4 +597,37 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get pleaseConfirmPayment => "कृपया भुगतान की पुष्टि करें";
+
+  @override
+  String get picked => "उठाया";
+
+  @override
+  String get at => "पर";
+
+  @override
+  String get delivered => "पहुंचा दिया";
+
+  @override
+  String get yourLocation => "आपकी स्थिति";
+
+  @override
+  String get lastUpdateAt => "अंतिम अद्यतन";
+
+  @override
+  String get uploadFileConfirmationMsg => "क्या आप वाकई इस फाइल को अपलोड करना चाहते हैं?";
+
+  @override
+  String get verifyDocument => "सत्यापित करें दस्तावेज़";
+
+  @override
+  String get selectDocument => "दस्तावेज़ का चयन करें";
+
+  @override
+  String get addDocument => "दस्तावेज़ जोड़ें";
+
+  @override
+  String get deleteMessage => "संदेश को हटाएं?";
+
+  @override
+  String get writeAMessage => "एक सन्देश लिखिए...";
 }

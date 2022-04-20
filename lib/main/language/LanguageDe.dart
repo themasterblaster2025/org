@@ -597,4 +597,37 @@ class LanguageDe extends BaseLanguage {
 
   @override
   String get pleaseConfirmPayment => "Bitte bestätigen Sie die Zahlung.";
+
+  @override
+  String get picked => "Gepflückt";
+
+  @override
+  String get at => "Beim";
+
+  @override
+  String get delivered => "Geliefert";
+
+  @override
+  String get yourLocation => "Ihr Standort";
+
+  @override
+  String get lastUpdateAt => "Letzte Aktualisierung at.";
+
+  @override
+  String get uploadFileConfirmationMsg => "Möchten Sie diese Datei sicher, dass Sie diese Datei hochladen möchten?";
+
+  @override
+  String get verifyDocument => "Dokument überprüfen";
+
+  @override
+  String get selectDocument => "Dokument auswählen";
+
+  @override
+  String get addDocument => "Dokument hinzufügen";
+
+  @override
+  String get deleteMessage => "Nachricht löschen?";
+
+  @override
+  String get writeAMessage => "Eine Nachricht schreiben...";
 }

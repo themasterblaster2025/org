@@ -1,3 +1,4 @@
+import 'dart:core';
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -12,6 +13,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import '../../main.dart';
+import '../models/ExtraChargeRequestModel.dart';
 
 InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, Function()? suffixOnTap, Widget? dateTime}) {
   return InputDecoration(
@@ -254,3 +256,11 @@ String dateParse(String date) {
 }
 
 bool get isRTL => rtlLanguage.contains(appStore.selectedLanguage);
+
+num countExtraCharge({required num totalAmount, required String chargesType, required num charges}){
+  if (chargesType == CHARGE_TYPE_PERCENTAGE) {
+    return (totalAmount * charges * 0.01).toStringAsFixed(2).toDouble();
+  } else {
+   return charges.toStringAsFixed(2).toDouble();
+  }
+}

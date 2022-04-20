@@ -1,5 +1,7 @@
 import 'package:mighty_delivery/main/models/PaginationModel.dart';
 
+import 'ExtraChargeRequestModel.dart';
+
 class OrderListModel {
   PaginationModel? pagination;
   List<OrderData>? data;
@@ -90,7 +92,7 @@ class OrderData {
   int? deliveryManId;
   String? deliveryManName;
   num? fixedCharges;
-  var extraCharges;
+  List<ExtraChargeRequestModel>? extraCharges;
   num? totalAmount;
   String? reason;
   int? pickupConfirmByClient;
@@ -165,7 +167,12 @@ class OrderData {
     deliveryManId = json['delivery_man_id'];
     deliveryManName = json['delivery_man_name'];
     fixedCharges = json['fixed_charges'];
-    extraCharges = json['extra_charges'];
+    if (json['extra_charges'] != null) {
+      extraCharges = <ExtraChargeRequestModel>[];
+      json['extra_charges'].forEach((v) {
+        extraCharges!.add(new ExtraChargeRequestModel.fromJson(v));
+      });
+    }
     totalAmount = json['total_amount'];
     reason = json['reason'];
     pickupConfirmByClient = json['pickup_confirm_by_client'];
@@ -209,7 +216,8 @@ class OrderData {
     data['delivery_man_name'] = this.deliveryManName;
     data['fixed_charges'] = this.fixedCharges;
     if (this.extraCharges != null) {
-      data['extra_charges'] = this.extraCharges!.toJson();
+      data['extra_charges'] =
+          this.extraCharges!.map((v) => v.toJson()).toList();
     }
     data['total_amount'] = this.totalAmount;
     data['reason'] = this.reason;

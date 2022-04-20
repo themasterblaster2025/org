@@ -58,23 +58,6 @@ class RegisterScreenState extends State<RegisterScreen> {
 
       appStore.setLoading(true);
 
-      // Map req = {
-      //   "name": nameController.text.trim(),
-      //   "username": userNameController.text.trim(),
-      //   "email": emailController.text.trim(),
-      //   "password": passController.text.validate(),
-      //   "user_type": widget.userType.validate(),
-      //   "contact_number": '$countryCode ${phoneController.text.trim()}',
-      //   "player_id": getStringAsync(PLAYER_ID).validate(),
-      // };
-      // await signUpApi(req).then((value) async {
-      //   appStore.setLoading(false);
-      //   UserCitySelectScreen().launch(context, isNewTask: true);
-      // }).catchError((error) {
-      //   appStore.setLoading(false);
-      //   toast(error.toString());
-      // });
-
       appStore.setLoading(true);
       authService
           .signUpWithEmailPassword(context,

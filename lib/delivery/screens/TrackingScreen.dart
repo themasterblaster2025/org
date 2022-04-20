@@ -66,7 +66,7 @@ class TrackingScreenState extends State<TrackingScreen> {
         deliveryBoy = Marker(
           markerId: id,
           position: LatLng(event.latitude, event.longitude),
-          infoWindow: InfoWindow(title: 'Your Location', snippet: 'Last update at ${DateFormat('yyyy-MM-dd hh:mm').format(DateTime.now())}'),
+          infoWindow: InfoWindow(title: language.yourLocation, snippet: '${language.lastUpdateAt} ${DateFormat('yyyy-MM-dd hh:mm').format(DateTime.now())}'),
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
         );
 

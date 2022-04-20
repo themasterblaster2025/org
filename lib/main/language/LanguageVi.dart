@@ -597,4 +597,37 @@ class LanguageVi extends BaseLanguage {
 
   @override
   String get pleaseConfirmPayment => "Vui lòng xác nhận thanh toán";
+
+  @override
+  String get picked => "Chọn";
+
+  @override
+  String get at => "Tại";
+
+  @override
+  String get delivered => "Đã giao hàng";
+
+  @override
+  String get yourLocation => "Vị trí của bạn";
+
+  @override
+  String get lastUpdateAt => "Cập nhật lần cuối tại";
+
+  @override
+  String get uploadFileConfirmationMsg => "Bạn có chắc chắn muốn tải tập tin này?";
+
+  @override
+  String get verifyDocument => "Xác minh tài liệu.";
+
+  @override
+  String get selectDocument => "Chọn tài liệu.";
+
+  @override
+  String get addDocument => "Thêm tài liệu.";
+
+  @override
+  String get deleteMessage => "Xóa tin nhắn?";
+
+  @override
+  String get writeAMessage => "Viết tin nhắn ...";
 }
