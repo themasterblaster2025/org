@@ -20,7 +20,7 @@ InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, F
     contentPadding: EdgeInsets.all(12),
     filled: true,
     hintText: hintText != null ? hintText : '',
-    hintStyle: secondaryTextStyle(size: 16,color: Colors.grey),
+    hintStyle: secondaryTextStyle(size: 16, color: Colors.grey),
     fillColor: Colors.grey.withOpacity(0.15),
     counterText: '',
     suffixIcon: dateTime != null
@@ -214,18 +214,17 @@ String statusTypeIcon({String? type}) {
   return icon;
 }
 
-Widget settingItemWidget(IconData icon,String title,Function() onTap,{bool isLast=false,IconData? suffixIcon}){
+Widget settingItemWidget(IconData icon, String title, Function() onTap, {bool isLast = false, IconData? suffixIcon}) {
   return Column(
     mainAxisSize: MainAxisSize.min,
     children: [
       ListTile(
-        contentPadding: EdgeInsets.zero,
-        leading: Icon(icon, size: 30, color: colorPrimary),
-        title: Text(title),
-        trailing: suffixIcon!=null ? Icon(suffixIcon,color: Colors.green): Icon(Icons.navigate_next, color: appStore.isDarkMode ? Colors.white : Colors.grey),
-        onTap:onTap
-      ),
-      if(!isLast) Divider()
+          contentPadding: EdgeInsets.zero,
+          leading: Icon(icon, size: 30, color: colorPrimary),
+          title: Text(title),
+          trailing: suffixIcon != null ? Icon(suffixIcon, color: Colors.green) : Icon(Icons.navigate_next, color: appStore.isDarkMode ? Colors.white : Colors.grey),
+          onTap: onTap),
+      if (!isLast) Divider()
     ],
   );
 }
@@ -257,10 +256,10 @@ String dateParse(String date) {
 
 bool get isRTL => rtlLanguage.contains(appStore.selectedLanguage);
 
-num countExtraCharge({required num totalAmount, required String chargesType, required num charges}){
+num countExtraCharge({required num totalAmount, required String chargesType, required num charges}) {
   if (chargesType == CHARGE_TYPE_PERCENTAGE) {
     return (totalAmount * charges * 0.01).toStringAsFixed(2).toDouble();
   } else {
-   return charges.toStringAsFixed(2).toDouble();
+    return charges.toStringAsFixed(2).toDouble();
   }
 }

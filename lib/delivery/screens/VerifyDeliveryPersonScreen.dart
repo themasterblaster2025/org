@@ -193,7 +193,7 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
                           ).expand(),
                         if (docId != 0)
                           Container(
-                            padding: EdgeInsets.all(12),
+                            padding: EdgeInsets.all(10),
                             margin: EdgeInsets.only(left: 16),
                             decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary, borderRadius: BorderRadius.circular(defaultRadius)),
                             child: Row(

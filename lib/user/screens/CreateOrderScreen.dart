@@ -125,7 +125,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     cityData!.extraCharges!.forEach((element) {
       extraChargeList.add(ExtraChargeRequestModel(key: element.title!.toLowerCase().replaceAll(' ', "_"), value: element.charges, valueType: element.chargesType));
     });
-    print(extraChargeList);
   }
 
   getCityDetailApiCall(int cityId) async {

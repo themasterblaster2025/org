@@ -156,10 +156,9 @@ class OrderFragmentState extends State<OrderFragment> {
                                           Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              // TODO Localization
-                                              Text(/*'${language.pickedAt}'*/ 'Picked', style: boldTextStyle(size: 18)),
+                                              Text(language.picked, style: boldTextStyle(size: 18)),
                                               4.height,
-                                              Text('At ${printDate(item.pickupDatetime!)}', style: secondaryTextStyle()),
+                                              Text('${language.at} ${printDate(item.pickupDatetime!)}', style: secondaryTextStyle()),
                                               16.height,
                                             ],
                                           ),
@@ -196,10 +195,9 @@ class OrderFragmentState extends State<OrderFragment> {
                                           Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              // TODO Localization
-                                              Text(/*'${language.deliveredAt}'*/ 'Delivered', style: boldTextStyle(size: 18)),
+                                              Text(language.delivered, style: boldTextStyle(size: 18)),
                                               4.height,
-                                              Text('At ${printDate(item.deliveryDatetime!)}', style: secondaryTextStyle()),
+                                              Text('${language.at} ${printDate(item.deliveryDatetime!)}', style: secondaryTextStyle()),
                                               16.height,
                                             ],
                                           ),
