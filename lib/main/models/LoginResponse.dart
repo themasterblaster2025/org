@@ -48,6 +48,7 @@ class UserData {
   String? profilePhotoPath;
   String? deletedAt;
   String? profilePhotoUrl;
+  int? isVerifiedDeliveryMan;
 
   UserData({
     this.apiToken,
@@ -74,34 +75,38 @@ class UserData {
     this.currentTeamId,
     this.profilePhotoPath,
     this.deletedAt,
+    this.isVerifiedDeliveryMan,
+    this.lastNotificationSeen,
+    this.profilePhotoUrl
   });
 
   factory UserData.fromJson(Map<String, dynamic> json) {
     return UserData(
-      apiToken: json['api_token'],
-      contactNumber: json['contact_number'],
-      createdAt: json['created_at'],
-      email: json['email'],
-      id: json['id'],
-      name: json['name'],
-      profileImage: json['profile_image'],
-      updatedAt: json['updated_at'],
-      userType: json['user_type'],
-      username: json['username'],
-      address: json['address'],
-      status: json['status'],
-      cityId: json['city_id'],
-      countryId: json['country_id'],
-      cityName: json['city_name'],
-      countryName: json['country_name'],
-      latitude: json['latitude'],
-      longitude: json['longitude'],
-      emailVerifiedAt: json['email_verified_at'],
-      playerId: json['player_id'],
-      uid: json['uid'],
-      currentTeamId: json['current_team_id'],
-      profilePhotoPath: json['profile_photo_path'],
-      deletedAt: json['deleted_at'],
+        apiToken: json['api_token'],
+        contactNumber: json['contact_number'],
+        createdAt: json['created_at'],
+        email: json['email'],
+        id: json['id'],
+        name: json['name'],
+        profileImage: json['profile_image'],
+        updatedAt: json['updated_at'],
+        userType: json['user_type'],
+        username: json['username'],
+        address: json['address'],
+        status: json['status'],
+        cityId: json['city_id'],
+        countryId: json['country_id'],
+        cityName: json['city_name'],
+        countryName: json['country_name'],
+        latitude: json['latitude'],
+        longitude: json['longitude'],
+        emailVerifiedAt: json['email_verified_at'],
+        playerId: json['player_id'],
+        uid: json['uid'],
+        currentTeamId: json['current_team_id'],
+        profilePhotoPath: json['profile_photo_path'],
+        deletedAt: json['deleted_at'],
+        isVerifiedDeliveryMan: json['is_verified_delivery_man'],
     );
   }
 
@@ -131,7 +136,7 @@ class UserData {
     data['current_team_id'] = this.currentTeamId;
     data['profile_photo_path'] = this.profilePhotoPath;
     data['deleted_at'] = this.deletedAt;
-
+    data['is_verified_delivery_man'] = this.isVerifiedDeliveryMan;
     return data;
   }
 }

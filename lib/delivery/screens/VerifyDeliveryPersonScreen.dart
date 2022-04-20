@@ -175,7 +175,14 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
                               value: selectedDoc,
                               dropdownColor: context.cardColor,
                               items: documents.map((DocumentData e) {
-                                return DropdownMenuItem<DocumentData>(value: e, child: Text(e.name!, style: primaryTextStyle(), maxLines: 1, overflow: TextOverflow.ellipsis));
+                                return DropdownMenuItem<DocumentData>(
+                                    value: e,
+                                    child: Text(
+                                      e.name! + '${e.isRequired==1 ? '*' : ''}',
+                                      style: primaryTextStyle(),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ));
                               }).toList(),
                               onChanged: (DocumentData? value) async {
                                 selectedDoc = value;

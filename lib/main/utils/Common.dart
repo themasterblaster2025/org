@@ -214,7 +214,7 @@ String statusTypeIcon({String? type}) {
   return icon;
 }
 
-Widget settingItemWidget(IconData icon,String title,Function() onTap,{bool isLast=false}){
+Widget settingItemWidget(IconData icon,String title,Function() onTap,{bool isLast=false,IconData? suffixIcon}){
   return Column(
     mainAxisSize: MainAxisSize.min,
     children: [
@@ -222,7 +222,7 @@ Widget settingItemWidget(IconData icon,String title,Function() onTap,{bool isLas
         contentPadding: EdgeInsets.zero,
         leading: Icon(icon, size: 30, color: colorPrimary),
         title: Text(title),
-        trailing: Icon(Icons.navigate_next, color: appStore.isDarkMode ? Colors.white : Colors.grey),
+        trailing: suffixIcon!=null ? Icon(suffixIcon,color: Colors.green): Icon(Icons.navigate_next, color: appStore.isDarkMode ? Colors.white : Colors.grey),
         onTap:onTap
       ),
       if(!isLast) Divider()

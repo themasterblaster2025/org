@@ -53,6 +53,7 @@ Future<LoginResponse> signUpApi(Map request) async {
     await setValue(COUNTRY_ID, loginResponse.data!.countryId.validate());
     await setValue(CITY_ID, loginResponse.data!.cityId.validate());
     await setValue(UID, loginResponse.data!.uid.validate());
+    await setValue(IS_VERIFIED_DELIVERY_MAN, loginResponse.data!.isVerifiedDeliveryMan??0 == 1);
 
     await appStore.setUserEmail(loginResponse.data!.email.validate());
     await appStore.setLogin(true);
@@ -106,7 +107,7 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
     await setValue(COUNTRY_ID, loginResponse.data!.countryId.validate());
     await setValue(CITY_ID, loginResponse.data!.cityId.validate());
     await setValue(UID, loginResponse.data!.uid.validate());
-
+    await setValue(IS_VERIFIED_DELIVERY_MAN, loginResponse.data!.isVerifiedDeliveryMan ?? 0 == 1);
 
     /* await appStore.setUserName(loginResponse.userData!.username.validate());
     await appStore.setRole(loginResponse.userData!.user_type.validate());
@@ -143,6 +144,7 @@ Future<void> logout(BuildContext context) async {
   await removeKey(CITY_ID);
   await removeKey(CITY_DATA);
   await removeKey(FILTER_DATA);
+  await removeKey(IS_VERIFIED_DELIVERY_MAN);
   if (!getBoolAsync(REMEMBER_ME)) {
     await removeKey(USER_EMAIL);
     await removeKey(USER_PASSWORD);

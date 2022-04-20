@@ -49,11 +49,19 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     emailController.text = getStringAsync(USER_EMAIL);
     usernameController.text = getStringAsync(USER_NAME);
     nameController.text = getStringAsync(NAME);
-    if (phoneNum.split(" ").length == 1) {
-      contactNumberController.text = phoneNum.split(" ").last;
+    if (phoneNum
+        .split(" ")
+        .length == 1) {
+      contactNumberController.text = phoneNum
+          .split(" ")
+          .last;
     } else {
-      countryCode = phoneNum.split(" ").first;
-      contactNumberController.text = phoneNum.split(" ").last;
+      countryCode = phoneNum
+          .split(" ")
+          .first;
+      contactNumberController.text = phoneNum
+          .split(" ")
+          .last;
     }
     addressController.text = getStringAsync(USER_ADDRESS).validate();
   }
@@ -206,10 +214,12 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                             focus: contactFocus,
                             nextFocus: addressFocus,
                             decoration: commonInputDecoration(),
-                            validator: (s){
+                            validator: (s) {
                               if (s!.trim().isEmpty)
                                 return language.fieldRequiredMsg;
-                              if (s.trim().length > 15)
+                              if (s
+                                  .trim()
+                                  .length > 15)
                                 return language.contactNumberValidation;
                               return null;
                             },
@@ -237,18 +247,12 @@ class EditProfileScreenState extends State<EditProfileScreen> {
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(16),
-        child: Row(
-          children: [
-            commonButton(language.verifyDocument, () {
-              VerifyDeliveryPersonScreen().launch(context);
-            }).paddingRight(16).expand(),
-            commonButton(language.saveChanges, () {
-              if (_formKey.currentState!.validate()) {
-                save();
-              }
-            }).expand(),
-          ],
-        ),
+        child:
+        commonButton(language.saveChanges, () {
+          if (_formKey.currentState!.validate()) {
+            save();
+          }
+        }),
       ),
     );
   }
