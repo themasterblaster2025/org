@@ -133,8 +133,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                 children: [
                                   Row(
                                     children: [
-                                      Icon(Icons.location_on, color: colorPrimary),
-                                      Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
+                                      ImageIcon(AssetImage('assets/icons/ic_pick_location.png'),size: 24,color: colorPrimary),
                                       16.width,
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,8 +161,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                   16.height,
                                   Row(
                                     children: [
-                                      Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
-                                      Icon(Icons.location_on, color: colorPrimary),
+                                      ImageIcon(AssetImage('assets/icons/ic_delivery_location.png'),size: 24,color: colorPrimary),
                                       16.width,
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,

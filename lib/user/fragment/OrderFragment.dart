@@ -1,3 +1,4 @@
+import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
@@ -165,15 +166,18 @@ class OrderFragmentState extends State<OrderFragment> {
                                         Row(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Row(
-                                              crossAxisAlignment: CrossAxisAlignment.end,
-                                              children: [
-                                                Icon(Icons.location_on, color: colorPrimary),
-                                                Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
-                                              ],
-                                            ),
+                                            ImageIcon(AssetImage('assets/icons/ic_pick_location.png'),size: 24,color: colorPrimary),
                                             12.width,
-                                            Text('${item.pickupPoint!.address}', style: primaryTextStyle()).expand(),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text('${item.pickupPoint!.address}', style: primaryTextStyle()),
+                                                if (item.pickupDatetime == null && item.pickupPoint!.endTime != null && item.pickupPoint!.startTime != null)
+                                                  Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(item.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(item.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(item.pickupPoint!.endTime!).toLocal())}',
+                                                      style: secondaryTextStyle())
+                                                      .paddingOnly(top: 8),
+                                              ],
+                                            ).expand(),
                                             12.width,
                                             if (item.pickupPoint!.contactNumber != null)
                                               Image.asset('assets/icons/ic_call.png', width: 24, height: 24).onTap(() {
@@ -181,13 +185,9 @@ class OrderFragmentState extends State<OrderFragment> {
                                               }),
                                           ],
                                         ),
-                                        if (item.pickupDatetime == null && item.pickupPoint!.endTime != null && item.pickupPoint!.startTime != null)
-                                          Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(item.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(item.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(item.pickupPoint!.endTime!).toLocal())}',
-                                                  style: secondaryTextStyle())
-                                              .paddingOnly(top: 8),
                                       ],
                                     ),
-                                    Divider(height: 30),
+                                    DottedLine(dashColor:borderColor).paddingSymmetric(vertical: 16,horizontal: 24),
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
@@ -204,15 +204,18 @@ class OrderFragmentState extends State<OrderFragment> {
                                         Row(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Row(
-                                              crossAxisAlignment: CrossAxisAlignment.end,
-                                              children: [
-                                                Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
-                                                Icon(Icons.location_on, color: colorPrimary),
-                                              ],
-                                            ),
+                                            ImageIcon(AssetImage('assets/icons/ic_delivery_location.png'),size: 24,color: colorPrimary),
                                             12.width,
-                                            Text('${item.deliveryPoint!.address}', style: primaryTextStyle()).expand(),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text('${item.deliveryPoint!.address}', style: primaryTextStyle()),
+                                                if (item.deliveryDatetime == null && item.deliveryPoint!.endTime != null && item.deliveryPoint!.startTime != null)
+                                                  Text('${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(item.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(item.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(item.deliveryPoint!.endTime!).toLocal())}',
+                                                      style: secondaryTextStyle())
+                                                      .paddingOnly(top: 8),
+                                              ],
+                                            ).expand(),
                                             12.width,
                                             if (item.deliveryPoint!.contactNumber != null)
                                               Image.asset('assets/icons/ic_call.png', width: 24, height: 24).onTap(() {
@@ -220,10 +223,6 @@ class OrderFragmentState extends State<OrderFragment> {
                                               }),
                                           ],
                                         ),
-                                        if (item.deliveryDatetime == null && item.deliveryPoint!.endTime != null && item.deliveryPoint!.startTime != null)
-                                          Text('${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(item.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(item.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(item.deliveryPoint!.endTime!).toLocal())}',
-                                                  style: secondaryTextStyle())
-                                              .paddingOnly(top: 8),
                                       ],
                                     ),
                                     Align(

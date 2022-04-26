@@ -85,22 +85,6 @@ const ORDER_DEPARTED = 'courier_departed';
 
 const stripeURL = 'https://api.stripe.com/v1/payment_intents';
 
-/*///RazorPay
-const razorKey = "rzp_test_CLw7tH3O3P5eQM";
-
-///StripPayment
-const stripeURL = 'https://api.stripe.com/v1/payment_intents';
-const stripPaymentKey = 'sk_test_51GrhA2Bz1ljKAgF9FIJPLupBUCHFCOy5rS6LCnYHSu6Od0Qyx3TElGbxIu8BGRvq14fgidGOYyNkQPivZGnzWoVt004fCZxVdk';
-const stripPaymentPublishKey = 'pk_test_51GrhA2Bz1ljKAgF98fI6WfB2YUn4CewOB0DNQC1pSeXspUc1LlUYs3ou19oPF0ATcqa52FXTYmv6v0mkvPZb9BSD00SUpBj9tI';
-
-///FlutterWave
-const flutterWavePublicKey = 'FLWPUBK_TEST-eb3edef083c890a7e22dc7eec9e0daa5-X';
-const flutterWaveSecretKey = 'FLWSECK_TEST-d2759023efce6198a853b8e2dd3beb55-X';
-const flutterWaveEncryptionKey = 'FLWSECK_TEST8497cc2db86c';
-
-///PAY STACK DETAIL
-const payStackPublicKey = 'pk_test_c46ddf9def17e34152daa1b6e2eb940dedea41f0';*/
-
 class AppThemeMode {
   final int themeModeLight = 1;
   final int themeModeDark = 2;

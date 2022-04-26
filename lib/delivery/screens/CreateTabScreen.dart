@@ -153,13 +153,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Icon(Icons.location_on, color: colorPrimary),
-                                  Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
-                                ],
-                              ),
+                              ImageIcon(AssetImage('assets/icons/ic_pick_location.png'),size: 24,color: colorPrimary),
                               12.width,
                               Text('${data.pickupPoint!.address}', style: primaryTextStyle()).expand(),
                               12.width,
@@ -192,13 +186,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
-                                  Icon(Icons.location_on, color: colorPrimary),
-                                ],
-                              ),
+                              ImageIcon(AssetImage('assets/icons/ic_delivery_location.png'),size: 24,color: colorPrimary),
                               12.width,
                               Text('${data.deliveryPoint!.address}', style: primaryTextStyle()).expand(),
                               12.width,

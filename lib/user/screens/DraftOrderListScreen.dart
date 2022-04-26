@@ -162,14 +162,8 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
                                           if (item.pickupPoint!.address != null)
                                             Row(
                                               children: [
-                                                Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                                  children: [
-                                                    Icon(Icons.location_on, color: colorPrimary),
-                                                    Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
-                                                  ],
-                                                ),
-                                                8.width,
+                                                ImageIcon(AssetImage('assets/icons/ic_pick_location.png'),size: 24,color: colorPrimary),
+                                                12.width,
                                                 Column(
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
@@ -192,14 +186,8 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
                                           if (item.deliveryPoint!.address != null)
                                             Row(
                                               children: [
-                                                Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                                  children: [
-                                                    Text('...', style: boldTextStyle(size: 20, color: colorPrimary)),
-                                                    Icon(Icons.location_on, color: colorPrimary),
-                                                  ],
-                                                ),
-                                                8.width,
+                                                ImageIcon(AssetImage('assets/icons/ic_delivery_location.png'),size: 24,color: colorPrimary),
+                                                12.width,
                                                 Column(
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [

@@ -107,8 +107,7 @@ class DashboardScreenState extends State<DashboardScreen> {
             children: [
               Align(
                 alignment: AlignmentDirectional.center,
-                //child: ImageIcon(AssetImage('assets/icons/ic_filter.png'),size: 24,color: Colors.white),
-                child: Icon(Icons.filter_list),
+                child: ImageIcon(AssetImage('assets/icons/ic_filter.png'),size: 18,color: Colors.white),
               ),
               Observer(builder: (context) {
                 return Positioned(
