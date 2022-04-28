@@ -630,4 +630,42 @@ class LanguageTr extends BaseLanguage {
 
   @override
   String get writeAMessage => "Bir mesaj yaz...";
+  @override
+  String get pending => "Bekliyor";
+
+  @override
+  String get failed => "Arızalı";
+
+  @override
+  String get paid => "Paralı";
+
+  @override
+  String get onPickup => "Pikapta";
+
+  @override
+  String get onDelivery => "Teslimatta";
+
+  @override
+  String get stripe => "Şerit";
+
+  @override
+  String get razorpay => "Jilet";
+
+  @override
+  String get payStack => "Paystack";
+
+  @override
+  String get flutterWave => "Çırpınma";
+
+  @override
+  String get deliveryContactNumber => "Teslimat İletişim Numarası";
+
+  @override
+  String get deliveryDescription => "Teslimat Açıklaması";
+
+  @override
+  String get pickupContactNumber => "Pikap İletişim Numarası";
+
+  @override
+  String get pickupDescription => "Pikap Açıklama";
 }

@@ -505,7 +505,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           },
         ),
         16.height,
-        Text(language.contactNumber, style: primaryTextStyle()),
+        Text(language.pickupContactNumber, style: primaryTextStyle()),
         8.height,
         AppTextField(
           controller: pickPhoneCont,
@@ -518,7 +518,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           },
         ),
         16.height,
-        Text(language.description, style: primaryTextStyle()),
+        Text(language.pickupDescription, style: primaryTextStyle()),
         8.height,
         TextField(
           controller: pickDesCont,
@@ -559,7 +559,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           },
         ),
         16.height,
-        Text(language.contactNumber, style: primaryTextStyle()),
+        Text(language.deliveryContactNumber, style: primaryTextStyle()),
         8.height,
         AppTextField(
           controller: deliverPhoneCont,
@@ -573,7 +573,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           },
         ),
         16.height,
-        Text(language.description, style: primaryTextStyle()),
+        Text(language.deliveryDescription, style: primaryTextStyle()),
         8.height,
         TextField(
           controller: deliverDesCont,
@@ -663,7 +663,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           ),
         ),
         Divider(height: 30),
-        OrderSummeryWidget(extraChargesList: extraChargeList, totalDistance: totalDistance, totalWeight: weightController.text.toDouble(), distanceCharge: distanceCharge, weightCharge: weightCharge, totalAmount: totalAmount),
+        OrderSummeryWidget(
+            extraChargesList: extraChargeList,
+            totalDistance: totalDistance,
+            totalWeight: weightController.text.toDouble(),
+            distanceCharge: distanceCharge,
+            weightCharge: weightCharge,
+            totalAmount: totalAmount),
         16.height,
         Text(language.payment, style: boldTextStyle()),
         16.height,

@@ -630,4 +630,43 @@ class LanguageVi extends BaseLanguage {
 
   @override
   String get writeAMessage => "Viết tin nhắn ...";
+
+  @override
+  String get pending => "Chưa giải quyết";
+
+  @override
+  String get failed => "Thất bại";
+
+  @override
+  String get paid => "Trả";
+
+  @override
+  String get onPickup => "Trên xe bán tải";
+
+  @override
+  String get onDelivery => "Khi giao hàng";
+
+  @override
+  String get stripe => "Vạch sọc";
+
+  @override
+  String get razorpay => "Dao cạo";
+
+  @override
+  String get payStack => "Paystack";
+
+  @override
+  String get flutterWave => "Flutterwave";
+
+  @override
+  String get deliveryContactNumber => "Số liên lạc giao hàng";
+
+  @override
+  String get deliveryDescription => "Mô tả giao hàng";
+
+  @override
+  String get pickupContactNumber => "Số liên lạc đón";
+
+  @override
+  String get pickupDescription => "Mô tả đón";
 }

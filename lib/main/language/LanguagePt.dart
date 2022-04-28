@@ -630,4 +630,43 @@ class LanguagePt extends BaseLanguage {
 
   @override
   String get writeAMessage => "Escreve uma mensagem...";
+
+  @override
+  String get pending => "Pendente";
+
+  @override
+  String get failed => "Fracassado";
+
+  @override
+  String get paid => "Pago";
+
+  @override
+  String get onPickup => "Na coleta";
+
+  @override
+  String get onDelivery => "Em entrega";
+
+  @override
+  String get stripe => "Listra";
+
+  @override
+  String get razorpay => "Razorpay";
+
+  @override
+  String get payStack => "PayStack";
+
+  @override
+  String get flutterWave => "Flutterwave";
+
+  @override
+  String get deliveryContactNumber => "Número de contato da entrega";
+
+  @override
+  String get deliveryDescription => "Descrição da entrega";
+
+  @override
+  String get pickupContactNumber => "Número de contato da coleta";
+
+  @override
+  String get pickupDescription => "Descrição da coleta";
 }

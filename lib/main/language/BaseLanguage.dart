@@ -422,4 +422,30 @@ abstract class BaseLanguage {
   String get deleteMessage;
 
   String get writeAMessage;
+
+  String get pending;
+
+  String get failed;
+
+  String get paid;
+
+  String get onPickup;
+
+  String get onDelivery;
+
+  String get stripe;
+
+  String get razorpay;
+
+  String get payStack;
+
+  String get flutterWave;
+
+  String get deliveryContactNumber;
+
+  String get deliveryDescription;
+
+  String get pickupContactNumber;
+
+  String get pickupDescription;
 }

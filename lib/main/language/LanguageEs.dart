@@ -630,4 +630,43 @@ class LanguageEs extends BaseLanguage {
 
   @override
   String get writeAMessage => "Escribe un mensaje...";
+
+  @override
+  String get pending => "Pendiente";
+
+  @override
+  String get failed => "Ha fallado";
+
+  @override
+  String get paid => "Pagado";
+
+  @override
+  String get onPickup => "En la recogida";
+
+  @override
+  String get onDelivery => "En la entrega";
+
+  @override
+  String get stripe => "Raya";
+
+  @override
+  String get razorpay => "Razonpay";
+
+  @override
+  String get payStack => "Paystack";
+
+  @override
+  String get flutterWave => "Flutero";
+
+  @override
+  String get deliveryContactNumber => "Número de contacto de entrega";
+
+  @override
+  String get deliveryDescription => "Descripción de la entrega";
+
+  @override
+  String get pickupContactNumber => "Número de contacto de recogida";
+
+  @override
+  String get pickupDescription => "Descripción de la recogida";
 }

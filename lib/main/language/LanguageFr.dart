@@ -630,4 +630,43 @@ class LanguageFr extends BaseLanguage {
 
   @override
   String get writeAMessage => "Écrire un message...";
+
+  @override
+  String get pending => "Écrire un message...";
+
+  @override
+  String get failed => "En attente";
+
+  @override
+  String get paid => "Manqué";
+
+  @override
+  String get onPickup => "Payé";
+
+  @override
+  String get onDelivery => "Lors du ramassage";
+
+  @override
+  String get stripe => "À la livraison";
+
+  @override
+  String get razorpay => "Bande";
+
+  @override
+  String get payStack => "Razorpay";
+
+  @override
+  String get flutterWave => "Sac de paiement";
+
+  @override
+  String get deliveryContactNumber => "Ondulation";
+
+  @override
+  String get deliveryDescription => "Numéro de contact de livraison";
+
+  @override
+  String get pickupContactNumber => "Description de livraison";
+
+  @override
+  String get pickupDescription => "Numéro de contact de ramassage";
 }

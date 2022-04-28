@@ -630,4 +630,43 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get writeAMessage => "اكتب رسالة...";
+
+  @override
+  String get pending => "اكتب رسالة...";
+
+  @override
+  String get failed => "قيد الانتظار";
+
+  @override
+  String get paid => "باءت بالفشل";
+
+  @override
+  String get onPickup => "دفع";
+
+  @override
+  String get onDelivery => "على بيك آب";
+
+  @override
+  String get stripe => "عند التسليم";
+
+  @override
+  String get razorpay => "شريط";
+
+  @override
+  String get payStack => "رازورباي";
+
+  @override
+  String get flutterWave => "PayStack";
+
+  @override
+  String get deliveryContactNumber => "Flutterwave";
+
+  @override
+  String get deliveryDescription => "رقم الاتصال بالتسليم";
+
+  @override
+  String get pickupContactNumber => "وصف التسليم";
+
+  @override
+  String get pickupDescription => "رقم الاتصال بالتقاط";
 }

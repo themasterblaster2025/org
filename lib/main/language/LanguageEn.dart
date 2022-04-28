@@ -630,4 +630,43 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get writeAMessage => "Write a message...";
+
+  @override
+  String get pending => "Pending";
+
+  @override
+  String get failed => "Failed";
+
+  @override
+  String get paid => "Paid";
+
+  @override
+  String get onPickup => "On pickup";
+
+  @override
+  String get onDelivery => "On delivery";
+
+  @override
+  String get stripe => "Stripe";
+
+  @override
+  String get razorpay => "Razorpay";
+
+  @override
+  String get payStack => "PayStack";
+
+  @override
+  String get flutterWave => "FlutterWave";
+
+  @override
+  String get deliveryContactNumber => "Delivery Contact Number";
+
+  @override
+  String get deliveryDescription => "Delivery Description";
+
+  @override
+  String get pickupContactNumber => "Pickup Contact Number";
+
+  @override
+  String get pickupDescription => "Pickup Description";
 }

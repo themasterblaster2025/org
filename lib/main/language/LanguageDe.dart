@@ -630,4 +630,43 @@ class LanguageDe extends BaseLanguage {
 
   @override
   String get writeAMessage => "Eine Nachricht schreiben...";
+
+  @override
+  String get pending => "Ausstehend";
+
+  @override
+  String get failed => "Gescheitert";
+
+  @override
+  String get paid => "Bezahlt";
+
+  @override
+  String get onPickup => "Bei Abholung";
+
+  @override
+  String get onDelivery => "Bei Lieferung";
+
+  @override
+  String get stripe => "Streifen";
+
+  @override
+  String get razorpay => "Razorpay";
+
+  @override
+  String get payStack => "Paystack";
+
+  @override
+  String get flutterWave => "Flutterwelle";
+
+  @override
+  String get deliveryContactNumber => "Lieferkontaktnummer";
+
+  @override
+  String get deliveryDescription => "Lieferbeschreibung";
+
+  @override
+  String get pickupContactNumber => "KONTAKT -NUMPER";
+
+  @override
+  String get pickupDescription => "Abholbeschreibung";
 }

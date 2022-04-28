@@ -630,4 +630,43 @@ class LanguageId extends BaseLanguage {
 
   @override
   String get writeAMessage => "Menulis pesan...";
+
+  @override
+  String get pending => "Tertunda";
+
+  @override
+  String get failed => "Gagal";
+
+  @override
+  String get paid => "Dibayar";
+
+  @override
+  String get onPickup => "Di pickup";
+
+  @override
+  String get onDelivery => "Sedang dikirim";
+
+  @override
+  String get stripe => "Garis";
+
+  @override
+  String get razorpay => "Razorpay";
+
+  @override
+  String get payStack => "Paystack";
+
+  @override
+  String get flutterWave => "Flutterwave";
+
+  @override
+  String get deliveryContactNumber => "Nomor kontak pengiriman";
+
+  @override
+  String get deliveryDescription => "Deskripsi pengiriman";
+
+  @override
+  String get pickupContactNumber => "Nomor kontak pickup";
+
+  @override
+  String get pickupDescription => "Deskripsi pickup";
 }

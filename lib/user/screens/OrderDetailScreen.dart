@@ -249,7 +249,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(language.paymentType, style: primaryTextStyle()),
-                                        Text('${orderData!.paymentType.validate(value: PAYMENT_TYPE_CASH)}', style: primaryTextStyle()),
+                                        Text('${paymentType(orderData!.paymentType.validate(value: PAYMENT_TYPE_CASH))}', style: primaryTextStyle()),
                                       ],
                                     ),
                                     Divider(height: 30),
@@ -257,7 +257,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(language.paymentStatus, style: primaryTextStyle()),
-                                        Text('${orderData!.paymentStatus.validate(value: PAYMENT_PENDING)}', style: primaryTextStyle()),
+                                        Text('${paymentStatus(orderData!.paymentStatus.validate(value: PAYMENT_PENDING))}', style: primaryTextStyle()),
                                       ],
                                     ),
                                     Divider(height: 30).visible(orderData!.paymentType.validate(value: PAYMENT_TYPE_CASH) == PAYMENT_TYPE_CASH),
@@ -265,7 +265,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(language.paymentCollectFrom, style: primaryTextStyle()),
-                                        Text('${orderData!.paymentCollectFrom!.replaceAll("_", " ").capitalizeFirstLetter()}', style: primaryTextStyle()),
+                                        Text('${paymentCollectForm(orderData!.paymentCollectFrom!)}', style: primaryTextStyle()),
                                       ],
                                     ).visible(orderData!.paymentType.validate(value: PAYMENT_TYPE_CASH) == PAYMENT_TYPE_CASH),
                                   ],

@@ -630,4 +630,43 @@ class LanguageNl extends BaseLanguage {
 
   @override
   String get writeAMessage => "Schrijf een bericht...";
+
+  @override
+  String get pending => "In afwachting";
+
+  @override
+  String get failed => "Mislukt";
+
+  @override
+  String get paid => "Betaald";
+
+  @override
+  String get onPickup => "Op pick -up";
+
+  @override
+  String get onDelivery => "Bij levering";
+
+  @override
+  String get stripe => "Streep";
+
+  @override
+  String get razorpay => "Razorpay";
+
+  @override
+  String get payStack => "Betalingsstack";
+
+  @override
+  String get flutterWave => "Flutterwave";
+
+  @override
+  String get deliveryContactNumber => "Levering contactnummer";
+
+  @override
+  String get deliveryDescription => "Leveringsbeschrijving";
+
+  @override
+  String get pickupContactNumber => "Pick -up contactnummer";
+
+  @override
+  String get pickupDescription => "Ophalen Beschrijving";
 }

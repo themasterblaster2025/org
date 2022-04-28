@@ -630,4 +630,43 @@ class LanguageAf extends BaseLanguage {
 
   @override
   String get writeAMessage => "Skryf 'n boodskap ...";
+
+  @override
+  String get pending => "Hangende";
+
+  @override
+  String get failed => "Misluk";
+
+  @override
+  String get paid => "Betaal";
+
+  @override
+  String get onPickup => "Op bakkie";
+
+  @override
+  String get onDelivery => "By aflewering";
+
+  @override
+  String get stripe => "Streep";
+
+  @override
+  String get razorpay => "Skeermes";
+
+  @override
+  String get payStack => "Paystack";
+
+  @override
+  String get flutterWave => "Fladdergolf";
+
+  @override
+  String get deliveryContactNumber => "Afleweringskontaknommer";
+
+  @override
+  String get deliveryDescription => "Aflewering Beskrywing";
+
+  @override
+  String get pickupContactNumber => "Kontaknommer";
+
+  @override
+  String get pickupDescription => "BESKRYWING BESKRYWING";
 }

@@ -630,4 +630,43 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get writeAMessage => "एक सन्देश लिखिए...";
+
+  @override
+  String get pending => "लंबित";
+
+  @override
+  String get failed => "अनुत्तीर्ण होना";
+
+  @override
+  String get paid => "चुकाया गया";
+
+  @override
+  String get onPickup => "पिकअप पर";
+
+  @override
+  String get onDelivery => "प्रसव पर";
+
+  @override
+  String get stripe => "पट्टी";
+
+  @override
+  String get razorpay => "रज़ोरपे";
+
+  @override
+  String get payStack => "अदायगी";
+
+  @override
+  String get flutterWave => "फड़फड़ाना";
+
+  @override
+  String get deliveryContactNumber => "वितरण संपर्क नंबर";
+
+  @override
+  String get deliveryDescription => "वितरण विवरण";
+
+  @override
+  String get pickupContactNumber => "पिकअप संपर्क नंबर";
+
+  @override
+  String get pickupDescription => "पिकअप विवरण";
 }

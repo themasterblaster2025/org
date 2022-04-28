@@ -13,7 +13,6 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import '../../main.dart';
-import '../models/ExtraChargeRequestModel.dart';
 
 InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, Function()? suffixOnTap, Widget? dateTime}) {
   return InputDecoration(
@@ -262,4 +261,39 @@ num countExtraCharge({required num totalAmount, required String chargesType, req
   } else {
     return charges.toStringAsFixed(2).toDouble();
   }
+}
+
+String? paymentStatus(String paymentStatus) {
+  if (paymentStatus.toLowerCase() == PAYMENT_PENDING.toLowerCase()) {
+    return language.pending;
+  } else if (paymentStatus.toLowerCase() == PAYMENT_FAILED.toLowerCase()) {
+    return language.failed;
+  } else if (paymentStatus.toLowerCase() == PAYMENT_PAID.toLowerCase()) {
+    return language.paid;
+  }
+  return '';
+}
+
+String? paymentCollectForm(String paymentType) {
+  if (paymentType.toLowerCase() == PAYMENT_ON_PICKUP.toLowerCase()) {
+    return language.onPickup;
+  } else if (paymentType.toLowerCase() == PAYMENT_ON_DELIVERY.toLowerCase()) {
+    return language.onDelivery;
+  }
+  return '';
+}
+
+String? paymentType(String paymentType) {
+  if (paymentType.toLowerCase() == PAYMENT_TYPE_STRIPE.toLowerCase()) {
+    return language.stripe;
+  } else if (paymentType.toLowerCase() == PAYMENT_TYPE_RAZORPAY.toLowerCase()) {
+    return language.razorpay;
+  } else if (paymentType.toLowerCase() == PAYMENT_TYPE_PAYSTACK.toLowerCase()) {
+    return language.payStack;
+  } else if (paymentType.toLowerCase() == PAYMENT_TYPE_FLUTTERWAVE.toLowerCase()) {
+    return language.flutterWave;
+  } else if (paymentType.toLowerCase() == PAYMENT_TYPE_CASH.toLowerCase()) {
+    return language.cash;
+  }
+  return PAYMENT_TYPE_CASH;
 }
