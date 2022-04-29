@@ -5,6 +5,8 @@ import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class AppTheme {
+
+
   //
   AppTheme._();
 
