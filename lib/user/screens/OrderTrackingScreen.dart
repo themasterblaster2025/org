@@ -69,8 +69,10 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
       markers.add(
         Marker(
           markerId: MarkerId(widget.orderData.cityName.validate()),
-          position: LatLng(widget.orderData.deliveryPoint!.latitude.toDouble(), widget.orderData.deliveryPoint!.longitude.toDouble()),
-          infoWindow: InfoWindow(title: widget.orderData.deliveryPoint!.address.validate()),
+          position: widget.orderData.status == ORDER_ACTIVE
+              ? LatLng(widget.orderData.pickupPoint!.latitude.toDouble(), widget.orderData.pickupPoint!.longitude.toDouble())
+              : LatLng(widget.orderData.deliveryPoint!.latitude.toDouble(), widget.orderData.deliveryPoint!.longitude.toDouble()),
+          infoWindow: InfoWindow(title: widget.orderData.status == ORDER_ACTIVE ? widget.orderData.pickupPoint!.address.validate() : widget.orderData.deliveryPoint!.address.validate()),
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
         ),
       );

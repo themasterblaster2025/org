@@ -75,8 +75,8 @@ class TrackingScreenState extends State<TrackingScreen> {
           markers.add(
             Marker(
               markerId: MarkerId('Destination'),
-              position: LatLng(e.deliveryPoint!.latitude.toDouble(), e.deliveryPoint!.longitude.toDouble()),
-              infoWindow: InfoWindow(title: e.deliveryPoint!.address),
+              position: e.status==ORDER_ACTIVE ? LatLng(e.pickupPoint!.latitude.toDouble(), e.pickupPoint!.longitude.toDouble()) : LatLng(e.deliveryPoint!.latitude.toDouble(), e.deliveryPoint!.longitude.toDouble()),
+              infoWindow: InfoWindow(title: e.status==ORDER_ACTIVE ? e.pickupPoint!.address : e.deliveryPoint!.address),
               icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
             ),
           );
@@ -188,7 +188,7 @@ class TrackingScreenState extends State<TrackingScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Icon(Icons.location_on, color: colorPrimary),
-                                  Text(data.deliveryPoint!.address.validate(), style: primaryTextStyle()).expand(),
+                                  Text(data.status==ORDER_ACTIVE ?  data.pickupPoint!.address.validate() : data.deliveryPoint!.address.validate(), style: primaryTextStyle()).expand(),
                                 ],
                               ),
                             ],
