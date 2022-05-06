@@ -630,4 +630,10 @@ class LanguageFr extends BaseLanguage {
 
   @override
   String get writeAMessage => "Écrire un message...";
+
+  @override
+  String get success => "Succès";
+
+  @override
+  String get failed => "Manqué";
 }

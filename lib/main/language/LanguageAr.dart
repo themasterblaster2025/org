@@ -630,4 +630,10 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get writeAMessage => "اكتب رسالة...";
+
+  @override
+  String get success => "نجاح";
+
+  @override
+  String get failed => "باءت بالفشل";
 }

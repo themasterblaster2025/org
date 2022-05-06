@@ -422,4 +422,8 @@ abstract class BaseLanguage {
   String get deleteMessage;
 
   String get writeAMessage;
+
+  String get success;
+
+  String get failed;
 }

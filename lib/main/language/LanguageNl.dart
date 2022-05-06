@@ -630,4 +630,10 @@ class LanguageNl extends BaseLanguage {
 
   @override
   String get writeAMessage => "Schrijf een bericht...";
+
+  @override
+  String get success => "Succes";
+
+  @override
+  String get failed => "Mislukt";
 }

@@ -630,4 +630,10 @@ class LanguageTr extends BaseLanguage {
 
   @override
   String get writeAMessage => "Bir mesaj yaz...";
+
+  @override
+  String get success => "Başarı";
+
+  @override
+  String get failed => "Arızalı";
 }

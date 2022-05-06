@@ -630,4 +630,10 @@ class LanguageId extends BaseLanguage {
 
   @override
   String get writeAMessage => "Menulis pesan...";
+
+  @override
+  String get success => "Kesuksesan";
+
+  @override
+  String get failed => "Gagal";
 }

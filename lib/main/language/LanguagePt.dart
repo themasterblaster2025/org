@@ -630,4 +630,10 @@ class LanguagePt extends BaseLanguage {
 
   @override
   String get writeAMessage => "Escreve uma mensagem...";
+
+  @override
+  String get success => "Sucesso";
+
+  @override
+  String get failed => "Fracassado";
 }

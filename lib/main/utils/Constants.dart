@@ -60,6 +60,7 @@ const PAYMENT_TYPE_PAYPAL = 'paypal';
 const PAYMENT_TYPE_PAYTABS = 'paytabs';
 const PAYMENT_TYPE_MERCADOPAGO = 'mercadopago';
 const PAYMENT_TYPE_PAYTM = 'paytm';
+const PAYMENT_TYPE_MYFATOORAH = 'myfatoorah';
 const PAYMENT_TYPE_CASH = 'cash';
 
 const PAYMENT_PENDING = 'pending';

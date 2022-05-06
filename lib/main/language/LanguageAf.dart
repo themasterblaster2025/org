@@ -630,4 +630,10 @@ class LanguageAf extends BaseLanguage {
 
   @override
   String get writeAMessage => "Skryf 'n boodskap ...";
+
+  @override
+  String get success => "Sukses";
+
+  @override
+  String get failed => "Misluk";
 }

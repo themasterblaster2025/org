@@ -630,4 +630,10 @@ class LanguageDe extends BaseLanguage {
 
   @override
   String get writeAMessage => "Eine Nachricht schreiben...";
+
+  @override
+  String get success => "Erfolg";
+
+  @override
+  String get failed => "Gescheitert";
 }

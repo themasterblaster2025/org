@@ -630,4 +630,10 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get writeAMessage => "एक सन्देश लिखिए...";
+
+  @override
+  String get success => "सफलता";
+
+  @override
+  String get failed => "अनुत्तीर्ण होना";
 }

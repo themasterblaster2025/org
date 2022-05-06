@@ -630,4 +630,10 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get writeAMessage => "Write a message...";
+
+  @override
+  String get success => "Success";
+
+  @override
+  String get failed => "Failed";
 }
