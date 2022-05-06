@@ -407,7 +407,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
           );
           await Stripe.instance.presentPaymentSheet(parameters: PresentPaymentSheetParameters(clientSecret: res.clientSecret!, confirmPayment: true)).then(
             (value) async {
-              savePaymentApiCall(paymentType: PAYMENT_TYPE_STRIPE, paymentStatus: PAYMENT_PAID);
+              savePaymentApiCall(paymentType: PAYMENT_TYPE_STRIPE, paymentStatus: PAYMENT_PAID,txnId: res.id);
             },
           ).catchError((e) {
             log("presentPaymentSheet ${e.toString()}");
