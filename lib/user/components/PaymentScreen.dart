@@ -1,7 +1,14 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_braintree/flutter_braintree.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
+import 'package:flutter_paytabs_bridge/BaseBillingShippingInfo.dart' as payTab;
+import 'package:flutter_paytabs_bridge/IOSThemeConfiguration.dart';
+import 'package:flutter_paytabs_bridge/PaymentSdkApms.dart';
+import 'package:flutter_paytabs_bridge/PaymentSdkConfigurationDetails.dart';
+import 'package:flutter_paytabs_bridge/flutter_paytabs_bridge.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutterwave_standard/core/TransactionCallBack.dart';
 import 'package:flutterwave_standard/core/navigation_controller.dart';
@@ -14,9 +21,9 @@ import 'package:flutterwave_standard/view/view_utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
+import 'package:mercado_pago_mobile_checkout/mercado_pago_mobile_checkout.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/models/PaymentGatewayListModel.dart';
-import 'package:mighty_delivery/main/models/StripePayModel.dart';
 import 'package:mighty_delivery/main/network/NetworkUtils.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
@@ -24,10 +31,15 @@ import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
+import 'package:my_fatoorah/my_fatoorah.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:paytm/paytm.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 import '../../main.dart';
+import '../../main/models/CityListModel.dart';
+import '../../main/models/CountryListModel.dart';
+import '../../main/models/StripePayModel.dart';
 
 class PaymentScreen extends StatefulWidget {
   static String tag = '/PaymentScreen';
@@ -41,10 +53,26 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class PaymentScreenState extends State<PaymentScreen> implements TransactionCallBack {
-  String? razorKey, stripPaymentKey, stripPaymentPublishKey, flutterWavePublicKey, flutterWaveSecretKey, flutterWaveEncryptionKey, payStackPublicKey;
+  String? razorKey,
+      stripPaymentKey,
+      stripPaymentPublishKey,
+      flutterWavePublicKey,
+      flutterWaveSecretKey,
+      flutterWaveEncryptionKey,
+      payStackPublicKey,
+      payPalTokenizationKey,
+      mercadoPagoPublicKey,
+      mercadoPagoAccessToken,
+      payTabsProfileId,
+      payTabsServerKey,
+      payTabsClientKey,
+      paytmMerchantId,
+      paytmMerchantKey,
+      myFatoorahToken;
   List<PaymentGatewayData> paymentGatewayList = [];
   late NavigationController controller;
   String? selectedPaymentType;
+  bool isTestType = true;
   late Razorpay _razorpay;
 
   final plugin = PaystackPlugin();
@@ -55,6 +83,8 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
   int? _expiryYear;
 
   bool isDisabled = false;
+
+  bool loading = false;
 
   @override
   void initState() {
@@ -96,6 +126,20 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
             flutterWavePublicKey = element.isTest == 1 ? element.testValue!.publicKey : element.liveValue!.publicKey;
             flutterWaveSecretKey = element.isTest == 1 ? element.testValue!.secretKey : element.liveValue!.secretKey;
             flutterWaveEncryptionKey = element.isTest == 1 ? element.testValue!.encryptionKey : element.liveValue!.encryptionKey;
+          } else if (element.type == PAYMENT_TYPE_PAYPAL) {
+            payPalTokenizationKey = element.isTest == 1 ? element.testValue!.tokenizationKey : element.liveValue!.tokenizationKey;
+          } else if (element.type == PAYMENT_TYPE_PAYTABS) {
+            payTabsProfileId = element.isTest == 1 ? element.testValue!.profileId : element.liveValue!.profileId;
+            payTabsClientKey = element.isTest == 1 ? element.testValue!.clientKey : element.liveValue!.clientKey;
+            payTabsServerKey = element.isTest == 1 ? element.testValue!.serverKey : element.liveValue!.serverKey;
+          } else if (element.type == PAYMENT_TYPE_MERCADOPAGO) {
+            mercadoPagoPublicKey = element.isTest == 1 ? element.testValue!.publicKey : element.liveValue!.publicKey;
+            mercadoPagoAccessToken = element.isTest == 1 ? element.testValue!.accessToken : element.liveValue!.accessToken;
+          } else if (element.type == PAYMENT_TYPE_PAYTM) {
+            paytmMerchantId = element.isTest == 1 ? element.testValue!.merchantId : element.liveValue!.merchantId;
+            paytmMerchantKey = element.isTest == 1 ? element.testValue!.merchantKey : element.liveValue!.merchantKey;
+          } else if (element.type == PAYMENT_TYPE_MYFATOORAH) {
+            myFatoorahToken = element.isTest == 1 ? element.testValue!.accessToken : element.liveValue!.accessToken;
           }
         });
         setState(() {});
@@ -198,7 +242,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
         "reference": response.reference.toString(),
       };
       if (response.message == 'Success') {
-        savePaymentApiCall(paymentType: PAYMENT_TYPE_PAYSTACK, paymentStatus: PAYMENT_PAID, transactionDetail: req);
+        savePaymentApiCall(paymentType: PAYMENT_TYPE_PAYSTACK, paymentStatus: PAYMENT_PAID, transactionDetail: req, txnId: response.reference);
       } else {
         toast('Payment Failed');
       }
@@ -261,7 +305,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
       customer: customer,
       paymentOptions: "card, payattitude",
       customization: Customization(title: "Test Payment"),
-      isTestMode: true,
+      isTestMode: isTestType,
       publicKey: flutterWavePublicKey.validate(),
       currency: currencyCode,
       redirectUrl: "https://www.google.com",
@@ -343,7 +387,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
               style: ThemeMode.light,
               applePay: true,
               googlePay: true,
-              testEnv: true,
+              testEnv: isTestType,
               merchantCountryCode: 'IN',
               merchantDisplayName: 'Mighty Delivery',
               customerId: '1',
@@ -353,7 +397,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
           );
           await Stripe.instance.presentPaymentSheet(parameters: PresentPaymentSheetParameters(clientSecret: res.clientSecret!, confirmPayment: true)).then(
             (value) async {
-              savePaymentApiCall(paymentType: PAYMENT_TYPE_STRIPE, paymentStatus: PAYMENT_PAID);
+              savePaymentApiCall(paymentType: PAYMENT_TYPE_STRIPE, paymentStatus: PAYMENT_PAID, txnId: res.id);
             },
           ).catchError((e) {
             log("presentPaymentSheet ${e.toString()}");
@@ -367,6 +411,223 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
       appStore.setLoading(false);
       toast(e.toString(), print: true);
     });
+  }
+
+  /// SSLCOMMERZ Payment
+  Future<void> sslCommerzPayment() async {
+    /*Sslcommerz sslcommerz = Sslcommerz(
+        initializer: SSLCommerzInitialization(
+            multi_card_name: "mastercard",
+            currency: "INR",
+            product_category: "Courier",
+            sdkType: SSLCSdkType.TESTBOX,
+            store_id: sslCommerzStoreId!,
+            store_passwd: sslCommerzStorePassword!,
+            total_amount: 100,
+            tran_id: 'txn_id_${DateTime.now().millisecond.toString()}'));
+    var result = await sslcommerz.payNow();
+    if (result is PlatformException) {
+      print("the response is: " + result.message.toString() + " code: " + result.code);
+    } else {
+      SSLCTransactionInfoModel response = result;
+      savePaymentApiCall(paymentType: PAYMENT_TYPE_SSLCOMMERZ, paymentStatus: PAYMENT_PAID, txnId: response.tranId);
+    }*/
+  }
+
+  /// Paypal Payment
+  void payPalPayment() async {
+    final request = BraintreePayPalRequest(amount: widget.totalAmount.toString(), currencyCode: 'INR', displayName: getStringAsync(USER_NAME));
+    final result = await Braintree.requestPaypalNonce(
+      payPalTokenizationKey!,
+      request,
+    );
+    if (result != null) {
+      var request = <String, String?>{
+        "txn_id": result.nonce,
+        "description": result.description,
+        "paypal_payer_id": result.paypalPayerId,
+      };
+      savePaymentApiCall(paymentType: PAYMENT_TYPE_PAYPAL, paymentStatus: PAYMENT_PAID, txnId: result.nonce, transactionDetail: request);
+    }
+  }
+
+  /// PayTabs Payment
+  void payTabsPayment() {
+    FlutterPaytabsBridge.startCardPayment(generateConfig(), (event) {
+      setState(() {
+        if (event["status"] == "success") {
+          var transactionDetails = event["data"];
+          if (transactionDetails["isSuccess"]) {
+            toast("successful transaction");
+            savePaymentApiCall(txnId: transactionDetails['transactionReference'], paymentType: PAYMENT_TYPE_PAYTABS, paymentStatus: 'paid');
+          } else {
+            toast("failed transaction");
+          }
+          toast("successful transaction");
+        } else if (event["status"] == "error") {
+          print("error");
+        } else if (event["status"] == "event") {
+          //
+        }
+      });
+    });
+  }
+
+  PaymentSdkConfigurationDetails generateConfig() {
+    var billingDetails = payTab.BillingDetails(getStringAsync(NAME), getStringAsync(USER_EMAIL), getStringAsync(USER_CONTACT_NUMBER), getStringAsync(USER_ADDRESS), CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).name.validate(),
+        CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate(), "", "");
+    List<PaymentSdkAPms> apms = [];
+    apms.add(PaymentSdkAPms.STC_PAY);
+    var configuration = PaymentSdkConfigurationDetails(
+        profileId: payTabsProfileId,
+        serverKey: payTabsServerKey,
+        clientKey: payTabsClientKey,
+        cartId: widget.orderId.toString(),
+        screentTitle: "Pay with Card",
+        amount: widget.totalAmount.toDouble(),
+        showBillingInfo: true,
+        forceShippingInfo: false,
+        currencyCode: "INR",
+        merchantCountryCode: "IN",
+        billingDetails: billingDetails,
+        alternativePaymentMethods: apms,
+        linkBillingNameWithCardHolderName: true);
+
+    var theme = IOSThemeConfigurations();
+
+    theme.logoImage = "assets/app_logo_white.png";
+
+    configuration.iOSThemeConfigurations = theme;
+
+    return configuration;
+  }
+
+  /// Mercado Pago payment
+  void mercadoPagoPayment() async {
+    var body = json.encode({
+      "items": [
+        {"title": "Courier", "description": "Courier Delivery", "quantity": 1, "currency_id": "BRL", "unit_price": widget.totalAmount}
+      ],
+      "payer": {"email": getStringAsync(USER_EMAIL)}
+    });
+
+    try {
+      final response = await http.post(
+        Uri.parse('https://api.mercadopago.com/checkout/preferences?access_token=${mercadoPagoAccessToken.toString()}'),
+        body: body,
+        headers: {'Content-type': "application/json"},
+      );
+      String preferenceId = json.decode(response.body)['id'];
+      PaymentResult result = await MercadoPagoMobileCheckout.startCheckout(
+        mercadoPagoPublicKey!,
+        preferenceId,
+      );
+      if (result.status == 'approved') {
+        savePaymentApiCall(paymentStatus: 'paid', paymentType: PAYMENT_TYPE_MERCADOPAGO, txnId: result.id.toString());
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  /// PayTm Payment
+  void paytmPayment() async {
+    setState(() {
+      loading = true;
+    });
+
+    String callBackUrl = (isTestType ? 'https://securegw-stage.paytm.in' : 'https://securegw.paytm.in') + '/theia/paytmCallback?ORDER_ID=' + widget.orderId.toString();
+
+    var url = 'https://desolate-anchorage-29312.herokuapp.com/generateTxnToken';
+
+    var body = json.encode({
+      "mid": paytmMerchantId,
+      "key_secret": paytmMerchantKey,
+      "website": isTestType ? "WEBSTAGING" : "DEFAULT",
+      "orderId": widget.orderId,
+      "amount": widget.totalAmount.toString(),
+      "callbackUrl": callBackUrl,
+      "custId": getIntAsync(USER_ID).toString(),
+      "testing": isTestType ? 0 : 1
+    });
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        body: body,
+        headers: {'Content-type': "application/json"},
+      );
+
+      String txnToken = response.body;
+
+      var paytmResponse = Paytm.payWithPaytm(
+        mId: paytmMerchantId!,
+        orderId: widget.orderId.toString(),
+        txnToken: txnToken,
+        txnAmount: widget.totalAmount.toString(),
+        callBackUrl: callBackUrl,
+        staging: isTestType,
+        appInvokeEnabled: false,
+      );
+
+      paytmResponse.then((value) {
+        setState(() {
+          loading = false;
+          if (value['error']) {
+            toast(value['errorMessage']);
+          } else {
+            if (value['response'] != null) {
+              toast(value['response']['RESPMSG']);
+              if (value['response']['STATUS'] == 'TXN_SUCCESS') {
+                savePaymentApiCall(paymentType: PAYMENT_TYPE_PAYTM, paymentStatus: 'paid', txnId: value['response']['TXNID']);
+              }
+            }
+          }
+        });
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  /// My Fatoorah Payment
+  Future<void> myFatoorahPayment() async {
+    PaymentResponse response = await MyFatoorah.startPayment(
+      context: context,
+      successChild: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.verified, size: 50, color: Colors.green),
+            SizedBox(height: 16),
+            Text(language.success, style: boldTextStyle(color: Colors.green, size: 24)),
+          ],
+        ),
+      ),
+      errorChild: Center(child: Text(language.failed, style: boldTextStyle(color: Colors.red, size: 24))),
+      request: isTestType
+          ? MyfatoorahRequest.test(
+              currencyIso: Country.SaudiArabia,
+              successUrl: 'https://pub.dev/packages/get',
+              errorUrl: 'https://www.google.com/',
+              invoiceAmount: widget.totalAmount.toDouble(),
+              language: defaultLanguage == 'ar' ? ApiLanguage.Arabic : ApiLanguage.English,
+              token: myFatoorahToken!,
+            )
+          : MyfatoorahRequest.live(
+              currencyIso: Country.SaudiArabia,
+              successUrl: 'https://pub.dev/packages/get',
+              errorUrl: 'https://www.google.com/',
+              invoiceAmount: widget.totalAmount.toDouble(),
+              language: defaultLanguage == 'ar' ? ApiLanguage.Arabic : ApiLanguage.English,
+              token: myFatoorahToken!,
+            ),
+    );
+    if (response.isSuccess) {
+      savePaymentApiCall(paymentType: PAYMENT_TYPE_MYFATOORAH, txnId: response.paymentId, paymentStatus: 'paid');
+    } else if (response.isError) {
+      toast('Payment Failed');
+    }
   }
 
   @override
@@ -400,23 +661,29 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
                                   return GestureDetector(
                                     child: Container(
                                       width: (context.width() - 50) * 0.5,
-                                      padding: EdgeInsets.symmetric(horizontal: 12,vertical: 16),
+                                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
                                       alignment: Alignment.center,
                                       decoration: boxDecorationWithRoundedCorners(
                                         backgroundColor: context.cardColor,
                                         borderRadius: BorderRadius.circular(defaultRadius),
-                                        border: Border.all(color: mData.type == selectedPaymentType ? colorPrimary : appStore.isDarkMode ? Colors.transparent : borderColor),
+                                        border: Border.all(
+                                            color: mData.type == selectedPaymentType
+                                                ? colorPrimary
+                                                : appStore.isDarkMode
+                                                    ? Colors.transparent
+                                                    : borderColor),
                                       ),
                                       child: Row(
                                         children: [
                                           commonCachedNetworkImage('${mData.gatewayLogo}', width: 40, height: 40),
                                           12.width,
-                                          Text('${mData.title}', style: primaryTextStyle()),
+                                          Text('${mData.title}', style: primaryTextStyle(), maxLines: 2).expand(),
                                         ],
                                       ),
                                     ),
                                     onTap: () {
                                       selectedPaymentType = mData.type;
+                                      isTestType = mData.isTest == 1;
                                       setState(() {});
                                     },
                                   );
@@ -436,6 +703,16 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
                               payStackPayment(context);
                             } else if (selectedPaymentType == PAYMENT_TYPE_FLUTTERWAVE) {
                               flutterWaveCheckout();
+                            } else if (selectedPaymentType == PAYMENT_TYPE_PAYPAL) {
+                              payPalPayment();
+                            } else if (selectedPaymentType == PAYMENT_TYPE_PAYTABS) {
+                              payTabsPayment();
+                            } else if (selectedPaymentType == PAYMENT_TYPE_MERCADOPAGO) {
+                              mercadoPagoPayment();
+                            } else if (selectedPaymentType == PAYMENT_TYPE_PAYTM) {
+                              paytmPayment();
+                            } else if (selectedPaymentType == PAYMENT_TYPE_MYFATOORAH) {
+                              myFatoorahPayment();
                             }
                           }, width: context.width())
                               .paddingAll(16),

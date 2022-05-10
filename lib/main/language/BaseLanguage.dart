@@ -448,4 +448,8 @@ abstract class BaseLanguage {
   String get pickupContactNumber;
 
   String get pickupDescription;
+
+  String get success;
+
+  String get failed;
 }

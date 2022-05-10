@@ -669,4 +669,10 @@ class LanguageEs extends BaseLanguage {
 
   @override
   String get pickupDescription => "Descripción de la recogida";
+
+  @override
+  String get success => "Éxito";
+
+  @override
+  String get failed => "Ha fallado";
 }

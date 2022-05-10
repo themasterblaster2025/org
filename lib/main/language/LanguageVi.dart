@@ -669,4 +669,10 @@ class LanguageVi extends BaseLanguage {
 
   @override
   String get pickupDescription => "Mô tả đón";
+
+  @override
+  String get success => "Sự thành công";
+
+  @override
+  String get failed => "Thất bại";
 }

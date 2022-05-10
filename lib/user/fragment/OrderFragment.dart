@@ -248,7 +248,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                           OrderTrackingScreen(orderData: item).launch(context);
                                         },
                                       ),
-                                    ).paddingOnly(top: 16).visible(item.status == ORDER_DEPARTED || item.status == ORDER_ARRIVED)
+                                    ).paddingOnly(top: 16).visible(item.status == ORDER_DEPARTED || item.status == ORDER_ACTIVE)
                                   ],
                                 ),
                               ),

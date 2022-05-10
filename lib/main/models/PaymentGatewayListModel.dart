@@ -7,9 +7,7 @@ class PaymentGatewayListModel {
   PaymentGatewayListModel({this.pagination, this.data});
 
   PaymentGatewayListModel.fromJson(Map<String, dynamic> json) {
-    pagination = json['pagination'] != null
-        ? new PaginationModel.fromJson(json['pagination'])
-        : null;
+    pagination = json['pagination'] != null ? new PaginationModel.fromJson(json['pagination']) : null;
     if (json['data'] != null) {
       data = <PaymentGatewayData>[];
       json['data'].forEach((v) {
@@ -42,17 +40,7 @@ class PaymentGatewayData {
   String? createdAt;
   String? updatedAt;
 
-  PaymentGatewayData(
-      {this.id,
-        this.title,
-        this.type,
-        this.status,
-        this.isTest,
-        this.testValue,
-        this.liveValue,
-        this.gatewayLogo,
-        this.createdAt,
-        this.updatedAt});
+  PaymentGatewayData({this.id, this.title, this.type, this.status, this.isTest, this.testValue, this.liveValue, this.gatewayLogo, this.createdAt, this.updatedAt});
 
   PaymentGatewayData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -60,12 +48,8 @@ class PaymentGatewayData {
     type = json['type'];
     status = json['status'];
     isTest = json['is_test'];
-    testValue = json['test_value'] != null
-        ? new TestValue.fromJson(json['test_value'])
-        : null;
-    liveValue = json['live_value'] != null
-        ? new TestValue.fromJson(json['live_value'])
-        : null;
+    testValue = json['test_value'] != null ? new TestValue.fromJson(json['test_value']) : null;
+    liveValue = json['live_value'] != null ? new TestValue.fromJson(json['live_value']) : null;
     gatewayLogo = json['gateway_logo'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
@@ -98,14 +82,33 @@ class TestValue {
   String? keyId;
   String? secretId;
   String? publishableKey;
+  String? storeId;
+  String? storePassword;
+  String? tokenizationKey;
+  String? accessToken;
+  String? profileId;
+  String? serverKey;
+  String? clientKey;
+  String? merchantId;
+  String? merchantKey;
 
-  TestValue(
-      {this.publicKey,
-        this.secretKey,
-        this.encryptionKey,
-        this.keyId,
-        this.secretId,
-        this.publishableKey});
+  TestValue({
+    this.publicKey,
+    this.secretKey,
+    this.encryptionKey,
+    this.keyId,
+    this.secretId,
+    this.publishableKey,
+    this.storeId,
+    this.storePassword,
+    this.tokenizationKey,
+    this.accessToken,
+    this.profileId,
+    this.serverKey,
+    this.clientKey,
+    this.merchantId,
+    this.merchantKey,
+  });
 
   TestValue.fromJson(Map<String, dynamic> json) {
     publicKey = json['public_key'];
@@ -114,6 +117,15 @@ class TestValue {
     keyId = json['key_id'];
     secretId = json['secret_id'];
     publishableKey = json['publishable_key'];
+    storeId = json['store_id'];
+    storePassword = json['store_password'];
+    tokenizationKey = json['tokenization_key'];
+    accessToken = json['access_token'];
+    profileId = json['profile_id'];
+    serverKey = json['server_key'];
+    clientKey = json['client_key'];
+    merchantId = json['merchant_id'];
+    merchantKey = json['merchant_key'];
   }
 
   Map<String, dynamic> toJson() {
@@ -124,6 +136,15 @@ class TestValue {
     data['key_id'] = this.keyId;
     data['secret_id'] = this.secretId;
     data['publishable_key'] = this.publishableKey;
+    data['store_id'] = this.storeId;
+    data['store_password'] = this.storePassword;
+    data['tokenization_key'] = this.tokenizationKey;
+    data['access_token'] = this.accessToken;
+    data['profile_id'] = this.profileId;
+    data['server_key'] = this.serverKey;
+    data['client_key'] = this.clientKey;
+    data['merchant_id'] = this.merchantId;
+    data['merchant_key'] = this.merchantKey;
     return data;
   }
 }

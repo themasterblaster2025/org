@@ -669,4 +669,10 @@ class LanguageAf extends BaseLanguage {
 
   @override
   String get pickupDescription => "BESKRYWING BESKRYWING";
+
+  @override
+  String get success => "Sukses";
+
+  @override
+  String get failed => "Misluk";
 }

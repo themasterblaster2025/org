@@ -669,4 +669,10 @@ class LanguageId extends BaseLanguage {
 
   @override
   String get pickupDescription => "Deskripsi pickup";
+
+  @override
+  String get success => "Kesuksesan";
+
+  @override
+  String get failed => "Gagal";
 }

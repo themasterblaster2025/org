@@ -669,4 +669,10 @@ class LanguageFr extends BaseLanguage {
 
   @override
   String get pickupDescription => "Numéro de contact de ramassage";
+
+  @override
+  String get success => "Succès";
+
+  @override
+  String get failed => "Manqué";
 }

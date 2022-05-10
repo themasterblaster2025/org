@@ -669,4 +669,10 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get pickupDescription => "पिकअप विवरण";
+
+  @override
+  String get success => "सफलता";
+
+  @override
+  String get failed => "अनुत्तीर्ण होना";
 }

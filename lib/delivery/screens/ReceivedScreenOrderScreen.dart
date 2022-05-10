@@ -73,7 +73,9 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
     final image = await screenshotController.capture(delay: Duration(milliseconds: 10));
     final tempDir = await getTemporaryDirectory();
     File file = await File('${tempDir.path}/image.png').create();
-    file.writeAsBytesSync(image!);
+    if(image!=null) {
+      file.writeAsBytesSync(image);
+    }
     return file;
   }
 

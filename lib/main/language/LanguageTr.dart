@@ -668,4 +668,10 @@ class LanguageTr extends BaseLanguage {
 
   @override
   String get pickupDescription => "Pikap Açıklama";
+
+  @override
+  String get success => "Başarı";
+
+  @override
+  String get failed => "Arızalı";
 }

@@ -669,4 +669,10 @@ class LanguagePt extends BaseLanguage {
 
   @override
   String get pickupDescription => "Descrição da coleta";
+
+  @override
+  String get success => "Sucesso";
+
+  @override
+  String get failed => "Fracassado";
 }

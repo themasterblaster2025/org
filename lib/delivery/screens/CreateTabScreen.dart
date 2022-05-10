@@ -1,3 +1,4 @@
+import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -105,7 +106,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                           widget.orderStatus != ORDER_CANCELLED
                               ? AppButton(
                                   text: buttonText(widget.orderStatus!),
-                                  padding: EdgeInsets.symmetric(vertical: 4,horizontal: 8),
+                                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                                   textStyle: boldTextStyle(color: Colors.white),
                                   color: colorPrimary,
                                   onTap: () {
@@ -153,9 +154,18 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ImageIcon(AssetImage('assets/icons/ic_pick_location.png'),size: 24,color: colorPrimary),
+                              ImageIcon(AssetImage('assets/icons/ic_pick_location.png'), size: 24, color: colorPrimary),
                               12.width,
-                              Text('${data.pickupPoint!.address}', style: primaryTextStyle()).expand(),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('${data.pickupPoint!.address}', style: primaryTextStyle()),
+                                  if (data.pickupDatetime == null && data.pickupPoint!.endTime != null && data.pickupPoint!.startTime != null)
+                                    Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.endTime!).toLocal())}',
+                                            style: secondaryTextStyle())
+                                        .paddingOnly(top: 8),
+                                ],
+                              ).expand(),
                               12.width,
                               if (data.pickupPoint!.contactNumber != null)
                                 Image.asset('assets/icons/ic_call.png', width: 24, height: 24).onTap(() {
@@ -163,13 +173,9 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                 }),
                             ],
                           ),
-                          if (data.pickupDatetime == null && data.pickupPoint!.endTime != null && data.pickupPoint!.startTime != null)
-                            Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.endTime!).toLocal())}',
-                                style: secondaryTextStyle())
-                                .paddingOnly(top: 8),
                         ],
                       ),
-                      Divider(height: 30),
+                      DottedLine(dashColor: borderColor).paddingSymmetric(vertical: 16, horizontal: 24),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -186,9 +192,18 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ImageIcon(AssetImage('assets/icons/ic_delivery_location.png'),size: 24,color: colorPrimary),
+                              ImageIcon(AssetImage('assets/icons/ic_delivery_location.png'), size: 24, color: colorPrimary),
                               12.width,
-                              Text('${data.deliveryPoint!.address}', style: primaryTextStyle()).expand(),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('${data.deliveryPoint!.address}', style: primaryTextStyle()),
+                                  if (data.deliveryDatetime == null && data.deliveryPoint!.endTime != null && data.deliveryPoint!.startTime != null)
+                                    Text('${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.endTime!).toLocal())}',
+                                            style: secondaryTextStyle())
+                                        .paddingOnly(top: 8),
+                                ],
+                              ).expand(),
                               12.width,
                               if (data.deliveryPoint!.contactNumber != null)
                                 Image.asset('assets/icons/ic_call.png', width: 24, height: 24).onTap(() {
@@ -196,10 +211,6 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                 }),
                             ],
                           ),
-                          if (data.deliveryDatetime == null && data.deliveryPoint!.endTime != null && data.deliveryPoint!.startTime != null)
-                            Text('${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.endTime!).toLocal())}',
-                                style: secondaryTextStyle())
-                                .paddingOnly(top: 8),
                         ],
                       ),
                       Divider(height: 30, thickness: 1),
@@ -230,68 +241,66 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                           ).expand(),
                         ],
                       ),
-                      if (data.status == COURIER_DEPARTED)
-                        Align(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Align(
                             alignment: Alignment.topRight,
                             child: AppButton(
                               elevation: 0,
                               color: Colors.transparent,
-                              padding: EdgeInsets.all(6),
+                              padding: EdgeInsets.symmetric(vertical: 8,horizontal: 16),
                               shapeBorder: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(defaultRadius),
                                 side: BorderSide(color: colorPrimary),
                               ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(language.trackOrder, style: primaryTextStyle(color: colorPrimary)),
-                                  Icon(Icons.arrow_right, color: colorPrimary),
-                                ],
-                              ),
-                              onTap: () async {
-                                if (await checkPermission()) {
-                                  TrackingScreen(order: orderData, latLng: LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble()))
-                                      .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
-                                }
-                              },
-                            )).paddingOnly(top: 12),
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: AppButton(
-                          elevation: 0,
-                          color: Colors.transparent,
-                          padding: EdgeInsets.all(6),
-                          shapeBorder: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(defaultRadius),
-                            side: BorderSide(color: colorPrimary),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(language.notifyUser, style: primaryTextStyle(color: colorPrimary)),
-                              Icon(Icons.arrow_right, color: colorPrimary),
-                            ],
-                          ),
-                          onTap: () {
-                            showConfirmDialogCustom(
-                              context,
-                              primaryColor: colorPrimary,
-                              dialogType: DialogType.CONFIRMATION,
-                              title: language.areYouSureWantToArrive,
-                              positiveText: language.yes,
-                              negativeText: language.cancel,
-                              onAccept: (c) async {
-                                appStore.setLoading(true);
-                                await updateOrder(orderStatus: ORDER_ARRIVED, orderId: data.id);
-                                appStore.setLoading(false);
-                                finish(context);
+                              child:  Text(language.notifyUser, style: primaryTextStyle(color: colorPrimary)),
+                              onTap: () {
+                                showConfirmDialogCustom(
+                                  context,
+                                  primaryColor: colorPrimary,
+                                  dialogType: DialogType.CONFIRMATION,
+                                  title: language.areYouSureWantToArrive,
+                                  positiveText: language.yes,
+                                  negativeText: language.cancel,
+                                  onAccept: (c) async {
+                                    appStore.setLoading(true);
+                                    await updateOrder(orderStatus: ORDER_ARRIVED, orderId: data.id);
+                                    appStore.setLoading(false);
+                                    finish(context);
 
-                                init();
+                                    init();
+                                  },
+                                );
                               },
-                            );
-                          },
-                        ),
-                      ).paddingOnly(top: 12).visible(data.status == ORDER_ACTIVE),
+                            ),
+                          ).paddingOnly(top: 12,right: 16).visible(data.status == ORDER_ACTIVE),
+                          Align(
+                              alignment: Alignment.topRight,
+                              child: AppButton(
+                                elevation: 0,
+                                color: Colors.transparent,
+                                padding: EdgeInsets.all(6),
+                                shapeBorder: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(defaultRadius),
+                                  side: BorderSide(color: colorPrimary),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(language.trackOrder, style: primaryTextStyle(color: colorPrimary)),
+                                    Icon(Icons.arrow_right, color: colorPrimary),
+                                  ],
+                                ),
+                                onTap: () async {
+                                  if (await checkPermission()) {
+                                    TrackingScreen(order: orderData, latLng: LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble()))
+                                        .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+                                  }
+                                },
+                              )).paddingOnly(top: 12).visible(data.status == COURIER_DEPARTED || data.status == ORDER_ACTIVE),
+                        ],
+                      ),
                     ],
                   ),
                 ),

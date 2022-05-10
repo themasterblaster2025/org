@@ -669,4 +669,10 @@ class LanguageNl extends BaseLanguage {
 
   @override
   String get pickupDescription => "Ophalen Beschrijving";
+
+  @override
+  String get success => "Succes";
+
+  @override
+  String get failed => "Mislukt";
 }

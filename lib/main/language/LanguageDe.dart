@@ -669,4 +669,10 @@ class LanguageDe extends BaseLanguage {
 
   @override
   String get pickupDescription => "Abholbeschreibung";
+
+  @override
+  String get success => "Erfolg";
+
+  @override
+  String get failed => "Gescheitert";
 }

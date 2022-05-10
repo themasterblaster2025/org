@@ -669,4 +669,10 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get pickupDescription => "رقم الاتصال بالتقاط";
+
+  @override
+  String get success => "نجاح";
+
+  @override
+  String get failed => "باءت بالفشل";
 }
