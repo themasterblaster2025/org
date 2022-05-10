@@ -673,6 +673,4 @@ class LanguageNl extends BaseLanguage {
   @override
   String get success => "Succes";
 
-  @override
-  String get failed => "Mislukt";
 }

@@ -673,6 +673,4 @@ class LanguageEn extends BaseLanguage {
   @override
   String get success => "Success";
 
-  @override
-  String get failed => "Failed";
 }

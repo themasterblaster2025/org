@@ -673,6 +673,4 @@ class LanguageEs extends BaseLanguage {
   @override
   String get success => "Éxito";
 
-  @override
-  String get failed => "Ha fallado";
 }

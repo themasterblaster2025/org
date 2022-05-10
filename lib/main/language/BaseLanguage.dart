@@ -451,5 +451,4 @@ abstract class BaseLanguage {
 
   String get success;
 
-  String get failed;
 }

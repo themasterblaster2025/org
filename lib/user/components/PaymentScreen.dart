@@ -413,27 +413,6 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
     });
   }
 
-  /// SSLCOMMERZ Payment
-  Future<void> sslCommerzPayment() async {
-    /*Sslcommerz sslcommerz = Sslcommerz(
-        initializer: SSLCommerzInitialization(
-            multi_card_name: "mastercard",
-            currency: "INR",
-            product_category: "Courier",
-            sdkType: SSLCSdkType.TESTBOX,
-            store_id: sslCommerzStoreId!,
-            store_passwd: sslCommerzStorePassword!,
-            total_amount: 100,
-            tran_id: 'txn_id_${DateTime.now().millisecond.toString()}'));
-    var result = await sslcommerz.payNow();
-    if (result is PlatformException) {
-      print("the response is: " + result.message.toString() + " code: " + result.code);
-    } else {
-      SSLCTransactionInfoModel response = result;
-      savePaymentApiCall(paymentType: PAYMENT_TYPE_SSLCOMMERZ, paymentStatus: PAYMENT_PAID, txnId: response.tranId);
-    }*/
-  }
-
   /// Paypal Payment
   void payPalPayment() async {
     final request = BraintreePayPalRequest(amount: widget.totalAmount.toString(), currencyCode: 'INR', displayName: getStringAsync(USER_NAME));

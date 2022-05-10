@@ -672,6 +672,4 @@ class LanguageTr extends BaseLanguage {
   @override
   String get success => "Başarı";
 
-  @override
-  String get failed => "Arızalı";
 }

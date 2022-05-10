@@ -673,6 +673,4 @@ class LanguageFr extends BaseLanguage {
   @override
   String get success => "Succès";
 
-  @override
-  String get failed => "Manqué";
 }

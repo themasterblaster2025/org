@@ -672,7 +672,4 @@ class LanguageId extends BaseLanguage {
 
   @override
   String get success => "Kesuksesan";
-
-  @override
-  String get failed => "Gagal";
 }

@@ -673,6 +673,4 @@ class LanguageVi extends BaseLanguage {
   @override
   String get success => "Sự thành công";
 
-  @override
-  String get failed => "Thất bại";
 }

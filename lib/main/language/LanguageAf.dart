@@ -672,7 +672,4 @@ class LanguageAf extends BaseLanguage {
 
   @override
   String get success => "Sukses";
-
-  @override
-  String get failed => "Misluk";
 }
