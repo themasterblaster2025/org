@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_braintree/flutter_braintree.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_paystack/flutter_paystack.dart';
@@ -10,10 +9,6 @@ import 'package:flutter_paytabs_bridge/IOSThemeConfiguration.dart';
 import 'package:flutter_paytabs_bridge/PaymentSdkApms.dart';
 import 'package:flutter_paytabs_bridge/PaymentSdkConfigurationDetails.dart';
 import 'package:flutter_paytabs_bridge/flutter_paytabs_bridge.dart';
-/*import 'package:flutter_sslcommerz/model/SSLCSdkType.dart';
-import 'package:flutter_sslcommerz/model/SSLCTransactionInfoModel.dart';
-import 'package:flutter_sslcommerz/model/SSLCommerzInitialization.dart';
-import 'package:flutter_sslcommerz/sslcommerz.dart';*/
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutterwave_standard/core/TransactionCallBack.dart';
 import 'package:flutterwave_standard/core/navigation_controller.dart';
@@ -65,8 +60,6 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
       flutterWaveSecretKey,
       flutterWaveEncryptionKey,
       payStackPublicKey,
-      sslCommerzStoreId,
-      sslCommerzStorePassword,
       payPalTokenizationKey,
       mercadoPagoPublicKey,
       mercadoPagoAccessToken,
@@ -133,9 +126,6 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
             flutterWavePublicKey = element.isTest == 1 ? element.testValue!.publicKey : element.liveValue!.publicKey;
             flutterWaveSecretKey = element.isTest == 1 ? element.testValue!.secretKey : element.liveValue!.secretKey;
             flutterWaveEncryptionKey = element.isTest == 1 ? element.testValue!.encryptionKey : element.liveValue!.encryptionKey;
-          } else if (element.type == PAYMENT_TYPE_SSLCOMMERZ) {
-            sslCommerzStoreId = element.isTest == 1 ? element.testValue!.storeId : element.liveValue!.storeId;
-            sslCommerzStorePassword = element.isTest == 1 ? element.testValue!.storePassword : element.liveValue!.storePassword;
           } else if (element.type == PAYMENT_TYPE_PAYPAL) {
             payPalTokenizationKey = element.isTest == 1 ? element.testValue!.tokenizationKey : element.liveValue!.tokenizationKey;
           } else if (element.type == PAYMENT_TYPE_PAYTABS) {
@@ -407,7 +397,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
           );
           await Stripe.instance.presentPaymentSheet(parameters: PresentPaymentSheetParameters(clientSecret: res.clientSecret!, confirmPayment: true)).then(
             (value) async {
-              savePaymentApiCall(paymentType: PAYMENT_TYPE_STRIPE, paymentStatus: PAYMENT_PAID,txnId: res.id);
+              savePaymentApiCall(paymentType: PAYMENT_TYPE_STRIPE, paymentStatus: PAYMENT_PAID, txnId: res.id);
             },
           ).catchError((e) {
             log("presentPaymentSheet ${e.toString()}");
@@ -620,7 +610,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
               currencyIso: Country.SaudiArabia,
               successUrl: 'https://pub.dev/packages/get',
               errorUrl: 'https://www.google.com/',
-              invoiceAmount: 100,
+              invoiceAmount: widget.totalAmount.toDouble(),
               language: defaultLanguage == 'ar' ? ApiLanguage.Arabic : ApiLanguage.English,
               token: myFatoorahToken!,
             )
@@ -628,7 +618,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
               currencyIso: Country.SaudiArabia,
               successUrl: 'https://pub.dev/packages/get',
               errorUrl: 'https://www.google.com/',
-              invoiceAmount: 100,
+              invoiceAmount: widget.totalAmount.toDouble(),
               language: defaultLanguage == 'ar' ? ApiLanguage.Arabic : ApiLanguage.English,
               token: myFatoorahToken!,
             ),
@@ -713,8 +703,6 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
                               payStackPayment(context);
                             } else if (selectedPaymentType == PAYMENT_TYPE_FLUTTERWAVE) {
                               flutterWaveCheckout();
-                            } else if (selectedPaymentType == PAYMENT_TYPE_SSLCOMMERZ) {
-                              sslCommerzPayment();
                             } else if (selectedPaymentType == PAYMENT_TYPE_PAYPAL) {
                               payPalPayment();
                             } else if (selectedPaymentType == PAYMENT_TYPE_PAYTABS) {

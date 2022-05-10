@@ -55,7 +55,6 @@ const PAYMENT_TYPE_STRIPE = 'stripe';
 const PAYMENT_TYPE_RAZORPAY = 'razorpay';
 const PAYMENT_TYPE_PAYSTACK = 'paystack';
 const PAYMENT_TYPE_FLUTTERWAVE = 'flutterwave';
-const PAYMENT_TYPE_SSLCOMMERZ = 'sslcommerz';
 const PAYMENT_TYPE_PAYPAL = 'paypal';
 const PAYMENT_TYPE_PAYTABS = 'paytabs';
 const PAYMENT_TYPE_MERCADOPAGO = 'mercadopago';
