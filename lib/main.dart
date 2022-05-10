@@ -9,7 +9,6 @@ import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'AppTheme.dart';
-import 'PayScreen.dart';
 import 'main/Services/ChatMessagesService.dart';
 import 'main/Services/NotificationService.dart';
 import 'main/Services/UserServices.dart';

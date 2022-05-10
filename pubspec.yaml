@@ -48,10 +48,6 @@ dependencies:
   flutter_braintree: ^2.3.0
   flutter_paypal: ^0.0.8
   mercado_pago_mobile_checkout: ^0.1.1
-  #mercado_pago_integration: ^1.1.9
-  #mercadopago_sdk: ^1.3.0
-  #equatable: ^2.0.3
-  #dartz: ^0.10.1
   flutter_paytabs_bridge: ^2.2.7
   my_fatoorah: ^3.0.11
 
