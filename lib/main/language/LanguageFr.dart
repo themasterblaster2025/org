@@ -673,4 +673,18 @@ class LanguageFr extends BaseLanguage {
   @override
   String get success => "Succès";
 
+  @override
+  String get paypal => "Pay Pal";
+
+  @override
+  String get payTabs => "Mât de paie";
+
+  @override
+  String get mercadoPago => "Mercado Pago";
+
+  @override
+  String get paytm => "Paytm";
+
+  @override
+  String get myFatoorah => "Ma fatoorah";
 }

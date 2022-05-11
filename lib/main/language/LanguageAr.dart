@@ -672,4 +672,19 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get success => "نجاح";
+
+  @override
+  String get paypal => "PayPal";
+
+  @override
+  String get payTabs => "Paytabs";
+
+  @override
+  String get mercadoPago => "ميركادو باغو";
+
+  @override
+  String get paytm => "paytm";
+
+  @override
+  String get myFatoorah => "بلدي فاطورا";
 }

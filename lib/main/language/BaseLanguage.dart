@@ -451,4 +451,13 @@ abstract class BaseLanguage {
 
   String get success;
 
+  String get paypal;
+
+  String get payTabs;
+
+  String get mercadoPago;
+
+  String get paytm;
+
+  String get myFatoorah;
 }

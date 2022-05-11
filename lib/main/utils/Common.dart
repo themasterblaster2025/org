@@ -292,8 +292,18 @@ String? paymentType(String paymentType) {
     return language.payStack;
   } else if (paymentType.toLowerCase() == PAYMENT_TYPE_FLUTTERWAVE.toLowerCase()) {
     return language.flutterWave;
+  }else if (paymentType.toLowerCase() == PAYMENT_TYPE_MERCADOPAGO.toLowerCase()) {
+    return language.mercadoPago;
+  }else if (paymentType.toLowerCase() == PAYMENT_TYPE_PAYPAL.toLowerCase()) {
+    return language.paypal;
+  }else if (paymentType.toLowerCase() == PAYMENT_TYPE_PAYTABS.toLowerCase()) {
+    return language.payTabs;
+  }else if (paymentType.toLowerCase() == PAYMENT_TYPE_PAYTM.toLowerCase()) {
+    return language.paytm;
+  }else if (paymentType.toLowerCase() == PAYMENT_TYPE_MYFATOORAH.toLowerCase()) {
+    return language.myFatoorah;
   } else if (paymentType.toLowerCase() == PAYMENT_TYPE_CASH.toLowerCase()) {
     return language.cash;
   }
-  return PAYMENT_TYPE_CASH;
+  return language.cash;
 }

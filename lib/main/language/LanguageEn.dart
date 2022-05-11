@@ -673,4 +673,18 @@ class LanguageEn extends BaseLanguage {
   @override
   String get success => "Success";
 
+  @override
+  String get paypal => "PayPal";
+
+  @override
+  String get payTabs => "PayTabs";
+
+  @override
+  String get mercadoPago => "Mercado pago";
+
+  @override
+  String get paytm => "Paytm";
+
+  @override
+  String get myFatoorah => "My Fatoorah";
 }

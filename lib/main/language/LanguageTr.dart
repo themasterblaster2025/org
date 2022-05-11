@@ -630,6 +630,7 @@ class LanguageTr extends BaseLanguage {
 
   @override
   String get writeAMessage => "Bir mesaj yaz...";
+
   @override
   String get pending => "Bekliyor";
 
@@ -672,4 +673,18 @@ class LanguageTr extends BaseLanguage {
   @override
   String get success => "Başarı";
 
+  @override
+  String get paypal => "Paypal";
+
+  @override
+  String get payTabs => "Paytabs";
+
+  @override
+  String get mercadoPago => "Mercado Pago";
+
+  @override
+  String get paytm => "Paytm";
+
+  @override
+  String get myFatoorah => "Benim Fatoorah'ım";
 }

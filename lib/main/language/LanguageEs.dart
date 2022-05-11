@@ -673,4 +673,18 @@ class LanguageEs extends BaseLanguage {
   @override
   String get success => "Éxito";
 
+  @override
+  String get paypal => "Paypal";
+
+  @override
+  String get payTabs => "Paytabs";
+
+  @override
+  String get mercadoPago => "Mercado Pago";
+
+  @override
+  String get paytm => "Paytm";
+
+  @override
+  String get myFatoorah => "Mi foroorah";
 }

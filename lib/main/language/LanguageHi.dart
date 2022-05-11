@@ -673,4 +673,18 @@ class LanguageHi extends BaseLanguage {
   @override
   String get success => "सफलता";
 
+  @override
+  String get paypal => "पेपैल";
+
+  @override
+  String get payTabs => "अदायगी";
+
+  @override
+  String get mercadoPago => "मर्कैडो पागो";
+
+  @override
+  String get paytm => "Paytm";
+
+  @override
+  String get myFatoorah => "मेरा फतुराह";
 }

@@ -672,4 +672,19 @@ class LanguageId extends BaseLanguage {
 
   @override
   String get success => "Kesuksesan";
+
+  @override
+  String get paypal => "Paypal";
+
+  @override
+  String get payTabs => "Paytab";
+
+  @override
+  String get mercadoPago => "Mercado Pago";
+
+  @override
+  String get paytm => "Paytm";
+
+  @override
+  String get myFatoorah => "Fatoorah saya";
 }
