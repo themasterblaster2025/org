@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -43,6 +44,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   TextEditingController parcelTypeCont = TextEditingController();
   TextEditingController weightController = TextEditingController(text: '1');
+  TextEditingController totalParcelController = TextEditingController(text: '1');
 
   TextEditingController pickAddressCont = TextEditingController();
   TextEditingController pickPhoneCont = TextEditingController();
@@ -57,6 +59,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   TextEditingController deliverDateController = TextEditingController();
   TextEditingController deliverFromTimeController = TextEditingController();
   TextEditingController deliverToTimeController = TextEditingController();
+
+  String deliverCountryCode = '+91';
+  String pickupCountryCode = '+91';
 
   DateTime? pickFromDateTime, pickToDateTime, deliverFromDateTime, deliverToDateTime;
   DateTime? pickDate, deliverDate;
@@ -97,18 +102,29 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
     if (widget.orderData != null) {
       if (widget.orderData!.totalWeight != 0) weightController.text = widget.orderData!.totalWeight!.toString();
+      if (widget.orderData!.totalParcel != null) totalParcelController.text = widget.orderData!.totalParcel!.toString();
       parcelTypeCont.text = widget.orderData!.parcelType.validate();
 
       pickAddressCont.text = widget.orderData!.pickupPoint!.address.validate();
       pickLat = widget.orderData!.pickupPoint!.latitude.validate();
       pickLong = widget.orderData!.pickupPoint!.longitude.validate();
-      pickPhoneCont.text = widget.orderData!.pickupPoint!.contactNumber.validate();
+      if (widget.orderData!.pickupPoint!.contactNumber.validate().split(" ").length == 1) {
+        pickPhoneCont.text = widget.orderData!.pickupPoint!.contactNumber.validate().split(" ").last;
+      } else {
+        pickupCountryCode = widget.orderData!.pickupPoint!.contactNumber.validate().split(" ").first;
+        pickPhoneCont.text = widget.orderData!.pickupPoint!.contactNumber.validate().split(" ").last;
+      }
       pickDesCont.text = widget.orderData!.pickupPoint!.description.validate();
 
       deliverAddressCont.text = widget.orderData!.deliveryPoint!.address.validate();
-      pickLat = widget.orderData!.deliveryPoint!.latitude.validate();
-      pickLong = widget.orderData!.deliveryPoint!.longitude.validate();
-      deliverPhoneCont.text = widget.orderData!.deliveryPoint!.contactNumber.validate();
+      deliverLat = widget.orderData!.deliveryPoint!.latitude.validate();
+      deliverLong = widget.orderData!.deliveryPoint!.longitude.validate();
+      if (widget.orderData!.deliveryPoint!.contactNumber.validate().split(" ").length == 1) {
+        deliverPhoneCont.text = widget.orderData!.deliveryPoint!.contactNumber.validate().split(" ").last;
+      } else {
+        deliverCountryCode = widget.orderData!.deliveryPoint!.contactNumber.validate().split(" ").first;
+        deliverPhoneCont.text = widget.orderData!.deliveryPoint!.contactNumber.validate().split(" ").last;
+      }
       deliverDesCont.text = widget.orderData!.deliveryPoint!.description.validate();
 
       paymentCollectFrom = widget.orderData!.paymentCollectFrom.validate(value: PAYMENT_ON_PICKUP);
@@ -191,7 +207,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         "latitude": pickLat,
         "longitude": pickLong,
         "description": pickDesCont.text,
-        "contact_number": pickPhoneCont.text
+        "contact_number": '$pickupCountryCode ${pickPhoneCont.text.trim()}'
       },
       "delivery_point": {
         "start_time": !isDeliverNow ? deliverFromDateTime.toString() : null,
@@ -200,7 +216,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         "latitude": deliverLat,
         "longitude": deliverLong,
         "description": deliverDesCont.text,
-        "contact_number": deliverPhoneCont.text,
+        "contact_number": '$deliverCountryCode ${deliverPhoneCont.text.trim()}',
       },
       "extra_charges": extraChargeList,
       "parcel_type": parcelTypeCont.text,
@@ -215,6 +231,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       "total_amount": totalAmount,
       "weight_charge": weightCharge,
       "distance_charge": distanceCharge,
+      "total_parcel": totalParcelController.text.toInt(),
     };
     appStore.setLoading(true);
     await createOrder(req).then((value) {
@@ -437,6 +454,46 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             ),
           ),
           16.height,
+          //TODO Localization
+          Text('Number of Parcels', style: boldTextStyle()),
+          8.height,
+          Container(
+            decoration: BoxDecoration(border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), borderRadius: BorderRadius.circular(defaultRadius)),
+            child: IntrinsicHeight(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('Number of Parcels', style: primaryTextStyle()).paddingAll(12).expand(),
+                  VerticalDivider(thickness: 1),
+                  Icon(Icons.remove, color: appStore.isDarkMode ? Colors.white : Colors.grey).paddingAll(12).onTap(() {
+                    if (totalParcelController.text.toInt() > 1) {
+                      totalParcelController.text = (totalParcelController.text.toInt() - 1).toString();
+                    }
+                  }),
+                  VerticalDivider(thickness: 1),
+                  Container(
+                    width: 50,
+                    child: AppTextField(
+                      controller: totalParcelController,
+                      textAlign: TextAlign.center,
+                      maxLength: 2,
+                      textFieldType: TextFieldType.PHONE,
+                      decoration: InputDecoration(
+                        counterText: '',
+                        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: colorPrimary)),
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+                  VerticalDivider(thickness: 1),
+                  Icon(Icons.add, color: appStore.isDarkMode ? Colors.white : Colors.grey).paddingAll(12).onTap(() {
+                    totalParcelController.text = (totalParcelController.text.toInt() + 1).toString();
+                  }),
+                ],
+              ),
+            ),
+          ),
+          16.height,
           Text(language.parcelType, style: boldTextStyle()),
           8.height,
           AppTextField(
@@ -507,15 +564,35 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         16.height,
         Text(language.pickupContactNumber, style: primaryTextStyle()),
         8.height,
-        AppTextField(
-          controller: pickPhoneCont,
-          textFieldType: TextFieldType.PHONE,
-          decoration: commonInputDecoration(suffixIcon: Icons.phone),
-          validator: (value) {
-            if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-            if (value.trim().length < 10 || value.trim().length > 14) return language.contactNumber;
-            return null;
-          },
+        Row(
+          children: [
+            CountryCodePicker(
+              initialSelection: pickupCountryCode,
+              showCountryOnly: false,
+              showFlag: false,
+              showFlagDialog: true,
+              showOnlyCountryWhenClosed: false,
+              alignLeft: false,
+              textStyle: primaryTextStyle(),
+              onInit: (c) {
+                pickupCountryCode = c!.dialCode!;
+              },
+              onChanged: (c) {
+                pickupCountryCode = c.dialCode!;
+              },
+            ),
+            8.width,
+            AppTextField(
+              controller: pickPhoneCont,
+              textFieldType: TextFieldType.PHONE,
+              decoration: commonInputDecoration(suffixIcon: Icons.phone),
+              validator: (value) {
+                if (value!.trim().isEmpty) return language.fieldRequiredMsg;
+                if (value.trim().length < 10 || value.trim().length > 14) return language.contactNumber;
+                return null;
+              },
+            ).expand(),
+          ],
         ),
         16.height,
         Text(language.pickupDescription, style: primaryTextStyle()),
@@ -561,16 +638,36 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         16.height,
         Text(language.deliveryContactNumber, style: primaryTextStyle()),
         8.height,
-        AppTextField(
-          controller: deliverPhoneCont,
-          textInputAction: TextInputAction.next,
-          textFieldType: TextFieldType.PHONE,
-          decoration: commonInputDecoration(suffixIcon: Icons.phone),
-          validator: (value) {
-            if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-            if (value.trim().length < 10 || value.trim().length > 14) return language.contactLength;
-            return null;
-          },
+        Row(
+          children: [
+            CountryCodePicker(
+              initialSelection: deliverCountryCode,
+              showCountryOnly: false,
+              showFlag: false,
+              showFlagDialog: true,
+              showOnlyCountryWhenClosed: false,
+              alignLeft: false,
+              textStyle: primaryTextStyle(),
+              onInit: (c) {
+                deliverCountryCode = c!.dialCode!;
+              },
+              onChanged: (c) {
+                deliverCountryCode = c.dialCode!;
+              },
+            ),
+            8.width,
+            AppTextField(
+              controller: deliverPhoneCont,
+              textInputAction: TextInputAction.next,
+              textFieldType: TextFieldType.PHONE,
+              decoration: commonInputDecoration(suffixIcon: Icons.phone),
+              validator: (value) {
+                if (value!.trim().isEmpty) return language.fieldRequiredMsg;
+                if (value.trim().length < 10 || value.trim().length > 14) return language.contactLength;
+                return null;
+              },
+            ).expand(),
+          ],
         ),
         16.height,
         Text(language.deliveryDescription, style: primaryTextStyle()),
@@ -619,6 +716,15 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   Text('${weightController.text} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weightType}', style: primaryTextStyle()),
                 ],
               ),
+              8.height,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Number of parcels', style: primaryTextStyle()),
+                  16.width,
+                  Text('${totalParcelController.text}', style: primaryTextStyle()),
+                ],
+              ),
             ],
           ),
         ),
@@ -663,13 +769,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           ),
         ),
         Divider(height: 30),
-        OrderSummeryWidget(
-            extraChargesList: extraChargeList,
-            totalDistance: totalDistance,
-            totalWeight: weightController.text.toDouble(),
-            distanceCharge: distanceCharge,
-            weightCharge: weightCharge,
-            totalAmount: totalAmount),
+        OrderSummeryWidget(extraChargesList: extraChargeList, totalDistance: totalDistance, totalWeight: weightController.text.toDouble(), distanceCharge: distanceCharge, weightCharge: weightCharge, totalAmount: totalAmount),
         16.height,
         Text(language.payment, style: boldTextStyle()),
         16.height,

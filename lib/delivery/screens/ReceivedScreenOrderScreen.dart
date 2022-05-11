@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,6 +17,8 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
+
+import '../components/OTPDialog.dart';
 
 class ReceivedScreenOrderScreen extends StatefulWidget {
   final OrderData? orderData;
@@ -59,8 +62,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   Future<void> init() async {
     mIsUpdate = widget.orderData != null;
     if (mIsUpdate) {
-      picUpController.text =
-          DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.orderData!.pickupDatetime.validate().isEmpty ? DateTime.now().toString() : widget.orderData!.pickupDatetime.validate()));
+      picUpController.text = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.orderData!.pickupDatetime.validate().isEmpty ? DateTime.now().toString() : widget.orderData!.pickupDatetime.validate()));
       reasonController.text = widget.orderData!.reason.validate();
       reason = widget.orderData!.reason.validate();
       log(picUpController);
@@ -73,7 +75,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
     final image = await screenshotController.capture(delay: Duration(milliseconds: 10));
     final tempDir = await getTemporaryDirectory();
     File file = await File('${tempDir.path}/image.png').create();
-    if(image!=null) {
+    if (image != null) {
       file.writeAsBytesSync(image);
     }
     return file;
@@ -320,7 +322,39 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                             if (!mIsCheck && widget.orderData!.paymentId == null && widget.isShowPayment) {
                               return toast(language.pleaseConfirmPayment);
                             } else {
-                              saveOrderData();
+                              appStore.setLoading(true);
+                              FirebaseAuth auth = FirebaseAuth.instance;
+                              await auth.verifyPhoneNumber(
+                                timeout: const Duration(seconds: 60),
+                                phoneNumber: widget.orderData!.status == ORDER_DEPARTED ? widget.orderData!.deliveryPoint!.contactNumber.validate() : widget.orderData!.pickupPoint!.contactNumber.validate(),
+                                verificationCompleted: (PhoneAuthCredential credential) async {
+                                  appStore.setLoading(false);
+                                  toast('Verification completed');
+                                },
+                                verificationFailed: (FirebaseAuthException e) {
+                                  appStore.setLoading(false);
+                                  if (e.code == 'invalid-phone-number') {
+                                    toast('The provided phone number is not valid.');
+                                    throw 'The provided phone number is not valid.';
+                                  } else {
+                                    toast(e.toString());
+                                    throw e.toString();
+                                  }
+                                },
+                                codeSent: (String verificationId, int? resendToken) async {
+                                  appStore.setLoading(false);
+                                  await showInDialog(context,
+                                      builder: (context) => OTPDialog(
+                                          verificationId: verificationId,
+                                          onUpdate: () {
+                                            saveOrderData();
+                                          }),
+                                      barrierDismissible: false);
+                                },
+                                codeAutoRetrievalTimeout: (String verificationId) {
+                                  appStore.setLoading(false);
+                                },
+                              );
                             }
                           },
                         ).expand(),
@@ -404,8 +438,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   }
 
   Future<void> paymentConfirmDialog(OrderData orderData) {
-    return showConfirmDialogCustom(context,
-        primaryColor: colorPrimary, dialogType: DialogType.CONFIRMATION, title: orderTitle(orderData.status!), positiveText: language.yes, negativeText: language.cancel, onAccept: (c) async {
+    return showConfirmDialogCustom(context, primaryColor: colorPrimary, dialogType: DialogType.CONFIRMATION, title: orderTitle(orderData.status!), positiveText: language.yes, negativeText: language.cancel, onAccept: (c) async {
       appStore.setLoading(true);
       Map req = {
         'order_id': orderData.id,

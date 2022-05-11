@@ -216,24 +216,38 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                               Container(
                                 decoration: BoxDecoration(color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
                                 padding: EdgeInsets.all(12),
-                                child: Row(
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Container(
-                                      decoration:
-                                          boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(8), border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), backgroundColor: Colors.transparent),
-                                      padding: EdgeInsets.all(8),
-                                      child: Image.asset(parcelTypeIcon(orderData!.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
-                                    ),
-                                    8.width,
-                                    Column(
+                                    Row(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text(orderData!.parcelType.validate(), style: boldTextStyle()),
-                                        4.height,
-                                        Text('${orderData!.totalWeight} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weightType}', style: secondaryTextStyle()),
+                                        Container(
+                                          decoration:
+                                              boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(8), border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), backgroundColor: Colors.transparent),
+                                          padding: EdgeInsets.all(8),
+                                          child: Image.asset(parcelTypeIcon(orderData!.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
+                                        ),
+                                        8.width,
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(orderData!.parcelType.validate(), style: boldTextStyle()),
+                                            4.height,
+                                            Text('${orderData!.totalWeight} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weightType}', style: secondaryTextStyle()),
+                                          ],
+                                        ).expand(),
                                       ],
-                                    ).expand(),
+                                    ),
+                                    Divider(height: 30).visible(orderData!.totalParcel!=null),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        // TODO Localization
+                                        Text('Number of parcels', style: primaryTextStyle()),
+                                        Text('${orderData!.totalParcel}', style: primaryTextStyle()),
+                                      ],
+                                    ).visible(orderData!.totalParcel!=null),
                                   ],
                                 ),
                               ),
