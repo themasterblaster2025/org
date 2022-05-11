@@ -10,7 +10,7 @@ const googleMapAPIKey = 'AIzaSyBAm_XYdWpfE2U_aLkMFGcG9H5wk1yY4yY';
 
 const mOneSignalAppId = 'f2e9c538-d4ad-45d4-8c57-fd081c987fb6';
 const mOneSignalRestKey = 'NzcwNjExNzYtYTJjOS00NGNkLWE2ZTUtY2JmMDEyNTFhYTFm';
-const mOneSignalChannelId = '9a4cc981-4c6b-4baf-8c5c-915f907446ae';
+const mOneSignalChannelId = 'e2422a99-3f76-4afa-a190-e80ab9370270';
 
 const defaultLanguage = "en";
 
