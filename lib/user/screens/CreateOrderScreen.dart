@@ -588,7 +588,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               decoration: commonInputDecoration(suffixIcon: Icons.phone),
               validator: (value) {
                 if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-                if (value.trim().length < 10 || value.trim().length > 14) return language.contactNumber;
+                if (value.trim().length < 10 || value.trim().length > 14) return language.contactLength;
                 return null;
               },
             ).expand(),
