@@ -66,6 +66,9 @@ dependencies:
   # PUSH NOTIFICATION
   onesignal_flutter: ^3.3.0
 
+  #OTP TEXTFIELD
+  otp_text_field: ^1.1.2
+
   #FIREBASE
   firebase_crashlytics: ^2.6.1
   firebase_core: ^1.14.0
