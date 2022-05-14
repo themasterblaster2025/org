@@ -1,9 +1,9 @@
 import 'dart:io';
+
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mighty_delivery/delivery/screens/VerifyDeliveryPersonScreen.dart';
 import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
@@ -49,19 +49,11 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     emailController.text = getStringAsync(USER_EMAIL);
     usernameController.text = getStringAsync(USER_NAME);
     nameController.text = getStringAsync(NAME);
-    if (phoneNum
-        .split(" ")
-        .length == 1) {
-      contactNumberController.text = phoneNum
-          .split(" ")
-          .last;
+    if (phoneNum.split(" ").length == 1) {
+      contactNumberController.text = phoneNum.split(" ").last;
     } else {
-      countryCode = phoneNum
-          .split(" ")
-          .first;
-      contactNumberController.text = phoneNum
-          .split(" ")
-          .last;
+      countryCode = phoneNum.split(" ").first;
+      contactNumberController.text = phoneNum.split(" ").last;
     }
     addressController.text = getStringAsync(USER_ADDRESS).validate();
   }
@@ -249,10 +241,9 @@ class EditProfileScreenState extends State<EditProfileScreen> {
         padding: EdgeInsets.all(16),
         child:
         commonButton(language.saveChanges, () {
-          toast(language.demoMsg);
-          /*if (_formKey.currentState!.validate()) {
+          if (_formKey.currentState!.validate()) {
             save();
-          }*/
+          }
         }),
       ),
     );
