@@ -252,7 +252,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                               ),
                             ),
                           ),
-                    if (widget.orderData!.pickupConfirmByClient == 0)
+                    if (widget.orderData!.pickupConfirmByClient != 1)
                       Align(
                         alignment: Alignment.bottomRight,
                         child: Row(

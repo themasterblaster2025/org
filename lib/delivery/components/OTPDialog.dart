@@ -76,13 +76,14 @@ class OTPDialogState extends State<OTPDialog> {
             16.height,
             Text(language.otpVerification, style: boldTextStyle(size: 18)),
             16.height,
-            RichText(
-                text: TextSpan(
-                    text: language.enterTheCodeSendTo,
-                    children: [
-                      TextSpan(text: widget.phoneNumber.validate(), style: boldTextStyle()),
-                    ],
-                    style: secondaryTextStyle(size: 16))),
+            Wrap(
+              alignment: WrapAlignment.center,
+              children: [
+                Text(language.enterTheCodeSendTo,style: secondaryTextStyle(size: 16)),
+                4.width,
+                Text(widget.phoneNumber.validate(),style: boldTextStyle()),
+              ],
+            ),
             30.height,
             OTPTextField(
               controller: otpController,
@@ -111,6 +112,7 @@ class OTPDialogState extends State<OTPDialog> {
             ),
             30.height,
             Wrap(
+              alignment: WrapAlignment.center,
               children: [
                 Text(language.didNotReceiveTheCode,style: secondaryTextStyle(size: 16)),
                 4.width,
