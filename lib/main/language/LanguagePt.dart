@@ -673,4 +673,27 @@ class LanguagePt extends BaseLanguage {
   @override
   String get success => "Sucesso";
 
+  @override
+  String get verificationCompleted => "Verificação concluída";
+
+  @override
+  String get codeSent => "Código enviado";
+
+  @override
+  String get otpVerification => "Verificação de OTP";
+
+  @override
+  String get enterTheCodeSendTo => "Digite o código enviado para";
+
+  @override
+  String get invalidVerificationCode => "Código de verificação inválido";
+
+  @override
+  String get didNotReceiveTheCode => "Não recebeu o código?";
+
+  @override
+  String get resend => "REENVIAR";
+
+  @override
+  String get numberOfParcels => "Número de parcelas";
 }

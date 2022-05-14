@@ -673,4 +673,27 @@ class LanguageEs extends BaseLanguage {
   @override
   String get success => "Éxito";
 
+  @override
+  String get verificationCompleted => "Verificación completada";
+
+  @override
+  String get codeSent => "Código enviado";
+
+  @override
+  String get otpVerification => "Verificación OTP";
+
+  @override
+  String get enterTheCodeSendTo => "Ingrese el código enviado a";
+
+  @override
+  String get invalidVerificationCode => "Código de verificación invalido";
+
+  @override
+  String get didNotReceiveTheCode => "¿No recibió el código?";
+
+  @override
+  String get resend => "Revender";
+
+  @override
+  String get numberOfParcels => "Número de parcelas";
 }

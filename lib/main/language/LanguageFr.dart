@@ -673,4 +673,27 @@ class LanguageFr extends BaseLanguage {
   @override
   String get success => "Succès";
 
+  @override
+  String get verificationCompleted => "Vérification terminée";
+
+  @override
+  String get codeSent => "Code envoyé";
+
+  @override
+  String get otpVerification => "Vérification OTP";
+
+  @override
+  String get enterTheCodeSendTo => "Entrez le code envoyé à";
+
+  @override
+  String get invalidVerificationCode => "Code de vérification invalide";
+
+  @override
+  String get didNotReceiveTheCode => "Ne recevait pas le code?";
+
+  @override
+  String get resend => "Repenser";
+
+  @override
+  String get numberOfParcels => "Nombre de colis";
 }

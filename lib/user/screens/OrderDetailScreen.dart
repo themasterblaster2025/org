@@ -243,9 +243,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        // TODO Localization
-                                        Text('Number of parcels', style: primaryTextStyle()),
-                                        Text('${orderData!.totalParcel}', style: primaryTextStyle()),
+                                        Text(language.numberOfParcels, style: primaryTextStyle()),
+                                        Text('${orderData!.totalParcel ?? 1}', style: primaryTextStyle()),
                                       ],
                                     ).visible(orderData!.totalParcel!=null),
                                   ],

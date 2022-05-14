@@ -672,4 +672,28 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get success => "نجاح";
+
+  @override
+  String get verificationCompleted => "الانتهاء من التحقق";
+
+  @override
+  String get codeSent => "تم ارسال الكود";
+
+  @override
+  String get otpVerification => "التحقق من OTP";
+
+  @override
+  String get enterTheCodeSendTo => "أدخل الرمز المرسلة إلى";
+
+  @override
+  String get invalidVerificationCode => "رمز التحقق غير صالح";
+
+  @override
+  String get didNotReceiveTheCode => "ألم تتلقى الرمز؟";
+
+  @override
+  String get resend => "إعادة إرسال";
+
+  @override
+  String get numberOfParcels => "عدد الطرود";
 }

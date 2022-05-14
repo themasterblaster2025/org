@@ -673,4 +673,27 @@ class LanguageEn extends BaseLanguage {
   @override
   String get success => "Success";
 
+  @override
+  String get verificationCompleted => "Verification completed";
+
+  @override
+  String get codeSent => "Code Sent";
+
+  @override
+  String get otpVerification => "OTP Verification";
+
+  @override
+  String get enterTheCodeSendTo => "Enter the code sent to";
+
+  @override
+  String get invalidVerificationCode => "Invalid Verification Code";
+
+  @override
+  String get didNotReceiveTheCode => "Didn\'t receive the code?";
+
+  @override
+  String get resend => "RESEND";
+
+  @override
+  String get numberOfParcels => "Number of Parcels";
 }

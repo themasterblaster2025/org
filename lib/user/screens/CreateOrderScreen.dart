@@ -454,8 +454,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             ),
           ),
           16.height,
-          //TODO Localization
-          Text('Number of Parcels', style: boldTextStyle()),
+          Text(language.numberOfParcels, style: boldTextStyle()),
           8.height,
           Container(
             decoration: BoxDecoration(border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), borderRadius: BorderRadius.circular(defaultRadius)),
@@ -463,7 +462,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('Number of Parcels', style: primaryTextStyle()).paddingAll(12).expand(),
+                  Text(language.numberOfParcels, style: primaryTextStyle()).paddingAll(12).expand(),
                   VerticalDivider(thickness: 1),
                   Icon(Icons.remove, color: appStore.isDarkMode ? Colors.white : Colors.grey).paddingAll(12).onTap(() {
                     if (totalParcelController.text.toInt() > 1) {

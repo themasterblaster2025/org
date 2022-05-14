@@ -672,4 +672,28 @@ class LanguageAf extends BaseLanguage {
 
   @override
   String get success => "Sukses";
+
+  @override
+  String get verificationCompleted => "Verifikasie voltooi";
+
+  @override
+  String get codeSent => "Kode gestuur";
+
+  @override
+  String get otpVerification => "OTP -verifikasie";
+
+  @override
+  String get enterTheCodeSendTo => "Voer die kode in wat gestuur word";
+
+  @override
+  String get invalidVerificationCode => "Ongeldige verifikasiekode";
+
+  @override
+  String get didNotReceiveTheCode => "Het u nie die kode ontvang nie?";
+
+  @override
+  String get resend => "Herlaai";
+
+  @override
+  String get numberOfParcels => "Aantal pakkies";
 }

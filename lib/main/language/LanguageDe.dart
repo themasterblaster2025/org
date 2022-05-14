@@ -673,4 +673,27 @@ class LanguageDe extends BaseLanguage {
   @override
   String get success => "Erfolg";
 
+  @override
+  String get verificationCompleted => "Überprüfung abgeschlossen";
+
+  @override
+  String get codeSent => "Code gesendet";
+
+  @override
+  String get otpVerification => "OTP -Überprüfung";
+
+  @override
+  String get enterTheCodeSendTo => "Geben Sie den gesendeten Code ein";
+
+  @override
+  String get invalidVerificationCode => "Ungültiger Bestätigungscode";
+
+  @override
+  String get didNotReceiveTheCode => "Hat der Code nicht erhalten?";
+
+  @override
+  String get resend => "ERNEUT SENDEN";
+
+  @override
+  String get numberOfParcels => "Anzahl der Parzellen";
 }

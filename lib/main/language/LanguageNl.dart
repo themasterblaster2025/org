@@ -673,4 +673,27 @@ class LanguageNl extends BaseLanguage {
   @override
   String get success => "Succes";
 
+  @override
+  String get verificationCompleted => "Verificatie voltooid";
+
+  @override
+  String get codeSent => "Code verzonden";
+
+  @override
+  String get otpVerification => "OTP -verificatie";
+
+  @override
+  String get enterTheCodeSendTo => "Voer de code in die is verzonden naar";
+
+  @override
+  String get invalidVerificationCode => "Ongeldige verificatie code";
+
+  @override
+  String get didNotReceiveTheCode => "Heeft de code niet ontvangen?";
+
+  @override
+  String get resend => "OPNIEUW VERZENDEN";
+
+  @override
+  String get numberOfParcels => "Aantal pakketten";
 }

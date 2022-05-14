@@ -672,4 +672,28 @@ class LanguageId extends BaseLanguage {
 
   @override
   String get success => "Kesuksesan";
+
+  @override
+  String get verificationCompleted => "Verifikasi selesai";
+
+  @override
+  String get codeSent => "Kode terkirim";
+
+  @override
+  String get otpVerification => "Verifikasi OTP";
+
+  @override
+  String get enterTheCodeSendTo => "Masukkan kode yang dikirim ke";
+
+  @override
+  String get invalidVerificationCode => "Kode verifikasi tidak benar";
+
+  @override
+  String get didNotReceiveTheCode => "Apakah tidak menerima kode?";
+
+  @override
+  String get resend => "Ulang";
+
+  @override
+  String get numberOfParcels => "Jumlah paket";
 }

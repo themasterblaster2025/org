@@ -673,4 +673,27 @@ class LanguageHi extends BaseLanguage {
   @override
   String get success => "सफलता";
 
+  @override
+  String get verificationCompleted => "सत्यापन पूरा हुआ";
+
+  @override
+  String get codeSent => "कोड भेजा है";
+
+  @override
+  String get otpVerification => "ओटीपी सत्यापन";
+
+  @override
+  String get enterTheCodeSendTo => "भेजा गया कोड दर्ज करें";
+
+  @override
+  String get invalidVerificationCode => "अवैध सत्यापन कोड";
+
+  @override
+  String get didNotReceiveTheCode => "क्या कोड प्राप्त नहीं हुआ?";
+
+  @override
+  String get resend => "पुन: भेजें";
+
+  @override
+  String get numberOfParcels => "पार्सल की संख्या";
 }

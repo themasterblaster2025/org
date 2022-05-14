@@ -630,6 +630,7 @@ class LanguageTr extends BaseLanguage {
 
   @override
   String get writeAMessage => "Bir mesaj yaz...";
+
   @override
   String get pending => "Bekliyor";
 
@@ -672,4 +673,27 @@ class LanguageTr extends BaseLanguage {
   @override
   String get success => "Başarı";
 
+  @override
+  String get verificationCompleted => "Doğrulama tamamlandı";
+
+  @override
+  String get codeSent => "Kod gönderildi";
+
+  @override
+  String get otpVerification => "OTP doğrulaması";
+
+  @override
+  String get enterTheCodeSendTo => "Gönderilen kodu girin";
+
+  @override
+  String get invalidVerificationCode => "Geçersiz Doğrulama Kodu";
+
+  @override
+  String get didNotReceiveTheCode => "Kodu almadı mı?";
+
+  @override
+  String get resend => "YENİDEN GÖNDER";
+
+  @override
+  String get numberOfParcels => "Parsel sayısı";
 }

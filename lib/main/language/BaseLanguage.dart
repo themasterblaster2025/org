@@ -451,4 +451,19 @@ abstract class BaseLanguage {
 
   String get success;
 
+  String get verificationCompleted;
+
+  String get codeSent;
+
+  String get otpVerification;
+
+  String get enterTheCodeSendTo;
+
+  String get invalidVerificationCode;
+
+  String get didNotReceiveTheCode;
+
+  String get resend;
+
+  String get numberOfParcels;
 }

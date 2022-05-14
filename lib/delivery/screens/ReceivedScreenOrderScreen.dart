@@ -322,39 +322,13 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                             if (!mIsCheck && widget.orderData!.paymentId == null && widget.isShowPayment) {
                               return toast(language.pleaseConfirmPayment);
                             } else {
-                              appStore.setLoading(true);
-                              FirebaseAuth auth = FirebaseAuth.instance;
-                              await auth.verifyPhoneNumber(
-                                timeout: const Duration(seconds: 60),
-                                phoneNumber: widget.orderData!.status == ORDER_DEPARTED ? widget.orderData!.deliveryPoint!.contactNumber.validate() : widget.orderData!.pickupPoint!.contactNumber.validate(),
-                                verificationCompleted: (PhoneAuthCredential credential) async {
-                                  appStore.setLoading(false);
-                                  toast('Verification completed');
-                                },
-                                verificationFailed: (FirebaseAuthException e) {
-                                  appStore.setLoading(false);
-                                  if (e.code == 'invalid-phone-number') {
-                                    toast('The provided phone number is not valid.');
-                                    throw 'The provided phone number is not valid.';
-                                  } else {
-                                    toast(e.toString());
-                                    throw e.toString();
-                                  }
-                                },
-                                codeSent: (String verificationId, int? resendToken) async {
-                                  appStore.setLoading(false);
-                                  await showInDialog(context,
-                                      builder: (context) => OTPDialog(
-                                          verificationId: verificationId,
-                                          onUpdate: () {
-                                            saveOrderData();
-                                          }),
-                                      barrierDismissible: false);
-                                },
-                                codeAutoRetrievalTimeout: (String verificationId) {
-                                  appStore.setLoading(false);
-                                },
-                              );
+                              await showInDialog(context,
+                                  builder: (context) => OTPDialog(
+                                      phoneNumber: widget.orderData!.status == ORDER_DEPARTED ? widget.orderData!.deliveryPoint!.contactNumber.validate() : widget.orderData!.pickupPoint!.contactNumber.validate(),
+                                      onUpdate: () {
+                                        saveOrderData();
+                                      }),
+                                  barrierDismissible: false);
                             }
                           },
                         ).expand(),

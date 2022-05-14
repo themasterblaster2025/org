@@ -673,4 +673,27 @@ class LanguageVi extends BaseLanguage {
   @override
   String get success => "Sự thành công";
 
+  @override
+  String get verificationCompleted => "Xác minh hoàn thành";
+
+  @override
+  String get codeSent => "Mã được gửi";
+
+  @override
+  String get otpVerification => "Xác minh OTP";
+
+  @override
+  String get enterTheCodeSendTo => "Nhập mã được gửi đến";
+
+  @override
+  String get invalidVerificationCode => "Mã xác minh không hợp lệ";
+
+  @override
+  String get didNotReceiveTheCode => "Không nhận được mã?";
+
+  @override
+  String get resend => "Chia rẽ";
+
+  @override
+  String get numberOfParcels => "Số lượng bưu kiện";
 }
