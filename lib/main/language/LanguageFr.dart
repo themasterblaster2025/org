@@ -687,4 +687,7 @@ class LanguageFr extends BaseLanguage {
 
   @override
   String get myFatoorah => "Ma fatoorah";
+
+  @override
+  String get demoMsg => 'Rôle de testeur non autorisé à effectuer cette action';
 }

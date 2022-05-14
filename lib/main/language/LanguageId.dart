@@ -687,4 +687,7 @@ class LanguageId extends BaseLanguage {
 
   @override
   String get myFatoorah => "Fatoorah saya";
+
+  @override
+  String get demoMsg => 'Peran tester tidak diizinkan untuk melakukan tindakan ini';
 }

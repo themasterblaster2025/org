@@ -460,4 +460,6 @@ abstract class BaseLanguage {
   String get paytm;
 
   String get myFatoorah;
+
+  String get demoMsg;
 }

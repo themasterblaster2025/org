@@ -687,4 +687,7 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get myFatoorah => "بلدي فاطورا";
+
+  @override
+  String get demoMsg => 'اختبار الدور غير المسموح به لأداء هذا الإجراء';
 }

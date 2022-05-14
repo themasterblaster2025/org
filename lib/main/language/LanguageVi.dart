@@ -687,4 +687,7 @@ class LanguageVi extends BaseLanguage {
 
   @override
   String get myFatoorah => "Fatoorah của tôi";
+
+  @override
+  String get demoMsg => 'Vai trò người kiểm tra không được phép thực hiện hành động này';
 }

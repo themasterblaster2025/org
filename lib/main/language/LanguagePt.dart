@@ -687,4 +687,7 @@ class LanguagePt extends BaseLanguage {
 
   @override
   String get myFatoorah => "Meu Fatoorah";
+
+  @override
+  String get demoMsg => 'Função do testador não é permitida para realizar esta ação';
 }

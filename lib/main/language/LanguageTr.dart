@@ -687,4 +687,7 @@ class LanguageTr extends BaseLanguage {
 
   @override
   String get myFatoorah => "Benim Fatoorah'ım";
+
+  @override
+  String get demoMsg => 'Test Cihazı Rolü bu eylemi gerçekleştirmesine izin verilmedi';
 }

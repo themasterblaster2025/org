@@ -687,4 +687,7 @@ class LanguageEs extends BaseLanguage {
 
   @override
   String get myFatoorah => "Mi foroorah";
+
+  @override
+  String get demoMsg => 'El papel del probador no se permite realizar esta acción.';
 }

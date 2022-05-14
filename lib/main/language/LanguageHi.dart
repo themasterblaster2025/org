@@ -687,4 +687,7 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get myFatoorah => "मेरा फतुराह";
+
+  @override
+  String get demoMsg => 'परीक्षक की भूमिका को यह क्रिया करने की अनुमति नहीं है';
 }

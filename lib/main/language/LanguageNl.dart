@@ -687,4 +687,7 @@ class LanguageNl extends BaseLanguage {
 
   @override
   String get myFatoorah => "Mijn fatoorah";
+
+  @override
+  String get demoMsg => 'Testerrol niet toegestaan ​​om deze actie uit te voeren';
 }

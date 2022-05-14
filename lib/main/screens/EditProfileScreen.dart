@@ -249,9 +249,10 @@ class EditProfileScreenState extends State<EditProfileScreen> {
         padding: EdgeInsets.all(16),
         child:
         commonButton(language.saveChanges, () {
-          if (_formKey.currentState!.validate()) {
+          toast(language.demoMsg);
+          /*if (_formKey.currentState!.validate()) {
             save();
-          }
+          }*/
         }),
       ),
     );

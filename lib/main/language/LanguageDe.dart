@@ -687,4 +687,7 @@ class LanguageDe extends BaseLanguage {
 
   @override
   String get myFatoorah => "Meine Fatoora";
+
+  @override
+  String get demoMsg => 'Tester Rolle darf diese Aktion nicht ausführen';
 }

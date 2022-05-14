@@ -32,7 +32,7 @@ class DashboardScreenState extends State<DashboardScreen> {
     init();
   }
 
-  Future<void> init() async  {
+  Future<void> init() async {
     bottomNavBarItems.add(BottomNavigationBarItemModel(icon: Icons.shopping_bag, title: language.myOrders));
     bottomNavBarItems.add(BottomNavigationBarItemModel(icon: Icons.person, title: language.account));
     LiveStream().on('UpdateLanguage', (p0) {
@@ -107,7 +107,7 @@ class DashboardScreenState extends State<DashboardScreen> {
             children: [
               Align(
                 alignment: AlignmentDirectional.center,
-                child: ImageIcon(AssetImage('assets/icons/ic_filter.png'),size: 18,color: Colors.white),
+                child: ImageIcon(AssetImage('assets/icons/ic_filter.png'), size: 18, color: Colors.white),
               ),
               Observer(builder: (context) {
                 return Positioned(
@@ -136,7 +136,12 @@ class DashboardScreenState extends State<DashboardScreen> {
           }).visible(currentIndex == 0),
         ],
       ),
-      body: BodyCornerWidget(child: [OrderFragment(), AccountFragment()][currentIndex]),
+      body: BodyCornerWidget(
+        child: [
+          OrderFragment(),
+          AccountFragment(),
+        ][currentIndex],
+      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: colorPrimary,
         child: Icon(Icons.add, color: Colors.white),
