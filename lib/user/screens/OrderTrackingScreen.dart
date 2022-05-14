@@ -89,7 +89,9 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
     var result = await polylinePoints.getRouteBetweenCoordinates(
       googleMapAPIKey,
       PointLatLng(deliveryLatLng.latitude, deliveryLatLng.longitude),
-      PointLatLng(widget.orderData.deliveryPoint!.latitude.toDouble(), widget.orderData.deliveryPoint!.longitude.toDouble()),
+      widget.orderData.status == ORDER_ACTIVE
+          ? PointLatLng(widget.orderData.pickupPoint!.latitude.toDouble(), widget.orderData.pickupPoint!.longitude.toDouble())
+          : PointLatLng(widget.orderData.deliveryPoint!.latitude.toDouble(), widget.orderData.deliveryPoint!.longitude.toDouble()),
     );
     if (result.points.isNotEmpty) {
       result.points.forEach((element) {

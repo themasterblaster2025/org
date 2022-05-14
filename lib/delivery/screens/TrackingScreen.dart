@@ -176,7 +176,7 @@ class TrackingScreenState extends State<TrackingScreen> {
                                     text: language.track,
                                     textStyle: primaryTextStyle(color: Colors.white),
                                     onTap: () async {
-                                      orderLatLong = LatLng(data.deliveryPoint!.latitude.toDouble(), data.deliveryPoint!.longitude.toDouble());
+                                      orderLatLong = data.status==ORDER_ACTIVE ? LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble()) : LatLng(data.deliveryPoint!.latitude.toDouble(), data.deliveryPoint!.longitude.toDouble());
                                       await setPolyLines(orderLat: orderLatLong);
                                       setState(() {});
                                     },

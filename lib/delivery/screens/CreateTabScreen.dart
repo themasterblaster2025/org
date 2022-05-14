@@ -249,12 +249,12 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                             child: AppButton(
                               elevation: 0,
                               color: Colors.transparent,
-                              padding: EdgeInsets.symmetric(vertical: 8,horizontal: 16),
+                              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                               shapeBorder: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(defaultRadius),
                                 side: BorderSide(color: colorPrimary),
                               ),
-                              child:  Text(language.notifyUser, style: primaryTextStyle(color: colorPrimary)),
+                              child: Text(language.notifyUser, style: primaryTextStyle(color: colorPrimary)),
                               onTap: () {
                                 showConfirmDialogCustom(
                                   context,
@@ -274,7 +274,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                 );
                               },
                             ),
-                          ).paddingOnly(top: 12,right: 16).visible(data.status == ORDER_ACTIVE),
+                          ).paddingOnly(top: 12, right: 16).visible(data.status == ORDER_ACTIVE),
                           Align(
                               alignment: Alignment.topRight,
                               child: AppButton(
@@ -294,7 +294,11 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                 ),
                                 onTap: () async {
                                   if (await checkPermission()) {
-                                    TrackingScreen(order: orderData, latLng: LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble()))
+                                    TrackingScreen(
+                                            order: orderData,
+                                            latLng: data.status == ORDER_ACTIVE
+                                                ? LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble())
+                                                : LatLng(data.deliveryPoint!.latitude.toDouble(), data.deliveryPoint!.longitude.toDouble()))
                                         .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
                                   }
                                 },
