@@ -696,4 +696,7 @@ class LanguageAf extends BaseLanguage {
 
   @override
   String get numberOfParcels => "Aantal pakkies";
+
+  @override
+  String get verified => "Geverifieer";
 }

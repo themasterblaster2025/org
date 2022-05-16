@@ -322,6 +322,14 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                   .visible(orderData!.status != ORDER_COMPLETED && orderData!.status != ORDER_CANCELLED)
                                             ],
                                           ),
+                                          if(getStringAsync(USER_TYPE) == CLIENT && userData!.isVerifiedDeliveryMan==1)
+                                            Row(
+                                              children: [
+                                                Icon(Icons.verified_user,color: Colors.green),
+                                                8.width,
+                                                Text(language.verified,style: primaryTextStyle(color: Colors.green)),
+                                              ],
+                                            ).paddingOnly(top: 16),
                                         ],
                                       ),
                                     ),

@@ -696,4 +696,7 @@ class LanguageDe extends BaseLanguage {
 
   @override
   String get numberOfParcels => "Anzahl der Parzellen";
+
+  @override
+  String get verified => "Verifiziert";
 }

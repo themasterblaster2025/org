@@ -696,4 +696,7 @@ class LanguageVi extends BaseLanguage {
 
   @override
   String get numberOfParcels => "Số lượng bưu kiện";
+
+  @override
+  String get verified => "Đã xác minh";
 }

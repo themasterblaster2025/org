@@ -696,4 +696,7 @@ class LanguageNl extends BaseLanguage {
 
   @override
   String get numberOfParcels => "Aantal pakketten";
+
+  @override
+  String get verified => "Geverifieerd";
 }

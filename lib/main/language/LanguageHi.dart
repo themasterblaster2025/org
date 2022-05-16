@@ -696,4 +696,7 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get numberOfParcels => "पार्सल की संख्या";
+
+  @override
+  String get verified => "सत्यापित";
 }

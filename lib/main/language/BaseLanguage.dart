@@ -466,4 +466,6 @@ abstract class BaseLanguage {
   String get resend;
 
   String get numberOfParcels;
+
+  String get verified;
 }

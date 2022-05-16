@@ -696,4 +696,7 @@ class LanguageEs extends BaseLanguage {
 
   @override
   String get numberOfParcels => "Número de parcelas";
+
+  @override
+  String get verified => "Verificado";
 }

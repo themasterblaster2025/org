@@ -87,7 +87,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
       orderId: widget.orderData!.id,
       pickupDatetime: picUpController.text,
       deliveryDatetime: deliveryDateController.text,
-      clientName: imageSignature != null ? '1' : '0',
+      clientName: (deliverySignature != null || imageSignature != null) ? '1' : '0',
       deliveryman: deliverySignature != null ? '1' : '0',
       picUpSignature: imageSignature,
       reason: reasonController.text,
@@ -322,13 +322,14 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                             if (!mIsCheck && widget.orderData!.paymentId == null && widget.isShowPayment) {
                               return toast(language.pleaseConfirmPayment);
                             } else {
-                              await showInDialog(context,
+                              /*await showInDialog(context,
                                   builder: (context) => OTPDialog(
                                       phoneNumber: widget.orderData!.status == ORDER_DEPARTED ? widget.orderData!.deliveryPoint!.contactNumber.validate() : widget.orderData!.pickupPoint!.contactNumber.validate(),
                                       onUpdate: () {
                                         saveOrderData();
                                       }),
-                                  barrierDismissible: false);
+                                  barrierDismissible: false);*/
+                              saveOrderData();
                             }
                           },
                         ).expand(),

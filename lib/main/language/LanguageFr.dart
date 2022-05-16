@@ -696,4 +696,7 @@ class LanguageFr extends BaseLanguage {
 
   @override
   String get numberOfParcels => "Nombre de colis";
+
+  @override
+  String get verified => "Vérifié";
 }

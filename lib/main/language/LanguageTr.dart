@@ -696,4 +696,7 @@ class LanguageTr extends BaseLanguage {
 
   @override
   String get numberOfParcels => "Parsel sayısı";
+
+  @override
+  String get verified => "Doğrulanmış";
 }

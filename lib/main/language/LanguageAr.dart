@@ -696,4 +696,7 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get numberOfParcels => "عدد الطرود";
+
+  @override
+  String get verified => "تم التحقق";
 }

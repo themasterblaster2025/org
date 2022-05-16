@@ -220,7 +220,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       },
       "extra_charges": extraChargeList,
       "parcel_type": parcelTypeCont.text,
-      "total_weight": weightController.text.toInt(),
+      "total_weight": weightController.text.toDouble(),
       "total_distance": totalDistance.toStringAsFixed(2).validate(),
       "payment_collect_from": paymentCollectFrom,
       "status": orderStatus,
@@ -426,8 +426,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   Text(language.weight, style: primaryTextStyle()).paddingAll(12).expand(),
                   VerticalDivider(thickness: 1),
                   Icon(Icons.remove, color: appStore.isDarkMode ? Colors.white : Colors.grey).paddingAll(12).onTap(() {
-                    if (weightController.text.toInt() > 1) {
-                      weightController.text = (weightController.text.toInt() - 1).toString();
+                    if (weightController.text.toDouble() > 1) {
+                      weightController.text = (weightController.text.toDouble() - 1).toString();
                     }
                   }),
                   VerticalDivider(thickness: 1),
@@ -447,7 +447,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   ),
                   VerticalDivider(thickness: 1),
                   Icon(Icons.add, color: appStore.isDarkMode ? Colors.white : Colors.grey).paddingAll(12).onTap(() {
-                    weightController.text = (weightController.text.toInt() + 1).toString();
+                    weightController.text = (weightController.text.toDouble() + 1).toString();
                   }),
                 ],
               ),

@@ -696,4 +696,7 @@ class LanguageId extends BaseLanguage {
 
   @override
   String get numberOfParcels => "Jumlah paket";
+
+  @override
+  String get verified => "Diverifikasi";
 }
