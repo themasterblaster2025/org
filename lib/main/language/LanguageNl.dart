@@ -699,4 +699,34 @@ class LanguageNl extends BaseLanguage {
 
   @override
   String get verified => "Geverifieerd";
+
+  @override
+  String get invoice => "Factuur";
+
+  @override
+  String get customerName => "Klantnaam:";
+
+  @override
+  String get deliveredTo => "Bezorgd bij:";
+
+  @override
+  String get invoiceNo => "Factuur nr:";
+
+  @override
+  String get invoiceDate => "Factuur datum:";
+
+  @override
+  String get orderedDate => "Bestelde datum:";
+
+  @override
+  String get invoiceCapital => "FACTUUR";
+
+  @override
+  String get product => "Product";
+
+  @override
+  String get price => "Prijs";
+
+  @override
+  String get subTotal => "Sub -totaal";
 }

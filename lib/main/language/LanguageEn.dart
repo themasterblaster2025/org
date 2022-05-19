@@ -699,4 +699,34 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get verified => "Verified";
+
+  @override
+  String get invoice => "Invoice";
+
+  @override
+  String get customerName => "Customer Name:";
+
+  @override
+  String get deliveredTo => "Delivered To:";
+
+  @override
+  String get invoiceNo => "Invoice No:";
+
+  @override
+  String get invoiceDate => "Invoice Date:";
+
+  @override
+  String get orderedDate => "Ordered Date:";
+
+  @override
+  String get invoiceCapital => "INVOICE";
+
+  @override
+  String get product => "Product";
+
+  @override
+  String get price => "Price";
+
+  @override
+  String get subTotal => "Sub Total";
 }

@@ -699,4 +699,34 @@ class LanguageEs extends BaseLanguage {
 
   @override
   String get verified => "Verificado";
+
+  @override
+  String get invoice => "Factura";
+
+  @override
+  String get customerName => "Nombre del cliente:";
+
+  @override
+  String get deliveredTo => "Entregado a:";
+
+  @override
+  String get invoiceNo => "Factura no:";
+
+  @override
+  String get invoiceDate => "Fecha de la factura:";
+
+  @override
+  String get orderedDate => "Fecha ordenada:";
+
+  @override
+  String get invoiceCapital => "FACTURA";
+
+  @override
+  String get product => "Producto";
+
+  @override
+  String get price => "Precio";
+
+  @override
+  String get subTotal => "Subcontrol";
 }

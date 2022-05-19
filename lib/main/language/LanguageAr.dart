@@ -699,4 +699,34 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get verified => "تم التحقق";
+
+  @override
+  String get invoice => "فاتورة";
+
+  @override
+  String get customerName => "اسم الزبون:";
+
+  @override
+  String get deliveredTo => "سلمت ل:";
+
+  @override
+  String get invoiceNo => "رقم الفاتورة:";
+
+  @override
+  String get invoiceDate => "تاريخ الفاتورة:";
+
+  @override
+  String get orderedDate => "تاريخ الطلب:";
+
+  @override
+  String get invoiceCapital => "فاتورة";
+
+  @override
+  String get product => "المنتج";
+
+  @override
+  String get price => "السعر";
+
+  @override
+  String get subTotal => "مجموع الفرعية";
 }

@@ -699,4 +699,34 @@ class LanguageAf extends BaseLanguage {
 
   @override
   String get verified => "Geverifieer";
+
+  @override
+  String get invoice => "Faktuur";
+
+  @override
+  String get customerName => "Kliënt naam:";
+
+  @override
+  String get deliveredTo => "Afgelewer aan:";
+
+  @override
+  String get invoiceNo => "Kwitansie No:";
+
+  @override
+  String get invoiceDate => "Faktuurdatum:";
+
+  @override
+  String get orderedDate => "Bestel datum:";
+
+  @override
+  String get invoiceCapital => "Faktuur";
+
+  @override
+  String get product => "Produk";
+
+  @override
+  String get price => "Prys";
+
+  @override
+  String get subTotal => "Subtotaal";
 }

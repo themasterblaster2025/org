@@ -699,4 +699,34 @@ class LanguageVi extends BaseLanguage {
 
   @override
   String get verified => "Đã xác minh";
+
+  @override
+  String get invoice => "Hóa đơn";
+
+  @override
+  String get customerName => "Tên khách hàng:";
+
+  @override
+  String get deliveredTo => "Giao cho:";
+
+  @override
+  String get invoiceNo => "Hóa đơn không có:";
+
+  @override
+  String get invoiceDate => "Ngày hóa đơn:";
+
+  @override
+  String get orderedDate => "Ngày đặt hàng:";
+
+  @override
+  String get invoiceCapital => "HÓA ĐƠN";
+
+  @override
+  String get product => "Sản phẩm";
+
+  @override
+  String get price => "Giá";
+
+  @override
+  String get subTotal => "Tổng số phụ";
 }

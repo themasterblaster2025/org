@@ -232,7 +232,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                       children: [
                                         Row(
                                           children: [
-                                            Text('Invoice', style: primaryTextStyle(color: colorPrimary)),
+                                            Text(language.invoice, style: primaryTextStyle(color: colorPrimary)),
                                             4.width,
                                             Icon(Icons.download_rounded, color: colorPrimary),
                                           ],

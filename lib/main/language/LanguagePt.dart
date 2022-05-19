@@ -699,4 +699,34 @@ class LanguagePt extends BaseLanguage {
 
   @override
   String get verified => "Verificado";
+
+  @override
+  String get invoice => "Fatura";
+
+  @override
+  String get customerName => "Nome do cliente:";
+
+  @override
+  String get deliveredTo => "Entregue a:";
+
+  @override
+  String get invoiceNo => "Fatura não:";
+
+  @override
+  String get invoiceDate => "Data da fatura:";
+
+  @override
+  String get orderedDate => "Data ordenada:";
+
+  @override
+  String get invoiceCapital => "FATURA";
+
+  @override
+  String get product => "produtos";
+
+  @override
+  String get price => "Preço";
+
+  @override
+  String get subTotal => "Subtono";
 }

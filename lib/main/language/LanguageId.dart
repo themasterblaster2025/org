@@ -699,4 +699,34 @@ class LanguageId extends BaseLanguage {
 
   @override
   String get verified => "Diverifikasi";
+
+  @override
+  String get invoice => "Faktur";
+
+  @override
+  String get customerName => "Nama Pelanggan:";
+
+  @override
+  String get deliveredTo => "Dikirim ke:";
+
+  @override
+  String get invoiceNo => "Nomor faktur:";
+
+  @override
+  String get invoiceDate => "Tanggal faktur:";
+
+  @override
+  String get orderedDate => "Tanggal yang dipesan:";
+
+  @override
+  String get invoiceCapital => "FAKTUR";
+
+  @override
+  String get product => "Produk";
+
+  @override
+  String get price => "Harga";
+
+  @override
+  String get subTotal => "Sub total";
 }

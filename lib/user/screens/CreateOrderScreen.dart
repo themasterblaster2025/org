@@ -194,6 +194,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   }
 
   createOrderApiCall(String orderStatus) async {
+    appStore.setLoading(true);
     Map req = {
       "id": widget.orderData != null ? widget.orderData!.id : "",
       "client_id": getIntAsync(USER_ID).toString(),
@@ -233,7 +234,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       "distance_charge": distanceCharge,
       "total_parcel": totalParcelController.text.toInt(),
     };
-    appStore.setLoading(true);
     await createOrder(req).then((value) {
       appStore.setLoading(false);
       toast(value.message);
@@ -436,7 +436,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     child: AppTextField(
                       controller: weightController,
                       textAlign: TextAlign.center,
-                      maxLength: 3,
+                      maxLength: 5,
                       textFieldType: TextFieldType.PHONE,
                       decoration: InputDecoration(
                         counterText: '',

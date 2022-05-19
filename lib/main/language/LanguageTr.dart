@@ -699,4 +699,34 @@ class LanguageTr extends BaseLanguage {
 
   @override
   String get verified => "Doğrulanmış";
+
+  @override
+  String get invoice => "Fatura";
+
+  @override
+  String get customerName => "Müşteri adı:";
+
+  @override
+  String get deliveredTo => "Teslim edildi:";
+
+  @override
+  String get invoiceNo => "Fatura Hayır:";
+
+  @override
+  String get invoiceDate => "Fatura tarihi:";
+
+  @override
+  String get orderedDate => "Sipariş edilen tarih:";
+
+  @override
+  String get invoiceCapital => "FATURA";
+
+  @override
+  String get product => "Ürün";
+
+  @override
+  String get price => "Fiyat";
+
+  @override
+  String get subTotal => "Ara toplam";
 }

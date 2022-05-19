@@ -699,4 +699,34 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get verified => "सत्यापित";
+
+  @override
+  String get invoice => "इनवॉइस";
+
+  @override
+  String get customerName => "ग्राहक का नाम:";
+
+  @override
+  String get deliveredTo => "को पहुंचा दिया गया:";
+
+  @override
+  String get invoiceNo => "चालान नंबर:";
+
+  @override
+  String get invoiceDate => "चालान की तारीख:";
+
+  @override
+  String get orderedDate => "आदेश दिया गया दिनांक:";
+
+  @override
+  String get invoiceCapital => "इनवॉइस";
+
+  @override
+  String get product => "उत्पाद";
+
+  @override
+  String get price => "कीमत";
+
+  @override
+  String get subTotal => "उप -कुल";
 }

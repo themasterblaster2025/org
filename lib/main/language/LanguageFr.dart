@@ -699,4 +699,34 @@ class LanguageFr extends BaseLanguage {
 
   @override
   String get verified => "Vérifié";
+
+  @override
+  String get invoice => "Facturer";
+
+  @override
+  String get customerName => "Nom du client:";
+
+  @override
+  String get deliveredTo => "Livré à:";
+
+  @override
+  String get invoiceNo => "N ° de facture:";
+
+  @override
+  String get invoiceDate => "Date de facture:";
+
+  @override
+  String get orderedDate => "Date commandée:";
+
+  @override
+  String get invoiceCapital => "FACTURER";
+
+  @override
+  String get product => "Produit";
+
+  @override
+  String get price => "Prix";
+
+  @override
+  String get subTotal => "Sous-total";
 }

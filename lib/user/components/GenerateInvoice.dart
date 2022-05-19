@@ -1,9 +1,12 @@
 import 'dart:io';
 import 'package:intl/intl.dart';
+import 'package:mighty_delivery/main.dart';
+import 'package:mighty_delivery/main/models/CountryListModel.dart';
 import 'package:mighty_delivery/main/models/ExtraChargeRequestModel.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -31,7 +34,7 @@ generateInvoiceCall(OrderData orderData) async {
   });
 
   final invoice = Invoice(
-    supplier: Supplier(name: 'Roberts Privat Limited', address: 'Sarah Street 9, Beijing, Ahmedabad', contactNumber: '+91 9845345665'),
+    supplier: Supplier(name: 'Roberts Private Limited', address: 'Sarah Street 9, Beijing, Ahmedabad', contactNumber: '+91 9845345665'),
     customer: Customer(
       name: '${orderData.clientName}',
       address: '${orderData.deliveryPoint!.address}',
@@ -43,18 +46,18 @@ generateInvoiceCall(OrderData orderData) async {
     ),
     items: [
       InvoiceItem(
-        product: 'Documents',
-        description: 'Fixed Charge',
+        product: '${orderData.parcelType} (${orderData.totalWeight} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weightType})',
+        description: language.deliveryCharge,
         price: orderData.fixedCharges!.toDouble(),
       ),
       InvoiceItem(
         product: '',
-        description: 'Distance Charge',
+        description: language.distanceCharge,
         price: orderData.distanceCharge!.toDouble(),
       ),
       InvoiceItem(
         product: '',
-        description: 'Weight Charge',
+        description: language.weightCharge,
         price: orderData.weightCharge!.toDouble(),
       ),
     ],
@@ -100,7 +103,12 @@ class PdfApi {
 class PdfInvoiceApi {
   static Future<File> generate(Invoice invoice) async {
     final pdf = Document(
-      theme: ThemeData.withFont(fontFallback: [await PdfGoogleFonts.hindLight(), await PdfGoogleFonts.notoSansArabicLight(), await PdfGoogleFonts.notoSansSymbols2Regular(), await PdfGoogleFonts.beVietnamProRegular()]),
+      theme: ThemeData.withFont(fontFallback: [
+        await PdfGoogleFonts.hindRegular(),
+        await PdfGoogleFonts.iBMPlexSansArabicRegular(),
+        await PdfGoogleFonts.notoSansSymbols2Regular(),
+        await PdfGoogleFonts.beVietnamProRegular(),
+      ]),
     );
 
     pdf.addPage(MultiPage(
@@ -125,11 +133,11 @@ class PdfInvoiceApi {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Customer Name:', style: TextStyle(color: PdfColors.blue)),
+            Text(language.customerName, style: TextStyle(color: PdfColors.blue)),
             SizedBox(height: 4),
             Text('${invoice.customer.name}'),
             SizedBox(height: 16),
-            Text('Delivered To:', style: TextStyle(color: PdfColors.blue)),
+            Text(language.deliveredTo, style: TextStyle(color: PdfColors.blue)),
             SizedBox(height: 4),
             Text('${invoice.customer.address}'),
           ],
@@ -137,9 +145,9 @@ class PdfInvoiceApi {
       ),
       Spacer(),
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text('Invoice No: ${invoice.info.number}'),
-        Text('Invoice Date: ${Utils.formatDate(invoice.info.invoiceDate)}'),
-        Text('Ordered Date: ${Utils.formatDate(invoice.info.orderedDate)}'),
+        Text('${language.invoiceNo} ${invoice.info.number}'),
+        Text('${language.invoiceDate} ${Utils.formatDate(invoice.info.invoiceDate)}'),
+        Text('${language.orderedDate} ${Utils.formatDate(invoice.info.orderedDate)}'),
       ]),
     ]);
   }
@@ -150,7 +158,7 @@ class PdfInvoiceApi {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            'INVOICE',
+            language.invoiceCapital,
             style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: PdfColors.blue),
           ),
           pw.Text('${invoice.supplier.name}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
@@ -164,7 +172,7 @@ class PdfInvoiceApi {
   }
 
   static Widget buildInvoice(Invoice invoice) {
-    final headers = ['Product', 'Description', 'Price'];
+    final headers = [language.product, language.description, language.price];
     final data = invoice.items.map((item) {
       return [
         item.product,
@@ -202,7 +210,7 @@ class PdfInvoiceApi {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 buildText(
-                  title: 'Sub total',
+                  title: language.subTotal,
                   value: Utils.formatPrice(subTotal),
                   unite: true,
                 ),
@@ -226,7 +234,7 @@ class PdfInvoiceApi {
                 Container(height: 1, color: PdfColors.grey400),
                 SizedBox(height: 2 * PdfPageFormat.mm),
                 buildText(
-                  title: 'Total',
+                  title: language.total,
                   value: Utils.formatPrice(invoice.totalAmount),
                   unite: true,
                 ),
@@ -243,7 +251,7 @@ class PdfInvoiceApi {
         children: [
           Divider(),
           SizedBox(height: 2 * PdfPageFormat.mm),
-          buildSimpleText(title: 'Address', value: invoice.supplier.address),
+          buildSimpleText(title: language.address, value: invoice.supplier.address),
         ],
       );
 

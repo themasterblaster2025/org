@@ -468,4 +468,24 @@ abstract class BaseLanguage {
   String get numberOfParcels;
 
   String get verified;
+
+  String get invoice;
+
+  String get customerName;
+
+  String get deliveredTo;
+
+  String get invoiceNo;
+
+  String get invoiceDate;
+
+  String get orderedDate;
+
+  String get invoiceCapital;
+
+  String get product;
+
+  String get price;
+
+  String get subTotal;
 }

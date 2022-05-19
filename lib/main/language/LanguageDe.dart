@@ -699,4 +699,34 @@ class LanguageDe extends BaseLanguage {
 
   @override
   String get verified => "Verifiziert";
+
+  @override
+  String get invoice => "Rechnung";
+
+  @override
+  String get customerName => "Kundenname:";
+
+  @override
+  String get deliveredTo => "Geliefert an:";
+
+  @override
+  String get invoiceNo => "Rechnung Nr.:";
+
+  @override
+  String get invoiceDate => "Rechnungsdatum:";
+
+  @override
+  String get orderedDate => "Bestellter Datum:";
+
+  @override
+  String get invoiceCapital => "RECHNUNG";
+
+  @override
+  String get product => "Produkt";
+
+  @override
+  String get price => "Preis";
+
+  @override
+  String get subTotal => "Sub Total";
 }
