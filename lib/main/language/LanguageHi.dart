@@ -690,4 +690,60 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get demoMsg => 'परीक्षक की भूमिका को यह क्रिया करने की अनुमति नहीं है';
+  @override
+  String get verificationCompleted => "सत्यापन पूरा हुआ";
+
+  @override
+  String get codeSent => "कोड भेजा है";
+
+  @override
+  String get otpVerification => "ओटीपी सत्यापन";
+
+  @override
+  String get enterTheCodeSendTo => "भेजा गया कोड दर्ज करें";
+
+  @override
+  String get invalidVerificationCode => "अवैध सत्यापन कोड";
+
+  @override
+  String get didNotReceiveTheCode => "क्या कोड प्राप्त नहीं हुआ?";
+
+  @override
+  String get resend => "पुन: भेजें";
+
+  @override
+  String get numberOfParcels => "पार्सल की संख्या";
+
+  @override
+  String get verified => "सत्यापित";
+
+  @override
+  String get invoice => "इनवॉइस";
+
+  @override
+  String get customerName => "ग्राहक का नाम:";
+
+  @override
+  String get deliveredTo => "को पहुंचा दिया गया:";
+
+  @override
+  String get invoiceNo => "चालान नंबर:";
+
+  @override
+  String get invoiceDate => "चालान की तारीख:";
+
+  @override
+  String get orderedDate => "आदेश दिया गया दिनांक:";
+
+  @override
+  String get invoiceCapital => "इनवॉइस";
+
+  @override
+  String get product => "उत्पाद";
+
+  @override
+  String get price => "कीमत";
+
+  @override
+  String get subTotal => "उप -कुल";
 }

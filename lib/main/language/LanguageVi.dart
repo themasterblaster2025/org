@@ -690,4 +690,60 @@ class LanguageVi extends BaseLanguage {
 
   @override
   String get demoMsg => 'Vai trò người kiểm tra không được phép thực hiện hành động này';
+  @override
+  String get verificationCompleted => "Xác minh hoàn thành";
+
+  @override
+  String get codeSent => "Mã được gửi";
+
+  @override
+  String get otpVerification => "Xác minh OTP";
+
+  @override
+  String get enterTheCodeSendTo => "Nhập mã được gửi đến";
+
+  @override
+  String get invalidVerificationCode => "Mã xác minh không hợp lệ";
+
+  @override
+  String get didNotReceiveTheCode => "Không nhận được mã?";
+
+  @override
+  String get resend => "Chia rẽ";
+
+  @override
+  String get numberOfParcels => "Số lượng bưu kiện";
+
+  @override
+  String get verified => "Đã xác minh";
+
+  @override
+  String get invoice => "Hóa đơn";
+
+  @override
+  String get customerName => "Tên khách hàng:";
+
+  @override
+  String get deliveredTo => "Giao cho:";
+
+  @override
+  String get invoiceNo => "Hóa đơn không có:";
+
+  @override
+  String get invoiceDate => "Ngày hóa đơn:";
+
+  @override
+  String get orderedDate => "Ngày đặt hàng:";
+
+  @override
+  String get invoiceCapital => "HÓA ĐƠN";
+
+  @override
+  String get product => "Sản phẩm";
+
+  @override
+  String get price => "Giá";
+
+  @override
+  String get subTotal => "Tổng số phụ";
 }

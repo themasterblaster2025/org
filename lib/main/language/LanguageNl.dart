@@ -690,4 +690,60 @@ class LanguageNl extends BaseLanguage {
 
   @override
   String get demoMsg => 'Testerrol niet toegestaan ​​om deze actie uit te voeren';
+  @override
+  String get verificationCompleted => "Verificatie voltooid";
+
+  @override
+  String get codeSent => "Code verzonden";
+
+  @override
+  String get otpVerification => "OTP -verificatie";
+
+  @override
+  String get enterTheCodeSendTo => "Voer de code in die is verzonden naar";
+
+  @override
+  String get invalidVerificationCode => "Ongeldige verificatie code";
+
+  @override
+  String get didNotReceiveTheCode => "Heeft de code niet ontvangen?";
+
+  @override
+  String get resend => "OPNIEUW VERZENDEN";
+
+  @override
+  String get numberOfParcels => "Aantal pakketten";
+
+  @override
+  String get verified => "Geverifieerd";
+
+  @override
+  String get invoice => "Factuur";
+
+  @override
+  String get customerName => "Klantnaam:";
+
+  @override
+  String get deliveredTo => "Bezorgd bij:";
+
+  @override
+  String get invoiceNo => "Factuur nr:";
+
+  @override
+  String get invoiceDate => "Factuur datum:";
+
+  @override
+  String get orderedDate => "Bestelde datum:";
+
+  @override
+  String get invoiceCapital => "FACTUUR";
+
+  @override
+  String get product => "Product";
+
+  @override
+  String get price => "Prijs";
+
+  @override
+  String get subTotal => "Sub -totaal";
 }

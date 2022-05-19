@@ -690,4 +690,60 @@ class LanguagePt extends BaseLanguage {
 
   @override
   String get demoMsg => 'Função do testador não é permitida para realizar esta ação';
+  @override
+  String get verificationCompleted => "Verificação concluída";
+
+  @override
+  String get codeSent => "Código enviado";
+
+  @override
+  String get otpVerification => "Verificação de OTP";
+
+  @override
+  String get enterTheCodeSendTo => "Digite o código enviado para";
+
+  @override
+  String get invalidVerificationCode => "Código de verificação inválido";
+
+  @override
+  String get didNotReceiveTheCode => "Não recebeu o código?";
+
+  @override
+  String get resend => "REENVIAR";
+
+  @override
+  String get numberOfParcels => "Número de parcelas";
+
+  @override
+  String get verified => "Verificado";
+
+  @override
+  String get invoice => "Fatura";
+
+  @override
+  String get customerName => "Nome do cliente:";
+
+  @override
+  String get deliveredTo => "Entregue a:";
+
+  @override
+  String get invoiceNo => "Fatura não:";
+
+  @override
+  String get invoiceDate => "Data da fatura:";
+
+  @override
+  String get orderedDate => "Data ordenada:";
+
+  @override
+  String get invoiceCapital => "FATURA";
+
+  @override
+  String get product => "produtos";
+
+  @override
+  String get price => "Preço";
+
+  @override
+  String get subTotal => "Subtono";
 }

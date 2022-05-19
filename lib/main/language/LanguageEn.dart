@@ -690,4 +690,60 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get demoMsg => 'Tester role not allowed to perform this action';
+  @override
+  String get verificationCompleted => "Verification completed";
+
+  @override
+  String get codeSent => "Code Sent";
+
+  @override
+  String get otpVerification => "OTP Verification";
+
+  @override
+  String get enterTheCodeSendTo => "Enter the code sent to";
+
+  @override
+  String get invalidVerificationCode => "Invalid Verification Code";
+
+  @override
+  String get didNotReceiveTheCode => "Didn\'t receive the code?";
+
+  @override
+  String get resend => "RESEND";
+
+  @override
+  String get numberOfParcels => "Number of Parcels";
+
+  @override
+  String get verified => "Verified";
+
+  @override
+  String get invoice => "Invoice";
+
+  @override
+  String get customerName => "Customer Name:";
+
+  @override
+  String get deliveredTo => "Delivered To:";
+
+  @override
+  String get invoiceNo => "Invoice No:";
+
+  @override
+  String get invoiceDate => "Invoice Date:";
+
+  @override
+  String get orderedDate => "Ordered Date:";
+
+  @override
+  String get invoiceCapital => "INVOICE";
+
+  @override
+  String get product => "Product";
+
+  @override
+  String get price => "Price";
+
+  @override
+  String get subTotal => "Sub Total";
 }

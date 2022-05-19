@@ -690,4 +690,61 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get demoMsg => 'اختبار الدور غير المسموح به لأداء هذا الإجراء';
+
+  @override
+  String get verificationCompleted => "الانتهاء من التحقق";
+
+  @override
+  String get codeSent => "تم ارسال الكود";
+
+  @override
+  String get otpVerification => "التحقق من OTP";
+
+  @override
+  String get enterTheCodeSendTo => "أدخل الرمز المرسلة إلى";
+
+  @override
+  String get invalidVerificationCode => "رمز التحقق غير صالح";
+
+  @override
+  String get didNotReceiveTheCode => "ألم تتلقى الرمز؟";
+
+  @override
+  String get resend => "إعادة إرسال";
+
+  @override
+  String get numberOfParcels => "عدد الطرود";
+
+  @override
+  String get verified => "تم التحقق";
+
+  @override
+  String get invoice => "فاتورة";
+
+  @override
+  String get customerName => "اسم الزبون:";
+
+  @override
+  String get deliveredTo => "سلمت ل:";
+
+  @override
+  String get invoiceNo => "رقم الفاتورة:";
+
+  @override
+  String get invoiceDate => "تاريخ الفاتورة:";
+
+  @override
+  String get orderedDate => "تاريخ الطلب:";
+
+  @override
+  String get invoiceCapital => "فاتورة";
+
+  @override
+  String get product => "المنتج";
+
+  @override
+  String get price => "السعر";
+
+  @override
+  String get subTotal => "مجموع الفرعية";
 }

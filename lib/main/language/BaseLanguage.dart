@@ -462,4 +462,41 @@ abstract class BaseLanguage {
   String get myFatoorah;
 
   String get demoMsg;
+  String get verificationCompleted;
+
+  String get codeSent;
+
+  String get otpVerification;
+
+  String get enterTheCodeSendTo;
+
+  String get invalidVerificationCode;
+
+  String get didNotReceiveTheCode;
+
+  String get resend;
+
+  String get numberOfParcels;
+
+  String get verified;
+
+  String get invoice;
+
+  String get customerName;
+
+  String get deliveredTo;
+
+  String get invoiceNo;
+
+  String get invoiceDate;
+
+  String get orderedDate;
+
+  String get invoiceCapital;
+
+  String get product;
+
+  String get price;
+
+  String get subTotal;
 }

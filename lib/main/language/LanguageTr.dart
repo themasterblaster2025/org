@@ -690,4 +690,60 @@ class LanguageTr extends BaseLanguage {
 
   @override
   String get demoMsg => 'Test Cihazı Rolü bu eylemi gerçekleştirmesine izin verilmedi';
+  @override
+  String get verificationCompleted => "Doğrulama tamamlandı";
+
+  @override
+  String get codeSent => "Kod gönderildi";
+
+  @override
+  String get otpVerification => "OTP doğrulaması";
+
+  @override
+  String get enterTheCodeSendTo => "Gönderilen kodu girin";
+
+  @override
+  String get invalidVerificationCode => "Geçersiz Doğrulama Kodu";
+
+  @override
+  String get didNotReceiveTheCode => "Kodu almadı mı?";
+
+  @override
+  String get resend => "YENİDEN GÖNDER";
+
+  @override
+  String get numberOfParcels => "Parsel sayısı";
+
+  @override
+  String get verified => "Doğrulanmış";
+
+  @override
+  String get invoice => "Fatura";
+
+  @override
+  String get customerName => "Müşteri adı:";
+
+  @override
+  String get deliveredTo => "Teslim edildi:";
+
+  @override
+  String get invoiceNo => "Fatura Hayır:";
+
+  @override
+  String get invoiceDate => "Fatura tarihi:";
+
+  @override
+  String get orderedDate => "Sipariş edilen tarih:";
+
+  @override
+  String get invoiceCapital => "FATURA";
+
+  @override
+  String get product => "Ürün";
+
+  @override
+  String get price => "Fiyat";
+
+  @override
+  String get subTotal => "Ara toplam";
 }

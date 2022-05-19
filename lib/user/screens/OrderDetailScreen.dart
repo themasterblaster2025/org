@@ -216,24 +216,37 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                               Container(
                                 decoration: BoxDecoration(color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
                                 padding: EdgeInsets.all(12),
-                                child: Row(
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Container(
-                                      decoration:
-                                          boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(8), border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), backgroundColor: Colors.transparent),
-                                      padding: EdgeInsets.all(8),
-                                      child: Image.asset(parcelTypeIcon(orderData!.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
-                                    ),
-                                    8.width,
-                                    Column(
+                                    Row(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text(orderData!.parcelType.validate(), style: boldTextStyle()),
-                                        4.height,
-                                        Text('${orderData!.totalWeight} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weightType}', style: secondaryTextStyle()),
+                                        Container(
+                                          decoration:
+                                              boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(8), border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), backgroundColor: Colors.transparent),
+                                          padding: EdgeInsets.all(8),
+                                          child: Image.asset(parcelTypeIcon(orderData!.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
+                                        ),
+                                        8.width,
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(orderData!.parcelType.validate(), style: boldTextStyle()),
+                                            4.height,
+                                            Text('${orderData!.totalWeight} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weightType}', style: secondaryTextStyle()),
+                                          ],
+                                        ).expand(),
                                       ],
-                                    ).expand(),
+                                    ),
+                                    Divider(height: 30).visible(orderData!.totalParcel!=null),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(language.numberOfParcels, style: primaryTextStyle()),
+                                        Text('${orderData!.totalParcel ?? 1}', style: primaryTextStyle()),
+                                      ],
+                                    ).visible(orderData!.totalParcel!=null),
                                   ],
                                 ),
                               ),
@@ -309,6 +322,14 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                   .visible(orderData!.status != ORDER_COMPLETED && orderData!.status != ORDER_CANCELLED)
                                             ],
                                           ),
+                                          if(getStringAsync(USER_TYPE) == CLIENT && userData!.isVerifiedDeliveryMan==1)
+                                            Row(
+                                              children: [
+                                                Icon(Icons.verified_user,color: Colors.green),
+                                                8.width,
+                                                Text(language.verified,style: primaryTextStyle(color: Colors.green)),
+                                              ],
+                                            ).paddingOnly(top: 16),
                                         ],
                                       ),
                                     ),

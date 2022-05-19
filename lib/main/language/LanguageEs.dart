@@ -690,4 +690,60 @@ class LanguageEs extends BaseLanguage {
 
   @override
   String get demoMsg => 'El papel del probador no se permite realizar esta acción.';
+  @override
+  String get verificationCompleted => "Verificación completada";
+
+  @override
+  String get codeSent => "Código enviado";
+
+  @override
+  String get otpVerification => "Verificación OTP";
+
+  @override
+  String get enterTheCodeSendTo => "Ingrese el código enviado a";
+
+  @override
+  String get invalidVerificationCode => "Código de verificación invalido";
+
+  @override
+  String get didNotReceiveTheCode => "¿No recibió el código?";
+
+  @override
+  String get resend => "Revender";
+
+  @override
+  String get numberOfParcels => "Número de parcelas";
+
+  @override
+  String get verified => "Verificado";
+
+  @override
+  String get invoice => "Factura";
+
+  @override
+  String get customerName => "Nombre del cliente:";
+
+  @override
+  String get deliveredTo => "Entregado a:";
+
+  @override
+  String get invoiceNo => "Factura no:";
+
+  @override
+  String get invoiceDate => "Fecha de la factura:";
+
+  @override
+  String get orderedDate => "Fecha ordenada:";
+
+  @override
+  String get invoiceCapital => "FACTURA";
+
+  @override
+  String get product => "Producto";
+
+  @override
+  String get price => "Precio";
+
+  @override
+  String get subTotal => "Subcontrol";
 }

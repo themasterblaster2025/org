@@ -690,4 +690,60 @@ class LanguageDe extends BaseLanguage {
 
   @override
   String get demoMsg => 'Tester Rolle darf diese Aktion nicht ausführen';
+  @override
+  String get verificationCompleted => "Überprüfung abgeschlossen";
+
+  @override
+  String get codeSent => "Code gesendet";
+
+  @override
+  String get otpVerification => "OTP -Überprüfung";
+
+  @override
+  String get enterTheCodeSendTo => "Geben Sie den gesendeten Code ein";
+
+  @override
+  String get invalidVerificationCode => "Ungültiger Bestätigungscode";
+
+  @override
+  String get didNotReceiveTheCode => "Hat der Code nicht erhalten?";
+
+  @override
+  String get resend => "ERNEUT SENDEN";
+
+  @override
+  String get numberOfParcels => "Anzahl der Parzellen";
+
+  @override
+  String get verified => "Verifiziert";
+
+  @override
+  String get invoice => "Rechnung";
+
+  @override
+  String get customerName => "Kundenname:";
+
+  @override
+  String get deliveredTo => "Geliefert an:";
+
+  @override
+  String get invoiceNo => "Rechnung Nr.:";
+
+  @override
+  String get invoiceDate => "Rechnungsdatum:";
+
+  @override
+  String get orderedDate => "Bestellter Datum:";
+
+  @override
+  String get invoiceCapital => "RECHNUNG";
+
+  @override
+  String get product => "Produkt";
+
+  @override
+  String get price => "Preis";
+
+  @override
+  String get subTotal => "Sub Total";
 }

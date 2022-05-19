@@ -271,7 +271,7 @@ String? paymentStatus(String paymentStatus) {
   } else if (paymentStatus.toLowerCase() == PAYMENT_PAID.toLowerCase()) {
     return language.paid;
   }
-  return '';
+  return language.pending;
 }
 
 String? paymentCollectForm(String paymentType) {
@@ -280,7 +280,7 @@ String? paymentCollectForm(String paymentType) {
   } else if (paymentType.toLowerCase() == PAYMENT_ON_DELIVERY.toLowerCase()) {
     return language.onDelivery;
   }
-  return '';
+  return language.onPickup;
 }
 
 String? paymentType(String paymentType) {

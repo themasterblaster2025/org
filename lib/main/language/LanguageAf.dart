@@ -690,4 +690,61 @@ class LanguageAf extends BaseLanguage {
 
   @override
   String get demoMsg => 'Testerrol mag nie hierdie aksie uitvoer nie';
+
+  @override
+  String get verificationCompleted => "Verifikasie voltooi";
+
+  @override
+  String get codeSent => "Kode gestuur";
+
+  @override
+  String get otpVerification => "OTP -verifikasie";
+
+  @override
+  String get enterTheCodeSendTo => "Voer die kode in wat gestuur word";
+
+  @override
+  String get invalidVerificationCode => "Ongeldige verifikasiekode";
+
+  @override
+  String get didNotReceiveTheCode => "Het u nie die kode ontvang nie?";
+
+  @override
+  String get resend => "Herlaai";
+
+  @override
+  String get numberOfParcels => "Aantal pakkies";
+
+  @override
+  String get verified => "Geverifieer";
+
+  @override
+  String get invoice => "Faktuur";
+
+  @override
+  String get customerName => "Kliënt naam:";
+
+  @override
+  String get deliveredTo => "Afgelewer aan:";
+
+  @override
+  String get invoiceNo => "Kwitansie No:";
+
+  @override
+  String get invoiceDate => "Faktuurdatum:";
+
+  @override
+  String get orderedDate => "Bestel datum:";
+
+  @override
+  String get invoiceCapital => "Faktuur";
+
+  @override
+  String get product => "Produk";
+
+  @override
+  String get price => "Prys";
+
+  @override
+  String get subTotal => "Subtotaal";
 }

@@ -1,7 +1,5 @@
 import 'package:mighty_delivery/main/models/PaginationModel.dart';
 
-import 'ExtraChargeRequestModel.dart';
-
 class OrderListModel {
   PaginationModel? pagination;
   List<OrderData>? data;
@@ -103,6 +101,7 @@ class OrderData {
   bool? returnOrderId;
   num? weightCharge;
   num? distanceCharge;
+  num? totalParcel;
 
   OrderData({
     this.id,
@@ -140,6 +139,7 @@ class OrderData {
     this.returnOrderId,
     this.weightCharge,
     this.distanceCharge,
+    this.totalParcel,
   });
 
   OrderData.fromJson(Map<String, dynamic> json) {
@@ -178,6 +178,7 @@ class OrderData {
     returnOrderId = json['return_order_id'];
     weightCharge = json['weight_charge'];
     distanceCharge = json['distance_charge'];
+    totalParcel = json['total_parcel'];
   }
 
   Map<String, dynamic> toJson() {
@@ -221,6 +222,7 @@ class OrderData {
     data['return_order_id'] = this.returnOrderId;
     data['weight_charge'] = this.weightCharge;
     data['distance_charge'] = this.distanceCharge;
+    data['total_parcel'] = this.totalParcel;
     return data;
   }
 }

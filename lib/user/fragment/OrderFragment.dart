@@ -14,6 +14,8 @@ import 'package:mighty_delivery/user/screens/OrderDetailScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../components/GenerateInvoice.dart';
+
 class OrderFragment extends StatefulWidget {
   static String tag = '/OrderFragment';
 
@@ -166,7 +168,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                         Row(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            ImageIcon(AssetImage('assets/icons/ic_pick_location.png'),size: 24,color: colorPrimary),
+                                            ImageIcon(AssetImage('assets/icons/ic_pick_location.png'), size: 24, color: colorPrimary),
                                             12.width,
                                             Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,7 +176,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                                 Text('${item.pickupPoint!.address}', style: primaryTextStyle()),
                                                 if (item.pickupDatetime == null && item.pickupPoint!.endTime != null && item.pickupPoint!.startTime != null)
                                                   Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(item.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(item.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(item.pickupPoint!.endTime!).toLocal())}',
-                                                      style: secondaryTextStyle())
+                                                          style: secondaryTextStyle())
                                                       .paddingOnly(top: 8),
                                               ],
                                             ).expand(),
@@ -187,7 +189,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                         ),
                                       ],
                                     ),
-                                    DottedLine(dashColor:borderColor).paddingSymmetric(vertical: 16,horizontal: 24),
+                                    DottedLine(dashColor: borderColor).paddingSymmetric(vertical: 16, horizontal: 24),
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
@@ -204,7 +206,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                         Row(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            ImageIcon(AssetImage('assets/icons/ic_delivery_location.png'),size: 24,color: colorPrimary),
+                                            ImageIcon(AssetImage('assets/icons/ic_delivery_location.png'), size: 24, color: colorPrimary),
                                             12.width,
                                             Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -212,7 +214,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                                 Text('${item.deliveryPoint!.address}', style: primaryTextStyle()),
                                                 if (item.deliveryDatetime == null && item.deliveryPoint!.endTime != null && item.deliveryPoint!.startTime != null)
                                                   Text('${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(item.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(item.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(item.deliveryPoint!.endTime!).toLocal())}',
-                                                      style: secondaryTextStyle())
+                                                          style: secondaryTextStyle())
                                                       .paddingOnly(top: 8),
                                               ],
                                             ).expand(),
@@ -225,30 +227,40 @@ class OrderFragmentState extends State<OrderFragment> {
                                         ),
                                       ],
                                     ),
-                                    Align(
-                                      alignment: Alignment.topRight,
-                                      child: AppButton(
-                                        elevation: 0,
-                                        width: 135,
-                                        height: 35,
-                                        color: Colors.transparent,
-                                        padding: EdgeInsets.zero,
-                                        shapeBorder: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(defaultRadius),
-                                          side: BorderSide(color: colorPrimary),
-                                        ),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
                                           children: [
-                                            Text(language.trackOrder, style: primaryTextStyle(color: colorPrimary)),
-                                            Icon(Icons.arrow_right, color: colorPrimary),
+                                            Text(language.invoice, style: primaryTextStyle(color: colorPrimary)),
+                                            4.width,
+                                            Icon(Icons.download_rounded, color: colorPrimary),
                                           ],
-                                        ),
-                                        onTap: () {
-                                          OrderTrackingScreen(orderData: item).launch(context);
-                                        },
-                                      ),
-                                    ).paddingOnly(top: 16).visible(item.status == ORDER_DEPARTED || item.status == ORDER_ACTIVE)
+                                        ).onTap(() {
+                                          generateInvoiceCall(item);
+                                        }),
+                                        AppButton(
+                                          elevation: 0,
+                                          height: 35,
+                                          color: Colors.transparent,
+                                          padding: EdgeInsets.symmetric(horizontal: 8),
+                                          shapeBorder: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(defaultRadius),
+                                            side: BorderSide(color: colorPrimary),
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(language.trackOrder, style: primaryTextStyle(color: colorPrimary)),
+                                              Icon(Icons.arrow_right, color: colorPrimary),
+                                            ],
+                                          ),
+                                          onTap: () {
+                                            OrderTrackingScreen(orderData: item).launch(context);
+                                          },
+                                        ).visible(item.status == ORDER_DEPARTED || item.status == ORDER_ACTIVE),
+                                      ],
+                                    ).paddingOnly(top: 16),
                                   ],
                                 ),
                               ),
