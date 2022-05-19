@@ -436,7 +436,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     child: AppTextField(
                       controller: weightController,
                       textAlign: TextAlign.center,
-                      maxLength: 2,
+                      maxLength: 3,
                       textFieldType: TextFieldType.PHONE,
                       decoration: InputDecoration(
                         counterText: '',

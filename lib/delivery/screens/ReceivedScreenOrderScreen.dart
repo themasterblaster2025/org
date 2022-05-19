@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
@@ -322,14 +321,13 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                             if (!mIsCheck && widget.orderData!.paymentId == null && widget.isShowPayment) {
                               return toast(language.pleaseConfirmPayment);
                             } else {
-                              /*await showInDialog(context,
+                              await showInDialog(context,
                                   builder: (context) => OTPDialog(
                                       phoneNumber: widget.orderData!.status == ORDER_DEPARTED ? widget.orderData!.deliveryPoint!.contactNumber.validate() : widget.orderData!.pickupPoint!.contactNumber.validate(),
                                       onUpdate: () {
                                         saveOrderData();
                                       }),
-                                  barrierDismissible: false);*/
-                              saveOrderData();
+                                  barrierDismissible: false);
                             }
                           },
                         ).expand(),
@@ -389,6 +387,8 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
         log(deliverySignature!.path);
       }
     }
+
+
     if (widget.orderData!.paymentId == null && widget.orderData!.paymentCollectFrom == PAYMENT_ON_PICKUP && (widget.orderData!.status == ORDER_ACTIVE || widget.orderData!.status == ORDER_ARRIVED)) {
       appStore.setLoading(true);
       await paymentConfirmDialog(widget.orderData!);

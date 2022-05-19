@@ -1,7 +1,5 @@
 import 'package:mighty_delivery/main/models/PaginationModel.dart';
 
-import 'ExtraChargeRequestModel.dart';
-
 class OrderListModel {
   PaginationModel? pagination;
   List<OrderData>? data;
