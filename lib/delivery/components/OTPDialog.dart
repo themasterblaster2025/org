@@ -42,8 +42,8 @@ class OTPDialogState extends State<OTPDialog> {
       },
       verificationFailed: (FirebaseAuthException e) {
         if (e.code == 'invalid-phone-number') {
-          toast('The provided phone number is not valid.');
-          throw 'The provided phone number is not valid.';
+          toast(language.phoneNumberInvalid);
+          throw language.phoneNumberInvalid;
         } else {
           toast(e.toString());
           throw e.toString();

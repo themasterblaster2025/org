@@ -747,4 +747,7 @@ class LanguageId extends BaseLanguage {
 
   @override
   String get subTotal => "Sub total";
+
+  @override
+  String get phoneNumberInvalid => "Nomor telepon yang disediakan tidak valid.";
 }

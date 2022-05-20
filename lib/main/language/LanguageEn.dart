@@ -690,6 +690,7 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get demoMsg => 'Tester role not allowed to perform this action';
+
   @override
   String get verificationCompleted => "Verification completed";
 
@@ -746,4 +747,7 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get subTotal => "Sub Total";
+
+  @override
+  String get phoneNumberInvalid => "The provided phone number is not valid.";
 }

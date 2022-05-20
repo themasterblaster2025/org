@@ -690,6 +690,7 @@ class LanguageEs extends BaseLanguage {
 
   @override
   String get demoMsg => 'El papel del probador no se permite realizar esta acción.';
+
   @override
   String get verificationCompleted => "Verificación completada";
 
@@ -746,4 +747,7 @@ class LanguageEs extends BaseLanguage {
 
   @override
   String get subTotal => "Subcontrol";
+
+  @override
+  String get phoneNumberInvalid => "El número de teléfono proporcionado no es válido.";
 }

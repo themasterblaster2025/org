@@ -462,6 +462,7 @@ abstract class BaseLanguage {
   String get myFatoorah;
 
   String get demoMsg;
+
   String get verificationCompleted;
 
   String get codeSent;
@@ -499,4 +500,6 @@ abstract class BaseLanguage {
   String get price;
 
   String get subTotal;
+
+  String get phoneNumberInvalid;
 }

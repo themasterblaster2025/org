@@ -690,6 +690,7 @@ class LanguageVi extends BaseLanguage {
 
   @override
   String get demoMsg => 'Vai trò người kiểm tra không được phép thực hiện hành động này';
+
   @override
   String get verificationCompleted => "Xác minh hoàn thành";
 
@@ -746,4 +747,7 @@ class LanguageVi extends BaseLanguage {
 
   @override
   String get subTotal => "Tổng số phụ";
+
+  @override
+  String get phoneNumberInvalid => "Số điện thoại được cung cấp không hợp lệ.";
 }

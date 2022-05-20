@@ -690,6 +690,7 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get demoMsg => 'परीक्षक की भूमिका को यह क्रिया करने की अनुमति नहीं है';
+
   @override
   String get verificationCompleted => "सत्यापन पूरा हुआ";
 
@@ -746,4 +747,7 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get subTotal => "उप -कुल";
+
+  @override
+  String get phoneNumberInvalid => "प्रदान किया गया फ़ोन नंबर मान्य नहीं है।";
 }

@@ -690,6 +690,7 @@ class LanguageTr extends BaseLanguage {
 
   @override
   String get demoMsg => 'Test Cihazı Rolü bu eylemi gerçekleştirmesine izin verilmedi';
+
   @override
   String get verificationCompleted => "Doğrulama tamamlandı";
 
@@ -746,4 +747,7 @@ class LanguageTr extends BaseLanguage {
 
   @override
   String get subTotal => "Ara toplam";
+
+  @override
+  String get phoneNumberInvalid => "Sağlanan telefon numarası geçerli değil.";
 }

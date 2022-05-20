@@ -690,6 +690,7 @@ class LanguagePt extends BaseLanguage {
 
   @override
   String get demoMsg => 'Função do testador não é permitida para realizar esta ação';
+
   @override
   String get verificationCompleted => "Verificação concluída";
 
@@ -746,4 +747,7 @@ class LanguagePt extends BaseLanguage {
 
   @override
   String get subTotal => "Subtono";
+
+  @override
+  String get phoneNumberInvalid => "O número de telefone fornecido não é válido.";
 }

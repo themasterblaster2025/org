@@ -74,10 +74,6 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
   bool isTestType = true;
   late Razorpay _razorpay;
 
-  String? _cardNumber;
-  String? _cvv;
-  int? _expiryMonth;
-  int? _expiryYear;
 
   bool isDisabled = false;
 

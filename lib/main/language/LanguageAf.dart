@@ -747,4 +747,7 @@ class LanguageAf extends BaseLanguage {
 
   @override
   String get subTotal => "Subtotaal";
+
+  @override
+  String get phoneNumberInvalid => "Die telefoonnommer wat voorsien word, is nie geldig nie.";
 }

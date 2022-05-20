@@ -747,4 +747,7 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get subTotal => "مجموع الفرعية";
+
+  @override
+  String get phoneNumberInvalid => "رقم الهاتف المقدم غير صالح.";
 }
