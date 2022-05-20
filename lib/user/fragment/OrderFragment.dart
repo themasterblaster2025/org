@@ -183,7 +183,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                             12.width,
                                             if (item.pickupPoint!.contactNumber != null)
                                               Image.asset('assets/icons/ic_call.png', width: 24, height: 24).onTap(() {
-                                                launch('tel:${item.pickupPoint!.contactNumber}');
+                                                launchUrl(Uri.parse('tel:${item.pickupPoint!.contactNumber}'));
                                               }),
                                           ],
                                         ),
@@ -221,7 +221,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                             12.width,
                                             if (item.deliveryPoint!.contactNumber != null)
                                               Image.asset('assets/icons/ic_call.png', width: 24, height: 24).onTap(() {
-                                                launch('tel:${item.deliveryPoint!.contactNumber}');
+                                                launchUrl(Uri.parse('tel:${item.deliveryPoint!.contactNumber}'));
                                               }),
                                           ],
                                         ),

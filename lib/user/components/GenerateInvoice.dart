@@ -63,6 +63,8 @@ generateInvoiceCall(OrderData orderData) async {
     ],
     extraChargeList: extraList,
     totalAmount: orderData.totalAmount!.toDouble(),
+    paymentType: paymentType(orderData.paymentType.validate(value: PAYMENT_TYPE_CASH)),
+    paymentStatus: paymentStatus(orderData.paymentStatus.validate(value: PAYMENT_PENDING)),
   );
 
   final pdfFile = await PdfInvoiceApi.generate(invoice);
@@ -128,7 +130,7 @@ class PdfInvoiceApi {
   }
 
   static Widget buildHeader(Invoice invoice) {
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment:CrossAxisAlignment.start,children: [
       Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,6 +142,9 @@ class PdfInvoiceApi {
             Text(language.deliveredTo, style: TextStyle(color: PdfColors.blue)),
             SizedBox(height: 4),
             Text('${invoice.customer.address}'),
+            SizedBox(height: 16),
+            Text('${language.paymentType}: ${invoice.paymentType}'),
+            Text('${language.paymentStatus}: ${invoice.paymentStatus}'),
           ],
         ),
       ),
@@ -316,6 +321,8 @@ class Invoice {
   final List<InvoiceItem> items;
   final List<ExtraChargeRequestModel> extraChargeList;
   final double totalAmount;
+  final String paymentType;
+  final String paymentStatus;
 
   const Invoice({
     required this.info,
@@ -324,6 +331,8 @@ class Invoice {
     required this.items,
     required this.extraChargeList,
     required this.totalAmount,
+    required this.paymentType,
+    required this.paymentStatus,
   });
 }
 

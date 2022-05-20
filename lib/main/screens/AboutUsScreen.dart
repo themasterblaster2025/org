@@ -75,7 +75,7 @@ class AboutUsScreenState extends State<AboutUsScreen> {
                 ],
               ),
               onTap: () {
-                launch('mailto:$mContactPref');
+                launchUrl(Uri.parse('mailto:$mContactPref'));
               },
             ),
           ),
@@ -94,7 +94,7 @@ class AboutUsScreenState extends State<AboutUsScreen> {
                 ],
               ),
               onTap: () {
-                launch(mCodeCanyonURL);
+                launchUrl(Uri.parse(mCodeCanyonURL));
               },
             ),
           ),

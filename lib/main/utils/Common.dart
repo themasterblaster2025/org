@@ -263,7 +263,7 @@ num countExtraCharge({required num totalAmount, required String chargesType, req
   }
 }
 
-String? paymentStatus(String paymentStatus) {
+String paymentStatus(String paymentStatus) {
   if (paymentStatus.toLowerCase() == PAYMENT_PENDING.toLowerCase()) {
     return language.pending;
   } else if (paymentStatus.toLowerCase() == PAYMENT_FAILED.toLowerCase()) {
@@ -283,7 +283,7 @@ String? paymentCollectForm(String paymentType) {
   return language.onPickup;
 }
 
-String? paymentType(String paymentType) {
+String paymentType(String paymentType) {
   if (paymentType.toLowerCase() == PAYMENT_TYPE_STRIPE.toLowerCase()) {
     return language.stripe;
   } else if (paymentType.toLowerCase() == PAYMENT_TYPE_RAZORPAY.toLowerCase()) {

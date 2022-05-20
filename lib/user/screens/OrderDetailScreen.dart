@@ -144,7 +144,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                             Row(
                                               children: [
                                                 Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
-                                                  launch('tel:${orderData!.pickupPoint!.contactNumber}');
+                                                  launchUrl(Uri.parse('tel:${orderData!.pickupPoint!.contactNumber}'));
                                                 }),
                                                 8.width,
                                                 Text('${orderData!.pickupPoint!.contactNumber}', style: secondaryTextStyle()),
@@ -172,7 +172,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                             Row(
                                               children: [
                                                 Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
-                                                  launch('tel:${orderData!.deliveryPoint!.contactNumber}');
+                                                  launchUrl(Uri.parse('tel:${orderData!.deliveryPoint!.contactNumber}'));
                                                 }),
                                                 8.width,
                                                 Text('${orderData!.deliveryPoint!.contactNumber}', style: secondaryTextStyle()),
@@ -309,7 +309,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                   Text('${userData!.name.validate()}', style: boldTextStyle()),
                                                   userData!.contactNumber != null
                                                       ? Text('${userData!.contactNumber}', style: secondaryTextStyle()).paddingOnly(top: 4).onTap(() {
-                                                          launch('tel:${userData!.contactNumber}');
+                                                          launchUrl(Uri.parse('tel:${userData!.contactNumber}'));
                                                         })
                                                       : SizedBox()
                                                 ],

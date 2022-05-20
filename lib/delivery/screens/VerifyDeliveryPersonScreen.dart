@@ -258,10 +258,10 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
                                     decoration: boxDecorationWithRoundedCorners(backgroundColor: Colors.grey.withOpacity(0.2)),
                                     child: Text(deliveryPersonDocuments[index].deliveryManDocument!.split('/').last, style: primaryTextStyle()),
                                   ).onTap(() {
-                                    launch(deliveryPersonDocuments[index].deliveryManDocument.validate());
+                                    launchUrl(Uri.parse(deliveryPersonDocuments[index].deliveryManDocument.validate()));
                                   })
                                 : commonCachedNetworkImage(deliveryPersonDocuments[index].deliveryManDocument!, height: 200, width: context.width(), fit: BoxFit.cover).cornerRadiusWithClipRRect(8).onTap(() {
-                                    launch(deliveryPersonDocuments[index].deliveryManDocument!.validate());
+                                    launchUrl(Uri.parse(deliveryPersonDocuments[index].deliveryManDocument!.validate()));
                                   }),
                           ],
                         );

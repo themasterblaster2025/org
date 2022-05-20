@@ -505,29 +505,27 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             },
           ),
           16.height,
-          (appStore.isLoading && parcelTypeList.isEmpty)
-              ? loaderWidget()
-              : Wrap(
-                  spacing: 8,
-                  runSpacing: 0,
-                  children: parcelTypeList.map((item) {
-                    return Chip(
-                      backgroundColor: context.scaffoldBackgroundColor,
-                      label: Text(item.label!),
-                      elevation: 0,
-                      labelStyle: primaryTextStyle(color: Colors.grey),
-                      padding: EdgeInsets.zero,
-                      labelPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(defaultRadius),
-                        side: BorderSide(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
-                      ),
-                    ).onTap(() {
-                      parcelTypeCont.text = item.label!;
-                      setState(() {});
-                    });
-                  }).toList(),
+          Wrap(
+            spacing: 8,
+            runSpacing: 0,
+            children: parcelTypeList.map((item) {
+              return Chip(
+                backgroundColor: context.scaffoldBackgroundColor,
+                label: Text(item.label!),
+                elevation: 0,
+                labelStyle: primaryTextStyle(color: Colors.grey),
+                padding: EdgeInsets.zero,
+                labelPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(defaultRadius),
+                  side: BorderSide(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
                 ),
+              ).onTap(() {
+                parcelTypeCont.text = item.label!;
+                setState(() {});
+              });
+            }).toList(),
+          ),
         ],
       );
     });
