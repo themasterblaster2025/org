@@ -144,7 +144,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                             Row(
                                               children: [
                                                 item.date != null ? Text(printDate(item.date!), style: secondaryTextStyle()).expand() : SizedBox(),
-                                                Text('$currencySymbol ${item.totalAmount}', style: boldTextStyle()),
+                                                Text('$currencySymbol ${item.totalAmount ?? 0}', style: boldTextStyle()),
                                               ],
                                             ),
                                           ],

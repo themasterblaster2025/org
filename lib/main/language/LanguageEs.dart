@@ -750,4 +750,52 @@ class LanguageEs extends BaseLanguage {
 
   @override
   String get phoneNumberInvalid => "El número de teléfono proporcionado no es válido.";
+
+  @override
+  String get placeOrderByMistake => "Orden de colocar por error";
+
+  @override
+  String get deliveryTimeIsTooLong => "El tiempo de entrega es demasiado largo";
+
+  @override
+  String get duplicateOrder => "Duplicar la orden";
+
+  @override
+  String get changeOfMind => "Cambiar de parecer";
+
+  @override
+  String get changeOrder => "Cambia el orden";
+
+  @override
+  String get incorrectIncompleteAddress => "Dirección incorrecta/incompleta";
+
+  @override
+  String get other => "Otro";
+
+  @override
+  String get wrongContactInformation => "Información de contacto incorrecta";
+
+  @override
+  String get paymentIssue => "Problema de pago";
+
+  @override
+  String get personNotAvailableOnLocation => "Persona no disponible en el lugar";
+
+  @override
+  String get invalidCourierPackage => "Paquete de mensajería no válido";
+
+  @override
+  String get courierPackageIsNotAsPerOrder => "El paquete de mensajería no es según el pedido";
+
+  @override
+  String get invalidOrder => "Orden no válido";
+
+  @override
+  String get damageCourier => "Mensajería de daño";
+
+  @override
+  String get sentWrongCourier => "Envió mensajería equivocada";
+
+  @override
+  String get notAsOrder => "No como orden";
 }

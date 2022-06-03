@@ -750,4 +750,52 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get phoneNumberInvalid => "رقم الهاتف المقدم غير صالح.";
+
+  @override
+  String get placeOrderByMistake => "وضع الطلب عن طريق الخطأ";
+
+  @override
+  String get deliveryTimeIsTooLong => "وقت التسليم طويل جدًا";
+
+  @override
+  String get duplicateOrder => "كرر الطلب";
+
+  @override
+  String get changeOfMind => "تغيير الفكر";
+
+  @override
+  String get changeOrder => "تغيير الترتيب";
+
+  @override
+  String get incorrectIncompleteAddress => "عنوان غير صحيح/غير مكتمل";
+
+  @override
+  String get other => "آخر";
+
+  @override
+  String get wrongContactInformation => "معلومات الاتصال الخاطئة";
+
+  @override
+  String get paymentIssue => "مستحقات الدفع \ مشاكل الدفع";
+
+  @override
+  String get personNotAvailableOnLocation => "الشخص غير متوفر في الموقع";
+
+  @override
+  String get invalidCourierPackage => "حزمة البريد السريع غير صالح";
+
+  @override
+  String get courierPackageIsNotAsPerOrder => "حزمة Courier ليست حسب الطلب";
+
+  @override
+  String get invalidOrder => "أمر غير صالح";
+
+  @override
+  String get damageCourier => "ضرر البريد السريع";
+
+  @override
+  String get sentWrongCourier => "أرسلت البريد السريع الخطأ";
+
+  @override
+  String get notAsOrder => "ليس كترتيب";
 }

@@ -750,4 +750,52 @@ class LanguagePt extends BaseLanguage {
 
   @override
   String get phoneNumberInvalid => "O número de telefone fornecido não é válido.";
+
+  @override
+  String get placeOrderByMistake => "Faça ordem por engano";
+
+  @override
+  String get deliveryTimeIsTooLong => "O tempo de entrega é muito longo";
+
+  @override
+  String get duplicateOrder => "Pedido duplicado";
+
+  @override
+  String get changeOfMind => "Mudança de idéia";
+
+  @override
+  String get changeOrder => "Mudar o pedido";
+
+  @override
+  String get incorrectIncompleteAddress => "Endereço incorreto/incompleto";
+
+  @override
+  String get other => "Outro";
+
+  @override
+  String get wrongContactInformation => "Informações de contato incorretas";
+
+  @override
+  String get paymentIssue => "Problema no pagamento";
+
+  @override
+  String get personNotAvailableOnLocation => "Pessoa não disponível no local";
+
+  @override
+  String get invalidCourierPackage => "Pacote inválido de correio";
+
+  @override
+  String get courierPackageIsNotAsPerOrder => "O pacote de correio não é o pedido";
+
+  @override
+  String get invalidOrder => "Ordem inválida";
+
+  @override
+  String get damageCourier => "Dano courier";
+
+  @override
+  String get sentWrongCourier => "Enviou um correio errado";
+
+  @override
+  String get notAsOrder => "Não como ordem";
 }

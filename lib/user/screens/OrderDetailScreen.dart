@@ -369,11 +369,11 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                               (orderData!.extraCharges!.runtimeType == List<dynamic>)
                                   ? OrderSummeryWidget(
                                       extraChargesList: list,
-                                      totalDistance: orderData!.totalDistance!,
-                                      totalWeight: orderData!.totalWeight!,
-                                      distanceCharge: orderData!.distanceCharge!,
-                                      weightCharge: orderData!.weightCharge!,
-                                      totalAmount: orderData!.totalAmount!,
+                                      totalDistance: orderData!.totalDistance.validate(),
+                                      totalWeight: orderData!.totalWeight.validate(),
+                                      distanceCharge: orderData!.distanceCharge.validate(),
+                                      weightCharge: orderData!.weightCharge.validate(),
+                                      totalAmount: orderData!.totalAmount.validate(),
                                     )
                                   : Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,

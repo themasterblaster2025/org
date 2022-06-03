@@ -750,4 +750,52 @@ class LanguageTr extends BaseLanguage {
 
   @override
   String get phoneNumberInvalid => "Sağlanan telefon numarası geçerli değil.";
+
+  @override
+  String get placeOrderByMistake => "Yanlışlıkla sipariş ver";
+
+  @override
+  String get deliveryTimeIsTooLong => "Teslimat süresi çok uzun";
+
+  @override
+  String get duplicateOrder => "Tekrarlanan sipariş";
+
+  @override
+  String get changeOfMind => "Fikir değişikliği";
+
+  @override
+  String get changeOrder => "Siparişi değiştir";
+
+  @override
+  String get incorrectIncompleteAddress => "Yanlış/eksik adres";
+
+  @override
+  String get other => "Başka";
+
+  @override
+  String get wrongContactInformation => "Yanlış iletişim bilgileri";
+
+  @override
+  String get paymentIssue => "Ödeme sorunu";
+
+  @override
+  String get personNotAvailableOnLocation => "Konumda mevcut değil";
+
+  @override
+  String get invalidCourierPackage => "Geçersiz kurye paketi";
+
+  @override
+  String get courierPackageIsNotAsPerOrder => "Courier paketi siparişe göre değil";
+
+  @override
+  String get invalidOrder => "Geçersiz sipariş";
+
+  @override
+  String get damageCourier => "Hasar kurye";
+
+  @override
+  String get sentWrongCourier => "Yanlış gönderdi kurye gönderildi";
+
+  @override
+  String get notAsOrder => "Emir olarak değil";
 }

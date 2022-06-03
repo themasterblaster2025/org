@@ -750,4 +750,52 @@ class LanguageNl extends BaseLanguage {
 
   @override
   String get phoneNumberInvalid => "Het meegeleverde telefoonnummer is niet geldig.";
+
+  @override
+  String get placeOrderByMistake => "Plaats per ongeluk bestelling";
+
+  @override
+  String get deliveryTimeIsTooLong => "Levertijd is te lang";
+
+  @override
+  String get duplicateOrder => "Dubbele bestelling";
+
+  @override
+  String get changeOfMind => "Verandering van gedachten";
+
+  @override
+  String get changeOrder => "Verander bestelling";
+
+  @override
+  String get incorrectIncompleteAddress => "Onjuist/onvolledig adres";
+
+  @override
+  String get other => "Ander";
+
+  @override
+  String get wrongContactInformation => "Verkeerde contactgegevens";
+
+  @override
+  String get paymentIssue => "Betalingsprobleem";
+
+  @override
+  String get personNotAvailableOnLocation => "Persoon niet beschikbaar op locatie";
+
+  @override
+  String get invalidCourierPackage => "Ongeldig koerierspakket";
+
+  @override
+  String get courierPackageIsNotAsPerOrder => "Courier -pakket is niet zoals per bestelling";
+
+  @override
+  String get invalidOrder => "Ongeldige bestelling";
+
+  @override
+  String get damageCourier => "Schade koerier";
+
+  @override
+  String get sentWrongCourier => "Verzonden verkeerde koerier";
+
+  @override
+  String get notAsOrder => "Niet als volgorde";
 }

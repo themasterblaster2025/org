@@ -750,4 +750,52 @@ class LanguageDe extends BaseLanguage {
 
   @override
   String get phoneNumberInvalid => "Die bereitgestellte Telefonnummer ist nicht gültig.";
+
+  @override
+  String get placeOrderByMistake => "Versehentlich bestellen";
+
+  @override
+  String get deliveryTimeIsTooLong => "Die Lieferzeit ist zu lang";
+
+  @override
+  String get duplicateOrder => "Doppelte Bestellung";
+
+  @override
+  String get changeOfMind => "Meinungsänderung";
+
+  @override
+  String get changeOrder => "Bestellung ändern";
+
+  @override
+  String get incorrectIncompleteAddress => "Falsche/unvollständige Adresse";
+
+  @override
+  String get other => "Sonstiges";
+
+  @override
+  String get wrongContactInformation => "Falsche Kontaktinformationen";
+
+  @override
+  String get paymentIssue => "Zahlungsproblem";
+
+  @override
+  String get personNotAvailableOnLocation => "Person, die nicht vor Ort verfügbar ist";
+
+  @override
+  String get invalidCourierPackage => "Ungültiges Kurierpaket";
+
+  @override
+  String get courierPackageIsNotAsPerOrder => "Das Kurierpaket entspricht nicht der Bestellung";
+
+  @override
+  String get invalidOrder => "Ungültige Bestellung";
+
+  @override
+  String get damageCourier => "Schadenskurier";
+
+  @override
+  String get sentWrongCourier => "Schickte falscher Kurier";
+
+  @override
+  String get notAsOrder => "Nicht als Ordnung";
 }

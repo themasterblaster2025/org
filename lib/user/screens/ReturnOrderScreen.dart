@@ -39,6 +39,8 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
   TextEditingController reasonController = TextEditingController();
   String? reason;
 
+  List<String> returnOrderReasonList = getReturnReasonList();
+
   @override
   void initState() {
     super.initState();
@@ -46,7 +48,11 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
   }
 
   Future<void> init() async {
-   //
+    LiveStream().on('UpdateLanguage', (p0) {
+      returnOrderReasonList.clear();
+      returnOrderReasonList.addAll(getReturnReasonList());
+      setState(() {});
+    });
   }
 
   @override
@@ -92,7 +98,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
         "fixed_charges": widget.orderData.fixedCharges!,
         "parent_order_id": widget.orderData.id!,
         "total_amount": widget.orderData.totalAmount!,
-        "reason": reason! != 'Other' ? reason : reasonController.text
+        "reason": reason!.validate().trim() != language.other.trim() ? reason : reasonController.text
       };
       appStore.setLoading(true);
       await createOrder(req).then((value) {
@@ -355,7 +361,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                     if (value!.isEmpty) return language.fieldRequiredMsg;
                     return null;
                   },
-                ).visible(reason == 'Other'),
+                ).visible(reason.validate().trim() == language.other.trim()),
                 16.height,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

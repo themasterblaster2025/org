@@ -1,11 +1,11 @@
-class NotificationModel {
+class NotificationListModel {
   int? allUnreadCount;
   List<NotificationData>? notificationData;
 
-  NotificationModel({this.allUnreadCount, this.notificationData});
+  NotificationListModel({this.allUnreadCount, this.notificationData});
 
-  factory NotificationModel.fromJson(Map<String, dynamic> json) {
-    return NotificationModel(
+  factory NotificationListModel.fromJson(Map<String, dynamic> json) {
+    return NotificationListModel(
       allUnreadCount: json['all_unread_count'],
       notificationData: json['notification_data'] != null ? (json['notification_data'] as List).map((i) => NotificationData.fromJson(i)).toList() : null,
     );

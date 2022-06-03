@@ -750,4 +750,52 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get phoneNumberInvalid => "प्रदान किया गया फ़ोन नंबर मान्य नहीं है।";
+
+  @override
+  String get placeOrderByMistake => "गलती से आदेश दें";
+
+  @override
+  String get deliveryTimeIsTooLong => "डिलीवरी का समय बहुत लंबा है";
+
+  @override
+  String get duplicateOrder => "आदेश की प्रतिलिपि";
+
+  @override
+  String get changeOfMind => "मन बदलना";
+
+  @override
+  String get changeOrder => "बदलने के आदेश";
+
+  @override
+  String get incorrectIncompleteAddress => "गलत/अधूरा पता";
+
+  @override
+  String get other => "अन्य";
+
+  @override
+  String get wrongContactInformation => "गलत संपर्क जानकारी";
+
+  @override
+  String get paymentIssue => "भुगतान मुद्दा";
+
+  @override
+  String get personNotAvailableOnLocation => "व्यक्ति स्थान पर उपलब्ध नहीं है";
+
+  @override
+  String get invalidCourierPackage => "अमान्य कूरियर पैकेज";
+
+  @override
+  String get courierPackageIsNotAsPerOrder => "कूरियर पैकेज ऑर्डर के अनुसार नहीं है";
+
+  @override
+  String get invalidOrder => "अमान्य आदेश";
+
+  @override
+  String get damageCourier => "क्षति कूरियर";
+
+  @override
+  String get sentWrongCourier => "गलत कूरियर भेजा";
+
+  @override
+  String get notAsOrder => "आदेश के रूप में नहीं";
 }

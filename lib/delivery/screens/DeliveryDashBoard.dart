@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:mighty_delivery/delivery/fragment/DProfileFragment.dart';
 import 'package:mighty_delivery/delivery/screens/CreateTabScreen.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
@@ -10,6 +11,7 @@ import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
+import '../../main/network/RestApis.dart';
 
 class DeliveryDashBoard extends StatefulWidget {
   @override
@@ -17,6 +19,9 @@ class DeliveryDashBoard extends StatefulWidget {
 }
 
 class DeliveryDashBoardState extends State<DeliveryDashBoard> {
+  List<String> statusList = [ORDER_ASSIGNED, ORDER_ACTIVE, ORDER_ARRIVED, ORDER_PICKED_UP, ORDER_DEPARTED, ORDER_COMPLETED, ORDER_CANCELLED];
+  int currentIndex = 1;
+
   @override
   void initState() {
     super.initState();
@@ -30,10 +35,19 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
     LiveStream().on('UpdateTheme', (p0) {
       setState(() {});
     });
+    if (await checkPermission()) {
+      await updateLatLong();
+    }
   }
 
-  List<String> statusList = [ORDER_ASSIGNED, ORDER_ACTIVE, ORDER_ARRIVED, ORDER_PICKED_UP, ORDER_DEPARTED, ORDER_COMPLETED, ORDER_CANCELLED];
-  int currentIndex = 1;
+  updateLatLong() async {
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    await updateLocation(latitude: position.latitude.toString(), longitude: position.longitude.toString()).then((value) {
+      //
+    }).catchError((error) {
+      log(error);
+    });
+  }
 
   @override
   void setState(fn) {

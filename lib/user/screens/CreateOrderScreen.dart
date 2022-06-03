@@ -60,6 +60,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   TextEditingController deliverFromTimeController = TextEditingController();
   TextEditingController deliverToTimeController = TextEditingController();
 
+  FocusNode pickPhoneFocus = FocusNode();
+  FocusNode pickDesFocus = FocusNode();
+  FocusNode deliverPhoneFocus = FocusNode();
+  FocusNode deliverDesFocus = FocusNode();
+
   String deliverCountryCode = '+91';
   String pickupCountryCode = '+91';
 
@@ -542,6 +547,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         AppTextField(
           controller: pickAddressCont,
           textInputAction: TextInputAction.next,
+          nextFocus: pickPhoneFocus,
           readOnly: true,
           textFieldType: TextFieldType.MULTILINE,
           decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
@@ -581,8 +587,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             8.width,
             AppTextField(
               controller: pickPhoneCont,
+              focus: pickPhoneFocus,
+              nextFocus: pickDesFocus,
               textFieldType: TextFieldType.PHONE,
               decoration: commonInputDecoration(suffixIcon: Icons.phone),
+              textInputAction: TextInputAction.next,
               validator: (value) {
                 if (value!.trim().isEmpty) return language.fieldRequiredMsg;
                 if (value.trim().length < 10 || value.trim().length > 14) return language.contactLength;
@@ -596,8 +605,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         8.height,
         TextField(
           controller: pickDesCont,
+          focusNode: pickDesFocus,
           decoration: commonInputDecoration(suffixIcon: Icons.notes),
-          textInputAction: TextInputAction.newline,
+          textInputAction: TextInputAction.done,
           maxLines: 3,
           minLines: 3,
         ),
@@ -616,6 +626,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         AppTextField(
           controller: deliverAddressCont,
           textInputAction: TextInputAction.next,
+          nextFocus: deliverPhoneFocus,
           readOnly: true,
           textFieldType: TextFieldType.MULTILINE,
           decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
@@ -656,6 +667,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             AppTextField(
               controller: deliverPhoneCont,
               textInputAction: TextInputAction.next,
+              focus: deliverPhoneFocus,
+              nextFocus: deliverDesFocus,
               textFieldType: TextFieldType.PHONE,
               decoration: commonInputDecoration(suffixIcon: Icons.phone),
               validator: (value) {
@@ -671,8 +684,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         8.height,
         TextField(
           controller: deliverDesCont,
+          focusNode: deliverDesFocus,
           decoration: commonInputDecoration(suffixIcon: Icons.notes),
-          textInputAction: TextInputAction.newline,
+          textInputAction: TextInputAction.done,
           maxLines: 3,
           minLines: 3,
         ),

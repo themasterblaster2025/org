@@ -5,7 +5,9 @@ const mHelpAndSupport = 'https://support.meetmighty.com/';
 const mContactPref = 'hello@meetmighty.com';
 const mCodeCanyonURL = 'https://codecanyon.net/user/meetmighty/portfolio/';
 
-const mBaseUrl = 'https://meetmighty.com/mobile/mighty-local-delivery/api/';
+//const mBaseUrl = 'https://meetmighty.com/mobile/mighty-local-delivery/api/';
+const mBaseUrl = 'http://192.168.1.230/meetmighty/local-delivery-laravel/api/';
+
 const googleMapAPIKey = 'AIzaSyBAm_XYdWpfE2U_aLkMFGcG9H5wk1yY4yY';
 
 const mOneSignalAppId = 'f2e9c538-d4ad-45d4-8c57-fd081c987fb6';

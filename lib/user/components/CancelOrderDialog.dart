@@ -14,7 +14,7 @@ class CancelOrderDialog extends StatefulWidget {
   final int orderId;
   final Function? onUpdate;
 
-  CancelOrderDialog({required this.orderId,this.onUpdate});
+  CancelOrderDialog({required this.orderId, this.onUpdate});
 
   @override
   CancelOrderDialogState createState() => CancelOrderDialogState();
@@ -26,6 +26,9 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
   TextEditingController reasonController = TextEditingController();
   String? reason;
 
+  List<String> userCancelOrderReasonList = getUserCancelReasonList();
+  List<String> deliveryBoyCancelOrderReasonList = getDeliveryCancelReasonList();
+
   @override
   void initState() {
     super.initState();
@@ -33,7 +36,13 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
   }
 
   Future<void> init() async {
-   //
+    LiveStream().on('UpdateLanguage', (p0) {
+      userCancelOrderReasonList.clear();
+      deliveryBoyCancelOrderReasonList.clear();
+      userCancelOrderReasonList.addAll(getUserCancelReasonList());
+      deliveryBoyCancelOrderReasonList.addAll(getDeliveryCancelReasonList());
+      setState(() {});
+    });
   }
 
   updateOrderApiCall() async {
@@ -41,7 +50,7 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
     appStore.setLoading(true);
     await updateOrder(
       orderId: widget.orderId,
-      reason: reason! != 'Other' ? reason : reasonController.text,
+      reason: reason!.validate().trim() != language.other.trim() ? reason : reasonController.text,
       orderStatus: ORDER_CANCELLED,
     ).then((value) {
       appStore.setLoading(false);
@@ -59,7 +68,6 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
     if (mounted) super.setState(fn);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -72,7 +80,7 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(language.cancelOrder, style: boldTextStyle(size: 18)),
-              Icon(Icons.clear).onTap((){
+              Icon(Icons.clear).onTap(() {
                 finish(context);
               }),
             ],
@@ -84,7 +92,7 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
             value: reason,
             isExpanded: true,
             decoration: commonInputDecoration(),
-            items: (getStringAsync(USER_TYPE)==CLIENT ? userCancelOrderReasonList : deliveryBoyCancelOrderReasonList).map((e) {
+            items: (getStringAsync(USER_TYPE) == CLIENT ? userCancelOrderReasonList : deliveryBoyCancelOrderReasonList).map((e) {
               return DropdownMenuItem(
                 value: e,
                 child: Text(e),
@@ -95,7 +103,7 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
               setState(() {});
             },
             validator: (value) {
-              if(value==null) return language.fieldRequiredMsg;
+              if (value == null) return language.fieldRequiredMsg;
               return null;
             },
           ),
@@ -110,7 +118,7 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
               if (value!.isEmpty) return language.fieldRequiredMsg;
               return null;
             },
-          ).visible(reason == 'Other'),
+          ).visible(reason.validate().trim() == language.other.trim()),
           16.height,
           Align(
             alignment: Alignment.centerRight,

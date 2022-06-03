@@ -52,7 +52,11 @@ class CreateTabScreenState extends State<CreateTabScreen> {
   }
 
   void init() async {
-    getDeliveryBoyList(page: currentPage, deliveryBoyID: getIntAsync(USER_ID), cityId: getIntAsync(CITY_ID), countryId: getIntAsync(COUNTRY_ID), orderStatus: widget.orderStatus!).then((value) {
+    await getOrderListApiCall();
+  }
+
+  getOrderListApiCall() async {
+    await getDeliveryBoyOrderList(page: currentPage, deliveryBoyID: getIntAsync(USER_ID), cityId: getIntAsync(CITY_ID), countryId: getIntAsync(COUNTRY_ID), orderStatus: widget.orderStatus!).then((value) {
       appStore.setLoading(false);
       appStore.setAllUnreadCount(value.allUnreadCount.validate());
 
@@ -67,6 +71,24 @@ class CreateTabScreenState extends State<CreateTabScreen> {
     }).catchError((error) {
       appStore.setLoading(false);
       log(error);
+    });
+  }
+
+  Future<void> cancelOrder(OrderData order) async {
+    appStore.setLoading(true);
+    List<dynamic> cancelledDeliverManIds = order.cancelledDeliverManIds ?? [];
+    cancelledDeliverManIds.add(getIntAsync(USER_ID));
+    Map req = {
+      "id": order.id,
+      "cancelled_delivery_man_ids": cancelledDeliverManIds,
+    };
+    await cancelAutoAssignOrder(req).then((value) {
+      appStore.setLoading(false);
+      toast(value.message);
+      init();
+    }).catchError((error) {
+      appStore.setLoading(false);
+      toast(error.toString());
     });
   }
 
@@ -103,6 +125,27 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                       Row(
                         children: [
                           Text('${language.order}# ${data.id}', style: boldTextStyle(size: 16)).expand(),
+                          AppButton(
+                            margin: EdgeInsets.only(right: 10),
+                            elevation: 0,
+                            text: language.cancel,
+                            padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                            textStyle: boldTextStyle(color: Colors.red),
+                            color: Colors.red.withOpacity(0.2),
+                            onTap: () {
+                              showConfirmDialogCustom(
+                                context,
+                                primaryColor: Colors.red,
+                                dialogType: DialogType.CONFIRMATION,
+                                title: language.orderCancelConfirmation,
+                                positiveText: language.yes,
+                                negativeText: language.no,
+                                onAccept: (c) async {
+                                  await cancelOrder(data);
+                                },
+                              );
+                            },
+                          ).visible(data.autoAssign == 1 && data.status == ORDER_ASSIGNED),
                           widget.orderStatus != ORDER_CANCELLED
                               ? AppButton(
                                   text: buttonText(widget.orderStatus!),

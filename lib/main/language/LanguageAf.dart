@@ -750,4 +750,52 @@ class LanguageAf extends BaseLanguage {
 
   @override
   String get phoneNumberInvalid => "Die telefoonnommer wat voorsien word, is nie geldig nie.";
+
+  @override
+  String get placeOrderByMistake => "Plaas bestelling per ongeluk";
+
+  @override
+  String get deliveryTimeIsTooLong => "Afleweringstyd is te lank";
+
+  @override
+  String get duplicateOrder => "Duplikaatbestelling";
+
+  @override
+  String get changeOfMind => "Gemoedsverandering";
+
+  @override
+  String get changeOrder => "Verander volgorde";
+
+  @override
+  String get incorrectIncompleteAddress => "Verkeerde/onvolledige adres";
+
+  @override
+  String get other => "Ander";
+
+  @override
+  String get wrongContactInformation => "Verkeerde kontakinligting";
+
+  @override
+  String get paymentIssue => "Betalingsuitgawe";
+
+  @override
+  String get personNotAvailableOnLocation => "Persoon wat nie op die plek beskikbaar is nie";
+
+  @override
+  String get invalidCourierPackage => "Ongeldige koerierpakket";
+
+  @override
+  String get courierPackageIsNotAsPerOrder => "Koerierpakket is nie volgens bestelling nie";
+
+  @override
+  String get invalidOrder => "Ongeldige bestelling";
+
+  @override
+  String get damageCourier => "Skade koerier";
+
+  @override
+  String get sentWrongCourier => "Verkeerde verkeerde koerier gestuur";
+
+  @override
+  String get notAsOrder => "Nie as bestelling nie";
 }

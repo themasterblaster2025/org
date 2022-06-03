@@ -102,45 +102,48 @@ class OrderData {
   num? weightCharge;
   num? distanceCharge;
   num? totalParcel;
+  int? autoAssign;
+  List<dynamic>? cancelledDeliverManIds;
 
-  OrderData({
-    this.id,
-    this.clientId,
-    this.clientName,
-    this.date,
-    this.pickupPoint,
-    this.deliveryPoint,
-    this.countryId,
-    this.countryName,
-    this.cityId,
-    this.cityName,
-    this.parcelType,
-    this.totalWeight,
-    this.totalDistance,
-    this.pickupDatetime,
-    this.deliveryDatetime,
-    this.parentOrderId,
-    this.status,
-    this.paymentId,
-    this.paymentType,
-    this.paymentStatus,
-    this.paymentCollectFrom,
-    this.deliveryManId,
-    this.deliveryManName,
-    this.fixedCharges,
-    this.extraCharges,
-    this.totalAmount,
-    this.reason,
-    this.pickupConfirmByClient,
-    this.pickupConfirmByDeliveryMan,
-    this.pickupTimeSignature,
-    this.deliveryTimeSignature,
-    this.deletedAt,
-    this.returnOrderId,
-    this.weightCharge,
-    this.distanceCharge,
-    this.totalParcel,
-  });
+  OrderData(
+      {this.id,
+      this.clientId,
+      this.clientName,
+      this.date,
+      this.pickupPoint,
+      this.deliveryPoint,
+      this.countryId,
+      this.countryName,
+      this.cityId,
+      this.cityName,
+      this.parcelType,
+      this.totalWeight,
+      this.totalDistance,
+      this.pickupDatetime,
+      this.deliveryDatetime,
+      this.parentOrderId,
+      this.status,
+      this.paymentId,
+      this.paymentType,
+      this.paymentStatus,
+      this.paymentCollectFrom,
+      this.deliveryManId,
+      this.deliveryManName,
+      this.fixedCharges,
+      this.extraCharges,
+      this.totalAmount,
+      this.reason,
+      this.pickupConfirmByClient,
+      this.pickupConfirmByDeliveryMan,
+      this.pickupTimeSignature,
+      this.deliveryTimeSignature,
+      this.deletedAt,
+      this.returnOrderId,
+      this.weightCharge,
+      this.distanceCharge,
+      this.totalParcel,
+      this.autoAssign,
+      this.cancelledDeliverManIds});
 
   OrderData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -179,6 +182,8 @@ class OrderData {
     weightCharge = json['weight_charge'];
     distanceCharge = json['distance_charge'];
     totalParcel = json['total_parcel'];
+    autoAssign = json['auto_assign'];
+    cancelledDeliverManIds = json['cancelled_delivery_man_ids'];
   }
 
   Map<String, dynamic> toJson() {
@@ -223,6 +228,8 @@ class OrderData {
     data['weight_charge'] = this.weightCharge;
     data['distance_charge'] = this.distanceCharge;
     data['total_parcel'] = this.totalParcel;
+    data['auto_assign'] = this.autoAssign;
+    data['cancelled_delivery_man_ids'] = this.cancelledDeliverManIds;
     return data;
   }
 }

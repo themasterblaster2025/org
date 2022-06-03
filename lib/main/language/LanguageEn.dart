@@ -750,4 +750,52 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get phoneNumberInvalid => "The provided phone number is not valid.";
+
+  @override
+  String get placeOrderByMistake => "Place order by mistake";
+
+  @override
+  String get deliveryTimeIsTooLong => "Delivery time is too long";
+
+  @override
+  String get duplicateOrder => "Duplicate order";
+
+  @override
+  String get changeOfMind => "Change of mind";
+
+  @override
+  String get changeOrder => "Change order";
+
+  @override
+  String get incorrectIncompleteAddress => "Incorrect/incomplete address";
+
+  @override
+  String get other => "Other";
+
+  @override
+  String get wrongContactInformation => "Wrong contact information";
+
+  @override
+  String get paymentIssue => "Payment issue";
+
+  @override
+  String get personNotAvailableOnLocation => "Person not available on location";
+
+  @override
+  String get invalidCourierPackage => "Invalid courier package";
+
+  @override
+  String get courierPackageIsNotAsPerOrder => "Courier package is not as per order";
+
+  @override
+  String get invalidOrder => "Invalid order";
+
+  @override
+  String get damageCourier => "Damage courier";
+
+  @override
+  String get sentWrongCourier => "Sent wrong courier";
+
+  @override
+  String get notAsOrder => "Not as order";
 }

@@ -750,4 +750,52 @@ class LanguageId extends BaseLanguage {
 
   @override
   String get phoneNumberInvalid => "Nomor telepon yang disediakan tidak valid.";
+
+  @override
+  String get placeOrderByMistake => "Tempatkan pesanan secara tidak sengaja";
+
+  @override
+  String get deliveryTimeIsTooLong => "Waktu pengiriman terlalu lama";
+
+  @override
+  String get duplicateOrder => "Duplikat pesanan";
+
+  @override
+  String get changeOfMind => "Perubahan pikiran";
+
+  @override
+  String get changeOrder => "Perintah diubah";
+
+  @override
+  String get incorrectIncompleteAddress => "Alamat yang salah/tidak lengkap";
+
+  @override
+  String get other => "Lainnya";
+
+  @override
+  String get wrongContactInformation => "Informasi kontak yang salah";
+
+  @override
+  String get paymentIssue => "Masalah pembayaran";
+
+  @override
+  String get personNotAvailableOnLocation => "Orang tidak tersedia di lokasi";
+
+  @override
+  String get invalidCourierPackage => "Paket kurir tidak valid";
+
+  @override
+  String get courierPackageIsNotAsPerOrder => "Paket kurir tidak sesuai pesanan";
+
+  @override
+  String get invalidOrder => "Urutan tidak valid";
+
+  @override
+  String get damageCourier => "Kerusakan kurir";
+
+  @override
+  String get sentWrongCourier => "Mengirim kurir yang salah";
+
+  @override
+  String get notAsOrder => "Bukan sebagai pesanan";
 }

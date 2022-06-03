@@ -502,4 +502,36 @@ abstract class BaseLanguage {
   String get subTotal;
 
   String get phoneNumberInvalid;
+
+  String get placeOrderByMistake;
+
+  String get deliveryTimeIsTooLong;
+
+  String get duplicateOrder;
+
+  String get changeOfMind;
+
+  String get changeOrder;
+
+  String get incorrectIncompleteAddress;
+
+  String get other;
+
+  String get wrongContactInformation;
+
+  String get paymentIssue;
+
+  String get personNotAvailableOnLocation;
+
+  String get invalidCourierPackage;
+
+  String get courierPackageIsNotAsPerOrder;
+
+  String get invalidOrder;
+
+  String get damageCourier;
+
+  String get sentWrongCourier;
+
+  String get notAsOrder;
 }

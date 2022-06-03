@@ -2,34 +2,40 @@ import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/models/models.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-List<String> userCancelOrderReasonList = [
-  "Place order by mistake",
-  "Delivery time is too long",
-  "Duplicate order",
-  "Change of mind",
-  "Change order",
-  "Incorrect/incomplete address",
-  "Other",
-];
+List<String> getUserCancelReasonList() {
+  List<String> list = [];
+  list.add(language.placeOrderByMistake);
+  list.add(language.deliveryTimeIsTooLong);
+  list.add(language.duplicateOrder);
+  list.add(language.changeOfMind);
+  list.add(language.changeOrder);
+  list.add(language.incorrectIncompleteAddress);
+  list.add(language.other);
+  return list;
+}
 
-List<String> deliveryBoyCancelOrderReasonList = [
-  "Incorrect/incomplete address",
-  "Wrong contact information",
-  "Damage courier",
-  "Payment issue",
-  "Person not available on location",
-  "Invalid courier package",
-  "Courier package is not as per order",
-  "Other",
-];
+List<String> getDeliveryCancelReasonList() {
+  List<String> list = [];
+  list.add(language.incorrectIncompleteAddress);
+  list.add(language.wrongContactInformation);
+  list.add(language.damageCourier);
+  list.add(language.paymentIssue);
+  list.add(language.personNotAvailableOnLocation);
+  list.add(language.invalidCourierPackage);
+  list.add(language.courierPackageIsNotAsPerOrder);
+  list.add(language.other);
+  return list;
+}
 
-List<String> returnOrderReasonList = [
-  "Invalid order",
-  "Damage courier",
-  "Sent wrong courier",
-  "Not as order",
-  "Other",
-];
+List<String> getReturnReasonList() {
+  List<String> list = [];
+  list.add(language.invalidOrder);
+  list.add(language.damageCourier);
+  list.add(language.sentWrongCourier);
+  list.add(language.notAsOrder);
+  list.add(language.other);
+  return list;
+}
 
 List<LanguageDataModel> languageList() {
   return [
@@ -55,4 +61,3 @@ List<WalkThroughItemModel> getWalkThroughItems() {
   list.add(WalkThroughItemModel(image: 'assets/walk_through3.png', title: language.walkThrough3Title, subTitle: language.walkThrough3Subtitle));
   return list;
 }
-

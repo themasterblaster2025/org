@@ -750,4 +750,52 @@ class LanguageFr extends BaseLanguage {
 
   @override
   String get phoneNumberInvalid => "Le numéro de téléphone fourni n'est pas valide.";
+
+  @override
+  String get placeOrderByMistake => "Passer la commande par erreur";
+
+  @override
+  String get deliveryTimeIsTooLong => "Le délai de livraison est trop long";
+
+  @override
+  String get duplicateOrder => "Commande en double";
+
+  @override
+  String get changeOfMind => "Changement d'esprit";
+
+  @override
+  String get changeOrder => "Change l'ordre";
+
+  @override
+  String get incorrectIncompleteAddress => "Adresse incorrecte / incomplète";
+
+  @override
+  String get other => "Autre";
+
+  @override
+  String get wrongContactInformation => "Mauvaises coordonnées";
+
+  @override
+  String get paymentIssue => "Problème de paiement";
+
+  @override
+  String get personNotAvailableOnLocation => "Personne non disponible sur place";
+
+  @override
+  String get invalidCourierPackage => "Package de messagerie non valide";
+
+  @override
+  String get courierPackageIsNotAsPerOrder => "Le package de messagerie n'est pas comme ordonnance";
+
+  @override
+  String get invalidOrder => "Commande non valide";
+
+  @override
+  String get damageCourier => "Dommage à la courrier";
+
+  @override
+  String get sentWrongCourier => "Envoyé un mauvais courrier";
+
+  @override
+  String get notAsOrder => "Pas comme l'ordre";
 }

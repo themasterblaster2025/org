@@ -750,4 +750,52 @@ class LanguageVi extends BaseLanguage {
 
   @override
   String get phoneNumberInvalid => "Số điện thoại được cung cấp không hợp lệ.";
+
+  @override
+  String get placeOrderByMistake => "Đặt hàng do nhầm lẫn";
+
+  @override
+  String get deliveryTimeIsTooLong => "Thời gian giao hàng quá dài";
+
+  @override
+  String get duplicateOrder => "Đơn hàng trùng lặp";
+
+  @override
+  String get changeOfMind => "Thay đổi tâm trí";
+
+  @override
+  String get changeOrder => "Thay đổi thứ tự";
+
+  @override
+  String get incorrectIncompleteAddress => "Địa chỉ không chính xác/không đầy đủ";
+
+  @override
+  String get other => "Khác";
+
+  @override
+  String get wrongContactInformation => "Thông tin liên hệ sai";
+
+  @override
+  String get paymentIssue => "Vấn đề thanh toán";
+
+  @override
+  String get personNotAvailableOnLocation => "Người không có sẵn ở vị trí";
+
+  @override
+  String get invalidCourierPackage => "Gói chuyển phát nhanh không hợp lệ";
+
+  @override
+  String get courierPackageIsNotAsPerOrder => "Gói chuyển phát nhanh không theo đơn đặt hàng";
+
+  @override
+  String get invalidOrder => "Đơn hàng không hợp lệ";
+
+  @override
+  String get damageCourier => "Phấn thương chuyển phát nhanh";
+
+  @override
+  String get sentWrongCourier => "Đã gửi chuyển phát nhanh";
+
+  @override
+  String get notAsOrder => "Không phải là thứ tự";
 }

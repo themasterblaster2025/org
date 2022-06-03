@@ -21,6 +21,7 @@ import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
+import '../models/AppSettingModel.dart';
 import '../models/OrderDetailModel.dart';
 import 'NetworkUtils.dart';
 
@@ -285,7 +286,7 @@ Future<OrderListModel> getOrderList({required int page, String? orderStatus, Str
 }
 
 /// get deliveryBoy orderList
-Future<OrderListModel> getDeliveryBoyList({required int page, required int deliveryBoyID, required int countryId, required int cityId, required String orderStatus}) async {
+Future<OrderListModel> getDeliveryBoyOrderList({required int page, required int deliveryBoyID, required int countryId, required int cityId, required String orderStatus}) async {
   return OrderListModel.fromJson(
       await handleResponse(await buildHttpResponse('order-list?delivery_man_id=$deliveryBoyID&page=$page&city_id=$cityId&country_id=$countryId&status=$orderStatus', method: HttpMethod.GET)));
 }
@@ -361,8 +362,8 @@ Future updateLocation({String? userName, String? userEmail, String? latitude, St
 }
 
 /// Get Notification List
-Future<NotificationModel> getNotification({required int page}) async {
-  return NotificationModel.fromJson(await handleResponse(await buildHttpResponse('notification-list?page=$page', method: HttpMethod.POST)));
+Future<NotificationListModel> getNotification({required int page}) async {
+  return NotificationListModel.fromJson(await handleResponse(await buildHttpResponse('notification-list?page=$page', method: HttpMethod.POST)));
 }
 
 /// Get Document List
@@ -377,6 +378,16 @@ Future<DeliveryDocumentListModel> getDeliveryPersonDocumentList({int? page}) asy
 
 Future<LDBaseResponse> deleteDeliveryDoc(int id) async {
   return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('delivery-man-document-delete/$id', method: HttpMethod.POST)));
+}
+
+/// App Setting
+Future<AppSettingModel> getAppSetting() async {
+  return AppSettingModel.fromJson(await handleResponse(await buildHttpResponse('get-appsetting', method: HttpMethod.GET)));
+}
+
+/// Cancel AutoAssign order
+Future<LDBaseResponse> cancelAutoAssignOrder(Map request) async{
+  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('order-auto-assign',request: request,method: HttpMethod.POST)));
 }
 
 
