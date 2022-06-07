@@ -534,4 +534,8 @@ abstract class BaseLanguage {
   String get sentWrongCourier;
 
   String get notAsOrder;
+
+  String get pleaseSelectValidAddress;
+
+  String get selectedAddressValidation;
 }

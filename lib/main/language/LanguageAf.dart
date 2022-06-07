@@ -798,4 +798,10 @@ class LanguageAf extends BaseLanguage {
 
   @override
   String get notAsOrder => "Nie as bestelling nie";
+
+  @override
+  String get pleaseSelectValidAddress => 'Kies geldige adres';
+
+  @override
+  String get selectedAddressValidation => 'Geselekteerde adres moet minstens 3 letter lank wees';
 }

@@ -59,7 +59,6 @@ dependencies:
   geolocator: ^8.2.1
   google_maps_flutter: ^2.1.5
   flutter_polyline_points: ^1.0.0
-  flutter_google_places: ^0.3.0
 
   # PUSH NOTIFICATION
   onesignal_flutter: ^3.3.0

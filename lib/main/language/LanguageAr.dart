@@ -798,4 +798,10 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get notAsOrder => "ليس كترتيب";
+
+  @override
+  String get pleaseSelectValidAddress => 'الرجاء تحديد عنوان صالح';
+
+  @override
+  String get selectedAddressValidation => 'يجب أن يكون العنوان المحدد 3 أحرف على الأقل';
 }

@@ -798,4 +798,10 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get notAsOrder => "Not as order";
+
+  @override
+  String get pleaseSelectValidAddress => 'Please select valid address';
+
+  @override
+  String get selectedAddressValidation => 'Selected address should be at least 3 letter long';
 }

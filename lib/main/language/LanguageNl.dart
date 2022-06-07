@@ -798,4 +798,10 @@ class LanguageNl extends BaseLanguage {
 
   @override
   String get notAsOrder => "Niet als volgorde";
+
+  @override
+  String get pleaseSelectValidAddress => 'Selecteer Geldig adres';
+
+  @override
+  String get selectedAddressValidation => 'Geselecteerd adres moet minimaal 3 letters lang zijn';
 }

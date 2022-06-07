@@ -798,4 +798,10 @@ class LanguagePt extends BaseLanguage {
 
   @override
   String get notAsOrder => "Não como ordem";
+
+  @override
+  String get pleaseSelectValidAddress => 'Selecione o endereço válido';
+
+  @override
+  String get selectedAddressValidation => 'O endereço selecionado deve ter pelo menos 3 letras';
 }

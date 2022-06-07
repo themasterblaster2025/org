@@ -798,4 +798,10 @@ class LanguageTr extends BaseLanguage {
 
   @override
   String get notAsOrder => "Emir olarak değil";
+
+  @override
+  String get pleaseSelectValidAddress => 'Lütfen geçerli adresi seçin';
+
+  @override
+  String get selectedAddressValidation => 'Seçilen adres en az 3 harfli olmalıdır';
 }

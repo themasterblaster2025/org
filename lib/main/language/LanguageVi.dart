@@ -798,4 +798,10 @@ class LanguageVi extends BaseLanguage {
 
   @override
   String get notAsOrder => "Không phải là thứ tự";
+
+  @override
+  String get pleaseSelectValidAddress => 'Vui lòng chọn địa chỉ hợp lệ';
+
+  @override
+  String get selectedAddressValidation => 'Địa chỉ được chọn phải dài ít nhất 3 chữ cái';
 }

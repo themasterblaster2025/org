@@ -798,4 +798,10 @@ class LanguageId extends BaseLanguage {
 
   @override
   String get notAsOrder => "Bukan sebagai pesanan";
+
+  @override
+  String get pleaseSelectValidAddress => 'Pilih alamat yang valid';
+
+  @override
+  String get selectedAddressValidation => 'Alamat yang dipilih harus setidaknya 3 huruf';
 }

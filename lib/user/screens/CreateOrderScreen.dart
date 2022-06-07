@@ -18,12 +18,13 @@ import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:mighty_delivery/user/components/CreateOrderConfirmationDialog.dart';
 import 'package:mighty_delivery/user/components/PaymentScreen.dart';
-import 'package:mighty_delivery/user/components/SearchAddressWidget.dart';
 import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main/components/OrderSummeryWidget.dart';
+import '../../main/models/AutoCompletePlacesListModel.dart';
 import '../../main/models/ExtraChargeRequestModel.dart';
+import '../../main/models/PlaceIdDetailModel.dart';
 
 class CreateOrderScreen extends StatefulWidget {
   static String tag = '/CreateOrderScreen';
@@ -91,6 +92,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   num totalExtraCharge = 0;
 
   List<ExtraChargeRequestModel> extraChargeList = [];
+
+  List<Predictions> pickPredictionList = [];
+  List<Predictions> deliverPredictionList = [];
+
+  String? pickMsg, deliverMsg;
 
   @override
   void initState() {
@@ -252,6 +258,26 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       appStore.setLoading(false);
       toast(error.toString());
     });
+  }
+
+  Future<List<Predictions>> getPlaceAutoCompleteApiCall(String text) async {
+    List<Predictions> list = [];
+    await placeAutoCompleteApi(searchText: text, language: appStore.selectedLanguage, countryCode: CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate(value: 'IN')).then((value) {
+      list = value.predictions ?? [];
+    }).catchError((e) {
+      throw e.toString();
+    });
+    return list;
+  }
+
+  Future<PlaceIdDetailModel?> getPlaceIdDetailApiCall({required String placeId}) async {
+    PlaceIdDetailModel? detailModel;
+    await getPlaceDetail(placeId: placeId).then((value) {
+      detailModel = value;
+    }).catchError((e) {
+      throw e.toString();
+    });
+    return detailModel;
   }
 
   @override
@@ -548,22 +574,57 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           controller: pickAddressCont,
           textInputAction: TextInputAction.next,
           nextFocus: pickPhoneFocus,
-          readOnly: true,
           textFieldType: TextFieldType.MULTILINE,
           decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
             if (value!.isEmpty) return language.fieldRequiredMsg;
+            if (pickLat == null || pickLong == null) return language.pleaseSelectValidAddress;
             return null;
           },
-          onTap: () async {
-            List<dynamic> data = await SearchAddressWidget().launch(context);
-            if (data.isNotEmpty) {
-              pickAddressCont.text = data.first['address']!;
-              pickLat = data.first['late'];
-              pickLong = data.first['long'];
+          onChanged: (val) async {
+            pickMsg = '';
+            pickLat = null;
+            pickLong = null;
+            if (val.isNotEmpty) {
+              if (val.length < 3) {
+                pickMsg = language.selectedAddressValidation;
+                pickPredictionList.clear();
+                setState(() {});
+              } else {
+                pickPredictionList = await getPlaceAutoCompleteApiCall(val);
+                setState(() {});
+              }
+            } else {
+              pickPredictionList.clear();
+              setState(() {});
             }
           },
         ),
+        if(!pickMsg.isEmptyOrNull) Padding(padding:EdgeInsets.only(top: 8,left: 8),child: Text(pickMsg.validate(),style: secondaryTextStyle(color: Colors.red),)),
+        if (pickPredictionList.isNotEmpty)
+          ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              controller: ScrollController(),
+              shrinkWrap: true,
+              padding: EdgeInsets.only(top: 16, bottom: 16),
+              itemCount: pickPredictionList.length,
+              itemBuilder: (context, index) {
+                Predictions mData = pickPredictionList[index];
+                return ListTile(
+                  leading: Icon(Icons.location_pin, color: colorPrimary),
+                  title: Text(mData.description ?? ""),
+                  onTap: () async {
+                    PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
+                    if (response != null) {
+                      pickAddressCont.text = mData.description ?? "";
+                      pickLat = response.result!.geometry!.location!.lat.toString();
+                      pickLong = response.result!.geometry!.location!.lng.toString();
+                      pickPredictionList.clear();
+                      setState(() {});
+                    }
+                  },
+                );
+              }),
         16.height,
         Text(language.pickupContactNumber, style: primaryTextStyle()),
         8.height,
@@ -627,22 +688,56 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           controller: deliverAddressCont,
           textInputAction: TextInputAction.next,
           nextFocus: deliverPhoneFocus,
-          readOnly: true,
           textFieldType: TextFieldType.MULTILINE,
           decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
             if (value!.isEmpty) return language.fieldRequiredMsg;
+            if(deliverLat==null || deliverLong==null) return language.pleaseSelectValidAddress;
             return null;
           },
-          onTap: () async {
-            List<dynamic> data = await SearchAddressWidget().launch(context);
-            if (data.isNotEmpty) {
-              deliverAddressCont.text = data.first['address']!;
-              deliverLat = data.first['late'];
-              deliverLong = data.first['long'];
+          onChanged: (val) async {
+            deliverMsg = '';
+            deliverLat = null;
+            deliverLong = null;
+            if (val.isNotEmpty) {
+              if (val.length < 3) {
+                deliverMsg = language.selectedAddressValidation;
+                deliverPredictionList.clear();
+                setState(() {});
+              } else {
+                deliverPredictionList = await getPlaceAutoCompleteApiCall(val);
+                setState(() {});
+              }
+            } else {
+              deliverPredictionList.clear();
+              setState(() {});
             }
           },
         ),
+        if(!deliverMsg.isEmptyOrNull) Padding(padding:EdgeInsets.only(top: 8,left: 8),child: Text(deliverMsg.validate(),style: secondaryTextStyle(color: Colors.red),)),
+        if(deliverPredictionList.isNotEmpty) ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            controller: ScrollController(),
+            shrinkWrap: true,
+            padding: EdgeInsets.only(top: 16,bottom: 16),
+            itemCount: deliverPredictionList.length,
+            itemBuilder: (context, index) {
+              Predictions mData = deliverPredictionList[index];
+              return ListTile(
+                leading: Icon(Icons.location_pin, color: colorPrimary),
+                title: Text(mData.description ?? ""),
+                onTap: () async {
+                  PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
+                  if (response != null) {
+                    deliverAddressCont.text = mData.description ?? "";
+                    deliverLat = response.result!.geometry!.location!.lat.toString();
+                    deliverLong = response.result!.geometry!.location!.lng.toString();
+                    deliverPredictionList.clear();
+                    setState(() {});
+                  }
+                },
+              );
+            }),
         16.height,
         Text(language.deliveryContactNumber, style: primaryTextStyle()),
         8.height,
@@ -882,7 +977,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   ),
                 ),
               ),
-              Observer(builder: (context) => loaderWidget().visible(appStore.isLoading),),
+              Observer(
+                builder: (context) => loaderWidget().visible(appStore.isLoading),
+              ),
             ],
           ),
         ),

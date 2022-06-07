@@ -161,7 +161,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                   16.height,
                                   Row(
                                     children: [
-                                      ImageIcon(AssetImage('assets/icons/ic_delivery_location.png'),size: 24,color: colorPrimary),
+                                      ImageIcon(AssetImage('assets/icons/ic_delivery_location.png'), size: 24, color: colorPrimary),
                                       16.width,
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -223,8 +223,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Container(
-                                          decoration:
-                                              boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(8), border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), backgroundColor: Colors.transparent),
+                                          decoration: boxDecorationWithRoundedCorners(
+                                              borderRadius: BorderRadius.circular(8), border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), backgroundColor: Colors.transparent),
                                           padding: EdgeInsets.all(8),
                                           child: Image.asset(parcelTypeIcon(orderData!.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
                                         ),
@@ -239,14 +239,14 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                         ).expand(),
                                       ],
                                     ),
-                                    Divider(height: 30).visible(orderData!.totalParcel!=null),
+                                    Divider(height: 30).visible(orderData!.totalParcel != null),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(language.numberOfParcels, style: primaryTextStyle()),
                                         Text('${orderData!.totalParcel ?? 1}', style: primaryTextStyle()),
                                       ],
-                                    ).visible(orderData!.totalParcel!=null),
+                                    ).visible(orderData!.totalParcel != null),
                                   ],
                                 ),
                               ),
@@ -322,12 +322,12 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                   .visible(orderData!.status != ORDER_COMPLETED && orderData!.status != ORDER_CANCELLED)
                                             ],
                                           ),
-                                          if(getStringAsync(USER_TYPE) == CLIENT && userData!.isVerifiedDeliveryMan==1)
+                                          if (getStringAsync(USER_TYPE) == CLIENT && userData!.isVerifiedDeliveryMan == 1)
                                             Row(
                                               children: [
-                                                Icon(Icons.verified_user,color: Colors.green),
+                                                Icon(Icons.verified_user, color: Colors.green),
                                                 8.width,
-                                                Text(language.verified,style: primaryTextStyle(color: Colors.green)),
+                                                Text(language.verified, style: primaryTextStyle(color: Colors.green)),
                                               ],
                                             ).paddingOnly(top: 16),
                                         ],

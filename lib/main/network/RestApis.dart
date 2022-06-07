@@ -22,7 +22,9 @@ import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
 import '../models/AppSettingModel.dart';
+import '../models/AutoCompletePlacesListModel.dart';
 import '../models/OrderDetailModel.dart';
+import '../models/PlaceIdDetailModel.dart';
 import 'NetworkUtils.dart';
 
 //region Auth
@@ -388,6 +390,14 @@ Future<AppSettingModel> getAppSetting() async {
 /// Cancel AutoAssign order
 Future<LDBaseResponse> cancelAutoAssignOrder(Map request) async{
   return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('order-auto-assign',request: request,method: HttpMethod.POST)));
+}
+
+Future<AutoCompletePlacesListModel> placeAutoCompleteApi({String searchText='', String countryCode = "in", String language = 'en'}) async {
+  return AutoCompletePlacesListModel.fromJson(await handleResponse(await buildHttpResponse('place-autocomplete-api?country_code=$countryCode&language=$language&search_text=$searchText', method: HttpMethod.GET)));
+}
+
+Future<PlaceIdDetailModel> getPlaceDetail({String placeId=''}) async {
+  return PlaceIdDetailModel.fromJson(await handleResponse(await buildHttpResponse('place-detail-api?placeid=$placeId', method: HttpMethod.GET)));
 }
 
 

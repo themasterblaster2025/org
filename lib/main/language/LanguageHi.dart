@@ -798,4 +798,10 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get notAsOrder => "आदेश के रूप में नहीं";
+
+  @override
+  String get pleaseSelectValidAddress => 'कृपया मान्य पता चुनें';
+
+  @override
+  String get selectedAddressValidation => 'चयनित पता कम से कम 3 अक्षर लंबा होना चाहिए';
 }
