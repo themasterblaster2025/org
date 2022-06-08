@@ -187,7 +187,9 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                           CountryCodePicker(
                             initialSelection: countryCode,
                             showCountryOnly: false,
-                            showFlag: false,
+                            dialogBackgroundColor: context.cardColor,
+                            barrierColor: appStore.isDarkMode ? Colors.black54 : Colors.black12,
+                            dialogSize: Size(context.width() - 60, context.height() * 0.5), showFlag: false,
                             showFlagDialog: true,
                             showOnlyCountryWhenClosed: false,
                             alignLeft: false,

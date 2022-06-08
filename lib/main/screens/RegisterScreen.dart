@@ -61,13 +61,13 @@ class RegisterScreenState extends State<RegisterScreen> {
       appStore.setLoading(true);
       authService
           .signUpWithEmailPassword(context,
-          lName: nameController.text,
-          userName: userNameController.text,
-          name: nameController.text.trim(),
-          email: emailController.text.trim(),
-          password: passController.text.trim(),
-          mobileNumber: '$countryCode ${phoneController.text.trim()}',
-          userType: widget.userType)
+              lName: nameController.text,
+              userName: userNameController.text,
+              name: nameController.text.trim(),
+              email: emailController.text.trim(),
+              password: passController.text.trim(),
+              mobileNumber: '$countryCode ${phoneController.text.trim()}',
+              userType: widget.userType)
           .then((res) async {
         appStore.setLoading(false);
         //
@@ -170,7 +170,9 @@ class RegisterScreenState extends State<RegisterScreen> {
                               CountryCodePicker(
                                 initialSelection: countryCode,
                                 showCountryOnly: false,
-                                showFlag: false,
+                                dialogBackgroundColor: context.cardColor,
+                                barrierColor: appStore.isDarkMode ? Colors.black54 : Colors.black12,
+                                dialogSize: Size(context.width() - 60, context.height() * 0.5), showFlag: false,
                                 showFlagDialog: true,
                                 showOnlyCountryWhenClosed: false,
                                 alignLeft: false,
@@ -191,11 +193,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                                 decoration: commonInputDecoration(),
                                 validator: (value) {
                                   if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-                                  if (value
-                                      .trim()
-                                      .length < 10 || value
-                                      .trim()
-                                      .length > 14) return language.contactLength;
+                                  if (value.trim().length < 10 || value.trim().length > 14) return language.contactLength;
                                   return null;
                                 },
                               ).expand(),
