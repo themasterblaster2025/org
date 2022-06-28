@@ -108,7 +108,7 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
               children: statusList.map((item) {
                 return Chip(
                   backgroundColor: selectedStatus == item ? colorPrimary : Colors.transparent,
-                  label: Text(orderStatus(item)!),
+                  label: Text(orderStatus(item)),
                   elevation: 0,
                   labelStyle: primaryTextStyle(color: selectedStatus == item ? white : Colors.grey),
                   padding: EdgeInsets.zero,

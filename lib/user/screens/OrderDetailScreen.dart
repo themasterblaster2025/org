@@ -383,7 +383,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                           children: [
                                             Text(language.deliveryCharge, style: primaryTextStyle()),
                                             16.width,
-                                            Text('$currencySymbol ${orderData!.fixedCharges}', style: primaryTextStyle()),
+                                            Text('${printAmount(orderData!.fixedCharges.validate())}', style: primaryTextStyle()),
                                           ],
                                         ),
                                         if (orderData!.distanceCharge.validate() != 0)
@@ -395,7 +395,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                 children: [
                                                   Text(language.distanceCharge, style: primaryTextStyle()),
                                                   16.width,
-                                                  Text('$currencySymbol ${orderData!.distanceCharge}', style: primaryTextStyle()),
+                                                  Text('${printAmount(orderData!.distanceCharge.validate())}', style: primaryTextStyle()),
                                                 ],
                                               )
                                             ],
@@ -409,7 +409,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                 children: [
                                                   Text(language.weightCharge, style: primaryTextStyle()),
                                                   16.width,
-                                                  Text('$currencySymbol ${orderData!.weightCharge}', style: primaryTextStyle()),
+                                                  Text('${printAmount(orderData!.weightCharge.validate())}', style: primaryTextStyle()),
                                                 ],
                                               ),
                                             ],
@@ -419,7 +419,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                           child: Column(
                                             children: [
                                               8.height,
-                                              Text('$currencySymbol ${orderData!.fixedCharges.validate() + orderData!.distanceCharge.validate() + orderData!.weightCharge.validate()}', style: primaryTextStyle()),
+                                              Text('${printAmount(orderData!.fixedCharges.validate() + orderData!.distanceCharge.validate() + orderData!.weightCharge.validate())}', style: primaryTextStyle()),
                                             ],
                                           ),
                                         ).visible((orderData!.distanceCharge.validate() != 0 || orderData!.weightCharge.validate() != 0) && orderData!.extraCharges.keys.length != 0),
@@ -438,7 +438,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                   children: [
                                                     Text(orderData!.extraCharges.keys.elementAt(index).replaceAll("_", " "), style: primaryTextStyle()),
                                                     16.width,
-                                                    Text('$currencySymbol ${orderData!.extraCharges.values.elementAt(index)}', style: primaryTextStyle()),
+                                                    Text('${printAmount(orderData!.extraCharges.values.elementAt(index))}', style: primaryTextStyle()),
                                                   ],
                                                 ),
                                               );
@@ -450,7 +450,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(language.total, style: boldTextStyle(size: 20)),
-                                            Text('$currencySymbol ${orderData!.totalAmount}', style: boldTextStyle(size: 20, color: colorPrimary)),
+                                            Text('${printAmount(orderData!.totalAmount.validate())}', style: boldTextStyle(size: 20, color: colorPrimary)),
                                           ],
                                         ),
                                       ],

@@ -368,7 +368,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                   children: [
                     Text(language.total, style: boldTextStyle()),
                     16.width,
-                    Text('$currencySymbol ${widget.orderData.totalAmount.validate()}', style: boldTextStyle(size: 20)),
+                    Text('${printAmount(widget.orderData.totalAmount.validate())}', style: boldTextStyle(size: 20)),
                   ],
                 ),
               ],

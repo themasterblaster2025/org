@@ -142,7 +142,7 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
                                                   Row(
                                                     children: [
                                                       item.date != null ? Text(printDate(item.date!), style: secondaryTextStyle()).expand() : SizedBox(),
-                                                      Text('$currencySymbol ${item.totalAmount}', style: boldTextStyle()),
+                                                      Text('${printAmount(item.totalAmount.validate())}', style: boldTextStyle()),
                                                     ],
                                                   ),
                                                 ],
@@ -152,7 +152,7 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
                                         : Row(
                                             children: [
                                               item.date != null ? Text(printDate(item.date!), style: secondaryTextStyle()).expand() : SizedBox(),
-                                              Text('$currencySymbol ${item.totalAmount}', style: boldTextStyle()),
+                                              Text('${printAmount(item.totalAmount.validate())}', style: boldTextStyle()),
                                             ],
                                           ),
                                     if (item.pickupPoint!.address != null || item.deliveryPoint!.address != null)

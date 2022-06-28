@@ -69,7 +69,7 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
           children: [
             Text(language.deliveryCharge, style: primaryTextStyle()),
             16.width,
-            Text('$currencySymbol $fixedCharges', style: primaryTextStyle()),
+            Text('${printAmount(fixedCharges)}', style: primaryTextStyle()),
           ],
         ),
         Column(
@@ -88,7 +88,7 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
                   ],
                 ).expand(),
                 16.width,
-                Text('$currencySymbol ${widget.distanceCharge}', style: primaryTextStyle()),
+                Text('${printAmount(widget.distanceCharge)}', style: primaryTextStyle()),
               ],
             )
           ],
@@ -109,7 +109,7 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
                   ],
                 ).expand(),
                 16.width,
-                Text('$currencySymbol ${widget.weightCharge}', style: primaryTextStyle()),
+                Text('${printAmount(widget.weightCharge)}', style: primaryTextStyle()),
               ],
             ),
           ],
@@ -119,7 +119,7 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
           child: Column(
             children: [
               8.height,
-              Text('$currencySymbol ${(fixedCharges + widget.distanceCharge + widget.weightCharge).toStringAsFixed(2)}', style: primaryTextStyle()),
+              Text('${printAmount((fixedCharges + widget.distanceCharge + widget.weightCharge).toStringAsFixed(2).toDouble())}', style: primaryTextStyle()),
             ],
           ),
         ).visible((widget.weightCharge != 0 || widget.distanceCharge != 0) && extraList.length != 0),
@@ -138,9 +138,9 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
                   children: [
                     Text(mData.key!.replaceAll("_", " ").capitalizeFirstLetter(), style: primaryTextStyle()),
                     4.width,
-                    Text('(${mData.value}${mData.valueType==CHARGE_TYPE_PERCENTAGE ? '%' : "$currencySymbol"})', style: secondaryTextStyle()).expand(),
+                    Text('(${mData.valueType==CHARGE_TYPE_PERCENTAGE ? '${mData.value}%' : '${printAmount(mData.value.validate())}'})',style: secondaryTextStyle()).expand(),
                     16.width,
-                    Text('$currencySymbol ${countExtraCharge(totalAmount: (fixedCharges + widget.weightCharge + widget.distanceCharge), chargesType: mData.valueType!, charges: mData.value!)}', style: primaryTextStyle()),
+                    Text('${printAmount(countExtraCharge(totalAmount: (fixedCharges + widget.weightCharge + widget.distanceCharge), chargesType: mData.valueType!, charges: mData.value!))}', style: primaryTextStyle()),
                   ],
                 ),
               );
@@ -153,7 +153,7 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
           children: [
             Text(language.total, style: boldTextStyle()),
             16.width,
-            Text('$currencySymbol ${widget.totalAmount}', style: boldTextStyle(size: 20)),
+            Text('${printAmount(widget.totalAmount)}', style: boldTextStyle(size: 20)),
           ],
         ),
       ],

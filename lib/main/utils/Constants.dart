@@ -5,7 +5,8 @@ const mHelpAndSupport = 'https://support.meetmighty.com/';
 const mContactPref = 'hello@meetmighty.com';
 const mCodeCanyonURL = 'https://codecanyon.net/user/meetmighty/portfolio/';
 
-const mBaseUrl = 'https://meetmighty.com/mobile/mighty-local-delivery/api/';
+//const mBaseUrl = 'https://meetmighty.com/mobile/mighty-local-delivery/api/';
+const mBaseUrl = 'http://192.168.1.230/meetmighty/local-delivery-laravel/api/';
 
 const googleMapAPIKey = 'AIzaSyBAm_XYdWpfE2U_aLkMFGcG9H5wk1yY4yY';
 
@@ -17,8 +18,8 @@ const defaultLanguage = "en";
 
 // font size
 const headingSize = 24;
-const currencySymbol = '₹';
-const currencyCode = 'NGN';
+const currencySymbol = '\$';
+const currencyCode = 'USD';
 
 // SharedReference keys
 const IS_LOGGED_IN = 'IS_LOGIN';
@@ -124,6 +125,10 @@ const MIN_DISTANCE = "min_distance";
 const MIN_WEIGHT = "min_weight";
 const PER_DISTANCE_CHARGE = "per_distance_charges";
 const PER_WEIGHT_CHARGE = "per_weight_charges";
+
+// Currency Position
+const CURRENCY_POSITION_LEFT = 'left';
+const CURRENCY_POSITION_RIGHT = 'right';
 
 //chat
 List<String> rtlLanguage = ['ar', 'ur'];

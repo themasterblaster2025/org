@@ -121,7 +121,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                         Container(
                                           decoration: BoxDecoration(color: statusColor(item.status.validate()).withOpacity(0.15), borderRadius: BorderRadius.circular(defaultRadius)),
                                           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                          child: Text(orderStatus(item.status!)!, style: boldTextStyle(color: statusColor(item.status.validate()))),
+                                          child: Text(orderStatus(item.status!), style: boldTextStyle(color: statusColor(item.status.validate()))),
                                         ),
                                       ],
                                     ),
@@ -144,7 +144,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                             Row(
                                               children: [
                                                 item.date != null ? Text(printDate(item.date!), style: secondaryTextStyle()).expand() : SizedBox(),
-                                                Text('$currencySymbol ${item.totalAmount ?? 0}', style: boldTextStyle()),
+                                                Text(printAmount(item.totalAmount ?? 0), style: boldTextStyle()),
                                               ],
                                             ),
                                           ],

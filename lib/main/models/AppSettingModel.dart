@@ -16,6 +16,10 @@ class AppSettingModel {
   int? autoAssign;
   String? distanceUnit;
   num? distance;
+  int? otpVerifyOnPickupDelivery;
+  String? currency;
+  String? currencyCode;
+  String? currencyPosition;
 
   AppSettingModel({
     this.createdAt,
@@ -35,6 +39,10 @@ class AppSettingModel {
     this.autoAssign,
     this.distanceUnit,
     this.distance,
+    this.otpVerifyOnPickupDelivery,
+    this.currency,
+    this.currencyCode,
+    this.currencyPosition,
   });
 
   factory AppSettingModel.fromJson(Map<String, dynamic> json) {
@@ -56,6 +64,10 @@ class AppSettingModel {
       autoAssign: json['auto_assign'],
       distanceUnit: json['distance_unit'],
       distance: json['distance'],
+      otpVerifyOnPickupDelivery: json['otp_verify_on_pickup_delivery'],
+      currency: json['currency'],
+      currencyCode: json['currency_code'],
+      currencyPosition: json['currency_position'],
     );
   }
 
@@ -100,6 +112,10 @@ class AppSettingModel {
     data['auto_assign'] = this.autoAssign;
     data['distance_unit'] = this.distanceUnit;
     data['distance'] = this.distance;
+    data['otp_verify_on_pickup_delivery'] = this.otpVerifyOnPickupDelivery;
+    data['currency'] = this.currency;
+    data['currency_code'] = this.currencyCode;
+    data['currency_position'] = this.currencyPosition;
     return data;
   }
 }

@@ -141,7 +141,7 @@ Widget emptyWidget() {
   return Center(child: Lottie.asset('assets/no_data.json', width: 150, height: 250));
 }
 
-String? orderStatus(String orderStatus) {
+String orderStatus(String orderStatus) {
   if (orderStatus == ORDER_ASSIGNED) {
     return language.assign;
   } else if (orderStatus == ORDER_ACTIVE) {
@@ -306,4 +306,8 @@ String paymentType(String paymentType) {
     return language.cash;
   }
   return language.cash;
+}
+
+String printAmount(num amount){
+  return appStore.currencyPosition==CURRENCY_POSITION_LEFT ? '${appStore.currencySymbol} $amount' : '$amount ${appStore.currencySymbol}';
 }

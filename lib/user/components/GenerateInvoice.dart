@@ -182,7 +182,7 @@ class PdfInvoiceApi {
       return [
         item.product,
         item.description,
-        '$currencySymbol ${item.price}',
+        '${printAmount(item.price)}',
       ];
     }).toList();
 
@@ -227,7 +227,7 @@ class PdfInvoiceApi {
                     return Padding(
                       padding: EdgeInsets.only(bottom: 4),
                       child: buildText(
-                        title: '${item.key!.replaceAll("_", " ")} (${item.value} ${item.valueType == CHARGE_TYPE_PERCENTAGE ? '%' : currencySymbol})',
+                        title: '${item.key!.replaceAll("_", " ")} (${item.valueType==CHARGE_TYPE_PERCENTAGE ? '${item.value}%' : '${printAmount(item.value.validate())}'})',
                         value: Utils.formatPrice(countExtraCharge(totalAmount: subTotal, chargesType: item.valueType!, charges: item.value!).toDouble()),
                       ),
                     );
@@ -299,7 +299,7 @@ class PdfInvoiceApi {
 }
 
 class Utils {
-  static formatPrice(double price) => '$currencySymbol ${price.toStringAsFixed(2)}';
+  static formatPrice(double price) => '${printAmount(price.toStringAsFixed(2).toDouble())}';
 
   static formatDate(DateTime date) => DateFormat.yMd().format(date);
 }

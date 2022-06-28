@@ -37,6 +37,18 @@ abstract class _AppStore with Store {
   @observable
   String uid = '';
 
+  @observable
+  bool isOtpVerifyOnPickupDelivery = true;
+
+  @observable
+  String currencyCode = "";
+
+  @observable
+  String currencySymbol = "";
+
+  @observable
+  String currencyPosition = CURRENCY_POSITION_LEFT;
+
   @action
   Future<void> setLoading(bool val) async {
     isLoading = val;
@@ -62,6 +74,26 @@ abstract class _AppStore with Store {
   @action
   Future<void> setAllUnreadCount(int val) async {
     allUnreadCount = val;
+  }
+
+  @action
+  Future<void> setOtpVerifyOnPickupDelivery(bool val) async {
+    isOtpVerifyOnPickupDelivery = val;
+  }
+
+  @action
+  Future<void> setCurrencyCode(String val) async {
+    currencyCode = val;
+  }
+
+  @action
+  Future<void> setCurrencySymbol(String val) async {
+    currencySymbol = val;
+  }
+
+  @action
+  Future<void> setCurrencyPosition(String val) async {
+    currencyPosition = val;
   }
 
   @action

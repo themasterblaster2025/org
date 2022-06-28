@@ -277,7 +277,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                               Row(
                                 children: [
                                   data.date != null ? Text(printDate(data.date ?? ''), style: secondaryTextStyle()).expand() : SizedBox(),
-                                  Text('$currencySymbol ${data.totalAmount.validate()}', style: boldTextStyle()),
+                                  Text('${printAmount(data.totalAmount.validate())}', style: boldTextStyle()),
                                 ],
                               ),
                             ],
