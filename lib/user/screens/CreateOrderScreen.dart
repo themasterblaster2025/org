@@ -600,7 +600,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             }
           },
         ),
-        if(!pickMsg.isEmptyOrNull) Padding(padding:EdgeInsets.only(top: 8,left: 8),child: Text(pickMsg.validate(),style: secondaryTextStyle(color: Colors.red),)),
+        if (!pickMsg.isEmptyOrNull)
+          Padding(
+              padding: EdgeInsets.only(top: 8, left: 8),
+              child: Text(
+                pickMsg.validate(),
+                style: secondaryTextStyle(color: Colors.red),
+              )),
         if (pickPredictionList.isNotEmpty)
           ListView.builder(
               physics: NeverScrollableScrollPhysics(),
@@ -628,40 +634,53 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         16.height,
         Text(language.pickupContactNumber, style: primaryTextStyle()),
         8.height,
-        Row(
-          children: [
-            CountryCodePicker(
-              initialSelection: pickupCountryCode,
-              showCountryOnly: false,
-              dialogBackgroundColor: context.cardColor,
-              barrierColor: appStore.isDarkMode ? Colors.black54 : Colors.black12,
-              dialogSize: Size(context.width() - 60, context.height() * 0.5), showFlag: false,
-              showFlagDialog: true,
-              showOnlyCountryWhenClosed: false,
-              alignLeft: false,
-              textStyle: primaryTextStyle(),
-              onInit: (c) {
-                pickupCountryCode = c!.dialCode!;
-              },
-              onChanged: (c) {
-                pickupCountryCode = c.dialCode!;
-              },
+        AppTextField(
+          controller: pickPhoneCont,
+          focus: pickPhoneFocus,
+          nextFocus: pickDesFocus,
+          textFieldType: TextFieldType.PHONE,
+          decoration: commonInputDecoration(
+            suffixIcon: Icons.phone,
+            prefixIcon: IntrinsicHeight(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CountryCodePicker(
+                    initialSelection: pickupCountryCode,
+                    showCountryOnly: false,
+                    dialogSize: Size(context.width() - 60, context.height() * 0.6),
+                    showFlag: true,
+                    showFlagDialog: true,
+                    showOnlyCountryWhenClosed: false,
+                    alignLeft: false,
+                    textStyle: primaryTextStyle(),
+                    dialogBackgroundColor: Theme.of(context).cardColor,
+                    barrierColor: Colors.black12,
+                    dialogTextStyle: primaryTextStyle(),
+                    searchDecoration: InputDecoration(
+                      iconColor: Theme.of(context).dividerColor,
+                      enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
+                      focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: colorPrimary)),
+                    ),
+                    searchStyle: primaryTextStyle(),
+                    onInit: (c) {
+                      pickupCountryCode = c!.dialCode!;
+                    },
+                    onChanged: (c) {
+                      pickupCountryCode = c.dialCode!;
+                    },
+                  ),
+                  VerticalDivider(color: Colors.grey.withOpacity(0.5)),
+                ],
+              ),
             ),
-            8.width,
-            AppTextField(
-              controller: pickPhoneCont,
-              focus: pickPhoneFocus,
-              nextFocus: pickDesFocus,
-              textFieldType: TextFieldType.PHONE,
-              decoration: commonInputDecoration(suffixIcon: Icons.phone),
-              textInputAction: TextInputAction.next,
-              validator: (value) {
-                if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-                if (value.trim().length < 10 || value.trim().length > 14) return language.contactLength;
-                return null;
-              },
-            ).expand(),
-          ],
+          ),
+          textInputAction: TextInputAction.next,
+          validator: (value) {
+            if (value!.trim().isEmpty) return language.fieldRequiredMsg;
+            if (value.trim().length < 10 || value.trim().length > 14) return language.contactLength;
+            return null;
+          },
         ),
         16.height,
         Text(language.pickupDescription, style: primaryTextStyle()),
@@ -694,7 +713,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
           validator: (value) {
             if (value!.isEmpty) return language.fieldRequiredMsg;
-            if(deliverLat==null || deliverLong==null) return language.pleaseSelectValidAddress;
+            if (deliverLat == null || deliverLong == null) return language.pleaseSelectValidAddress;
             return null;
           },
           onChanged: (val) async {
@@ -716,67 +735,87 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             }
           },
         ),
-        if(!deliverMsg.isEmptyOrNull) Padding(padding:EdgeInsets.only(top: 8,left: 8),child: Text(deliverMsg.validate(),style: secondaryTextStyle(color: Colors.red),)),
-        if(deliverPredictionList.isNotEmpty) ListView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            controller: ScrollController(),
-            shrinkWrap: true,
-            padding: EdgeInsets.only(top: 16,bottom: 16),
-            itemCount: deliverPredictionList.length,
-            itemBuilder: (context, index) {
-              Predictions mData = deliverPredictionList[index];
-              return ListTile(
-                leading: Icon(Icons.location_pin, color: colorPrimary),
-                title: Text(mData.description ?? ""),
-                onTap: () async {
-                  PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
-                  if (response != null) {
-                    deliverAddressCont.text = mData.description ?? "";
-                    deliverLat = response.result!.geometry!.location!.lat.toString();
-                    deliverLong = response.result!.geometry!.location!.lng.toString();
-                    deliverPredictionList.clear();
-                    setState(() {});
-                  }
-                },
-              );
-            }),
+        if (!deliverMsg.isEmptyOrNull)
+          Padding(
+              padding: EdgeInsets.only(top: 8, left: 8),
+              child: Text(
+                deliverMsg.validate(),
+                style: secondaryTextStyle(color: Colors.red),
+              )),
+        if (deliverPredictionList.isNotEmpty)
+          ListView.builder(
+              physics: NeverScrollableScrollPhysics(),
+              controller: ScrollController(),
+              shrinkWrap: true,
+              padding: EdgeInsets.only(top: 16, bottom: 16),
+              itemCount: deliverPredictionList.length,
+              itemBuilder: (context, index) {
+                Predictions mData = deliverPredictionList[index];
+                return ListTile(
+                  leading: Icon(Icons.location_pin, color: colorPrimary),
+                  title: Text(mData.description ?? ""),
+                  onTap: () async {
+                    PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
+                    if (response != null) {
+                      deliverAddressCont.text = mData.description ?? "";
+                      deliverLat = response.result!.geometry!.location!.lat.toString();
+                      deliverLong = response.result!.geometry!.location!.lng.toString();
+                      deliverPredictionList.clear();
+                      setState(() {});
+                    }
+                  },
+                );
+              }),
         16.height,
         Text(language.deliveryContactNumber, style: primaryTextStyle()),
         8.height,
-        Row(
-          children: [
-            CountryCodePicker(
-              initialSelection: deliverCountryCode,
-              showCountryOnly: false,
-              dialogBackgroundColor: context.cardColor,
-              barrierColor: appStore.isDarkMode ? Colors.black54 : Colors.black12,
-              dialogSize: Size(context.width() - 60, context.height() * 0.5),showFlag: false,
-              showFlagDialog: true,
-              showOnlyCountryWhenClosed: false,
-              alignLeft: false,
-              textStyle: primaryTextStyle(),
-              onInit: (c) {
-                deliverCountryCode = c!.dialCode!;
-              },
-              onChanged: (c) {
-                deliverCountryCode = c.dialCode!;
-              },
+        AppTextField(
+          controller: deliverPhoneCont,
+          textInputAction: TextInputAction.next,
+          focus: deliverPhoneFocus,
+          nextFocus: deliverDesFocus,
+          textFieldType: TextFieldType.PHONE,
+          decoration: commonInputDecoration(
+            suffixIcon: Icons.phone,
+            prefixIcon: IntrinsicHeight(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CountryCodePicker(
+                    initialSelection: deliverCountryCode,
+                    showCountryOnly: false,
+                    dialogSize: Size(context.width() - 60, context.height() * 0.6),
+                    showFlag: true,
+                    showFlagDialog: true,
+                    showOnlyCountryWhenClosed: false,
+                    alignLeft: false,
+                    textStyle: primaryTextStyle(),
+                    dialogBackgroundColor: Theme.of(context).cardColor,
+                    barrierColor: Colors.black12,
+                    dialogTextStyle: primaryTextStyle(),
+                    searchDecoration: InputDecoration(
+                      iconColor: Theme.of(context).dividerColor,
+                      enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
+                      focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: colorPrimary)),
+                    ),
+                    searchStyle: primaryTextStyle(),
+                    onInit: (c) {
+                      deliverCountryCode = c!.dialCode!;
+                    },
+                    onChanged: (c) {
+                      deliverCountryCode = c.dialCode!;
+                    },
+                  ),
+                  VerticalDivider(color: Colors.grey.withOpacity(0.5)),
+                ],
+              ),
             ),
-            8.width,
-            AppTextField(
-              controller: deliverPhoneCont,
-              textInputAction: TextInputAction.next,
-              focus: deliverPhoneFocus,
-              nextFocus: deliverDesFocus,
-              textFieldType: TextFieldType.PHONE,
-              decoration: commonInputDecoration(suffixIcon: Icons.phone),
-              validator: (value) {
-                if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-                if (value.trim().length < 10 || value.trim().length > 14) return language.contactLength;
-                return null;
-              },
-            ).expand(),
-          ],
+          ),
+          validator: (value) {
+            if (value!.trim().isEmpty) return language.fieldRequiredMsg;
+            if (value.trim().length < 10 || value.trim().length > 14) return language.contactLength;
+            return null;
+          },
         ),
         16.height,
         Text(language.deliveryDescription, style: primaryTextStyle()),

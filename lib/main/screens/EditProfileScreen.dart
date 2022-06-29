@@ -180,46 +180,51 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     16.height,
                     Text(language.contactNumber, style: primaryTextStyle()),
                     8.height,
-                    Container(
-                      height: 100,
-                      child: Row(
-                        children: [
-                          CountryCodePicker(
-                            initialSelection: countryCode,
-                            showCountryOnly: false,
-                            dialogBackgroundColor: context.cardColor,
-                            barrierColor: appStore.isDarkMode ? Colors.black54 : Colors.black12,
-                            dialogSize: Size(context.width() - 60, context.height() * 0.5), showFlag: false,
-                            showFlagDialog: true,
-                            showOnlyCountryWhenClosed: false,
-                            alignLeft: false,
-                            textStyle: primaryTextStyle(),
-                            onInit: (c) {
-                              countryCode = c!.dialCode!;
-                            },
-                            onChanged: (c) {
-                              countryCode = c.dialCode!;
-                            },
+                    AppTextField(
+                      controller: contactNumberController,
+                      textFieldType: TextFieldType.PHONE,
+                      focus: contactFocus,
+                      nextFocus: addressFocus,
+                      decoration: commonInputDecoration(
+                        prefixIcon: IntrinsicHeight(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              CountryCodePicker(
+                                initialSelection: countryCode,
+                                showCountryOnly: false,
+                                dialogSize: Size(context.width() - 60, context.height() * 0.6),
+                                showFlag: true,
+                                showFlagDialog: true,
+                                showOnlyCountryWhenClosed: false,
+                                alignLeft: false,
+                                textStyle: primaryTextStyle(),
+                                dialogBackgroundColor: Theme.of(context).cardColor,
+                                barrierColor: Colors.black12,
+                                dialogTextStyle: primaryTextStyle(),
+                                searchDecoration: InputDecoration(
+                                  iconColor: Theme.of(context).dividerColor,
+                                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
+                                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: colorPrimary)),
+                                ),
+                                searchStyle: primaryTextStyle(),
+                                onInit: (c) {
+                                  countryCode = c!.dialCode!;
+                                },
+                                onChanged: (c) {
+                                  countryCode = c.dialCode!;
+                                },
+                              ),
+                              VerticalDivider(color: Colors.grey.withOpacity(0.5)),
+                            ],
                           ),
-                          8.width,
-                          AppTextField(
-                            controller: contactNumberController,
-                            textFieldType: TextFieldType.PHONE,
-                            focus: contactFocus,
-                            nextFocus: addressFocus,
-                            decoration: commonInputDecoration(),
-                            validator: (s) {
-                              if (s!.trim().isEmpty)
-                                return language.fieldRequiredMsg;
-                              if (s
-                                  .trim()
-                                  .length > 15)
-                                return language.contactNumberValidation;
-                              return null;
-                            },
-                          ).expand(),
-                        ],
+                        ),
                       ),
+                      validator: (s) {
+                        if (s!.trim().isEmpty) return language.fieldRequiredMsg;
+                        if (s.trim().length > 15) return language.contactNumberValidation;
+                        return null;
+                      },
                     ),
                     16.height,
                     Text(language.address, style: primaryTextStyle()),
@@ -241,8 +246,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(16),
-        child:
-        commonButton(language.saveChanges, () {
+        child: commonButton(language.saveChanges, () {
           if (_formKey.currentState!.validate()) {
             save();
           }

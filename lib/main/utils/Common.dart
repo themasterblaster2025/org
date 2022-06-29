@@ -14,10 +14,11 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import '../../main.dart';
 
-InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, Function()? suffixOnTap, Widget? dateTime}) {
+InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, Function()? suffixOnTap, Widget? dateTime,Widget? prefixIcon}) {
   return InputDecoration(
     contentPadding: EdgeInsets.all(12),
     filled: true,
+    prefixIcon: prefixIcon,
     hintText: hintText != null ? hintText : '',
     hintStyle: secondaryTextStyle(size: 16, color: Colors.grey),
     fillColor: Colors.grey.withOpacity(0.15),
