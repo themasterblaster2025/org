@@ -43,14 +43,6 @@ void main() async {
   appStore.setLanguage(getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguage));
   FilterAttributeModel? filterData = FilterAttributeModel.fromJson(getJSONAsync(FILTER_DATA));
   appStore.setFiltering(filterData.orderStatus != null || !filterData.fromDate.isEmptyOrNull || !filterData.toDate.isEmptyOrNull);
-  await getAppSetting().then((value) {
-    appStore.setOtpVerifyOnPickupDelivery(value.otpVerifyOnPickupDelivery == 1);
-    appStore.setCurrencyCode(value.currencyCode ?? currencyCode);
-    appStore.setCurrencySymbol(value.currency ?? currencySymbol);
-    appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
-  }).catchError((error) {
-    log(error.toString());
-  });
 
   int themeModeIndex = getIntAsync(THEME_MODE_INDEX);
   if (themeModeIndex == appThemeMode.themeModeLight) {

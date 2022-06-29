@@ -15,6 +15,8 @@ import 'package:mighty_delivery/user/fragment/OrderFragment.dart';
 import 'package:mighty_delivery/user/screens/CreateOrderScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import '../../main/network/RestApis.dart';
+
 class DashboardScreen extends StatefulWidget {
   static String tag = '/DashboardScreen';
 
@@ -40,6 +42,14 @@ class DashboardScreenState extends State<DashboardScreen> {
     });
     LiveStream().on('UpdateTheme', (p0) {
       setState(() {});
+    });
+    await getAppSetting().then((value) {
+      appStore.setOtpVerifyOnPickupDelivery(value.otpVerifyOnPickupDelivery == 1);
+      appStore.setCurrencyCode(value.currencyCode ?? currencyCode);
+      appStore.setCurrencySymbol(value.currency ?? currencySymbol);
+      appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
+    }).catchError((error) {
+      log(error.toString());
     });
   }
 
