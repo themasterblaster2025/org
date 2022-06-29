@@ -132,7 +132,7 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
   });
 }
 
-Future<void> logout(BuildContext context) async {
+Future<void> logout(BuildContext context,{bool isFromLogin=false}) async {
   await removeKey(USER_ID);
   await removeKey(NAME);
   await removeKey(USER_TOKEN);
@@ -155,8 +155,11 @@ Future<void> logout(BuildContext context) async {
 
   await appStore.setLogin(false);
   appStore.setFiltering(false);
-
-  LoginScreen().launch(context, isNewTask: true);
+  if(isFromLogin){
+    toast('These credential do not match our records');
+  }else {
+    LoginScreen().launch(context, isNewTask: true);
+  }
 }
 
 Future<ChangePasswordResponseModel> changePassword(Map req) async {

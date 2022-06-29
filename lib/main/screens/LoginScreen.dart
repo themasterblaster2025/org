@@ -79,17 +79,20 @@ class LoginScreenState extends State<LoginScreen> {
       }
       authService.signInWithEmailPassword(context, email: emailController.text, password: passController.text).then((value) async {
         await logInApi(req).then((value) async {
-          if (getIntAsync(STATUS) == 1) {
-            if (value.data!.countryId != null && value.data!.cityId != null) {
-              await getCountryDetailApiCall(value.data!.countryId.validate());
-              getCityDetailApiCall(value.data!.cityId.validate());
-              appStore.setLoading(false);
+          appStore.setLoading(false);
+          if(value.data!.userType!=CLIENT && value.data!.userType!=DELIVERY_MAN){
+            await logout(context,isFromLogin: true);
+          }else {
+            if (getIntAsync(STATUS) == 1) {
+              if (value.data!.countryId != null && value.data!.cityId != null) {
+                await getCountryDetailApiCall(value.data!.countryId.validate());
+                getCityDetailApiCall(value.data!.cityId.validate());
+              } else {
+                UserCitySelectScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+              }
             } else {
-              UserCitySelectScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+              toast(language.userNotApproveMsg);
             }
-          } else {
-            toast(language.userNotApproveMsg);
-            appStore.setLoading(false);
           }
         }).catchError((e) {
           appStore.setLoading(false);
