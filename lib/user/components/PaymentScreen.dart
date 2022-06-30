@@ -224,7 +224,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
   void _showConfirmDialog() {
     FlutterwaveViewUtils.showConfirmPaymentModal(
       context,
-      currencyCode,
+      "NGN",
       widget.totalAmount.toString(),
       style.getMainTextStyle(),
       style.getDialogBackgroundColor(),
@@ -245,7 +245,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
       customization: Customization(title: "Test Payment"),
       isTestMode: isTestType,
       publicKey: flutterWavePublicKey.validate(),
-      currency: currencyCode,
+      currency: "NGN",
       redirectUrl: "https://www.google.com",
     );
 
@@ -303,7 +303,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
 
     request.bodyFields = {
       'amount': '${(widget.totalAmount * 100).toInt()}',
-      'currency': "INR",
+      'currency': "${appStore.currencyCode}",
     };
 
     log(request.bodyFields);
@@ -353,7 +353,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
 
   /// Paypal Payment
   void payPalPayment() async {
-    final request = BraintreePayPalRequest(amount: widget.totalAmount.toString(), currencyCode: 'INR', displayName: getStringAsync(USER_NAME));
+    final request = BraintreePayPalRequest(amount: widget.totalAmount.toString(), currencyCode: appStore.currencyCode, displayName: getStringAsync(USER_NAME));
     final result = await Braintree.requestPaypalNonce(
       payPalTokenizationKey!,
       request,
@@ -404,7 +404,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
         amount: widget.totalAmount.toDouble(),
         showBillingInfo: true,
         forceShippingInfo: false,
-        currencyCode: "INR",
+        currencyCode: appStore.currencyCode,
         merchantCountryCode: "IN",
         billingDetails: billingDetails,
         alternativePaymentMethods: apms,

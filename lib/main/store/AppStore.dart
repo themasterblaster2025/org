@@ -41,10 +41,10 @@ abstract class _AppStore with Store {
   bool isOtpVerifyOnPickupDelivery = true;
 
   @observable
-  String currencyCode = 'USD';
+  String currencyCode = 'INR';
 
   @observable
-  String currencySymbol = "\$";
+  String currencySymbol = "₹";
 
   @observable
   String currencyPosition = CURRENCY_POSITION_LEFT;

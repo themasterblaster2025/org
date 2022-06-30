@@ -18,8 +18,8 @@ const defaultLanguage = "en";
 
 // font size
 const headingSize = 24;
-const currencySymbol = '\$';
-const currencyCode = 'USD';
+const currencySymbol = '₹';
+const currencyCode = 'INR';
 
 // SharedReference keys
 const IS_LOGGED_IN = 'IS_LOGIN';
