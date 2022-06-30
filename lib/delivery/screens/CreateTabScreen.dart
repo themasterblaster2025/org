@@ -308,10 +308,11 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                   negativeText: language.cancel,
                                   onAccept: (c) async {
                                     appStore.setLoading(true);
-                                    await updateOrder(orderStatus: ORDER_ARRIVED, orderId: data.id);
+                                    await updateOrder(orderStatus: ORDER_ARRIVED, orderId: data.id).then((value){
+                                      toast(language.orderArrived);
+                                    });
                                     appStore.setLoading(false);
                                     finish(context);
-
                                     init();
                                   },
                                 );
@@ -366,7 +367,9 @@ class CreateTabScreenState extends State<CreateTabScreen> {
 
   Future<void> onTapData({required String orderStatus, required OrderData orderData}) async {
     if (orderStatus == ORDER_ASSIGNED) {
-      await updateOrder(orderStatus: ORDER_ACTIVE, orderId: orderData.id);
+      await updateOrder(orderStatus: ORDER_ACTIVE, orderId: orderData.id).then((value){
+        toast(language.orderActiveSuccessfully);
+      });
       init();
     } else if (orderStatus == ORDER_ACTIVE) {
       await ReceivedScreenOrderScreen(orderData: orderData, isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_PICKUP).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
@@ -378,7 +381,9 @@ class CreateTabScreenState extends State<CreateTabScreen> {
         init();
       }
     } else if (orderStatus == ORDER_PICKED_UP) {
-      await updateOrder(orderStatus: ORDER_DEPARTED, orderId: orderData.id);
+      await updateOrder(orderStatus: ORDER_DEPARTED, orderId: orderData.id).then((value){
+        toast(language.orderDepartedSuccessfully);
+      });
       init();
     } else if (orderStatus == ORDER_DEPARTED) {
       await ReceivedScreenOrderScreen(orderData: orderData, isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_DELIVERY).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);

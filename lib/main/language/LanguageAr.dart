@@ -804,4 +804,16 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get selectedAddressValidation => 'يجب أن يكون العنوان المحدد 3 أحرف على الأقل';
+
+  @override
+  String get orderArrived => "وصل الأمر";
+
+  @override
+  String get orderActiveSuccessfully => "اطلب نشط بنجاح";
+
+  @override
+  String get orderDepartedSuccessfully => "غادر الأمر بنجاح";
+
+  @override
+  String get orderDeliveredSuccessfully => "تم تسليم الطلب بنجاح";
 }

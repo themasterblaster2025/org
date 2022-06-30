@@ -804,4 +804,16 @@ class LanguageDe extends BaseLanguage {
 
   @override
   String get selectedAddressValidation => 'Die ausgewählte Adresse sollte mindestens 3 Buchstaben lang sein';
+
+  @override
+  String get orderArrived => "Bestellung angekommen";
+
+  @override
+  String get orderActiveSuccessfully => "Erfolgreich aktiv bestellen";
+
+  @override
+  String get orderDepartedSuccessfully => "Reihenfolge erfolgreich abgereist";
+
+  @override
+  String get orderDeliveredSuccessfully => "Reihenfolge erfolgreich geliefert";
 }

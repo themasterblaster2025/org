@@ -38,6 +38,14 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
     if (await checkPermission()) {
       await updateLatLong();
     }
+    await getAppSetting().then((value) {
+      appStore.setOtpVerifyOnPickupDelivery(value.otpVerifyOnPickupDelivery == 1);
+      appStore.setCurrencyCode(value.currencyCode ?? currencyCode);
+      appStore.setCurrencySymbol(value.currency ?? currencySymbol);
+      appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
+    }).catchError((error) {
+      log(error.toString());
+    });
   }
 
   updateLatLong() async {

@@ -804,4 +804,16 @@ class LanguageId extends BaseLanguage {
 
   @override
   String get selectedAddressValidation => 'Alamat yang dipilih harus setidaknya 3 huruf';
+
+  @override
+  String get orderArrived => "Pesanan tiba";
+
+  @override
+  String get orderActiveSuccessfully => "Pesan aktif dengan sukses";
+
+  @override
+  String get orderDepartedSuccessfully => "Pesanan berhasil";
+
+  @override
+  String get orderDeliveredSuccessfully => "Pesanan berhasil disampaikan";
 }

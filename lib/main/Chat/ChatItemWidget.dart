@@ -99,60 +99,6 @@ class _ChatItemWidgetState extends State<ChatItemWidget> {
           } else {
             return Container(child: Loader(), height: 250, width: 250);
           }
-        /*   return SizedBox();
-        case VIDEO:
-          if (widget.data!.photoUrl.validate().isNotEmpty || widget.data!.photoUrl != null) {
-            return Container(
-              height: 250,
-              width: 250,
-              child: Stack(
-                children: [
-                  cachedImage(
-                    widget.data!.photoUrl.validate(),
-                    height: 250,
-                    width: 250,
-                    fit: BoxFit.cover,
-                  ),
-                  Container(
-                    decoration: boxDecorationWithShadow(backgroundColor: Colors.black38, boxShape: BoxShape.circle, spreadRadius: 0, blurRadius: 0),
-                    child: IconButton(
-                      icon: Icon(Icons.play_arrow, color: Colors.white),
-                      onPressed: () {
-                        //
-                      },
-                    ),
-                  ).center(),
-                  Positioned(
-                    bottom: 8,
-                    right: 8,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          time,
-                          style: primaryTextStyle(
-                            color: !widget.data!.isMe.validate() ? Colors.blueGrey.withOpacity(0.6) : whiteColor.withOpacity(0.6),
-                            size: 10,
-                          ),
-                        ),
-                        2.width,
-                        widget.data!.isMe!
-                            ? !widget.data!.isMessageRead!
-                                ? Icon(Icons.done, size: 12, color: Colors.white60)
-                                : Icon(Icons.done_all, size: 12, color: Colors.white60)
-                            : Offstage()
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            );
-          } else {
-            return Container(child: Loader(), height: 250, width: 250);
-          }
-          return SizedBox();
-        case AUDIO:
-          return Container();*/
         default:
           return Container();
       }

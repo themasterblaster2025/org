@@ -11,8 +11,9 @@ import 'package:otp_text_field/style.dart';
 class OTPDialog extends StatefulWidget {
   final String? phoneNumber;
   final Function()? onUpdate;
+  final String? verificationId;
 
-  OTPDialog({this.phoneNumber, this.onUpdate});
+  OTPDialog({this.phoneNumber, this.onUpdate,this.verificationId});
 
   @override
   OTPDialogState createState() => OTPDialogState();
@@ -29,18 +30,22 @@ class OTPDialogState extends State<OTPDialog> {
   }
 
   void init() async {
-    sendOTP();
+    verId = widget.verificationId.validate();
+    setState(() { });
   }
 
   Future sendOTP() async {
+    appStore.setLoading(true);
     FirebaseAuth auth = FirebaseAuth.instance;
     await auth.verifyPhoneNumber(
       timeout: const Duration(seconds: 60),
       phoneNumber: widget.phoneNumber.validate(),
       verificationCompleted: (PhoneAuthCredential credential) async {
+        appStore.setLoading(false);
         toast(language.verificationCompleted);
       },
       verificationFailed: (FirebaseAuthException e) {
+        appStore.setLoading(false);
         if (e.code == 'invalid-phone-number') {
           toast(language.phoneNumberInvalid);
           throw language.phoneNumberInvalid;
@@ -50,12 +55,13 @@ class OTPDialogState extends State<OTPDialog> {
         }
       },
       codeSent: (String verificationId, int? resendToken) async {
+        appStore.setLoading(false);
         toast(language.codeSent);
         verId = verificationId;
         setState(() {});
       },
       codeAutoRetrievalTimeout: (String verificationId) {
-        //
+        appStore.setLoading(false);
       },
     );
   }

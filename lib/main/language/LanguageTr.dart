@@ -804,4 +804,16 @@ class LanguageTr extends BaseLanguage {
 
   @override
   String get selectedAddressValidation => 'Seçilen adres en az 3 harfli olmalıdır';
+
+  @override
+  String get orderArrived => "Sipariş geldi";
+
+  @override
+  String get orderActiveSuccessfully => "Başarılı bir şekilde aktif sipariş";
+
+  @override
+  String get orderDepartedSuccessfully => "Sipariş başarıyla ayrıldı";
+
+  @override
+  String get orderDeliveredSuccessfully => "Başarılı bir şekilde teslim edilen sipariş";
 }

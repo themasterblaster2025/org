@@ -538,4 +538,12 @@ abstract class BaseLanguage {
   String get pleaseSelectValidAddress;
 
   String get selectedAddressValidation;
+
+  String get orderArrived;
+
+  String get orderActiveSuccessfully;
+
+  String get orderDepartedSuccessfully;
+
+  String get orderDeliveredSuccessfully;
 }

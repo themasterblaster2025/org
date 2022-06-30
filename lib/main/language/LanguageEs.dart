@@ -804,4 +804,16 @@ class LanguageEs extends BaseLanguage {
 
   @override
   String get selectedAddressValidation => 'La dirección seleccionada debe tener al menos 3 letras de largo';
+
+  @override
+  String get orderArrived => "Llegó el pedido";
+
+  @override
+  String get orderActiveSuccessfully => "Ordene activo con éxito";
+
+  @override
+  String get orderDepartedSuccessfully => "El pedido se fue con éxito";
+
+  @override
+  String get orderDeliveredSuccessfully => "Orden entregado con éxito";
 }

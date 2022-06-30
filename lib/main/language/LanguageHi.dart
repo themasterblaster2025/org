@@ -804,4 +804,16 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get selectedAddressValidation => 'चयनित पता कम से कम 3 अक्षर लंबा होना चाहिए';
+
+  @override
+  String get orderArrived => "आदेश आ गया";
+
+  @override
+  String get orderActiveSuccessfully => "सफलतापूर्वक सक्रिय आदेश दें";
+
+  @override
+  String get orderDepartedSuccessfully => "आदेश सफलतापूर्वक प्रस्थान किया";
+
+  @override
+  String get orderDeliveredSuccessfully => "आदेश सफलतापूर्वक दिया गया";
 }

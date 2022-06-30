@@ -804,4 +804,16 @@ class LanguagePt extends BaseLanguage {
 
   @override
   String get selectedAddressValidation => 'O endereço selecionado deve ter pelo menos 3 letras';
+
+  @override
+  String get orderArrived => "Ordem chegou";
+
+  @override
+  String get orderActiveSuccessfully => "Encomende ativo com sucesso";
+
+  @override
+  String get orderDepartedSuccessfully => "A ordem partiu com sucesso";
+
+  @override
+  String get orderDeliveredSuccessfully => "Ordem entregue com sucesso";
 }

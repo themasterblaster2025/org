@@ -804,4 +804,16 @@ class LanguageNl extends BaseLanguage {
 
   @override
   String get selectedAddressValidation => 'Geselecteerd adres moet minimaal 3 letters lang zijn';
+
+  @override
+  String get orderArrived => "Bestelling is aangekomen";
+
+  @override
+  String get orderActiveSuccessfully => "Bestel met succes actief";
+
+  @override
+  String get orderDepartedSuccessfully => "Bestellen met succes vertrokken";
+
+  @override
+  String get orderDeliveredSuccessfully => "Bestellen met succes geleverd";
 }

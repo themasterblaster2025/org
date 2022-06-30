@@ -804,4 +804,16 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get selectedAddressValidation => 'Selected address should be at least 3 letter long';
+
+  @override
+  String get orderArrived => "Order Arrived";
+
+  @override
+  String get orderActiveSuccessfully => "Order Active Successfully";
+
+  @override
+  String get orderDepartedSuccessfully => "Order Departed Successfully";
+
+  @override
+  String get orderDeliveredSuccessfully => "Order Delivered Successfully";
 }

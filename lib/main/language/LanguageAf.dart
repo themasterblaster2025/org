@@ -804,4 +804,16 @@ class LanguageAf extends BaseLanguage {
 
   @override
   String get selectedAddressValidation => 'Geselekteerde adres moet minstens 3 letter lank wees';
+
+  @override
+  String get orderArrived => "Bestelling aangekom";
+
+  @override
+  String get orderActiveSuccessfully => "Bestel aktief suksesvol";
+
+  @override
+  String get orderDepartedSuccessfully => "Bestelling is suksesvol vertrek";
+
+  @override
+  String get orderDeliveredSuccessfully => "Bestel suksesvol afgelewer";
 }

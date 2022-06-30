@@ -804,4 +804,16 @@ class LanguageFr extends BaseLanguage {
 
   @override
   String get selectedAddressValidation => 'L\'adresse sélectionnée doit durer au moins 3 lettres';
+
+  @override
+  String get orderArrived => "L'ordre est arrivé";
+
+  @override
+  String get orderActiveSuccessfully => "Commander actif avec succès";
+
+  @override
+  String get orderDepartedSuccessfully => "L'ordre est parti avec succès";
+
+  @override
+  String get orderDeliveredSuccessfully => "Commande livrée avec succès";
 }

@@ -804,4 +804,16 @@ class LanguageVi extends BaseLanguage {
 
   @override
   String get selectedAddressValidation => 'Địa chỉ được chọn phải dài ít nhất 3 chữ cái';
+
+  @override
+  String get orderArrived => "Đơn đặt hàng đã đến";
+
+  @override
+  String get orderActiveSuccessfully => "Đặt hàng hoạt động thành công";
+
+  @override
+  String get orderDepartedSuccessfully => "Đặt hàng đã khởi hành thành công";
+
+  @override
+  String get orderDeliveredSuccessfully => "Đơn đặt hàng được giao thành công";
 }
