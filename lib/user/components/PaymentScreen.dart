@@ -224,7 +224,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
   void _showConfirmDialog() {
     FlutterwaveViewUtils.showConfirmPaymentModal(
       context,
-      "NGN",
+      appStore.currencyCode,
       widget.totalAmount.toString(),
       style.getMainTextStyle(),
       style.getDialogBackgroundColor(),
@@ -245,7 +245,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
       customization: Customization(title: "Test Payment"),
       isTestMode: isTestType,
       publicKey: flutterWavePublicKey.validate(),
-      currency: "NGN",
+      currency: appStore.currencyCode,
       redirectUrl: "https://www.google.com",
     );
 
@@ -328,8 +328,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
               testEnv: isTestType,
               merchantCountryCode: 'IN',
               merchantDisplayName: 'Mighty Delivery',
-              customerId: '1',
-              customerEphemeralKeySecret: res.clientSecret.validate(),
+              customerId: getIntAsync(USER_ID).toString(),
               setupIntentClientSecret: res.clientSecret.validate(),
             ),
           );
@@ -423,7 +422,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
   void mercadoPagoPayment() async {
     var body = json.encode({
       "items": [
-        {"title": "Courier", "description": "Courier Delivery", "quantity": 1, "currency_id": "BRL", "unit_price": widget.totalAmount}
+        {"title": "Courier", "description": "Courier Delivery", "quantity": 1, "currency_id": appStore.currencyCode, "unit_price": widget.totalAmount}
       ],
       "payer": {"email": getStringAsync(USER_EMAIL)}
     });
