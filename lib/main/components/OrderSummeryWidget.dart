@@ -82,7 +82,7 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text('(${(widget.totalDistance - minDistance).toStringAsFixed(2)}', style: secondaryTextStyle()),
+                    Text('(${(widget.totalDistance - minDistance).toStringAsFixed(digitAfterDecimal)}', style: secondaryTextStyle()),
                     Icon(Icons.close, color: Colors.grey, size: 12),
                     Text('$perDistanceCharges)', style: secondaryTextStyle()),
                   ],
@@ -119,7 +119,7 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
           child: Column(
             children: [
               8.height,
-              Text('${printAmount((fixedCharges + widget.distanceCharge + widget.weightCharge).toStringAsFixed(2).toDouble())}', style: primaryTextStyle()),
+              Text('${printAmount((fixedCharges + widget.distanceCharge + widget.weightCharge).toStringAsFixed(digitAfterDecimal).toDouble())}', style: primaryTextStyle()),
             ],
           ),
         ).visible((widget.weightCharge != 0 || widget.distanceCharge != 0) && extraList.length != 0),

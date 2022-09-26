@@ -15,6 +15,10 @@ const mOneSignalChannelId = 'e2422a99-3f76-4afa-a190-e80ab9370270';
 
 const defaultLanguage = "en";
 
+const minContactLength = 10;
+const maxContactLength = 14;
+const digitAfterDecimal = 2;
+
 // font size
 const headingSize = 24;
 const currencySymbol = '₹';

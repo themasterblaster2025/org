@@ -110,6 +110,7 @@ class PdfInvoiceApi {
         await PdfGoogleFonts.iBMPlexSansArabicRegular(),
         await PdfGoogleFonts.notoSansSymbols2Regular(),
         await PdfGoogleFonts.beVietnamProRegular(),
+        await PdfGoogleFonts.robotoRegular(),
       ]),
     );
 
@@ -299,7 +300,7 @@ class PdfInvoiceApi {
 }
 
 class Utils {
-  static formatPrice(double price) => '${printAmount(price.toStringAsFixed(2).toDouble())}';
+  static formatPrice(double price) => '${printAmount(price.toStringAsFixed(digitAfterDecimal).toDouble())}';
 
   static formatDate(DateTime date) => DateFormat.yMd().format(date);
 }

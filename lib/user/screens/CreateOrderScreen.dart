@@ -184,12 +184,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
     /// calculate weight Charge
     if (weightController.text.toDouble() > cityData!.minWeight!) {
-      weightCharge = ((weightController.text.toDouble() - cityData!.minWeight!) * cityData!.perWeightCharges!).toStringAsFixed(2).toDouble();
+      weightCharge = ((weightController.text.toDouble() - cityData!.minWeight!) * cityData!.perWeightCharges!).toStringAsFixed(digitAfterDecimal).toDouble();
     }
 
     /// calculate distance Charge
     if (totalDistance > cityData!.minDistance!) {
-      distanceCharge = ((totalDistance - cityData!.minDistance!) * cityData!.perDistanceCharges!).toStringAsFixed(2).toDouble();
+      distanceCharge = ((totalDistance - cityData!.minDistance!) * cityData!.perDistanceCharges!).toStringAsFixed(digitAfterDecimal).toDouble();
     }
 
     /// total amount
@@ -201,7 +201,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     });
 
     /// All Charges
-    totalAmount = (totalAmount + totalExtraCharge).toStringAsFixed(2).toDouble();
+    totalAmount = (totalAmount + totalExtraCharge).toStringAsFixed(digitAfterDecimal).toDouble();
   }
 
   createOrderApiCall(String orderStatus) async {
@@ -213,8 +213,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       "country_id": getIntAsync(COUNTRY_ID).toString(),
       "city_id": getIntAsync(CITY_ID).toString(),
       "pickup_point": {
-        "start_time": !isDeliverNow ? pickFromDateTime.toString() : DateTime.now().toString(),
-        "end_time": !isDeliverNow ? pickToDateTime.toString() : null,
+        "start_time": (!isDeliverNow && pickFromDateTime != null) ? pickFromDateTime.toString() : DateTime.now().toString(),
+        "end_time": (!isDeliverNow && pickToDateTime != null) ? pickToDateTime.toString() : null,
         "address": pickAddressCont.text,
         "latitude": pickLat,
         "longitude": pickLong,
@@ -222,8 +222,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         "contact_number": '$pickupCountryCode ${pickPhoneCont.text.trim()}'
       },
       "delivery_point": {
-        "start_time": !isDeliverNow ? deliverFromDateTime.toString() : null,
-        "end_time": !isDeliverNow ? deliverToDateTime.toString() : null,
+        "start_time": (!isDeliverNow && deliverFromDateTime != null) ? deliverFromDateTime.toString() : null,
+        "end_time": (!isDeliverNow && deliverToDateTime != null) ? deliverToDateTime.toString() : null,
         "address": deliverAddressCont.text,
         "latitude": deliverLat,
         "longitude": deliverLong,
@@ -233,7 +233,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       "extra_charges": extraChargeList,
       "parcel_type": parcelTypeCont.text,
       "total_weight": weightController.text.toDouble(),
-      "total_distance": totalDistance.toStringAsFixed(2).validate(),
+      "total_distance": totalDistance.toStringAsFixed(digitAfterDecimal).validate(),
       "payment_collect_from": paymentCollectFrom,
       "status": orderStatus,
       "payment_type": "",
@@ -678,7 +678,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           textInputAction: TextInputAction.next,
           validator: (value) {
             if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-            if (value.trim().length < 10 || value.trim().length > 14) return language.contactLength;
+            if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
             return null;
           },
         ),
@@ -813,7 +813,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           ),
           validator: (value) {
             if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-            if (value.trim().length < 10 || value.trim().length > 14) return language.contactLength;
+            if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
             return null;
           },
         ),

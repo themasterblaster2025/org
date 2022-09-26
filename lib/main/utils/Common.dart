@@ -131,7 +131,7 @@ String printDate(String date) {
 double calculateDistance(lat1, lon1, lat2, lon2) {
   var p = 0.017453292519943295;
   var a = 0.5 - cos((lat2 - lat1) * p) / 2 + cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
-  return (12742 * asin(sqrt(a))).toStringAsFixed(2).toDouble();
+  return (12742 * asin(sqrt(a))).toStringAsFixed(digitAfterDecimal).toDouble();
 }
 
 Widget loaderWidget() {
@@ -258,9 +258,9 @@ bool get isRTL => rtlLanguage.contains(appStore.selectedLanguage);
 
 num countExtraCharge({required num totalAmount, required String chargesType, required num charges}) {
   if (chargesType == CHARGE_TYPE_PERCENTAGE) {
-    return (totalAmount * charges * 0.01).toStringAsFixed(2).toDouble();
+    return (totalAmount * charges * 0.01).toStringAsFixed(digitAfterDecimal).toDouble();
   } else {
-    return charges.toStringAsFixed(2).toDouble();
+    return charges.toStringAsFixed(digitAfterDecimal).toDouble();
   }
 }
 
