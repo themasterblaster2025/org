@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_braintree/flutter_braintree.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_paystack/flutter_paystack.dart';
 import 'package:flutter_paytabs_bridge/BaseBillingShippingInfo.dart' as payTab;
 import 'package:flutter_paytabs_bridge/IOSThemeConfiguration.dart';
 import 'package:flutter_paytabs_bridge/PaymentSdkApms.dart';
@@ -73,7 +74,8 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
   String? selectedPaymentType;
   bool isTestType = true;
   late Razorpay _razorpay;
-
+  final plugin = PaystackPlugin();
+  CheckoutMethod method = CheckoutMethod.card;
 
   bool isDisabled = false;
 
@@ -93,6 +95,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
     await Stripe.instance.applySettings().catchError((e) {
       log("${e.toString()}");
     });
+    plugin.initialize(publicKey: payStackPublicKey.validate());
     _razorpay = Razorpay();
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
@@ -348,6 +351,59 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
       appStore.setLoading(false);
       toast(e.toString(), print: true);
     });
+  }
+
+  ///PayStack Payment
+  void payStackPayment(BuildContext context) async {
+    Charge charge = Charge()
+      ..amount = (widget.totalAmount * 100).toInt() // In base currency
+      ..email = getStringAsync(USER_EMAIL);
+
+    charge.reference = _getReference();
+
+    try {
+      CheckoutResponse response = await plugin.checkout(context, method: method, charge: charge, fullscreen: false);
+      payStackUpdateStatus(response.reference, response.message);
+      Map<String, dynamic> req = {
+        "status": response.status.toString(),
+        "card": {
+          "number": response.card!.number,
+          "cvc": response.card!.cvc,
+          "expiry_month": response.card!.expiryMonth,
+          "expiry_year": response.card!.expiryYear,
+        },
+        "message": response.message.toString(),
+        "method": response.method.name.toString(),
+        "reference": response.reference.toString(),
+      };
+      if (response.message == 'Success') {
+        savePaymentApiCall(paymentType: PAYMENT_TYPE_PAYSTACK, paymentStatus: PAYMENT_PAID, transactionDetail: req, txnId: response.reference);
+      } else {
+        toast('Payment Failed');
+      }
+    } catch (e) {
+      payStackShowMessage("Check console for error");
+      rethrow;
+    }
+  }
+
+  payStackUpdateStatus(String? reference, String message) {
+    payStackShowMessage(message, const Duration(seconds: 7));
+  }
+
+  void payStackShowMessage(String message, [Duration duration = const Duration(seconds: 4)]) {
+    toast(message);
+    log(message);
+  }
+
+  String _getReference() {
+    String platform;
+    if (Platform.isIOS) {
+      platform = 'iOS';
+    } else {
+      platform = 'Android';
+    }
+    return 'ChargedFrom${platform}_${DateTime.now().millisecondsSinceEpoch}';
   }
 
   /// Paypal Payment
@@ -615,6 +671,8 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
                               stripePay();
                             } else if (selectedPaymentType == PAYMENT_TYPE_RAZORPAY) {
                               razorPayPayment();
+                            } else if (selectedPaymentType == PAYMENT_TYPE_PAYSTACK) {
+                              payStackPayment(context);
                             } else if (selectedPaymentType == PAYMENT_TYPE_FLUTTERWAVE) {
                               flutterWaveCheckout();
                             } else if (selectedPaymentType == PAYMENT_TYPE_PAYPAL) {
