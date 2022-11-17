@@ -14,6 +14,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../main/screens/AboutUsScreen.dart';
+import '../screens/DeleteAccountScreen.dart';
 
 class AccountFragment extends StatefulWidget {
   static String tag = '/AccountFragment';
@@ -82,6 +83,9 @@ class AccountFragmentState extends State<AccountFragment> {
                 }),
                 settingItemWidget(Icons.info_outline, language.aboutUs, () {
                   AboutUsScreen().launch(context);
+                }),
+                settingItemWidget(Icons.delete_forever, language.deleteAccount, ()  {
+                  DeleteAccountScreen().launch(context);
                 }),
                 settingItemWidget(
                   Icons.logout,

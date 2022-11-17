@@ -10,11 +10,13 @@ import 'package:mighty_delivery/main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../main/Services/AuthSertvices.dart';
 import '../../main/screens/AboutUsScreen.dart';
 import '../../main/screens/ChangePasswordScreen.dart';
 import '../../main/screens/EditProfileScreen.dart';
 import '../../main/screens/ThemeScreen.dart';
 import '../../main/components/UserCitySelectScreen.dart';
+import '../../user/screens/DeleteAccountScreen.dart';
 import '../screens/VerifyDeliveryPersonScreen.dart';
 
 class DProfileFragment extends StatefulWidget {
@@ -94,6 +96,9 @@ class DProfileFragmentState extends State<DProfileFragment> {
                         }),
                         settingItemWidget(Icons.info_outline, language.aboutUs, () {
                           AboutUsScreen().launch(context);
+                        }),
+                        settingItemWidget(Icons.delete_forever, language.deleteAccount, ()  {
+                          DeleteAccountScreen().launch(context);
                         }),
                         settingItemWidget(
                           Icons.logout,

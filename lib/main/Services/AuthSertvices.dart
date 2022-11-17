@@ -267,3 +267,10 @@ getCityDetailApiCall(int cityId, context) async {
     }
   }).catchError((error) {});
 }
+
+Future deleteUserFirebase() async {
+  if(FirebaseAuth.instance.currentUser != null) {
+    FirebaseAuth.instance.currentUser!.delete();
+    await FirebaseAuth.instance.signOut();
+  }
+}

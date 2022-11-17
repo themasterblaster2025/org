@@ -816,4 +816,25 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get orderDeliveredSuccessfully => "تم تسليم الطلب بنجاح";
+
+  @override
+  String get deleteAccount => 'حذف الحساب';
+
+  @override
+  String get deleteAccountMsg1 => 'هل انت متأكد انك تريد حذف حسابك؟ يرجى قراءة كيفية تأثير حذف الحساب.';
+
+  @override
+  String get deleteAccountMsg2 => 'حذف حسابك يزيل المعلومات الشخصية من قاعدة البيانات الخاصة بنا. يصبح بريدك الإلكتروني محجوزًا بشكل دائم ولا يمكن إعادة استخدام البريد الإلكتروني نفسه لتسجيل حساب جديد.';
+
+  @override
+  String get deleteAccountConfirmMsg => 'هل أنت متأكد من أنك تريد حذف الحساب؟';
+
+  @override
+  String get remark => 'ملاحظة';
+
+  @override
+  String get showMore => 'أظهر المزيد';
+
+  @override
+  String get showLess => 'تظهر أقل';
 }

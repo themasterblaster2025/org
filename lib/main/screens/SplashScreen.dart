@@ -30,8 +30,8 @@ class SplashScreenState extends State<SplashScreen> {
     Future.delayed(
       Duration(seconds: 1),
       () {
-        if (appStore.isLoggedIn) {
-          getUserDetail(getIntAsync(USER_ID).validate()).then((value) {
+        if (appStore.isLoggedIn && getIntAsync(USER_ID)!=0) {
+          getUserDetail(getIntAsync(USER_ID)).then((value) {
             if (value.deletedAt != null) {
               logout(context);
             } else {

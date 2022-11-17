@@ -38,7 +38,7 @@ class OrderFragmentState extends State<OrderFragment> {
       if (scrollController.position.pixels == scrollController.position.maxScrollExtent && !appStore.isLoading) {
         if (page < totalPage) {
           page++;
-          init();
+          getOrderListApiCall();
         }
       }
     });
@@ -50,8 +50,14 @@ class OrderFragmentState extends State<OrderFragment> {
   }
 
   Future<void> init() async {
-    afterBuildCreated(() {
-      getOrderListApiCall();
+    getOrderListApiCall();
+    await getAppSetting().then((value) {
+      appStore.setOtpVerifyOnPickupDelivery(value.otpVerifyOnPickupDelivery == 1);
+      appStore.setCurrencyCode(value.currencyCode ?? currencyCode);
+      appStore.setCurrencySymbol(value.currency ?? currencySymbol);
+      appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
+    }).catchError((error) {
+      log(error.toString());
     });
   }
 

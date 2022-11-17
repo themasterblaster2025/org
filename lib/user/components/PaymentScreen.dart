@@ -10,13 +10,7 @@ import 'package:flutter_paytabs_bridge/PaymentSdkApms.dart';
 import 'package:flutter_paytabs_bridge/PaymentSdkConfigurationDetails.dart';
 import 'package:flutter_paytabs_bridge/flutter_paytabs_bridge.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:flutterwave_standard/core/TransactionCallBack.dart';
-import 'package:flutterwave_standard/core/navigation_controller.dart';
-import 'package:flutterwave_standard/models/requests/customer.dart';
-import 'package:flutterwave_standard/models/requests/customizations.dart';
-import 'package:flutterwave_standard/models/requests/standard_request.dart';
-import 'package:flutterwave_standard/models/responses/charge_response.dart';
-import 'package:flutterwave_standard/view/flutterwave_style.dart';
+import 'package:flutterwave_standard/flutterwave.dart';
 import 'package:flutterwave_standard/view/view_utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -24,7 +18,6 @@ import 'package:intl/intl.dart';
 import 'package:mercado_pago_mobile_checkout/mercado_pago_mobile_checkout.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
 import 'package:mighty_delivery/main/models/PaymentGatewayListModel.dart';
-import 'package:mighty_delivery/main/network/NetworkUtils.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
@@ -52,7 +45,7 @@ class PaymentScreen extends StatefulWidget {
   PaymentScreenState createState() => PaymentScreenState();
 }
 
-class PaymentScreenState extends State<PaymentScreen> implements TransactionCallBack {
+class PaymentScreenState extends State<PaymentScreen> {
   String? razorKey,
       stripPaymentKey,
       stripPaymentPublishKey,
@@ -70,7 +63,6 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
       paytmMerchantKey,
       myFatoorahToken;
   List<PaymentGatewayData> paymentGatewayList = [];
-  late NavigationController controller;
   String? selectedPaymentType;
   bool isTestType = true;
   late Razorpay _razorpay;
@@ -213,86 +205,34 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
   }
 
   /// FlutterWave Payment
-  void flutterWaveCheckout() {
-    if (isDisabled) return;
-    _showConfirmDialog();
-  }
+  void flutterWaveCheckout() async {
+    final  customer = Customer(name: getStringAsync(NAME), phoneNumber: getStringAsync(USER_CONTACT_NUMBER), email: getStringAsync(USER_EMAIL));
 
-  final style = FlutterwaveStyle(
-      buttonColor: Color(0xFF5957b0),
-      buttonTextStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
-      dialogCancelTextStyle: TextStyle(color: Colors.grey, fontSize: 18),
-      dialogContinueTextStyle: TextStyle(color: Color(0xFF5957b0), fontSize: 18));
-
-  void _showConfirmDialog() {
-    FlutterwaveViewUtils.showConfirmPaymentModal(
-      context,
-      appStore.currencyCode,
-      widget.totalAmount.toString(),
-      style.getMainTextStyle(),
-      style.getDialogBackgroundColor(),
-      style.getDialogCancelTextStyle(),
-      style.getDialogContinueTextStyle(),
-      _handlePayment,
-    );
-  }
-
-  void _handlePayment() async {
-    final Customer customer = Customer(name: getStringAsync(NAME), phoneNumber: getStringAsync(USER_CONTACT_NUMBER), email: getStringAsync(USER_EMAIL));
-
-    final request = StandardRequest(
+    final Flutterwave flutterwave = Flutterwave(
+      context: context,
+      publicKey: flutterWavePublicKey.validate(),
+      currency: appStore.currencyCode,
+      redirectUrl: "https://www.google.com",
       txRef: DateTime.now().millisecond.toString(),
       amount: widget.totalAmount.toString(),
       customer: customer,
       paymentOptions: "card, payattitude",
       customization: Customization(title: "Test Payment"),
       isTestMode: isTestType,
-      publicKey: flutterWavePublicKey.validate(),
-      currency: appStore.currencyCode,
-      redirectUrl: "https://www.google.com",
     );
+    final ChargeResponse response = await flutterwave.charge();
+    if (response.status == 'successful') {
+      Map<String, dynamic> req = {
+        "txn_id": response.transactionId.toString(),
+        "status": response.status.toString(),
+        "reference": response.txRef.toString(),
+      };
+      savePaymentApiCall(paymentStatus: PAYMENT_PAID, txnId: response.transactionId, paymentType: PAYMENT_TYPE_FLUTTERWAVE, transactionDetail: req);
 
-    try {
-      Navigator.of(context).pop();
-      _toggleButtonActive(false);
-      controller.startTransaction(request);
-      _toggleButtonActive(true);
-    } catch (error) {
-      _toggleButtonActive(true);
-      _showErrorAndClose(error.toString());
+      print("${response.toJson()}");
+    } else {
+      FlutterwaveViewUtils.showToast(context, 'Transaction Failed');
     }
-  }
-
-  void _toggleButtonActive(final bool shouldEnable) {
-    setState(() {
-      isDisabled = !shouldEnable;
-    });
-  }
-
-  void _showErrorAndClose(final String errorMessage) {
-    FlutterwaveViewUtils.showToast(context, errorMessage);
-  }
-
-  @override
-  onTransactionError() {
-    _showErrorAndClose("transaction error");
-    toast(errorMessage);
-  }
-
-  @override
-  onCancelled() {
-    toast("Transaction Cancelled");
-  }
-
-  @override
-  onTransactionSuccess(String id, String txRef) {
-    final ChargeResponse chargeResponse = ChargeResponse(status: "success", success: true, transactionId: id, txRef: txRef);
-    Map<String, dynamic> req = {
-      "txn_id": chargeResponse.transactionId.toString(),
-      "status": chargeResponse.status.toString(),
-      "reference": chargeResponse.txRef.toString(),
-    };
-    savePaymentApiCall(paymentStatus: PAYMENT_PAID, txnId: chargeResponse.transactionId, paymentType: PAYMENT_TYPE_FLUTTERWAVE, transactionDetail: req);
   }
 
   /// StripPayment
@@ -320,7 +260,7 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
       appStore.setLoading(false);
       http.Response.fromStream(value).then((response) async {
         if (response.statusCode == 200) {
-          var res = StripePayModel.fromJson(await handleResponse(response));
+          var res = StripePayModel.fromJson(jsonDecode(response.body));
 
           await Stripe.instance.initPaymentSheet(
             paymentSheetParameters: SetupPaymentSheetParameters(
@@ -609,7 +549,6 @@ class PaymentScreenState extends State<PaymentScreen> implements TransactionCall
 
   @override
   Widget build(BuildContext context) {
-    controller = NavigationController(Client(), style, this);
     return Scaffold(
       appBar: AppBar(title: Text(language.payment)),
       body: BodyCornerWidget(

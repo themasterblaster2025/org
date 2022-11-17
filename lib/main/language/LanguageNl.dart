@@ -816,4 +816,26 @@ class LanguageNl extends BaseLanguage {
 
   @override
   String get orderDeliveredSuccessfully => "Bestellen met succes geleverd";
+
+  @override
+  String get deleteAccount => 'Account verwijderen';
+
+  @override
+  String get deleteAccountMsg1 => 'Weet u zeker dat u uw account wilt verwijderen? Lees hoe accountverwijdering zal beïnvloeden.';
+
+  @override
+  String get deleteAccountMsg2 =>
+      'Het verwijderen van uw account verwijdert persoonlijke informatie uit onze database. Uw e-mail wordt permanent gereserveerd en dezelfde e-mail kan niet worden gebruikt om een ​​nieuw account te registreren.';
+
+  @override
+  String get deleteAccountConfirmMsg => 'Weet u zeker dat u het account wilt verwijderen?';
+
+  @override
+  String get remark => 'Opmerking';
+
+  @override
+  String get showMore => 'Laat meer zien';
+
+  @override
+  String get showLess => 'Laat minder zien';
 }

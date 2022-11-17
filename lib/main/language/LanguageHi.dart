@@ -816,4 +816,26 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get orderDeliveredSuccessfully => "आदेश सफलतापूर्वक दिया गया";
+
+  @override
+  String get deleteAccount => 'खाता हटा दो';
+
+  @override
+  String get deleteAccountMsg1 => 'क्या आप इस खाते को हटाने के लिए सुनिश्चित हैं? कृपया पढ़ें कि खाता विलोपन कैसे प्रभावित करेगा।';
+
+  @override
+  String get deleteAccountMsg2 =>
+      'अपने खाते को हटाने से हमारे डेटाबेस से व्यक्तिगत जानकारी हट जाती है। आपका ईमेल स्थायी रूप से आरक्षित हो जाता है और एक नया खाता पंजीकृत करने के लिए एक ही ईमेल का फिर से उपयोग नहीं किया जा सकता है।';
+
+  @override
+  String get deleteAccountConfirmMsg => 'क्या आप सुनिश्चित हैं कि आप खाता हटाना चाहते हैं?';
+
+  @override
+  String get remark => 'टिप्पणी';
+
+  @override
+  String get showMore => 'और दिखाओ';
+
+  @override
+  String get showLess => 'कम दिखाएं';
 }

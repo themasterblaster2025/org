@@ -816,4 +816,26 @@ class LanguageFr extends BaseLanguage {
 
   @override
   String get orderDeliveredSuccessfully => "Commande livrée avec succès";
+
+  @override
+  String get deleteAccount => 'Supprimer le compte';
+
+  @override
+  String get deleteAccountMsg1 => 'Êtes-vous sûr de vouloir supprimer votre compte? Veuillez lire comment la suppression du compte affectera.';
+
+  @override
+  String get deleteAccountMsg2 =>
+      'La suppression de votre compte supprime les informations personnelles de notre base de données. Votre e-mail est réservé en permanence et le même e-mail ne peut pas être réutilisé pour enregistrer un nouveau compte.';
+
+  @override
+  String get deleteAccountConfirmMsg => 'Êtes-vous sûr de vouloir supprimer le compte?';
+
+  @override
+  String get remark => 'Remarque';
+
+  @override
+  String get showMore => 'Montre plus';
+
+  @override
+  String get showLess => 'Montrer moins';
 }

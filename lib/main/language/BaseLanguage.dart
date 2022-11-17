@@ -546,4 +546,18 @@ abstract class BaseLanguage {
   String get orderDepartedSuccessfully;
 
   String get orderDeliveredSuccessfully;
+
+  String get deleteAccount;
+
+  String get deleteAccountMsg1;
+
+  String get deleteAccountMsg2;
+
+  String get deleteAccountConfirmMsg;
+
+  String get remark;
+
+  String get showMore;
+
+  String get showLess;
 }

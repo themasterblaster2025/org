@@ -816,4 +816,25 @@ class LanguageId extends BaseLanguage {
 
   @override
   String get orderDeliveredSuccessfully => "Pesanan berhasil disampaikan";
+
+  @override
+  String get deleteAccount => 'Hapus akun';
+
+  @override
+  String get deleteAccountMsg1 => 'Apakah Anda yakin ingin menghapus akun Anda? Harap baca bagaimana penghapusan akun akan mempengaruhi.';
+
+  @override
+  String get deleteAccountMsg2 => 'Menghapus akun Anda menghapus informasi pribadi dari database kami. Email Anda menjadi dipesan secara permanen dan email yang sama tidak dapat digunakan kembali untuk mendaftarkan akun baru.';
+
+  @override
+  String get deleteAccountConfirmMsg => 'Apakah Anda yakin ingin menghapus akun?';
+
+  @override
+  String get remark => 'Komentar';
+
+  @override
+  String get showMore => 'Menampilkan lebih banyak';
+
+  @override
+  String get showLess => 'Tunjukkan lebih sedikit';
 }

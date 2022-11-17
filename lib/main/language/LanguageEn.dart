@@ -816,4 +816,25 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get orderDeliveredSuccessfully => "Order Delivered Successfully";
+
+  @override
+  String get deleteAccount => 'Delete Account';
+
+  @override
+  String get deleteAccountMsg1 => 'Are you sure you want to delete your account? Please read how account deletion will affect.';
+
+  @override
+  String get deleteAccountMsg2 => 'Deleting your account removes personal information from our database. Your email becomes permanently reserved and same email cannot be re-used to register a new account.';
+
+  @override
+  String get deleteAccountConfirmMsg => 'Are you sure you want to delete Account?';
+
+  @override
+  String get remark => 'Remark';
+
+  @override
+  String get showMore => 'Show more';
+
+  @override
+  String get showLess => 'Show less';
 }

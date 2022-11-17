@@ -154,6 +154,19 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                             Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(orderData!.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.pickupPoint!.endTime!).toLocal())}',
                                                     style: secondaryTextStyle())
                                                 .paddingOnly(top: 8),
+                                          if (orderData!.pickupPoint!.description.validate().isNotEmpty)
+                                            Padding(
+                                              padding: EdgeInsets.only(top: 8.0),
+                                              child: ReadMoreText(
+                                                '${language.remark}: ${orderData!.pickupPoint!.description.validate()}',
+                                                trimLines: 3,
+                                                style: primaryTextStyle(size: 14),
+                                                colorClickableText: colorPrimary,
+                                                trimMode: TrimMode.Line,
+                                                trimCollapsedText: language.showMore,
+                                                trimExpandedText: language.showLess,
+                                              ),
+                                            ),
                                         ],
                                       ).expand(),
                                     ],
@@ -182,6 +195,19 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                             Text('${language.note} ${language.courierWillDeliverAt}${DateFormat('dd MMM yyyy').format(DateTime.parse(orderData!.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.deliveryPoint!.endTime!).toLocal())}',
                                                     style: secondaryTextStyle())
                                                 .paddingOnly(top: 8),
+                                          if (orderData!.deliveryPoint!.description.validate().isNotEmpty)
+                                            Padding(
+                                              padding: EdgeInsets.only(top: 8.0),
+                                              child: ReadMoreText(
+                                                '${language.remark}: ${orderData!.deliveryPoint!.description.validate()}',
+                                                trimLines: 3,
+                                                style: primaryTextStyle(size: 14),
+                                                colorClickableText: colorPrimary,
+                                                trimMode: TrimMode.Line,
+                                                trimCollapsedText: language.showMore,
+                                                trimExpandedText: language.showLess,
+                                              ),
+                                            ),
                                         ],
                                       ).expand(),
                                     ],

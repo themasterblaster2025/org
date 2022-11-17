@@ -816,4 +816,25 @@ class LanguageVi extends BaseLanguage {
 
   @override
   String get orderDeliveredSuccessfully => "Đơn đặt hàng được giao thành công";
+
+  @override
+  String get deleteAccount => 'Xóa tài khoản';
+
+  @override
+  String get deleteAccountMsg1 => 'Bạn có chắc rằng bạn muốn xóa tài khoản của bạn? Vui lòng đọc cách xóa tài khoản sẽ ảnh hưởng.';
+
+  @override
+  String get deleteAccountMsg2 => 'Xóa tài khoản của bạn xóa thông tin cá nhân khỏi cơ sở dữ liệu của chúng tôi. Email của bạn được bảo lưu vĩnh viễn và cùng một email không thể được sử dụng lại để đăng ký một tài khoản mới.';
+
+  @override
+  String get deleteAccountConfirmMsg => 'Bạn có chắc bạn muốn xóa tài khoản không?';
+
+  @override
+  String get remark => 'Nhận xét';
+
+  @override
+  String get showMore => 'Cho xem nhiều hơn';
+
+  @override
+  String get showLess => 'Hiện ít hơn';
 }

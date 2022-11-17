@@ -816,4 +816,25 @@ class LanguageTr extends BaseLanguage {
 
   @override
   String get orderDeliveredSuccessfully => "Başarılı bir şekilde teslim edilen sipariş";
+
+  @override
+  String get deleteAccount => 'Hesabı sil';
+
+  @override
+  String get deleteAccountMsg1 => 'Hesabınızı silmek istediğinizden emin misiniz? Lütfen hesap silme işleminin nasıl etkileyeceğini okuyun.';
+
+  @override
+  String get deleteAccountMsg2 => 'Hesabınızı silme kişisel bilgileri veritabanımızdan kaldırır. E-postanız kalıcı olarak ayrılır ve aynı e-posta yeni bir hesap kaydetmek için yeniden kullanılamaz.';
+
+  @override
+  String get deleteAccountConfirmMsg => 'Hesabı silmek istediğinden emin misiniz?';
+
+  @override
+  String get remark => 'Söz';
+
+  @override
+  String get showMore => 'Daha fazla göster';
+
+  @override
+  String get showLess => 'Daha az göster';
 }

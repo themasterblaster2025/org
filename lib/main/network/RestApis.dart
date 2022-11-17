@@ -403,6 +403,15 @@ Future<PlaceIdDetailModel> getPlaceDetail({String placeId=''}) async {
   return PlaceIdDetailModel.fromJson(await handleResponse(await buildHttpResponse('place-detail-api?placeid=$placeId', method: HttpMethod.GET)));
 }
 
+Future<LDBaseResponse> deleteUser(Map req) async {
+  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('delete-user', request: req, method: HttpMethod.POST)));
+}
+
+Future<LDBaseResponse> userAction(Map request) async {
+  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('user-action', request: request, method: HttpMethod.POST)));
+}
+
+
 
 
 

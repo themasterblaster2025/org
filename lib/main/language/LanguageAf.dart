@@ -816,4 +816,26 @@ class LanguageAf extends BaseLanguage {
 
   @override
   String get orderDeliveredSuccessfully => "Bestel suksesvol afgelewer";
+
+  @override
+  String get deleteAccount => 'Verwyder rekening';
+
+  @override
+  String get deleteAccountMsg1 => 'Is u seker dat u u rekening wil uitvee? Lees hoe die verwydering van rekening sal beïnvloed.';
+
+  @override
+  String get deleteAccountMsg2 =>
+      'Die verwydering van u rekening verwyder persoonlike inligting uit ons databasis. U e-pos word permanent gereserveer en dieselfde e-pos kan nie weer gebruik word om \'n nuwe rekening te registreer nie.';
+
+  @override
+  String get deleteAccountConfirmMsg => 'Is u seker dat u rekening wil verwyder?';
+
+  @override
+  String get remark => 'Opmerk';
+
+  @override
+  String get showMore => 'Wys meer';
+
+  @override
+  String get showLess => 'Wys minder';
 }

@@ -816,4 +816,26 @@ class LanguageEs extends BaseLanguage {
 
   @override
   String get orderDeliveredSuccessfully => "Orden entregado con éxito";
+
+  @override
+  String get deleteAccount => 'Borrar cuenta';
+
+  @override
+  String get deleteAccountMsg1 => '¿Estás seguro de que quieres eliminar tu cuenta? Lea cómo afectará la eliminación de la cuenta.';
+
+  @override
+  String get deleteAccountMsg2 =>
+      'Eliminar su cuenta elimina la información personal de nuestra base de datos. Su correo electrónico se reserva permanentemente y el mismo correo electrónico no puede reutilizarse para registrar una nueva cuenta.';
+
+  @override
+  String get deleteAccountConfirmMsg => '¿Estás seguro de que quieres eliminar la cuenta?';
+
+  @override
+  String get remark => 'Observación';
+
+  @override
+  String get showMore => 'Mostrar más';
+
+  @override
+  String get showLess => 'Muestra menos';
 }

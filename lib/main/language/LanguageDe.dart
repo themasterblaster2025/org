@@ -816,4 +816,26 @@ class LanguageDe extends BaseLanguage {
 
   @override
   String get orderDeliveredSuccessfully => "Reihenfolge erfolgreich geliefert";
+
+  @override
+  String get deleteAccount => 'Konto löschen';
+
+  @override
+  String get deleteAccountMsg1 => 'Sind Sie sicher, dass Sie Ihr Konto löschen möchten? Bitte lesen Sie, wie sich die Löschung des Kontos auswirkt.';
+
+  @override
+  String get deleteAccountMsg2 =>
+      'Durch das Löschen Ihres Kontos werden persönliche Daten aus unserer Datenbank entfernt. Ihre E-Mail wird dauerhaft reserviert und dieselbe E-Mail kann nicht wiederverwendet werden, um ein neues Konto zu registrieren.';
+
+  @override
+  String get deleteAccountConfirmMsg => 'Sind Sie sicher, dass Sie Konto löschen möchten?';
+
+  @override
+  String get remark => 'Anmerkung';
+
+  @override
+  String get showMore => 'Zeig mehr';
+
+  @override
+  String get showLess => 'Zeige weniger';
 }

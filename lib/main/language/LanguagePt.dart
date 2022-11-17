@@ -816,4 +816,26 @@ class LanguagePt extends BaseLanguage {
 
   @override
   String get orderDeliveredSuccessfully => "Ordem entregue com sucesso";
+
+  @override
+  String get deleteAccount => 'Deletar conta';
+
+  @override
+  String get deleteAccountMsg1 => 'Tem certeza de que deseja excluir sua conta? Leia como a exclusão da conta afetará.';
+
+  @override
+  String get deleteAccountMsg2 =>
+      'A exclusão de sua conta remove as informações pessoais do nosso banco de dados. Seu email se torna permanentemente reservado e o mesmo email não pode ser reutilizado para registrar uma nova conta.';
+
+  @override
+  String get deleteAccountConfirmMsg => 'Tem certeza de que deseja excluir a conta?';
+
+  @override
+  String get remark => 'Observação';
+
+  @override
+  String get showMore => 'Mostre mais';
+
+  @override
+  String get showLess => 'Mostre menos';
 }
