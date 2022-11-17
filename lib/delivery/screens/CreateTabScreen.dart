@@ -351,6 +351,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                   onTap: () async {
                                     if (await checkPermission()) {
                                       TrackingScreen(
+                                        orderId: data.id,
                                               order: orderData,
                                               latLng: data.status == ORDER_ACTIVE
                                                   ? LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble())
