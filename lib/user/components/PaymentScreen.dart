@@ -13,7 +13,6 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutterwave_standard/flutterwave.dart';
 import 'package:flutterwave_standard/view/view_utils.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:mercado_pago_mobile_checkout/mercado_pago_mobile_checkout.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
@@ -83,15 +82,21 @@ class PaymentScreenState extends State<PaymentScreen> {
 
   Future<void> init() async {
     await paymentListApiCall();
-    Stripe.publishableKey = stripPaymentPublishKey.validate();
-    await Stripe.instance.applySettings().catchError((e) {
-      log("${e.toString()}");
-    });
-    plugin.initialize(publicKey: payStackPublicKey.validate());
-    _razorpay = Razorpay();
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    if (paymentGatewayList.any((element) => element.type == PAYMENT_TYPE_STRIPE)) {
+      Stripe.publishableKey = stripPaymentPublishKey.validate();
+      await Stripe.instance.applySettings().catchError((e) {
+        log("${e.toString()}");
+      });
+    }
+    if (paymentGatewayList.any((element) => element.type == PAYMENT_TYPE_PAYSTACK)) {
+      plugin.initialize(publicKey: payStackPublicKey.validate());
+    }
+    if (paymentGatewayList.any((element) => element.type == PAYMENT_TYPE_RAZORPAY)) {
+      _razorpay = Razorpay();
+      _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+      _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+      _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    }
   }
 
   /// Get Payment Gateway Api Call
@@ -206,7 +211,7 @@ class PaymentScreenState extends State<PaymentScreen> {
 
   /// FlutterWave Payment
   void flutterWaveCheckout() async {
-    final  customer = Customer(name: getStringAsync(NAME), phoneNumber: getStringAsync(USER_CONTACT_NUMBER), email: getStringAsync(USER_EMAIL));
+    final customer = Customer(name: getStringAsync(NAME), phoneNumber: getStringAsync(USER_CONTACT_NUMBER), email: getStringAsync(USER_EMAIL));
 
     final Flutterwave flutterwave = Flutterwave(
       context: context,
@@ -429,13 +434,17 @@ class PaymentScreenState extends State<PaymentScreen> {
         body: body,
         headers: {'Content-type': "application/json"},
       );
-      String preferenceId = json.decode(response.body)['id'];
-      PaymentResult result = await MercadoPagoMobileCheckout.startCheckout(
-        mercadoPagoPublicKey!,
-        preferenceId,
-      );
-      if (result.status == 'approved') {
-        savePaymentApiCall(paymentStatus: 'paid', paymentType: PAYMENT_TYPE_MERCADOPAGO, txnId: result.id.toString());
+      String? preferenceId = json.decode(response.body)['id'];
+      if(preferenceId!=null) {
+        PaymentResult result = await MercadoPagoMobileCheckout.startCheckout(
+          mercadoPagoPublicKey!,
+          preferenceId,
+        );
+        if (result.status == 'approved') {
+          savePaymentApiCall(paymentStatus: 'paid', paymentType: PAYMENT_TYPE_MERCADOPAGO, txnId: result.id.toString());
+        }
+      }else{
+        toast(json.decode(response.body)['message']);
       }
     } catch (e) {
       print(e);

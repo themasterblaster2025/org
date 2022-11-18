@@ -5,6 +5,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:mighty_delivery/main/models/models.dart';
 import 'package:mighty_delivery/main/screens/SplashScreen.dart';
 import 'package:mighty_delivery/main/utils/Constants.dart';
@@ -29,6 +30,7 @@ ChatMessageService chatMessageService = ChatMessageService();
 NotificationService notificationService = NotificationService();
 late List<FileModel> fileList = [];
 bool isCurrentlyOnNoInternet = false;
+late StreamSubscription<Position> positionStream;
 
 bool mIsEnterKey = false;
 String mSelectedImage = "assets/default_wallpaper.png";

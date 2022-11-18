@@ -36,7 +36,13 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
       setState(() {});
     });
     if (await checkPermission()) {
-      await updateLatLong();
+     positionStream =  Geolocator.getPositionStream().listen((event) async {
+        await updateLocation(latitude: event.latitude.toString(), longitude: event.longitude.toString()).then((value) {
+          log('Location updated:$event');
+        }).catchError((error) {
+          log(error);
+        });
+      });
     }
     await getAppSetting().then((value) {
       appStore.setOtpVerifyOnPickupDelivery(value.otpVerifyOnPickupDelivery == 1);
@@ -45,15 +51,6 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
       appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
     }).catchError((error) {
       log(error.toString());
-    });
-  }
-
-  updateLatLong() async {
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    await updateLocation(latitude: position.latitude.toString(), longitude: position.longitude.toString()).then((value) {
-      //
-    }).catchError((error) {
-      log(error);
     });
   }
 

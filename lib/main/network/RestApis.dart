@@ -110,18 +110,17 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
     await setValue(COUNTRY_ID, loginResponse.data!.countryId.validate());
     await setValue(CITY_ID, loginResponse.data!.cityId.validate());
     await setValue(UID, loginResponse.data!.uid.validate());
-    await setValue(IS_VERIFIED_DELIVERY_MAN,loginResponse.data!.isVerifiedDeliveryMan == 1);
+    await setValue(IS_VERIFIED_DELIVERY_MAN, loginResponse.data!.isVerifiedDeliveryMan == 1);
 
     /* await appStore.setUserName(loginResponse.userData!.username.validate());
     await appStore.setRole(loginResponse.userData!.user_type.validate());
     await appStore.setToken(loginResponse.userData!.api_token.validate());
     await appStore.setUserID(loginResponse.userData!.id.validate());*/
     await appStore.setUserEmail(loginResponse.data!.email.validate());
-    if(getIntAsync(STATUS) == 1){
+    if (getIntAsync(STATUS) == 1) {
       await appStore.setLogin(true);
-    }else{
+    } else {
       await appStore.setLogin(false);
-
     }
 
     await setValue(USER_PASSWORD, request['password']);
@@ -132,7 +131,10 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
   });
 }
 
-Future<void> logout(BuildContext context,{bool isFromLogin=false}) async {
+Future<void> logout(BuildContext context, {bool isFromLogin = false}) async {
+  if (getStringAsync(USER_TYPE) == DELIVERY_MAN) {
+    positionStream.cancel();
+  }
   await removeKey(USER_ID);
   await removeKey(NAME);
   await removeKey(USER_TOKEN);
@@ -155,9 +157,9 @@ Future<void> logout(BuildContext context,{bool isFromLogin=false}) async {
 
   await appStore.setLogin(false);
   appStore.setFiltering(false);
-  if(isFromLogin){
+  if (isFromLogin) {
     toast('These credential do not match our records');
-  }else {
+  } else {
     LoginScreen().launch(context, isNewTask: true);
   }
 }
@@ -217,9 +219,8 @@ Future updateProfile({String? userName, String? name, String? userEmail, String?
   });
 }
 
-
-Future<UserData> getUserDetail(int id)async{
-  return UserData.fromJson(await handleResponse(await buildHttpResponse('user-detail?id=$id',method: HttpMethod.GET)).then((value) => value['data']));
+Future<UserData> getUserDetail(int id) async {
+  return UserData.fromJson(await handleResponse(await buildHttpResponse('user-detail?id=$id', method: HttpMethod.GET)).then((value) => value['data']));
 }
 
 /// Create Order Api
@@ -231,8 +232,8 @@ Future<LDBaseResponse> deleteOrder(int id) async {
   return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('order-delete/$id', method: HttpMethod.POST)));
 }
 
-Future<OrderDetailModel> getOrderDetails(int id)async{
-  return OrderDetailModel.fromJson(await handleResponse(await buildHttpResponse('order-detail?id=$id',method: HttpMethod.GET)));
+Future<OrderDetailModel> getOrderDetails(int id) async {
+  return OrderDetailModel.fromJson(await handleResponse(await buildHttpResponse('order-detail?id=$id', method: HttpMethod.GET)));
 }
 
 /// ParcelType Api
@@ -249,8 +250,7 @@ Future<CountryDetailModel> getCountryDetail(int id) async {
 }
 
 Future<CityListModel> getCityList({required int countryId, String? name}) async {
-  return CityListModel.fromJson(
-      await handleResponse(await buildHttpResponse(name != null ? 'city-list?country_id=$countryId&name=$name&per_page=-1' : 'city-list?country_id=$countryId&per_page=-1', method: HttpMethod.GET)));
+  return CityListModel.fromJson(await handleResponse(await buildHttpResponse(name != null ? 'city-list?country_id=$countryId&name=$name&per_page=-1' : 'city-list?country_id=$countryId&per_page=-1', method: HttpMethod.GET)));
 }
 
 Future<CityDetailModel> getCityDetail(int id) async {
@@ -292,8 +292,7 @@ Future<OrderListModel> getOrderList({required int page, String? orderStatus, Str
 
 /// get deliveryBoy orderList
 Future<OrderListModel> getDeliveryBoyOrderList({required int page, required int deliveryBoyID, required int countryId, required int cityId, required String orderStatus}) async {
-  return OrderListModel.fromJson(
-      await handleResponse(await buildHttpResponse('order-list?delivery_man_id=$deliveryBoyID&page=$page&city_id=$cityId&country_id=$countryId&status=$orderStatus', method: HttpMethod.GET)));
+  return OrderListModel.fromJson(await handleResponse(await buildHttpResponse('order-list?delivery_man_id=$deliveryBoyID&page=$page&city_id=$cityId&country_id=$countryId&status=$orderStatus', method: HttpMethod.GET)));
 }
 
 /// update status
@@ -391,15 +390,15 @@ Future<AppSettingModel> getAppSetting() async {
 }
 
 /// Cancel AutoAssign order
-Future<LDBaseResponse> cancelAutoAssignOrder(Map request) async{
-  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('order-auto-assign',request: request,method: HttpMethod.POST)));
+Future<LDBaseResponse> cancelAutoAssignOrder(Map request) async {
+  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('order-auto-assign', request: request, method: HttpMethod.POST)));
 }
 
-Future<AutoCompletePlacesListModel> placeAutoCompleteApi({String searchText='', String countryCode = "in", String language = 'en'}) async {
+Future<AutoCompletePlacesListModel> placeAutoCompleteApi({String searchText = '', String countryCode = "in", String language = 'en'}) async {
   return AutoCompletePlacesListModel.fromJson(await handleResponse(await buildHttpResponse('place-autocomplete-api?country_code=$countryCode&language=$language&search_text=$searchText', method: HttpMethod.GET)));
 }
 
-Future<PlaceIdDetailModel> getPlaceDetail({String placeId=''}) async {
+Future<PlaceIdDetailModel> getPlaceDetail({String placeId = ''}) async {
   return PlaceIdDetailModel.fromJson(await handleResponse(await buildHttpResponse('place-detail-api?placeid=$placeId', method: HttpMethod.GET)));
 }
 
@@ -410,8 +409,3 @@ Future<LDBaseResponse> deleteUser(Map req) async {
 Future<LDBaseResponse> userAction(Map request) async {
   return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('user-action', request: request, method: HttpMethod.POST)));
 }
-
-
-
-
-
