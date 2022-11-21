@@ -10,12 +10,11 @@ import '../../main/network/RestApis.dart';
 import '../../main/utils/Constants.dart';
 
 class DeleteAccountScreen extends StatefulWidget {
-
   @override
   DeleteAccountScreenState createState() => DeleteAccountScreenState();
 }
-class DeleteAccountScreenState extends State<DeleteAccountScreen> {
 
+class DeleteAccountScreenState extends State<DeleteAccountScreen> {
   @override
   void initState() {
     super.initState();
@@ -37,8 +36,10 @@ class DeleteAccountScreenState extends State<DeleteAccountScreen> {
     await deleteUser(req).then((value) async {
       await userService.removeDocument(getStringAsync(UID)).then((value) async {
         await deleteUserFirebase().then((value) async {
-          await logout(context).then((value) {
+          await logout(context).then((value) async {
             appStore.setLoading(false);
+            await removeKey(USER_EMAIL);
+            await removeKey(USER_PASSWORD);
           });
         }).catchError((error) {
           appStore.setLoading(false);
@@ -57,7 +58,7 @@ class DeleteAccountScreenState extends State<DeleteAccountScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Delete Account')),
+      appBar: AppBar(title: Text(language.deleteAccount)),
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -65,32 +66,33 @@ class DeleteAccountScreenState extends State<DeleteAccountScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(language.deleteAccountMsg1,style:primaryTextStyle()),
+                Text(language.deleteAccountMsg1, style: primaryTextStyle()),
                 16.height,
-                Text(language.account,style: boldTextStyle()),
+                Text(language.account, style: boldTextStyle()),
                 8.height,
-                Text(language.deleteAccountMsg2,style: primaryTextStyle()),
+                Text(language.deleteAccountMsg2, style: primaryTextStyle()),
                 24.height,
-                commonButton(language.deleteAccount, () async => {
-                  await showConfirmDialogCustom(
-                    context,
-                    title: language.deleteAccountConfirmMsg,
-                    dialogType: DialogType.DELETE,
-                    positiveText: language.yes,
-                    negativeText: language.no,
-                    onAccept: (c) async {
-                      await deleteAccount(context);
-                    },
-                  ),
-                },color: Colors.red),
+                commonButton(
+                    language.deleteAccount,
+                    () async => {
+                          await showConfirmDialogCustom(
+                            context,
+                            title: language.deleteAccountConfirmMsg,
+                            dialogType: DialogType.DELETE,
+                            positiveText: language.yes,
+                            negativeText: language.no,
+                            onAccept: (c) async {
+                              await deleteAccount(context);
+                            },
+                          ),
+                        },
+                    color: Colors.red),
               ],
             ),
           ),
-          Observer(
-              builder: (context) {
-                return loaderWidget().visible(appStore.isLoading);
-              }
-          ),
+          Observer(builder: (context) {
+            return loaderWidget().visible(appStore.isLoading);
+          }),
         ],
       ),
     );

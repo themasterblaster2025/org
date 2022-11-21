@@ -38,26 +38,24 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
   }
 
   Future<void> submit() async {
-    if (formKey.currentState!.validate()) {
-      Map req = {
-        'old_password': oldPassController.text.trim(),
-        'new_password': newPassController.text.trim(),
-      };
-      appStore.setLoading(true);
+    Map req = {
+      'old_password': oldPassController.text.trim(),
+      'new_password': newPassController.text.trim(),
+    };
+    appStore.setLoading(true);
 
-      await setValue(USER_PASSWORD, newPassController.text.trim());
+    await setValue(USER_PASSWORD, newPassController.text.trim());
 
-      await changePassword(req).then((value) {
-        toast(value.message.toString());
-        appStore.setLoading(false);
+    await changePassword(req).then((value) {
+      toast(value.message.toString());
+      appStore.setLoading(false);
 
-        finish(context);
-      }).catchError((error) {
-        appStore.setLoading(false);
+      finish(context);
+    }).catchError((error) {
+      appStore.setLoading(false);
 
-        toast(error.toString());
-      });
-    }
+      toast(error.toString());
+    });
   }
 
   @override
@@ -129,7 +127,9 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(16),
         child: commonButton(language.saveChanges, () {
-          submit();
+          if (formKey.currentState!.validate()) {
+            submit();
+          }
         }),
       ),
     );
