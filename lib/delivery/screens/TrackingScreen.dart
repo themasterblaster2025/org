@@ -145,91 +145,91 @@ class TrackingScreenState extends State<TrackingScreen> {
       body: BodyCornerWidget(
         child: sourceLocation != null
             ? Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            GoogleMap(
-              markers: markers.map((e) => e).toSet(),
-              polylines: _polylines,
-              mapType: MapType.normal,
-              initialCameraPosition: CameraPosition(
-                target: sourceLocation!,
-                zoom: cameraZoom,
-                tilt: cameraTilt,
-                bearing: cameraBearing,
-              ),
-              onMapCreated: onMapCreated,
-            ),
-            Container(
-              height: 200,
-              color: context.scaffoldBackgroundColor,
-              child: ListView.separated(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  shrinkWrap: true,
-                  itemCount: widget.order.length,
-                  itemBuilder: (_, index) {
-                    OrderData data = widget.order[index];
-                    return Container(
-                      color: orderId == data.id ? colorPrimary.withOpacity(0.1) : Colors.transparent,
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('${language.order}# ${data.id}', style: boldTextStyle()),
-                              Row(
-                                children: [
-                                  Container(
-                                    child: Image.asset('assets/icons/ic_google_map.png', height: 30, width: 30).onTap(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  GoogleMap(
+                    markers: markers.map((e) => e).toSet(),
+                    polylines: _polylines,
+                    mapType: MapType.normal,
+                    initialCameraPosition: CameraPosition(
+                      target: sourceLocation!,
+                      zoom: cameraZoom,
+                      tilt: cameraTilt,
+                      bearing: cameraBearing,
+                    ),
+                    onMapCreated: onMapCreated,
+                  ),
+                  Container(
+                    height: 200,
+                    color: context.scaffoldBackgroundColor,
+                    child: ListView.separated(
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        shrinkWrap: true,
+                        itemCount: widget.order.length,
+                        itemBuilder: (_, index) {
+                          OrderData data = widget.order[index];
+                          return Container(
+                            color: orderId == data.id ? colorPrimary.withOpacity(0.1) : Colors.transparent,
+                            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('${language.order}# ${data.id}', style: boldTextStyle()),
+                                    Row(
+                                      children: [
+                                        Container(
+                                          child: Image.asset('assets/icons/ic_google_map.png', height: 30, width: 30),
+                                          decoration: boxDecorationRoundedWithShadow(defaultRadius.toInt()),
+                                          padding: EdgeInsets.all(2),
+                                        ).onTap(
                                           () {
-                                        if (data.status == ORDER_ACTIVE) {
-                                          MapsLauncher.launchCoordinates(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble());
-                                        } else {
-                                          MapsLauncher.launchCoordinates(data.deliveryPoint!.latitude.toDouble(), data.deliveryPoint!.longitude.toDouble());
-                                        }
-                                      },
+                                            if (data.status == ORDER_ACTIVE) {
+                                              MapsLauncher.launchCoordinates(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble());
+                                            } else {
+                                              MapsLauncher.launchCoordinates(data.deliveryPoint!.latitude.toDouble(), data.deliveryPoint!.longitude.toDouble());
+                                            }
+                                          },
+                                        ),
+                                        16.width,
+                                        AppButton(
+                                          padding: EdgeInsets.zero,
+                                          color: colorPrimary,
+                                          text: language.track,
+                                          textStyle: primaryTextStyle(color: Colors.white),
+                                          onTap: () async {
+                                            orderId = data.id;
+                                            orderLatLong = data.status == ORDER_ACTIVE
+                                                ? LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble())
+                                                : LatLng(data.deliveryPoint!.latitude.toDouble(), data.deliveryPoint!.longitude.toDouble());
+                                            await setPolyLines(orderLat: orderLatLong);
+                                            setState(() {});
+                                          },
+                                        )
+                                      ],
                                     ),
-                                    decoration: boxDecorationRoundedWithShadow(defaultRadius.toInt()),
-                                    padding: EdgeInsets.all(2),
-                                  ),
-                                  16.width,
-                                  AppButton(
-                                    padding: EdgeInsets.zero,
-                                    color: colorPrimary,
-                                    text: language.track,
-                                    textStyle: primaryTextStyle(color: Colors.white),
-                                    onTap: () async {
-                                      orderId = data.id;
-                                      orderLatLong = data.status == ORDER_ACTIVE
-                                          ? LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble())
-                                          : LatLng(data.deliveryPoint!.latitude.toDouble(), data.deliveryPoint!.longitude.toDouble());
-                                      await setPolyLines(orderLat: orderLatLong);
-                                      setState(() {});
-                                    },
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Icon(Icons.location_on, color: colorPrimary),
-                              Text(data.status == ORDER_ACTIVE ? data.pickupPoint!.address.validate() : data.deliveryPoint!.address.validate(), style: primaryTextStyle()).expand(),
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                  separatorBuilder: (_, index) {
-                    return Divider();
-                  }),
-            ),
-          ],
-        )
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Icon(Icons.location_on, color: colorPrimary),
+                                    Text(data.status == ORDER_ACTIVE ? data.pickupPoint!.address.validate() : data.deliveryPoint!.address.validate(), style: primaryTextStyle()).expand(),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        separatorBuilder: (_, index) {
+                          return Divider();
+                        }),
+                  ),
+                ],
+              )
             : loaderWidget(),
       ),
     );
