@@ -838,4 +838,37 @@ class LanguageFr extends BaseLanguage {
 
   @override
   String get showLess => 'Montrer moins';
+
+  @override
+  String get choosePickupAddress => "Choisissez l'adresse de ramassage";
+
+  @override
+  String get chooseDeliveryAddress => "Choisissez l'adresse de livraison";
+
+  @override
+  String get showingAllAddress => "Affichage de toutes les adresses disponibles";
+
+  @override
+  String get addNewAddress => "Ajouter une nouvelle adresse";
+
+  @override
+  String get selectPickupLocation => "Sélectionnez l'emplacement de ramassage";
+
+  @override
+  String get selectDeliveryLocation => "Sélectionnez le lieu de livraison";
+
+  @override
+  String get searchAddress => "Adresse de recherche";
+
+  @override
+  String get pleaseWait => "S'il vous plaît, attendez...";
+
+  @override
+  String get confirmPickupLocation => "Confirmer l'emplacement de ramassage";
+
+  @override
+  String get confirmDeliveryLocation => "Confirmer le lieu de livraison";
+
+  @override
+  String get addressNotInArea => "Adresse pas dans la zone";
 }

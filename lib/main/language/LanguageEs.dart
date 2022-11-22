@@ -838,4 +838,37 @@ class LanguageEs extends BaseLanguage {
 
   @override
   String get showLess => 'Muestra menos';
+
+  @override
+  String get choosePickupAddress => "Elija la dirección de recogida";
+
+  @override
+  String get chooseDeliveryAddress => "Elija la dirección de entrega";
+
+  @override
+  String get showingAllAddress => "Mostrando todas las direcciones disponibles";
+
+  @override
+  String get addNewAddress => "Agregar nueva dirección";
+
+  @override
+  String get selectPickupLocation => "Seleccionar ubicación de recogida";
+
+  @override
+  String get selectDeliveryLocation => "Seleccione la ubicación de entrega";
+
+  @override
+  String get searchAddress => "Dirección de búsqueda";
+
+  @override
+  String get pleaseWait => "Espere por favor...";
+
+  @override
+  String get confirmPickupLocation => "Confirmar la ubicación de la recolección";
+
+  @override
+  String get confirmDeliveryLocation => "Confirmar la ubicación de entrega";
+
+  @override
+  String get addressNotInArea => "Dirección no en el área";
 }

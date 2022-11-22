@@ -838,4 +838,37 @@ class LanguagePt extends BaseLanguage {
 
   @override
   String get showLess => 'Mostre menos';
+
+  @override
+  String get choosePickupAddress => "Escolha o endereço de captador";
+
+  @override
+  String get chooseDeliveryAddress => "Escolha o endereço de entrega";
+
+  @override
+  String get showingAllAddress => "Mostrando todos os endereços disponíveis";
+
+  @override
+  String get addNewAddress => "Adicionar novo endereço";
+
+  @override
+  String get selectPickupLocation => "Selecione Local de coleta";
+
+  @override
+  String get selectDeliveryLocation => "Selecione Local de entrega";
+
+  @override
+  String get searchAddress => "Endereço de pesquisa";
+
+  @override
+  String get pleaseWait => "Por favor, espere...";
+
+  @override
+  String get confirmPickupLocation => "Confirme a localização da coleta";
+
+  @override
+  String get confirmDeliveryLocation => "Confirme o local da entrega";
+
+  @override
+  String get addressNotInArea => "Endereço não na área";
 }

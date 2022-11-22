@@ -837,4 +837,37 @@ class LanguageVi extends BaseLanguage {
 
   @override
   String get showLess => 'Hiện ít hơn';
+
+  @override
+  String get choosePickupAddress => "Chọn địa chỉ đón";
+
+  @override
+  String get chooseDeliveryAddress => "Chọn địa chỉ giao hàng";
+
+  @override
+  String get showingAllAddress => "Hiển thị tất cả các địa chỉ có sẵn";
+
+  @override
+  String get addNewAddress => "Thêm địa chỉ mới";
+
+  @override
+  String get selectPickupLocation => "Chọn Vị trí đón";
+
+  @override
+  String get selectDeliveryLocation => "Chọn vị trí giao hàng";
+
+  @override
+  String get searchAddress => "Địa chỉ tìm kiếm";
+
+  @override
+  String get pleaseWait => "Vui lòng chờ...";
+
+  @override
+  String get confirmPickupLocation => "Xác nhận vị trí đón";
+
+  @override
+  String get confirmDeliveryLocation => "Xác nhận vị trí giao hàng";
+
+  @override
+  String get addressNotInArea => "Địa chỉ không có trong khu vực";
 }

@@ -838,4 +838,37 @@ class LanguageNl extends BaseLanguage {
 
   @override
   String get showLess => 'Laat minder zien';
+
+  @override
+  String get choosePickupAddress => "Kies ophalenadres";
+
+  @override
+  String get chooseDeliveryAddress => "Kies afleveradres";
+
+  @override
+  String get showingAllAddress => "Alle beschikbare adressen weergeven";
+
+  @override
+  String get addNewAddress => "Nieuw adres toevoegen";
+
+  @override
+  String get selectPickupLocation => "Selecteer Pickup Location";
+
+  @override
+  String get selectDeliveryLocation => "Selecteer Leveringslocatie";
+
+  @override
+  String get searchAddress => "Zoekadres";
+
+  @override
+  String get pleaseWait => "Even geduld aub...";
+
+  @override
+  String get confirmPickupLocation => "Bevestig de pick -up locatie";
+
+  @override
+  String get confirmDeliveryLocation => "Bevestig de leveringslocatie";
+
+  @override
+  String get addressNotInArea => "Adres niet in het gebied";
 }

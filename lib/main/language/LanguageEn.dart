@@ -837,4 +837,37 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get showLess => 'Show less';
+
+  @override
+  String get choosePickupAddress => "Choose pickup address";
+
+  @override
+  String get chooseDeliveryAddress => "Choose delivery address";
+
+  @override
+  String get showingAllAddress => "Showing all available addresses";
+
+  @override
+  String get addNewAddress => "Add New Address";
+
+  @override
+  String get selectPickupLocation => "Select Pickup Location";
+
+  @override
+  String get selectDeliveryLocation => "Select Delivery Location";
+
+  @override
+  String get searchAddress => "Search Address";
+
+  @override
+  String get pleaseWait => "Please wait...";
+
+  @override
+  String get confirmPickupLocation => "Confirm Pickup Location";
+
+  @override
+  String get confirmDeliveryLocation => "Confirm Delivery Location";
+
+  @override
+  String get addressNotInArea => "Address not in area";
 }

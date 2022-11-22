@@ -838,4 +838,37 @@ class LanguageAf extends BaseLanguage {
 
   @override
   String get showLess => 'Wys minder';
+
+  @override
+  String get choosePickupAddress => "Kies afhaaladres";
+
+  @override
+  String get chooseDeliveryAddress => "Kies afleweringsadres";
+
+  @override
+  String get showingAllAddress => "Toon alle beskikbare adresse";
+
+  @override
+  String get addNewAddress => "Voeg nuwe adres by";
+
+  @override
+  String get selectPickupLocation => "Kies afhaalplek";
+
+  @override
+  String get selectDeliveryLocation => "Kies afleweringslokasie";
+
+  @override
+  String get searchAddress => "Soek adres";
+
+  @override
+  String get pleaseWait => "Wag asseblief...";
+
+  @override
+  String get confirmPickupLocation => "Bevestig die afhaalplek";
+
+  @override
+  String get confirmDeliveryLocation => "Bevestig die afleweringslokasie";
+
+  @override
+  String get addressNotInArea => "Adres nie in die omgewing nie";
 }

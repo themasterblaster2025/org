@@ -22,6 +22,7 @@ import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main/components/OrderSummeryWidget.dart';
+import '../../main/components/PickAddressBottomSheet.dart';
 import '../../main/models/AutoCompletePlacesListModel.dart';
 import '../../main/models/ExtraChargeRequestModel.dart';
 import '../../main/models/PlaceIdDetailModel.dart';
@@ -92,11 +93,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   num totalExtraCharge = 0;
 
   List<ExtraChargeRequestModel> extraChargeList = [];
-
-  List<Predictions> pickPredictionList = [];
-  List<Predictions> deliverPredictionList = [];
-
-  String? pickMsg, deliverMsg;
 
   @override
   void initState() {
@@ -572,6 +568,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         8.height,
         AppTextField(
           controller: pickAddressCont,
+          readOnly: true,
           textInputAction: TextInputAction.next,
           nextFocus: pickPhoneFocus,
           textFieldType: TextFieldType.MULTILINE,
@@ -581,56 +578,23 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             if (pickLat == null || pickLong == null) return language.pleaseSelectValidAddress;
             return null;
           },
-          onChanged: (val) async {
-            pickMsg = '';
-            pickLat = null;
-            pickLong = null;
-            if (val.isNotEmpty) {
-              if (val.length < 3) {
-                pickMsg = language.selectedAddressValidation;
-                pickPredictionList.clear();
-                setState(() {});
-              } else {
-                pickPredictionList = await getPlaceAutoCompleteApiCall(val);
-                setState(() {});
-              }
-            } else {
-              pickPredictionList.clear();
-              setState(() {});
-            }
-          },
-        ),
-        if (!pickMsg.isEmptyOrNull)
-          Padding(
-              padding: EdgeInsets.only(top: 8, left: 8),
-              child: Text(
-                pickMsg.validate(),
-                style: secondaryTextStyle(color: Colors.red),
-              )),
-        if (pickPredictionList.isNotEmpty)
-          ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              controller: ScrollController(),
-              shrinkWrap: true,
-              padding: EdgeInsets.only(top: 16, bottom: 16),
-              itemCount: pickPredictionList.length,
-              itemBuilder: (context, index) {
-                Predictions mData = pickPredictionList[index];
-                return ListTile(
-                  leading: Icon(Icons.location_pin, color: colorPrimary),
-                  title: Text(mData.description ?? ""),
-                  onTap: () async {
-                    PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
-                    if (response != null) {
-                      pickAddressCont.text = mData.description ?? "";
-                      pickLat = response.result!.geometry!.location!.lat.toString();
-                      pickLong = response.result!.geometry!.location!.lng.toString();
-                      pickPredictionList.clear();
-                      setState(() {});
-                    }
+          onTap: () {
+            showModalBottomSheet(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+              context: context,
+              builder: (context) {
+                return PickAddressBottomSheet(
+                  onPick: (address) {
+                    pickAddressCont.text = address.placeAddress ?? "";
+                    pickLat = address.latitude.toString();
+                    pickLong = address.longitude.toString();
+                    setState(() {});
                   },
                 );
-              }),
+              },
+            );
+          },
+        ),
         16.height,
         Text(language.pickupContactNumber, style: primaryTextStyle()),
         8.height,
@@ -707,6 +671,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         8.height,
         AppTextField(
           controller: deliverAddressCont,
+          readOnly: true,
           textInputAction: TextInputAction.next,
           nextFocus: deliverPhoneFocus,
           textFieldType: TextFieldType.MULTILINE,
@@ -716,56 +681,24 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             if (deliverLat == null || deliverLong == null) return language.pleaseSelectValidAddress;
             return null;
           },
-          onChanged: (val) async {
-            deliverMsg = '';
-            deliverLat = null;
-            deliverLong = null;
-            if (val.isNotEmpty) {
-              if (val.length < 3) {
-                deliverMsg = language.selectedAddressValidation;
-                deliverPredictionList.clear();
-                setState(() {});
-              } else {
-                deliverPredictionList = await getPlaceAutoCompleteApiCall(val);
-                setState(() {});
-              }
-            } else {
-              deliverPredictionList.clear();
-              setState(() {});
-            }
+          onTap: () {
+            showModalBottomSheet(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+              context: context,
+              builder: (context) {
+                return PickAddressBottomSheet(
+                  onPick: (address) {
+                    deliverAddressCont.text = address.placeAddress ?? "";
+                    deliverLat = address.latitude.toString();
+                    deliverLong = address.longitude.toString();
+                    setState(() {});
+                  },
+                  isPickup: false,
+                );
+              },
+            );
           },
         ),
-        if (!deliverMsg.isEmptyOrNull)
-          Padding(
-              padding: EdgeInsets.only(top: 8, left: 8),
-              child: Text(
-                deliverMsg.validate(),
-                style: secondaryTextStyle(color: Colors.red),
-              )),
-        if (deliverPredictionList.isNotEmpty)
-          ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              controller: ScrollController(),
-              shrinkWrap: true,
-              padding: EdgeInsets.only(top: 16, bottom: 16),
-              itemCount: deliverPredictionList.length,
-              itemBuilder: (context, index) {
-                Predictions mData = deliverPredictionList[index];
-                return ListTile(
-                  leading: Icon(Icons.location_pin, color: colorPrimary),
-                  title: Text(mData.description ?? ""),
-                  onTap: () async {
-                    PlaceIdDetailModel? response = await getPlaceIdDetailApiCall(placeId: mData.placeId!);
-                    if (response != null) {
-                      deliverAddressCont.text = mData.description ?? "";
-                      deliverLat = response.result!.geometry!.location!.lat.toString();
-                      deliverLong = response.result!.geometry!.location!.lng.toString();
-                      deliverPredictionList.clear();
-                      setState(() {});
-                    }
-                  },
-                );
-              }),
         16.height,
         Text(language.deliveryContactNumber, style: primaryTextStyle()),
         8.height,
@@ -1005,9 +938,14 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: List.generate(4, (index) {
                           return Container(
-                            color: selectedTabIndex >= index ? colorPrimary : borderColor,
-                            height: 5,
-                            width: context.width() * 0.15,
+                            alignment: Alignment.center,
+                            height: 35,
+                            width: 35,
+                            decoration: BoxDecoration(
+                              color: selectedTabIndex >= index ? colorPrimary : borderColor,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Text('${index + 1}', style: primaryTextStyle(color: selectedTabIndex >= index ? Colors.white : null)),
                           );
                         }).toList(),
                       ),

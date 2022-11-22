@@ -837,4 +837,37 @@ class LanguageTr extends BaseLanguage {
 
   @override
   String get showLess => 'Daha az göster';
+
+  @override
+  String get choosePickupAddress => "Pikap adresini seçin";
+
+  @override
+  String get chooseDeliveryAddress => "Teslimat Adresini Seçin";
+
+  @override
+  String get showingAllAddress => "Mevcut tüm adresleri gösterme";
+
+  @override
+  String get addNewAddress => "Yeni adres ekleyin";
+
+  @override
+  String get selectPickupLocation => "Pikap Konumu'nu seçin";
+
+  @override
+  String get selectDeliveryLocation => "Teslimat Konumu'nu seçin";
+
+  @override
+  String get searchAddress => "Arama adresi";
+
+  @override
+  String get pleaseWait => "Lütfen bekle...";
+
+  @override
+  String get confirmPickupLocation => "Pikap konumunu onaylayın";
+
+  @override
+  String get confirmDeliveryLocation => "Teslimat Konumunu onaylayın";
+
+  @override
+  String get addressNotInArea => "Alanda Adres Değil";
 }

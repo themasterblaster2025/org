@@ -560,4 +560,26 @@ abstract class BaseLanguage {
   String get showMore;
 
   String get showLess;
+
+  String get choosePickupAddress;
+
+  String get chooseDeliveryAddress;
+
+  String get showingAllAddress;
+
+  String get addNewAddress;
+
+  String get selectPickupLocation;
+
+  String get selectDeliveryLocation;
+
+  String get searchAddress;
+
+  String get pleaseWait;
+
+  String get confirmPickupLocation;
+
+  String get confirmDeliveryLocation;
+
+  String get addressNotInArea;
 }

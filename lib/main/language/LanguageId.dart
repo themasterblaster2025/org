@@ -837,4 +837,37 @@ class LanguageId extends BaseLanguage {
 
   @override
   String get showLess => 'Tunjukkan lebih sedikit';
+
+  @override
+  String get choosePickupAddress => "Pilih alamat pickup";
+
+  @override
+  String get chooseDeliveryAddress => "Pilih alamat pengiriman";
+
+  @override
+  String get showingAllAddress => "Menampilkan semua alamat yang tersedia";
+
+  @override
+  String get addNewAddress => "Tambahkan alamat baru";
+
+  @override
+  String get selectPickupLocation => "Pilih lokasi pickup";
+
+  @override
+  String get selectDeliveryLocation => "Pilih Lokasi Pengiriman";
+
+  @override
+  String get searchAddress => "Alamat pencarian";
+
+  @override
+  String get pleaseWait => "Mohon tunggu...";
+
+  @override
+  String get confirmPickupLocation => "Konfirmasi lokasi pickup";
+
+  @override
+  String get confirmDeliveryLocation => "Konfirmasi lokasi pengiriman";
+
+  @override
+  String get addressNotInArea => "Alamat Tidak di Area";
 }

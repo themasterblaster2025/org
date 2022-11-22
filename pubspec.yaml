@@ -62,6 +62,7 @@ dependencies:
   google_maps_flutter: ^2.2.1
   flutter_polyline_points: ^1.0.0
   maps_launcher: ^2.0.1
+  google_maps_place_picker_mb: ^2.0.0-mb.22
 
   # PUSH NOTIFICATION
   onesignal_flutter: ^3.4.1

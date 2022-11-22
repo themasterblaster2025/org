@@ -838,4 +838,37 @@ class LanguageDe extends BaseLanguage {
 
   @override
   String get showLess => 'Zeige weniger';
+
+  @override
+  String get choosePickupAddress => "Wählen Sie Abholadresse";
+
+  @override
+  String get chooseDeliveryAddress => "Wählen Sie die Lieferadresse";
+
+  @override
+  String get showingAllAddress => "Alle verfügbaren Adressen anzeigen";
+
+  @override
+  String get addNewAddress => "Neue Adresse hinzufügen";
+
+  @override
+  String get selectPickupLocation => "Wählen Sie Abholort";
+
+  @override
+  String get selectDeliveryLocation => "Wählen Sie Lieferposition";
+
+  @override
+  String get searchAddress => "Suchadresse";
+
+  @override
+  String get pleaseWait => "Warten Sie mal...";
+
+  @override
+  String get confirmPickupLocation => "Bestätigen Sie den Abholort";
+
+  @override
+  String get confirmDeliveryLocation => "Bestätigen Sie den Lieferstandort";
+
+  @override
+  String get addressNotInArea => "Adresse nicht im Bereich";
 }

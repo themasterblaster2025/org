@@ -838,4 +838,37 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get showLess => 'कम दिखाएं';
+
+  @override
+  String get choosePickupAddress => "पिकअप पता चुनें";
+
+  @override
+  String get chooseDeliveryAddress => "वितरण पता चुनें";
+
+  @override
+  String get showingAllAddress => "सभी उपलब्ध पते दिखा रहा है";
+
+  @override
+  String get addNewAddress => "नया पता जोड़ें";
+
+  @override
+  String get selectPickupLocation => "पिकअप स्थान का चयन करें";
+
+  @override
+  String get selectDeliveryLocation => "वितरण स्थान का चयन करें";
+
+  @override
+  String get searchAddress => "खोज पता";
+
+  @override
+  String get pleaseWait => "कृपया प्रतीक्षा करें...";
+
+  @override
+  String get confirmPickupLocation => "पिकअप स्थान की पुष्टि करें";
+
+  @override
+  String get confirmDeliveryLocation => "वितरण स्थान की पुष्टि करें";
+
+  @override
+  String get addressNotInArea => "पता क्षेत्र में नहीं";
 }

@@ -837,4 +837,37 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get showLess => 'تظهر أقل';
+
+  @override
+  String get choosePickupAddress => "اختر عنوان الالتقاط";
+
+  @override
+  String get chooseDeliveryAddress => "اختر عنوان التسليم";
+
+  @override
+  String get showingAllAddress => "إظهار جميع العناوين المتاحة";
+
+  @override
+  String get addNewAddress => "أضف عنوانًا جديدًا";
+
+  @override
+  String get selectPickupLocation => "حدد موقع الالتقاط";
+
+  @override
+  String get selectDeliveryLocation => "حدد موقع التسليم";
+
+  @override
+  String get searchAddress => "عنوان البحث";
+
+  @override
+  String get pleaseWait => "أرجو الإنتظار...";
+
+  @override
+  String get confirmPickupLocation => "تأكيد موقع التقاط";
+
+  @override
+  String get confirmDeliveryLocation => "تأكيد موقع التسليم";
+
+  @override
+  String get addressNotInArea => "العنوان ليس في المنطقة";
 }
