@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
+import '../main/utils/Colors.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class AppTheme {

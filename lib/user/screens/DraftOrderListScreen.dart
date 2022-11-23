@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
-import 'package:mighty_delivery/main/models/OrderListModel.dart';
-import 'package:mighty_delivery/main/network/RestApis.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
-import 'package:mighty_delivery/main/utils/Common.dart';
-import 'package:mighty_delivery/main/utils/Constants.dart';
-import 'package:mighty_delivery/user/screens/CreateOrderScreen.dart';
+import '../../main/components/BodyCornerWidget.dart';
+import '../../main/models/OrderListModel.dart';
+import '../../main/network/RestApis.dart';
+import '../../main/utils/Colors.dart';
+import '../../main/utils/Common.dart';
+import '../../main/utils/Constants.dart';
+import '../../user/screens/CreateOrderScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 

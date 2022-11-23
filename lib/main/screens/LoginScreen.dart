@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/main/network/RestApis.dart';
-import 'package:mighty_delivery/main/screens/ForgotPasswordScreen.dart';
-import 'package:mighty_delivery/main/screens/RegisterScreen.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
-import 'package:mighty_delivery/main/utils/Common.dart';
-import 'package:mighty_delivery/main/utils/Constants.dart';
-import 'package:mighty_delivery/main/utils/Widgets.dart';
+import '../../main/network/RestApis.dart';
+import '../../main/screens/ForgotPasswordScreen.dart';
+import '../../main/screens/RegisterScreen.dart';
+import '../../main/utils/Colors.dart';
+import '../../main/utils/Common.dart';
+import '../../main/utils/Constants.dart';
+import '../../main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../delivery/screens/DeliveryDashBoard.dart';

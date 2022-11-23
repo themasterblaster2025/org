@@ -4,13 +4,13 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mighty_delivery/main.dart';
-import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
-import 'package:mighty_delivery/main/network/RestApis.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
-import 'package:mighty_delivery/main/utils/Common.dart';
-import 'package:mighty_delivery/main/utils/Constants.dart';
-import 'package:mighty_delivery/main/utils/Widgets.dart';
+import '../../main.dart';
+import '../../main/components/BodyCornerWidget.dart';
+import '../../main/network/RestApis.dart';
+import '../../main/utils/Colors.dart';
+import '../../main/utils/Common.dart';
+import '../../main/utils/Constants.dart';
+import '../../main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class EditProfileScreen extends StatefulWidget {

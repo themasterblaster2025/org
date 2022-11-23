@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:mighty_delivery/main/screens/LoginScreen.dart';
+import '../../main/screens/LoginScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../delivery/screens/DeliveryDashBoard.dart';
@@ -168,7 +168,7 @@ class AuthServices {
       userModel.email = loginDetail.data!.email.validate();
       userModel.userType = CLIENT;
 
-      if (isIos) {
+      if (isIOS) {
         userModel.username = fullName;
       } else {
         userModel.username = loginDetail.data!.username.validate();

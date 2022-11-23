@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
-
-import '../../main.dart';
-
 class NoInternetScreen extends StatefulWidget {
   @override
   _NoInternetScreenState createState() => _NoInternetScreenState();

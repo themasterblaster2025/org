@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/main/models/ExtraChargeRequestModel.dart';
-import 'package:mighty_delivery/main/utils/Common.dart';
+import '../../main/models/ExtraChargeRequestModel.dart';
+import '../../main/utils/Common.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/delivery/screens/DeliveryDashBoard.dart';
-import 'package:mighty_delivery/main/components/UserCitySelectScreen.dart';
-import 'package:mighty_delivery/main/models/CityListModel.dart';
-import 'package:mighty_delivery/main/network/RestApis.dart';
-import 'package:mighty_delivery/main/screens/LoginScreen.dart';
-import 'package:mighty_delivery/main/screens/WalkThroughScreen.dart';
-import 'package:mighty_delivery/main/utils/Constants.dart';
-import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
+import '../../delivery/screens/DeliveryDashBoard.dart';
+import '../../main/components/UserCitySelectScreen.dart';
+import '../../main/models/CityListModel.dart';
+import '../../main/network/RestApis.dart';
+import '../../main/screens/LoginScreen.dart';
+import '../../main/screens/WalkThroughScreen.dart';
+import '../../main/utils/Constants.dart';
+import '../../user/screens/DashboardScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';

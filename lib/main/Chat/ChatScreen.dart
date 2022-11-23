@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
+import '../../main/utils/Colors.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 

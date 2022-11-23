@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
-import 'package:mighty_delivery/main/utils/Common.dart';
-import 'package:mighty_delivery/main/utils/Constants.dart';
+import '../../main/utils/Common.dart';
+import '../../main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';

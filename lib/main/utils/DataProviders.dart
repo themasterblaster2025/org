@@ -1,5 +1,5 @@
-import 'package:mighty_delivery/main.dart';
-import 'package:mighty_delivery/main/models/models.dart';
+import '../../main.dart';
+import '../../main/models/models.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 List<String> getUserCancelReasonList() {

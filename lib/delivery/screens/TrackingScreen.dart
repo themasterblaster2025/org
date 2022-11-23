@@ -6,11 +6,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:maps_launcher/maps_launcher.dart';
-import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
-import 'package:mighty_delivery/main/models/OrderListModel.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
-import 'package:mighty_delivery/main/utils/Common.dart';
-import 'package:mighty_delivery/main/utils/Constants.dart';
+import '../../main/components/BodyCornerWidget.dart';
+import '../../main/models/OrderListModel.dart';
+import '../../main/utils/Colors.dart';
+import '../../main/utils/Common.dart';
+import '../../main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';

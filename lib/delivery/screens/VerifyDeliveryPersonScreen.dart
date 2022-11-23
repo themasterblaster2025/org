@@ -4,12 +4,12 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:http/http.dart';
-import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
-import 'package:mighty_delivery/main/models/DeliveryDocumentListModel.dart';
-import 'package:mighty_delivery/main/models/DocumentListModel.dart';
-import 'package:mighty_delivery/main/network/RestApis.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
-import 'package:mighty_delivery/main/utils/Common.dart';
+import '../../main/components/BodyCornerWidget.dart';
+import '../../main/models/DeliveryDocumentListModel.dart';
+import '../../main/models/DocumentListModel.dart';
+import '../../main/network/RestApis.dart';
+import '../../main/utils/Colors.dart';
+import '../../main/utils/Common.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 

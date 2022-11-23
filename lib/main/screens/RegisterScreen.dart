@@ -1,10 +1,10 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
-import 'package:mighty_delivery/main/utils/Common.dart';
-import 'package:mighty_delivery/main/utils/Constants.dart';
-import 'package:mighty_delivery/main/utils/Widgets.dart';
+import '../../main/utils/Colors.dart';
+import '../../main/utils/Common.dart';
+import '../../main/utils/Constants.dart';
+import '../../main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';

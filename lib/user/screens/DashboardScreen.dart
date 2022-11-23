@@ -1,21 +1,19 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/main.dart';
-import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
-import 'package:mighty_delivery/main/components/UserCitySelectScreen.dart';
-import 'package:mighty_delivery/main/models/CityListModel.dart';
-import 'package:mighty_delivery/main/models/models.dart';
-import 'package:mighty_delivery/main/screens/NotificationScreen.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
-import 'package:mighty_delivery/main/utils/Constants.dart';
-import 'package:mighty_delivery/user/components/FilterOrderComponent.dart';
-import 'package:mighty_delivery/user/fragment/AccountFragment.dart';
-import 'package:mighty_delivery/user/fragment/OrderFragment.dart';
-import 'package:mighty_delivery/user/screens/CreateOrderScreen.dart';
+import '../../main.dart';
+import '../../main/components/BodyCornerWidget.dart';
+import '../../main/components/UserCitySelectScreen.dart';
+import '../../main/models/CityListModel.dart';
+import '../../main/models/models.dart';
+import '../../main/screens/NotificationScreen.dart';
+import '../../main/utils/Colors.dart';
+import '../../main/utils/Constants.dart';
+import '../../user/components/FilterOrderComponent.dart';
+import '../../user/fragment/AccountFragment.dart';
+import '../../user/fragment/OrderFragment.dart';
+import '../../user/screens/CreateOrderScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
-
-import '../../main/network/RestApis.dart';
 
 class DashboardScreen extends StatefulWidget {
   static String tag = '/DashboardScreen';

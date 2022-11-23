@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/main.dart';
-import 'package:mighty_delivery/main/network/RestApis.dart';
-import 'package:mighty_delivery/main/screens/ChangePasswordScreen.dart';
-import 'package:mighty_delivery/main/screens/EditProfileScreen.dart';
-import 'package:mighty_delivery/main/screens/LanguageScreen.dart';
-import 'package:mighty_delivery/main/screens/ThemeScreen.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
-import 'package:mighty_delivery/main/utils/Common.dart';
-import 'package:mighty_delivery/main/utils/Constants.dart';
-import 'package:mighty_delivery/user/screens/DraftOrderListScreen.dart';
+import '../../main.dart';
+import '../../main/network/RestApis.dart';
+import '../../main/screens/ChangePasswordScreen.dart';
+import '../../main/screens/EditProfileScreen.dart';
+import '../../main/screens/LanguageScreen.dart';
+import '../../main/screens/ThemeScreen.dart';
+import '../../main/utils/Colors.dart';
+import '../../main/utils/Common.dart';
+import '../../main/utils/Constants.dart';
+import '../../user/screens/DraftOrderListScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 

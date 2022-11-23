@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/main/language/AppLocalizations.dart';
-import 'package:mighty_delivery/main/language/BaseLanguage.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
-import 'package:mighty_delivery/main/utils/Constants.dart';
+import '../../main/language/AppLocalizations.dart';
+import '../../main/language/BaseLanguage.dart';
+import '../../main/utils/Colors.dart';
+import '../../main/utils/Constants.dart';
 import 'package:mobx/mobx.dart';
 import 'package:nb_utils/nb_utils.dart';
 

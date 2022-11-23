@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/main.dart';
-import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
-import 'package:mighty_delivery/main/network/RestApis.dart';
-import 'package:mighty_delivery/main/screens/LanguageScreen.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
-import 'package:mighty_delivery/main/utils/Common.dart';
-import 'package:mighty_delivery/main/utils/Constants.dart';
+import '../../main.dart';
+import '../../main/components/BodyCornerWidget.dart';
+import '../../main/network/RestApis.dart';
+import '../../main/screens/LanguageScreen.dart';
+import '../../main/utils/Colors.dart';
+import '../../main/utils/Common.dart';
+import '../../main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../../main/Services/AuthSertvices.dart';
 import '../../main/screens/AboutUsScreen.dart';
 import '../../main/screens/ChangePasswordScreen.dart';
 import '../../main/screens/EditProfileScreen.dart';

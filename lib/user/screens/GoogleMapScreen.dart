@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:mighty_delivery/main/models/PlaceAddressModel.dart';
-import 'package:mighty_delivery/main/utils/Constants.dart';
+import '../../main/models/PlaceAddressModel.dart';
+import '../../main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';

@@ -7,8 +7,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
-import 'package:mighty_delivery/main/utils/Constants.dart';
+import '../../main/utils/Colors.dart';
+import '../../main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 

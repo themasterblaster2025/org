@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/main/models/models.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
-import 'package:mighty_delivery/main/utils/Constants.dart';
-import 'package:mighty_delivery/main/utils/DataProviders.dart';
-import 'package:mighty_delivery/main/utils/Widgets.dart';
+import '../../main/models/models.dart';
+import '../../main/utils/Colors.dart';
+import '../../main/utils/Constants.dart';
+import '../../main/utils/DataProviders.dart';
+import '../../main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';

@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'package:intl/intl.dart';
-import 'package:mighty_delivery/main.dart';
-import 'package:mighty_delivery/main/models/CountryListModel.dart';
-import 'package:mighty_delivery/main/models/ExtraChargeRequestModel.dart';
-import 'package:mighty_delivery/main/models/OrderListModel.dart';
-import 'package:mighty_delivery/main/utils/Common.dart';
-import 'package:mighty_delivery/main/utils/Constants.dart';
+import '../../main.dart';
+import '../../main/models/CountryListModel.dart';
+import '../../main/models/ExtraChargeRequestModel.dart';
+import '../../main/models/OrderListModel.dart';
+import '../../main/utils/Common.dart';
+import '../../main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';

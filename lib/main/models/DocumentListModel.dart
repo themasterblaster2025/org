@@ -1,4 +1,4 @@
-import 'package:mighty_delivery/main/models/PaginationModel.dart';
+import '../../main/models/PaginationModel.dart';
 
 class DocumentListModel {
   PaginationModel? pagination;

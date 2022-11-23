@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/main.dart';
-import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
-import 'package:mighty_delivery/main/network/RestApis.dart';
-import 'package:mighty_delivery/main/utils/Common.dart';
-import 'package:mighty_delivery/main/utils/Widgets.dart';
+import '../../main.dart';
+import '../../main/components/BodyCornerWidget.dart';
+import '../../main/network/RestApis.dart';
+import '../../main/utils/Common.dart';
+import '../../main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
