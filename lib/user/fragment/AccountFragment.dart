@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mighty_delivery/user/screens/WalletScreen.dart';
 import '../../main.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/screens/ChangePasswordScreen.dart';
@@ -59,6 +60,10 @@ class AccountFragmentState extends State<AccountFragment> {
               children: [
                 settingItemWidget(Icons.drafts_outlined, language.drafts, () {
                   DraftOrderListScreen().launch(context);
+                }),
+                ///TODO
+                settingItemWidget(Icons.wallet, "Wallet", () {
+                  WalletScreen().launch(context);
                 }),
                 settingItemWidget(Icons.person_outline, language.editProfile, () {
                   EditProfileScreen().launch(context);

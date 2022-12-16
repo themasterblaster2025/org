@@ -312,3 +312,8 @@ String paymentType(String paymentType) {
 String printAmount(num amount){
   return appStore.currencyPosition==CURRENCY_POSITION_LEFT ? '${appStore.currencySymbol} $amount' : '$amount ${appStore.currencySymbol}';
 }
+
+// user /delivery - add /get
+// delivery - widtor rew / bank
+//     admin - list width req /
+// create wallet

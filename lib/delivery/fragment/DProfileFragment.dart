@@ -15,6 +15,7 @@ import '../../main/screens/EditProfileScreen.dart';
 import '../../main/screens/ThemeScreen.dart';
 import '../../main/components/UserCitySelectScreen.dart';
 import '../../user/screens/DeleteAccountScreen.dart';
+import '../../user/screens/WalletScreen.dart';
 import '../screens/VerifyDeliveryPersonScreen.dart';
 
 class DProfileFragment extends StatefulWidget {
@@ -71,6 +72,10 @@ class DProfileFragmentState extends State<DProfileFragment> {
                         settingItemWidget(Icons.assignment_outlined, language.verifyDocument, () {
                           VerifyDeliveryPersonScreen().launch(context);
                         },suffixIcon: getBoolAsync(IS_VERIFIED_DELIVERY_MAN) ? Icons.verified_user : null),
+                        ///TODO
+                        settingItemWidget(Icons.wallet, "Wallet", () {
+                          WalletScreen().launch(context);
+                        }),
                         settingItemWidget(Icons.lock_outline, language.changePassword, () {
                           ChangePasswordScreen().launch(context);
                         }),

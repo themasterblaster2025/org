@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../main.dart';
+import '../../main/components/BodyCornerWidget.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -61,33 +62,35 @@ class DeleteAccountScreenState extends State<DeleteAccountScreen> {
       appBar: AppBar(title: Text(language.deleteAccount)),
       body: Stack(
         children: [
-          SingleChildScrollView(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(language.deleteAccountMsg1, style: primaryTextStyle()),
-                16.height,
-                Text(language.account, style: boldTextStyle()),
-                8.height,
-                Text(language.deleteAccountMsg2, style: primaryTextStyle()),
-                24.height,
-                commonButton(
-                    language.deleteAccount,
-                    () async => {
-                          await showConfirmDialogCustom(
-                            context,
-                            title: language.deleteAccountConfirmMsg,
-                            dialogType: DialogType.DELETE,
-                            positiveText: language.yes,
-                            negativeText: language.no,
-                            onAccept: (c) async {
-                              await deleteAccount(context);
-                            },
-                          ),
-                        },
-                    color: Colors.red),
-              ],
+          BodyCornerWidget(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(language.deleteAccountMsg1, style: primaryTextStyle()),
+                  16.height,
+                  Text(language.account, style: boldTextStyle()),
+                  8.height,
+                  Text(language.deleteAccountMsg2, style: primaryTextStyle()),
+                  24.height,
+                  commonButton(
+                      language.deleteAccount,
+                      () async => {
+                            await showConfirmDialogCustom(
+                              context,
+                              title: language.deleteAccountConfirmMsg,
+                              dialogType: DialogType.DELETE,
+                              positiveText: language.yes,
+                              negativeText: language.no,
+                              onAccept: (c) async {
+                                await deleteAccount(context);
+                              },
+                            ),
+                          },
+                      color: Colors.red),
+                ],
+              ),
             ),
           ),
           Observer(builder: (context) {

@@ -11,6 +11,7 @@ import '../../main/models/CityListModel.dart';
 import '../../main/models/CountryListModel.dart';
 import '../../main/models/OrderListModel.dart';
 import '../../main/models/ParcelTypeListModel.dart';
+import '../../main/models/PaymentModel.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
@@ -78,8 +79,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   int selectedTabIndex = 0;
 
-  bool isCashPayment = true;
   bool isDeliverNow = true;
+  int? isSelected;
+
+  bool? isCash = false;
 
   String paymentCollectFrom = PAYMENT_ON_PICKUP;
 
@@ -91,6 +94,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   num weightCharge = 0;
   num distanceCharge = 0;
   num totalExtraCharge = 0;
+
+  List<PaymentModel> mPaymentList = getPaymentItems();
 
   List<ExtraChargeRequestModel> extraChargeList = [];
 
@@ -245,10 +250,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       appStore.setLoading(false);
       toast(value.message);
       finish(context);
-      if (!isCashPayment) {
+      if (isSelected==1) {
         PaymentScreen(orderId: value.orderId.validate(), totalAmount: totalAmount).launch(context);
-      } else {
+      } else if(isSelected==0){
         DashboardScreen().launch(context, isNewTask: true);
+      }
+      else{
+
       }
     }).catchError((error) {
       appStore.setLoading(false);
@@ -851,23 +859,55 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           ),
         ),
         Divider(height: 30),
-        OrderSummeryWidget(extraChargesList: extraChargeList, totalDistance: totalDistance, totalWeight: weightController.text.toDouble(), distanceCharge: distanceCharge, weightCharge: weightCharge, totalAmount: totalAmount),
+        OrderSummeryWidget(
+            extraChargesList: extraChargeList, totalDistance: totalDistance, totalWeight: weightController.text.toDouble(), distanceCharge: distanceCharge, weightCharge: weightCharge, totalAmount: totalAmount),
         16.height,
         Text(language.payment, style: boldTextStyle()),
         16.height,
-        Row(
-          children: [
-            scheduleOptionWidget(context, isCashPayment, 'assets/icons/ic_cash.png', language.cash).onTap(() {
-              isCashPayment = true;
-              setState(() {});
-            }).expand(),
-            16.width,
-            scheduleOptionWidget(context, !isCashPayment, 'assets/icons/ic_credit_card.png', language.online).onTap(() {
-              isCashPayment = false;
-              setState(() {});
-            }).expand(),
-          ],
-        ),
+        HorizontalList(
+            itemCount: mPaymentList.length,
+            itemBuilder: (context, index) {
+              return Container(
+                width: context.width() / 3,
+                padding: EdgeInsets.all(16),
+                decoration: boxDecorationWithRoundedCorners(
+                    border: Border.all(
+                        color: isSelected == index
+                            ? colorPrimary
+                            : appStore.isDarkMode
+                                ? Colors.transparent
+                                : borderColor),
+                    backgroundColor: context.cardColor),
+                child: Row(
+                  children: [
+                    ImageIcon(AssetImage('assets/icons/ic_cash.png'), size: 20, color: isSelected == index ? colorPrimary : Colors.grey),
+                    16.width,
+                    Text(mPaymentList[index].title!, style: boldTextStyle()).expand(),
+                  ],
+                ),
+              ).onTap(() {
+                isSelected = index;
+                setState(() {});
+              });
+            }),
+        // Row(
+        //   children: [
+        //     scheduleOptionWidget(context, isCashPayment, 'assets/icons/ic_cash.png', language.cash).onTap(() {
+        //       isCashPayment = true;
+        //       setState(() {});
+        //     }).expand(),
+        //     16.width,
+        //     scheduleOptionWidget(context, !isCashPayment, 'assets/icons/ic_credit_card.png', language.online).onTap(() {
+        //       isCashPayment = false;
+        //       setState(() {});
+        //     }).expand(),
+        //     16.width,
+        //     scheduleOptionWidget(context, !isCashPayment, 'assets/icons/ic_credit_card.png', "Wallet").onTap(() {
+        //       isCashPayment = false;
+        //       setState(() {});
+        //     }).expand(),
+        //   ],
+        // ),
         16.height,
         Row(
           children: [
@@ -887,7 +927,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               },
             ).expand(),
           ],
-        ).visible(isCashPayment),
+        ).visible(isSelected ==0),
       ],
     );
   }

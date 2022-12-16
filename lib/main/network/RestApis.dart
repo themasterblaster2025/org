@@ -25,6 +25,8 @@ import '../models/AppSettingModel.dart';
 import '../models/AutoCompletePlacesListModel.dart';
 import '../models/OrderDetailModel.dart';
 import '../models/PlaceIdDetailModel.dart';
+import '../models/WalletListModel.dart';
+import '../models/WithDrawListModel.dart';
 import 'NetworkUtils.dart';
 
 //region Auth
@@ -250,7 +252,8 @@ Future<CountryDetailModel> getCountryDetail(int id) async {
 }
 
 Future<CityListModel> getCityList({required int countryId, String? name}) async {
-  return CityListModel.fromJson(await handleResponse(await buildHttpResponse(name != null ? 'city-list?country_id=$countryId&name=$name&per_page=-1' : 'city-list?country_id=$countryId&per_page=-1', method: HttpMethod.GET)));
+  return CityListModel.fromJson(
+      await handleResponse(await buildHttpResponse(name != null ? 'city-list?country_id=$countryId&name=$name&per_page=-1' : 'city-list?country_id=$countryId&per_page=-1', method: HttpMethod.GET)));
 }
 
 Future<CityDetailModel> getCityDetail(int id) async {
@@ -349,6 +352,14 @@ Future<LDBaseResponse> savePayment(Map request) async {
   return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('payment-save', request: request, method: HttpMethod.POST)));
 }
 
+Future<WithDrawListModel> getWithDrawList({int? page}) async {
+  return WithDrawListModel.fromJson(await handleResponse(await buildHttpResponse('withdrawrequest-list?page=$page', method: HttpMethod.GET)));
+}
+
+Future<LDBaseResponse> saveWithDrawRequest(Map request) async {
+  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('save-withdrawrequest', method: HttpMethod.POST, request: request)));
+}
+
 /// Update Location
 Future updateLocation({String? userName, String? userEmail, String? latitude, String? longitude}) async {
   MultipartRequest multiPartRequest = await getMultiPartRequest('update-profile');
@@ -408,4 +419,32 @@ Future<LDBaseResponse> deleteUser(Map req) async {
 
 Future<LDBaseResponse> userAction(Map request) async {
   return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('user-action', request: request, method: HttpMethod.POST)));
+}
+
+Future<WalletListModel> getWalletList({required int page}) async {
+  return WalletListModel.fromJson(await handleResponse(await buildHttpResponse('wallet-list?page=$Page', method: HttpMethod.GET)));
+}
+
+Future<LDBaseResponse> saveWallet(Map request) async {
+  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('save-wallet', method: HttpMethod.POST, request: request)));
+}
+
+/// Update Bank Info
+Future updateBankDetail({String? bankName, String? bankCode, String? accountName, String? accountNumber}) async {
+  MultipartRequest multiPartRequest = await getMultiPartRequest('update-profile');
+  multiPartRequest.fields['email'] = getStringAsync(USER_EMAIL).validate();
+  multiPartRequest.fields['contact_number'] = getStringAsync(USER_CONTACT_NUMBER).validate();
+  multiPartRequest.fields['username'] = getStringAsync(USER_NAME).validate();
+  multiPartRequest.fields['user_bank_account[bank_name]'] = bankName.validate();
+  multiPartRequest.fields['user_bank_account[bank_code]'] = bankCode.validate();
+  multiPartRequest.fields['user_bank_account[account_holder_name]'] = accountName.validate();
+  multiPartRequest.fields['user_bank_account[account_number]'] = accountNumber.validate();
+
+  await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
+    if (data != null) {
+      //
+    }
+  }, onError: (error) {
+    toast(error.toString());
+  });
 }

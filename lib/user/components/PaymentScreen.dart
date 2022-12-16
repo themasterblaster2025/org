@@ -36,9 +36,10 @@ import '../../main/models/StripePayModel.dart';
 class PaymentScreen extends StatefulWidget {
   static String tag = '/PaymentScreen';
   final num totalAmount;
-  final int orderId;
+  final int? orderId;
+  final bool? isWallet;
 
-  PaymentScreen({required this.totalAmount, required this.orderId});
+  PaymentScreen({required this.totalAmount, this.orderId, this.isWallet = false});
 
   @override
   PaymentScreenState createState() => PaymentScreenState();
@@ -198,7 +199,11 @@ class PaymentScreenState extends State<PaymentScreen> {
       'txn_id': response.paymentId,
       'signature': response.signature,
     };
-    savePaymentApiCall(paymentType: PAYMENT_TYPE_RAZORPAY, paymentStatus: 'paid', txnId: response.paymentId, transactionDetail: req);
+    if (widget.isWallet == true) {
+      paymentConfirm();
+    } else {
+      savePaymentApiCall(paymentType: PAYMENT_TYPE_RAZORPAY, paymentStatus: 'paid', txnId: response.paymentId, transactionDetail: req);
+    }
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
@@ -232,8 +237,11 @@ class PaymentScreenState extends State<PaymentScreen> {
         "status": response.status.toString(),
         "reference": response.txRef.toString(),
       };
-      savePaymentApiCall(paymentStatus: PAYMENT_PAID, txnId: response.transactionId, paymentType: PAYMENT_TYPE_FLUTTERWAVE, transactionDetail: req);
-
+      if (widget.isWallet == true) {
+        paymentConfirm();
+      } else {
+        savePaymentApiCall(paymentStatus: PAYMENT_PAID, txnId: response.transactionId, paymentType: PAYMENT_TYPE_FLUTTERWAVE, transactionDetail: req);
+      }
       print("${response.toJson()}");
     } else {
       FlutterwaveViewUtils.showToast(context, 'Transaction Failed');
@@ -282,7 +290,11 @@ class PaymentScreenState extends State<PaymentScreen> {
           );
           await Stripe.instance.presentPaymentSheet(parameters: PresentPaymentSheetParameters(clientSecret: res.clientSecret!, confirmPayment: true)).then(
             (value) async {
-              savePaymentApiCall(paymentType: PAYMENT_TYPE_STRIPE, paymentStatus: PAYMENT_PAID, txnId: res.id);
+              if (widget.isWallet == true) {
+                paymentConfirm();
+              } else {
+                savePaymentApiCall(paymentType: PAYMENT_TYPE_STRIPE, paymentStatus: PAYMENT_PAID, txnId: res.id);
+              }
             },
           ).catchError((e) {
             log("presentPaymentSheet ${e.toString()}");
@@ -322,7 +334,11 @@ class PaymentScreenState extends State<PaymentScreen> {
         "reference": response.reference.toString(),
       };
       if (response.message == 'Success') {
-        savePaymentApiCall(paymentType: PAYMENT_TYPE_PAYSTACK, paymentStatus: PAYMENT_PAID, transactionDetail: req, txnId: response.reference);
+        if (widget.isWallet == true) {
+          paymentConfirm();
+        } else {
+          savePaymentApiCall(paymentType: PAYMENT_TYPE_PAYSTACK, paymentStatus: PAYMENT_PAID, transactionDetail: req, txnId: response.reference);
+        }
       } else {
         toast('Payment Failed');
       }
@@ -364,7 +380,11 @@ class PaymentScreenState extends State<PaymentScreen> {
         "description": result.description,
         "paypal_payer_id": result.paypalPayerId,
       };
-      savePaymentApiCall(paymentType: PAYMENT_TYPE_PAYPAL, paymentStatus: PAYMENT_PAID, txnId: result.nonce, transactionDetail: request);
+      if (widget.isWallet == true) {
+        paymentConfirm();
+      } else {
+        savePaymentApiCall(paymentType: PAYMENT_TYPE_PAYPAL, paymentStatus: PAYMENT_PAID, txnId: result.nonce, transactionDetail: request);
+      }
     }
   }
 
@@ -376,7 +396,11 @@ class PaymentScreenState extends State<PaymentScreen> {
           var transactionDetails = event["data"];
           if (transactionDetails["isSuccess"]) {
             toast("successful transaction");
-            savePaymentApiCall(txnId: transactionDetails['transactionReference'], paymentType: PAYMENT_TYPE_PAYTABS, paymentStatus: 'paid');
+            if (widget.isWallet == true) {
+              paymentConfirm();
+            } else {
+              savePaymentApiCall(txnId: transactionDetails['transactionReference'], paymentType: PAYMENT_TYPE_PAYTABS, paymentStatus: 'paid');
+            }
           } else {
             toast("failed transaction");
           }
@@ -391,8 +415,8 @@ class PaymentScreenState extends State<PaymentScreen> {
   }
 
   PaymentSdkConfigurationDetails generateConfig() {
-    var billingDetails = payTab.BillingDetails(getStringAsync(NAME), getStringAsync(USER_EMAIL), getStringAsync(USER_CONTACT_NUMBER), getStringAsync(USER_ADDRESS), CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).name.validate(),
-        CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate(), "", "");
+    var billingDetails = payTab.BillingDetails(getStringAsync(NAME), getStringAsync(USER_EMAIL), getStringAsync(USER_CONTACT_NUMBER), getStringAsync(USER_ADDRESS),
+        CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).name.validate(), CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate(), "", "");
     List<PaymentSdkAPms> apms = [];
     apms.add(PaymentSdkAPms.STC_PAY);
     var configuration = PaymentSdkConfigurationDetails(
@@ -435,15 +459,19 @@ class PaymentScreenState extends State<PaymentScreen> {
         headers: {'Content-type': "application/json"},
       );
       String? preferenceId = json.decode(response.body)['id'];
-      if(preferenceId!=null) {
+      if (preferenceId != null) {
         PaymentResult result = await MercadoPagoMobileCheckout.startCheckout(
           mercadoPagoPublicKey!,
           preferenceId,
         );
         if (result.status == 'approved') {
-          savePaymentApiCall(paymentStatus: 'paid', paymentType: PAYMENT_TYPE_MERCADOPAGO, txnId: result.id.toString());
+          if (widget.isWallet == true) {
+            paymentConfirm();
+          } else {
+            savePaymentApiCall(paymentStatus: 'paid', paymentType: PAYMENT_TYPE_MERCADOPAGO, txnId: result.id.toString());
+          }
         }
-      }else{
+      } else {
         toast(json.decode(response.body)['message']);
       }
     } catch (e) {
@@ -500,7 +528,11 @@ class PaymentScreenState extends State<PaymentScreen> {
             if (value['response'] != null) {
               toast(value['response']['RESPMSG']);
               if (value['response']['STATUS'] == 'TXN_SUCCESS') {
-                savePaymentApiCall(paymentType: PAYMENT_TYPE_PAYTM, paymentStatus: 'paid', txnId: value['response']['TXNID']);
+                if (widget.isWallet == true) {
+                  paymentConfirm();
+                } else {
+                  savePaymentApiCall(paymentType: PAYMENT_TYPE_PAYTM, paymentStatus: 'paid', txnId: value['response']['TXNID']);
+                }
               }
             }
           }
@@ -545,10 +577,33 @@ class PaymentScreenState extends State<PaymentScreen> {
             ),
     );
     if (response.isSuccess) {
-      savePaymentApiCall(paymentType: PAYMENT_TYPE_MYFATOORAH, txnId: response.paymentId, paymentStatus: 'paid');
+      if (widget.isWallet == true) {
+        paymentConfirm();
+      } else {
+        savePaymentApiCall(paymentType: PAYMENT_TYPE_MYFATOORAH, txnId: response.paymentId, paymentStatus: 'paid');
+      }
     } else if (response.isError) {
       toast('Payment Failed');
     }
+  }
+
+  Future<void> paymentConfirm() async {
+    Map req = {
+      "user_id": getIntAsync(USER_ID),
+      "type": "credit",
+      "amount": widget.totalAmount,
+      "transaction_type": "topup",
+      "currency": appStore.currencyCode,
+    };
+    appStore.isLoading = true;
+    await saveWallet(req).then((value) {
+      appStore.isLoading = false;
+      finish(context, true);
+    }).catchError((error) {
+      appStore.isLoading = false;
+      finish(context);
+      log(error.toString());
+    });
   }
 
   @override
