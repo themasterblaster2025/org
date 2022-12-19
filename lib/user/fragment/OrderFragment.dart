@@ -69,6 +69,7 @@ class OrderFragmentState extends State<OrderFragment> {
       appStore.setAllUnreadCount(value.allUnreadCount.validate());
       totalPage = value.pagination!.totalPages.validate(value: 1);
       page = value.pagination!.currentPage.validate(value: 1);
+      appStore.availableBal = value.walletData!.totalAmount.validate(value: 0);
       isLastPage = false;
       if (page == 1) {
         orderList.clear();
@@ -108,7 +109,7 @@ class OrderFragmentState extends State<OrderFragment> {
                 ? ListView(
                     shrinkWrap: true,
                     controller: scrollController,
-                    padding: EdgeInsets.all(16),
+                    padding: EdgeInsets.only(left: 16, right: 16, bottom: context.height() * 0.1, top: 16),
                     children: orderList.map((item) {
                       return item.status != ORDER_DRAFT
                           ? GestureDetector(
@@ -137,7 +138,9 @@ class OrderFragmentState extends State<OrderFragment> {
                                       children: [
                                         Container(
                                           decoration: boxDecorationWithRoundedCorners(
-                                              borderRadius: BorderRadius.circular(8), border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), backgroundColor: Colors.transparent),
+                                              borderRadius: BorderRadius.circular(8),
+                                              border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                                              backgroundColor: Colors.transparent),
                                           padding: EdgeInsets.all(8),
                                           child: Image.asset(parcelTypeIcon(item.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
                                         ),

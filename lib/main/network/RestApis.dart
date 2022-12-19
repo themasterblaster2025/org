@@ -49,7 +49,7 @@ Future<LoginResponse> signUpApi(Map request) async {
     await setValue(USER_ID, loginResponse.data!.id.validate());
     await setValue(NAME, loginResponse.data!.name.validate());
     await setValue(USER_EMAIL, loginResponse.data!.email.validate());
-    await setValue(USER_TOKEN, loginResponse.data!.apiToken.validate());
+    await setValue(USER_TOKEN, loginResponse.data!.fcmToken.validate());
     await setValue(USER_CONTACT_NUMBER, loginResponse.data!.contactNumber.validate());
     await setValue(USER_PROFILE_PHOTO, loginResponse.data!.profileImage.validate());
     await setValue(USER_TYPE, loginResponse.data!.userType.validate());
@@ -113,7 +113,6 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
     await setValue(CITY_ID, loginResponse.data!.cityId.validate());
     await setValue(UID, loginResponse.data!.uid.validate());
     await setValue(IS_VERIFIED_DELIVERY_MAN, loginResponse.data!.isVerifiedDeliveryMan == 1);
-
     /* await appStore.setUserName(loginResponse.userData!.username.validate());
     await appStore.setRole(loginResponse.userData!.user_type.validate());
     await appStore.setToken(loginResponse.userData!.api_token.validate());
@@ -295,7 +294,8 @@ Future<OrderListModel> getOrderList({required int page, String? orderStatus, Str
 
 /// get deliveryBoy orderList
 Future<OrderListModel> getDeliveryBoyOrderList({required int page, required int deliveryBoyID, required int countryId, required int cityId, required String orderStatus}) async {
-  return OrderListModel.fromJson(await handleResponse(await buildHttpResponse('order-list?delivery_man_id=$deliveryBoyID&page=$page&city_id=$cityId&country_id=$countryId&status=$orderStatus', method: HttpMethod.GET)));
+  return OrderListModel.fromJson(
+      await handleResponse(await buildHttpResponse('order-list?delivery_man_id=$deliveryBoyID&page=$page&city_id=$cityId&country_id=$countryId&status=$orderStatus', method: HttpMethod.GET)));
 }
 
 /// update status
@@ -406,7 +406,8 @@ Future<LDBaseResponse> cancelAutoAssignOrder(Map request) async {
 }
 
 Future<AutoCompletePlacesListModel> placeAutoCompleteApi({String searchText = '', String countryCode = "in", String language = 'en'}) async {
-  return AutoCompletePlacesListModel.fromJson(await handleResponse(await buildHttpResponse('place-autocomplete-api?country_code=$countryCode&language=$language&search_text=$searchText', method: HttpMethod.GET)));
+  return AutoCompletePlacesListModel.fromJson(
+      await handleResponse(await buildHttpResponse('place-autocomplete-api?country_code=$countryCode&language=$language&search_text=$searchText', method: HttpMethod.GET)));
 }
 
 Future<PlaceIdDetailModel> getPlaceDetail({String placeId = ''}) async {

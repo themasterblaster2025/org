@@ -1,11 +1,13 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mighty_delivery/user/screens/WalletScreen.dart';
 import '../../main.dart';
 import '../../main/components/BodyCornerWidget.dart';
 import '../../main/components/UserCitySelectScreen.dart';
 import '../../main/models/CityListModel.dart';
 import '../../main/models/models.dart';
+import '../../main/network/RestApis.dart';
 import '../../main/screens/NotificationScreen.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Constants.dart';
@@ -43,6 +45,18 @@ class DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
+  getOrderListApiCall() async {
+    appStore.setLoading(true);
+    FilterAttributeModel filterData = FilterAttributeModel.fromJson(getJSONAsync(FILTER_DATA));
+    await getOrderList(orderStatus: filterData.orderStatus, fromDate: filterData.fromDate, toDate: filterData.toDate, page: 1).then((value) {
+      appStore.setLoading(false);
+      appStore.availableBal = value.walletData!.totalAmount.validate(value: 0);
+    }).catchError((e) {
+      appStore.setLoading(false);
+      toast(e.toString());
+    });
+  }
+
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
@@ -60,7 +74,10 @@ class DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    getOrderListApiCall();
+
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
         title: Text('${getTitle()}'),
         actions: [
@@ -143,10 +160,15 @@ class DashboardScreenState extends State<DashboardScreen> {
         ][currentIndex],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: colorPrimary,
+        backgroundColor: appStore.availableBal >= 0 ? colorPrimary : textSecondaryColorGlobal,
         child: Icon(Icons.add, color: Colors.white),
         onPressed: () {
-          CreateOrderScreen().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+          if (appStore.availableBal >= 0) {
+            CreateOrderScreen().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+          } else {
+            toast("Balance is insufficient,Please add amount in your wallet");
+            WalletScreen().launch(context);
+          }
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

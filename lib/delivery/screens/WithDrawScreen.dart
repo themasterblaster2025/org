@@ -54,7 +54,7 @@ class WithDrawScreenState extends State<WithDrawScreen> {
   void init() async {
     await getWithDrawList(page: currentPage).then((value) {
       appStore.setLoading(false);
-print("valuee"+value.toJson().toString());
+      print("valuee" + value.toJson().toString());
       currentPage = value.pagination!.currentPage!;
       totalPage = value.pagination!.totalPages!;
       totalAmount = value.wallet_balance!.totalAmount!.toInt();
@@ -204,6 +204,12 @@ print("valuee"+value.toJson().toString());
                           controller: addMoneyController,
                           textFieldType: TextFieldType.PHONE,
                           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                          onChanged: (a) {
+                            log(a);
+                            if (a.toInt() >= totalAmount) {
+                              addMoneyController.text = totalAmount.toString();
+                            }
+                          },
                           decoration: commonInputDecoration(),
                         ),
                         16.height,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mighty_delivery/main/screens/BankDetailScreen.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/user/components/PaymentScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -146,7 +147,7 @@ class WalletScreenState extends State<WalletScreen> {
                               );
                             },
                           );
-                        }, color: whiteColor, textColor: colorPrimary)
+                        }, color:  context.cardColor, textColor: colorPrimary)
                       ],
                     ),
                   ),
@@ -161,7 +162,7 @@ class WalletScreenState extends State<WalletScreen> {
                       return Container(
                         margin: EdgeInsets.only(bottom: 16),
                         padding: EdgeInsets.all(8),
-                        decoration: boxDecorationRoundedWithShadow(defaultRadius.toInt()),
+                        decoration: boxDecorationRoundedWithShadow(defaultRadius.toInt(),backgroundColor: context.cardColor),
                         child: Row(
                           children: [
                             Container(
@@ -174,13 +175,13 @@ class WalletScreenState extends State<WalletScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Money Deposited", style: boldTextStyle(size: 16)),
+                                  Text(data.type == CREDIT?"Money Credited":"Money Deposited", style: boldTextStyle(size: 16)),
                                   SizedBox(height: 8),
-                                  Text(printDate(data.createdAt!), style: secondaryTextStyle(size: 12)),
+                                  Text(printDate(data.createdAt.validate()), style: secondaryTextStyle(size: 12)),
                                 ],
                               ),
                             ),
-                            Text('${printAmount(data.amount!.toDouble())}', style: secondaryTextStyle(color: Colors.green))
+                            Text('${printAmount(data.amount.toDouble())}', style: secondaryTextStyle(color:data.type == CREDIT? Colors.green:Colors.red))
                           ],
                         ),
                       );
@@ -200,12 +201,18 @@ class WalletScreenState extends State<WalletScreen> {
             if (totalAmount != 0)
               Expanded(
                 child: commonButton(
-                  "withDraw",
+                  "Withdraw",
                   () {
-                    WithDrawScreen(onTap: () {
-                      init();
-                    },).launch(context);
-
+                    if (appStore.userBankDetail != null)
+                      WithDrawScreen(
+                        onTap: () {
+                          init();
+                        },
+                      ).launch(context);
+                    else {
+                      toast("opps,your Bank detail not found");
+                      BankDetailScreen(isWallet: true).launch(context);
+                    }
                   },
                 ),
               ),

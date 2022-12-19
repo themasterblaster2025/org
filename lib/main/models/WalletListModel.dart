@@ -1,4 +1,3 @@
-
 import 'PaginationModel.dart';
 
 class WalletListModel {
@@ -12,7 +11,7 @@ class WalletListModel {
     return WalletListModel(
       data: json['data'] != null ? (json['data'] as List).map((i) => WalletModel.fromJson(i)).toList() : null,
       pagination: json['pagination'] != null ? PaginationModel.fromJson(json['pagination']) : null,
-      walletBalance: json['wallet_balance'] != null ? UserWalletModel.fromJson(json['wallet_balance']) : null,
+      walletBalance: json['wallet_data'] != null ? UserWalletModel.fromJson(json['wallet_data']) : null,
     );
   }
 
@@ -25,7 +24,7 @@ class WalletListModel {
       data['pagination'] = this.pagination!.toJson();
     }
     if (this.walletBalance != null) {
-      data['wallet_balance'] = this.walletBalance!.toJson();
+      data['wallet_data'] = this.walletBalance!.toJson();
     }
     return data;
   }
@@ -33,14 +32,15 @@ class WalletListModel {
 
 class WalletModel {
   String? data;
-  int? amount;
-  num? balance;
+  var amount;
+  var balance;
   String? createdAt;
   String? currency;
   String? datetime;
   String? description;
   int? id;
   int? rideRequestId;
+  Data? newData;
   String? transactionType;
   String? type;
   String? updatedAt;
@@ -55,6 +55,7 @@ class WalletModel {
     this.createdAt,
     this.currency,
     this.datetime,
+    this.newData,
     this.description,
     this.id,
     this.rideRequestId,
@@ -68,7 +69,6 @@ class WalletModel {
 
   factory WalletModel.fromJson(Map<String, dynamic> json) {
     return WalletModel(
-      data: json['data'],
       amount: json['amount'],
       balance: json['balance'],
       createdAt: json['created_at'],
@@ -79,6 +79,7 @@ class WalletModel {
       rideRequestId: json['ride_request_id'],
       transactionType: json['transaction_type'],
       type: json['type'],
+      newData: json['data'] != null ? new Data.fromJson(json['data']) : null,
       updatedAt: json['updated_at'],
       userDisplayName: json['user_display_name'],
       userId: json['user_id'],
@@ -102,7 +103,32 @@ class WalletModel {
     data['updated_at'] = this.updatedAt;
     data['user_display_name'] = this.userDisplayName;
     data['user_id'] = this.userId;
+    if (this.newData != null) {
+      data['data'] = this.newData!.toJson();
+    }
     data['wallet_balance'] = this.walletBalance;
+    return data;
+  }
+}
+
+class Data {
+  int? paymentId;
+  int? cancelCharges;
+  int? orderHistory;
+
+  Data({this.paymentId, this.cancelCharges, this.orderHistory});
+
+  Data.fromJson(Map<String, dynamic> json) {
+    paymentId = json['payment_id'];
+    cancelCharges = json['cancel_charges'];
+    orderHistory = json['order_history'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['payment_id'] = this.paymentId;
+    data['cancel_charges'] = this.cancelCharges;
+    data['order_history'] = this.orderHistory;
     return data;
   }
 }

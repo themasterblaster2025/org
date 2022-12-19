@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mighty_delivery/main/screens/BankDetailScreen.dart';
 import '../../main.dart';
 import '../../main/components/BodyCornerWidget.dart';
 import '../../main/network/RestApis.dart';
@@ -75,6 +76,9 @@ class DProfileFragmentState extends State<DProfileFragment> {
                         ///TODO
                         settingItemWidget(Icons.wallet, "Wallet", () {
                           WalletScreen().launch(context);
+                        }),
+                        settingItemWidget(Icons.wallet, "Bank Detail", () {
+                          BankDetailScreen().launch(context);
                         }),
                         settingItemWidget(Icons.lock_outline, language.changePassword, () {
                           ChangePasswordScreen().launch(context);

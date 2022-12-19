@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mighty_delivery/user/screens/WalletScreen.dart';
 import '../../main.dart';
 import '../../main/network/RestApis.dart';
+import '../../main/screens/BankDetailScreen.dart';
 import '../../main/screens/ChangePasswordScreen.dart';
 import '../../main/screens/EditProfileScreen.dart';
 import '../../main/screens/LanguageScreen.dart';
@@ -44,10 +45,10 @@ class AccountFragmentState extends State<AccountFragment> {
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) => SingleChildScrollView(
-        padding: EdgeInsets.only(left: 16, right: 16, bottom: 16, top: 30),
+        padding: EdgeInsets.only(left: 16, right: 16, bottom: context.height() * 0.1, top: 30),
         child: Column(
           children: [
-            commonCachedNetworkImage(getStringAsync(USER_PROFILE_PHOTO).validate(), height: 90, width: 90, fit: BoxFit.cover,alignment: Alignment.center).cornerRadiusWithClipRRect(50),
+            commonCachedNetworkImage(getStringAsync(USER_PROFILE_PHOTO).validate(), height: 90, width: 90, fit: BoxFit.cover, alignment: Alignment.center).cornerRadiusWithClipRRect(50),
             12.height,
             Text(getStringAsync(NAME).validate(), style: boldTextStyle(size: 20)),
             6.height,
@@ -61,9 +62,13 @@ class AccountFragmentState extends State<AccountFragment> {
                 settingItemWidget(Icons.drafts_outlined, language.drafts, () {
                   DraftOrderListScreen().launch(context);
                 }),
+
                 ///TODO
                 settingItemWidget(Icons.wallet, "Wallet", () {
                   WalletScreen().launch(context);
+                }),
+                settingItemWidget(Icons.account_balance, "Bank Detail", () {
+                  BankDetailScreen().launch(context);
                 }),
                 settingItemWidget(Icons.person_outline, language.editProfile, () {
                   EditProfileScreen().launch(context);
@@ -77,19 +82,19 @@ class AccountFragmentState extends State<AccountFragment> {
                 settingItemWidget(Icons.wb_sunny_outlined, language.theme, () {
                   ThemeScreen().launch(context);
                 }),
-                settingItemWidget(Icons.assignment_outlined,language.privacyPolicy , () {
+                settingItemWidget(Icons.assignment_outlined, language.privacyPolicy, () {
                   launchUrl(Uri.parse(mPrivacyPolicy));
                 }),
                 settingItemWidget(Icons.help_outline, language.helpAndSupport, () {
                   launchUrl(Uri.parse(mHelpAndSupport));
                 }),
-                settingItemWidget(Icons.assignment_outlined,language.termAndCondition , () {
+                settingItemWidget(Icons.assignment_outlined, language.termAndCondition, () {
                   launchUrl(Uri.parse(mTermAndCondition));
                 }),
                 settingItemWidget(Icons.info_outline, language.aboutUs, () {
                   AboutUsScreen().launch(context);
                 }),
-                settingItemWidget(Icons.delete_forever, language.deleteAccount, ()  {
+                settingItemWidget(Icons.delete_forever, language.deleteAccount, () {
                   DeleteAccountScreen().launch(context);
                 }),
                 settingItemWidget(

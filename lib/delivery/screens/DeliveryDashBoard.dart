@@ -36,7 +36,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
       setState(() {});
     });
     if (await checkPermission()) {
-     positionStream =  Geolocator.getPositionStream().listen((event) async {
+      positionStream = Geolocator.getPositionStream().listen((event) async {
         await updateLocation(latitude: event.latitude.toString(), longitude: event.longitude.toString()).then((value) {
           log('Location updated:$event');
         }).catchError((error) {
@@ -82,10 +82,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
                       height: 20,
                       width: 20,
                       alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.orange,
-                        shape: BoxShape.circle,
-                      ),
+                      decoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
                       child: Text('${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}', style: primaryTextStyle(size: appStore.allUnreadCount < 99 ? 12 : 8, color: Colors.white)),
                     ),
                   ).visible(appStore.allUnreadCount != 0);

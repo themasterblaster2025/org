@@ -13,130 +13,169 @@ class LoginResponse {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['message'] = this.message;
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
+    data['message'] = this.message;
     return data;
   }
 }
 
 class UserData {
   String? apiToken;
-  String? contactNumber;
-  String? createdAt;
-  String? email;
   int? id;
   String? name;
-  String? profileImage;
-  String? updatedAt;
-  String? userType;
+  String? email;
   String? username;
-  String? address;
   int? status;
+  String? userType;
   int? countryId;
+  String? countryName;
   int? cityId;
   String? cityName;
-  String? countryName;
+  String? address;
+  String? contactNumber;
+  String? createdAt;
+  String? updatedAt;
+  String? profileImage;
+  String? loginType;
   String? latitude;
   String? longitude;
-  String? emailVerifiedAt;
-  String? playerId;
-  String? lastNotificationSeen;
   String? uid;
-  String? currentTeamId;
-  String? profilePhotoPath;
-  String? deletedAt;
-  String? profilePhotoUrl;
+  String? playerId;
+  String? fcmToken;
+  String? lastNotificationSeen;
   int? isVerifiedDeliveryMan;
+  String? deletedAt;
+  UserBankAccount? userBankAccount;
 
-  UserData({
-    this.apiToken,
-    this.contactNumber,
-    this.createdAt,
-    this.email,
-    this.id,
-    this.name,
-    this.profileImage,
-    this.updatedAt,
-    this.userType,
-    this.username,
-    this.address,
-    this.status,
-    this.cityId,
-    this.countryId,
-    this.cityName,
-    this.countryName,
-    this.latitude,
-    this.longitude,
-    this.emailVerifiedAt,
-    this.playerId,
-    this.uid,
-    this.currentTeamId,
-    this.profilePhotoPath,
-    this.deletedAt,
-    this.isVerifiedDeliveryMan,
-    this.lastNotificationSeen,
-    this.profilePhotoUrl
-  });
+  UserData(
+      {this.apiToken,
+      this.id,
+      this.name,
+      this.email,
+      this.username,
+      this.status,
+      this.userType,
+      this.countryId,
+      this.countryName,
+      this.cityId,
+      this.cityName,
+      this.address,
+      this.contactNumber,
+      this.createdAt,
+      this.updatedAt,
+      this.profileImage,
+      this.loginType,
+      this.latitude,
+      this.longitude,
+      this.uid,
+      this.playerId,
+      this.fcmToken,
+      this.lastNotificationSeen,
+      this.isVerifiedDeliveryMan,
+      this.deletedAt,
+      this.userBankAccount});
 
-  factory UserData.fromJson(Map<String, dynamic> json) {
-    return UserData(
-        apiToken: json['api_token'],
-        contactNumber: json['contact_number'],
-        createdAt: json['created_at'],
-        email: json['email'],
-        id: json['id'],
-        name: json['name'],
-        profileImage: json['profile_image'],
-        updatedAt: json['updated_at'],
-        userType: json['user_type'],
-        username: json['username'],
-        address: json['address'],
-        status: json['status'],
-        cityId: json['city_id'],
-        countryId: json['country_id'],
-        cityName: json['city_name'],
-        countryName: json['country_name'],
-        latitude: json['latitude'],
-        longitude: json['longitude'],
-        emailVerifiedAt: json['email_verified_at'],
-        playerId: json['player_id'],
-        uid: json['uid'],
-        currentTeamId: json['current_team_id'],
-        profilePhotoPath: json['profile_photo_path'],
-        deletedAt: json['deleted_at'],
-        isVerifiedDeliveryMan: json['is_verified_delivery_man'],
-    );
+  UserData.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    apiToken = json['api_token'];
+    name = json['name'];
+    email = json['email'];
+    username = json['username'];
+    status = json['status'];
+    userType = json['user_type'];
+    countryId = json['country_id'];
+    countryName = json['country_name'];
+    cityId = json['city_id'];
+    cityName = json['city_name'];
+    address = json['address'];
+    contactNumber = json['contact_number'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+    profileImage = json['profile_image'];
+    loginType = json['login_type'];
+    latitude = json['latitude'];
+    longitude = json['longitude'];
+    uid = json['uid'];
+    playerId = json['player_id'];
+    fcmToken = json['fcm_token'];
+    lastNotificationSeen = json['last_notification_seen'];
+    isVerifiedDeliveryMan = json['is_verified_delivery_man'];
+    deletedAt = json['deleted_at'];
+    userBankAccount = json['user_bank_account'] != null ? new UserBankAccount.fromJson(json['user_bank_account']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['api_token'] = this.apiToken;
-    data['contact_number'] = this.contactNumber;
-    data['created_at'] = this.createdAt;
-    data['email'] = this.email;
     data['id'] = this.id;
     data['name'] = this.name;
-    data['profile_image'] = this.profileImage;
-    data['updated_at'] = this.updatedAt;
-    data['user_type'] = this.userType;
+    data['email'] = this.email;
+    data['api_token'] = this.apiToken;
     data['username'] = this.username;
-    data['address'] = this.address;
     data['status'] = this.status;
-    data['city_id'] = this.cityId;
+    data['user_type'] = this.userType;
     data['country_id'] = this.countryId;
-    data['city_name'] = this.cityName;
     data['country_name'] = this.countryName;
+    data['city_id'] = this.cityId;
+    data['city_name'] = this.cityName;
+    data['address'] = this.address;
+    data['contact_number'] = this.contactNumber;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
+    data['profile_image'] = this.profileImage;
+    data['login_type'] = this.loginType;
     data['latitude'] = this.latitude;
     data['longitude'] = this.longitude;
-    data['email_verified_at'] = this.emailVerifiedAt;
-    data['player_id'] = this.playerId;
     data['uid'] = this.uid;
-    data['current_team_id'] = this.currentTeamId;
-    data['profile_photo_path'] = this.profilePhotoPath;
-    data['deleted_at'] = this.deletedAt;
+    data['player_id'] = this.playerId;
+    data['fcm_token'] = this.fcmToken;
+    data['last_notification_seen'] = this.lastNotificationSeen;
     data['is_verified_delivery_man'] = this.isVerifiedDeliveryMan;
+    data['deleted_at'] = this.deletedAt;
+    if (this.userBankAccount != null) {
+      data['user_bank_account'] = this.userBankAccount!.toJson();
+    }
+    return data;
+  }
+}
+
+class UserBankAccount {
+  int? id;
+  int? userId;
+  String? bankName;
+  String? bankCode;
+  String? accountHolderName;
+  String? accountNumber;
+  String? createdAt;
+  String? updatedAt;
+  String? deletedAt;
+
+  UserBankAccount({this.id, this.userId, this.bankName, this.bankCode, this.accountHolderName, this.accountNumber, this.createdAt, this.updatedAt, this.deletedAt});
+
+  UserBankAccount.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    userId = json['user_id'];
+    bankName = json['bank_name'];
+    bankCode = json['bank_code'];
+    accountHolderName = json['account_holder_name'];
+    accountNumber = json['account_number'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+    deletedAt = json['deleted_at'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['user_id'] = this.userId;
+    data['bank_name'] = this.bankName;
+    data['bank_code'] = this.bankCode;
+    data['account_holder_name'] = this.accountHolderName;
+    data['account_number'] = this.accountNumber;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
+    data['deleted_at'] = this.deletedAt;
     return data;
   }
 }

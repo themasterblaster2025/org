@@ -14,6 +14,14 @@ const mOneSignalAppId = 'f2e9c538-d4ad-45d4-8c57-fd081c987fb6';
 const mOneSignalRestKey = 'NzcwNjExNzYtYTJjOS00NGNkLWE2ZTUtY2JmMDEyNTFhYTFm';
 const mOneSignalChannelId = 'e2422a99-3f76-4afa-a190-e80ab9370270';
 
+const BANK_LIST = [
+  'HDFC',
+  'Bank of baroda',
+  'State bank of india',
+  'Bank of India',
+  'Indian Bank',
+];
+
 const defaultLanguage = "en";
 
 const minContactLength = 10;
@@ -68,6 +76,7 @@ const PAYMENT_TYPE_MERCADOPAGO = 'mercadopago';
 const PAYMENT_TYPE_PAYTM = 'paytm';
 const PAYMENT_TYPE_MYFATOORAH = 'myfatoorah';
 const PAYMENT_TYPE_CASH = 'cash';
+const PAYMENT_TYPE_WALLET = 'wallet';
 
 const PAYMENT_PENDING = 'pending';
 const PAYMENT_FAILED = 'failed';

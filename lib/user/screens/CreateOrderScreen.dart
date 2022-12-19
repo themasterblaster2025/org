@@ -27,6 +27,7 @@ import '../../main/components/PickAddressBottomSheet.dart';
 import '../../main/models/AutoCompletePlacesListModel.dart';
 import '../../main/models/ExtraChargeRequestModel.dart';
 import '../../main/models/PlaceIdDetailModel.dart';
+import 'WalletScreen.dart';
 
 class CreateOrderScreen extends StatefulWidget {
   static String tag = '/CreateOrderScreen';
@@ -246,21 +247,51 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       "distance_charge": distanceCharge,
       "total_parcel": totalParcelController.text.toInt(),
     };
+
+    log("req----" + req.toString());
     await createOrder(req).then((value) {
       appStore.setLoading(false);
       toast(value.message);
       finish(context);
-      if (isSelected==1) {
+      if (isSelected == 1) {
         PaymentScreen(orderId: value.orderId.validate(), totalAmount: totalAmount).launch(context);
-      } else if(isSelected==0){
-        DashboardScreen().launch(context, isNewTask: true);
-      }
-      else{
-
+      } else if (isSelected == 2) {
+        if (appStore.availableBal >= 0)
+          savePaymentApiCall(paymentType: PAYMENT_TYPE_WALLET, paymentStatus: PAYMENT_PAID, totalAmount: totalAmount.toString(), orderID: value.orderId.toString());
+        else {
+          toast("Balance is insufficient,Please add amount in your wallet");
+          WalletScreen().launch(context);
+        }
       }
     }).catchError((error) {
       appStore.setLoading(false);
       toast(error.toString());
+    });
+  }
+
+  /// Save Payment
+  Future<void> savePaymentApiCall({String? paymentType, String? totalAmount, String? orderID, String? txnId, String? paymentStatus = PAYMENT_PENDING, Map? transactionDetail}) async {
+    Map req = {
+      "id": "",
+      "order_id": orderID,
+      "client_id": getIntAsync(USER_ID).toString(),
+      "datetime": DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.now()),
+      "total_amount": totalAmount,
+      "payment_type": paymentType,
+      "txn_id": txnId,
+      "payment_status": paymentStatus,
+      "transaction_detail": transactionDetail ?? {}
+    };
+
+    appStore.setLoading(true);
+
+    savePayment(req).then((value) {
+      appStore.setLoading(false);
+      toast(value.message.toString());
+      DashboardScreen().launch(context, isNewTask: true);
+    }).catchError((error) {
+      appStore.setLoading(false);
+      print(error.toString());
     });
   }
 
@@ -315,10 +346,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               16.height,
               Container(
                 padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
-                  borderRadius: BorderRadius.circular(defaultRadius),
-                ),
+                decoration: BoxDecoration(border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), borderRadius: BorderRadius.circular(defaultRadius)),
                 child: Column(
                   children: [
                     DateTimePicker(
@@ -860,7 +888,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         ),
         Divider(height: 30),
         OrderSummeryWidget(
-            extraChargesList: extraChargeList, totalDistance: totalDistance, totalWeight: weightController.text.toDouble(), distanceCharge: distanceCharge, weightCharge: weightCharge, totalAmount: totalAmount),
+            extraChargesList: extraChargeList,
+            totalDistance: totalDistance,
+            totalWeight: weightController.text.toDouble(),
+            distanceCharge: distanceCharge,
+            weightCharge: weightCharge,
+            totalAmount: totalAmount),
         16.height,
         Text(language.payment, style: boldTextStyle()),
         16.height,
@@ -886,6 +919,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   ],
                 ),
               ).onTap(() {
+                toast(index.toString());
                 isSelected = index;
                 setState(() {});
               });
@@ -927,7 +961,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               },
             ).expand(),
           ],
-        ).visible(isSelected ==0),
+        ).visible(isSelected == 0),
       ],
     );
   }

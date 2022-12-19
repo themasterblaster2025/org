@@ -29,9 +29,10 @@ class SplashScreenState extends State<SplashScreen> {
     setStatusBarColor(appStore.isDarkMode ? Colors.black : Colors.white, statusBarBrightness: appStore.isDarkMode ? Brightness.light : Brightness.dark);
     Future.delayed(
       Duration(seconds: 1),
-      () {
-        if (appStore.isLoggedIn && getIntAsync(USER_ID)!=0) {
-          getUserDetail(getIntAsync(USER_ID)).then((value) {
+      () async {
+        if (appStore.isLoggedIn && getIntAsync(USER_ID) != 0) {
+          await getUserDetail(getIntAsync(USER_ID)).then((value) {
+            appStore.userBankDetail = value.userBankAccount;
             if (value.deletedAt != null) {
               logout(context);
             } else {
@@ -45,6 +46,8 @@ class SplashScreenState extends State<SplashScreen> {
                 UserCitySelectScreen().launch(context);
               }
             }
+          }).catchError((e) {
+            log(e);
           });
         } else {
           if (getBoolAsync(IS_FIRST_TIME, defaultValue: true)) {

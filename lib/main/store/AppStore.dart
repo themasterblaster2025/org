@@ -7,6 +7,8 @@ import 'package:mobx/mobx.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
+import '../models/LoginResponse.dart';
+import '../models/UserBankAccountModel.dart';
 
 part 'AppStore.g.dart';
 
@@ -47,7 +49,13 @@ abstract class _AppStore with Store {
   String currencySymbol = "₹";
 
   @observable
+  num availableBal = 0;
+
+  @observable
   String currencyPosition = CURRENCY_POSITION_LEFT;
+
+  @observable
+  UserBankAccount? userBankDetail;
 
   @action
   Future<void> setLoading(bool val) async {

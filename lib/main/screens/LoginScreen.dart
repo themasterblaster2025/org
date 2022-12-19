@@ -63,7 +63,7 @@ class LoginScreenState extends State<LoginScreen> {
   Future<void> loginApiCall() async {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
-
+      hideKeyboard(context);
       appStore.setLoading(true);
 
       Map req = {
@@ -79,10 +79,11 @@ class LoginScreenState extends State<LoginScreen> {
       }
       authService.signInWithEmailPassword(context, email: emailController.text, password: passController.text).then((value) async {
         await logInApi(req).then((value) async {
+          appStore.userBankDetail = value.data!.userBankAccount;
           appStore.setLoading(false);
-          if(value.data!.userType!=CLIENT && value.data!.userType!=DELIVERY_MAN){
-            await logout(context,isFromLogin: true);
-          }else {
+          if (value.data!.userType != CLIENT && value.data!.userType != DELIVERY_MAN) {
+            await logout(context, isFromLogin: true);
+          } else {
             if (getIntAsync(STATUS) == 1) {
               if (value.data!.countryId != null && value.data!.cityId != null) {
                 await getCountryDetailApiCall(value.data!.countryId.validate());
@@ -134,8 +135,12 @@ class LoginScreenState extends State<LoginScreen> {
             children: [
               Container(
                 height: context.height() * 0.25,
-                child:
-                    Container(height: 90, width: 90, alignment: Alignment.center, decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle), child: Image.asset('assets/app_logo_primary.png', height: 70, width: 70)),
+                child: Container(
+                    height: 90,
+                    width: 90,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                    child: Image.asset('assets/app_logo_primary.png', height: 70, width: 70)),
               ),
               Container(
                 width: context.width(),
