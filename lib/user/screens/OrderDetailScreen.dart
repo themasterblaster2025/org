@@ -58,7 +58,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
       appStore.setLoading(false);
       orderData = value.data!;
       orderHistory = value.orderHistory!;
-      if(orderData!.extraCharges.runtimeType == List<dynamic>){
+      if (orderData!.extraCharges.runtimeType == List<dynamic>) {
         (orderData!.extraCharges as List<dynamic>).forEach((element) {
           list.add(ExtraChargeRequestModel.fromJson(element));
         });
@@ -133,12 +133,13 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                 children: [
                                   Row(
                                     children: [
-                                      ImageIcon(AssetImage('assets/icons/ic_pick_location.png'),size: 24,color: colorPrimary),
+                                      ImageIcon(AssetImage('assets/icons/ic_pick_location.png'), size: 24, color: colorPrimary),
                                       16.width,
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          if (orderData!.pickupDatetime != null) Text('${language.pickedAt} ${printDate(orderData!.pickupDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
+                                          if (orderData!.pickupDatetime != null)
+                                            Text('${language.pickedAt} ${printDate(orderData!.pickupDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
                                           Text('${orderData!.pickupPoint!.address}', style: primaryTextStyle()),
                                           if (orderData!.pickupPoint!.contactNumber != null)
                                             Row(
@@ -179,7 +180,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          if (orderData!.deliveryDatetime != null) Text('${language.deliveredAt} ${printDate(orderData!.deliveryDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
+                                          if (orderData!.deliveryDatetime != null)
+                                            Text('${language.deliveredAt} ${printDate(orderData!.deliveryDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
                                           Text('${orderData!.deliveryPoint!.address}', style: primaryTextStyle()),
                                           if (orderData!.deliveryPoint!.contactNumber != null)
                                             Row(
@@ -250,7 +252,9 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                       children: [
                                         Container(
                                           decoration: boxDecorationWithRoundedCorners(
-                                              borderRadius: BorderRadius.circular(8), border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), backgroundColor: Colors.transparent),
+                                              borderRadius: BorderRadius.circular(8),
+                                              border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                                              backgroundColor: Colors.transparent),
                                           padding: EdgeInsets.all(8),
                                           child: Image.asset(parcelTypeIcon(orderData!.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
                                         ),
@@ -395,11 +399,11 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                               (orderData!.extraCharges!.runtimeType == List<dynamic>)
                                   ? OrderSummeryWidget(
                                       extraChargesList: list,
-                                      totalDistance: orderData!.totalDistance.validate(),
+                                      totalDistance: orderData!.totalDistance,
                                       totalWeight: orderData!.totalWeight.validate(),
                                       distanceCharge: orderData!.distanceCharge.validate(),
                                       weightCharge: orderData!.weightCharge.validate(),
-                                      totalAmount: orderData!.totalAmount.validate(),
+                                      totalAmount: orderData!.totalAmount,
                                     )
                                   : Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -445,7 +449,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                           child: Column(
                                             children: [
                                               8.height,
-                                              Text('${printAmount(orderData!.fixedCharges.validate() + orderData!.distanceCharge.validate() + orderData!.weightCharge.validate())}', style: primaryTextStyle()),
+                                              Text('${printAmount(orderData!.fixedCharges.validate() + orderData!.distanceCharge.validate() + orderData!.weightCharge.validate())}',
+                                                  style: primaryTextStyle()),
                                             ],
                                           ),
                                         ).visible((orderData!.distanceCharge.validate() != 0 || orderData!.weightCharge.validate() != 0) && orderData!.extraCharges.keys.length != 0),
@@ -481,6 +486,24 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                         ),
                                       ],
                                     ),
+                              16.height,
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: commonButton(language.cancelOrder, () {
+                                  showInDialog(
+                                    context,
+                                    contentPadding: EdgeInsets.all(16),
+                                    builder: (p0) {
+                                      return CancelOrderDialog(
+                                          orderId: orderData!.id.validate(),
+                                          onUpdate: () {
+                                            orderDetailApiCall();
+                                            LiveStream().emit('UpdateOrderData');
+                                          });
+                                    },
+                                  );
+                                }, width: context.width()),
+                              ).visible(getStringAsync(USER_TYPE) == CLIENT && orderData!.status != ORDER_COMPLETED)
                             ],
                           ),
                         ),
@@ -491,24 +514,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                           }, width: context.width())
                               .paddingAll(16),
                         ).visible(orderData!.status == ORDER_COMPLETED && !orderData!.returnOrderId! && getStringAsync(USER_TYPE) == CLIENT),
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: commonButton(language.cancelOrder, () {
-                            showInDialog(
-                              context,
-                              contentPadding: EdgeInsets.all(16),
-                              builder: (p0) {
-                                return CancelOrderDialog(
-                                    orderId: orderData!.id.validate(),
-                                    onUpdate: () {
-                                      orderDetailApiCall();
-                                      LiveStream().emit('UpdateOrderData');
-                                    });
-                              },
-                            );
-                          }, width: context.width())
-                              .paddingAll(16),
-                        ).visible(orderData!.status == ORDER_CREATE && getStringAsync(USER_TYPE) == CLIENT)
                       ],
                     )
                   : SizedBox(),

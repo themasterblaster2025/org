@@ -311,7 +311,7 @@ String paymentType(String paymentType) {
   return language.cash;
 }
 
-String printAmount(num amount) {
+String printAmount(var amount) {
   return appStore.currencyPosition == CURRENCY_POSITION_LEFT ? '${appStore.currencySymbol} $amount' : '$amount ${appStore.currencySymbol}';
 }
 

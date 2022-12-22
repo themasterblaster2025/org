@@ -8,6 +8,7 @@ import '../../main.dart';
 import '../../main/models/WithDrawListModel.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Common.dart';
+import '../../main/utils/Constants.dart';
 import '../../main/utils/Widgets.dart';
 
 class WithDrawScreen extends StatefulWidget {
@@ -73,9 +74,9 @@ class WithDrawScreenState extends State<WithDrawScreen> {
     appStore.setLoading(true);
     Map req = {
       "user_id": appStore.uid,
-      "currency": appStore.currencyCode,
+      "currency": appStore.currencyCode.toLowerCase(),
       "amount": amount,
-      "status": "0",
+      "status": REQUESTED,
     };
     await saveWithDrawRequest(req).then((value) {
       toast(value.message);

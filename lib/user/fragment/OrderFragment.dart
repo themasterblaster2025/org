@@ -69,7 +69,7 @@ class OrderFragmentState extends State<OrderFragment> {
       appStore.setAllUnreadCount(value.allUnreadCount.validate());
       totalPage = value.pagination!.totalPages.validate(value: 1);
       page = value.pagination!.currentPage.validate(value: 1);
-      appStore.availableBal = value.walletData!.totalAmount.validate(value: 0);
+      appStore.availableBal = value.walletData!.totalAmount;
       isLastPage = false;
       if (page == 1) {
         orderList.clear();
@@ -79,7 +79,7 @@ class OrderFragmentState extends State<OrderFragment> {
     }).catchError((e) {
       isLastPage = true;
       appStore.setLoading(false);
-      toast(e.toString());
+      toast(e.toString(), print: true);
     });
   }
 

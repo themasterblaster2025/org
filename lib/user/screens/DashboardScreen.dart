@@ -50,7 +50,7 @@ class DashboardScreenState extends State<DashboardScreen> {
     FilterAttributeModel filterData = FilterAttributeModel.fromJson(getJSONAsync(FILTER_DATA));
     await getOrderList(orderStatus: filterData.orderStatus, fromDate: filterData.fromDate, toDate: filterData.toDate, page: 1).then((value) {
       appStore.setLoading(false);
-      appStore.availableBal = value.walletData!.totalAmount.validate(value: 0);
+      appStore.availableBal = value.walletData!.totalAmount;
     }).catchError((e) {
       appStore.setLoading(false);
       toast(e.toString());

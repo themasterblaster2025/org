@@ -181,7 +181,7 @@ class WalletScreenState extends State<WalletScreen> {
                                 ],
                               ),
                             ),
-                            Text('${printAmount(data.amount.toDouble())}', style: secondaryTextStyle(color:data.type == CREDIT? Colors.green:Colors.red))
+                            Text('${printAmount(data.amount)}', style: secondaryTextStyle(color:data.type == CREDIT? Colors.green:Colors.red))
                           ],
                         ),
                       );

@@ -89,6 +89,10 @@ const RESTORE = 'restore';
 const FORCE_DELETE = 'forcedelete';
 const DELETE_USER = 'deleted_at';
 
+const DECLINE = 'decline';
+const REQUESTED = 'requested';
+const APPROVED = 'approved';
+
 // OrderStatus
 const COURIER_ASSIGNED = 'courier_assigned';
 const COURIER_DEPARTED = 'courier_departed';

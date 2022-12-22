@@ -87,7 +87,7 @@ class OrderData {
   String? cityName;
   String? parcelType;
   num? totalWeight;
-  num? totalDistance;
+  var totalDistance;
   String? pickupDatetime;
   String? deliveryDatetime;
   int? parentOrderId;
@@ -100,7 +100,7 @@ class OrderData {
   String? deliveryManName;
   num? fixedCharges;
   var extraCharges;
-  num? totalAmount;
+  var totalAmount;
   String? reason;
   int? pickupConfirmByClient;
   int? pickupConfirmByDeliveryMan;
