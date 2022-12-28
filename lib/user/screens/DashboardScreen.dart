@@ -50,10 +50,12 @@ class DashboardScreenState extends State<DashboardScreen> {
     FilterAttributeModel filterData = FilterAttributeModel.fromJson(getJSONAsync(FILTER_DATA));
     await getOrderList(orderStatus: filterData.orderStatus, fromDate: filterData.fromDate, toDate: filterData.toDate, page: 1).then((value) {
       appStore.setLoading(false);
-      appStore.availableBal = value.walletData!.totalAmount;
+      if (value.walletData != null) {
+        appStore.availableBal = value.walletData!.totalAmount;
+      }
     }).catchError((e) {
       appStore.setLoading(false);
-      toast(e.toString());
+      log(e.toString());
     });
   }
 
@@ -96,10 +98,7 @@ class DashboardScreenState extends State<DashboardScreen> {
           }).paddingOnly(right: 16),
           Stack(
             children: [
-              Align(
-                alignment: AlignmentDirectional.center,
-                child: Icon(Icons.notifications),
-              ),
+              Align(alignment: AlignmentDirectional.center, child: Icon(Icons.notifications)),
               Observer(builder: (context) {
                 return Positioned(
                   right: 2,
@@ -108,10 +107,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                     height: 20,
                     width: 20,
                     alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Colors.orange,
-                      shape: BoxShape.circle,
-                    ),
+                    decoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
                     child: Text('${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}', style: primaryTextStyle(size: appStore.allUnreadCount > 99 ? 8 : 12, color: Colors.white)),
                   ),
                 ).visible(appStore.allUnreadCount != 0);
@@ -133,10 +129,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                   child: Container(
                     height: 10,
                     width: 10,
-                    decoration: BoxDecoration(
-                      color: Colors.orange,
-                      shape: BoxShape.circle,
-                    ),
+                    decoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
                   ),
                 ).visible(appStore.isFiltering);
               }),
@@ -183,7 +176,6 @@ class DashboardScreenState extends State<DashboardScreen> {
         leftCornerRadius: 30,
         rightCornerRadius: 30,
         onTap: (index) => setState(() => currentIndex = index),
-        //other params
       ),
     );
   }

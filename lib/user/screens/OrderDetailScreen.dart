@@ -503,7 +503,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     },
                                   );
                                 }, width: context.width()),
-                              ).visible(getStringAsync(USER_TYPE) == CLIENT && orderData!.status != ORDER_COMPLETED)
+                              ).visible(getStringAsync(USER_TYPE) == CLIENT && orderData!.status != ORDER_COMPLETED && orderData!.status != ORDER_CANCELLED)
                             ],
                           ),
                         ),

@@ -69,7 +69,9 @@ class OrderFragmentState extends State<OrderFragment> {
       appStore.setAllUnreadCount(value.allUnreadCount.validate());
       totalPage = value.pagination!.totalPages.validate(value: 1);
       page = value.pagination!.currentPage.validate(value: 1);
-      appStore.availableBal = value.walletData!.totalAmount;
+      if(value.walletData!=null){
+        appStore.availableBal = value.walletData!.totalAmount;
+      }
       isLastPage = false;
       if (page == 1) {
         orderList.clear();
