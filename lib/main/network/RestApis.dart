@@ -423,7 +423,7 @@ Future<LDBaseResponse> userAction(Map request) async {
 }
 
 Future<WalletListModel> getWalletList({required int page}) async {
-  return WalletListModel.fromJson(await handleResponse(await buildHttpResponse('wallet-list?page=$Page', method: HttpMethod.GET)));
+  return WalletListModel.fromJson(await handleResponse(await buildHttpResponse('wallet-list?page=$page', method: HttpMethod.GET)));
 }
 
 Future<LDBaseResponse> saveWallet(Map request) async {

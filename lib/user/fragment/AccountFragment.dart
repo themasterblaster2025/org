@@ -83,13 +83,13 @@ class AccountFragmentState extends State<AccountFragment> {
                   ThemeScreen().launch(context);
                 }),
                 settingItemWidget(Icons.assignment_outlined, language.privacyPolicy, () {
-                  launchUrl(Uri.parse(mPrivacyPolicy));
+                 commonLaunchUrl(mPrivacyPolicy);
                 }),
                 settingItemWidget(Icons.help_outline, language.helpAndSupport, () {
-                  launchUrl(Uri.parse(mHelpAndSupport));
+                 commonLaunchUrl(mHelpAndSupport);
                 }),
                 settingItemWidget(Icons.assignment_outlined, language.termAndCondition, () {
-                  launchUrl(Uri.parse(mTermAndCondition));
+                 commonLaunchUrl(mTermAndCondition);
                 }),
                 settingItemWidget(Icons.info_outline, language.aboutUs, () {
                   AboutUsScreen().launch(context);

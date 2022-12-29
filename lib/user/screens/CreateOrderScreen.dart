@@ -69,8 +69,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   FocusNode deliverPhoneFocus = FocusNode();
   FocusNode deliverDesFocus = FocusNode();
 
-  String deliverCountryCode = '+91';
-  String pickupCountryCode = '+91';
+  String deliverCountryCode = defaultPhoneCode;
+  String pickupCountryCode = defaultPhoneCode;
 
   DateTime? pickFromDateTime, pickToDateTime, deliverFromDateTime, deliverToDateTime;
   DateTime? pickDate, deliverDate;
@@ -249,7 +249,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     };
 
     log("req----" + req.toString());
-    await createOrder(req).then((value) {
+    await createOrder(req).then((value) async {
       appStore.setLoading(false);
       toast(value.message);
       finish(context);
@@ -258,11 +258,20 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       } else if (isSelected == 2) {
         log("-----" + appStore.availableBal.toString());
 
-        if (appStore.availableBal > 0)
+        if (appStore.availableBal > totalAmount) {
           savePaymentApiCall(paymentType: PAYMENT_TYPE_WALLET, paymentStatus: PAYMENT_PAID, totalAmount: totalAmount.toString(), orderID: value.orderId.toString());
-        else {
+        } else {
           toast("Balance is insufficient,Please add amount in your wallet");
-          WalletScreen().launch(context);
+          bool? res = await WalletScreen().launch(context);
+          if (res == true) {
+            if (appStore.availableBal > totalAmount) {
+              savePaymentApiCall(paymentType: PAYMENT_TYPE_WALLET, paymentStatus: PAYMENT_PAID, totalAmount: totalAmount.toString(), orderID: value.orderId.toString());
+            } else {
+              cashConfirmDialog();
+            }
+          } else {
+            cashConfirmDialog();
+          }
         }
       }
     }).catchError((error) {
@@ -889,13 +898,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           ),
         ),
         Divider(height: 30),
-        OrderSummeryWidget(
-            extraChargesList: extraChargeList,
-            totalDistance: totalDistance,
-            totalWeight: weightController.text.toDouble(),
-            distanceCharge: distanceCharge,
-            weightCharge: weightCharge,
-            totalAmount: totalAmount),
+        OrderSummeryWidget(extraChargesList: extraChargeList, totalDistance: totalDistance, totalWeight: weightController.text.toDouble(), distanceCharge: distanceCharge, weightCharge: weightCharge, totalAmount: totalAmount),
         16.height,
         Text(language.payment, style: boldTextStyle()),
         16.height,
@@ -926,24 +929,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 setState(() {});
               });
             }),
-        // Row(
-        //   children: [
-        //     scheduleOptionWidget(context, isCashPayment, 'assets/icons/ic_cash.png', language.cash).onTap(() {
-        //       isCashPayment = true;
-        //       setState(() {});
-        //     }).expand(),
-        //     16.width,
-        //     scheduleOptionWidget(context, !isCashPayment, 'assets/icons/ic_credit_card.png', language.online).onTap(() {
-        //       isCashPayment = false;
-        //       setState(() {});
-        //     }).expand(),
-        //     16.width,
-        //     scheduleOptionWidget(context, !isCashPayment, 'assets/icons/ic_credit_card.png', "Wallet").onTap(() {
-        //       isCashPayment = false;
-        //       setState(() {});
-        //     }).expand(),
-        //   ],
-        // ),
         16.height,
         Row(
           children: [

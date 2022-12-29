@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../components/BodyCornerWidget.dart';
+import '../utils/Common.dart';
 
 class AboutUsScreen extends StatefulWidget {
   static String tag = '/AboutUsScreen';
@@ -75,7 +76,7 @@ class AboutUsScreenState extends State<AboutUsScreen> {
                 ],
               ),
               onTap: () {
-                launchUrl(Uri.parse('mailto:$mContactPref'));
+                commonLaunchUrl('mailto:$mContactPref');
               },
             ),
           ),
@@ -94,7 +95,7 @@ class AboutUsScreenState extends State<AboutUsScreen> {
                 ],
               ),
               onTap: () {
-                launchUrl(Uri.parse(mCodeCanyonURL));
+                commonLaunchUrl(mCodeCanyonURL);
               },
             ),
           ),

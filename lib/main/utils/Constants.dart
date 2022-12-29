@@ -24,6 +24,8 @@ const BANK_LIST = [
 
 const defaultLanguage = "en";
 
+const defaultPhoneCode = '+91';
+
 const minContactLength = 10;
 const maxContactLength = 14;
 const digitAfterDecimal = 2;

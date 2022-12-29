@@ -172,7 +172,7 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
                                                     Row(
                                                       children: [
                                                         Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
-                                                          launchUrl(Uri.parse('tel:${item.pickupPoint!.contactNumber}'));
+                                                         commonLaunchUrl('tel:${item.pickupPoint!.contactNumber}');
                                                         }),
                                                         8.width,
                                                         Text('${item.pickupPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
@@ -196,7 +196,7 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
                                                     Row(
                                                       children: [
                                                         Icon(Icons.call, color: Colors.green, size: 18).onTap((){
-                                                          launchUrl(Uri.parse('tel:${item.deliveryPoint!.contactNumber}'));
+                                                         commonLaunchUrl('tel:${item.deliveryPoint!.contactNumber}');
                                                         }),
                                                         8.width,
                                                         Text('${item.deliveryPoint!.contactNumber ?? ""}', style: primaryTextStyle()),

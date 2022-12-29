@@ -1,6 +1,8 @@
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
@@ -23,7 +25,7 @@ class RegisterScreen extends StatefulWidget {
 class RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   AuthServices authService = AuthServices();
-  String countryCode = '+91';
+  String countryCode = defaultPhoneCode;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController userNameController = TextEditingController();
@@ -36,6 +38,8 @@ class RegisterScreenState extends State<RegisterScreen> {
   FocusNode emailFocus = FocusNode();
   FocusNode phoneFocus = FocusNode();
   FocusNode passFocus = FocusNode();
+
+  bool isAcceptedTc = false;
 
   @override
   void initState() {
@@ -55,26 +59,27 @@ class RegisterScreenState extends State<RegisterScreen> {
   Future<void> registerApiCall() async {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
-
-      appStore.setLoading(true);
-
-      appStore.setLoading(true);
-      authService
-          .signUpWithEmailPassword(context,
-              lName: nameController.text,
-              userName: userNameController.text,
-              name: nameController.text.trim(),
-              email: emailController.text.trim(),
-              password: passController.text.trim(),
-              mobileNumber: '$countryCode ${phoneController.text.trim()}',
-              userType: widget.userType)
-          .then((res) async {
-        appStore.setLoading(false);
-        //
-      }).catchError((e) {
-        appStore.setLoading(false);
-        toast(e.toString());
-      });
+      if (isAcceptedTc) {
+        appStore.setLoading(true);
+        authService
+            .signUpWithEmailPassword(context,
+                lName: nameController.text,
+                userName: userNameController.text,
+                name: nameController.text.trim(),
+                email: emailController.text.trim(),
+                password: passController.text.trim(),
+                mobileNumber: '$countryCode ${phoneController.text.trim()}',
+                userType: widget.userType)
+            .then((res) async {
+          appStore.setLoading(false);
+          //
+        }).catchError((e) {
+          appStore.setLoading(false);
+          toast(e.toString());
+        });
+      }else{
+        toast('Please accept Terms of service & Privacy Policy');
+      }
     }
   }
 
@@ -219,6 +224,43 @@ class RegisterScreenState extends State<RegisterScreen> {
                           decoration: commonInputDecoration(),
                           errorThisFieldRequired: language.fieldRequiredMsg,
                           errorMinimumPasswordLength: language.passwordInvalid,
+                        ),
+                        8.height,
+                        // TODO Localization
+                        CheckboxListTile(
+                          contentPadding: EdgeInsets.zero,
+                          controlAffinity: ListTileControlAffinity.leading,
+                          activeColor: colorPrimary,
+                          title: RichTextWidget(
+                            list: [
+                              TextSpan(text: 'I agree to the ', style: secondaryTextStyle()),
+                              TextSpan(
+                                text: 'Terms of Service',
+                                style: boldTextStyle(color: colorPrimary, size: 14),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    commonLaunchUrl(mTermAndCondition);
+                                  },
+                              ),
+                              TextSpan(text: ' & ', style: secondaryTextStyle()),
+                              TextSpan(
+                                text: 'Privacy Policy',
+                                style: boldTextStyle(color: colorPrimary, size: 14),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    commonLaunchUrl(mPrivacyPolicy);
+                                  },
+                              ),
+                            ],
+                          ),
+                          value: isAcceptedTc,
+                          onChanged: (val) async {
+                            isAcceptedTc = val!;
+                            if (!isAcceptedTc) {
+                              removeKey(REMEMBER_ME);
+                            }
+                            setState(() {});
+                          },
                         ),
                         30.height,
                         commonButton(language.signUp, () {

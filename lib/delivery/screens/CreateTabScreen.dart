@@ -224,7 +224,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                 12.width,
                                 if (data.pickupPoint!.contactNumber != null)
                                   Image.asset('assets/icons/ic_call.png', width: 24, height: 24).onTap(() {
-                                    launchUrl(Uri.parse('tel:${data.pickupPoint!.contactNumber}'));
+                                   commonLaunchUrl('tel:${data.pickupPoint!.contactNumber}');
                                   }),
                               ],
                             ),
@@ -262,7 +262,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                 12.width,
                                 if (data.deliveryPoint!.contactNumber != null)
                                   Image.asset('assets/icons/ic_call.png', width: 24, height: 24).onTap(() {
-                                    launchUrl(Uri.parse('tel:${data.deliveryPoint!.contactNumber}'));
+                                   commonLaunchUrl('tel:${data.deliveryPoint!.contactNumber}');
                                   }),
                               ],
                             ),

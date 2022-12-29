@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../main/network/RestApis.dart';
@@ -35,6 +36,8 @@ class LoginScreenState extends State<LoginScreen> {
 
   bool mIsCheck = false;
 
+  bool isAcceptedTc = false;
+
   @override
   void initState() {
     super.initState();
@@ -64,42 +67,48 @@ class LoginScreenState extends State<LoginScreen> {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
       hideKeyboard(context);
-      appStore.setLoading(true);
+      if (isAcceptedTc) {
+        appStore.setLoading(true);
 
-      Map req = {
-        "email": emailController.text,
-        "password": passController.text,
-        "player_id": getStringAsync(PLAYER_ID).validate(),
-      };
+        Map req = {
+          "email": emailController.text,
+          "password": passController.text,
+          "player_id": getStringAsync(PLAYER_ID).validate(),
+        };
 
-      if (mIsCheck) {
-        await setValue(REMEMBER_ME, mIsCheck);
-        await setValue(USER_EMAIL, emailController.text);
-        await setValue(USER_PASSWORD, passController.text);
-      }
-      authService.signInWithEmailPassword(context, email: emailController.text, password: passController.text).then((value) async {
-        await logInApi(req).then((value) async {
-          appStore.userBankDetail = value.data!.userBankAccount;
-          appStore.setLoading(false);
-          if (value.data!.userType != CLIENT && value.data!.userType != DELIVERY_MAN) {
-            await logout(context, isFromLogin: true);
-          } else {
-            if (getIntAsync(STATUS) == 1) {
-              if (value.data!.countryId != null && value.data!.cityId != null) {
-                await getCountryDetailApiCall(value.data!.countryId.validate());
-                getCityDetailApiCall(value.data!.cityId.validate());
-              } else {
-                UserCitySelectScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
-              }
+        if (mIsCheck) {
+          await setValue(REMEMBER_ME, mIsCheck);
+          await setValue(USER_EMAIL, emailController.text);
+          await setValue(USER_PASSWORD, passController.text);
+        }
+        authService.signInWithEmailPassword(context, email: emailController.text, password: passController.text).then((value) async {
+          await logInApi(req).then((value) async {
+            await getUserDetail(value.data!.id!).then((value) {
+              appStore.userBankDetail = value.userBankAccount;
+            });
+            appStore.setLoading(false);
+            if (value.data!.userType != CLIENT && value.data!.userType != DELIVERY_MAN) {
+              await logout(context, isFromLogin: true);
             } else {
-              toast(language.userNotApproveMsg);
+              if (getIntAsync(STATUS) == 1) {
+                if (value.data!.countryId != null && value.data!.cityId != null) {
+                  await getCountryDetailApiCall(value.data!.countryId.validate());
+                  getCityDetailApiCall(value.data!.cityId.validate());
+                } else {
+                  UserCitySelectScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+                }
+              } else {
+                toast(language.userNotApproveMsg);
+              }
             }
-          }
-        }).catchError((e) {
-          appStore.setLoading(false);
-          toast(e.toString());
+          }).catchError((e) {
+            appStore.setLoading(false);
+            toast(e.toString());
+          });
         });
-      });
+      }else{
+        toast('Please accept Terms of service & Privacy Policy');
+      }
     }
   }
 
@@ -135,12 +144,8 @@ class LoginScreenState extends State<LoginScreen> {
             children: [
               Container(
                 height: context.height() * 0.25,
-                child: Container(
-                    height: 90,
-                    width: 90,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                    child: Image.asset('assets/app_logo_primary.png', height: 70, width: 70)),
+                child:
+                    Container(height: 90, width: 90, alignment: Alignment.center, decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle), child: Image.asset('assets/app_logo_primary.png', height: 70, width: 70)),
               ),
               Container(
                 width: context.width(),
@@ -194,6 +199,43 @@ class LoginScreenState extends State<LoginScreen> {
                             setState(() {});
                           },
                         ),
+                        // TODO Localization
+                        CheckboxListTile(
+                          contentPadding: EdgeInsets.zero,
+                          controlAffinity: ListTileControlAffinity.leading,
+                          activeColor: colorPrimary,
+                          title: RichTextWidget(
+                            list: [
+                              TextSpan(text: 'I agree to the ', style: secondaryTextStyle()),
+                              TextSpan(
+                                text: 'Terms of Service',
+                                style: boldTextStyle(color: colorPrimary, size: 14),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    commonLaunchUrl(mTermAndCondition);
+                                  },
+                              ),
+                              TextSpan(text: ' & ', style: secondaryTextStyle()),
+                              TextSpan(
+                                text: 'Privacy Policy',
+                                style: boldTextStyle(color: colorPrimary, size: 14),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    commonLaunchUrl(mPrivacyPolicy);
+                                  },
+                              ),
+                            ],
+                          ),
+                          value: isAcceptedTc,
+                          onChanged: (val) async {
+                            isAcceptedTc = val!;
+                            if (!isAcceptedTc) {
+                              removeKey(REMEMBER_ME);
+                            }
+                            setState(() {});
+                          },
+                        ),
+                        16.height,
                         commonButton(
                           language.signIn,
                           () {

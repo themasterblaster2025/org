@@ -111,6 +111,7 @@ class PdfInvoiceApi {
         await PdfGoogleFonts.notoSansSymbols2Regular(),
         await PdfGoogleFonts.beVietnamProRegular(),
         await PdfGoogleFonts.robotoRegular(),
+        await PdfGoogleFonts.padaukRegular(),
       ]),
     );
 

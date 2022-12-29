@@ -145,7 +145,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                             Row(
                                               children: [
                                                 Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
-                                                  launchUrl(Uri.parse('tel:${orderData!.pickupPoint!.contactNumber}'));
+                                                 commonLaunchUrl('tel:${orderData!.pickupPoint!.contactNumber}');
                                                 }),
                                                 8.width,
                                                 Text('${orderData!.pickupPoint!.contactNumber}', style: secondaryTextStyle()),
@@ -187,7 +187,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                             Row(
                                               children: [
                                                 Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
-                                                  launchUrl(Uri.parse('tel:${orderData!.deliveryPoint!.contactNumber}'));
+                                                 commonLaunchUrl('tel:${orderData!.deliveryPoint!.contactNumber}');
                                                 }),
                                                 8.width,
                                                 Text('${orderData!.deliveryPoint!.contactNumber}', style: secondaryTextStyle()),
@@ -339,7 +339,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                   Text('${userData!.name.validate()}', style: boldTextStyle()),
                                                   userData!.contactNumber != null
                                                       ? Text('${userData!.contactNumber}', style: secondaryTextStyle()).paddingOnly(top: 4).onTap(() {
-                                                          launchUrl(Uri.parse('tel:${userData!.contactNumber}'));
+                                                         commonLaunchUrl('tel:${userData!.contactNumber}');
                                                         })
                                                       : SizedBox()
                                                 ],

@@ -22,7 +22,7 @@ class EditProfileScreen extends StatefulWidget {
 
 class EditProfileScreenState extends State<EditProfileScreen> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  String countryCode = '+91';
+  String countryCode = defaultPhoneCode;
 
   TextEditingController emailController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
@@ -248,7 +248,11 @@ class EditProfileScreenState extends State<EditProfileScreen> {
         padding: EdgeInsets.all(16),
         child: commonButton(language.saveChanges, () {
           if (_formKey.currentState!.validate()) {
-            save();
+            if (getStringAsync(USER_EMAIL) == 'jose@gmail.com' || getStringAsync(USER_EMAIL) == 'mark@gmail.com') {
+              toast(language.demoMsg);
+            } else {
+              save();
+            }
           }
         }),
       ),

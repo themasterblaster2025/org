@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
@@ -73,6 +75,7 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
       sendMultiPartRequest(
         multiPartRequest,
         onSuccess: (data) async {
+          UserData? userData = UserData.fromJson(data["data"]);
           log(data);
           toast(data['message']);
           // appStore.userBankDetail.bankName = dropdownValue;
@@ -80,6 +83,7 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
           // appStore.userBankDetail.nameAsPerBank = nameCon.text.trim();
           // appStore.userBankDetail.ifscCode = ifscCCon.text.trim();
           appStore.setLoading(false);
+          appStore.userBankDetail = userData.userBankAccount;
           setState(() {});
         },
         onError: (error) {

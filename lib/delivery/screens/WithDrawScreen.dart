@@ -31,7 +31,7 @@ class WithDrawScreenState extends State<WithDrawScreen> {
 
   List<WithDrawModel> withDrawData = [];
 
-  int totalAmount = 0;
+  num totalAmount = 0;
   int currentIndex = -1;
 
   @override
@@ -58,7 +58,7 @@ class WithDrawScreenState extends State<WithDrawScreen> {
       print("valuee" + value.toJson().toString());
       currentPage = value.pagination!.currentPage!;
       totalPage = value.pagination!.totalPages!;
-      totalAmount = value.wallet_balance!.totalAmount!.toInt();
+      totalAmount = value.wallet_balance!.totalAmount!;
       if (currentPage == 1) {
         withDrawData.clear();
       }
@@ -90,6 +90,30 @@ class WithDrawScreenState extends State<WithDrawScreen> {
       appStore.setLoading(false);
       log(error.toString());
     });
+  }
+
+  String printStatus(String status) {
+    String text = "";
+    if (status == DECLINE) {
+      text = "Declined";
+    } else if (status == REQUESTED) {
+      text = "Requested";
+    } else if (status == APPROVED) {
+      text = "Approved";
+    }
+    return text;
+  }
+
+  Color withdrawStatusColor(String status){
+    Color color = colorPrimary;
+    if (status == DECLINE) {
+      color = Colors.red;
+    } else if (status == REQUESTED) {
+      color = colorPrimary;
+    } else if (status == APPROVED) {
+      color = Colors.green;
+    }
+    return color;
   }
 
   @override
@@ -150,19 +174,13 @@ class WithDrawScreenState extends State<WithDrawScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text("Withdraw History", style: boldTextStyle(size: 14)),
-                                    SizedBox(height: 4),
-                                    Text(printDate(data.createdAt!), style: secondaryTextStyle(size: 12)),
+                                    Text(printStatus(data.status!), style: boldTextStyle(color: withdrawStatusColor(data.status!))),
+                                    SizedBox(height: 8),
+                                    Text(printDate(data.createdAt!), style: secondaryTextStyle()),
                                   ],
                                 ),
                               ),
-                              Column(
-                                children: [
-                                  Text(data.status == 1 ? "approved" : "requested", style: secondaryTextStyle(color: data.status == 1 ? Colors.green : Colors.red)),
-                                  SizedBox(height: 4),
-                                  Text('${printAmount(data.amount!.toDouble())}', style: secondaryTextStyle()),
-                                ],
-                              )
+                              Text('${printAmount(data.amount!.toDouble())}', style: primaryTextStyle()),
                             ],
                           ),
                         );
@@ -186,7 +204,7 @@ class WithDrawScreenState extends State<WithDrawScreen> {
           padding: EdgeInsets.all(16),
           child: commonButton(
             "WithDraw",
-            () {
+                () {
               showDialog(
                 context: context,
                 builder: (context) {
@@ -216,7 +234,7 @@ class WithDrawScreenState extends State<WithDrawScreen> {
                         16.height,
                         commonButton(
                           "Withdraw",
-                          () async {
+                              () async {
                             if (addMoneyController.text.isNotEmpty) {
                               await withDrawRequest(amount: int.parse(addMoneyController.text));
                             } else {

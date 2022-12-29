@@ -7,12 +7,14 @@ import 'package:geolocator/geolocator.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import '../../main.dart';
+import 'Widgets.dart';
 
 InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, Function()? suffixOnTap, Widget? dateTime, Widget? prefixIcon}) {
   return InputDecoration(
@@ -312,7 +314,34 @@ String paymentType(String paymentType) {
 }
 
 String printAmount(var amount) {
-  return appStore.currencyPosition == CURRENCY_POSITION_LEFT ? '${appStore.currencySymbol} $amount' : '$amount ${appStore.currencySymbol}';
+  return appStore.currencyPosition == CURRENCY_POSITION_LEFT ? '${appStore.currencySymbol} ${amount.toStringAsFixed(digitAfterDecimal)}' : '${amount.toStringAsFixed(digitAfterDecimal)} ${appStore.currencySymbol}';
+}
+
+Future<void> commonLaunchUrl(String url, {bool forceWebView = false}) async {
+  log(url);
+  await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication).then((value) {}).catchError((e) {
+    // TODO Localization
+    toast('Invalid Url: $url');
+  });
+}
+
+cashConfirmDialog() {
+  showInDialog(
+    getContext,
+    contentPadding: EdgeInsets.all(16),
+    builder: (p0) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text('Balance is insufficient,Order is created with Cash Payment.', style: primaryTextStyle(size: 16),textAlign: TextAlign.center),
+          30.height,
+          commonButton('OK', () {
+            finish(getContext);
+          }),
+        ],
+      );
+    },
+  );
 }
 
 // user /delivery - add /get
