@@ -73,11 +73,10 @@ class DProfileFragmentState extends State<DProfileFragment> {
                         settingItemWidget(Icons.assignment_outlined, language.verifyDocument, () {
                           VerifyDeliveryPersonScreen().launch(context);
                         },suffixIcon: getBoolAsync(IS_VERIFIED_DELIVERY_MAN) ? Icons.verified_user : null),
-                        ///TODO
-                        settingItemWidget(Icons.wallet, "Wallet", () {
+                        settingItemWidget(Icons.wallet, language.wallet, () {
                           WalletScreen().launch(context);
                         }),
-                        settingItemWidget(Icons.wallet, "Bank Detail", () {
+                        settingItemWidget(Icons.wallet, language.bankDetails, () {
                           BankDetailScreen().launch(context);
                         }),
                         settingItemWidget(Icons.lock_outline, language.changePassword, () {

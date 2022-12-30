@@ -308,7 +308,7 @@ String paymentType(String paymentType) {
   } else if (paymentType.toLowerCase() == PAYMENT_TYPE_CASH.toLowerCase()) {
     return language.cash;
   } else if (paymentType.toLowerCase() == PAYMENT_TYPE_WALLET.toLowerCase()) {
-    return 'Wallet';
+    return language.wallet;
   }
   return language.cash;
 }
@@ -320,8 +320,7 @@ String printAmount(var amount) {
 Future<void> commonLaunchUrl(String url, {bool forceWebView = false}) async {
   log(url);
   await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication).then((value) {}).catchError((e) {
-    // TODO Localization
-    toast('Invalid Url: $url');
+    toast('${language.invalidUrl}: $url');
   });
 }
 
@@ -333,9 +332,9 @@ cashConfirmDialog() {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('Balance is insufficient,Order is created with Cash Payment.', style: primaryTextStyle(size: 16),textAlign: TextAlign.center),
+          Text(language.balanceInsufficientCashPayment, style: primaryTextStyle(size: 16),textAlign: TextAlign.center),
           30.height,
-          commonButton('OK', () {
+          commonButton(language.ok, () {
             finish(getContext);
           }),
         ],

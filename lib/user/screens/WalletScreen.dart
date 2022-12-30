@@ -86,8 +86,7 @@ class WalletScreenState extends State<WalletScreen> {
         return false;
       },
       child: Scaffold(
-        ///TODO
-        appBar: AppBar(title: Text("Wallet")),
+        appBar: AppBar(title: Text(language.wallet)),
         body: Stack(
           children: [
             BodyCornerWidget(
@@ -106,12 +105,12 @@ class WalletScreenState extends State<WalletScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Available Balance', style: primaryTextStyle(size: 16, color: white.withOpacity(0.7))),
+                              Text(language.availableBalance, style: primaryTextStyle(size: 16, color: white.withOpacity(0.7))),
                               6.height,
                               Text('${printAmount(totalAmount)}', style: boldTextStyle(size: 22, color: Colors.white)),
                             ],
                           ),
-                          commonButton("Add Money", () {
+                          commonButton(language.addMoney, () {
                             showDialog(
                               context: context,
                               builder: (context) {
@@ -121,10 +120,10 @@ class WalletScreenState extends State<WalletScreen> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Text('Add Money', style: boldTextStyle(size: 18)),
+                                      Text(language.addMoney, style: boldTextStyle(size: 18)),
                                       Divider(),
                                       16.height,
-                                      Text("Amount", style: primaryTextStyle()),
+                                      Text(language.amount, style: primaryTextStyle()),
                                       8.height,
                                       AppTextField(
                                         controller: amountCont,
@@ -134,7 +133,7 @@ class WalletScreenState extends State<WalletScreen> {
                                       ),
                                       16.height,
                                       commonButton(
-                                        "Add",
+                                        language.add,
                                         () async {
                                           Navigator.pop(context);
                                           bool? res = await PaymentScreen(
@@ -181,7 +180,7 @@ class WalletScreenState extends State<WalletScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(data.type == CREDIT?"Money Credited":"Money Deposited", style: boldTextStyle(size: 16)),
+                                    Text(data.type == CREDIT ? language.moneyDeposited : language.moneyDebited, style: boldTextStyle(size: 16)),
                                     SizedBox(height: 8),
                                     Text(printDate(data.createdAt.validate()), style: secondaryTextStyle(size: 12)),
                                   ],
@@ -207,7 +206,7 @@ class WalletScreenState extends State<WalletScreen> {
               if (totalAmount != 0)
                 Expanded(
                   child: commonButton(
-                    "Withdraw",
+                    language.withdraw,
                     () {
                       if (appStore.userBankDetail != null)
                         WithDrawScreen(
@@ -216,7 +215,7 @@ class WalletScreenState extends State<WalletScreen> {
                           },
                         ).launch(context);
                       else {
-                        toast("opps,your Bank detail not found");
+                        toast(language.bankNotFound);
                         BankDetailScreen(isWallet: true).launch(context);
                       }
                     },

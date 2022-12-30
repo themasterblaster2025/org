@@ -78,7 +78,7 @@ class RegisterScreenState extends State<RegisterScreen> {
           toast(e.toString());
         });
       }else{
-        toast('Please accept Terms of service & Privacy Policy');
+        toast(language.acceptTermService);
       }
     }
   }
@@ -226,16 +226,15 @@ class RegisterScreenState extends State<RegisterScreen> {
                           errorMinimumPasswordLength: language.passwordInvalid,
                         ),
                         8.height,
-                        // TODO Localization
                         CheckboxListTile(
                           contentPadding: EdgeInsets.zero,
                           controlAffinity: ListTileControlAffinity.leading,
                           activeColor: colorPrimary,
                           title: RichTextWidget(
                             list: [
-                              TextSpan(text: 'I agree to the ', style: secondaryTextStyle()),
+                              TextSpan(text: '${language.iAgreeToThe}', style: secondaryTextStyle()),
                               TextSpan(
-                                text: 'Terms of Service',
+                                text: language.termOfService,
                                 style: boldTextStyle(color: colorPrimary, size: 14),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
@@ -244,7 +243,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                               ),
                               TextSpan(text: ' & ', style: secondaryTextStyle()),
                               TextSpan(
-                                text: 'Privacy Policy',
+                                text: language.privacyPolicy,
                                 style: boldTextStyle(color: colorPrimary, size: 14),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {

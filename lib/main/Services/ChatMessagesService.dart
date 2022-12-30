@@ -159,7 +159,7 @@ class ChatMessageService extends BaseService {
       ref!.doc(senderId).collection(receiverId).doc(documentId).delete();
     } on Exception catch (e) {
       log(e);
-      throw 'Something went wrong';
+      throw language.somethingWentWrong;
     }
   }
 

@@ -871,4 +871,91 @@ class LanguagePt extends BaseLanguage {
 
   @override
   String get addressNotInArea => "Endereço não na área";
+
+  @override
+  String get wallet => "Carteira";
+
+  @override
+  String get bankDetails => "Detalhes bancários";
+
+  @override
+  String get declined => "Recusou";
+
+  @override
+  String get requested => "Requeridos";
+
+  @override
+  String get approved => "Aprovado";
+
+  @override
+  String get withdraw => "Retirar o";
+
+  @override
+  String get availableBalance => "Saldo disponível";
+
+  @override
+  String get withdrawHistory => "Retirar a história";
+
+  @override
+  String get addMoney => "Adicione dinheiro";
+
+  @override
+  String get amount => "Montante";
+
+  @override
+  String get addAmount => "Adicione o valor";
+
+  @override
+  String get credentialNotMatch => "Essas credenciais não correspondem aos nossos registros";
+
+  @override
+  String get accountNumber => "Número da conta";
+
+  @override
+  String get nameAsPerBank => "Nome como banco";
+
+  @override
+  String get ifscCode => "Código IFSC";
+
+  @override
+  String get acceptTermService => "Aceite a Política de Termos de Serviço e Privacidade";
+
+  @override
+  String get iAgreeToThe => "eu concordo com o";
+
+  @override
+  String get termOfService => "Termos de serviço";
+
+  @override
+  String get somethingWentWrong => "Algo deu errado";
+
+  @override
+  String get userNotFound => "Usuário não encontrado";
+
+  @override
+  String get balanceInsufficient => "O saldo é insuficiente, adicione o valor em sua carteira";
+
+  @override
+  String get add => "Adicionar";
+
+  @override
+  String get moneyDeposited => "Dinheiro depositado";
+
+  @override
+  String get moneyDebited => "Dinheiro debitado";
+
+  @override
+  String get bankNotFound => "OPPS, seus detalhes bancários não encontrados";
+
+  @override
+  String get internetIsConnected => "Internet está conectada.";
+
+  @override
+  String get invalidUrl => "URL inválida";
+
+  @override
+  String get balanceInsufficientCashPayment => "O saldo é insuficiente, o pedido é criado com pagamento em dinheiro.";
+
+  @override
+  String get ok => "OK";
 }

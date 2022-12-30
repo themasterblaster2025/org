@@ -9,11 +9,10 @@ class PaymentModel{
 
 }
 
-///TODO
 List<PaymentModel> getPaymentItems() {
   List<PaymentModel> list = [];
   list.add(PaymentModel(index: 1,image: 'assets/icons/ic_cash.png', title: language.cash));
   list.add(PaymentModel(index: 2,image: 'assets/icons/ic_credit_card.png', title: language.online));
-  list.add(PaymentModel(index: 3,image: 'assets/icons/ic_credit_card.png', title: "Wallet"));
+  list.add(PaymentModel(index: 3,image: 'assets/icons/ic_credit_card.png', title: language.wallet));
   return list;
 }

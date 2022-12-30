@@ -107,7 +107,7 @@ class LoginScreenState extends State<LoginScreen> {
           });
         });
       }else{
-        toast('Please accept Terms of service & Privacy Policy');
+        toast(language.acceptTermService);
       }
     }
   }
@@ -199,16 +199,15 @@ class LoginScreenState extends State<LoginScreen> {
                             setState(() {});
                           },
                         ),
-                        // TODO Localization
                         CheckboxListTile(
                           contentPadding: EdgeInsets.zero,
                           controlAffinity: ListTileControlAffinity.leading,
                           activeColor: colorPrimary,
                           title: RichTextWidget(
                             list: [
-                              TextSpan(text: 'I agree to the ', style: secondaryTextStyle()),
+                              TextSpan(text: '${language.iAgreeToThe} ', style: secondaryTextStyle()),
                               TextSpan(
-                                text: 'Terms of Service',
+                                text: language.termOfService,
                                 style: boldTextStyle(color: colorPrimary, size: 14),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
@@ -217,7 +216,7 @@ class LoginScreenState extends State<LoginScreen> {
                               ),
                               TextSpan(text: ' & ', style: secondaryTextStyle()),
                               TextSpan(
-                                text: 'Privacy Policy',
+                                text: language.privacyPolicy,
                                 style: boldTextStyle(color: colorPrimary, size: 14),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {

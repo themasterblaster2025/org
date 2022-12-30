@@ -871,4 +871,91 @@ class LanguageNl extends BaseLanguage {
 
   @override
   String get addressNotInArea => "Adres niet in het gebied";
+
+  @override
+  String get wallet => "Portemonnee";
+
+  @override
+  String get bankDetails => "Bankgegevens";
+
+  @override
+  String get declined => "Afgewezen";
+
+  @override
+  String get requested => "Aangevraagd";
+
+  @override
+  String get approved => "Goedgekeurd";
+
+  @override
+  String get withdraw => "Terugtrekken";
+
+  @override
+  String get availableBalance => "beschikbaar saldo";
+
+  @override
+  String get withdrawHistory => "Geschiedenis terugtrekken";
+
+  @override
+  String get addMoney => "Voeg geld toe";
+
+  @override
+  String get amount => "Hoeveelheid";
+
+  @override
+  String get addAmount => "Voeg het bedrag toe";
+
+  @override
+  String get credentialNotMatch => "Deze referentie komt niet overeen met onze records";
+
+  @override
+  String get accountNumber => "Rekeningnummer";
+
+  @override
+  String get nameAsPerBank => "Naam volgens de bank";
+
+  @override
+  String get ifscCode => "IFSC -code";
+
+  @override
+  String get acceptTermService => "Accepteer alstublieft voorwaarden voor service- en privacybeleid";
+
+  @override
+  String get iAgreeToThe => "Ik ga akkoord met de";
+
+  @override
+  String get termOfService => "Servicevoorwaarden";
+
+  @override
+  String get somethingWentWrong => "Er is iets fout gegaan";
+
+  @override
+  String get userNotFound => "Gebruiker niet gevonden";
+
+  @override
+  String get balanceInsufficient => "Balans is onvoldoende, voeg de hoeveelheid toe aan uw portemonnee";
+
+  @override
+  String get add => "Toevoegen";
+
+  @override
+  String get moneyDeposited => "Geld gestort";
+
+  @override
+  String get moneyDebited => "Geld gedebiteerd";
+
+  @override
+  String get bankNotFound => "OPPS, uw bankdetail niet gevonden";
+
+  @override
+  String get internetIsConnected => "Internet is verbonden.";
+
+  @override
+  String get invalidUrl => "Ongeldige URL";
+
+  @override
+  String get balanceInsufficientCashPayment => "Het saldo is onvoldoende, bestelling wordt gemaakt met contante betaling.";
+
+  @override
+  String get ok => "OKÉ";
 }

@@ -55,7 +55,7 @@ class WithDrawScreenState extends State<WithDrawScreen> {
   void init() async {
     await getWithDrawList(page: currentPage).then((value) {
       appStore.setLoading(false);
-      print("valuee" + value.toJson().toString());
+      print("value" + value.toJson().toString());
       currentPage = value.pagination!.currentPage!;
       totalPage = value.pagination!.totalPages!;
       totalAmount = value.wallet_balance!.totalAmount!;
@@ -95,11 +95,11 @@ class WithDrawScreenState extends State<WithDrawScreen> {
   String printStatus(String status) {
     String text = "";
     if (status == DECLINE) {
-      text = "Declined";
+      text = language.declined;
     } else if (status == REQUESTED) {
-      text = "Requested";
+      text = language.requested;
     } else if (status == APPROVED) {
-      text = "Approved";
+      text = language.approved;
     }
     return text;
   }
@@ -125,7 +125,7 @@ class WithDrawScreenState extends State<WithDrawScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("WithDraw", style: boldTextStyle(color: Colors.white)),
+        title: Text(language.withdraw, style: boldTextStyle(color: Colors.white)),
       ),
       body: Observer(builder: (context) {
         return Form(
@@ -148,7 +148,7 @@ class WithDrawScreenState extends State<WithDrawScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text("Available Balance", style: secondaryTextStyle(color: Colors.white)),
+                            Text(language.availableBalance, style: secondaryTextStyle(color: Colors.white)),
                             SizedBox(height: 8),
                             Text('${printAmount(totalAmount)}', style: boldTextStyle(size: 22, color: Colors.white)),
                           ],
@@ -156,7 +156,7 @@ class WithDrawScreenState extends State<WithDrawScreen> {
                       ),
                     ),
                     SizedBox(height: 4),
-                    Text("Withdraw History", style: boldTextStyle(size: 18)),
+                    Text(language.withdrawHistory, style: boldTextStyle(size: 18)),
                     SizedBox(height: 16),
                     ListView.builder(
                       itemCount: withDrawData.length,
@@ -203,7 +203,7 @@ class WithDrawScreenState extends State<WithDrawScreen> {
         child: Padding(
           padding: EdgeInsets.all(16),
           child: commonButton(
-            "WithDraw",
+            language.withdraw,
                 () {
               showDialog(
                 context: context,
@@ -214,10 +214,10 @@ class WithDrawScreenState extends State<WithDrawScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text('Add Money', style: boldTextStyle(size: 18)),
+                        Text(language.addMoney, style: boldTextStyle(size: 18)),
                         Divider(),
                         16.height,
-                        Text("Amount", style: primaryTextStyle()),
+                        Text(language.amount, style: primaryTextStyle()),
                         8.height,
                         AppTextField(
                           controller: addMoneyController,
@@ -233,12 +233,12 @@ class WithDrawScreenState extends State<WithDrawScreen> {
                         ),
                         16.height,
                         commonButton(
-                          "Withdraw",
+                          language.withdraw,
                               () async {
                             if (addMoneyController.text.isNotEmpty) {
                               await withDrawRequest(amount: int.parse(addMoneyController.text));
                             } else {
-                              toast("Add Amount");
+                              toast(language.addAmount);
                             }
                           },
                           width: context.width(),

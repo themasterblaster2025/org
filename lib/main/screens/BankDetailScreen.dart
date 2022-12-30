@@ -106,8 +106,7 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      ///TODO
-      appBar: AppBar(title: Text('Bank Detail')),
+      appBar: AppBar(title: Text(language.bankDetails)),
       body: BodyCornerWidget(
         child: Stack(
           children: [
@@ -135,21 +134,21 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
                       isValidationRequired: true,
                       controller: accNumberCon,
                       textFieldType: TextFieldType.PHONE,
-                      decoration: commonInputDecoration(hintText: "Account Number"),
+                      decoration: commonInputDecoration(hintText: language.accountNumber),
                     ),
                     16.height,
                     AppTextField(
                       isValidationRequired: true,
                       controller: nameCon,
                       textFieldType: TextFieldType.NAME,
-                      decoration: commonInputDecoration(hintText: "Name as Per Bank"),
+                      decoration: commonInputDecoration(hintText: language.nameAsPerBank),
                     ),
                     16.height,
                     AppTextField(
                       isValidationRequired: true,
                       controller: ifscCCon,
                       textFieldType: TextFieldType.OTHER,
-                      decoration: commonInputDecoration(hintText: "IFSC Code"),
+                      decoration: commonInputDecoration(hintText: language.ifscCode),
                     ),
                     30.height,
                   ],
@@ -163,7 +162,7 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
       bottomNavigationBar: AppButton(
           color: colorPrimary,
           textColor: Colors.white,
-          text: "Save",
+          text: language.save,
           onTap: () {
             saveBankDetail();
           }).paddingAll(16),

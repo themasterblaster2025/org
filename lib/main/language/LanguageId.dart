@@ -870,4 +870,91 @@ class LanguageId extends BaseLanguage {
 
   @override
   String get addressNotInArea => "Alamat Tidak di Area";
+
+  @override
+  String get wallet => "Dompet";
+
+  @override
+  String get bankDetails => "Rincian bank";
+
+  @override
+  String get declined => "Ditolak";
+
+  @override
+  String get requested => "Diminta";
+
+  @override
+  String get approved => "Disetujui";
+
+  @override
+  String get withdraw => "Menarik";
+
+  @override
+  String get availableBalance => "Saldo Tersedia";
+
+  @override
+  String get withdrawHistory => "Menarik sejarah";
+
+  @override
+  String get addMoney => "Tambahkan uang";
+
+  @override
+  String get amount => "Jumlah";
+
+  @override
+  String get addAmount => "Tambahkan jumlah";
+
+  @override
+  String get credentialNotMatch => "Kredensial ini tidak cocok dengan catatan kami";
+
+  @override
+  String get accountNumber => "Nomor akun";
+
+  @override
+  String get nameAsPerBank => "Nama sesuai bank";
+
+  @override
+  String get ifscCode => "Kode ifsc";
+
+  @override
+  String get acceptTermService => "Harap terima Ketentuan Layanan & Kebijakan Privasi";
+
+  @override
+  String get iAgreeToThe => "Saya setuju dengan";
+
+  @override
+  String get termOfService => "Ketentuan Layanan";
+
+  @override
+  String get somethingWentWrong => "Ada yang salah";
+
+  @override
+  String get userNotFound => "Pengguna tidak ditemukan";
+
+  @override
+  String get balanceInsufficient => "Saldo tidak cukup, silakan tambahkan jumlah di dompet Anda";
+
+  @override
+  String get add => "Menambahkan";
+
+  @override
+  String get moneyDeposited => "Uang disetor";
+
+  @override
+  String get moneyDebited => "Uang didebit";
+
+  @override
+  String get bankNotFound => "opps, detail bank Anda tidak ditemukan";
+
+  @override
+  String get internetIsConnected => "Internet terhubung.";
+
+  @override
+  String get invalidUrl => "URL tidak valid";
+
+  @override
+  String get balanceInsufficientCashPayment => "Saldo tidak mencukupi, pesanan dibuat dengan pembayaran tunai.";
+
+  @override
+  String get ok => "Oke";
 }

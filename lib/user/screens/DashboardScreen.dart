@@ -159,7 +159,7 @@ class DashboardScreenState extends State<DashboardScreen> {
           if (appStore.availableBal >= 0) {
             CreateOrderScreen().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
           } else {
-            toast("Balance is insufficient,Please add amount in your wallet");
+            toast(language.balanceInsufficient);
             WalletScreen().launch(context);
           }
         },

@@ -62,12 +62,10 @@ class AccountFragmentState extends State<AccountFragment> {
                 settingItemWidget(Icons.drafts_outlined, language.drafts, () {
                   DraftOrderListScreen().launch(context);
                 }),
-
-                ///TODO
-                settingItemWidget(Icons.wallet, "Wallet", () {
+                settingItemWidget(Icons.wallet, language.wallet, () {
                   WalletScreen().launch(context);
                 }),
-                settingItemWidget(Icons.account_balance, "Bank Detail", () {
+                settingItemWidget(Icons.account_balance, language.bankDetails, () {
                   BankDetailScreen().launch(context);
                 }),
                 settingItemWidget(Icons.person_outline, language.editProfile, () {

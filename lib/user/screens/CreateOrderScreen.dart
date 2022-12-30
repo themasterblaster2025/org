@@ -261,7 +261,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         if (appStore.availableBal > totalAmount) {
           savePaymentApiCall(paymentType: PAYMENT_TYPE_WALLET, paymentStatus: PAYMENT_PAID, totalAmount: totalAmount.toString(), orderID: value.orderId.toString());
         } else {
-          toast("Balance is insufficient,Please add amount in your wallet");
+          toast(language.balanceInsufficient);
           bool? res = await WalletScreen().launch(context);
           if (res == true) {
             if (appStore.availableBal > totalAmount) {

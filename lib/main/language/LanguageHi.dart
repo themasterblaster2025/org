@@ -871,4 +871,91 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get addressNotInArea => "पता क्षेत्र में नहीं";
+
+  @override
+  String get wallet => "बटुआ";
+
+  @override
+  String get bankDetails => "बैंक विवरण";
+
+  @override
+  String get declined => "इंकार कर दिया";
+
+  @override
+  String get requested => "का अनुरोध किया";
+
+  @override
+  String get approved => "स्वीकृत";
+
+  @override
+  String get withdraw => "निकालना";
+
+  @override
+  String get availableBalance => "उपलब्ध शेष राशि";
+
+  @override
+  String get withdrawHistory => "इतिहास वापस लेना";
+
+  @override
+  String get addMoney => "पैसे जोड़ें";
+
+  @override
+  String get amount => "मात्रा";
+
+  @override
+  String get addAmount => "राशि जोड़ें";
+
+  @override
+  String get credentialNotMatch => "ये क्रेडेंशियल हमारे रिकॉर्ड से मेल नहीं खाते हैं";
+
+  @override
+  String get accountNumber => "खाता संख्या";
+
+  @override
+  String get nameAsPerBank => "बैंक के अनुसार नाम";
+
+  @override
+  String get ifscCode => "IFSC कोड";
+
+  @override
+  String get acceptTermService => "कृपया सेवा और गोपनीयता नीति की शर्तें स्वीकार करें";
+
+  @override
+  String get iAgreeToThe => "मैं इसके लिए सहमत हूँ";
+
+  @override
+  String get termOfService => "सेवा की शर्तें";
+
+  @override
+  String get somethingWentWrong => "कुछ गलत हो गया";
+
+  @override
+  String get userNotFound => "उपयोगकर्ता नहीं मिला";
+
+  @override
+  String get balanceInsufficient => "संतुलन अपर्याप्त है, कृपया अपने बटुए में राशि जोड़ें";
+
+  @override
+  String get add => "जोड़ना";
+
+  @override
+  String get moneyDeposited => "जमा राशि";
+
+  @override
+  String get moneyDebited => "मनी डेबिटेड";
+
+  @override
+  String get bankNotFound => "opps, आपका बैंक विवरण नहीं मिला";
+
+  @override
+  String get internetIsConnected => "इंटरनेट जुड़ा हुआ है।";
+
+  @override
+  String get invalidUrl => "असामान्य यूआरएल";
+
+  @override
+  String get balanceInsufficientCashPayment => "शेष राशि अपर्याप्त है, आदेश नकद भुगतान के साथ बनाया जाता है।";
+
+  @override
+  String get ok => "ठीक है";
 }

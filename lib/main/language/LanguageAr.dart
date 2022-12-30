@@ -870,4 +870,91 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get addressNotInArea => "العنوان ليس في المنطقة";
+
+  @override
+  String get wallet => "محفظة";
+
+  @override
+  String get bankDetails => "تفاصيل البنك";
+
+  @override
+  String get declined => "انخفض";
+
+  @override
+  String get requested => "مطلوب";
+
+  @override
+  String get approved => "وافق";
+
+  @override
+  String get withdraw => "انسحب";
+
+  @override
+  String get availableBalance => "الرصيد المتوفر";
+
+  @override
+  String get withdrawHistory => "سحب التاريخ";
+
+  @override
+  String get addMoney => "إضافة المال";
+
+  @override
+  String get amount => "مقدار";
+
+  @override
+  String get addAmount => "أضف المبلغ";
+
+  @override
+  String get credentialNotMatch => "هذه الاعتماد لا تتطابق مع سجلاتنا";
+
+  @override
+  String get accountNumber => "رقم حساب";
+
+  @override
+  String get nameAsPerBank => "الاسم حسب البنك";
+
+  @override
+  String get ifscCode => "رمز IFSC";
+
+  @override
+  String get acceptTermService => "يرجى قبول شروط الخدمة وسياسة الخصوصية";
+
+  @override
+  String get iAgreeToThe => "أنا أوافق على";
+
+  @override
+  String get termOfService => "شروط الخدمة";
+
+  @override
+  String get somethingWentWrong => "هناك خطأ ما";
+
+  @override
+  String get userNotFound => "لم يتم العثور على المستخدم";
+
+  @override
+  String get balanceInsufficient => "الرصيد غير كافٍ ، يرجى إضافة مبلغ في محفظتك";
+
+  @override
+  String get add => "يضيف";
+
+  @override
+  String get moneyDeposited => "مودعة مودعة";
+
+  @override
+  String get moneyDebited => "أموال خصم";
+
+  @override
+  String get bankNotFound => "OPPS ، لم يتم العثور على تفاصيل البنوك الخاصة بك";
+
+  @override
+  String get internetIsConnected => "الإنترنت متصل.";
+
+  @override
+  String get invalidUrl => "URL غير صالح";
+
+  @override
+  String get balanceInsufficientCashPayment => "الرصيد غير كافٍ ، يتم إنشاء الطلب مع الدفع النقدي.";
+
+  @override
+  String get ok => "نعم";
 }

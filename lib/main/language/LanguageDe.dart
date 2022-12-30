@@ -871,4 +871,91 @@ class LanguageDe extends BaseLanguage {
 
   @override
   String get addressNotInArea => "Adresse nicht im Bereich";
+
+  @override
+  String get wallet => "Geldbörse";
+
+  @override
+  String get bankDetails => "Bankdaten";
+
+  @override
+  String get declined => "Zurückgegangen";
+
+  @override
+  String get requested => "Angefordert";
+
+  @override
+  String get approved => "Genehmigt";
+
+  @override
+  String get withdraw => "Zurückziehen";
+
+  @override
+  String get availableBalance => "Verfügbares Guthaben";
+
+  @override
+  String get withdrawHistory => "Geschichte zurückziehen";
+
+  @override
+  String get addMoney => "Geld hinzufügen";
+
+  @override
+  String get amount => "Menge";
+
+  @override
+  String get addAmount => "Menge hinzufügen";
+
+  @override
+  String get credentialNotMatch => "Diese Anmeldeinformationen stimmen nicht mit unseren Datensätzen überein";
+
+  @override
+  String get accountNumber => "Kontonummer";
+
+  @override
+  String get nameAsPerBank => "Name gemäß Bank";
+
+  @override
+  String get ifscCode => "IFSC -Code";
+
+  @override
+  String get acceptTermService => "Bitte übernehmen Sie die Nutzungsbedingungen für Service- und Datenschutzbestimmungen";
+
+  @override
+  String get iAgreeToThe => "Ich stimme dem zu";
+
+  @override
+  String get termOfService => "Nutzungsbedingungen";
+
+  @override
+  String get somethingWentWrong => "Etwas ist schief gelaufen";
+
+  @override
+  String get userNotFound => "Benutzer wurde nicht gefunden";
+
+  @override
+  String get balanceInsufficient => "Das Gleichgewicht ist unzureichend. Bitte fügen Sie Ihrer Brieftasche Betrag hinzu";
+
+  @override
+  String get add => "Addieren";
+
+  @override
+  String get moneyDeposited => "Geld deponiert";
+
+  @override
+  String get moneyDebited => "Geld ausgelöst";
+
+  @override
+  String get bankNotFound => "OPPS, Ihr Bankdetail nicht gefunden";
+
+  @override
+  String get internetIsConnected => "Das Internet ist verbunden.";
+
+  @override
+  String get invalidUrl => "Ungültige URL";
+
+  @override
+  String get balanceInsufficientCashPayment => "Saldo ist unzureichend, die Bestellung wird mit Barzahlung erstellt.";
+
+  @override
+  String get ok => "OK";
 }

@@ -870,4 +870,91 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get addressNotInArea => "Address not in area";
+
+  @override
+  String get wallet => "Wallet";
+
+  @override
+  String get bankDetails => "Bank Details";
+
+  @override
+  String get declined => "Declined";
+
+  @override
+  String get requested => "Requested";
+
+  @override
+  String get approved => "Approved";
+
+  @override
+  String get withdraw => "WithDraw";
+
+  @override
+  String get availableBalance => "Available Balance";
+
+  @override
+  String get withdrawHistory => "Withdraw History";
+
+  @override
+  String get addMoney => "Add Money";
+
+  @override
+  String get amount => "Amount";
+
+  @override
+  String get addAmount => "Add Amount";
+
+  @override
+  String get credentialNotMatch => "These credential do not match our records";
+
+  @override
+  String get accountNumber => "Account Number";
+
+  @override
+  String get nameAsPerBank => "Name as Per Bank";
+
+  @override
+  String get ifscCode => "IFSC Code";
+
+  @override
+  String get acceptTermService => "Please accept Terms of service & Privacy Policy";
+
+  @override
+  String get iAgreeToThe => "I agree to the";
+
+  @override
+  String get termOfService => "Terms of Service";
+
+  @override
+  String get somethingWentWrong => "Something went wrong";
+
+  @override
+  String get userNotFound => "User Not found";
+
+  @override
+  String get balanceInsufficient => "Balance is insufficient,Please add amount in your wallet";
+
+  @override
+  String get add => "Add";
+
+  @override
+  String get moneyDeposited => "Money Deposited";
+
+  @override
+  String get moneyDebited => "Money Debited";
+
+  @override
+  String get bankNotFound => "opps,your Bank detail not found";
+
+  @override
+  String get internetIsConnected => "Internet is connected.";
+
+  @override
+  String get invalidUrl => "Invalid Url";
+
+  @override
+  String get balanceInsufficientCashPayment => "Balance is insufficient,Order is created with Cash Payment.";
+
+  @override
+  String get ok => "OK";
 }

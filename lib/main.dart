@@ -86,7 +86,7 @@ class MyAppState extends State<MyApp> {
         if (isCurrentlyOnNoInternet) {
           pop();
           isCurrentlyOnNoInternet = false;
-          toast('Internet is connected.');
+          toast(language.internetIsConnected);
         }
         log('connected');
       }

@@ -159,7 +159,7 @@ Future<void> logout(BuildContext context, {bool isFromLogin = false}) async {
   await appStore.setLogin(false);
   appStore.setFiltering(false);
   if (isFromLogin) {
-    toast('These credential do not match our records');
+    toast(language.credentialNotMatch);
   } else {
     LoginScreen().launch(context, isNewTask: true);
   }

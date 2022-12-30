@@ -870,4 +870,91 @@ class LanguageVi extends BaseLanguage {
 
   @override
   String get addressNotInArea => "Địa chỉ không có trong khu vực";
+
+  @override
+  String get wallet => "Cái ví";
+
+  @override
+  String get bankDetails => "Thông tin chi tiết ngân hàng";
+
+  @override
+  String get declined => "Suy giảm";
+
+  @override
+  String get requested => "Yêu cầu";
+
+  @override
+  String get approved => "Đã được phê duyệt";
+
+  @override
+  String get withdraw => "Rút";
+
+  @override
+  String get availableBalance => "Số dư có sẵn";
+
+  @override
+  String get withdrawHistory => "Rút tiền lịch sử";
+
+  @override
+  String get addMoney => "Thêm tiền";
+
+  @override
+  String get amount => "Số lượng";
+
+  @override
+  String get addAmount => "Thêm số tiền";
+
+  @override
+  String get credentialNotMatch => "Thông tin xác thực này không khớp với hồ sơ của chúng tôi";
+
+  @override
+  String get accountNumber => "Số tài khoản";
+
+  @override
+  String get nameAsPerBank => "Tên theo ngân hàng";
+
+  @override
+  String get ifscCode => "Mã IFSC";
+
+  @override
+  String get acceptTermService => "Vui lòng chấp nhận Điều khoản của Chính sách Dịch vụ & Quyền riêng tư";
+
+  @override
+  String get iAgreeToThe => "tôi đồng ý với";
+
+  @override
+  String get termOfService => "Điều khoản dịch vụ";
+
+  @override
+  String get somethingWentWrong => "Có gì đó đã sai";
+
+  @override
+  String get userNotFound => "Người dùng không tìm thấy";
+
+  @override
+  String get balanceInsufficient => "Số dư là không đủ, vui lòng thêm số tiền vào ví của bạn";
+
+  @override
+  String get add => "cộng";
+
+  @override
+  String get moneyDeposited => "Tiền gửi";
+
+  @override
+  String get moneyDebited => "Tiền ghi nợ";
+
+  @override
+  String get bankNotFound => "opps, không tìm thấy chi tiết ngân hàng của bạn";
+
+  @override
+  String get internetIsConnected => "Internet được kết nối.";
+
+  @override
+  String get invalidUrl => "URL không hợp lệ";
+
+  @override
+  String get balanceInsufficientCashPayment => "Số dư là không đủ, đơn đặt hàng được tạo bằng thanh toán bằng tiền mặt.";
+
+  @override
+  String get ok => "VÂNG";
 }

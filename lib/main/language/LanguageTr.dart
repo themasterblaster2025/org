@@ -870,4 +870,91 @@ class LanguageTr extends BaseLanguage {
 
   @override
   String get addressNotInArea => "Alanda Adres Değil";
+
+  @override
+  String get wallet => "Cüzdan";
+
+  @override
+  String get bankDetails => "Banka detayları";
+
+  @override
+  String get declined => "Reddetti";
+
+  @override
+  String get requested => "Talep edilen";
+
+  @override
+  String get approved => "Onaylı";
+
+  @override
+  String get withdraw => "Çekil";
+
+  @override
+  String get availableBalance => "Kalan bakiye";
+
+  @override
+  String get withdrawHistory => "Tarihi Çekme";
+
+  @override
+  String get addMoney => "Para eklemek";
+
+  @override
+  String get amount => "Miktar";
+
+  @override
+  String get addAmount => "Miktar ekle";
+
+  @override
+  String get credentialNotMatch => "Bu kimlik bilgileri kayıtlarımıza uymuyor";
+
+  @override
+  String get accountNumber => "Hesap numarası";
+
+  @override
+  String get nameAsPerBank => "Bankaya göre isim";
+
+  @override
+  String get ifscCode => "IFSC kodu";
+
+  @override
+  String get acceptTermService => "Lütfen Hizmet Şartları ve Gizlilik Politikası kabul edin";
+
+  @override
+  String get iAgreeToThe => "Katılıyorum";
+
+  @override
+  String get termOfService => "Kullanım Şartları";
+
+  @override
+  String get somethingWentWrong => "Bir şeyler yanlış gitti";
+
+  @override
+  String get userNotFound => "Kullanıcı bulunamadı";
+
+  @override
+  String get balanceInsufficient => "Denge yetersizdir, lütfen cüzdanınıza miktar ekleyin";
+
+  @override
+  String get add => "Eklemek";
+
+  @override
+  String get moneyDeposited => "Para yatırıldı";
+
+  @override
+  String get moneyDebited => "Para Boru";
+
+  @override
+  String get bankNotFound => "OPP'ler, banka detayınız bulunamadı";
+
+  @override
+  String get internetIsConnected => "İnternet bağlıdır.";
+
+  @override
+  String get invalidUrl => "Geçersiz URL";
+
+  @override
+  String get balanceInsufficientCashPayment => "Bakiye yetersizdir, nakit ödeme ile sipariş oluşturulur.";
+
+  @override
+  String get ok => "Tamam";
 }

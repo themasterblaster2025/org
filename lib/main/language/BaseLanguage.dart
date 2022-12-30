@@ -582,4 +582,62 @@ abstract class BaseLanguage {
   String get confirmDeliveryLocation;
 
   String get addressNotInArea;
+
+  String get wallet;
+
+  String get bankDetails;
+
+  String get declined;
+
+  String get requested;
+
+  String get approved;
+
+  String get withdraw;
+
+  String get availableBalance;
+
+  String get withdrawHistory;
+
+  String get addMoney;
+
+  String get amount;
+
+  String get addAmount;
+
+  String get credentialNotMatch;
+
+  String get accountNumber;
+
+  String get nameAsPerBank;
+
+  String get ifscCode;
+
+  String get acceptTermService;
+
+  String get iAgreeToThe;
+
+  String get termOfService;
+
+  String get somethingWentWrong;
+
+  String get userNotFound;
+
+  String get balanceInsufficient;
+
+  String get add;
+
+  String get moneyDeposited;
+
+  String get moneyDebited;
+
+  String get bankNotFound;
+
+  String get internetIsConnected;
+
+  String get invalidUrl;
+
+  String get balanceInsufficientCashPayment;
+
+  String get ok;
 }

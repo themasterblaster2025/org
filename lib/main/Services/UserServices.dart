@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:mighty_delivery/main.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:path/path.dart';
 import '../models/LoginResponse.dart';
@@ -41,7 +42,7 @@ class UserService extends BaseService {
       if (value.docs.length == 1) {
         return UserData.fromJson(value.docs.first.data() as Map<String, dynamic>);
       } else {
-        throw 'User Not found';
+        throw language.userNotFound;
       }
     });
   }
@@ -59,7 +60,7 @@ class UserService extends BaseService {
       if (value.docs.isNotEmpty) {
         return UserData.fromJson(value.docs.first.data() as Map<String, dynamic>);
       } else {
-        throw 'No User Found';
+        throw language.userNotFound;
       }
     });
   }
@@ -77,7 +78,7 @@ class UserService extends BaseService {
       if (value.docs.isNotEmpty) {
         return UserData.fromJson(value.docs.first.data() as Map<String, dynamic>);
       } else {
-        throw "No user found";
+        throw language.userNotFound;
       }
     });
   }
