@@ -1,4 +1,4 @@
-import 'package:mighty_delivery/main/models/WalletListModel.dart';
+import '../../main/models/WalletListModel.dart';
 
 import '../../main/models/PaginationModel.dart';
 

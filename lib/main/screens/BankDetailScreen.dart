@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
+import '../../main/components/BodyCornerWidget.dart';
+import '../../main/utils/Colors.dart';
 import 'package:nb_utils/nb_utils.dart';
 import '../../main.dart';
 import '../models/LoginResponse.dart';

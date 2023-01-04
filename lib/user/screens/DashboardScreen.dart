@@ -1,7 +1,7 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/user/screens/WalletScreen.dart';
+import '../../user/screens/WalletScreen.dart';
 import '../../main.dart';
 import '../../main/components/BodyCornerWidget.dart';
 import '../../main/components/UserCitySelectScreen.dart';

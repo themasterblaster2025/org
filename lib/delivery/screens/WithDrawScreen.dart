@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
+import '../../main/utils/Colors.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/main/screens/BankDetailScreen.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
-import 'package:mighty_delivery/user/components/PaymentScreen.dart';
+import '../../main/screens/BankDetailScreen.dart';
+import '../../main/utils/Colors.dart';
+import '../../user/components/PaymentScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../delivery/screens/WithDrawScreen.dart';
