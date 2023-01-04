@@ -343,7 +343,3 @@ cashConfirmDialog() {
   );
 }
 
-// user /delivery - add /get
-// delivery - widtor rew / bank
-//     admin - list width req /
-// create wallet

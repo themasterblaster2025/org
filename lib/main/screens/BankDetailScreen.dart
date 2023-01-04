@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:mighty_delivery/main/components/BodyCornerWidget.dart';
@@ -42,7 +40,6 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
   }
 
   getBankDetail() async {
-    log(appStore.userBankDetail);
     appStore.setLoading(true);
     if (appStore.userBankDetail != null) {
       userBankDetail = appStore.userBankDetail!;
@@ -127,7 +124,6 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
                       onChanged: (value) {
                         dropdownValue = value!;
                       },
-                      validator: (value) {},
                     ),
                     16.height,
                     AppTextField(

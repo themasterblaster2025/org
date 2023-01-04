@@ -12,7 +12,6 @@ import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../user/screens/OrderDetailScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../components/GenerateInvoice.dart';
 

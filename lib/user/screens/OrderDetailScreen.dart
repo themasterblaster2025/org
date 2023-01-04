@@ -16,7 +16,6 @@ import '../../main/utils/Widgets.dart';
 import '../../user/components/CancelOrderDialog.dart';
 import '../../user/screens/ReturnOrderScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../main/components/OrderSummeryWidget.dart';
 import '../../main/models/OrderDetailModel.dart';

@@ -1,8 +1,8 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
@@ -213,6 +213,9 @@ class RegisterScreenState extends State<RegisterScreen> {
                             if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
                             return null;
                           },
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
                         ),
                         16.height,
                         Text(language.password, style: primaryTextStyle()),

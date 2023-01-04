@@ -58,7 +58,7 @@ class WithDrawScreenState extends State<WithDrawScreen> {
       print("value" + value.toJson().toString());
       currentPage = value.pagination!.currentPage!;
       totalPage = value.pagination!.totalPages!;
-      totalAmount = value.wallet_balance!.totalAmount!;
+      totalAmount = value.walletBalance!.totalAmount!;
       if (currentPage == 1) {
         withDrawData.clear();
       }

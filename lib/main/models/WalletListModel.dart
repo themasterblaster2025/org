@@ -172,6 +172,5 @@ class UserWalletModel {
     data['updated_at'] = this.updatedAt;
     data['deleted_at'] = this.deletedAt;
     return data;
-    return data;
   }
 }
