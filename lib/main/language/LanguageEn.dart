@@ -957,4 +957,31 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get ok => "OK";
+
+  @override
+  String get orderFee => "Order Fee";
+
+  @override
+  String get topup => "Topup";
+
+  @override
+  String get orderCancelCharge => "Order Cancel Charge";
+
+  @override
+  String get orderCancelRefund => "Order Cancel Refund";
+
+  @override
+  String get correction => "Correction";
+
+  @override
+  String get commission => "Commission";
+
+  @override
+  String get cancelBeforePickMsg => 'The order was cancelled before pickup the parcel.So,only cancellation charge is cut.If payment is already done then amount is refund to wallet.';
+
+  @override
+  String get cancelAfterPickMsg => 'The order was cancelled after pickup the parcel.So,fully charge is cut.';
+
+  @override
+  String get cancelNote => 'NOTE: If you cancel the order before pickup the parcel then cancellation charge will be cut.Otherwise,full charge will be cut.';
 }

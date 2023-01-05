@@ -958,4 +958,31 @@ class LanguageFr extends BaseLanguage {
 
   @override
   String get ok => "D'ACCORD";
+
+  @override
+  String get orderFee => "Frais de commande";
+
+  @override
+  String get topup => "Secouer";
+
+  @override
+  String get orderCancelCharge => "Commandez des frais d'annulation";
+
+  @override
+  String get orderCancelRefund => "Commandez le remboursement de l'annulation";
+
+  @override
+  String get correction => "Correction";
+
+  @override
+  String get commission => "Commission";
+
+  @override
+  String get cancelBeforePickMsg => 'La commande a été annulée avant de ramasser le colis. Ainsi, seule les frais d\'annulation sont réduits. Si le paiement est déjà effectué, le montant est remboursé au portefeuille.';
+
+  @override
+  String get cancelAfterPickMsg => 'La commande a été annulée après le ramassage du colis. Ainsi, la charge est entièrement coupée.';
+
+  @override
+  String get cancelNote => 'Remarque: Si vous annulez la commande avant de ramasser le colis, les frais d\'annulation seront coupés. Autrement dit, la charge complète sera coupée.';
 }

@@ -958,4 +958,31 @@ class LanguageAf extends BaseLanguage {
 
   @override
   String get ok => "Ok";
+
+  @override
+  String get orderFee => "Bestelgeld";
+
+  @override
+  String get topup => "Toppunt";
+
+  @override
+  String get orderCancelCharge => "Bestelling kanselleer heffing";
+
+  @override
+  String get orderCancelRefund => "Bestelling kanselleer terugbetaling";
+
+  @override
+  String get correction => "Regstelling";
+
+  @override
+  String get commission => "Kommissie";
+
+  @override
+  String get cancelBeforePickMsg => 'Die bestelling is gekanselleer voordat die pakkie die pakkie optel. So is slegs die kansellasiekoste besnoei. As die betaling reeds gedoen word, is die bedrag terugbetaling aan Wallet.';
+
+  @override
+  String get cancelAfterPickMsg => 'Die bestelling is gekanselleer nadat die pakkie die pakkie afhaal.';
+
+  @override
+  String get cancelNote => 'OPMERKING: As u die bestelling voordat u die pakket kanselleer, kanselleer, sal die kansellasiekoste besnoei word. Ander is die volle lading gesny.';
 }

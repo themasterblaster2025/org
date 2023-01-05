@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:http/http.dart';
 import '../../main/components/BodyCornerWidget.dart';
 import '../../main/utils/Colors.dart';
@@ -22,12 +23,10 @@ class BankDetailScreen extends StatefulWidget {
 class _BankDetailScreenState extends State<BankDetailScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  UserBankAccount userBankDetail = UserBankAccount();
+  TextEditingController bankNameCon = TextEditingController();
   TextEditingController accNumberCon = TextEditingController();
   TextEditingController nameCon = TextEditingController();
   TextEditingController ifscCCon = TextEditingController();
-
-  String dropdownValue = 'HDFC';
 
   @override
   void initState() {
@@ -41,14 +40,18 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
 
   getBankDetail() async {
     appStore.setLoading(true);
-    if (appStore.userBankDetail != null) {
-      userBankDetail = appStore.userBankDetail!;
-      dropdownValue = appStore.userBankDetail!.bankName!;
-      accNumberCon.text = appStore.userBankDetail!.accountNumber!;
-      nameCon.text = appStore.userBankDetail!.accountHolderName.isEmptyOrNull ? "" : appStore.userBankDetail!.accountHolderName!;
-      ifscCCon.text = appStore.userBankDetail!.bankCode!;
-    }
-    appStore.setLoading(false);
+    await getUserDetail(getIntAsync(USER_ID)).then((value) {
+      appStore.setLoading(false);
+      if (value.userBankAccount != null) {
+        bankNameCon.text = value.userBankAccount!.bankName.validate();
+        accNumberCon.text = value.userBankAccount!.accountNumber.validate();
+        nameCon.text = value.userBankAccount!.accountHolderName.validate();
+        ifscCCon.text = value.userBankAccount!.bankCode.validate();
+        setState(() { });
+      }
+    }).then((value) {
+      appStore.setLoading(false);
+    });
   }
 
   saveBankDetail() async {
@@ -63,7 +66,7 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
       multiPartRequest.fields['id'] = getIntAsync(USER_ID).toString();
 
       multiPartRequest.fields['email'] = getStringAsync(USER_EMAIL);
-      multiPartRequest.fields['user_bank_account[bank_name]'] = dropdownValue;
+      multiPartRequest.fields['user_bank_account[bank_name]'] = bankNameCon.text.trim();
       multiPartRequest.fields['user_bank_account[account_number]'] = accNumberCon.text.trim();
       multiPartRequest.fields['user_bank_account[account_holder_name]'] = nameCon.text.trim();
       multiPartRequest.fields['user_bank_account[bank_code]'] = ifscCCon.text.trim();
@@ -80,7 +83,6 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
           // appStore.userBankDetail.nameAsPerBank = nameCon.text.trim();
           // appStore.userBankDetail.ifscCode = ifscCCon.text.trim();
           appStore.setLoading(false);
-          appStore.userBankDetail = userData.userBankAccount;
           setState(() {});
         },
         onError: (error) {
@@ -102,66 +104,65 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(language.bankDetails)),
-      body: BodyCornerWidget(
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              padding: EdgeInsets.all(12),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    16.height,
-                    DropdownButtonFormField<String>(
-                      value: dropdownValue,
-                      decoration: commonInputDecoration(),
-                      items: BANK_LIST.map((String items) {
-                        return DropdownMenuItem(value: items, child: Text(items, style: primaryTextStyle()));
-                      }).toList(),
-                      onChanged: (value) {
-                        dropdownValue = value!;
-                      },
+    return Observer(
+      builder: (context) {
+        return Scaffold(
+          appBar: AppBar(title: Text(language.bankDetails)),
+          body: BodyCornerWidget(
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  padding: EdgeInsets.all(12),
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        16.height,
+                        AppTextField(
+                          controller: bankNameCon,
+                          textFieldType: TextFieldType.NAME,
+                          decoration: commonInputDecoration(hintText: language.accountNumber),
+                        ),
+                        16.height,
+                        AppTextField(
+                          isValidationRequired: true,
+                          controller: accNumberCon,
+                          textFieldType: TextFieldType.PHONE,
+                          decoration: commonInputDecoration(hintText: language.accountNumber),
+                        ),
+                        16.height,
+                        AppTextField(
+                          isValidationRequired: true,
+                          controller: nameCon,
+                          textFieldType: TextFieldType.NAME,
+                          decoration: commonInputDecoration(hintText: language.nameAsPerBank),
+                        ),
+                        16.height,
+                        AppTextField(
+                          isValidationRequired: true,
+                          controller: ifscCCon,
+                          textFieldType: TextFieldType.OTHER,
+                          decoration: commonInputDecoration(hintText: language.ifscCode),
+                        ),
+                        30.height,
+                      ],
                     ),
-                    16.height,
-                    AppTextField(
-                      isValidationRequired: true,
-                      controller: accNumberCon,
-                      textFieldType: TextFieldType.PHONE,
-                      decoration: commonInputDecoration(hintText: language.accountNumber),
-                    ),
-                    16.height,
-                    AppTextField(
-                      isValidationRequired: true,
-                      controller: nameCon,
-                      textFieldType: TextFieldType.NAME,
-                      decoration: commonInputDecoration(hintText: language.nameAsPerBank),
-                    ),
-                    16.height,
-                    AppTextField(
-                      isValidationRequired: true,
-                      controller: ifscCCon,
-                      textFieldType: TextFieldType.OTHER,
-                      decoration: commonInputDecoration(hintText: language.ifscCode),
-                    ),
-                    30.height,
-                  ],
+                  ),
                 ),
-              ),
+                loaderWidget().visible(appStore.isLoading)
+              ],
             ),
-            Loader().visible(appStore.isLoading)
-          ],
-        ),
-      ),
-      bottomNavigationBar: AppButton(
-          color: colorPrimary,
-          textColor: Colors.white,
-          text: language.save,
-          onTap: () {
-            saveBankDetail();
-          }).paddingAll(16),
+          ),
+          bottomNavigationBar: AppButton(
+              color: colorPrimary,
+              textColor: Colors.white,
+              text: language.save,
+              onTap: () {
+                saveBankDetail();
+              }).paddingAll(16),
+        );
+      }
     );
   }
 }

@@ -154,7 +154,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                             Row(
                                               children: [
                                                 item.date != null ? Text(printDate(item.date!), style: secondaryTextStyle()).expand() : SizedBox(),
-                                                Text(printAmount(item.totalAmount ?? 0), style: boldTextStyle()),
+                                                if(item.status != ORDER_CANCELLED) Text(printAmount(item.totalAmount ?? 0), style: boldTextStyle()),
                                               ],
                                             ),
                                           ],
@@ -240,7 +240,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Row(
+                                        if(item.status != ORDER_CANCELLED) Row(
                                           children: [
                                             Text(language.invoice, style: primaryTextStyle(color: colorPrimary)),
                                             4.width,

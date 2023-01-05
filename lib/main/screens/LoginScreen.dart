@@ -83,9 +83,6 @@ class LoginScreenState extends State<LoginScreen> {
         }
         authService.signInWithEmailPassword(context, email: emailController.text, password: passController.text).then((value) async {
           await logInApi(req).then((value) async {
-            await getUserDetail(value.data!.id!).then((value) {
-              appStore.userBankDetail = value.userBankAccount;
-            });
             appStore.setLoading(false);
             if (value.data!.userType != CLIENT && value.data!.userType != DELIVERY_MAN) {
               await logout(context, isFromLogin: true);

@@ -957,4 +957,31 @@ class LanguageTr extends BaseLanguage {
 
   @override
   String get ok => "Tamam";
+
+  @override
+  String get orderFee => "Sipariş ücreti";
+
+  @override
+  String get topup => "Toparlamak";
+
+  @override
+  String get orderCancelCharge => "Sipariş İptal Ücreti";
+
+  @override
+  String get orderCancelRefund => "Sipariş İptal Geri Ödeme";
+
+  @override
+  String get correction => "Düzeltme";
+
+  @override
+  String get commission => "komisyon";
+
+  @override
+  String get cancelBeforePickMsg => 'Sipariş parseli almadan önce iptal edildi.';
+
+  @override
+  String get cancelAfterPickMsg => 'Sipariş parsel aldıktan sonra iptal edildi.So, tamamen şarj kesilir.';
+
+  @override
+  String get cancelNote => 'Not: Parsel almadan önce siparişi iptal ederseniz, iptal ücreti kesilir. Akıllı olarak tam şarj kesilir.';
 }

@@ -185,6 +185,22 @@ mixin _$AppStore on _AppStore, Store {
     });
   }
 
+  late final _$availableBalAtom =
+      Atom(name: '_AppStore.availableBal', context: context);
+
+  @override
+  num get availableBal {
+    _$availableBalAtom.reportRead();
+    return super.availableBal;
+  }
+
+  @override
+  set availableBal(num value) {
+    _$availableBalAtom.reportWrite(value, super.availableBal, () {
+      super.availableBal = value;
+    });
+  }
+
   late final _$currencyPositionAtom =
       Atom(name: '_AppStore.currencyPosition', context: context);
 
@@ -319,6 +335,7 @@ uid: ${uid},
 isOtpVerifyOnPickupDelivery: ${isOtpVerifyOnPickupDelivery},
 currencyCode: ${currencyCode},
 currencySymbol: ${currencySymbol},
+availableBal: ${availableBal},
 currencyPosition: ${currencyPosition}
     ''';
   }

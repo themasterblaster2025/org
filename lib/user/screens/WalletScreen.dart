@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mighty_delivery/main/models/LoginResponse.dart';
 import '../../main/screens/BankDetailScreen.dart';
 import '../../main/utils/Colors.dart';
 import '../../user/components/PaymentScreen.dart';
@@ -25,6 +26,8 @@ class WalletScreen extends StatefulWidget {
 class WalletScreenState extends State<WalletScreen> {
   TextEditingController amountCont = TextEditingController();
 
+  UserBankAccount? userBankAccount;
+
   List<WalletModel> walletData = [];
   ScrollController scrollController = ScrollController();
   int currentPage = 1;
@@ -39,7 +42,7 @@ class WalletScreenState extends State<WalletScreen> {
   }
 
   init() async {
-    //
+    getBankDetail();
     getWalletData();
     scrollController.addListener(() {
       if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
@@ -50,6 +53,14 @@ class WalletScreenState extends State<WalletScreen> {
           getWalletData();
         }
       }
+    });
+  }
+
+  getBankDetail() async {
+    await getUserDetail(getIntAsync(USER_ID)).then((value) {
+      userBankAccount = value.userBankAccount;
+    }).then((value) {
+      log(value);
     });
   }
 
@@ -180,7 +191,7 @@ class WalletScreenState extends State<WalletScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(data.type == CREDIT ? language.moneyDeposited : language.moneyDebited, style: boldTextStyle(size: 16)),
+                                    Text(transactionType(data.transactionType!), style: boldTextStyle(size: 16)),
                                     SizedBox(height: 8),
                                     Text(printDate(data.createdAt.validate()), style: secondaryTextStyle(size: 12)),
                                   ],
@@ -208,7 +219,7 @@ class WalletScreenState extends State<WalletScreen> {
                   child: commonButton(
                     language.withdraw,
                     () {
-                      if (appStore.userBankDetail != null)
+                      if (userBankAccount != null)
                         WithDrawScreen(
                           onTap: () {
                             init();

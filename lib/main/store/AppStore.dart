@@ -53,9 +53,6 @@ abstract class _AppStore with Store {
   @observable
   String currencyPosition = CURRENCY_POSITION_LEFT;
 
-  @observable
-  UserBankAccount? userBankDetail;
-
   @action
   Future<void> setLoading(bool val) async {
     isLoading = val;

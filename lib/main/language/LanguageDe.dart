@@ -958,4 +958,31 @@ class LanguageDe extends BaseLanguage {
 
   @override
   String get ok => "OK";
+
+  @override
+  String get orderFee => "Bestellgebühr";
+
+  @override
+  String get topup => "Aufpackung";
+
+  @override
+  String get orderCancelCharge => "Auftragsgebühr bestellen";
+
+  @override
+  String get orderCancelRefund => "Bestätigungsrückerstattung";
+
+  @override
+  String get correction => "Korrektur";
+
+  @override
+  String get commission => "Kommission";
+
+  @override
+  String get cancelBeforePickMsg => 'Die Bestellung wurde vor Abholung des Pakets storniert. So wird nur die Stornierungsgebühr gesenkt. Wenn die Zahlung bereits erfolgt, wird der Betrag der Brieftasche erstattet.';
+
+  @override
+  String get cancelAfterPickMsg => 'Die Bestellung wurde nach dem Abholung des Pakets storniert.';
+
+  @override
+  String get cancelNote => 'HINWEIS: Wenn Sie die Bestellung vor dem Abholung des Pakets stornieren, wird die Stornierungsgebühr gekürzt.';
 }

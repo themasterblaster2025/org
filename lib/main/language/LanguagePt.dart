@@ -958,4 +958,31 @@ class LanguagePt extends BaseLanguage {
 
   @override
   String get ok => "OK";
+
+  @override
+  String get orderFee => "Taxa de pedido";
+
+  @override
+  String get topup => "Completar";
+
+  @override
+  String get orderCancelCharge => "Pedidos cancelar cobrança";
+
+  @override
+  String get orderCancelRefund => "Pedido Cancelar o reembolso";
+
+  @override
+  String get correction => "Correção";
+
+  @override
+  String get commission => "Comissão";
+
+  @override
+  String get cancelBeforePickMsg => 'O pedido foi cancelado antes da coleta do pacote.';
+
+  @override
+  String get cancelAfterPickMsg => 'O pedido foi cancelado após a coleta do pacote.';
+
+  @override
+  String get cancelNote => 'NOTA: Se você cancelar o pedido antes da retirada do pacote, a carga de cancelamento será cortada. Além disso, a carga completa será cortada.';
 }

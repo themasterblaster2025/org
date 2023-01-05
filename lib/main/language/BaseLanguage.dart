@@ -640,4 +640,20 @@ abstract class BaseLanguage {
   String get balanceInsufficientCashPayment;
 
   String get ok;
+
+  String get orderFee;
+
+  String get topup;
+
+  String get orderCancelCharge;
+
+  String get orderCancelRefund;
+
+  String get correction;
+
+  String get commission;
+
+  String get cancelBeforePickMsg;
+  String get cancelAfterPickMsg;
+  String get cancelNote;
 }

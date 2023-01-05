@@ -957,4 +957,31 @@ class LanguageVi extends BaseLanguage {
 
   @override
   String get ok => "VÂNG";
+
+  @override
+  String get orderFee => "Phí đặt hàng";
+
+  @override
+  String get topup => "Topup";
+
+  @override
+  String get orderCancelCharge => "Đặt hàng Hủy phí";
+
+  @override
+  String get orderCancelRefund => "Đơn đặt hàng hủy hoàn lại";
+
+  @override
+  String get correction => "Điều chỉnh";
+
+  @override
+  String get commission => "Nhiệm vụ";
+
+  @override
+  String get cancelBeforePickMsg => 'Đơn đặt hàng đã bị hủy trước khi nhận bưu kiện.';
+
+  @override
+  String get cancelAfterPickMsg => 'Đơn đặt hàng đã bị hủy sau khi nhận bưu kiện. Vì vậy, sạc đầy được cắt.';
+
+  @override
+  String get cancelNote => 'Lưu ý: Nếu bạn hủy đơn đặt hàng trước khi nhận phần, thì phí hủy sẽ bị cắt. Tuy nhiên, phí đầy đủ sẽ bị cắt.';
 }

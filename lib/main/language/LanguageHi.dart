@@ -958,4 +958,31 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get ok => "ठीक है";
+
+  @override
+  String get orderFee => "आदेश शुल्क";
+
+  @override
+  String get topup => "ऊपर से";
+
+  @override
+  String get orderCancelCharge => "आदेश रद्द प्रभार";
+
+  @override
+  String get orderCancelRefund => "आदेश रद्द करें";
+
+  @override
+  String get correction => "सुधार";
+
+  @override
+  String get commission => "आयोग";
+
+  @override
+  String get cancelBeforePickMsg => 'पार्सल को पिकअप से पहले ऑर्डर रद्द कर दिया गया था।';
+
+  @override
+  String get cancelAfterPickMsg => 'पिकअप पार्सल के बाद आदेश रद्द कर दिया गया था। पूरी तरह से चार्ज में कटौती की गई है।';
+
+  @override
+  String get cancelNote => 'नोट: यदि आप पार्सल को पिकअप से पहले ऑर्डर रद्द करते हैं, तो रद्द करने का शुल्क काट दिया जाएगा। कोई भी समय में कटौती की जाएगी।';
 }

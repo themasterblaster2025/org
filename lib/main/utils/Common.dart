@@ -165,6 +165,25 @@ String orderStatus(String orderStatus) {
   return '';
 }
 
+String transactionType(String type) {
+  if (type == TRANSACTION_ORDER_FEE) {
+    return language.orderFee;
+  } else if (type == TRANSACTION_TOPUP) {
+    return language.topup;
+  } else if (type == TRANSACTION_ORDER_CANCEL_CHARGE) {
+    return language.orderCancelCharge;
+  } else if (type == TRANSACTION_ORDER_CANCEL_REFUND) {
+    return language.orderCancelRefund;
+  } else if (type == TRANSACTION_CORRECTION) {
+    return language.correction;
+  } else if (type == TRANSACTION_COMMISSION) {
+    return language.commission;
+  } else if (type == TRANSACTION_WITHDRAW) {
+    return language.withdraw;
+  }
+  return '';
+}
+
 Future<bool> checkPermission() async {
   // Request app level location permission
   LocationPermission locationPermission = await Geolocator.requestPermission();
@@ -332,7 +351,7 @@ cashConfirmDialog() {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(language.balanceInsufficientCashPayment, style: primaryTextStyle(size: 16),textAlign: TextAlign.center),
+          Text(language.balanceInsufficientCashPayment, style: primaryTextStyle(size: 16), textAlign: TextAlign.center),
           30.height,
           commonButton(language.ok, () {
             finish(getContext);
@@ -342,4 +361,3 @@ cashConfirmDialog() {
     },
   );
 }
-

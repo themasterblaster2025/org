@@ -141,7 +141,7 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
                                                   Row(
                                                     children: [
                                                       item.date != null ? Text(printDate(item.date!), style: secondaryTextStyle()).expand() : SizedBox(),
-                                                      Text('${printAmount(item.totalAmount.validate())}', style: boldTextStyle()),
+                                                      Text('${printAmount(item.totalAmount??0)}', style: boldTextStyle()),
                                                     ],
                                                   ),
                                                 ],

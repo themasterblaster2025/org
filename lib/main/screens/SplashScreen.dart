@@ -32,7 +32,6 @@ class SplashScreenState extends State<SplashScreen> {
       () async {
         if (appStore.isLoggedIn && getIntAsync(USER_ID) != 0) {
           await getUserDetail(getIntAsync(USER_ID)).then((value) {
-            appStore.userBankDetail = value.userBankAccount;
             if (value.deletedAt != null) {
               logout(context);
             } else {

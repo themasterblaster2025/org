@@ -958,4 +958,31 @@ class LanguageEs extends BaseLanguage {
 
   @override
   String get ok => "DE ACUERDO";
+
+  @override
+  String get orderFee => "Tarifa de pedido";
+
+  @override
+  String get topup => "Topup";
+
+  @override
+  String get orderCancelCharge => "Pedido de cancelación de pedido";
+
+  @override
+  String get orderCancelRefund => "Reembolso de cancelación de pedido";
+
+  @override
+  String get correction => "Corrección";
+
+  @override
+  String get commission => "Comisión";
+
+  @override
+  String get cancelBeforePickMsg => 'El pedido se canceló antes de recoger el paquete. Solo, solo se corta el cargo por cancelación. Si el pago ya se realiza, el monto es reembolso a la billetera.';
+
+  @override
+  String get cancelAfterPickMsg => 'El pedido se canceló después de recoger el paquete. Por lo tanto, se corta el cargo por completo.';
+
+  @override
+  String get cancelNote => 'Nota: Si cancela el pedido antes de recoger el paquete, se cortará la carga de cancelación. De lo contrario, se cortará la carga completa.';
 }

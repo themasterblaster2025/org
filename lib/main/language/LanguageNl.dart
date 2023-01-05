@@ -958,4 +958,31 @@ class LanguageNl extends BaseLanguage {
 
   @override
   String get ok => "OKÉ";
+
+  @override
+  String get orderFee => "Bestelkosten";
+
+  @override
+  String get topup => "Toppositie";
+
+  @override
+  String get orderCancelCharge => "Bestel annuleren kosten annuleren";
+
+  @override
+  String get orderCancelRefund => "Bestel annuleren terugbetaling";
+
+  @override
+  String get correction => "Correctie";
+
+  @override
+  String get commission => "Commissie";
+
+  @override
+  String get cancelBeforePickMsg => 'De bestelling is geannuleerd voordat het pakket wordt opgehaald.';
+
+  @override
+  String get cancelAfterPickMsg => 'De bestelling werd geannuleerd na het ophalen van het pakket. Dus, wordt volledig opladen gesneden.';
+
+  @override
+  String get cancelNote => 'OPMERKING: Als u de bestelling annuleert voordat u het pakket opneemt, worden de annuleringskosten gesneden. Termijn wordt de volledige lading gesneden.';
 }

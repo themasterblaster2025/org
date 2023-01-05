@@ -957,4 +957,31 @@ class LanguageId extends BaseLanguage {
 
   @override
   String get ok => "Oke";
+
+  @override
+  String get orderFee => "Biaya pesanan";
+
+  @override
+  String get topup => "Topup";
+
+  @override
+  String get orderCancelCharge => "Pesanan Batalkan Biaya";
+
+  @override
+  String get orderCancelRefund => "Pesanan Batalkan Pengembalian dana";
+
+  @override
+  String get correction => "Koreksi";
+
+  @override
+  String get commission => "Komisi";
+
+  @override
+  String get cancelBeforePickMsg => 'Pesanan dibatalkan sebelum mengambil parsel. Jadi, hanya biaya pembatalan yang dipotong. Jika pembayaran sudah dilakukan maka jumlah pengembalian dana ke dompet.';
+
+  @override
+  String get cancelAfterPickMsg => 'Pesanan dibatalkan setelah mengambil parsel. Jadi, biaya penuh dipotong.';
+
+  @override
+  String get cancelNote => 'CATATAN: Jika Anda membatalkan pesanan sebelum mengambil parsel maka biaya pembatalan akan dipotong. Lalu, biaya penuh akan dipotong.';
 }

@@ -5,8 +5,8 @@ const mHelpAndSupport = 'https://support.meetmighty.com/';
 const mContactPref = 'hello@meetmighty.com';
 const mCodeCanyonURL = 'https://codecanyon.net/user/meetmighty/portfolio/';
 
-// const mBaseUrl = 'https://meetmighty.com/mobile/mighty-local-delivery/api/';
-const mBaseUrl = 'http://192.168.1.230/meetmighty/local-delivery-laravel/api/';
+const mBaseUrl = 'https://meetmighty.com/mobile/mighty-local-delivery/api/';
+//const mBaseUrl = 'http://192.168.1.230/meetmighty/local-delivery-laravel/api/';
 
 const googleMapAPIKey = 'AIzaSyCDD0QOjZNS05ByZlnv-VcwH2id3WzS2Lw';
 
@@ -109,6 +109,14 @@ const ORDER_PICKED_UP = 'courier_picked_up';
 const ORDER_COMPLETED = 'completed';
 const ORDER_DRAFT = 'draft';
 const ORDER_DEPARTED = 'courier_departed';
+
+const TRANSACTION_ORDER_FEE = "order_fee";
+const TRANSACTION_TOPUP = "topup";
+const TRANSACTION_ORDER_CANCEL_CHARGE = "order_cancel_charge";
+const TRANSACTION_ORDER_CANCEL_REFUND = "order_cancel_refund";
+const TRANSACTION_CORRECTION = "correction";
+const TRANSACTION_COMMISSION = "commission";
+const TRANSACTION_WITHDRAW = "withdraw";
 
 const stripeURL = 'https://api.stripe.com/v1/payment_intents';
 

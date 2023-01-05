@@ -957,4 +957,31 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get ok => "نعم";
+
+  @override
+  String get orderFee => "رسوم الطلب";
+
+  @override
+  String get topup => "فوق حتى";
+
+  @override
+  String get orderCancelCharge => "طلب إلغاء الرسوم";
+
+  @override
+  String get orderCancelRefund => "طلب إلغاء الاسترداد";
+
+  @override
+  String get correction => "تصحيح";
+
+  @override
+  String get commission => "عمولة";
+
+  @override
+  String get cancelBeforePickMsg => 'تم إلغاء الطلب قبل التقاط الطرود. لذا ، يتم قطع رسوم الإلغاء فقط. إذا تم الدفع بالفعل ، فسيتم استرداد المبلغ إلى المحفظة.';
+
+  @override
+  String get cancelAfterPickMsg => 'تم إلغاء الطلب بعد التقاط الطرود.';
+
+  @override
+  String get cancelNote => 'ملاحظة: إذا قمت بإلغاء الطلب قبل التقاط الطرود ، فسيتم قطع رسوم الإلغاء. وإلا فسيتم قطع الشحن الكامل.';
 }
