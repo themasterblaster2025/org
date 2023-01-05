@@ -39,7 +39,7 @@ class Payment {
   int? clientId;
   String? clientName;
   String? datetime;
-  int? totalAmount;
+  num? totalAmount;
   String? paymentType;
   String? txnId;
   String? paymentStatus;
