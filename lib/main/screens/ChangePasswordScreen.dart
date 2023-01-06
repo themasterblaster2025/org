@@ -128,11 +128,7 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
         padding: EdgeInsets.all(16),
         child: commonButton(language.saveChanges, () {
           if (formKey.currentState!.validate()) {
-            if (getStringAsync(USER_EMAIL) == 'jose@gmail.com' || getStringAsync(USER_EMAIL) == 'mark@gmail.com') {
-              toast(language.demoMsg);
-            } else {
-              submit();
-            }
+            submit();
           }
         }),
       ),

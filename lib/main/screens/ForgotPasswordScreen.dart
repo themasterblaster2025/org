@@ -86,11 +86,7 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       ),
       bottomNavigationBar: commonButton(language.submit, () {
         if (formKey.currentState!.validate()) {
-          if (forgotEmailController.text == 'jose@gmail.com' || forgotEmailController.text == 'mark@gmail.com') {
-            toast(language.demoMsg);
-          } else {
-            submit();
-          }
+          submit();
         }
       }).paddingAll(16),
     );

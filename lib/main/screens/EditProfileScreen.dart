@@ -252,11 +252,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
         padding: EdgeInsets.all(16),
         child: commonButton(language.saveChanges, () {
           if (_formKey.currentState!.validate()) {
-            if (getStringAsync(USER_EMAIL) == 'jose@gmail.com' || getStringAsync(USER_EMAIL) == 'mark@gmail.com') {
-              toast(language.demoMsg);
-            } else {
-              save();
-            }
+            save();
           }
         }),
       ),
