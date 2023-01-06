@@ -55,11 +55,10 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
   }
 
   saveBankDetail() async {
-    appStore.setLoading(true);
-
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
       hideKeyboard(context);
+      appStore.setLoading(true);
 
       MultipartRequest multiPartRequest = await getMultiPartRequest('update-profile');
       multiPartRequest.fields['username'] = getStringAsync(USER_NAME);
@@ -71,7 +70,6 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
       multiPartRequest.fields['user_bank_account[account_holder_name]'] = nameCon.text.trim();
       multiPartRequest.fields['user_bank_account[bank_code]'] = ifscCCon.text.trim();
       multiPartRequest.headers.addAll(buildHeaderTokens());
-      appStore.setLoading(true);
       sendMultiPartRequest(
         multiPartRequest,
         onSuccess: (data) async {
@@ -120,9 +118,10 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
                       children: [
                         16.height,
                         AppTextField(
+                          isValidationRequired: true,
                           controller: bankNameCon,
                           textFieldType: TextFieldType.NAME,
-                          decoration: commonInputDecoration(hintText: language.accountNumber),
+                          decoration: commonInputDecoration(hintText: 'Bank Name'),
                         ),
                         16.height,
                         AppTextField(
@@ -142,7 +141,7 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
                         AppTextField(
                           isValidationRequired: true,
                           controller: ifscCCon,
-                          textFieldType: TextFieldType.OTHER,
+                          textFieldType: TextFieldType.NAME,
                           decoration: commonInputDecoration(hintText: language.ifscCode),
                         ),
                         30.height,
