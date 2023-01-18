@@ -37,7 +37,7 @@ class DeleteAccountScreenState extends State<DeleteAccountScreen> {
     await deleteUser(req).then((value) async {
       await userService.removeDocument(getStringAsync(UID)).then((value) async {
         await deleteUserFirebase().then((value) async {
-          await logout(context).then((value) async {
+          await logout(context,isDeleteAccount: true).then((value) async {
             appStore.setLoading(false);
             await removeKey(USER_EMAIL);
             await removeKey(USER_PASSWORD);

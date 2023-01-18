@@ -132,36 +132,49 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
   });
 }
 
-Future<void> logout(BuildContext context, {bool isFromLogin = false}) async {
+Future<void> logout(BuildContext context, {bool isFromLogin = false,bool isDeleteAccount=false}) async {
+  clearData() async {
+    await removeKey(USER_ID);
+    await removeKey(NAME);
+    await removeKey(USER_TOKEN);
+    await removeKey(USER_CONTACT_NUMBER);
+    await removeKey(USER_PROFILE_PHOTO);
+    await removeKey(USER_TYPE);
+    await removeKey(USER_NAME);
+    await removeKey(USER_ADDRESS);
+    await removeKey(STATUS);
+    await removeKey(COUNTRY_ID);
+    await removeKey(COUNTRY_DATA);
+    await removeKey(CITY_ID);
+    await removeKey(CITY_DATA);
+    await removeKey(FILTER_DATA);
+    await removeKey(IS_VERIFIED_DELIVERY_MAN);
+    if (!getBoolAsync(REMEMBER_ME)) {
+      await removeKey(USER_EMAIL);
+      await removeKey(USER_PASSWORD);
+    }
+
+    await appStore.setLogin(false);
+    appStore.setFiltering(false);
+    if (isFromLogin) {
+      toast(language.credentialNotMatch);
+    } else {
+      LoginScreen().launch(context, isNewTask: true);
+    }
+  }
+
   if (getStringAsync(USER_TYPE) == DELIVERY_MAN) {
     positionStream.cancel();
   }
-  await removeKey(USER_ID);
-  await removeKey(NAME);
-  await removeKey(USER_TOKEN);
-  await removeKey(USER_CONTACT_NUMBER);
-  await removeKey(USER_PROFILE_PHOTO);
-  await removeKey(USER_TYPE);
-  await removeKey(USER_NAME);
-  await removeKey(USER_ADDRESS);
-  await removeKey(STATUS);
-  await removeKey(COUNTRY_ID);
-  await removeKey(COUNTRY_DATA);
-  await removeKey(CITY_ID);
-  await removeKey(CITY_DATA);
-  await removeKey(FILTER_DATA);
-  await removeKey(IS_VERIFIED_DELIVERY_MAN);
-  if (!getBoolAsync(REMEMBER_ME)) {
-    await removeKey(USER_EMAIL);
-    await removeKey(USER_PASSWORD);
-  }
-
-  await appStore.setLogin(false);
-  appStore.setFiltering(false);
-  if (isFromLogin) {
-    toast(language.credentialNotMatch);
+  if (isDeleteAccount) {
+    clearData();
   } else {
-    LoginScreen().launch(context, isNewTask: true);
+    await logoutApi().then((value) async {
+      clearData();
+    }).catchError((e) {
+      appStore.setLoading(false);
+      throw e.toString();
+    });
   }
 }
 
@@ -448,4 +461,8 @@ Future updateBankDetail({String? bankName, String? bankCode, String? accountName
   }, onError: (error) {
     toast(error.toString());
   });
+}
+
+Future<LDBaseResponse> logoutApi() async {
+  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('logout?clear=player_id', method: HttpMethod.GET)));
 }
