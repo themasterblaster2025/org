@@ -25,6 +25,7 @@ import '../models/AppSettingModel.dart';
 import '../models/AutoCompletePlacesListModel.dart';
 import '../models/OrderDetailModel.dart';
 import '../models/PlaceIdDetailModel.dart';
+import '../models/UserProfileDetailModel.dart';
 import '../models/WalletListModel.dart';
 import '../models/WithDrawListModel.dart';
 import 'NetworkUtils.dart';
@@ -465,4 +466,12 @@ Future updateBankDetail({String? bankName, String? bankCode, String? accountName
 
 Future<LDBaseResponse> logoutApi() async {
   return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('logout?clear=player_id', method: HttpMethod.GET)));
+}
+
+Future<EarningList> getPaymentList({required int page}) async {
+  return EarningList.fromJson(await handleResponse(await buildHttpResponse('payment-list?page=$page&delivery_man_id=${getIntAsync(USER_ID)}&type=earning', method: HttpMethod.GET)));
+}
+
+Future<UserProfileDetailModel> getUserProfile() async {
+  return UserProfileDetailModel.fromJson(await handleResponse(await buildHttpResponse('user-profile-detail?id=${getIntAsync(USER_ID)}', method: HttpMethod.GET)));
 }

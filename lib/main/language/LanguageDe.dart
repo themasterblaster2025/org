@@ -985,4 +985,13 @@ class LanguageDe extends BaseLanguage {
 
   @override
   String get cancelNote => 'HINWEIS: Wenn Sie die Bestellung vor dem Abholung des Pakets stornieren, wird die Stornierungsgebühr gekürzt.';
+
+  @override
+  String get earningHistory => "Geschichte verdienen";
+
+  @override
+  String get earning => "Verdienst";
+
+  @override
+  String get adminCommission => "Administratorkommission";
 }

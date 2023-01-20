@@ -985,4 +985,13 @@ class LanguagePt extends BaseLanguage {
 
   @override
   String get cancelNote => 'NOTA: Se você cancelar o pedido antes da retirada do pacote, a carga de cancelamento será cortada. Além disso, a carga completa será cortada.';
+
+  @override
+  String get earningHistory => "Ganhando história";
+
+  @override
+  String get earning => "Ganho";
+
+  @override
+  String get adminCommission => "Comissão de Administração";
 }

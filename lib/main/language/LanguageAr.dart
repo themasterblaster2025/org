@@ -984,4 +984,13 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get cancelNote => 'ملاحظة: إذا قمت بإلغاء الطلب قبل التقاط الطرود ، فسيتم قطع رسوم الإلغاء. وإلا فسيتم قطع الشحن الكامل.';
+
+  @override
+  String get earningHistory => "كسب التاريخ";
+
+  @override
+  String get earning => "كسب";
+
+  @override
+  String get adminCommission => "اللجنة الإدارية";
 }

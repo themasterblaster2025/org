@@ -985,4 +985,13 @@ class LanguageEs extends BaseLanguage {
 
   @override
   String get cancelNote => 'Nota: Si cancela el pedido antes de recoger el paquete, se cortará la carga de cancelación. De lo contrario, se cortará la carga completa.';
+
+  @override
+  String get earningHistory => "Historia de ganancias";
+
+  @override
+  String get earning => "Ganador";
+
+  @override
+  String get adminCommission => "Comisión administrativa";
 }

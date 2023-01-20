@@ -985,4 +985,13 @@ class LanguageFr extends BaseLanguage {
 
   @override
   String get cancelNote => 'Remarque: Si vous annulez la commande avant de ramasser le colis, les frais d\'annulation seront coupés. Autrement dit, la charge complète sera coupée.';
+
+  @override
+  String get earningHistory => "Gagner l'histoire";
+
+  @override
+  String get earning => "Revenus";
+
+  @override
+  String get adminCommission => "Commission administrative";
 }

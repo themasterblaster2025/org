@@ -985,4 +985,13 @@ class LanguageNl extends BaseLanguage {
 
   @override
   String get cancelNote => 'OPMERKING: Als u de bestelling annuleert voordat u het pakket opneemt, worden de annuleringskosten gesneden. Termijn wordt de volledige lading gesneden.';
+
+  @override
+  String get earningHistory => "Geschiedenis verdienen";
+
+  @override
+  String get earning => "Verdienen";
+
+  @override
+  String get adminCommission => "Admincommissie";
 }

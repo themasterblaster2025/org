@@ -985,4 +985,13 @@ class LanguageAf extends BaseLanguage {
 
   @override
   String get cancelNote => 'OPMERKING: As u die bestelling voordat u die pakket kanselleer, kanselleer, sal die kansellasiekoste besnoei word. Ander is die volle lading gesny.';
+
+  @override
+  String get earningHistory => "Verdienste geskiedenis";
+
+  @override
+  String get earning => "Verdien";
+
+  @override
+  String get adminCommission => "Adminkommissie";
 }

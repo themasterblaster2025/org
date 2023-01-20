@@ -654,6 +654,14 @@ abstract class BaseLanguage {
   String get commission;
 
   String get cancelBeforePickMsg;
+
   String get cancelAfterPickMsg;
+
   String get cancelNote;
+
+  String get earningHistory;
+
+  String get earning;
+
+  String get adminCommission;
 }

@@ -984,4 +984,13 @@ class LanguageTr extends BaseLanguage {
 
   @override
   String get cancelNote => 'Not: Parsel almadan önce siparişi iptal ederseniz, iptal ücreti kesilir. Akıllı olarak tam şarj kesilir.';
+
+  @override
+  String get earningHistory => "Kazanma Tarihi";
+
+  @override
+  String get earning => "Kazanç";
+
+  @override
+  String get adminCommission => "Yönetici komisyonu";
 }

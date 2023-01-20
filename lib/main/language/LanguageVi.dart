@@ -984,4 +984,13 @@ class LanguageVi extends BaseLanguage {
 
   @override
   String get cancelNote => 'Lưu ý: Nếu bạn hủy đơn đặt hàng trước khi nhận phần, thì phí hủy sẽ bị cắt. Tuy nhiên, phí đầy đủ sẽ bị cắt.';
+
+  @override
+  String get earningHistory => "Kiếm tiền lịch sử";
+
+  @override
+  String get earning => "Kiếm tiền";
+
+  @override
+  String get adminCommission => "Ủy ban quản trị";
 }

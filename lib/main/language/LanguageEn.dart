@@ -984,4 +984,13 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get cancelNote => 'NOTE: If you cancel the order before pickup the parcel then cancellation charge will be cut.Otherwise,full charge will be cut.';
+
+  @override
+  String get earningHistory => "Earning History";
+
+  @override
+  String get earning => "Earning";
+
+  @override
+  String get adminCommission => "Admin Commission";
 }

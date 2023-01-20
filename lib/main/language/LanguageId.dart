@@ -984,4 +984,13 @@ class LanguageId extends BaseLanguage {
 
   @override
   String get cancelNote => 'CATATAN: Jika Anda membatalkan pesanan sebelum mengambil parsel maka biaya pembatalan akan dipotong. Lalu, biaya penuh akan dipotong.';
+
+  @override
+  String get earningHistory => "Menghasilkan Sejarah";
+
+  @override
+  String get earning => "Penghasilan";
+
+  @override
+  String get adminCommission => "Komisi Admin";
 }
