@@ -225,9 +225,6 @@ class LoginScreenState extends State<LoginScreen> {
                           value: isAcceptedTc,
                           onChanged: (val) async {
                             isAcceptedTc = val!;
-                            if (!isAcceptedTc) {
-                              removeKey(REMEMBER_ME);
-                            }
                             setState(() {});
                           },
                         ),

@@ -258,9 +258,6 @@ class RegisterScreenState extends State<RegisterScreen> {
                           value: isAcceptedTc,
                           onChanged: (val) async {
                             isAcceptedTc = val!;
-                            if (!isAcceptedTc) {
-                              removeKey(REMEMBER_ME);
-                            }
                             setState(() {});
                           },
                         ),
