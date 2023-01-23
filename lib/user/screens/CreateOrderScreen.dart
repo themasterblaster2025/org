@@ -82,7 +82,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   int selectedTabIndex = 0;
 
   bool isDeliverNow = true;
-  int? isSelected;
+  int isSelected = 1;
 
   bool? isCash = false;
 
@@ -254,9 +254,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       appStore.setLoading(false);
       toast(value.message);
       finish(context);
-      if (isSelected == 1) {
+      if (isSelected == 2) {
         PaymentScreen(orderId: value.orderId.validate(), totalAmount: totalAmount).launch(context);
-      } else if (isSelected == 2) {
+      } else if (isSelected == 3) {
         log("-----" + appStore.availableBal.toString());
 
         if (appStore.availableBal > totalAmount) {
@@ -274,6 +274,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             cashConfirmDialog();
           }
         }
+      }else{
+        DashboardScreen().launch(context, isNewTask: true);
       }
     }).catchError((error) {
       appStore.setLoading(false);
@@ -909,32 +911,35 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         16.height,
         Text(language.payment, style: boldTextStyle()),
         16.height,
-        HorizontalList(
-            itemCount: mPaymentList.length,
-            itemBuilder: (context, index) {
-              return Container(
-                width: context.width() / 3,
-                padding: EdgeInsets.all(16),
-                decoration: boxDecorationWithRoundedCorners(
-                    border: Border.all(
-                        color: isSelected == index
-                            ? colorPrimary
-                            : appStore.isDarkMode
-                                ? Colors.transparent
-                                : borderColor),
-                    backgroundColor: context.cardColor),
-                child: Row(
-                  children: [
-                    ImageIcon(AssetImage('assets/icons/ic_cash.png'), size: 20, color: isSelected == index ? colorPrimary : Colors.grey),
-                    16.width,
-                    Text(mPaymentList[index].title!, style: boldTextStyle()).expand(),
-                  ],
-                ),
-              ).onTap(() {
-                isSelected = index;
-                setState(() {});
-              });
-            }),
+        Wrap(
+          spacing: 16,
+          runSpacing: 16,
+          children: mPaymentList.map((mData) {
+            return Container(
+              width: 130,
+              padding: EdgeInsets.all(16),
+              decoration: boxDecorationWithRoundedCorners(
+                  border: Border.all(
+                      color: isSelected == mData.index
+                          ? colorPrimary
+                          : appStore.isDarkMode
+                          ? Colors.transparent
+                          : borderColor),
+                  backgroundColor: context.cardColor),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ImageIcon(AssetImage(mData.image.validate()), size: 20, color: isSelected == mData.index ? colorPrimary : Colors.grey),
+                  16.width,
+                  Text(mData.title!, style: boldTextStyle()).expand(),
+                ],
+              ),
+            ).onTap(() {
+              isSelected = mData.index!;
+              setState(() {});
+            });
+          }).toList(),
+        ),
         16.height,
         Row(
           children: [
@@ -954,7 +959,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               },
             ).expand(),
           ],
-        ).visible(isSelected == 0),
+        ).visible(isSelected == 1),
       ],
     );
   }

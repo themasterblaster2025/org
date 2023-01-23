@@ -178,7 +178,7 @@ class WalletScreenState extends State<WalletScreen> {
                         return Container(
                           margin: EdgeInsets.only(bottom: 16),
                           padding: EdgeInsets.all(8),
-                          decoration: boxDecorationRoundedWithShadow(defaultRadius.toInt(),backgroundColor: context.cardColor),
+                          decoration: boxDecorationRoundedWithShadow(defaultRadius.toInt(),backgroundColor: context.cardColor,shadowColor: appStore.isDarkMode ? Colors.transparent : null),
                           child: Row(
                             children: [
                               Container(
