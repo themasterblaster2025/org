@@ -7,7 +7,6 @@ import 'package:mobx/mobx.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
-import '../models/LoginResponse.dart';
 
 part 'AppStore.g.dart';
 

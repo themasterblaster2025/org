@@ -47,8 +47,8 @@ android {
         applicationId "com.mighty.delivery"
         minSdkVersion 21
         targetSdkVersion 32
-        versionCode 12
-        versionName '2.0.7'
+        versionCode 13
+        versionName '3.0.0'
     }
 
     buildTypes {
