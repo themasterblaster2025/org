@@ -993,4 +993,16 @@ class LanguageVi extends BaseLanguage {
 
   @override
   String get adminCommission => "Ủy ban quản trị";
+
+  @override
+  String get assigned => "Giao";
+
+  @override
+  String get draft => "Bản thảo";
+
+  @override
+  String get created => "Tạo";
+
+  @override
+  String get accepted => "Đã được chấp nhận";
 }

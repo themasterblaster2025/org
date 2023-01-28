@@ -93,7 +93,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
       picUpSignature: imageSignature,
       reason: reasonController.text,
       deliverySignature: deliverySignature,
-      orderStatus: widget.orderData!.status == ORDER_DEPARTED ? ORDER_COMPLETED : ORDER_PICKED_UP,
+      orderStatus: widget.orderData!.status == ORDER_DEPARTED ? ORDER_DELIVERED : ORDER_PICKED_UP,
     ).then((value) {
       appStore.setLoading(false);
       toast(widget.orderData!.status == ORDER_DEPARTED ? language.orderDeliveredSuccessfully : language.orderPickupSuccessfully);
@@ -306,8 +306,8 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                             ],
                           ),
                         ),
-                      Text(language.deliveryTimeSignature, style: boldTextStyle()).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
-                      8.height.visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
+                      Text(language.deliveryTimeSignature, style: boldTextStyle()).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
+                      8.height.visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
                       if (widget.orderData!.status == ORDER_DEPARTED)
                         Container(
                           height: 150,
@@ -322,7 +322,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                               strokeColor: colorPrimary,
                             ),
                           ),
-                        ).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
+                        ).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
                       if (widget.orderData!.status == ORDER_DEPARTED)
                         Align(
                           alignment: Alignment.bottomRight,
@@ -338,7 +338,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                               ),
                             ],
                           ),
-                        ).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
+                        ).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
                       16.height,
                       CheckboxListTile(
                         value: mIsCheck,
@@ -364,8 +364,8 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                               }
                             },
                           ).expand(),
-                          if (widget.orderData!.status == ORDER_ACTIVE && widget.orderData!.status == ORDER_ARRIVED) 16.width,
-                          if (widget.orderData!.status == ORDER_ACTIVE && widget.orderData!.status == ORDER_ARRIVED)
+                          if (widget.orderData!.status == ORDER_ACCEPTED && widget.orderData!.status == ORDER_ARRIVED) 16.width,
+                          if (widget.orderData!.status == ORDER_ACCEPTED && widget.orderData!.status == ORDER_ARRIVED)
                             AppButton(
                               width: context.width(),
                               text: language.cancelOrder,
@@ -410,7 +410,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
       }
     }
 
-    if (widget.orderData!.status == ORDER_ACTIVE || widget.orderData!.status == ORDER_ARRIVED) {
+    if (widget.orderData!.status == ORDER_ACCEPTED || widget.orderData!.status == ORDER_ARRIVED) {
       if (imageSignature == null) {
         imageSignature = await saveSignature(pickupScreenshotController);
         log(imageSignature!.path);
@@ -423,7 +423,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
       }
     }
 
-    if (widget.orderData!.paymentId == null && widget.orderData!.paymentCollectFrom == PAYMENT_ON_PICKUP && (widget.orderData!.status == ORDER_ACTIVE || widget.orderData!.status == ORDER_ARRIVED)) {
+    if (widget.orderData!.paymentId == null && widget.orderData!.paymentCollectFrom == PAYMENT_ON_PICKUP && (widget.orderData!.status == ORDER_ACCEPTED || widget.orderData!.status == ORDER_ARRIVED)) {
       appStore.setLoading(true);
       await paymentConfirmDialog(widget.orderData!);
       appStore.setLoading(false);

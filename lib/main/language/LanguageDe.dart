@@ -994,4 +994,16 @@ class LanguageDe extends BaseLanguage {
 
   @override
   String get adminCommission => "Administratorkommission";
+
+  @override
+  String get assigned => "Zugewiesen";
+
+  @override
+  String get draft => "Luftzug";
+
+  @override
+  String get created => "Erstellt";
+
+  @override
+  String get accepted => "Akzeptiert";
 }

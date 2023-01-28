@@ -993,4 +993,16 @@ class LanguageId extends BaseLanguage {
 
   @override
   String get adminCommission => "Komisi Admin";
+
+  @override
+  String get assigned => "DitugaskanL";
+
+  @override
+  String get draft => "KonsepL";
+
+  @override
+  String get created => "DibuatL";
+
+  @override
+  String get accepted => "DiterimaL";
 }

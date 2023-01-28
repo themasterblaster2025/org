@@ -346,7 +346,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                         ChatScreen(userData: userData).launch(context);
                                                       },
                                                       icon: Icon(Icons.chat))
-                                                  .visible(orderData!.status != ORDER_COMPLETED && orderData!.status != ORDER_CANCELLED)
+                                                  .visible(orderData!.status != ORDER_DELIVERED && orderData!.status != ORDER_CANCELLED)
                                             ],
                                           ),
                                           if (getStringAsync(USER_TYPE) == CLIENT && userData!.isVerifiedDeliveryMan == 1)
@@ -530,7 +530,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     ),
                                   ],
                                 ),
-                              ).visible(getStringAsync(USER_TYPE) == CLIENT && orderData!.status != ORDER_COMPLETED && orderData!.status != ORDER_CANCELLED)
+                              ).visible(getStringAsync(USER_TYPE) == CLIENT && orderData!.status != ORDER_DELIVERED && orderData!.status != ORDER_CANCELLED)
                             ],
                           ),
                         ),
@@ -540,7 +540,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                             ReturnOrderScreen(orderData!).launch(context);
                           }, width: context.width())
                               .paddingAll(16),
-                        ).visible(orderData!.status == ORDER_COMPLETED && !orderData!.returnOrderId! && getStringAsync(USER_TYPE) == CLIENT),
+                        ).visible(orderData!.status == ORDER_DELIVERED && !orderData!.returnOrderId! && getStringAsync(USER_TYPE) == CLIENT),
                       ],
                     )
                   : SizedBox(),

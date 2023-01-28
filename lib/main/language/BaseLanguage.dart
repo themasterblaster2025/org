@@ -664,4 +664,12 @@ abstract class BaseLanguage {
   String get earning;
 
   String get adminCommission;
+
+  String get assigned;
+
+  String get draft;
+
+  String get created;
+
+  String get accepted;
 }

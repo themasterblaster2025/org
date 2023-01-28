@@ -994,4 +994,16 @@ class LanguageFr extends BaseLanguage {
 
   @override
   String get adminCommission => "Commission administrative";
+
+  @override
+  String get assigned => "Attribué";
+
+  @override
+  String get draft => "Brouillon";
+
+  @override
+  String get created => "Créé";
+
+  @override
+  String get accepted => "Accepté";
 }

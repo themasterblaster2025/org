@@ -79,11 +79,11 @@ String parseHtmlString(String? htmlString) {
 Color statusColor(String status) {
   Color color = colorPrimary;
   switch (status) {
-    case ORDER_ACTIVE:
+    case ORDER_ACCEPTED:
       return colorPrimary;
     case ORDER_CANCELLED:
       return Colors.red;
-    case ORDER_COMPLETED:
+    case ORDER_DELIVERED:
       return Colors.green;
     case ORDER_DRAFT:
       return Colors.grey;
@@ -146,23 +146,25 @@ Widget emptyWidget() {
 
 String orderStatus(String orderStatus) {
   if (orderStatus == ORDER_ASSIGNED) {
-    return language.assign;
-  } else if (orderStatus == ORDER_ACTIVE) {
-    return language.active;
+    return language.assigned;
+  } else if (orderStatus == ORDER_DRAFT) {
+    return language.draft;
+  } else if (orderStatus == ORDER_CREATED) {
+    return language.created;
+  } else if (orderStatus == ORDER_ACCEPTED) {
+    return language.accepted;
   } else if (orderStatus == ORDER_PICKED_UP) {
     return language.pickedUp;
   } else if (orderStatus == ORDER_ARRIVED) {
     return language.arrived;
   } else if (orderStatus == ORDER_DEPARTED) {
     return language.departed;
-  } else if (orderStatus == ORDER_COMPLETED) {
-    return language.completed;
+  } else if (orderStatus == ORDER_DELIVERED) {
+    return language.delivered;
   } else if (orderStatus == ORDER_CANCELLED) {
     return language.cancelled;
-  } else if (orderStatus == ORDER_CREATE) {
-    return language.create;
   }
-  return '';
+  return language.assigned;
 }
 
 String transactionType(String type) {
@@ -215,7 +217,7 @@ String statusTypeIcon({String? type}) {
   String icon = 'assets/icons/ic_create.png';
   if (type == ORDER_ASSIGNED) {
     icon = 'assets/icons/ic_assign.png';
-  } else if (type == ORDER_ACTIVE) {
+  } else if (type == ORDER_ACCEPTED) {
     icon = 'assets/icons/ic_active.png';
   } else if (type == ORDER_PICKED_UP) {
     icon = 'assets/icons/ic_picked.png';
@@ -223,11 +225,11 @@ String statusTypeIcon({String? type}) {
     icon = 'assets/icons/ic_arrived.png';
   } else if (type == ORDER_DEPARTED) {
     icon = 'assets/icons/ic_departed.png';
-  } else if (type == ORDER_COMPLETED) {
+  } else if (type == ORDER_DELIVERED) {
     icon = 'assets/icons/ic_completed.png';
   } else if (type == ORDER_CANCELLED) {
     icon = 'assets/icons/ic_cancelled.png';
-  } else if (type == ORDER_CREATE) {
+  } else if (type == ORDER_CREATED) {
     icon = 'assets/icons/ic_create.png';
   } else if (type == ORDER_DRAFT) {
     icon = 'assets/icons/ic_draft.png';
@@ -253,7 +255,7 @@ Widget settingItemWidget(IconData icon, String title, Function() onTap, {bool is
 String? orderTitle(String orderStatus) {
   if (orderStatus == ORDER_ASSIGNED) {
     return language.orderAssignConfirmation;
-  } else if (orderStatus == ORDER_ACTIVE) {
+  } else if (orderStatus == ORDER_ACCEPTED) {
     return language.orderPickupConfirmation;
   } else if (orderStatus == ORDER_PICKED_UP) {
     return language.orderDepartedConfirmation;
@@ -261,11 +263,11 @@ String? orderTitle(String orderStatus) {
     return language.orderPickupConfirmation;
   } else if (orderStatus == ORDER_DEPARTED) {
     return language.orderCompleteConfirmation;
-  } else if (orderStatus == ORDER_COMPLETED) {
+  } else if (orderStatus == ORDER_DELIVERED) {
     return '';
   } else if (orderStatus == ORDER_CANCELLED) {
     return language.orderCancelConfirmation;
-  } else if (orderStatus == ORDER_CREATE) {
+  } else if (orderStatus == ORDER_CREATED) {
     return language.orderCreateConfirmation;
   }
   return '';

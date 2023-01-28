@@ -993,4 +993,16 @@ class LanguageTr extends BaseLanguage {
 
   @override
   String get adminCommission => "Yönetici komisyonu";
+
+  @override
+  String get assigned => "Atanmış";
+
+  @override
+  String get draft => "Taslak";
+
+  @override
+  String get created => "Yaratılmış";
+
+  @override
+  String get accepted => "Kabul edilmiş";
 }

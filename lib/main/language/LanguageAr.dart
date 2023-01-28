@@ -993,4 +993,16 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get adminCommission => "اللجنة الإدارية";
+
+  @override
+  String get assigned => "تعيين";
+
+  @override
+  String get draft => "مشروع";
+
+  @override
+  String get created => "مخلوق";
+
+  @override
+  String get accepted => "وافقت";
 }

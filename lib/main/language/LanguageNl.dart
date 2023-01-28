@@ -994,4 +994,16 @@ class LanguageNl extends BaseLanguage {
 
   @override
   String get adminCommission => "Admincommissie";
+
+  @override
+  String get assigned => "Toegewezen";
+
+  @override
+  String get draft => "Voorlopige versie";
+
+  @override
+  String get created => "Gecreëerd";
+
+  @override
+  String get accepted => "Geaccepteerd";
 }

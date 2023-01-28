@@ -994,4 +994,16 @@ class LanguageAf extends BaseLanguage {
 
   @override
   String get adminCommission => "Adminkommissie";
+
+  @override
+  String get assigned => "Toegewys";
+
+  @override
+  String get draft => "Konsep";
+
+  @override
+  String get created => "Geskep";
+
+  @override
+  String get accepted => "Aanvaar";
 }

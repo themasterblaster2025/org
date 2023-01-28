@@ -164,7 +164,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                     textStyle: boldTextStyle(color: Colors.white),
                                     color: colorPrimary,
                                     onTap: () {
-                                      if (widget.orderStatus == ORDER_ACTIVE) {
+                                      if (widget.orderStatus == ORDER_ACCEPTED) {
                                         onTapData(orderData: data, orderStatus: widget.orderStatus!);
                                       } else if (widget.orderStatus == ORDER_ARRIVED) {
                                         onTapData(orderData: data, orderStatus: widget.orderStatus!);
@@ -187,7 +187,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                         );
                                       }
                                     },
-                                  ).visible(widget.orderStatus != ORDER_COMPLETED)
+                                  ).visible(widget.orderStatus != ORDER_DELIVERED)
                                 : SizedBox()
                           ],
                         ),
@@ -329,7 +329,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                   );
                                 },
                               ),
-                            ).paddingOnly(top: 12, right: 16).visible(data.status == ORDER_ACTIVE),
+                            ).paddingOnly(top: 12, right: 16).visible(data.status == ORDER_ACCEPTED),
                             Align(
                                 alignment: Alignment.topRight,
                                 child: AppButton(
@@ -352,13 +352,13 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                       TrackingScreen(
                                         orderId: data.id,
                                               order: orderData,
-                                              latLng: data.status == ORDER_ACTIVE
+                                              latLng: data.status == ORDER_ACCEPTED
                                                   ? LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble())
                                                   : LatLng(data.deliveryPoint!.latitude.toDouble(), data.deliveryPoint!.longitude.toDouble()))
                                           .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
                                     }
                                   },
-                                )).paddingOnly(top: 12).visible(data.status == COURIER_DEPARTED || data.status == ORDER_ACTIVE),
+                                )).paddingOnly(top: 12).visible(data.status == ORDER_DEPARTED || data.status == ORDER_ACCEPTED),
                           ],
                         ),
                       ],
@@ -380,11 +380,11 @@ class CreateTabScreenState extends State<CreateTabScreen> {
 
   Future<void> onTapData({required String orderStatus, required OrderData orderData}) async {
     if (orderStatus == ORDER_ASSIGNED) {
-      await updateOrder(orderStatus: ORDER_ACTIVE, orderId: orderData.id).then((value){
+      await updateOrder(orderStatus: ORDER_ACCEPTED, orderId: orderData.id).then((value){
         toast(language.orderActiveSuccessfully);
       });
       init();
-    } else if (orderStatus == ORDER_ACTIVE) {
+    } else if (orderStatus == ORDER_ACCEPTED) {
       await ReceivedScreenOrderScreen(orderData: orderData, isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_PICKUP).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
       init();
     } else if (orderStatus == ORDER_ARRIVED) {
@@ -407,7 +407,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
   buttonText(String orderStatus) {
     if (orderStatus == ORDER_ASSIGNED) {
       return language.active;
-    } else if (orderStatus == ORDER_ACTIVE) {
+    } else if (orderStatus == ORDER_ACCEPTED) {
       return language.pickUp;
     } else if (orderStatus == ORDER_ARRIVED) {
       return language.pickUp;

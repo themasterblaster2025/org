@@ -19,7 +19,7 @@ class DeliveryDashBoard extends StatefulWidget {
 }
 
 class DeliveryDashBoardState extends State<DeliveryDashBoard> {
-  List<String> statusList = [ORDER_ASSIGNED, ORDER_ACTIVE, ORDER_ARRIVED, ORDER_PICKED_UP, ORDER_DEPARTED, ORDER_COMPLETED, ORDER_CANCELLED];
+  List<String> statusList = [ORDER_ASSIGNED, ORDER_ACCEPTED, ORDER_ARRIVED, ORDER_PICKED_UP, ORDER_DEPARTED, ORDER_DELIVERED, ORDER_CANCELLED];
   int currentIndex = 1;
 
   @override

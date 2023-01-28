@@ -994,4 +994,16 @@ class LanguageEs extends BaseLanguage {
 
   @override
   String get adminCommission => "Comisión administrativa";
+
+  @override
+  String get assigned => "Asignado";
+
+  @override
+  String get draft => "Borrador";
+
+  @override
+  String get created => "Creado";
+
+  @override
+  String get accepted => "Aceptado";
 }

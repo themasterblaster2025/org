@@ -993,4 +993,16 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get adminCommission => "Admin Commission";
+
+  @override
+  String get assigned => "Assigned";
+
+  @override
+  String get draft => "Draft";
+
+  @override
+  String get created => "Created";
+
+  @override
+  String get accepted => "Accepted";
 }

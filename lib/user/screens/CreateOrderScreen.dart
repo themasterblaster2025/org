@@ -1076,7 +1076,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     positiveText: language.yes,
                     negativeText: language.no,
                     onAccept: () {
-                      createOrderApiCall(ORDER_CREATE);
+                      createOrderApiCall(ORDER_CREATED);
                     },
                   );
                 }

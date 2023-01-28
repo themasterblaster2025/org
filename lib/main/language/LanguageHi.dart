@@ -994,4 +994,12 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get adminCommission => "व्यवस्थापक आयोग";
+
+  @override String get assigned => "सौंपा गया";
+
+  @override String get draft => "प्रारूप";
+
+  @override String get created => "बनाया था";
+
+  @override String get accepted => "स्वीकार किया हुआ";
 }

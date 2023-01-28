@@ -5,8 +5,8 @@ const mHelpAndSupport = 'https://support.meetmighty.com/';
 const mContactPref = 'hello@meetmighty.com';
 const mCodeCanyonURL = 'https://codecanyon.net/user/meetmighty/portfolio/';
 
-const mBaseUrl = 'https://meetmighty.com/mobile/mighty-local-delivery/api/';
-//const mBaseUrl = 'http://192.168.1.230/meetmighty/local-delivery-laravel/api/';
+//const mBaseUrl = 'https://meetmighty.com/mobile/mighty-local-delivery/api/';
+const mBaseUrl = 'http://192.168.1.230/meetmighty/local-delivery-laravel/api/';
 
 const googleMapAPIKey = 'AIzaSyCDD0QOjZNS05ByZlnv-VcwH2id3WzS2Lw';
 
@@ -96,19 +96,19 @@ const REQUESTED = 'requested';
 const APPROVED = 'approved';
 
 // OrderStatus
-const COURIER_ASSIGNED = 'courier_assigned';
-const COURIER_DEPARTED = 'courier_departed';
-const COURIER_TRANSFER = 'courier_transfer';
-const ORDER_CREATE = 'create';
-const ORDER_ACTIVE = 'active';
+const ORDER_CREATED = 'create';
+const ORDER_ACCEPTED = 'active';
 const ORDER_CANCELLED = 'cancelled';
 const ORDER_DELAYED = 'delayed';
 const ORDER_ASSIGNED = 'courier_assigned';
 const ORDER_ARRIVED = 'courier_arrived';
 const ORDER_PICKED_UP = 'courier_picked_up';
-const ORDER_COMPLETED = 'completed';
+const ORDER_DELIVERED = 'completed';
 const ORDER_DRAFT = 'draft';
 const ORDER_DEPARTED = 'courier_departed';
+const ORDER_TRANSFER = 'courier_transfer';
+const ORDER_PAYMENT = 'payment_status_message';
+const ORDER_FAIL = 'failed';
 
 const TRANSACTION_ORDER_FEE = "order_fee";
 const TRANSACTION_TOPUP = "topup";

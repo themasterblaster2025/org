@@ -994,4 +994,16 @@ class LanguagePt extends BaseLanguage {
 
   @override
   String get adminCommission => "Comissão de Administração";
+
+  @override
+  String get assigned => "Atribuído";
+
+  @override
+  String get draft => "Rascunho";
+
+  @override
+  String get created => "Criado";
+
+  @override
+  String get accepted => "Aceitaram";
 }
