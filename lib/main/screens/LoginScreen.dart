@@ -81,16 +81,16 @@ class LoginScreenState extends State<LoginScreen> {
           await setValue(USER_EMAIL, emailController.text);
           await setValue(USER_PASSWORD, passController.text);
         }
-        authService.signInWithEmailPassword(context, email: emailController.text, password: passController.text).then((value) async {
-          await logInApi(req).then((value) async {
-            appStore.setLoading(false);
-            if (value.data!.userType != CLIENT && value.data!.userType != DELIVERY_MAN) {
+        await logInApi(req).then((v) async {
+          appStore.setLoading(false);
+          authService.signInWithEmailPassword(context, email: emailController.text, password: passController.text).then((value) async {
+            if (v.data!.userType != CLIENT && v.data!.userType != DELIVERY_MAN) {
               await logout(context, isFromLogin: true);
             } else {
               if (getIntAsync(STATUS) == 1) {
-                if (value.data!.countryId != null && value.data!.cityId != null) {
-                  await getCountryDetailApiCall(value.data!.countryId.validate());
-                  getCityDetailApiCall(value.data!.cityId.validate());
+                if (v.data!.countryId != null && v.data!.cityId != null) {
+                  await getCountryDetailApiCall(v.data!.countryId.validate());
+                  getCityDetailApiCall(v.data!.cityId.validate());
                 } else {
                   UserCitySelectScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
                 }
@@ -98,12 +98,12 @@ class LoginScreenState extends State<LoginScreen> {
                 toast(language.userNotApproveMsg);
               }
             }
-          }).catchError((e) {
-            appStore.setLoading(false);
-            toast(e.toString());
           });
+        }).catchError((e) {
+          appStore.setLoading(false);
+          toast(e.toString());
         });
-      }else{
+      } else {
         toast(language.acceptTermService);
       }
     }
@@ -141,8 +141,12 @@ class LoginScreenState extends State<LoginScreen> {
             children: [
               Container(
                 height: context.height() * 0.25,
-                child:
-                    Container(height: 90, width: 90, alignment: Alignment.center, decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle), child: Image.asset('assets/app_logo_primary.png', height: 70, width: 70)),
+                child: Container(
+                    height: 90,
+                    width: 90,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle),
+                    child: Image.asset('assets/app_logo_primary.png', height: 70, width: 70)),
               ),
               Container(
                 width: context.width(),

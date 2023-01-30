@@ -44,6 +44,7 @@ class _ChatScreenState extends State<ChatScreen> {
   );
 
   init() async {
+    log(widget.userData!.toJson());
     id = getStringAsync(UID);
     mIsEnterKey = getBoolAsync(IS_ENTER_KEY, defaultValue: false);
     mSelectedImage = getStringAsync(SELECTED_WALLPAPER, defaultValue: "assets/default_wallpaper.png");
@@ -118,6 +119,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    log(widget.userData!.uid);
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -153,7 +155,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 isLive: true,
                 padding: EdgeInsets.only(left: 8, top: 8, right: 8, bottom: 0),
                 physics: BouncingScrollPhysics(),
-                query: chatMessageService.chatMessagesWithPagination(currentUserId: getStringAsync(UID), receiverUserId: widget.userData!.uid!),
+                query: chatMessageService.chatMessagesWithPagination(currentUserId: getStringAsync(UID), receiverUserId: widget.userData!.uid.validate()),
                 itemsPerPage: PER_PAGE_CHAT_COUNT,
                 shrinkWrap: true,
                 onEmpty: Offstage(),

@@ -47,24 +47,31 @@ Future<LoginResponse> signUpApi(Map request) async {
   return await handleResponse(response).then((json) async {
     var loginResponse = LoginResponse.fromJson(json);
 
-    await setValue(USER_ID, loginResponse.data!.id.validate());
-    await setValue(NAME, loginResponse.data!.name.validate());
-    await setValue(USER_EMAIL, loginResponse.data!.email.validate());
-    await setValue(USER_TOKEN, loginResponse.data!.fcmToken.validate());
-    await setValue(USER_CONTACT_NUMBER, loginResponse.data!.contactNumber.validate());
-    await setValue(USER_PROFILE_PHOTO, loginResponse.data!.profileImage.validate());
-    await setValue(USER_TYPE, loginResponse.data!.userType.validate());
-    await setValue(USER_NAME, loginResponse.data!.username.validate());
-    await setValue(USER_ADDRESS, loginResponse.data!.address.validate());
-    await setValue(COUNTRY_ID, loginResponse.data!.countryId.validate());
-    await setValue(CITY_ID, loginResponse.data!.cityId.validate());
-    await setValue(UID, loginResponse.data!.uid.validate());
-    await setValue(IS_VERIFIED_DELIVERY_MAN, loginResponse.data!.isVerifiedDeliveryMan == 1);
-
-    await appStore.setUserEmail(loginResponse.data!.email.validate());
-    await appStore.setLogin(true);
-
-    await setValue(USER_PASSWORD, request['password']);
+    // await setValue(USER_ID, loginResponse.data!.id.validate());
+    // await setValue(NAME, loginResponse.data!.name.validate());
+    // await setValue(USER_EMAIL, loginResponse.data!.email.validate());
+    // await setValue(USER_TOKEN, loginResponse.data!.fcmToken.validate());
+    // await setValue(USER_CONTACT_NUMBER, loginResponse.data!.contactNumber.validate());
+    // await setValue(USER_PROFILE_PHOTO, loginResponse.data!.profileImage.validate());
+    // await setValue(USER_TYPE, loginResponse.data!.userType.validate());
+    // await setValue(USER_NAME, loginResponse.data!.username.validate());
+    // await setValue(USER_ADDRESS, loginResponse.data!.address.validate());
+    // await setValue(COUNTRY_ID, loginResponse.data!.countryId.validate());
+    // await setValue(CITY_ID, loginResponse.data!.cityId.validate());
+    // await userService.getUser(email: loginResponse.data!.email.validate()).then((value) async {
+    //   await setValue(UID, value.uid.validate());
+    // }).catchError((e) {
+    //   log(e.toString());
+    //   if (e.toString() == "User not found") {
+    //     toast('user Not Found');
+    //   }
+    // });
+    // await setValue(IS_VERIFIED_DELIVERY_MAN, loginResponse.data!.isVerifiedDeliveryMan == 1);
+    //
+    // await appStore.setUserEmail(loginResponse.data!.email.validate());
+    // await appStore.setLogin(true);
+    //
+    // await setValue(USER_PASSWORD, request['password']);
 
     return loginResponse;
   }).catchError((e) {
@@ -112,7 +119,15 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
     await setValue(USER_ADDRESS, loginResponse.data!.address.validate());
     await setValue(COUNTRY_ID, loginResponse.data!.countryId.validate());
     await setValue(CITY_ID, loginResponse.data!.cityId.validate());
-    await setValue(UID, loginResponse.data!.uid.validate());
+    await userService.getUser(email: loginResponse.data!.email.validate()).then((value) async {
+      log(value);
+      await setValue(UID, value.uid.validate());
+    }).catchError((e) {
+      log(e.toString());
+      if (e.toString() == "User not found") {
+        toast('user Not Found');
+      }
+    });
     await setValue(IS_VERIFIED_DELIVERY_MAN, loginResponse.data!.isVerifiedDeliveryMan == 1);
     /* await appStore.setUserName(loginResponse.userData!.username.validate());
     await appStore.setRole(loginResponse.userData!.user_type.validate());
@@ -133,7 +148,21 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
   });
 }
 
-Future<void> logout(BuildContext context, {bool isFromLogin = false,bool isDeleteAccount=false}) async {
+////// Update Location
+Future updateUid(String? uid) async {
+  MultipartRequest multiPartRequest = await getMultiPartRequest('update-profile');
+  multiPartRequest.fields['uid'] = uid.validate();
+
+  await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
+    if (data != null) {
+      //
+    }
+  }, onError: (error) {
+    toast(error.toString());
+  });
+}
+
+Future<void> logout(BuildContext context, {bool isFromLogin = false, bool isDeleteAccount = false}) async {
   clearData() async {
     await removeKey(USER_ID);
     await removeKey(NAME);
@@ -380,6 +409,7 @@ Future updateLocation({String? userName, String? userEmail, String? latitude, St
   multiPartRequest.fields['id'] = getIntAsync(USER_ID).toString();
   multiPartRequest.fields['latitude'] = latitude!;
   multiPartRequest.fields['longitude'] = longitude!;
+  multiPartRequest.fields['uid'] = getStringAsync(UID);
 
   await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
     if (data != null) {
