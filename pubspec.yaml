@@ -88,6 +88,9 @@ dependencies:
   # READ MORE LESS
   readmore: ^2.2.0
 
+  # Social Login
+  google_sign_in: ^5.4.3
+
   flutter_localizations:
     sdk: flutter
 

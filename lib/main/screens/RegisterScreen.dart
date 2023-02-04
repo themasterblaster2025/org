@@ -10,8 +10,8 @@ import '../../main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
-import '../Services/AuthSertvices.dart';
 import '../network/RestApis.dart';
+import '../services/AuthSertvices.dart';
 
 class RegisterScreen extends StatefulWidget {
   final String? userType;

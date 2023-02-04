@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../../main/screens/LoginScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -146,58 +148,74 @@ class AuthServices {
     }
   }
 
-// Future<void> signUpWithOTP(context, {String? name, String? email, String? password, String? mobileNumber, String? lName, String? userName, String? verificationId, String? otpCode}) async {
-//   AuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId.validate(), smsCode: otpCode.validate());
-//   await FirebaseAuth.instance.signInWithCredential(credential).then((result) async {
-//     if (result != null && result.user != null) {
-//       User currentUser = result.user!;
-//
-//       UserData userModel = UserData();
-//       var displayName = name! + lName!;
-//
-//       /// Create user
-//      // userModel.uid = currentUser.uid;
-//       userModel.email = currentUser.email;
-//       userModel.contactNumber = mobileNumber;
-//       userModel.name = name;
-//       userModel.username = userName;
-//       userModel.userType = CLIENT;
-//       userModel.createdAt = Timestamp.now().toDate().toString();
-//       userModel.updatedAt = Timestamp.now().toDate().toString();
-//
-//       await userService.addDocumentWithCustomId(currentUser.uid, userModel.toJson()).then((value) async {
-//         var request = {
-//           UserKeys.firstName: name,
-//           UserKeys.lastName: lName,
-//           UserKeys.userName: userName,
-//           UserKeys.userType: LoginTypeUser,
-//           UserKeys.contactNumber: mobileNumber,
-//           UserKeys.email: email,
-//           UserKeys.password: password,
-//           UserKeys.uid: userModel.uid,
-//           UserKeys.loginType: getStringAsync(LOGIN_TYPE)
-//         };
-//         await createUser(request).then((res) async {
-//           await loginUser(request).then((res) async {
-//             DashboardScreen(index: 0).launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
-//           }).catchError((e) {
-//             toast(e.toString());
-//           });
-//         }).catchError((e) {
-//           toast(e.toString());
-//           return;
-//         });
-//         appStore.setLoading(false);
-//
-//       }).catchError((e) {
-//         appStore.setLoading(false);
-//         toast(e.toString());
-//       });
-//     } else {
-//       throw errorSomethingWentWrong;
-//     }
-//   });
-// }
+/*  Future<void> signInWithGoogle(BuildContext context) async {
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+    GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+
+    if (googleSignInAccount != null) {
+      //Authentication
+      final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+
+      final UserCredential authResult = await _auth.signInWithCredential(credential);
+      final User user = authResult.user!;
+
+      assert(!user.isAnonymous);
+
+      final User currentUser = _auth.currentUser!;
+      assert(user.uid == currentUser.uid);
+
+      googleSignIn.signOut();
+
+      String firstName = '';
+      String lastName = '';
+      if (currentUser.displayName.validate().split(' ').length >= 1) firstName = currentUser.displayName.splitBefore(' ');
+      if (currentUser.displayName.validate().split(' ').length >= 2) lastName = currentUser.displayName.splitAfter(' ');
+      Map req = {
+        "email": currentUser.email,
+        "login_type": LoginTypeGoogle,
+        "user_type": RIDER,
+        "first_name": firstName,
+        "last_name": lastName,
+        "username": (firstName + lastName).toLowerCase(),
+        "uid": currentUser.uid,
+        'accessToken': googleSignInAuthentication.accessToken,
+        if (!currentUser.phoneNumber.isEmptyOrNull) 'contact_number': currentUser.phoneNumber.validate(),
+      };
+
+      await logInApi(req, isSocialLogin: true).then((value) async {
+        Navigator.pop(context);
+        sharedPreferences.setString(UID, currentUser.uid);
+        await appStore.setUserProfile(currentUser.photoURL.toString());
+        await sharedPref.setString(USER_PROFILE_PHOTO, currentUser.photoURL.toString());
+        if (value.data!.contactNumber.isEmptyOrNull) {
+          launchScreen(context, EditProfileScreen(isGoogle: true), isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+        } else {
+          if (value.data!.uid.isEmptyOrNull) {
+            await updateProfile(
+              uid: sharedPref.getString(UID).toString(),
+              userEmail: currentUser.email.validate(),
+            ).then((value) {
+              launchScreen(context, RiderDashBoardScreen(), isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+            }).catchError((error) {
+              log(error.toString());
+            });
+          } else {
+            launchScreen(context, RiderDashBoardScreen(), isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+          }
+        }
+      }).catchError((e) {
+        log(e.toString());
+        throw e;
+      });
+    } else {
+      throw errorSomethingWentWrong;
+    }
+  }*/
 }
 
 getCountryDetailApiCall(int countryId, context) async {

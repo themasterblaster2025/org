@@ -13,9 +13,9 @@ import 'package:nb_utils/nb_utils.dart';
 import '../../delivery/screens/DeliveryDashBoard.dart';
 import '../../main.dart';
 import '../../user/screens/DashboardScreen.dart';
-import '../Services/AuthSertvices.dart';
 import '../components/UserCitySelectScreen.dart';
 import '../models/CityListModel.dart';
+import '../services/AuthSertvices.dart';
 
 class LoginScreen extends StatefulWidget {
   static String tag = '/LoginScreen';
@@ -130,6 +130,19 @@ class LoginScreenState extends State<LoginScreen> {
     }).catchError((error) {});
   }
 
+  /*void googleSignIn() async {
+    hideKeyboard(context);
+    appStore.setLoading(true);
+
+    await googleAuthService.signInWithGoogle(context).then((value) async {
+      appStore.setLoading(false);
+    }).catchError((e) {
+      appStore.setLoading(false);
+      toast(e.toString());
+      print(e.toString());
+    });
+  }*/
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -159,11 +172,11 @@ class LoginScreenState extends State<LoginScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        30.height,
+                        24.height,
                         Text(language.signIn, style: boldTextStyle(size: headingSize)),
                         8.height,
                         Text(language.signInWithYourCredential, style: secondaryTextStyle(size: 16)),
-                        30.height,
+                        16.height,
                         Text(language.email, style: primaryTextStyle()),
                         8.height,
                         AppTextField(
@@ -190,6 +203,7 @@ class LoginScreenState extends State<LoginScreen> {
                           contentPadding: EdgeInsets.zero,
                           controlAffinity: ListTileControlAffinity.leading,
                           activeColor: colorPrimary,
+                          dense: true,
                           title: Text(language.rememberMe, style: primaryTextStyle()),
                           value: mIsCheck,
                           onChanged: (val) async {
@@ -204,6 +218,7 @@ class LoginScreenState extends State<LoginScreen> {
                           contentPadding: EdgeInsets.zero,
                           controlAffinity: ListTileControlAffinity.leading,
                           activeColor: colorPrimary,
+                          dense: true,
                           title: RichTextWidget(
                             list: [
                               TextSpan(text: '${language.iAgreeToThe} ', style: secondaryTextStyle()),
@@ -246,6 +261,44 @@ class LoginScreenState extends State<LoginScreen> {
                           child: Text(language.forgotPasswordQue, style: primaryTextStyle(color: colorPrimary)).onTap(() {
                             ForgotPasswordScreen().launch(context);
                           }),
+                        ),
+                        SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Expanded(child: Divider(color: colorPrimary.withOpacity(0.5))),
+                            Padding(
+                              padding: EdgeInsets.only(left: 16, right: 16),
+                              child: Text('Or LogIn With', style: primaryTextStyle()),
+                            ),
+                            Expanded(child: Divider(color: colorPrimary.withOpacity(0.5))),
+                          ],
+                        ),
+                        SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            InkWell(
+                              onTap: () async {
+                               // googleSignIn();
+                              },
+                              child: Image.asset('assets/icons/ic_google.png', fit: BoxFit.cover, height: 35, width: 35),
+                            ),
+                            SizedBox(width: 16),
+                            InkWell(
+                              onTap: () async {
+                               /* showDialog(
+                                  context: context,
+                                  builder: (_) {
+                                    return AlertDialog(
+                                      contentPadding: EdgeInsets.all(16),
+                                      content: OTPDialog(),
+                                    );
+                                  },
+                                );*/
+                              },
+                              child: Image.asset('assets/icons/ic_mobile.png', fit: BoxFit.cover, height: 35, width: 35),
+                            ),
+                          ],
                         ),
                         16.height,
                         Row(

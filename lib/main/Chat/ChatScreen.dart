@@ -7,11 +7,11 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 
 import '../../main.dart';
-import '../Services/ChatMessagesService.dart';
-import '../Services/UserServices.dart';
+import '../services/ChatMessagesService.dart';
 import '../models/ChatMessageModel.dart';
 import '../models/FileModel.dart';
 import '../models/LoginResponse.dart';
+import '../services/UserServices.dart';
 import '../utils/Constants.dart';
 import 'ChatItemWidget.dart';
 

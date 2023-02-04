@@ -6,7 +6,7 @@ import '../../main/utils/Common.dart';
 import '../../main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-import '../../main/Services/AuthSertvices.dart';
+import '../../main/services/AuthSertvices.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Constants.dart';
 
