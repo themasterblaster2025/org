@@ -134,7 +134,7 @@ class UserWalletModel {
   var totalAmount;
   int? onlineReceived;
   int? collectedCash;
-  int? manualReceived;
+  var manualReceived;
   int? totalWithdrawn;
   String? currency;
   String? createdAt;
