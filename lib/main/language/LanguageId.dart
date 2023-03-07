@@ -1005,4 +1005,48 @@ class LanguageId extends BaseLanguage {
 
   @override
   String get accepted => "DiterimaL";
+
+  //TODO
+  @override
+  String get vehicle => 'kendaraan';
+
+  @override
+  String get add_vehicle => 'menambah kendaraan';
+
+  @override
+  String get update_vehicle => 'memperbarui kendaraan';
+
+  @override
+  String get vehicle_size => 'ukuran kendaraan';
+
+  @override
+  String get vehicle_capacity => 'kapasitas kendaraan';
+
+  @override
+  String get vehicle_image => 'gambar kendaraan';
+
+  @override
+  String get select_vehicle => 'pilih kendaraan';
+
+  @override
+  String get enable_vehicle => 'aktifkan kendaraan?';
+
+  @override
+  String get disable_vehicle => 'melumpuhkan kendaraan?';
+
+  @override
+  String get enable_vehicle_msg => 'Apakah Anda ingin mengaktifkan kendaraan ini?';
+
+  @override
+  String get disable_vehicle_msg => 'Apakah Anda ingin menonaktifkan kendaraan ini?';
+
+  @override
+  String get delete_vehicle => 'hapus kendaraan?';
+
+  @override
+  String get do_you_want_to_delete_this_vehicle =>
+      'Apakah Anda ingin menghapus kendaraan ini?';
+
+  @override
+  String get vehicle_name => 'nama kendaraan';
 }

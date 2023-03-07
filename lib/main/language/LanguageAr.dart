@@ -1005,4 +1005,49 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get accepted => "وافقت";
+
+
+  //TODO
+  @override
+  String get vehicle => 'عربة';
+
+  @override
+  String get add_vehicle => 'أضف مركبة';
+
+  @override
+  String get update_vehicle => 'تحديث السيارة';
+
+  @override
+  String get vehicle_size => 'حجم السيارة';
+
+  @override
+  String get vehicle_capacity => 'قدرة السيارة';
+
+  @override
+  String get vehicle_image => 'صورة السيارة';
+
+  @override
+  String get select_vehicle => 'اختر السيارة';
+
+  @override
+  String get enable_vehicle => 'تمكين السيارة';
+
+  @override
+  String get disable_vehicle => 'تعطيل السيارة';
+
+  @override
+  String get enable_vehicle_msg => 'هل تريد تمكين هذه السيارة؟';
+
+  @override
+  String get disable_vehicle_msg => 'هل تريد تعطيل هذه السيارة؟';
+
+  @override
+  String get delete_vehicle => 'حذف السيارة؟';
+
+  @override
+  String get do_you_want_to_delete_this_vehicle =>
+      'هل تريد حذف هذه السيارة؟';
+
+  @override
+  String get vehicle_name => 'قدرة السيارة';
 }

@@ -1005,4 +1005,48 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get accepted => "Accepted";
+
+  //TODO
+  @override
+  String get vehicle => 'Vehicle';
+
+  @override
+  String get add_vehicle => 'Add Vehicle';
+
+  @override
+  String get update_vehicle => 'Update Vehicle';
+
+  @override
+  String get vehicle_size => 'Vehicle Size';
+
+  @override
+  String get vehicle_capacity => 'Vehicle Capacity';
+
+  @override
+  String get vehicle_image => 'Vehicle Image';
+
+  @override
+  String get select_vehicle => 'Select Vehicle';
+
+  @override
+  String get enable_vehicle => 'Enable Vehicle?';
+
+  @override
+  String get disable_vehicle => 'Disable Vehicle?';
+
+  @override
+  String get enable_vehicle_msg => 'Do you want to enable this vehicle?';
+
+  @override
+  String get disable_vehicle_msg => 'Do you want to disable this vehicle?';
+
+  @override
+  String get delete_vehicle => 'Delete Vehicle?';
+
+  @override
+  String get do_you_want_to_delete_this_vehicle =>
+      'Do you want to delete this vehicle?';
+
+  @override
+  String get vehicle_name => 'Vehicle Name';
 }

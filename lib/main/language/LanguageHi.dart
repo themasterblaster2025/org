@@ -1002,4 +1002,48 @@ class LanguageHi extends BaseLanguage {
   @override String get created => "बनाया था";
 
   @override String get accepted => "स्वीकार किया हुआ";
+
+  //TODO
+  @override
+  String get vehicle => 'वाहन';
+
+  @override
+  String get add_vehicle => 'वाहन जोड़ें';
+
+  @override
+  String get update_vehicle => 'अद्यतन वाहन';
+
+  @override
+  String get vehicle_size => 'वाहन का आकार';
+
+  @override
+  String get vehicle_capacity => 'वाहन क्षमता';
+
+  @override
+  String get vehicle_image => 'वाहन छवि';
+
+  @override
+  String get select_vehicle => 'वाहन चुनें';
+
+  @override
+  String get enable_vehicle => 'वाहन सक्षम करें?';
+
+  @override
+  String get disable_vehicle => 'वाहन अक्षम करें?';
+
+  @override
+  String get enable_vehicle_msg => 'क्या आप इस वाहन को सक्षम करना चाहते हैं?';
+
+  @override
+  String get disable_vehicle_msg => 'क्या आप इस वाहन को अक्षम करना चाहते हैं?';
+
+  @override
+  String get delete_vehicle => 'वाहन हटाएं?';
+
+  @override
+  String get do_you_want_to_delete_this_vehicle =>
+      'क्या आप इस वाहन को हटाना चाहते हैं?';
+
+  @override
+  String get vehicle_name => 'वाहन का नाम';
 }

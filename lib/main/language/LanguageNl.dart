@@ -1006,4 +1006,48 @@ class LanguageNl extends BaseLanguage {
 
   @override
   String get accepted => "Geaccepteerd";
+
+  //TODO
+  @override
+  String get vehicle => 'voertuig';
+
+  @override
+  String get add_vehicle => 'voertuig toevoegen';
+
+  @override
+  String get update_vehicle => 'voertuig opdateer';
+
+  @override
+  String get vehicle_size => 'voertuig grootte';
+
+  @override
+  String get vehicle_capacity => 'voertuig capaciteit';
+
+  @override
+  String get vehicle_image => 'voertuig afbeelding';
+
+  @override
+  String get select_vehicle => 'voertuig selecteren';
+
+  @override
+  String get enable_vehicle => 'voertuig inschakelen';
+
+  @override
+  String get disable_vehicle => 'voertuig uitschakelen';
+
+  @override
+  String get enable_vehicle_msg => 'Wil je hier het voertuig actief maken?';
+
+  @override
+  String get disable_vehicle_msg => 'Wil je hier dat voertuig deaktiveer?';
+
+  @override
+  String get delete_vehicle => 'voertuig verwijderen?';
+
+  @override
+  String get do_you_want_to_delete_this_vehicle =>
+      'Wilt u dit voertuig verwijderen?';
+
+  @override
+  String get vehicle_name => 'voertuig naam';
 }

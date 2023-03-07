@@ -1006,4 +1006,48 @@ class LanguagePt extends BaseLanguage {
 
   @override
   String get accepted => "Aceitaram";
+
+  //TODO
+  @override
+  String get vehicle => 'veículo';
+
+  @override
+  String get add_vehicle => 'adicionar veículo';
+
+  @override
+  String get update_vehicle => 'atualizar veículo';
+
+  @override
+  String get vehicle_size => 'tamanho do veículo';
+
+  @override
+  String get vehicle_capacity => 'capacidade do veículo';
+
+  @override
+  String get vehicle_image => 'imagem do veículo';
+
+  @override
+  String get select_vehicle => 'selecione o veículo';
+
+  @override
+  String get enable_vehicle => 'habilita veículo?';
+
+  @override
+  String get disable_vehicle => 'desativar veículo?';
+
+  @override
+  String get enable_vehicle_msg => 'Deseja habilitar este veículo?';
+
+  @override
+  String get disable_vehicle_msg => 'Deseja desativar este veículo?';
+
+  @override
+  String get delete_vehicle => 'excluir veículo?';
+
+  @override
+  String get do_you_want_to_delete_this_vehicle =>
+      'Deseja excluir este veículo?';
+
+  @override
+  String get vehicle_name => 'nome do veículo';
 }

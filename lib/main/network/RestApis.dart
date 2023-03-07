@@ -26,6 +26,7 @@ import '../models/AutoCompletePlacesListModel.dart';
 import '../models/OrderDetailModel.dart';
 import '../models/PlaceIdDetailModel.dart';
 import '../models/UserProfileDetailModel.dart';
+import '../models/VehicleModel.dart';
 import '../models/WalletListModel.dart';
 import '../models/WithDrawListModel.dart';
 import 'NetworkUtils.dart';
@@ -301,6 +302,25 @@ Future<CityListModel> getCityList({required int countryId, String? name}) async 
 Future<CityDetailModel> getCityDetail(int id) async {
   return CityDetailModel.fromJson(await handleResponse(await buildHttpResponse('city-detail?id=$id', method: HttpMethod.GET)));
 }
+
+///Vehicle
+Future<VehicleModel> getVehicleList(
+    {String? type,
+      int? perPage,
+      int? page,
+      int? cityID,
+      bool isDeleted = false,
+      int? totalItem,
+      int? totalPage = 10}) async {
+  if(cityID!=null){
+    return VehicleModel.fromJson(await handleResponse(
+        await buildHttpResponse('vehicle-list?city_id=$cityID&per_page=-1', method: HttpMethod.GET)));
+  }else{
+    return VehicleModel.fromJson(await handleResponse(
+        await buildHttpResponse('vehicle-list?per_page=-1', method: HttpMethod.GET)));
+  }
+}
+
 
 /// Country
 Future updateCountryCity({int? countryId, int? cityId}) async {

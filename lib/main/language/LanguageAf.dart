@@ -1006,4 +1006,48 @@ class LanguageAf extends BaseLanguage {
 
   @override
   String get accepted => "Aanvaar";
+
+  //TODO
+  @override
+  String get vehicle => 'voertuig';
+
+  @override
+  String get add_vehicle => 'voertuig byvoeg';
+
+  @override
+  String get update_vehicle => 'voertuig opdateer';
+
+  @override
+  String get vehicle_size => 'voertuig grootte';
+
+  @override
+  String get vehicle_capacity => 'voertuig kapasiteit';
+
+  @override
+  String get vehicle_image => 'voertuig beeld';
+
+  @override
+  String get select_vehicle => 'kies voertuig';
+
+  @override
+  String get enable_vehicle => 'voertuig in staat stel';
+
+  @override
+  String get disable_vehicle => 'voertuig uitskakel?';
+
+  @override
+  String get enable_vehicle_msg => 'Wil jy hierdie voertuig aktiveer?';
+
+  @override
+  String get disable_vehicle_msg => 'Wil jy hierdie voertuig deaktiveer?';
+
+  @override
+  String get delete_vehicle => 'voertuig uitvee?';
+
+  @override
+  String get do_you_want_to_delete_this_vehicle =>
+      'Wil jy hierdie voertuig uitvee?';
+
+  @override
+  String get vehicle_name => 'voertuig naam';
 }

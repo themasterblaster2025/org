@@ -13,6 +13,7 @@ import '../../main/models/CountryListModel.dart';
 import '../../main/models/OrderListModel.dart';
 import '../../main/models/ParcelTypeListModel.dart';
 import '../../main/models/PaymentModel.dart';
+import '../../main/models/VehicleModel.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
@@ -101,6 +102,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   List<ExtraChargeRequestModel> extraChargeList = [];
 
+  int? selectedVehicle;
+  List<VehicleData> vehicleList = [];
+  VehicleData? vehicleData;
+
   @override
   void initState() {
     super.initState();
@@ -113,6 +118,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     await getCityDetailApiCall(getIntAsync(CITY_ID));
     getParcelTypeListApiCall();
     extraChargesList();
+    getVehicleList(cityID: cityData!.id);
 
     if (widget.orderData != null) {
       if (widget.orderData!.totalWeight != 0) weightController.text = widget.orderData!.totalWeight!.toString();
@@ -161,6 +167,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     await getCityDetail(cityId).then((value) async {
       await setValue(CITY_DATA, value.data!.toJson());
       cityData = value.data!;
+      getVehicleApiCall();
       setState(() {});
     }).catchError((error) {});
   }
@@ -175,6 +182,20 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     }).catchError((error) {
       appStore.setLoading(false);
       toast(error.toString());
+    });
+  }
+
+
+  getVehicleApiCall({String? name}) async {
+    appStore.setLoading(true);
+    await getVehicleList(cityID: cityData!.id).then((value) {
+      appStore.setLoading(false);
+      vehicleList.clear();
+      vehicleList = value.data!;
+      setState(() {});
+    }).catchError((error) {
+      appStore.setLoading(false);
+      log(error);
     });
   }
 
@@ -215,6 +236,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       "date": DateTime.now().toString(),
       "country_id": getIntAsync(COUNTRY_ID).toString(),
       "city_id": getIntAsync(CITY_ID).toString(),
+      "vehicle_id": selectedVehicle.toString(),
       "pickup_point": {
         "start_time": (!isDeliverNow && pickFromDateTime != null) ? pickFromDateTime.toString() : DateTime.now().toString(),
         "end_time": (!isDeliverNow && pickToDateTime != null) ? pickToDateTime.toString() : null,
@@ -602,6 +624,32 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 setState(() {});
               });
             }).toList(),
+          ),
+          16.height,
+          Text(language.select_vehicle, style: boldTextStyle()),
+          8.height,
+         DropdownButtonFormField<int>(
+            isExpanded: true,
+            value: selectedVehicle,
+            decoration: commonInputDecoration(),
+            dropdownColor: Theme.of(context).cardColor,
+            style: primaryTextStyle(),
+            items: vehicleList.map<DropdownMenuItem<int>>((item) {
+              return DropdownMenuItem(
+                value: item.id,
+                child: Text(item.title ?? ''),
+              );
+            }).toList(),
+            onChanged: (value) {
+              selectedVehicle = value;
+              getVehicleApiCall();
+              print(selectedVehicle);
+              setState(() {});
+            },
+            validator: (value) {
+              if (selectedVehicle == null) return errorThisFieldRequired;
+              return null;
+            },
           ),
         ],
       );

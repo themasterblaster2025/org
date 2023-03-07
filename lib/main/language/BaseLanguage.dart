@@ -672,4 +672,33 @@ abstract class BaseLanguage {
   String get created;
 
   String get accepted;
+
+  //TODO
+  String get vehicle;
+
+  String get add_vehicle;
+
+  String get update_vehicle;
+
+  String get vehicle_size;
+
+  String get vehicle_capacity;
+
+  String get vehicle_image;
+
+  String get select_vehicle;
+
+  String get enable_vehicle;
+
+  String get disable_vehicle;
+
+  String get enable_vehicle_msg;
+
+  String get disable_vehicle_msg;
+
+  String get delete_vehicle;
+
+  String get do_you_want_to_delete_this_vehicle;
+
+  String get vehicle_name;
 }

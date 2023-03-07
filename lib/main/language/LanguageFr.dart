@@ -1006,4 +1006,48 @@ class LanguageFr extends BaseLanguage {
 
   @override
   String get accepted => "Accepté";
+
+  //TODO
+  @override
+  String get vehicle => 'véhicule';
+
+  @override
+  String get add_vehicle => 'ajouter un véhicule';
+
+  @override
+  String get update_vehicle => 'véhicule de mise à jour';
+
+  @override
+  String get vehicle_size => 'taille du véhicule';
+
+  @override
+  String get vehicle_capacity => 'capacité du véhicule';
+
+  @override
+  String get vehicle_image => 'photo du véhicule';
+
+  @override
+  String get select_vehicle => 'sélectionner un véhicule';
+
+  @override
+  String get enable_vehicle => 'activer le véhicule ?';
+
+  @override
+  String get disable_vehicle => 'désactiver le véhicule ?';
+
+  @override
+  String get enable_vehicle_msg => 'Voulez-vous activer ce véhicule ?';
+
+  @override
+  String get disable_vehicle_msg => 'Voulez-vous désactiver ce véhicule ?';
+
+  @override
+  String get delete_vehicle => 'supprimer le véhicule ?';
+
+  @override
+  String get do_you_want_to_delete_this_vehicle =>
+      'Voulez-vous supprimer ce véhicule ?';
+
+  @override
+  String get vehicle_name=> 'nom du véhicule';
 }
