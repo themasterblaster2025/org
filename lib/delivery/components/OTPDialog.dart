@@ -8,12 +8,14 @@ import 'package:nb_utils/nb_utils.dart' hide OTPTextField;
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 
+import '../../main/network/RestApis.dart';
+
 class OTPDialog extends StatefulWidget {
   final String? phoneNumber;
   final Function()? onUpdate;
   final String? verificationId;
 
-  OTPDialog({this.phoneNumber, this.onUpdate,this.verificationId});
+  OTPDialog({this.phoneNumber, this.onUpdate, this.verificationId});
 
   @override
   OTPDialogState createState() => OTPDialogState();
@@ -31,7 +33,7 @@ class OTPDialogState extends State<OTPDialog> {
 
   void init() async {
     verId = widget.verificationId.validate();
-    setState(() { });
+    setState(() {});
   }
 
   Future sendOTP() async {
@@ -85,9 +87,9 @@ class OTPDialogState extends State<OTPDialog> {
             Wrap(
               alignment: WrapAlignment.center,
               children: [
-                Text(language.enterTheCodeSendTo,style: secondaryTextStyle(size: 16)),
+                Text(language.enterTheCodeSendTo, style: secondaryTextStyle(size: 16)),
                 4.width,
-                Text(widget.phoneNumber.validate(),style: boldTextStyle()),
+                Text(widget.phoneNumber.validate(), style: boldTextStyle()),
               ],
             ),
             30.height,
@@ -120,9 +122,9 @@ class OTPDialogState extends State<OTPDialog> {
             Wrap(
               alignment: WrapAlignment.center,
               children: [
-                Text(language.didNotReceiveTheCode,style: secondaryTextStyle(size: 16)),
+                Text(language.didNotReceiveTheCode, style: secondaryTextStyle(size: 16)),
                 4.width,
-                Text(language.resend,style: boldTextStyle(color: colorPrimary)).onTap((){
+                Text(language.resend, style: boldTextStyle(color: colorPrimary)).onTap(() {
                   sendOTP();
                 }),
               ],

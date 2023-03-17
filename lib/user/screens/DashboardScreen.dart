@@ -87,7 +87,10 @@ class DashboardScreenState extends State<DashboardScreen> {
             children: [
               Icon(Icons.location_on, color: Colors.white),
               8.width,
-              Text(CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate(), style: primaryTextStyle(color: white)),
+              Text(CityModel
+                  .fromJson(getJSONAsync(CITY_DATA))
+                  .name
+                  .validate(), style: primaryTextStyle(color: white)),
             ],
           ).onTap(() {
             UserCitySelectScreen(

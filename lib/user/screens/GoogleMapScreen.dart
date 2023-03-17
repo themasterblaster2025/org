@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:mighty_delivery/main/models/CountryListModel.dart';
+
 import '../../main/models/PlaceAddressModel.dart';
 import '../../main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -8,6 +10,7 @@ import '../../main.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
+import 'package:google_maps_webservice/places.dart';
 
 class GoogleMapScreen extends StatefulWidget {
   static final kInitialPosition = LatLng(-33.8567844, 151.213108);
@@ -35,6 +38,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
         hintText: language.searchAddress,
         searchingText: language.pleaseWait,
         selectText: widget.isPick ? language.confirmPickupLocation : language.confirmDeliveryLocation,
+        autocompleteComponents: [Component(Component.country,CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate(value: 'IN'))],
         outsideOfPickAreaText: language.addressNotInArea,
         initialPosition: GoogleMapScreen.kInitialPosition,
         useCurrentLocation: true,

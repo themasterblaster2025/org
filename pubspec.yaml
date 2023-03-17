@@ -101,8 +101,8 @@ dev_dependencies:
   mobx_codegen: ^2.1.1
 
 dependency_overrides:
-  freezed_annotation: ^2.2.0
   firebase_core_platform_interface: 4.5.1
+  freezed_annotation: ^2.2.0
   firebase_crashlytics: ^2.8.13
   firebase_core: ^1.24.0
   firebase_auth: ^3.11.2
@@ -114,7 +114,6 @@ dependency_overrides:
   file_picker: ^4.5.1
   package_info_plus: ^1.4.2
   intl: ^0.18.0
-
   modal_bottom_sheet:
     git:
       url: https://github.com/danReynolds/modal_bottom_sheet.git

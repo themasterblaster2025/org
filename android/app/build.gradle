@@ -46,9 +46,9 @@ android {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.mighty.delivery"
         minSdkVersion 21
-        targetSdkVersion 32
-        versionCode 13
-        versionName '3.0.0'
+        targetSdkVersion 33
+        versionCode 14
+        versionName '3.1.0'
     }
 
     buildTypes {

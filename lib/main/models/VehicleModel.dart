@@ -35,7 +35,7 @@ class VehicleData {
   String? type;
   String? size;
   String? capacity;
-  List<int>? cityIds;
+  List<String>? cityIds;
   Map<String, dynamic>? cityText;
   int? status;
   String? description;
@@ -66,7 +66,7 @@ class VehicleData {
     type = json['type'];
     size = json['size'];
     capacity = json['capacity'];
-    cityIds = json['city_ids'] != null ? new List<int>.from(json['city_ids']) : null;
+    cityIds = json['city_ids'] != null ? new List<String>.from(json['city_ids']) : null;
     cityText = json['city_text'];
     status = json['status'];
     description = json['description'];
