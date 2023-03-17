@@ -55,7 +55,8 @@ class CreateTabScreenState extends State<CreateTabScreen> {
   }
 
   getOrderListApiCall() async {
-    await getDeliveryBoyOrderList(page: currentPage, deliveryBoyID: getIntAsync(USER_ID), cityId: getIntAsync(CITY_ID), countryId: getIntAsync(COUNTRY_ID), orderStatus: widget.orderStatus!).then((value) {
+    await getDeliveryBoyOrderList(page: currentPage, deliveryBoyID: getIntAsync(USER_ID), cityId: getIntAsync(CITY_ID), countryId: getIntAsync(COUNTRY_ID), orderStatus: widget.orderStatus!)
+        .then((value) {
       appStore.setLoading(false);
       appStore.setAllUnreadCount(value.allUnreadCount.validate());
 
@@ -105,6 +106,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
           appStore.setCurrencyCode(value.currencyCode ?? currencyCode);
           appStore.setCurrencySymbol(value.currency ?? currencySymbol);
           appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
+          appStore.isVehicleOrder = value.isVehicleInOrder ?? 0;
         }).catchError((error) {
           log(error.toString());
         });
@@ -223,7 +225,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                 12.width,
                                 if (data.pickupPoint!.contactNumber != null)
                                   Image.asset('assets/icons/ic_call.png', width: 24, height: 24).onTap(() {
-                                   commonLaunchUrl('tel:${data.pickupPoint!.contactNumber}');
+                                    commonLaunchUrl('tel:${data.pickupPoint!.contactNumber}');
                                   }),
                               ],
                             ),
@@ -261,7 +263,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                 12.width,
                                 if (data.deliveryPoint!.contactNumber != null)
                                   Image.asset('assets/icons/ic_call.png', width: 24, height: 24).onTap(() {
-                                   commonLaunchUrl('tel:${data.deliveryPoint!.contactNumber}');
+                                    commonLaunchUrl('tel:${data.deliveryPoint!.contactNumber}');
                                   }),
                               ],
                             ),
@@ -319,7 +321,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                     negativeText: language.cancel,
                                     onAccept: (c) async {
                                       appStore.setLoading(true);
-                                      await updateOrder(orderStatus: ORDER_ARRIVED, orderId: data.id).then((value){
+                                      await updateOrder(orderStatus: ORDER_ARRIVED, orderId: data.id).then((value) {
                                         toast(language.orderArrived);
                                       });
                                       appStore.setLoading(false);
@@ -350,7 +352,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                   onTap: () async {
                                     if (await checkPermission()) {
                                       TrackingScreen(
-                                        orderId: data.id,
+                                              orderId: data.id,
                                               order: orderData,
                                               latLng: data.status == ORDER_ACCEPTED
                                                   ? LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble())
@@ -380,12 +382,13 @@ class CreateTabScreenState extends State<CreateTabScreen> {
 
   Future<void> onTapData({required String orderStatus, required OrderData orderData}) async {
     if (orderStatus == ORDER_ASSIGNED) {
-      await updateOrder(orderStatus: ORDER_ACCEPTED, orderId: orderData.id).then((value){
+      await updateOrder(orderStatus: ORDER_ACCEPTED, orderId: orderData.id).then((value) {
         toast(language.orderActiveSuccessfully);
       });
       init();
     } else if (orderStatus == ORDER_ACCEPTED) {
-      await ReceivedScreenOrderScreen(orderData: orderData, isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_PICKUP).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+      await ReceivedScreenOrderScreen(orderData: orderData, isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_PICKUP)
+          .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
       init();
     } else if (orderStatus == ORDER_ARRIVED) {
       bool isCheck = await ReceivedScreenOrderScreen(orderData: orderData, isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_PICKUP)
@@ -394,12 +397,13 @@ class CreateTabScreenState extends State<CreateTabScreen> {
         init();
       }
     } else if (orderStatus == ORDER_PICKED_UP) {
-      await updateOrder(orderStatus: ORDER_DEPARTED, orderId: orderData.id).then((value){
+      await updateOrder(orderStatus: ORDER_DEPARTED, orderId: orderData.id).then((value) {
         toast(language.orderDepartedSuccessfully);
       });
       init();
     } else if (orderStatus == ORDER_DEPARTED) {
-      await ReceivedScreenOrderScreen(orderData: orderData, isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_DELIVERY).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+      await ReceivedScreenOrderScreen(orderData: orderData, isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_DELIVERY)
+          .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
       init();
     }
   }

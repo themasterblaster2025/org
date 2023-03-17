@@ -55,6 +55,7 @@ class OrderFragmentState extends State<OrderFragment> {
       appStore.setCurrencyCode(value.currencyCode ?? currencyCode);
       appStore.setCurrencySymbol(value.currency ?? currencySymbol);
       appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
+      appStore.isVehicleOrder = value.isVehicleInOrder ?? 0;
     }).catchError((error) {
       log(error.toString());
     });

@@ -50,6 +50,9 @@ abstract class _AppStore with Store {
   num availableBal = 0;
 
   @observable
+  int isVehicleOrder = 0;
+
+  @observable
   String currencyPosition = CURRENCY_POSITION_LEFT;
 
   @action

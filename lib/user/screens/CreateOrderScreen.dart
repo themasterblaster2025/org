@@ -185,17 +185,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     });
   }
 
-
   getVehicleApiCall({String? name}) async {
     appStore.setLoading(true);
     await getVehicleList(cityID: cityData!.id).then((value) {
       appStore.setLoading(false);
       vehicleList.clear();
       vehicleList = value.data!;
+      if (value.data!.isNotEmpty) selectedVehicle = value.data![0].id;
       setState(() {});
     }).catchError((error) {
       appStore.setLoading(false);
-      log(error);
+      toast(error);
     });
   }
 
@@ -236,7 +236,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       "date": DateTime.now().toString(),
       "country_id": getIntAsync(COUNTRY_ID).toString(),
       "city_id": getIntAsync(CITY_ID).toString(),
-      "vehicle_id": selectedVehicle.toString(),
+      if (appStore.isVehicleOrder != 0) "vehicle_id": selectedVehicle.toString(),
       "pickup_point": {
         "start_time": (!isDeliverNow && pickFromDateTime != null) ? pickFromDateTime.toString() : DateTime.now().toString(),
         "end_time": (!isDeliverNow && pickToDateTime != null) ? pickToDateTime.toString() : null,
@@ -296,7 +296,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             cashConfirmDialog();
           }
         }
-      }else{
+      } else {
         DashboardScreen().launch(context, isNewTask: true);
       }
     }).catchError((error) {
@@ -626,30 +626,38 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             }).toList(),
           ),
           16.height,
-          Text(language.select_vehicle, style: boldTextStyle()),
-          8.height,
-         DropdownButtonFormField<int>(
-            isExpanded: true,
-            value: selectedVehicle,
-            decoration: commonInputDecoration(),
-            dropdownColor: Theme.of(context).cardColor,
-            style: primaryTextStyle(),
-            items: vehicleList.map<DropdownMenuItem<int>>((item) {
-              return DropdownMenuItem(
-                value: item.id,
-                child: Text(item.title ?? ''),
-              );
-            }).toList(),
-            onChanged: (value) {
-              selectedVehicle = value;
-              getVehicleApiCall();
-              print(selectedVehicle);
-              setState(() {});
-            },
-            validator: (value) {
-              if (selectedVehicle == null) return errorThisFieldRequired;
-              return null;
-            },
+          Visibility(
+            visible: appStore.isVehicleOrder != 0,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(language.select_vehicle, style: boldTextStyle()),
+                8.height,
+                DropdownButtonFormField<int>(
+                  isExpanded: true,
+                  value: selectedVehicle,
+                  decoration: commonInputDecoration(),
+                  dropdownColor: Theme.of(context).cardColor,
+                  style: primaryTextStyle(),
+                  items: vehicleList.map<DropdownMenuItem<int>>((item) {
+                    return DropdownMenuItem(
+                      value: item.id,
+                      child: Text(item.title ?? ''),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    selectedVehicle = value;
+                    getVehicleApiCall();
+                    print(selectedVehicle);
+                    setState(() {});
+                  },
+                  validator: (value) {
+                    if (selectedVehicle == null) return errorThisFieldRequired;
+                    return null;
+                  },
+                ),
+              ],
+            ),
           ),
         ],
       );
@@ -955,7 +963,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           ),
         ),
         Divider(height: 30),
-        OrderSummeryWidget(extraChargesList: extraChargeList, totalDistance: totalDistance, totalWeight: weightController.text.toDouble(), distanceCharge: distanceCharge, weightCharge: weightCharge, totalAmount: totalAmount),
+        OrderSummeryWidget(
+            extraChargesList: extraChargeList,
+            totalDistance: totalDistance,
+            totalWeight: weightController.text.toDouble(),
+            distanceCharge: distanceCharge,
+            weightCharge: weightCharge,
+            totalAmount: totalAmount),
         16.height,
         Text(language.payment, style: boldTextStyle()),
         16.height,
@@ -971,8 +985,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       color: isSelected == mData.index
                           ? colorPrimary
                           : appStore.isDarkMode
-                          ? Colors.transparent
-                          : borderColor),
+                              ? Colors.transparent
+                              : borderColor),
                   backgroundColor: context.cardColor),
               child: Row(
                 mainAxisSize: MainAxisSize.min,

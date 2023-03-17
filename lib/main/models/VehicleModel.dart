@@ -1,13 +1,14 @@
-class VehicleModel {
-  Pagination? pagination;
+
+import 'PaginationModel.dart';
+
+class VehicleListModel {
+  PaginationModel? pagination;
   List<VehicleData>? data;
 
-  VehicleModel({this.pagination, this.data});
+  VehicleListModel({this.pagination, this.data});
 
-  VehicleModel.fromJson(Map<String, dynamic> json) {
-    pagination = json['pagination'] != null
-        ? new Pagination.fromJson(json['pagination'])
-        : null;
+  VehicleListModel.fromJson(Map<String, dynamic> json) {
+    pagination = json['pagination'] != null ? new PaginationModel.fromJson(json['pagination']) : null;
     if (json['data'] != null) {
       data = <VehicleData>[];
       json['data'].forEach((v) {
@@ -28,61 +29,36 @@ class VehicleModel {
   }
 }
 
-class Pagination {
-  int? totalItems;
-  int? perPage;
-  int? currentPage;
-  int? totalPages;
-
-  Pagination(
-      {this.totalItems, this.perPage, this.currentPage, this.totalPages});
-
-  Pagination.fromJson(Map<String, dynamic> json) {
-    totalItems = json['total_items'];
-    perPage = json['per_page'];
-    currentPage = json['currentPage'];
-    totalPages = json['totalPages'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['total_items'] = this.totalItems;
-    data['per_page'] = this.perPage;
-    data['currentPage'] = this.currentPage;
-    data['totalPages'] = this.totalPages;
-    return data;
-  }
-}
-
 class VehicleData {
   int? id;
   String? title;
   String? type;
   String? size;
   String? capacity;
-  List<String>? cityIds;
-  CityText? cityText;
+  List<int>? cityIds;
+  Map<String, dynamic>? cityText;
   int? status;
   String? description;
   String? vehicleImage;
   String? createdAt;
   String? updatedAt;
-  Null? deletedAt;
+  String? deletedAt;
 
-  VehicleData(
-      {this.id,
-      this.title,
-      this.type,
-      this.size,
-      this.capacity,
-      this.cityIds,
-      this.cityText,
-      this.status,
-      this.description,
-      this.vehicleImage,
-      this.createdAt,
-      this.updatedAt,
-      this.deletedAt});
+  VehicleData({
+    this.id,
+    this.title,
+    this.type,
+    this.size,
+    this.capacity,
+    this.cityIds,
+    this.cityText,
+    this.status,
+    this.description,
+    this.vehicleImage,
+    this.createdAt,
+    this.updatedAt,
+    this.deletedAt,
+  });
 
   VehicleData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -90,10 +66,8 @@ class VehicleData {
     type = json['type'];
     size = json['size'];
     capacity = json['capacity'];
-    cityIds = json['city_ids'].cast<String>();
-    cityText = json['city_text'] != null
-        ? new CityText.fromJson(json['city_text'])
-        : null;
+    cityIds = json['city_ids'] != null ? new List<int>.from(json['city_ids']) : null;
+    cityText = json['city_text'];
     status = json['status'];
     description = json['description'];
     vehicleImage = json['vehicle_image'];
@@ -110,40 +84,13 @@ class VehicleData {
     data['size'] = this.size;
     data['capacity'] = this.capacity;
     data['city_ids'] = this.cityIds;
-    if (this.cityText != null) {
-      data['city_text'] = this.cityText!.toJson();
-    }
+    data['city_text'] = this.cityText;
     data['status'] = this.status;
     data['description'] = this.description;
     data['vehicle_image'] = this.vehicleImage;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['deleted_at'] = this.deletedAt;
-    return data;
-  }
-}
-
-class CityText {
-  String? s3;
-  String? s2;
-  String? s1;
-  String? s4;
-
-  CityText({this.s3, this.s2, this.s1, this.s4});
-
-  CityText.fromJson(Map<String, dynamic> json) {
-    s3 = json['3'];
-    s2 = json['2'];
-    s1 = json['1'];
-    s4 = json['4'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['3'] = this.s3;
-    data['2'] = this.s2;
-    data['1'] = this.s1;
-    data['4'] = this.s4;
     return data;
   }
 }
