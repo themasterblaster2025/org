@@ -47,8 +47,8 @@ android {
         applicationId "com.mighty.delivery"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 16
-        versionName '3.0.3'
+        versionCode 22
+        versionName '3.0.9'
     }
 
     buildTypes {
@@ -77,6 +77,11 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation platform('com.google.firebase:firebase-bom:29.2.0')
+    implementation platform('com.google.firebase:firebase-bom:26.6.0')
     implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'com.mercadopago.android.px:checkout:4.+'
+    implementation('com.braintreepayments.api:drop-in:5.2.1'){
+        exclude group: "org.jfrog.cardinalcommerce.gradle", module: "cardinalmobilesdk"
+    }
+    implementation("org.jfrog.cardinalcommerce.gradle:cardinalmobilesdk:2.2.7-2")
 }

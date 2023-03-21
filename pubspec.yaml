@@ -45,7 +45,7 @@ dependencies:
   paytm: ^3.0.1
   flutter_paystack: ^1.0.7
   flutter_braintree: ^3.0.0
-  mercado_pago_mobile_checkout: ^0.1.1
+  mercado_pago_mobile_checkout: ^0.2.0-dev.3
   flutter_paytabs_bridge: ^2.3.3
   my_fatoorah: ^3.2.0
 
@@ -72,7 +72,7 @@ dependencies:
 
   #FIREBASE
   firebase_crashlytics: ^3.0.12
-  firebase_core: ^2.5.0
+  firebase_core: ^1.24.0
   firebase_auth: ^4.2.6
   firebase_storage: ^11.0.11
   firebase_database: ^10.0.11
@@ -101,10 +101,8 @@ dev_dependencies:
   mobx_codegen: ^2.1.1
 
 dependency_overrides:
-  firebase_core_platform_interface: 4.5.1
   freezed_annotation: ^2.2.0
   firebase_crashlytics: ^2.8.13
-  firebase_core: ^1.24.0
   firebase_auth: ^3.11.2
   firebase_storage: ^10.3.11
   firebase_database: ^9.1.7
