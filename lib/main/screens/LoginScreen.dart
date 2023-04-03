@@ -264,44 +264,6 @@ class LoginScreenState extends State<LoginScreen> {
                         ),
                         SizedBox(height: 20),
                         Row(
-                          children: [
-                            Expanded(child: Divider(color: colorPrimary.withOpacity(0.5))),
-                            Padding(
-                              padding: EdgeInsets.only(left: 16, right: 16),
-                              child: Text('Or LogIn With', style: primaryTextStyle()),
-                            ),
-                            Expanded(child: Divider(color: colorPrimary.withOpacity(0.5))),
-                          ],
-                        ),
-                        SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              onTap: () async {
-                               // googleSignIn();
-                              },
-                              child: Image.asset('assets/icons/ic_google.png', fit: BoxFit.cover, height: 35, width: 35),
-                            ),
-                            SizedBox(width: 16),
-                            InkWell(
-                              onTap: () async {
-                               /* showDialog(
-                                  context: context,
-                                  builder: (_) {
-                                    return AlertDialog(
-                                      contentPadding: EdgeInsets.all(16),
-                                      content: OTPDialog(),
-                                    );
-                                  },
-                                );*/
-                              },
-                              child: Image.asset('assets/icons/ic_mobile.png', fit: BoxFit.cover, height: 35, width: 35),
-                            ),
-                          ],
-                        ),
-                        16.height,
-                        Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(language.doNotHaveAccount, style: primaryTextStyle()),
