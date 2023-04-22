@@ -642,13 +642,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   items: vehicleList.map<DropdownMenuItem<int>>((item) {
                     return DropdownMenuItem(
                       value: item.id,
-                      child: Text(item.title ?? ''),
+                      child: Row(
+                        children: [
+                          commonCachedNetworkImage(item.vehicleImage.validate(), height: 40, width: 40),
+                          SizedBox(width: 16),
+                          Text(item.title.validate(), style: primaryTextStyle()),
+                        ],
+                      ),
                     );
                   }).toList(),
                   onChanged: (value) {
                     selectedVehicle = value;
-                    getVehicleApiCall();
-                    print(selectedVehicle);
                     setState(() {});
                   },
                   validator: (value) {
@@ -982,11 +986,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               padding: EdgeInsets.all(16),
               decoration: boxDecorationWithRoundedCorners(
                   border: Border.all(
-                      color: isSelected == mData.index
-                          ? colorPrimary
-                          : appStore.isDarkMode
-                              ? Colors.transparent
-                              : borderColor),
+                    color: isSelected == mData.index
+                        ? colorPrimary
+                        : appStore.isDarkMode
+                            ? Colors.transparent
+                            : borderColor,
+                  ),
                   backgroundColor: context.cardColor),
               child: Row(
                 mainAxisSize: MainAxisSize.min,

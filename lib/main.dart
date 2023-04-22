@@ -55,7 +55,6 @@ void main() async {
   } else if (themeModeIndex == appThemeMode.themeModeDark) {
     appStore.setDarkMode(true);
   }
-
   await OneSignal.shared.setAppId(mOneSignalAppId);
 
   saveOneSignalPlayerId();

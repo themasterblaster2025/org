@@ -101,6 +101,7 @@ dev_dependencies:
   mobx_codegen: ^2.1.1
 
 dependency_overrides:
+  firebase_core_platform_interface: 4.5.1
   freezed_annotation: ^2.2.0
   firebase_crashlytics: ^2.8.13
   firebase_auth: ^3.11.2
