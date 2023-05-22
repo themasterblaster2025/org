@@ -23,6 +23,7 @@ import 'package:nb_utils/nb_utils.dart';
 import '../../main.dart';
 import '../models/AppSettingModel.dart';
 import '../models/AutoCompletePlacesListModel.dart';
+import '../models/InvoiceSettingModel.dart';
 import '../models/OrderDetailModel.dart';
 import '../models/PlaceIdDetailModel.dart';
 import '../models/UserProfileDetailModel.dart';
@@ -120,6 +121,7 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
     await setValue(USER_ADDRESS, loginResponse.data!.address.validate());
     await setValue(COUNTRY_ID, loginResponse.data!.countryId.validate());
     await setValue(CITY_ID, loginResponse.data!.cityId.validate());
+    await setValue(OTP_VERIFIED, loginResponse.data!.otpVerifyAt!=null);
     await userService.getUser(email: loginResponse.data!.email.validate()).then((value) async {
       log(value);
       await setValue(UID, value.uid.validate());
@@ -163,7 +165,7 @@ Future updateUid(String? uid) async {
   });
 }
 
-Future<void> logout(BuildContext context, {bool isFromLogin = false, bool isDeleteAccount = false}) async {
+Future<void> logout(BuildContext context, {bool isFromLogin = false, bool isDeleteAccount = false,bool isVerification = false}) async {
   clearData() async {
     await removeKey(USER_ID);
     await removeKey(NAME);
@@ -194,7 +196,7 @@ Future<void> logout(BuildContext context, {bool isFromLogin = false, bool isDele
     }
   }
 
-  if (getStringAsync(USER_TYPE) == DELIVERY_MAN) {
+  if (getStringAsync(USER_TYPE) == DELIVERY_MAN && !isVerification) {
     positionStream.cancel();
   }
   if (isDeleteAccount) {
@@ -324,6 +326,21 @@ Future updateCountryCity({int? countryId, int? cityId}) async {
 
       await setValue(COUNTRY_ID, res.data!.countryId.validate());
       await setValue(CITY_ID, res.data!.cityId.validate());
+    }
+  }, onError: (error) {
+    toast(error.toString());
+  });
+}
+
+/// Update otp verify
+Future updateOtpVerify() async {
+  MultipartRequest multiPartRequest = await getMultiPartRequest('update-profile');
+  multiPartRequest.fields['otp_verify_at'] = DateTime.now().toString();
+
+  await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
+    if (data != null) {
+      LoginResponse res = LoginResponse.fromJson(data);
+      await setValue(OTP_VERIFIED, res.data!.otpVerifyAt != null);
     }
   }, onError: (error) {
     toast(error.toString());
@@ -514,4 +531,8 @@ Future<EarningList> getPaymentList({required int page}) async {
 
 Future<UserProfileDetailModel> getUserProfile() async {
   return UserProfileDetailModel.fromJson(await handleResponse(await buildHttpResponse('user-profile-detail?id=${getIntAsync(USER_ID)}', method: HttpMethod.GET)));
+}
+
+Future<InvoiceSettingModel> getInvoiceSetting() async {
+  return InvoiceSettingModel.fromJson(await handleResponse(await buildHttpResponse('get-setting', method: HttpMethod.GET)));
 }

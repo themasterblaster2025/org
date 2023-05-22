@@ -16,6 +16,7 @@ import '../../user/screens/DashboardScreen.dart';
 import '../components/UserCitySelectScreen.dart';
 import '../models/CityListModel.dart';
 import '../services/AuthSertvices.dart';
+import 'VerificationScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   static String tag = '/LoginScreen';
@@ -84,6 +85,7 @@ class LoginScreenState extends State<LoginScreen> {
         await logInApi(req).then((v) async {
           appStore.setLoading(false);
           authService.signInWithEmailPassword(context, email: emailController.text, password: passController.text).then((value) async {
+            appStore.setLoading(false);
             if (v.data!.userType != CLIENT && v.data!.userType != DELIVERY_MAN) {
               await logout(context, isFromLogin: true);
             } else {
@@ -119,29 +121,20 @@ class LoginScreenState extends State<LoginScreen> {
     await getCityDetail(cityId).then((value) async {
       await setValue(CITY_DATA, value.data!.toJson());
       if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
-        if (getStringAsync(USER_TYPE) == CLIENT) {
-          DashboardScreen().launch(context, isNewTask: true);
+        if (getBoolAsync(OTP_VERIFIED)) {
+          if (getStringAsync(USER_TYPE) == CLIENT) {
+            DashboardScreen().launch(context, isNewTask: true);
+          } else {
+            DeliveryDashBoard().launch(context, isNewTask: true);
+          }
         } else {
-          DeliveryDashBoard().launch(context, isNewTask: true);
+          VerificationScreen().launch(context, isNewTask: true);
         }
       } else {
         UserCitySelectScreen().launch(context, isNewTask: true);
       }
     }).catchError((error) {});
   }
-
-  /*void googleSignIn() async {
-    hideKeyboard(context);
-    appStore.setLoading(true);
-
-    await googleAuthService.signInWithGoogle(context).then((value) async {
-      appStore.setLoading(false);
-    }).catchError((e) {
-      appStore.setLoading(false);
-      toast(e.toString());
-      print(e.toString());
-    });
-  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -154,12 +147,8 @@ class LoginScreenState extends State<LoginScreen> {
             children: [
               Container(
                 height: context.height() * 0.25,
-                child: Container(
-                    height: 90,
-                    width: 90,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                    child: Image.asset('assets/app_logo_primary.png', height: 70, width: 70)),
+                child:
+                    Container(height: 90, width: 90, alignment: Alignment.center, decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle), child: Image.asset('assets/app_logo_primary.png', height: 70, width: 70)),
               ),
               Container(
                 width: context.width(),

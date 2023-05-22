@@ -38,6 +38,7 @@ class OTPDialogState extends State<OTPDialog> {
 
   Future sendOTP() async {
     appStore.setLoading(true);
+    log('********${widget.phoneNumber.validate()}');
     FirebaseAuth auth = FirebaseAuth.instance;
     await auth.verifyPhoneNumber(
       timeout: const Duration(seconds: 60),

@@ -34,7 +34,7 @@ generateInvoiceCall(OrderData orderData) async {
   });
 
   final invoice = Invoice(
-    supplier: Supplier(name: 'Roberts Private Limited', address: 'Sarah Street 9, Beijing, Ahmedabad', contactNumber: '+91 9845345665'),
+    supplier: Supplier(name: appStore.invoiceCompanyName, address: appStore.invoiceAddress, contactNumber: appStore.invoiceContactNumber),
     customer: Customer(
       name: '${orderData.clientName}',
       address: '${orderData.deliveryPoint!.address}',

@@ -5,8 +5,8 @@ const mHelpAndSupport = 'https://support.meetmighty.com/';
 const mContactPref = 'hello@meetmighty.com';
 const mCodeCanyonURL = 'https://codecanyon.net/user/meetmighty/portfolio/';
 
-const mBaseUrl = 'https://meetmighty.com/mobile/mighty-local-delivery/api/';
-// const mBaseUrl = 'http://192.168.1.230/meetmighty/local-delivery-laravel/api/';
+//const mBaseUrl = 'https://meetmighty.com/mobile/mighty-local-delivery/api/';
+const mBaseUrl = 'http://192.168.1.230/meetmighty/local-delivery-laravel/api/';
 
 const googleMapAPIKey = 'AIzaSyCDD0QOjZNS05ByZlnv-VcwH2id3WzS2Lw';
 
@@ -55,6 +55,7 @@ const FILTER_DATA = 'FILTER_DATA';
 const UID = 'UID';
 const IS_VERIFIED_DELIVERY_MAN = 'IS_VERIFIED_DELIVERY_MAN';
 const RECENT_ADDRESS_LIST = 'RECENT_ADDRESS_LIST';
+const OTP_VERIFIED = "OTP_VERIFIED";
 
 const COUNTRY_ID = 'COUNTRY_ID';
 const COUNTRY_DATA = 'COUNTRY_DATA';

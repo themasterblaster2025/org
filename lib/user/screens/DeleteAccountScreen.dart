@@ -84,7 +84,11 @@ class DeleteAccountScreenState extends State<DeleteAccountScreen> {
                               positiveText: language.yes,
                               negativeText: language.no,
                               onAccept: (c) async {
-                                await deleteAccount(context);
+                                if (getStringAsync(USER_EMAIL) == 'jose@gmail.com' || getStringAsync(USER_EMAIL) == 'mark@gmail.com') {
+                                  toast(language.demoMsg);
+                                } else {
+                                  await deleteAccount(context);
+                                }
                               },
                             ),
                           },

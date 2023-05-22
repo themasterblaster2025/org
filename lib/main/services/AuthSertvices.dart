@@ -12,6 +12,7 @@ import '../components/UserCitySelectScreen.dart';
 import '../models/CityListModel.dart';
 import '../models/LoginResponse.dart';
 import '../network/RestApis.dart';
+import '../screens/VerificationScreen.dart';
 import '../utils/Constants.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -228,10 +229,14 @@ getCityDetailApiCall(int cityId, context) async {
   await getCityDetail(cityId).then((value) async {
     await setValue(CITY_DATA, value.data!.toJson());
     if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
-      if (getStringAsync(USER_TYPE) == CLIENT) {
-        DashboardScreen().launch(context, isNewTask: true);
+      if (getBoolAsync(OTP_VERIFIED)) {
+        if (getStringAsync(USER_TYPE) == CLIENT) {
+          DashboardScreen().launch(context, isNewTask: true);
+        } else {
+          DeliveryDashBoard().launch(context, isNewTask: true);
+        }
       } else {
-        DeliveryDashBoard().launch(context, isNewTask: true);
+        VerificationScreen().launch(context, isNewTask: true);
       }
     } else {
       UserCitySelectScreen().launch(context, isNewTask: true);

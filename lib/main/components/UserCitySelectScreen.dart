@@ -13,6 +13,8 @@ import '../../main/utils/Constants.dart';
 import '../../user/screens/DashboardScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import '../screens/VerificationScreen.dart';
+
 class UserCitySelectScreen extends StatefulWidget {
   static String tag = '/UserCitySelectScreen';
   final bool isBack;
@@ -99,10 +101,14 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
         LiveStream().emit('UpdateOrderData');
         widget.onUpdate!.call();
       } else {
-        if (getStringAsync(USER_TYPE) == CLIENT) {
-          DashboardScreen().launch(context, isNewTask: true);
-        } else {
-          DeliveryDashBoard().launch(context, isNewTask: true);
+        if(getBoolAsync(OTP_VERIFIED)){
+          if (getStringAsync(USER_TYPE) == CLIENT) {
+            DashboardScreen().launch(context, isNewTask: true);
+          } else {
+            DeliveryDashBoard().launch(context, isNewTask: true);
+          }
+        }else{
+          VerificationScreen().launch(context,isNewTask: true);
         }
       }
     }).catchError((error) {

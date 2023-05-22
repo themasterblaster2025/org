@@ -201,6 +201,22 @@ mixin _$AppStore on _AppStore, Store {
     });
   }
 
+  late final _$isVehicleOrderAtom =
+      Atom(name: '_AppStore.isVehicleOrder', context: context);
+
+  @override
+  int get isVehicleOrder {
+    _$isVehicleOrderAtom.reportRead();
+    return super.isVehicleOrder;
+  }
+
+  @override
+  set isVehicleOrder(int value) {
+    _$isVehicleOrderAtom.reportWrite(value, super.isVehicleOrder, () {
+      super.isVehicleOrder = value;
+    });
+  }
+
   late final _$currencyPositionAtom =
       Atom(name: '_AppStore.currencyPosition', context: context);
 
@@ -214,6 +230,55 @@ mixin _$AppStore on _AppStore, Store {
   set currencyPosition(String value) {
     _$currencyPositionAtom.reportWrite(value, super.currencyPosition, () {
       super.currencyPosition = value;
+    });
+  }
+
+  late final _$invoiceCompanyNameAtom =
+      Atom(name: '_AppStore.invoiceCompanyName', context: context);
+
+  @override
+  String get invoiceCompanyName {
+    _$invoiceCompanyNameAtom.reportRead();
+    return super.invoiceCompanyName;
+  }
+
+  @override
+  set invoiceCompanyName(String value) {
+    _$invoiceCompanyNameAtom.reportWrite(value, super.invoiceCompanyName, () {
+      super.invoiceCompanyName = value;
+    });
+  }
+
+  late final _$invoiceContactNumberAtom =
+      Atom(name: '_AppStore.invoiceContactNumber', context: context);
+
+  @override
+  String get invoiceContactNumber {
+    _$invoiceContactNumberAtom.reportRead();
+    return super.invoiceContactNumber;
+  }
+
+  @override
+  set invoiceContactNumber(String value) {
+    _$invoiceContactNumberAtom.reportWrite(value, super.invoiceContactNumber,
+        () {
+      super.invoiceContactNumber = value;
+    });
+  }
+
+  late final _$invoiceAddressAtom =
+      Atom(name: '_AppStore.invoiceAddress', context: context);
+
+  @override
+  String get invoiceAddress {
+    _$invoiceAddressAtom.reportRead();
+    return super.invoiceAddress;
+  }
+
+  @override
+  set invoiceAddress(String value) {
+    _$invoiceAddressAtom.reportWrite(value, super.invoiceAddress, () {
+      super.invoiceAddress = value;
     });
   }
 
@@ -321,6 +386,42 @@ mixin _$AppStore on _AppStore, Store {
     return _$setFilteringAsyncAction.run(() => super.setFiltering(val));
   }
 
+  late final _$_AppStoreActionController =
+      ActionController(name: '_AppStore', context: context);
+
+  @override
+  void setInvoiceCompanyName(String val) {
+    final _$actionInfo = _$_AppStoreActionController.startAction(
+        name: '_AppStore.setInvoiceCompanyName');
+    try {
+      return super.setInvoiceCompanyName(val);
+    } finally {
+      _$_AppStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setInvoiceContactNumber(String val) {
+    final _$actionInfo = _$_AppStoreActionController.startAction(
+        name: '_AppStore.setInvoiceContactNumber');
+    try {
+      return super.setInvoiceContactNumber(val);
+    } finally {
+      _$_AppStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setCompanyAddress(String val) {
+    final _$actionInfo = _$_AppStoreActionController.startAction(
+        name: '_AppStore.setCompanyAddress');
+    try {
+      return super.setCompanyAddress(val);
+    } finally {
+      _$_AppStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
@@ -336,7 +437,11 @@ isOtpVerifyOnPickupDelivery: ${isOtpVerifyOnPickupDelivery},
 currencyCode: ${currencyCode},
 currencySymbol: ${currencySymbol},
 availableBal: ${availableBal},
-currencyPosition: ${currencyPosition}
+isVehicleOrder: ${isVehicleOrder},
+currencyPosition: ${currencyPosition},
+invoiceCompanyName: ${invoiceCompanyName},
+invoiceContactNumber: ${invoiceContactNumber},
+invoiceAddress: ${invoiceAddress}
     ''';
   }
 }

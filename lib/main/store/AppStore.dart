@@ -55,6 +55,15 @@ abstract class _AppStore with Store {
   @observable
   String currencyPosition = CURRENCY_POSITION_LEFT;
 
+  @observable
+  String invoiceCompanyName = '';
+
+  @observable
+  String invoiceContactNumber = '';
+
+  @observable
+  String invoiceAddress = '';
+
   @action
   Future<void> setLoading(bool val) async {
     isLoading = val;
@@ -136,5 +145,20 @@ abstract class _AppStore with Store {
   @action
   Future<void> setFiltering(bool val) async {
     isFiltering = val;
+  }
+
+  @action
+  void setInvoiceCompanyName(String val) {
+    invoiceCompanyName = val;
+  }
+
+  @action
+  void setInvoiceContactNumber(String val) {
+    invoiceContactNumber = val;
+  }
+
+  @action
+  void setCompanyAddress(String val) {
+    invoiceAddress = val;
   }
 }
