@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import '../../delivery/components/OTPDialog.dart';
 import '../../main/screens/LoginScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -25,56 +26,86 @@ class AuthServices {
     }, user.uid);
   }
 
+  Future<User?> createAuthUser(String? email, String? password) async {
+    User? userCredential;
+    try {
+      await _auth.createUserWithEmailAndPassword(email: email!, password: password!).then((value) {
+        userCredential = value.user!;
+      });
+    } on FirebaseException catch (error) {
+      if (error.code == "ERROR_EMAIL_ALREADY_IN_USE" || error.code == "account-exists-with-different-credential" || error.code == "email-already-in-use") {
+        try {
+          await _auth.signInWithEmailAndPassword(email: email!, password: password!).then((value) {
+            userCredential = value.user!;
+          });
+        } on FirebaseException catch (error) {
+          toast(error.message);
+        }
+      } else {
+        toast(error.message);
+      }
+    }
+    return userCredential;
+  }
+
   Future<void> signUpWithEmailPassword(context,
       {String? name, String? email, String? password, LoginResponse? userData, String? mobileNumber, String? lName, String? userName, bool? isOTP, String? userType, bool isAddUser = false}) async {
-    UserCredential? userCredential = await _auth.createUserWithEmailAndPassword(email: email!, password: password!);
-    log('Step2-------');
-    if (userCredential.user != null) {
-      User currentUser = userCredential.user!;
+    try {
+      createAuthUser(email, password).then((user) async {
+        if (user != null) {
+          UserData userModel = UserData();
 
-      UserData userModel = UserData();
-
-      /// Create user
-      userModel.uid = currentUser.uid;
-      userModel.email = currentUser.email;
-      userModel.contactNumber = userData!.data!.contactNumber;
-      userModel.name = userData.data!.name;
-      userModel.username = userData.data!.username;
-      userModel.userType = userData.data!.userType;
-      userModel.longitude = userData.data!.longitude;
-      userModel.latitude = userData.data!.longitude;
-      userModel.countryName = userData.data!.countryName;
-      userModel.cityName = userData.data!.cityName;
-      userModel.status = userData.data!.status;
-      userModel.playerId = userData.data!.playerId;
-      userModel.profileImage = userData.data!.profileImage;
-      userModel.createdAt = Timestamp.now().toDate().toString();
-      userModel.updatedAt = Timestamp.now().toDate().toString();
-      userModel.playerId = getStringAsync(PLAYER_ID);
-      await userService.addDocumentWithCustomId(currentUser.uid, userModel.toJson()).then((value) async {
-        updateUid(currentUser.uid).then((value) async {
-          if (userModel.userType == DELIVERY_MAN) {
-            appStore.setLogin(false);
-            LoginScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
-          } else {
-            Map request = {"email": userModel.email, "password": password};
-            await logInApi(request).then((res) async {
-              await signInWithEmailPassword(context, email: email, password: password).then((value) {
-                UserCitySelectScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
-              });
-            }).catchError((e) {
-              appStore.setLoading(false);
-              log(e.toString());
-              toast(e.toString());
+          /// Create user
+          userModel.uid = user.uid;
+          userModel.email = user.email;
+          userModel.contactNumber = userData!.data!.contactNumber;
+          userModel.name = userData.data!.name;
+          userModel.username = userData.data!.username;
+          userModel.userType = userData.data!.userType;
+          userModel.longitude = userData.data!.longitude;
+          userModel.latitude = userData.data!.longitude;
+          userModel.countryName = userData.data!.countryName;
+          userModel.cityName = userData.data!.cityName;
+          userModel.status = userData.data!.status;
+          userModel.playerId = userData.data!.playerId;
+          userModel.profileImage = userData.data!.profileImage;
+          userModel.createdAt = Timestamp.now().toDate().toString();
+          userModel.updatedAt = Timestamp.now().toDate().toString();
+          userModel.playerId = getStringAsync(PLAYER_ID);
+          await userService.addDocumentWithCustomId(user.uid, userModel.toJson()).then((value) async {
+            updateUid(user.uid).then((value) async {
+              if (userModel.userType == DELIVERY_MAN) {
+                appStore.setLogin(false);
+                appStore.setLoading(false);
+                LoginScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+              } else {
+                Map request = {"email": userModel.email, "password": password};
+                await logInApi(request).then((res) async {
+                  await signInWithEmailPassword(context, email: email.validate(), password: password.validate()).then((value) {
+                    appStore.setLoading(false);
+                    UserCitySelectScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+                  });
+                }).catchError((e) {
+                  appStore.setLoading(false);
+                  log(e.toString());
+                  toast(e.toString());
+                });
+              }
             });
-          }
-        });
-      }).catchError((e) {
+          }).catchError((e) {
+            appStore.setLoading(false);
+            toast(e.toString());
+          });
+        } else {
+          appStore.setLoading(false);
+          throw 'Something went wrong';
+        }
+      }).catchError((e){
         appStore.setLoading(false);
-        toast(e.toString());
       });
-    } else {
-      throw errorSomethingWentWrong;
+    } on FirebaseException catch (error) {
+      appStore.setLoading(false);
+      toast(error.message);
     }
   }
 
@@ -248,5 +279,40 @@ Future deleteUserFirebase() async {
   if (FirebaseAuth.instance.currentUser != null) {
     FirebaseAuth.instance.currentUser!.delete();
     await FirebaseAuth.instance.signOut();
+  }
+}
+
+sendOtp(BuildContext context, {required String phoneNumber, required Function(String) onUpdate}) async {
+  appStore.setLoading(true);
+  try {
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      timeout: const Duration(seconds: 60),
+      phoneNumber: phoneNumber,
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        appStore.setLoading(false);
+        toast(language.verificationCompleted);
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        appStore.setLoading(false);
+        if (e.code == 'invalid-phone-number') {
+          toast(language.phoneNumberInvalid);
+          throw language.phoneNumberInvalid;
+        } else {
+          toast(e.message.toString());
+          throw e.message.toString();
+        }
+      },
+      codeSent: (String verificationId, int? resendToken) async {
+        appStore.setLoading(false);
+        toast(language.codeSent);
+        onUpdate.call(verificationId);
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        appStore.setLoading(false);
+      },
+    );
+  } on FirebaseException catch (error) {
+    appStore.setLoading(false);
+    toast(error.message);
   }
 }

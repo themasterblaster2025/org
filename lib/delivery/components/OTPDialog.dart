@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mighty_delivery/main/services/AuthSertvices.dart';
 import '../../main.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
@@ -36,7 +37,7 @@ class OTPDialogState extends State<OTPDialog> {
     setState(() {});
   }
 
-  Future sendOTP() async {
+  /*Future sendOTP() async {
     appStore.setLoading(true);
     log('********${widget.phoneNumber.validate()}');
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -67,7 +68,7 @@ class OTPDialogState extends State<OTPDialog> {
         appStore.setLoading(false);
       },
     );
-  }
+  }*/
 
   @override
   void setState(fn) {
@@ -126,7 +127,10 @@ class OTPDialogState extends State<OTPDialog> {
                 Text(language.didNotReceiveTheCode, style: secondaryTextStyle(size: 16)),
                 4.width,
                 Text(language.resend, style: boldTextStyle(color: colorPrimary)).onTap(() {
-                  sendOTP();
+                  sendOtp(context, phoneNumber: widget.phoneNumber.validate(), onUpdate: (verificationId){
+                    verId = verificationId;
+                    setState(() {});
+                  });
                 }),
               ],
             ),

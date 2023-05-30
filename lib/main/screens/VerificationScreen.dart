@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mighty_delivery/main/services/AuthSertvices.dart';
 import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 import '../../delivery/components/OTPDialog.dart';
+import '../../delivery/screens/DeliveryDashBoard.dart';
 import '../../main.dart';
 import '../network/RestApis.dart';
 import '../utils/Colors.dart';
@@ -73,7 +75,7 @@ class VerificationScreenState extends State<VerificationScreen> {
                     positiveText: language.yes,
                     negativeText: language.no,
                     onAccept: (c) {
-                      logout(context,isVerification: true);
+                      logout(context, isVerification: true);
                     },
                   );
                 },
@@ -88,11 +90,27 @@ class VerificationScreenState extends State<VerificationScreen> {
                 InkWell(
                   onTap: () async {
                     if (getBoolAsync(OTP_VERIFIED).validate()) {
-                      toast('Email has already verified.');
+                      toast('Phone number has already verified.');
                     } else {
                       appStore.setLoading(true);
                       log('-----${getStringAsync(USER_CONTACT_NUMBER)}');
-                      await FirebaseAuth.instance.verifyPhoneNumber(
+                      sendOtp(context, phoneNumber: getStringAsync(USER_CONTACT_NUMBER), onUpdate: (verificationId) async {
+                        await showInDialog(context,
+                            builder: (context) => OTPDialog(
+                                phoneNumber: getStringAsync(USER_CONTACT_NUMBER),
+                                onUpdate: () {
+                                  updateOtpVerify().then((value) {
+                                    if (getStringAsync(USER_TYPE) == CLIENT) {
+                                      DashboardScreen().launch(getContext, isNewTask: true);
+                                    } else {
+                                      DeliveryDashBoard().launch(getContext, isNewTask: true);
+                                    }
+                                  });
+                                },
+                                verificationId: verificationId),
+                            barrierDismissible: false);
+                      });
+                      /* await FirebaseAuth.instance.verifyPhoneNumber(
                         timeout: const Duration(seconds: 60),
                         phoneNumber: getStringAsync(USER_CONTACT_NUMBER),
                         verificationCompleted: (PhoneAuthCredential credential) async {
@@ -126,7 +144,7 @@ class VerificationScreenState extends State<VerificationScreen> {
                         codeAutoRetrievalTimeout: (String verificationId) {
                           appStore.setLoading(false);
                         },
-                      );
+                      );*/
                     }
                   },
                   child: Container(

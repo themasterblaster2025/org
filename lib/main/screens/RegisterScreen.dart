@@ -83,7 +83,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                   userType: res.data!.userType,
                   userData: res)
               .then((res) async {
-            appStore.setLoading(false);
+           //
           }).catchError((e) {
             appStore.setLoading(false);
             log(e.toString());
