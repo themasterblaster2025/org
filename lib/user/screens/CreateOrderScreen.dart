@@ -119,6 +119,15 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     getParcelTypeListApiCall();
     extraChargesList();
     getVehicleList(cityID: cityData!.id);
+    await getAppSetting().then((value) {
+      appStore.setCurrencyCode(value.currencyCode ?? currencyCode);
+      appStore.setCurrencySymbol(value.currency ?? currencySymbol);
+      appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
+      appStore.isVehicleOrder = value.isVehicleInOrder ?? 0;
+      setState(() { });
+    }).catchError((error) {
+      log(error.toString());
+    });
 
     if (widget.orderData != null) {
       if (widget.orderData!.totalWeight != 0) weightController.text = widget.orderData!.totalWeight!.toString();
