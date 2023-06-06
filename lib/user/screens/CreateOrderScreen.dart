@@ -761,7 +761,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           textInputAction: TextInputAction.next,
           validator: (value) {
             if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-            if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
+          //  if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
             return null;
           },
           inputFormatters: [
@@ -868,7 +868,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           ),
           validator: (value) {
             if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-            if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
+           // if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
             return null;
           },
           inputFormatters: [
