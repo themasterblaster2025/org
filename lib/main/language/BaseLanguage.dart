@@ -701,4 +701,6 @@ abstract class BaseLanguage {
   String get do_you_want_to_delete_this_vehicle;
 
   String get vehicle_name;
+
+  String get bankName;
 }

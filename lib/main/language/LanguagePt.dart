@@ -1045,9 +1045,11 @@ class LanguagePt extends BaseLanguage {
   String get delete_vehicle => 'excluir veículo?';
 
   @override
-  String get do_you_want_to_delete_this_vehicle =>
-      'Deseja excluir este veículo?';
+  String get do_you_want_to_delete_this_vehicle => 'Deseja excluir este veículo?';
 
   @override
   String get vehicle_name => 'nome do veículo';
+
+  @override
+  String get bankName => "Nome do banco";
 }

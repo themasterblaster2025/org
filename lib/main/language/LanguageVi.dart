@@ -1035,8 +1035,7 @@ class LanguageVi extends BaseLanguage {
   String get disable_vehicle => 'vô hiệu hóa phương tiện??';
 
   @override
-  String get enable_vehicle_msg =>
-      'Bạn có muốn kích hoạt phương tiện này không?';
+  String get enable_vehicle_msg => 'Bạn có muốn kích hoạt phương tiện này không?';
 
   @override
   String get disable_vehicle_msg => 'Bạn có muốn tắt phương tiện này không?';
@@ -1045,9 +1044,11 @@ class LanguageVi extends BaseLanguage {
   String get delete_vehicle => 'xóa xe?';
 
   @override
-  String get do_you_want_to_delete_this_vehicle =>
-      'Bạn có muốn xóa phương tiện này không?';
+  String get do_you_want_to_delete_this_vehicle => 'Bạn có muốn xóa phương tiện này không?';
 
   @override
   String get vehicle_name => 'tên xe';
+
+  @override
+  String get bankName => "Tên ngân hàng";
 }
