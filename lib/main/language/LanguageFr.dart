@@ -1045,9 +1045,11 @@ class LanguageFr extends BaseLanguage {
   String get delete_vehicle => 'supprimer le véhicule ?';
 
   @override
-  String get do_you_want_to_delete_this_vehicle =>
-      'Voulez-vous supprimer ce véhicule ?';
+  String get do_you_want_to_delete_this_vehicle => 'Voulez-vous supprimer ce véhicule ?';
 
   @override
-  String get vehicle_name=> 'nom du véhicule';
+  String get vehicle_name => 'nom du véhicule';
+
+  @override
+  String get bankName => "Nom de banque";
 }

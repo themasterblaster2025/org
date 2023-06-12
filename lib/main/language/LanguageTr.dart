@@ -1038,16 +1038,17 @@ class LanguageTr extends BaseLanguage {
   String get enable_vehicle_msg => 'Bu aracı etkinleştirmek istiyor musunuz?';
 
   @override
-  String get disable_vehicle_msg =>
-      'Bu aracı devre dışı bırakmak istiyor musunuz?';
+  String get disable_vehicle_msg => 'Bu aracı devre dışı bırakmak istiyor musunuz?';
 
   @override
   String get delete_vehicle => 'araç silinsin mi?';
 
   @override
-  String get do_you_want_to_delete_this_vehicle =>
-      'Bu aracı silmek istiyor musunuz?';
+  String get do_you_want_to_delete_this_vehicle => 'Bu aracı silmek istiyor musunuz?';
 
   @override
   String get vehicle_name => 'araç adı';
+
+  @override
+  String get bankName => "Banka adı";
 }

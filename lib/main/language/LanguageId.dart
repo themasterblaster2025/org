@@ -1044,9 +1044,11 @@ class LanguageId extends BaseLanguage {
   String get delete_vehicle => 'hapus kendaraan?';
 
   @override
-  String get do_you_want_to_delete_this_vehicle =>
-      'Apakah Anda ingin menghapus kendaraan ini?';
+  String get do_you_want_to_delete_this_vehicle => 'Apakah Anda ingin menghapus kendaraan ini?';
 
   @override
   String get vehicle_name => 'nama kendaraan';
+
+  @override
+  String get bankName => "Nama Bank";
 }

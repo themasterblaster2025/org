@@ -121,7 +121,7 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
                           isValidationRequired: true,
                           controller: bankNameCon,
                           textFieldType: TextFieldType.NAME,
-                          decoration: commonInputDecoration(hintText: 'Bank Name'),
+                          decoration: commonInputDecoration(hintText: language.bankName),
                         ),
                         16.height,
                         AppTextField(

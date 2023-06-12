@@ -228,7 +228,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           ),
                           validator: (value) {
                             if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-                            if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
+                           // if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
                             return null;
                           },
                           inputFormatters: [

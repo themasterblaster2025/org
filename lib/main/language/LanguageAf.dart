@@ -1045,9 +1045,11 @@ class LanguageAf extends BaseLanguage {
   String get delete_vehicle => 'voertuig uitvee?';
 
   @override
-  String get do_you_want_to_delete_this_vehicle =>
-      'Wil jy hierdie voertuig uitvee?';
+  String get do_you_want_to_delete_this_vehicle => 'Wil jy hierdie voertuig uitvee?';
 
   @override
   String get vehicle_name => 'voertuig naam';
+
+  @override
+  String get bankName => "Bank Naam";
 }

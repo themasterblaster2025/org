@@ -995,13 +995,17 @@ class LanguageHi extends BaseLanguage {
   @override
   String get adminCommission => "व्यवस्थापक आयोग";
 
-  @override String get assigned => "सौंपा गया";
+  @override
+  String get assigned => "सौंपा गया";
 
-  @override String get draft => "प्रारूप";
+  @override
+  String get draft => "प्रारूप";
 
-  @override String get created => "बनाया था";
+  @override
+  String get created => "बनाया था";
 
-  @override String get accepted => "स्वीकार किया हुआ";
+  @override
+  String get accepted => "स्वीकार किया हुआ";
 
   //TODO
   @override
@@ -1041,9 +1045,11 @@ class LanguageHi extends BaseLanguage {
   String get delete_vehicle => 'वाहन हटाएं?';
 
   @override
-  String get do_you_want_to_delete_this_vehicle =>
-      'क्या आप इस वाहन को हटाना चाहते हैं?';
+  String get do_you_want_to_delete_this_vehicle => 'क्या आप इस वाहन को हटाना चाहते हैं?';
 
   @override
   String get vehicle_name => 'वाहन का नाम';
+
+  @override
+  String get bankName => "बैंक का नाम";
 }

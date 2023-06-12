@@ -1006,7 +1006,6 @@ class LanguageAr extends BaseLanguage {
   @override
   String get accepted => "وافقت";
 
-
   //TODO
   @override
   String get vehicle => 'عربة';
@@ -1045,9 +1044,11 @@ class LanguageAr extends BaseLanguage {
   String get delete_vehicle => 'حذف السيارة؟';
 
   @override
-  String get do_you_want_to_delete_this_vehicle =>
-      'هل تريد حذف هذه السيارة؟';
+  String get do_you_want_to_delete_this_vehicle => 'هل تريد حذف هذه السيارة؟';
 
   @override
   String get vehicle_name => 'قدرة السيارة';
+
+  @override
+  String get bankName => 'اسم البنك';
 }
