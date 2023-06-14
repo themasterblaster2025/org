@@ -49,6 +49,9 @@ android {
         targetSdkVersion 33
         versionCode 25
         versionName '3.0.12'
+        buildToolsVersion "23.0.1"
+        multiDexEnabled true
+
     }
 
     buildTypes {
