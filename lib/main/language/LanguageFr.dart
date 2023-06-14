@@ -1052,4 +1052,25 @@ class LanguageFr extends BaseLanguage {
 
   @override
   String get bankName => "Nom de banque";
+
+  @override
+  String get courierAssigned => "Courrier affecté";
+
+  @override
+  String get courierAccepted => "Courier accepté";
+
+  @override
+  String get courierPickedUp => "Pickep";
+
+  @override
+  String get courierArrived => "Courier est arrivé";
+
+  @override
+  String get courierDeparted => "Courier est parti";
+
+  @override
+  String get courierTransfer => "Transfert de courrier";
+
+  @override
+  String get paymentStatusMessage => "Message d'état de paiement";
 }

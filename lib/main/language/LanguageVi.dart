@@ -1051,4 +1051,25 @@ class LanguageVi extends BaseLanguage {
 
   @override
   String get bankName => "Tên ngân hàng";
+
+  @override
+  String get courierAssigned => "Chuyển phát nhanh được giao";
+
+  @override
+  String get courierAccepted => "Chuyển phát nhanh chấp nhận";
+
+  @override
+  String get courierPickedUp => "Chuyển phát nhanh";
+
+  @override
+  String get courierArrived => "Chuyển phát nhanh đã đến";
+
+  @override
+  String get courierDeparted => "Chuyển phát nhanh khởi hành";
+
+  @override
+  String get courierTransfer => "Chuyển giao chuyển phát nhanh";
+
+  @override
+  String get paymentStatusMessage => "Thông báo trạng thái thanh toán";
 }

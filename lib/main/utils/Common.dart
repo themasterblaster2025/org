@@ -273,6 +273,31 @@ String? orderTitle(String orderStatus) {
   return '';
 }
 
+String historyStatus(String orderStatus) {
+  if (orderStatus == ORDER_ASSIGNED) {
+    return language.courierAssigned;
+  } else if (orderStatus == ORDER_CREATED) {
+    return language.created;
+  } else if (orderStatus == ORDER_ACCEPTED) {
+    return language.courierAccepted;
+  } else if (orderStatus == ORDER_PICKED_UP) {
+    return language.courierPickedUp;
+  } else if (orderStatus == ORDER_ARRIVED) {
+    return language.courierArrived;
+  } else if (orderStatus == ORDER_DEPARTED) {
+    return language.courierDeparted;
+  } else if (orderStatus == ORDER_DELIVERED) {
+    return language.completed;
+  } else if (orderStatus == ORDER_CANCELLED) {
+    return language.cancelled;
+  }else if (orderStatus == ORDER_TRANSFER) {
+    return language.courierTransfer;
+  }else if (orderStatus == ORDER_PAYMENT) {
+    return language.paymentStatusMessage;
+  }
+  return language.assigned;
+}
+
 String dateParse(String date) {
   return DateFormat.yMd().add_jm().format(DateTime.parse(date).toLocal());
 }

@@ -1052,4 +1052,25 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get bankName => "बैंक का नाम";
+
+  @override
+  String get courierAssigned => "कूरियर सौंपा";
+
+  @override
+  String get courierAccepted => "कूरियर ने स्वीकार किया";
+
+  @override
+  String get courierPickedUp => "कूरियर पिकअप";
+
+  @override
+  String get courierArrived => "कूरियर आ गया";
+
+  @override
+  String get courierDeparted => "कूरियर ने प्रस्थान किया";
+
+  @override
+  String get courierTransfer => "कूरियर अंतरण";
+
+  @override
+  String get paymentStatusMessage => "भुगतान की स्थिति संदेश";
 }

@@ -703,4 +703,18 @@ abstract class BaseLanguage {
   String get vehicle_name;
 
   String get bankName;
+
+  String get courierAssigned;
+
+  String get courierAccepted;
+
+  String get courierPickedUp;
+
+  String get courierArrived;
+
+  String get courierDeparted;
+
+  String get courierTransfer;
+
+  String get paymentStatusMessage;
 }

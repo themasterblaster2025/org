@@ -1052,4 +1052,25 @@ class LanguageNl extends BaseLanguage {
 
   @override
   String get bankName => "Banknaam";
+
+  @override
+  String get courierAssigned => "Koerier toegewezen";
+
+  @override
+  String get courierAccepted => "Courier aanvaard";
+
+  @override
+  String get courierPickedUp => "Koerier pickedup";
+
+  @override
+  String get courierArrived => "Koerier arriveerde";
+
+  @override
+  String get courierDeparted => "Koerier vertrok";
+
+  @override
+  String get courierTransfer => "Koerieroverdracht";
+
+  @override
+  String get paymentStatusMessage => "Betalingsstatusbericht";
 }

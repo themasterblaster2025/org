@@ -62,7 +62,7 @@ class OrderHistoryScreenState extends State<OrderHistoryScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('${mData.historyType!.replaceAll("_", " ").capitalizeFirstLetter()}', style: boldTextStyle()),
+                        Text('${historyStatus(mData.historyType.validate())}', style: boldTextStyle()),
                         8.height,
                         Text(messageData(mData)),
                         8.height,

@@ -1052,4 +1052,25 @@ class LanguageEs extends BaseLanguage {
 
   @override
   String get bankName => "Nombre del banco";
+
+  @override
+  String get courierAssigned => "Mensajería asignada";
+
+  @override
+  String get courierAccepted => "Correo aceptado";
+
+  @override
+  String get courierPickedUp => "Mensajería recogida";
+
+  @override
+  String get courierArrived => "Llegó el servicio de mensajería";
+
+  @override
+  String get courierDeparted => "Courier se fue";
+
+  @override
+  String get courierTransfer => "Transferencia de mensajería";
+
+  @override
+  String get paymentStatusMessage => "Mensaje de estado de pago";
 }

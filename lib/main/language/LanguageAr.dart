@@ -1051,4 +1051,25 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get bankName => 'اسم البنك';
+
+  @override
+  String get courierAssigned => "تم تعيين البريد السريع";
+
+  @override
+  String get courierAccepted => "قبل البريد السريع";
+
+  @override
+  String get courierPickedUp => "Courier التقاط";
+
+  @override
+  String get courierArrived => "وصل البريد السريع";
+
+  @override
+  String get courierDeparted => "غادر البريد";
+
+  @override
+  String get courierTransfer => "نقل البريد";
+
+  @override
+  String get paymentStatusMessage => "رسالة حالة الدفع";
 }

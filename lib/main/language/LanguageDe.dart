@@ -1052,4 +1052,25 @@ class LanguageDe extends BaseLanguage {
 
   @override
   String get bankName => "Bank Name";
+
+  @override
+  String get courierAssigned => "Kurier zugewiesen";
+
+  @override
+  String get courierAccepted => "Kurier akzeptiert";
+
+  @override
+  String get courierPickedUp => "Kurier ausgewählt";
+
+  @override
+  String get courierArrived => "Kurier kam an";
+
+  @override
+  String get courierDeparted => "Kurier reiste ab";
+
+  @override
+  String get courierTransfer => "Kuriertransfer";
+
+  @override
+  String get paymentStatusMessage => "Zahlungsstatusnachricht";
 }

@@ -65,11 +65,9 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
         });
       }
       if (getStringAsync(USER_TYPE) == CLIENT) {
-        if (orderData!.deliveryManId != null)
-          userDetailApiCall(orderData!.deliveryManId!);
+        if (orderData!.deliveryManId != null) userDetailApiCall(orderData!.deliveryManId!);
       } else {
-        if (orderData!.clientId != null)
-          userDetailApiCall(orderData!.clientId!);
+        if (orderData!.clientId != null) userDetailApiCall(orderData!.clientId!);
       }
       setState(() {});
     }).catchError((error) {
@@ -110,9 +108,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
         return false;
       },
       child: Scaffold(
-        appBar: AppBar(
-            title: Text(
-                '${orderData != null ? orderData!.status!.replaceAll("_", " ").capitalizeFirstLetter() : ''}')),
+        appBar: AppBar(title: Text('${orderData != null ? orderData!.status!.replaceAll("_", " ").capitalizeFirstLetter() : ''}')),
         body: BodyCornerWidget(
           child: Stack(
             children: [
@@ -120,95 +116,56 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                   ? Stack(
                       children: [
                         SingleChildScrollView(
-                          padding: EdgeInsets.only(
-                              left: 16, right: 16, top: 16, bottom: 100),
+                          padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 100),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(language.orderId,
-                                      style: boldTextStyle(size: 20)),
-                                  Text('#${orderData!.id}',
-                                      style: boldTextStyle(size: 20)),
+                                  Text(language.orderId, style: boldTextStyle(size: 20)),
+                                  Text('#${orderData!.id}', style: boldTextStyle(size: 20)),
                                 ],
                               ),
                               16.height,
-                              Text(
-                                  '${language.createdAt} ${printDate(orderData!.date.toString())}',
-                                  style: secondaryTextStyle()),
+                              Text('${language.createdAt} ${printDate(orderData!.date.toString())}', style: secondaryTextStyle()),
                               Divider(height: 30, thickness: 1),
                               Column(
                                 children: [
                                   Row(
                                     children: [
-                                      ImageIcon(
-                                          AssetImage(
-                                              'assets/icons/ic_pick_location.png'),
-                                          size: 24,
-                                          color: colorPrimary),
+                                      ImageIcon(AssetImage('assets/icons/ic_pick_location.png'), size: 24, color: colorPrimary),
                                       16.width,
                                       Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          if (orderData!.pickupDatetime != null)
-                                            Text('${language.pickedAt} ${printDate(orderData!.pickupDatetime!)}',
-                                                    style: secondaryTextStyle())
-                                                .paddingOnly(bottom: 8),
-                                          Text(
-                                              '${orderData!.pickupPoint!.address}',
-                                              style: primaryTextStyle()),
-                                          if (orderData!
-                                                  .pickupPoint!.contactNumber !=
-                                              null)
+                                          if (orderData!.pickupDatetime != null) Text('${language.pickedAt} ${printDate(orderData!.pickupDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
+                                          Text('${orderData!.pickupPoint!.address}', style: primaryTextStyle()),
+                                          if (orderData!.pickupPoint!.contactNumber != null)
                                             Row(
                                               children: [
-                                                Icon(Icons.call,
-                                                        color: Colors.green,
-                                                        size: 18)
-                                                    .onTap(() {
-                                                  commonLaunchUrl(
-                                                      'tel:${orderData!.pickupPoint!.contactNumber}');
+                                                Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
+                                                  commonLaunchUrl('tel:${orderData!.pickupPoint!.contactNumber}');
                                                 }),
                                                 8.width,
-                                                Text(
-                                                    '${orderData!.pickupPoint!.contactNumber}',
-                                                    style:
-                                                        secondaryTextStyle()),
+                                                Text('${orderData!.pickupPoint!.contactNumber}', style: secondaryTextStyle()),
                                               ],
                                             ).paddingOnly(top: 8),
-                                          if (orderData!.pickupDatetime ==
-                                                  null &&
-                                              orderData!.pickupPoint!.endTime !=
-                                                  null &&
-                                              orderData!
-                                                      .pickupPoint!.startTime !=
-                                                  null)
+                                          if (orderData!.pickupDatetime == null && orderData!.pickupPoint!.endTime != null && orderData!.pickupPoint!.startTime != null)
                                             Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(orderData!.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.pickupPoint!.endTime!).toLocal())}',
                                                     style: secondaryTextStyle())
                                                 .paddingOnly(top: 8),
-                                          if (orderData!
-                                              .pickupPoint!.description
-                                              .validate()
-                                              .isNotEmpty)
+                                          if (orderData!.pickupPoint!.description.validate().isNotEmpty)
                                             Padding(
-                                              padding:
-                                                  EdgeInsets.only(top: 8.0),
+                                              padding: EdgeInsets.only(top: 8.0),
                                               child: ReadMoreText(
                                                 '${language.remark}: ${orderData!.pickupPoint!.description.validate()}',
                                                 trimLines: 3,
-                                                style:
-                                                    primaryTextStyle(size: 14),
-                                                colorClickableText:
-                                                    colorPrimary,
+                                                style: primaryTextStyle(size: 14),
+                                                colorClickableText: colorPrimary,
                                                 trimMode: TrimMode.Line,
-                                                trimCollapsedText:
-                                                    language.showMore,
-                                                trimExpandedText:
-                                                    language.showLess,
+                                                trimCollapsedText: language.showMore,
+                                                trimExpandedText: language.showLess,
                                               ),
                                             ),
                                         ],
@@ -218,73 +175,38 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                   16.height,
                                   Row(
                                     children: [
-                                      ImageIcon(
-                                          AssetImage(
-                                              'assets/icons/ic_delivery_location.png'),
-                                          size: 24,
-                                          color: colorPrimary),
+                                      ImageIcon(AssetImage('assets/icons/ic_delivery_location.png'), size: 24, color: colorPrimary),
                                       16.width,
                                       Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          if (orderData!.deliveryDatetime !=
-                                              null)
-                                            Text('${language.deliveredAt} ${printDate(orderData!.deliveryDatetime!)}',
-                                                    style: secondaryTextStyle())
-                                                .paddingOnly(bottom: 8),
-                                          Text(
-                                              '${orderData!.deliveryPoint!.address}',
-                                              style: primaryTextStyle()),
-                                          if (orderData!.deliveryPoint!
-                                                  .contactNumber !=
-                                              null)
+                                          if (orderData!.deliveryDatetime != null) Text('${language.deliveredAt} ${printDate(orderData!.deliveryDatetime!)}', style: secondaryTextStyle()).paddingOnly(bottom: 8),
+                                          Text('${orderData!.deliveryPoint!.address}', style: primaryTextStyle()),
+                                          if (orderData!.deliveryPoint!.contactNumber != null)
                                             Row(
                                               children: [
-                                                Icon(Icons.call,
-                                                        color: Colors.green,
-                                                        size: 18)
-                                                    .onTap(() {
-                                                  commonLaunchUrl(
-                                                      'tel:${orderData!.deliveryPoint!.contactNumber}');
+                                                Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
+                                                  commonLaunchUrl('tel:${orderData!.deliveryPoint!.contactNumber}');
                                                 }),
                                                 8.width,
-                                                Text(
-                                                    '${orderData!.deliveryPoint!.contactNumber}',
-                                                    style:
-                                                        secondaryTextStyle()),
+                                                Text('${orderData!.deliveryPoint!.contactNumber}', style: secondaryTextStyle()),
                                               ],
                                             ).paddingOnly(top: 8),
-                                          if (orderData!.deliveryDatetime ==
-                                                  null &&
-                                              orderData!
-                                                      .deliveryPoint!.endTime !=
-                                                  null &&
-                                              orderData!.deliveryPoint!
-                                                      .startTime !=
-                                                  null)
+                                          if (orderData!.deliveryDatetime == null && orderData!.deliveryPoint!.endTime != null && orderData!.deliveryPoint!.startTime != null)
                                             Text('${language.note} ${language.courierWillDeliverAt}${DateFormat('dd MMM yyyy').format(DateTime.parse(orderData!.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.deliveryPoint!.endTime!).toLocal())}',
                                                     style: secondaryTextStyle())
                                                 .paddingOnly(top: 8),
-                                          if (orderData!
-                                              .deliveryPoint!.description
-                                              .validate()
-                                              .isNotEmpty)
+                                          if (orderData!.deliveryPoint!.description.validate().isNotEmpty)
                                             Padding(
-                                              padding:
-                                                  EdgeInsets.only(top: 8.0),
+                                              padding: EdgeInsets.only(top: 8.0),
                                               child: ReadMoreText(
                                                 '${language.remark}: ${orderData!.deliveryPoint!.description.validate()}',
                                                 trimLines: 3,
-                                                style:
-                                                    primaryTextStyle(size: 14),
-                                                colorClickableText:
-                                                    colorPrimary,
+                                                style: primaryTextStyle(size: 14),
+                                                colorClickableText: colorPrimary,
                                                 trimMode: TrimMode.Line,
-                                                trimCollapsedText:
-                                                    language.showMore,
-                                                trimExpandedText:
-                                                    language.showLess,
+                                                trimCollapsedText: language.showMore,
+                                                trimExpandedText: language.showLess,
                                               ),
                                             ),
                                         ],
@@ -300,173 +222,107 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                   color: Colors.transparent,
                                   padding: EdgeInsets.all(6),
                                   shapeBorder: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(defaultRadius),
+                                    borderRadius: BorderRadius.circular(defaultRadius),
                                     side: BorderSide(color: colorPrimary),
                                   ),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Text(language.viewHistory,
-                                          style: primaryTextStyle(
-                                              color: colorPrimary)),
-                                      Icon(Icons.arrow_right,
-                                          color: colorPrimary),
+                                      Text(language.viewHistory, style: primaryTextStyle(color: colorPrimary)),
+                                      Icon(Icons.arrow_right, color: colorPrimary),
                                     ],
                                   ),
                                   onTap: () {
-                                    OrderHistoryScreen(
-                                            orderHistory:
-                                                orderHistory.validate())
-                                        .launch(context);
+                                    OrderHistoryScreen(orderHistory: orderHistory.validate()).launch(context);
                                   },
                                 ),
                               ),
                               Divider(height: 30, thickness: 1),
-                              Text(language.parcelDetails,
-                                  style: boldTextStyle(size: 16)),
+                              Text(language.parcelDetails, style: boldTextStyle(size: 16)),
                               12.height,
                               Container(
-                                decoration: BoxDecoration(
-                                    color: appStore.isDarkMode
-                                        ? scaffoldSecondaryDark
-                                        : colorPrimary.withOpacity(0.05),
-                                    borderRadius: BorderRadius.circular(8)),
+                                decoration: BoxDecoration(color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
                                 padding: EdgeInsets.all(12),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Container(
-                                          decoration:
-                                              boxDecorationWithRoundedCorners(
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                  border: Border.all(
-                                                      color: borderColor,
-                                                      width: appStore.isDarkMode
-                                                          ? 0.2
-                                                          : 1),
-                                                  backgroundColor:
-                                                      Colors.transparent),
+                                          decoration: boxDecorationWithRoundedCorners(
+                                              borderRadius: BorderRadius.circular(8), border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), backgroundColor: Colors.transparent),
                                           padding: EdgeInsets.all(8),
-                                          child: Image.asset(
-                                              parcelTypeIcon(orderData!
-                                                  .parcelType
-                                                  .validate()),
-                                              height: 24,
-                                              width: 24,
-                                              color: Colors.grey),
+                                          child: Image.asset(parcelTypeIcon(orderData!.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
                                         ),
                                         8.width,
                                         Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                                orderData!.parcelType
-                                                    .validate(),
-                                                style: boldTextStyle()),
+                                            Text(orderData!.parcelType.validate(), style: boldTextStyle()),
                                             4.height,
-                                            Text(
-                                                '${orderData!.totalWeight} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weightType}',
-                                                style: secondaryTextStyle()),
+                                            Text('${orderData!.totalWeight} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weightType}', style: secondaryTextStyle()),
                                           ],
                                         ).expand(),
                                       ],
                                     ),
-                                    Divider(height: 30).visible(
-                                        orderData!.totalParcel != null),
+                                    Divider(height: 30).visible(orderData!.totalParcel != null),
                                     Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(language.numberOfParcels,
-                                            style: primaryTextStyle()),
-                                        Text('${orderData!.totalParcel ?? 1}',
-                                            style: primaryTextStyle()),
+                                        Text(language.numberOfParcels, style: primaryTextStyle()),
+                                        Text('${orderData!.totalParcel ?? 1}', style: primaryTextStyle()),
                                       ],
                                     ).visible(orderData!.totalParcel != null),
                                   ],
                                 ),
                               ),
                               24.height,
-                              Text(language.paymentDetails,
-                                  style: boldTextStyle(size: 16)),
+                              Text(language.paymentDetails, style: boldTextStyle(size: 16)),
                               12.height,
                               Container(
-                                decoration: BoxDecoration(
-                                    color: appStore.isDarkMode
-                                        ? scaffoldSecondaryDark
-                                        : colorPrimary.withOpacity(0.05),
-                                    borderRadius: BorderRadius.circular(8)),
+                                decoration: BoxDecoration(color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
                                 padding: EdgeInsets.all(12),
                                 child: Column(
                                   children: [
                                     Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(language.paymentType,
-                                            style: primaryTextStyle()),
-                                        Text(
-                                            '${paymentType(orderData!.paymentType.validate(value: PAYMENT_TYPE_CASH))}',
-                                            style: primaryTextStyle()),
+                                        Text(language.paymentType, style: primaryTextStyle()),
+                                        Text('${paymentType(orderData!.paymentType.validate(value: PAYMENT_TYPE_CASH))}', style: primaryTextStyle()),
                                       ],
                                     ),
                                     Divider(height: 30),
                                     Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(language.paymentStatus,
-                                            style: primaryTextStyle()),
-                                        Text(
-                                            '${paymentStatus(orderData!.paymentStatus.validate(value: PAYMENT_PENDING))}',
-                                            style: primaryTextStyle()),
+                                        Text(language.paymentStatus, style: primaryTextStyle()),
+                                        Text('${paymentStatus(orderData!.paymentStatus.validate(value: PAYMENT_PENDING))}', style: primaryTextStyle()),
                                       ],
                                     ),
-                                    Divider(height: 30).visible(
-                                        orderData!.paymentType.validate(
-                                                value: PAYMENT_TYPE_CASH) ==
-                                            PAYMENT_TYPE_CASH),
+                                    Divider(height: 30).visible(orderData!.paymentType.validate(value: PAYMENT_TYPE_CASH) == PAYMENT_TYPE_CASH),
                                     Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(language.paymentCollectFrom,
-                                            style: primaryTextStyle()),
-                                        Text(
-                                            '${paymentCollectForm(orderData!.paymentCollectFrom!)}',
-                                            style: primaryTextStyle()),
+                                        Text(language.paymentCollectFrom, style: primaryTextStyle()),
+                                        Text('${paymentCollectForm(orderData!.paymentCollectFrom!)}', style: primaryTextStyle()),
                                       ],
-                                    ).visible(orderData!.paymentType.validate(
-                                            value: PAYMENT_TYPE_CASH) ==
-                                        PAYMENT_TYPE_CASH),
+                                    ).visible(orderData!.paymentType.validate(value: PAYMENT_TYPE_CASH) == PAYMENT_TYPE_CASH),
                                   ],
                                 ),
                               ),
                               12.height,
-                              if (orderData!.vehicleData != null)
-                                Text(language.vehicle, style: boldTextStyle()),
+                              if (orderData!.vehicleData != null) Text(language.vehicle, style: boldTextStyle()),
                               if (orderData!.vehicleData != null) 12.height,
                               if (orderData!.vehicleData != null)
                                 Container(
-                                    decoration: BoxDecoration(
-                                        color: appStore.isDarkMode
-                                            ? scaffoldSecondaryDark
-                                            : colorPrimary.withOpacity(0.05),
-                                        borderRadius: BorderRadius.circular(8)),
+                                    decoration: BoxDecoration(color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
                                     padding: EdgeInsets.all(12),
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                           children: [
                                             Expanded(
                                               child: Text(
@@ -475,9 +331,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                               ),
                                             ),
                                             Expanded(
-                                              child: Text(
-                                                  '${orderData!.vehicleData!.title.validate()}',
-                                                  style: primaryTextStyle()),
+                                              child: Text('${orderData!.vehicleData!.title.validate()}', style: primaryTextStyle()),
                                             )
                                           ],
                                         ),
@@ -485,16 +339,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                         if (orderData!.vehicleImage != null)
                                           Container(
                                             margin: EdgeInsets.all(10),
-                                            child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                child: commonCachedNetworkImage(
-                                                    orderData!.vehicleImage,
-                                                    fit: BoxFit.fill,
-                                                    height:
-                                                        100,
-                                                    width:
-                                                        150)),
+                                            child: ClipRRect(borderRadius: BorderRadius.circular(10), child: commonCachedNetworkImage(orderData!.vehicleImage, fit: BoxFit.fill, height: 100, width: 150)),
                                           ),
                                       ],
                                     )),
@@ -504,85 +349,45 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     24.height,
-                                    Text(
-                                        '${getStringAsync(USER_TYPE) == CLIENT ? language.aboutDeliveryMan : language.aboutUser}',
-                                        style: boldTextStyle(size: 16)),
+                                    Text('${getStringAsync(USER_TYPE) == CLIENT ? language.aboutDeliveryMan : language.aboutUser}', style: boldTextStyle(size: 16)),
                                     12.height,
                                     Container(
-                                      decoration: BoxDecoration(
-                                          color: appStore.isDarkMode
-                                              ? scaffoldSecondaryDark
-                                              : colorPrimary.withOpacity(0.05),
-                                          borderRadius:
-                                              BorderRadius.circular(8)),
+                                      decoration: BoxDecoration(color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
                                       padding: EdgeInsets.all(12),
                                       child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Row(
                                             children: [
-                                              Image.network(
-                                                      userData!.profileImage
-                                                          .validate(),
-                                                      height: 60,
-                                                      width: 60,
-                                                      fit: BoxFit.cover,
-                                                      alignment:
-                                                          Alignment.center)
-                                                  .cornerRadiusWithClipRRect(
-                                                      60),
+                                              Image.network(userData!.profileImage.validate(), height: 60, width: 60, fit: BoxFit.cover, alignment: Alignment.center).cornerRadiusWithClipRRect(60),
                                               16.width,
                                               Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                mainAxisAlignment: MainAxisAlignment.start,
                                                 children: [
-                                                  Text(
-                                                      '${userData!.name.validate()}',
-                                                      style: boldTextStyle()),
-                                                  userData!.contactNumber !=
-                                                          null
-                                                      ? Text('${userData!.contactNumber}',
-                                                              style:
-                                                                  secondaryTextStyle())
-                                                          .paddingOnly(top: 4)
-                                                          .onTap(() {
-                                                          commonLaunchUrl(
-                                                              'tel:${userData!.contactNumber}');
+                                                  Text('${userData!.name.validate()}', style: boldTextStyle()),
+                                                  userData!.contactNumber != null
+                                                      ? Text('${userData!.contactNumber}', style: secondaryTextStyle()).paddingOnly(top: 4).onTap(() {
+                                                          commonLaunchUrl('tel:${userData!.contactNumber}');
                                                         })
                                                       : SizedBox()
                                                 ],
                                               ).expand(),
                                               IconButton(
                                                       onPressed: () {
-                                                        ChatScreen(
-                                                                userData:
-                                                                    userData)
-                                                            .launch(context);
+                                                        ChatScreen(userData: userData).launch(context);
                                                       },
                                                       icon: Icon(Icons.chat))
-                                                  .visible(orderData!.status !=
-                                                          ORDER_DELIVERED &&
-                                                      orderData!.status !=
-                                                          ORDER_CANCELLED)
+                                                  .visible(orderData!.status != ORDER_DELIVERED && orderData!.status != ORDER_CANCELLED && userData!.userType!=ADMIN && userData!.userType!=DEMO_ADMIN)
                                             ],
                                           ),
-                                          if (getStringAsync(USER_TYPE) ==
-                                                  CLIENT &&
-                                              userData!.isVerifiedDeliveryMan ==
-                                                  1)
+                                          if (getStringAsync(USER_TYPE) == CLIENT && userData!.isVerifiedDeliveryMan == 1)
                                             Row(
                                               children: [
-                                                Icon(Icons.verified_user,
-                                                    color: Colors.green),
+                                                Icon(Icons.verified_user, color: Colors.green),
                                                 8.width,
-                                                Text(language.verified,
-                                                    style: primaryTextStyle(
-                                                        color: Colors.green)),
+                                                Text(language.verified, style: primaryTextStyle(color: Colors.green)),
                                               ],
                                             ).paddingOnly(top: 16),
                                         ],
@@ -590,26 +395,18 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     ),
                                   ],
                                 ),
-                              if (orderData!.reason.validate().isNotEmpty &&
-                                  orderData!.status != ORDER_CANCELLED)
+                              if (orderData!.reason.validate().isNotEmpty && orderData!.status != ORDER_CANCELLED)
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     24.height,
-                                    Text(language.returnReason,
-                                        style: boldTextStyle()),
+                                    Text(language.returnReason, style: boldTextStyle()),
                                     12.height,
                                     Container(
                                       width: context.width(),
-                                      decoration: BoxDecoration(
-                                          color: Colors.red.withOpacity(0.1),
-                                          borderRadius:
-                                              BorderRadius.circular(8)),
+                                      decoration: BoxDecoration(color: Colors.red.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
                                       padding: EdgeInsets.all(12),
-                                      child: Text(
-                                          '${orderData!.reason.validate(value: "-")}',
-                                          style: primaryTextStyle(
-                                              color: Colors.red)),
+                                      child: Text('${orderData!.reason.validate(value: "-")}', style: primaryTextStyle(color: Colors.red)),
                                     ),
                                   ],
                                 ),
@@ -618,97 +415,63 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     24.height,
-                                    Text(language.cancelledReason,
-                                        style: boldTextStyle()),
+                                    Text(language.cancelledReason, style: boldTextStyle()),
                                     12.height,
                                     Container(
                                       width: context.width(),
-                                      decoration: BoxDecoration(
-                                          color: Colors.red.withOpacity(0.1),
-                                          borderRadius:
-                                              BorderRadius.circular(8)),
+                                      decoration: BoxDecoration(color: Colors.red.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
                                       padding: EdgeInsets.all(12),
-                                      child: Text(
-                                          '${orderData!.reason.validate(value: "-")}',
-                                          style: primaryTextStyle(
-                                              color: Colors.red)),
+                                      child: Text('${orderData!.reason.validate(value: "-")}', style: primaryTextStyle(color: Colors.red)),
                                     ),
                                   ],
                                 ),
                               Divider(height: 30, thickness: 1),
-                              (orderData!.extraCharges!.runtimeType ==
-                                      List<dynamic>)
+                              (orderData!.extraCharges!.runtimeType == List<dynamic>)
                                   ? OrderSummeryWidget(
                                       extraChargesList: list,
                                       totalDistance: orderData!.totalDistance,
-                                      totalWeight:
-                                          orderData!.totalWeight.validate(),
-                                      distanceCharge:
-                                          orderData!.distanceCharge.validate(),
-                                      weightCharge:
-                                          orderData!.weightCharge.validate(),
+                                      totalWeight: orderData!.totalWeight.validate(),
+                                      distanceCharge: orderData!.distanceCharge.validate(),
+                                      weightCharge: orderData!.weightCharge.validate(),
                                       totalAmount: orderData!.totalAmount,
                                       payment: payment,
                                       status: orderData!.status,
                                     )
                                   : Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(language.deliveryCharge,
-                                                style: primaryTextStyle()),
+                                            Text(language.deliveryCharge, style: primaryTextStyle()),
                                             16.width,
-                                            Text(
-                                                '${printAmount(orderData!.fixedCharges.validate())}',
-                                                style: primaryTextStyle()),
+                                            Text('${printAmount(orderData!.fixedCharges.validate())}', style: primaryTextStyle()),
                                           ],
                                         ),
-                                        if (orderData!.distanceCharge
-                                                .validate() !=
-                                            0)
+                                        if (orderData!.distanceCharge.validate() != 0)
                                           Column(
                                             children: [
                                               8.height,
                                               Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
-                                                  Text(language.distanceCharge,
-                                                      style:
-                                                          primaryTextStyle()),
+                                                  Text(language.distanceCharge, style: primaryTextStyle()),
                                                   16.width,
-                                                  Text(
-                                                      '${printAmount(orderData!.distanceCharge.validate())}',
-                                                      style:
-                                                          primaryTextStyle()),
+                                                  Text('${printAmount(orderData!.distanceCharge.validate())}', style: primaryTextStyle()),
                                                 ],
                                               )
                                             ],
                                           ),
-                                        if (orderData!.weightCharge
-                                                .validate() !=
-                                            0)
+                                        if (orderData!.weightCharge.validate() != 0)
                                           Column(
                                             children: [
                                               8.height,
                                               Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
-                                                  Text(language.weightCharge,
-                                                      style:
-                                                          primaryTextStyle()),
+                                                  Text(language.weightCharge, style: primaryTextStyle()),
                                                   16.width,
-                                                  Text(
-                                                      '${printAmount(orderData!.weightCharge.validate())}',
-                                                      style:
-                                                          primaryTextStyle()),
+                                                  Text('${printAmount(orderData!.weightCharge.validate())}', style: primaryTextStyle()),
                                                 ],
                                               ),
                                             ],
@@ -718,114 +481,58 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                           child: Column(
                                             children: [
                                               8.height,
-                                              Text(
-                                                  '${printAmount(orderData!.fixedCharges.validate() + orderData!.distanceCharge.validate() + orderData!.weightCharge.validate())}',
-                                                  style: primaryTextStyle()),
+                                              Text('${printAmount(orderData!.fixedCharges.validate() + orderData!.distanceCharge.validate() + orderData!.weightCharge.validate())}', style: primaryTextStyle()),
                                             ],
                                           ),
-                                        ).visible((orderData!.distanceCharge
-                                                        .validate() !=
-                                                    0 ||
-                                                orderData!.weightCharge
-                                                        .validate() !=
-                                                    0) &&
-                                            orderData!
-                                                    .extraCharges.keys.length !=
-                                                0),
+                                        ).visible((orderData!.distanceCharge.validate() != 0 || orderData!.weightCharge.validate() != 0) && orderData!.extraCharges.keys.length != 0),
                                         Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             16.height,
-                                            Text(language.extraCharges,
-                                                style: boldTextStyle()),
+                                            Text(language.extraCharges, style: boldTextStyle()),
                                             8.height,
                                             Column(
-                                                children: List.generate(
-                                                    orderData!.extraCharges.keys
-                                                        .length, (index) {
+                                                children: List.generate(orderData!.extraCharges.keys.length, (index) {
                                               return Padding(
-                                                padding:
-                                                    EdgeInsets.only(bottom: 8),
+                                                padding: EdgeInsets.only(bottom: 8),
                                                 child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
-                                                    Text(
-                                                        orderData!
-                                                            .extraCharges.keys
-                                                            .elementAt(index)
-                                                            .replaceAll(
-                                                                "_", " "),
-                                                        style:
-                                                            primaryTextStyle()),
+                                                    Text(orderData!.extraCharges.keys.elementAt(index).replaceAll("_", " "), style: primaryTextStyle()),
                                                     16.width,
-                                                    Text(
-                                                        '${printAmount(orderData!.extraCharges.values.elementAt(index))}',
-                                                        style:
-                                                            primaryTextStyle()),
+                                                    Text('${printAmount(orderData!.extraCharges.values.elementAt(index))}', style: primaryTextStyle()),
                                                   ],
                                                 ),
                                               );
                                             }).toList()),
                                           ],
-                                        ).visible(orderData!
-                                                .extraCharges.keys.length !=
-                                            0),
+                                        ).visible(orderData!.extraCharges.keys.length != 0),
                                         16.height,
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(language.total,
-                                                style: boldTextStyle(size: 20)),
-                                            (orderData!.status ==
-                                                        ORDER_CANCELLED &&
-                                                    payment != null &&
-                                                    payment!.deliveryManFee ==
-                                                        0)
+                                            Text(language.total, style: boldTextStyle(size: 20)),
+                                            (orderData!.status == ORDER_CANCELLED && payment != null && payment!.deliveryManFee == 0)
                                                 ? Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
+                                                    mainAxisSize: MainAxisSize.min,
                                                     children: [
-                                                      Text(
-                                                          '${printAmount(orderData!.totalAmount.validate())}',
-                                                          style: secondaryTextStyle(
-                                                              size: 16,
-                                                              decoration:
-                                                                  TextDecoration
-                                                                      .lineThrough)),
+                                                      Text('${printAmount(orderData!.totalAmount.validate())}', style: secondaryTextStyle(size: 16, decoration: TextDecoration.lineThrough)),
                                                       8.width,
-                                                      Text(
-                                                          '${printAmount(payment!.cancelCharges.validate())}',
-                                                          style: boldTextStyle(
-                                                              size: 20)),
+                                                      Text('${printAmount(payment!.cancelCharges.validate())}', style: boldTextStyle(size: 20)),
                                                     ],
                                                   )
-                                                : Text(
-                                                    '${printAmount(orderData!.totalAmount.validate())}',
-                                                    style: boldTextStyle(
-                                                        size: 20)),
+                                                : Text('${printAmount(orderData!.totalAmount.validate())}', style: boldTextStyle(size: 20)),
                                           ],
                                         ),
                                       ],
                                     ),
                               16.height,
-                              if (orderData!.status == ORDER_CANCELLED &&
-                                  payment != null)
+                              if (orderData!.status == ORDER_CANCELLED && payment != null)
                                 Container(
                                   width: context.width(),
-                                  decoration: BoxDecoration(
-                                      color: appStore.isDarkMode
-                                          ? scaffoldSecondaryDark
-                                          : colorPrimary.withOpacity(0.1),
-                                      borderRadius: BorderRadius.circular(8)),
+                                  decoration: BoxDecoration(color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
                                   padding: EdgeInsets.all(12),
-                                  child: Text(
-                                      '${language.note} ${payment!.deliveryManFee == 0 ? language.cancelBeforePickMsg : language.cancelAfterPickMsg}',
-                                      style: secondaryTextStyle(
-                                          color: Colors.red)),
+                                  child: Text('${language.note} ${payment!.deliveryManFee == 0 ? language.cancelBeforePickMsg : language.cancelAfterPickMsg}', style: secondaryTextStyle(color: Colors.red)),
                                 ),
                               Align(
                                 alignment: Alignment.bottomCenter,
@@ -840,8 +547,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                               orderId: orderData!.id.validate(),
                                               onUpdate: () {
                                                 orderDetailApiCall();
-                                                LiveStream()
-                                                    .emit('UpdateOrderData');
+                                                LiveStream().emit('UpdateOrderData');
                                               });
                                         },
                                       );
@@ -849,21 +555,13 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     8.height,
                                     Container(
                                       width: context.width(),
-                                      decoration: BoxDecoration(
-                                          color: appStore.isDarkMode
-                                              ? scaffoldSecondaryDark
-                                              : colorPrimary.withOpacity(0.1),
-                                          borderRadius:
-                                              BorderRadius.circular(8)),
+                                      decoration: BoxDecoration(color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
                                       padding: EdgeInsets.all(12),
-                                      child: Text(language.cancelNote,
-                                          style: secondaryTextStyle()),
+                                      child: Text(language.cancelNote, style: secondaryTextStyle()),
                                     ),
                                   ],
                                 ),
-                              ).visible(getStringAsync(USER_TYPE) == CLIENT &&
-                                  orderData!.status != ORDER_DELIVERED &&
-                                  orderData!.status != ORDER_CANCELLED)
+                              ).visible(getStringAsync(USER_TYPE) == CLIENT && orderData!.status != ORDER_DELIVERED && orderData!.status != ORDER_CANCELLED)
                             ],
                           ),
                         ),
@@ -873,15 +571,11 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                             ReturnOrderScreen(orderData!).launch(context);
                           }, width: context.width())
                               .paddingAll(16),
-                        ).visible(orderData!.status == ORDER_DELIVERED &&
-                            !orderData!.returnOrderId! &&
-                            getStringAsync(USER_TYPE) == CLIENT),
+                        ).visible(orderData!.status == ORDER_DELIVERED && !orderData!.returnOrderId! && getStringAsync(USER_TYPE) == CLIENT),
                       ],
                     )
                   : SizedBox(),
-              Observer(
-                  builder: (context) =>
-                      loaderWidget().visible(appStore.isLoading)),
+              Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
             ],
           ),
         ),
