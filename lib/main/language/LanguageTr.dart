@@ -1051,4 +1051,25 @@ class LanguageTr extends BaseLanguage {
 
   @override
   String get bankName => "Banka adı";
+
+  @override
+  String get courierAssigned => "Kurye atandı";
+
+  @override
+  String get courierAccepted => "Kurye kabul edildi";
+
+  @override
+  String get courierPickedUp => "Kurye pickedup";
+
+  @override
+  String get courierArrived => "Courier geldi";
+
+  @override
+  String get courierDeparted => "Kurye ayrıldı";
+
+  @override
+  String get courierTransfer => "Kurye transferi";
+
+  @override
+  String get paymentStatusMessage => "Ödeme Durumu Mesajı";
 }

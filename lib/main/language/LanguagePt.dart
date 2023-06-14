@@ -1052,4 +1052,18 @@ class LanguagePt extends BaseLanguage {
 
   @override
   String get bankName => "Nome do banco";
+
+  @override String get courierAssigned => "Courier designado";
+
+  @override String get courierAccepted => "Courier aceito";
+
+  @override String get courierPickedUp => "Courier pegou";
+
+  @override String get courierArrived => "Courier chegou";
+
+  @override String get courierDeparted => "Courier partiu";
+
+  @override String get courierTransfer => "Transferência de correio";
+
+  @override String get paymentStatusMessage => "Mensagem de status de pagamento";
 }

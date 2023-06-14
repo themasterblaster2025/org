@@ -1052,4 +1052,25 @@ class LanguageAf extends BaseLanguage {
 
   @override
   String get bankName => "Bank Naam";
+
+  @override
+  String get courierAssigned => "Koerier toegewys";
+
+  @override
+  String get courierAccepted => "Koerier aanvaar";
+
+  @override
+  String get courierPickedUp => "Courier PickedUp";
+
+  @override
+  String get courierArrived => "Courier het opgedaag";
+
+  @override
+  String get courierDeparted => "Courier het vertrek";
+
+  @override
+  String get courierTransfer => "Koerieroordrag";
+
+  @override
+  String get paymentStatusMessage => "Betalingsstatusboodskap";
 }

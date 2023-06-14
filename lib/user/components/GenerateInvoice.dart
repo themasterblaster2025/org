@@ -168,7 +168,10 @@ class PdfInvoiceApi {
             language.invoiceCapital,
             style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: PdfColors.blue),
           ),
-          pw.Text('${invoice.supplier.name}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          SizedBox(width: 16),
+          pw.Expanded(
+            child: pw.Text('${invoice.supplier.name}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),textAlign: TextAlign.right),
+          ),
         ],
       ),
       SizedBox(height: 4),

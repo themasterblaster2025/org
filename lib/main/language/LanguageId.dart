@@ -1051,4 +1051,25 @@ class LanguageId extends BaseLanguage {
 
   @override
   String get bankName => "Nama Bank";
+
+  @override
+  String get courierAssigned => "Kurir ditugaskan";
+
+  @override
+  String get courierAccepted => "Kurir diterima";
+
+  @override
+  String get courierPickedUp => "Pickedup kurir";
+
+  @override
+  String get courierArrived => "Kurir tiba";
+
+  @override
+  String get courierDeparted => "Kurir berangkat";
+
+  @override
+  String get courierTransfer => "Transfer kurir";
+
+  @override
+  String get paymentStatusMessage => "Pesan Status Pembayaran";
 }

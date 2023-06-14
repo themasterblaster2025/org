@@ -1051,4 +1051,25 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get bankName => 'Bank Name';
+
+  @override
+  String get courierAssigned => "Courier Assigned";
+
+  @override
+  String get courierAccepted => "Courier Accepted";
+
+  @override
+  String get courierPickedUp => "Courier PickedUp";
+
+  @override
+  String get courierArrived => "Courier Arrived";
+
+  @override
+  String get courierDeparted => "Courier Departed";
+
+  @override
+  String get courierTransfer => "Courier Transfer";
+
+  @override
+  String get paymentStatusMessage => "Payment Status Message";
 }
