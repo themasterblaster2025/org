@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:mighty_delivery/main/screens/OrderIdDetails.dart';
 import '../main/models/models.dart';
 import '../main/screens/SplashScreen.dart';
 import '../main/utils/Constants.dart';
@@ -45,9 +46,13 @@ void main() async {
 
   appStore.setLogin(getBoolAsync(IS_LOGGED_IN), isInitializing: true);
   appStore.setUserEmail(getStringAsync(USER_EMAIL), isInitialization: true);
-  appStore.setLanguage(getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguage));
-  FilterAttributeModel? filterData = FilterAttributeModel.fromJson(getJSONAsync(FILTER_DATA));
-  appStore.setFiltering(filterData.orderStatus != null || !filterData.fromDate.isEmptyOrNull || !filterData.toDate.isEmptyOrNull);
+  appStore.setLanguage(
+      getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguage));
+  FilterAttributeModel? filterData =
+      FilterAttributeModel.fromJson(getJSONAsync(FILTER_DATA));
+  appStore.setFiltering(filterData.orderStatus != null ||
+      !filterData.fromDate.isEmptyOrNull ||
+      !filterData.toDate.isEmptyOrNull);
 
   int themeModeIndex = getIntAsync(THEME_MODE_INDEX);
   if (themeModeIndex == appThemeMode.themeModeLight) {
@@ -76,7 +81,8 @@ class MyAppState extends State<MyApp> {
   }
 
   void init() async {
-    _connectivitySubscription = Connectivity().onConnectivityChanged.listen((e) {
+    _connectivitySubscription =
+        Connectivity().onConnectivityChanged.listen((e) {
       if (e == ConnectivityResult.none) {
         log('not connected');
         isCurrentlyOnNoInternet = true;
@@ -114,11 +120,20 @@ class MyAppState extends State<MyApp> {
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
         themeMode: appStore.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-        home: SplashScreen(),
+        home:
+            //Entercode(),
+
+            SplashScreen(),
         supportedLocales: LanguageDataModel.languageLocales(),
-        localizationsDelegates: [AppLocalizations(), GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate, GlobalCupertinoLocalizations.delegate],
+        localizationsDelegates: [
+          AppLocalizations(),
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate
+        ],
         localeResolutionCallback: (locale, supportedLocales) => locale,
-        locale: Locale(appStore.selectedLanguage.validate(value: defaultLanguage)),
+        locale:
+            Locale(appStore.selectedLanguage.validate(value: defaultLanguage)),
       );
     });
   }
@@ -126,7 +141,8 @@ class MyAppState extends State<MyApp> {
 
 class MyBehavior extends ScrollBehavior {
   @override
-  Widget buildOverscrollIndicator(BuildContext context, Widget child, ScrollableDetails details) {
+  Widget buildOverscrollIndicator(
+      BuildContext context, Widget child, ScrollableDetails details) {
     return child;
   }
 }

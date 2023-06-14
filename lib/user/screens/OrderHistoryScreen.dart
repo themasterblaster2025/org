@@ -3,6 +3,7 @@ import '../../main/components/BodyCornerWidget.dart';
 import '../../main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:timeline_tile/timeline_tile.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../main.dart';
 import '../../main/models/OrderDetailModel.dart';
@@ -42,7 +43,8 @@ class OrderHistoryScreenState extends State<OrderHistoryScreen> {
       appBar: AppBar(
         title: Text(language.orderHistory),
       ),
-      body: BodyCornerWidget(
+      body: Observer(builder :(context) {
+        return BodyCornerWidget(
           child: ListView.builder(
             padding: EdgeInsets.all(16),
             itemCount: widget.orderHistory.length,
@@ -51,22 +53,31 @@ class OrderHistoryScreenState extends State<OrderHistoryScreen> {
               return TimelineTile(
                 alignment: TimelineAlign.start,
                 isFirst: index == 0 ? true : false,
-                isLast: index == (widget.orderHistory.length - 1) ? true : false,
+                isLast: index == (widget.orderHistory.length - 1)
+                    ? true
+                    : false,
                 indicatorStyle: IndicatorStyle(width: 15, color: colorPrimary),
                 afterLineStyle: LineStyle(color: colorPrimary, thickness: 3),
                 beforeLineStyle: LineStyle(color: colorPrimary, thickness: 3),
                 endChild: Row(
                   children: [
-                    ImageIcon(AssetImage(statusTypeIcon(type: mData.historyType)), color: colorPrimary, size: 30),
+                    ImageIcon(AssetImage(
+                        statusTypeIcon(type: mData.historyType)),
+                        color: colorPrimary, size: 30),
                     16.width,
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('${mData.historyType!.replaceAll("_", " ").capitalizeFirstLetter()}', style: boldTextStyle()),
+                        Text(
+                            '${mData.historyType!
+                                .replaceAll("_", " ")
+                                .capitalizeFirstLetter()}',
+                            style: boldTextStyle()),
                         8.height,
                         Text(messageData(mData)),
                         8.height,
-                        Text('${printDate('${mData.createdAt}')}', style: secondaryTextStyle()),
+                        Text('${printDate('${mData.createdAt}')}',
+                            style: secondaryTextStyle()),
                       ],
                     ).expand(),
                   ],
@@ -74,17 +85,20 @@ class OrderHistoryScreenState extends State<OrderHistoryScreen> {
               );
             },
           ),
-      ),
+        );
+
+      }  ),
     );
   }
+
 
   messageData(OrderHistory orderData) {
     if (getStringAsync(USER_TYPE) == CLIENT) {
       if (orderData.historyType == ORDER_ASSIGNED) {
         return 'Your Order#${orderData.orderId} has been assigned to ${orderData.historyData!.deliveryManName}.';
-      }else if (orderData.historyType == ORDER_TRANSFER) {
+      } else if (orderData.historyType == ORDER_TRANSFER) {
         return 'Your Order#${orderData.orderId} has been transfered to ${orderData.historyData!.deliveryManName}.';
-      }else {
+      } else {
         return '${orderData.historyMessage}';
       }
     } else {

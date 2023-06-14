@@ -9,10 +9,13 @@ class OrderListModel {
   int? allUnreadCount;
   UserWalletModel? walletData;
 
-  OrderListModel({this.pagination, this.data, this.allUnreadCount,this.walletData});
+  OrderListModel(
+      {this.pagination, this.data, this.allUnreadCount, this.walletData});
 
   OrderListModel.fromJson(Map<String, dynamic> json) {
-    pagination = json['pagination'] != null ? new PaginationModel.fromJson(json['pagination']) : null;
+    pagination = json['pagination'] != null
+        ? new PaginationModel.fromJson(json['pagination'])
+        : null;
     if (json['data'] != null) {
       data = <OrderData>[];
       json['data'].forEach((v) {
@@ -50,7 +53,14 @@ class PickupPoint {
   String? startTime;
   String? endTime;
 
-  PickupPoint({this.address, this.latitude, this.longitude, this.description, this.contactNumber, this.startTime, this.endTime});
+  PickupPoint(
+      {this.address,
+      this.latitude,
+      this.longitude,
+      this.description,
+      this.contactNumber,
+      this.startTime,
+      this.endTime});
 
   PickupPoint.fromJson(Map<String, dynamic> json) {
     address = json['address'];
@@ -158,17 +168,20 @@ class OrderData {
       this.autoAssign,
       this.cancelledDeliverManIds,
       this.vehicleId,
-        this.vehicleData,
-        this.vehicleImage
-      });
+      this.vehicleData,
+      this.vehicleImage});
 
   OrderData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     clientId = json['client_id'];
     clientName = json['client_name'];
     date = json['date'];
-    pickupPoint = json['pickup_point'] != null ? new PickupPoint.fromJson(json['pickup_point']) : null;
-    deliveryPoint = json['delivery_point'] != null ? new PickupPoint.fromJson(json['delivery_point']) : null;
+    pickupPoint = json['pickup_point'] != null
+        ? new PickupPoint.fromJson(json['pickup_point'])
+        : null;
+    deliveryPoint = json['delivery_point'] != null
+        ? new PickupPoint.fromJson(json['delivery_point'])
+        : null;
     countryId = json['country_id'];
     countryName = json['country_name'];
     cityId = json['city_id'];

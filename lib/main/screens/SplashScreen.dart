@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mighty_delivery/main/screens/OrderIdDetails.dart';
 import '../../delivery/screens/DeliveryDashBoard.dart';
 import '../../main/components/UserCitySelectScreen.dart';
 import '../../main/models/CityListModel.dart';
@@ -27,7 +28,9 @@ class SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> init() async {
-    setStatusBarColor(appStore.isDarkMode ? Colors.black : Colors.white, statusBarBrightness: appStore.isDarkMode ? Brightness.light : Brightness.dark);
+    setStatusBarColor(appStore.isDarkMode ? Colors.black : Colors.white,
+        statusBarBrightness:
+            appStore.isDarkMode ? Brightness.light : Brightness.dark);
     Future.delayed(
       Duration(seconds: 1),
       () async {
@@ -36,7 +39,10 @@ class SplashScreenState extends State<SplashScreen> {
             if (value.deletedAt != null) {
               logout(context);
             } else {
-              if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
+              if (CityModel.fromJson(getJSONAsync(CITY_DATA))
+                  .name
+                  .validate()
+                  .isNotEmpty) {
                 if (getBoolAsync(OTP_VERIFIED)) {
                   if (getStringAsync(USER_TYPE) == CLIENT) {
                     DashboardScreen().launch(context, isNewTask: true);
@@ -44,7 +50,9 @@ class SplashScreenState extends State<SplashScreen> {
                     DeliveryDashBoard().launch(context, isNewTask: true);
                   }
                 } else {
-                  VerificationScreen().launch(context, isNewTask: true);
+                  DashboardScreen().launch(context, isNewTask: true);
+
+//                  VerificationScreen().launch(context, isNewTask: true);
                 }
               } else {
                 UserCitySelectScreen().launch(context);
@@ -77,9 +85,12 @@ class SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset('assets/app_logo.jpg', height: 80, width: 80, fit: BoxFit.fill).cornerRadiusWithClipRRect(defaultRadius),
+            Image.asset('assets/app_logo.jpg',
+                    height: 80, width: 80, fit: BoxFit.fill)
+                .cornerRadiusWithClipRRect(defaultRadius),
             16.height,
-            Text(language.appName, style: boldTextStyle(size: 20), textAlign: TextAlign.center),
+            Text(language.appName,
+                style: boldTextStyle(size: 20), textAlign: TextAlign.center),
           ],
         ),
       ),
