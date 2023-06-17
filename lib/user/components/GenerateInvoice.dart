@@ -132,7 +132,7 @@ class PdfInvoiceApi {
   }
 
   static Widget buildHeader(Invoice invoice) {
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment:CrossAxisAlignment.start,children: [
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.start, children: [
       Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,25 +160,31 @@ class PdfInvoiceApi {
   }
 
   static Widget buildTitle(Invoice invoice) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            language.invoiceCapital,
-            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: PdfColors.blue),
-          ),
-          SizedBox(width: 16),
-          pw.Expanded(
-            child: pw.Text('${invoice.supplier.name}', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),textAlign: TextAlign.right),
-          ),
-        ],
-      ),
-      SizedBox(height: 4),
-      pw.Text('${invoice.supplier.address}', style: TextStyle(fontSize: 16)),
-      SizedBox(height: 4),
-      pw.Text('${invoice.supplier.contactNumber}', style: TextStyle(fontSize: 16)),
-    ]);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Text(
+                "${language.invoiceCapital}",
+                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: PdfColors.blue),
+              ),
+            ),
+            SizedBox(width: 16),
+            pw.Text('${invoice.supplier.name}', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+          ],
+        ),
+        SizedBox(height: 4),
+        Container(
+          width: 250,
+          child: pw.Text('${invoice.supplier.address}', style: TextStyle(fontSize: 16), textAlign: TextAlign.right),
+        ),
+        SizedBox(height: 4),
+        pw.Text('${invoice.supplier.contactNumber}', style: TextStyle(fontSize: 16)),
+      ],
+    );
   }
 
   static Widget buildInvoice(Invoice invoice) {
@@ -232,7 +238,7 @@ class PdfInvoiceApi {
                     return Padding(
                       padding: EdgeInsets.only(bottom: 4),
                       child: buildText(
-                        title: '${item.key!.replaceAll("_", " ")} (${item.valueType==CHARGE_TYPE_PERCENTAGE ? '${item.value}%' : '${printAmount(item.value.validate())}'})',
+                        title: '${item.key!.replaceAll("_", " ")} (${item.valueType == CHARGE_TYPE_PERCENTAGE ? '${item.value}%' : '${printAmount(item.value.validate())}'})',
                         value: Utils.formatPrice(countExtraCharge(totalAmount: subTotal, chargesType: item.valueType!, charges: item.value!).toDouble()),
                       ),
                     );
@@ -256,14 +262,15 @@ class PdfInvoiceApi {
     );
   }
 
-  static Widget buildFooter(Invoice invoice) => Column(
+  static Widget buildFooter(Invoice invoice) => Expanded(
+          child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Divider(),
           SizedBox(height: 2 * PdfPageFormat.mm),
           buildSimpleText(title: language.address, value: invoice.supplier.address),
         ],
-      );
+      ));
 
   static buildSimpleText({
     required String title,
@@ -273,11 +280,13 @@ class PdfInvoiceApi {
 
     return Row(
       mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: pw.CrossAxisAlignment.end,
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
         Text(title, style: style),
         SizedBox(width: 2 * PdfPageFormat.mm),
-        Text(value),
+        Expanded(
+          child: Text(value),
+        )
       ],
     );
   }

@@ -196,8 +196,8 @@ Future<void> logout(BuildContext context, {bool isFromLogin = false, bool isDele
     }
   }
 
-  if (getStringAsync(USER_TYPE) == DELIVERY_MAN && !isVerification) {
-    positionStream.cancel();
+  if (getStringAsync(USER_TYPE) == DELIVERY_MAN && !isVerification && positionStream!=null) {
+    positionStream!.cancel();
   }
   if (isDeleteAccount) {
     clearData();

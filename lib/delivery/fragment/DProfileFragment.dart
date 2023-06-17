@@ -113,16 +113,16 @@ class DProfileFragmentState extends State<DProfileFragment> {
                     }),
                     settingItemWidget(
                         Icons.assignment_outlined, language.privacyPolicy, () {
-                      // commonLaunchUrl(mPrivacyPolicy);
+                       commonLaunchUrl(mPrivacyPolicy);
                     }),
                     settingItemWidget(
                         Icons.help_outline, language.helpAndSupport, () {
-                      // commonLaunchUrl(mHelpAndSupport);
+                       commonLaunchUrl(mHelpAndSupport);
                     }),
                     settingItemWidget(
                         Icons.assignment_outlined, language.termAndCondition,
                         () {
-                      //commonLaunchUrl(mTermAndCondition);
+                      commonLaunchUrl(mTermAndCondition);
                     }),
                     settingItemWidget(Icons.info_outline, language.aboutUs, () {
                       AboutUsScreen().launch(context);

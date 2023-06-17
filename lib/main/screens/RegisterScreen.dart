@@ -60,6 +60,7 @@ class RegisterScreenState extends State<RegisterScreen> {
   Future<void> registerApiCall() async {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
+      hideKeyboard(context);
       if (isAcceptedTc) {
         appStore.setLoading(true);
         var request = {

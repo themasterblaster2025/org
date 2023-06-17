@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:mighty_delivery/main/screens/OrderIdDetails.dart';
 import '../main/models/models.dart';
 import '../main/screens/SplashScreen.dart';
 import '../main/utils/Constants.dart';
@@ -31,7 +30,7 @@ ChatMessageService chatMessageService = ChatMessageService();
 NotificationService notificationService = NotificationService();
 late List<FileModel> fileList = [];
 bool isCurrentlyOnNoInternet = false;
-late StreamSubscription<Position> positionStream;
+StreamSubscription<Position>? positionStream;
 
 bool mIsEnterKey = false;
 String mSelectedImage = "assets/default_wallpaper.png";
@@ -115,15 +114,12 @@ class MyAppState extends State<MyApp> {
             child: child!,
           );
         },
-        title: language.appName,
+        title: mAppName,
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
         themeMode: appStore.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-        home:
-            //Entercode(),
-
-            SplashScreen(),
+        home: SplashScreen(),
         supportedLocales: LanguageDataModel.languageLocales(),
         localizationsDelegates: [
           AppLocalizations(),

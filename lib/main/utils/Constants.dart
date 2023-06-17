@@ -5,10 +5,12 @@ const mHelpAndSupport = 'https://support.meetmighty.com/';
 const mContactPref = 'hello@meetmighty.com';
 const mCodeCanyonURL = 'https://codecanyon.net/user/meetmighty/portfolio/';
 
-//const mBaseUrl = 'https://meetmighty.com/mobile/mighty-local-delivery/api/';
-const mBaseUrl = 'http://192.168.1.230/meetmighty/local-delivery-laravel/api/';
+/// Don't add slash at the end of the url
+const DOMAIN_URL = 'https://meetmighty.com/mobile/mighty-local-delivery';
+//const DOMAIN_URL = 'http://192.168.1.230/meetmighty/local-delivery-laravel';
+const mBaseUrl = "$DOMAIN_URL/api/";
 
-const googleMapAPIKey = 'AIzaSyCDD0QOjZNS05ByZlnv-VcwH2id3WzS2Lw';
+const googleMapAPIKey = 'AIzaSyCGRSk7rUwHzf8vhRIzPp3bmiJDaRt8Ev4';
 
 const mOneSignalAppId = 'f2e9c538-d4ad-45d4-8c57-fd081c987fb6';
 const mOneSignalRestKey = 'NzcwNjExNzYtYTJjOS00NGNkLWE2ZTUtY2JmMDEyNTFhYTFm';
@@ -65,6 +67,8 @@ const CITY_DATA = 'CITY_DATA';
 
 const CLIENT = 'client';
 const DELIVERY_MAN = 'delivery_man';
+const ADMIN = 'admin';
+const DEMO_ADMIN = 'demo+admin';
 
 const CHARGE_TYPE_FIXED = 'fixed';
 const CHARGE_TYPE_PERCENTAGE = 'percentage';
@@ -187,3 +191,10 @@ extension MessageExtension on MessageType {
     }
   }
 }
+
+const mStripeIdentifier = 'IN';
+
+const mInvoiceCompanyName = 'Roberts Private Limited';
+const mInvoiceAddress = 'Sarah Street 9, Beijing, Ahmedabad';
+const mInvoiceContactNumber = '+91 9845345665';
+

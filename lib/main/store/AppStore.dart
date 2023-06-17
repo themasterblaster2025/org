@@ -56,13 +56,13 @@ abstract class _AppStore with Store {
   String currencyPosition = CURRENCY_POSITION_LEFT;
 
   @observable
-  String invoiceCompanyName = '';
+  String invoiceCompanyName = mInvoiceCompanyName;
 
   @observable
-  String invoiceContactNumber = '';
+  String invoiceContactNumber = mInvoiceContactNumber;
 
   @observable
-  String invoiceAddress = '';
+  String invoiceAddress = mInvoiceAddress;
 
   @action
   Future<void> setLoading(bool val) async {

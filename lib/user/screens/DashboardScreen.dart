@@ -1,7 +1,6 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/main/screens/OrderIdDetails.dart';
 import '../../main/models/OrderDetailModel.dart';
 import '../../user/screens/WalletScreen.dart';
 import '../../main.dart';
@@ -21,9 +20,6 @@ import 'package:nb_utils/nb_utils.dart';
 
 class DashboardScreen extends StatefulWidget {
   static String tag = '/DashboardScreen';
-  final List<OrderHistory>? orderHistory;
-
-  DashboardScreen({this.orderHistory});
 
   @override
   DashboardScreenState createState() => DashboardScreenState();
@@ -41,10 +37,8 @@ class DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> init() async {
-    bottomNavBarItems.add(BottomNavigationBarItemModel(
-        icon: Icons.shopping_bag, title: language.myOrders));
-    bottomNavBarItems.add(BottomNavigationBarItemModel(
-        icon: Icons.person, title: language.account));
+    bottomNavBarItems.add(BottomNavigationBarItemModel(icon: Icons.shopping_bag, title: language.myOrders));
+    bottomNavBarItems.add(BottomNavigationBarItemModel(icon: Icons.person, title: language.account));
     LiveStream().on('UpdateLanguage', (p0) {
       setState(() {});
     });
@@ -55,14 +49,8 @@ class DashboardScreenState extends State<DashboardScreen> {
 
   getOrderListApiCall() async {
     appStore.setLoading(true);
-    FilterAttributeModel filterData =
-        FilterAttributeModel.fromJson(getJSONAsync(FILTER_DATA));
-    await getOrderList(
-            orderStatus: filterData.orderStatus,
-            fromDate: filterData.fromDate,
-            toDate: filterData.toDate,
-            page: 1)
-        .then((value) {
+    FilterAttributeModel filterData = FilterAttributeModel.fromJson(getJSONAsync(FILTER_DATA));
+    await getOrderList(orderStatus: filterData.orderStatus, fromDate: filterData.fromDate, toDate: filterData.toDate, page: 1).then((value) {
       appStore.setLoading(false);
       if (value.walletData != null) {
         appStore.availableBal = value.walletData!.totalAmount;
@@ -101,8 +89,7 @@ class DashboardScreenState extends State<DashboardScreen> {
             children: [
               Icon(Icons.location_on, color: Colors.white),
               8.width,
-              Text(CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate(),
-                  style: primaryTextStyle(color: white)),
+              Text(CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate(), style: primaryTextStyle(color: white)),
             ],
           ).onTap(() {
             UserCitySelectScreen(
@@ -113,9 +100,7 @@ class DashboardScreenState extends State<DashboardScreen> {
           }).paddingOnly(right: 16),
           Stack(
             children: [
-              Align(
-                  alignment: AlignmentDirectional.center,
-                  child: Icon(Icons.notifications)),
+              Align(alignment: AlignmentDirectional.center, child: Icon(Icons.notifications)),
               Observer(builder: (context) {
                 return Positioned(
                   right: 2,
@@ -124,13 +109,8 @@ class DashboardScreenState extends State<DashboardScreen> {
                     height: 20,
                     width: 20,
                     alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: Colors.orange, shape: BoxShape.circle),
-                    child: Text(
-                        '${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}',
-                        style: primaryTextStyle(
-                            size: appStore.allUnreadCount > 99 ? 8 : 12,
-                            color: Colors.white)),
+                    decoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
+                    child: Text('${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}', style: primaryTextStyle(size: appStore.allUnreadCount > 99 ? 8 : 12, color: Colors.white)),
                   ),
                 ).visible(appStore.allUnreadCount != 0);
               }),
@@ -142,8 +122,7 @@ class DashboardScreenState extends State<DashboardScreen> {
             children: [
               Align(
                 alignment: AlignmentDirectional.center,
-                child: ImageIcon(AssetImage('assets/icons/ic_filter.png'),
-                    size: 18, color: Colors.white),
+                child: ImageIcon(AssetImage('assets/icons/ic_filter.png'), size: 18, color: Colors.white),
               ),
               Observer(builder: (context) {
                 return Positioned(
@@ -152,8 +131,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                   child: Container(
                     height: 10,
                     width: 10,
-                    decoration: BoxDecoration(
-                        color: Colors.orange, shape: BoxShape.circle),
+                    decoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
                   ),
                 ).visible(appStore.isFiltering);
               }),
@@ -162,10 +140,7 @@ class DashboardScreenState extends State<DashboardScreen> {
             showModalBottomSheet(
               context: context,
               isScrollControlled: true,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(defaultRadius),
-                      topRight: Radius.circular(defaultRadius))),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(defaultRadius), topRight: Radius.circular(defaultRadius))),
               builder: (context) {
                 return FilterOrderComponent();
               },
@@ -175,20 +150,16 @@ class DashboardScreenState extends State<DashboardScreen> {
       ),
       body: BodyCornerWidget(
         child: [
-          OrderIdDetails(),
-          //OrderFragment(),
+          OrderFragment(),
           AccountFragment(),
         ][currentIndex],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: appStore.availableBal >= 0
-            ? colorPrimary
-            : textSecondaryColorGlobal,
+        backgroundColor: appStore.availableBal >= 0 ? colorPrimary : textSecondaryColorGlobal,
         child: Icon(Icons.add, color: Colors.white),
         onPressed: () {
           if (appStore.availableBal >= 0) {
-            CreateOrderScreen().launch(context,
-                pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+            CreateOrderScreen().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
           } else {
             toast(language.balanceInsufficient);
             WalletScreen().launch(context);

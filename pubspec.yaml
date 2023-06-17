@@ -46,7 +46,7 @@ dependencies:
   flutter_paystack: ^1.0.7
   flutter_braintree: ^3.0.0
   mercado_pago_mobile_checkout: ^0.1.1
-  flutter_paytabs_bridge: ^2.3.6
+  flutter_paytabs_bridge: ^2.4.2
   my_fatoorah: ^3.3.0
 
   # IMAGES

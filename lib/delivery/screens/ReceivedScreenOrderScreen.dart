@@ -305,6 +305,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                       16.height,
                       CheckboxListTile(
                         value: mIsCheck,
+                        activeColor: colorPrimary,
                         title: Text(widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY ? language.paymentCollectFrom : language.paymentCollectFromPickup, style: primaryTextStyle()),
                         onChanged: (val) {
                           mIsCheck = val!;

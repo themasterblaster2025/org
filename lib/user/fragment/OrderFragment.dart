@@ -49,7 +49,7 @@ class OrderFragmentState extends State<OrderFragment> {
   }
 
   Future<void> init() async {
-    getOrderListApiCall();
+    await getOrderListApiCall();
     await getAppSetting().then((value) {
       appStore.setOtpVerifyOnPickupDelivery(value.otpVerifyOnPickupDelivery == 1);
       appStore.setCurrencyCode(value.currencyCode ?? currencyCode);
@@ -58,6 +58,15 @@ class OrderFragmentState extends State<OrderFragment> {
       appStore.isVehicleOrder = value.isVehicleInOrder ?? 0;
     }).catchError((error) {
       log(error.toString());
+    });
+    await getInvoiceSetting().then((value) {
+      if(value.invoiceData!=null && value.invoiceData!.isNotEmpty){
+        appStore.setInvoiceCompanyName(value.invoiceData!.firstWhere((element) => element.key=='company_name').value.validate());
+        appStore.setInvoiceContactNumber(value.invoiceData!.firstWhere((element) => element.key=='company_contact_number').value.validate());
+        appStore.setCompanyAddress(value.invoiceData!.firstWhere((element) => element.key=='company_address').value.validate());
+      }
+    }).catchError((error) {
+      toast(error.toString());
     });
   }
 
@@ -82,15 +91,6 @@ class OrderFragmentState extends State<OrderFragment> {
       isLastPage = true;
       appStore.setLoading(false);
       toast(e.toString(), print: true);
-    });
-    await getInvoiceSetting().then((value) {
-      if(value.invoiceData!=null){
-        appStore.setInvoiceCompanyName(value.invoiceData!.firstWhere((element) => element.key=='company_name').value.validate());
-        appStore.setInvoiceContactNumber(value.invoiceData!.firstWhere((element) => element.key=='company_contact_number').value.validate());
-        appStore.setCompanyAddress(value.invoiceData!.firstWhere((element) => element.key=='company_address').value.validate());
-      }
-    }).catchError((error) {
-      log(error.toString());
     });
   }
 

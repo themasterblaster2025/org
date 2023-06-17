@@ -85,6 +85,7 @@ class PaymentScreenState extends State<PaymentScreen> {
     await paymentListApiCall();
     if (paymentGatewayList.any((element) => element.type == PAYMENT_TYPE_STRIPE)) {
       Stripe.publishableKey = stripPaymentPublishKey.validate();
+      Stripe.merchantIdentifier = mStripeIdentifier;
       await Stripe.instance.applySettings().catchError((e) {
         log("${e.toString()}");
       });
@@ -275,31 +276,27 @@ class PaymentScreenState extends State<PaymentScreen> {
         if (response.statusCode == 200) {
           var res = StripePayModel.fromJson(jsonDecode(response.body));
 
-       //   await Stripe.instance.initPaymentSheet(
-          //   paymentSheetParameters: SetupPaymentSheetParameters(
-          //     paymentIntentClientSecret: res.clientSecret.validate(),
-          //     style: ThemeMode.light,
-          //     applePay: true,
-          //     googlePay: true,
-          //     testEnv: isTestType,
-          //     merchantCountryCode: 'IN',
-          //     merchantDisplayName: mAppName,
-          //     customerId: getIntAsync(USER_ID).toString(),
-          //     setupIntentClientSecret: res.clientSecret.validate(),
-          //   ),
-          // );
-          // await Stripe.instance.presentPaymentSheet(parameters: PresentPaymentSheetParameters(clientSecret: res.clientSecret!, confirmPayment: true)).then(
-          //   (value) async {
-          //     if (widget.isWallet == true) {
-          //       paymentConfirm();
-          //     } else {
-          //       savePaymentApiCall(paymentType: PAYMENT_TYPE_STRIPE, paymentStatus: PAYMENT_PAID, txnId: res.id);
-          //     }
-          //   },
-        //  ).
-        // catchError((e) {
-        //     log("presentPaymentSheet ${e.toString()}");
-        //   });
+          SetupPaymentSheetParameters setupPaymentSheetParameters = SetupPaymentSheetParameters(
+            paymentIntentClientSecret: res.clientSecret.validate(),
+            style: ThemeMode.light,
+            appearance: PaymentSheetAppearance(colors: PaymentSheetAppearanceColors(primary: colorPrimary)),
+            applePay: PaymentSheetApplePay(merchantCountryCode: appStore.currencyCode.toUpperCase()),
+            googlePay: PaymentSheetGooglePay(merchantCountryCode: appStore.currencyCode.toUpperCase(), testEnv: true),
+            merchantDisplayName: mAppName,
+            customerId: getIntAsync(USER_ID).toString(),
+          );
+
+          await Stripe.instance.initPaymentSheet(paymentSheetParameters: setupPaymentSheetParameters).then((value) async {
+            await Stripe.instance.presentPaymentSheet().then((value) async {
+              if (widget.isWallet == true) {
+                paymentConfirm();
+              } else {
+                savePaymentApiCall(paymentType: PAYMENT_TYPE_STRIPE, paymentStatus: PAYMENT_PAID, txnId: res.id);
+              }
+            });
+          }).catchError((e) {
+            log("presentPaymentSheet ${e.toString()}");
+          });
         }
       }).catchError((e) {
         appStore.setLoading(false);
