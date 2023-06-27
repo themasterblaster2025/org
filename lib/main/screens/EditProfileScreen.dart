@@ -89,7 +89,6 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     ).then((value) {
       finish(context);
       appStore.setLoading(false);
-      toast(language.profileUpdateMsg);
     }).catchError((error) {
       log(error);
       appStore.setLoading(false);
@@ -184,7 +183,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     AppTextField(
                       controller: contactNumberController,
                       textFieldType: TextFieldType.PHONE,
-                      enabled: false,
+                      readOnly: true,
                       focus: contactFocus,
                       nextFocus: addressFocus,
                       decoration: commonInputDecoration(
@@ -227,6 +226,9 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                         if (value!.trim().isEmpty) return language.fieldRequiredMsg;
                       //  if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
                         return null;
+                      },
+                      onTap: () {
+                        toast('You cannot change Contact Number');
                       },
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,

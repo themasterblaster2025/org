@@ -120,7 +120,7 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
     await setValue(USER_ADDRESS, loginResponse.data!.address.validate());
     await setValue(COUNTRY_ID, loginResponse.data!.countryId.validate());
     await setValue(CITY_ID, loginResponse.data!.cityId.validate());
-    await setValue(OTP_VERIFIED, loginResponse.data!.otpVerifyAt!=null);
+    await setValue(OTP_VERIFIED, loginResponse.data!.otpVerifyAt != null);
     appStore.setUserProfile(loginResponse.data!.profileImage.validate());
     await userService.getUser(email: loginResponse.data!.email.validate()).then((value) async {
       log(value);
@@ -154,6 +154,7 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
 ////// Update Location
 Future updateUid(String? uid) async {
   MultipartRequest multiPartRequest = await getMultiPartRequest('update-profile');
+  multiPartRequest.fields['id'] = getIntAsync(USER_ID).toString();
   multiPartRequest.fields['uid'] = uid.validate();
 
   await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
@@ -165,7 +166,7 @@ Future updateUid(String? uid) async {
   });
 }
 
-Future<void> logout(BuildContext context, {bool isFromLogin = false, bool isDeleteAccount = false,bool isVerification = false}) async {
+Future<void> logout(BuildContext context, {bool isFromLogin = false, bool isDeleteAccount = false, bool isVerification = false}) async {
   clearData() async {
     await removeKey(USER_ID);
     await removeKey(NAME);
@@ -197,7 +198,7 @@ Future<void> logout(BuildContext context, {bool isFromLogin = false, bool isDele
     }
   }
 
-  if (getStringAsync(USER_TYPE) == DELIVERY_MAN && !isVerification && positionStream!=null) {
+  if (getStringAsync(USER_TYPE) == DELIVERY_MAN && !isVerification && positionStream != null) {
     positionStream!.cancel();
   }
   if (isDeleteAccount) {
@@ -243,6 +244,7 @@ Future sendMultiPartRequest(MultipartRequest multiPartRequest, {Function(dynamic
 /// Profile Update
 Future updateProfile({String? userName, String? name, String? userEmail, String? address, String? contactNumber, File? file}) async {
   MultipartRequest multiPartRequest = await getMultiPartRequest('update-profile');
+  multiPartRequest.fields['id'] = getIntAsync(USER_ID).toString();
   multiPartRequest.fields['username'] = userName.validate();
   multiPartRequest.fields['email'] = userEmail ?? appStore.userEmail;
   multiPartRequest.fields['name'] = name.validate();
@@ -254,13 +256,15 @@ Future updateProfile({String? userName, String? name, String? userEmail, String?
   await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
     if (data != null) {
       LoginResponse res = LoginResponse.fromJson(data);
-
-      await setValue(NAME, res.data!.name.validate());
-      await setValue(USER_NAME, res.data!.username.validate());
-      await setValue(USER_ADDRESS, res.data!.address.validate());
-      await setValue(USER_CONTACT_NUMBER, res.data!.contactNumber.validate());
-      await appStore.setUserEmail(res.data!.email.validate());
-      appStore.setUserProfile(res.data!.profileImage.validate());
+      if (res.data != null) {
+        await setValue(NAME, res.data!.name.validate());
+        await setValue(USER_NAME, res.data!.username.validate());
+        await setValue(USER_ADDRESS, res.data!.address.validate());
+        await setValue(USER_CONTACT_NUMBER, res.data!.contactNumber.validate());
+        await appStore.setUserEmail(res.data!.email.validate());
+        appStore.setUserProfile(res.data!.profileImage.validate());
+      }
+      toast(res.message.toString());
     }
   }, onError: (error) {
     toast(error.toString());
@@ -298,8 +302,7 @@ Future<CountryDetailModel> getCountryDetail(int id) async {
 }
 
 Future<CityListModel> getCityList({required int countryId, String? name}) async {
-  return CityListModel.fromJson(
-      await handleResponse(await buildHttpResponse(name != null ? 'city-list?country_id=$countryId&name=$name&per_page=-1' : 'city-list?country_id=$countryId&per_page=-1', method: HttpMethod.GET)));
+  return CityListModel.fromJson(await handleResponse(await buildHttpResponse(name != null ? 'city-list?country_id=$countryId&name=$name&per_page=-1' : 'city-list?country_id=$countryId&per_page=-1', method: HttpMethod.GET)));
 }
 
 Future<CityDetailModel> getCityDetail(int id) async {
@@ -318,15 +321,17 @@ Future<VehicleListModel> getVehicleList({String? type, int? perPage, int? page, 
 /// Country
 Future updateCountryCity({int? countryId, int? cityId}) async {
   MultipartRequest multiPartRequest = await getMultiPartRequest('update-profile');
+  multiPartRequest.fields['id'] = getIntAsync(USER_ID).toString();
   multiPartRequest.fields['city_id'] = cityId.toString();
   multiPartRequest.fields['country_id'] = countryId.toString();
 
   await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
     if (data != null) {
       LoginResponse res = LoginResponse.fromJson(data);
-
-      await setValue(COUNTRY_ID, res.data!.countryId.validate());
-      await setValue(CITY_ID, res.data!.cityId.validate());
+      if(res.data!=null){
+        await setValue(COUNTRY_ID, res.data!.countryId.validate());
+        await setValue(CITY_ID, res.data!.cityId.validate());
+      }
     }
   }, onError: (error) {
     toast(error.toString());
@@ -336,12 +341,15 @@ Future updateCountryCity({int? countryId, int? cityId}) async {
 /// Update otp verify
 Future updateOtpVerify() async {
   MultipartRequest multiPartRequest = await getMultiPartRequest('update-profile');
+  multiPartRequest.fields['id'] = getIntAsync(USER_ID).toString();
   multiPartRequest.fields['otp_verify_at'] = DateTime.now().toString();
 
   await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
     if (data != null) {
       LoginResponse res = LoginResponse.fromJson(data);
-      await setValue(OTP_VERIFIED, res.data!.otpVerifyAt != null);
+      if(res.data!=null) {
+        await setValue(OTP_VERIFIED, res.data!.otpVerifyAt != null);
+      }
     }
   }, onError: (error) {
     toast(error.toString());
@@ -365,8 +373,7 @@ Future<OrderListModel> getOrderList({required int page, String? orderStatus, Str
 
 /// get deliveryBoy orderList
 Future<OrderListModel> getDeliveryBoyOrderList({required int page, required int deliveryBoyID, required int countryId, required int cityId, required String orderStatus}) async {
-  return OrderListModel.fromJson(
-      await handleResponse(await buildHttpResponse('order-list?delivery_man_id=$deliveryBoyID&page=$page&city_id=$cityId&country_id=$countryId&status=$orderStatus', method: HttpMethod.GET)));
+  return OrderListModel.fromJson(await handleResponse(await buildHttpResponse('order-list?delivery_man_id=$deliveryBoyID&page=$page&city_id=$cityId&country_id=$countryId&status=$orderStatus', method: HttpMethod.GET)));
 }
 
 /// update status
@@ -478,8 +485,7 @@ Future<LDBaseResponse> cancelAutoAssignOrder(Map request) async {
 }
 
 Future<AutoCompletePlacesListModel> placeAutoCompleteApi({String searchText = '', String countryCode = "in", String language = 'en'}) async {
-  return AutoCompletePlacesListModel.fromJson(
-      await handleResponse(await buildHttpResponse('place-autocomplete-api?country_code=$countryCode&language=$language&search_text=$searchText', method: HttpMethod.GET)));
+  return AutoCompletePlacesListModel.fromJson(await handleResponse(await buildHttpResponse('place-autocomplete-api?country_code=$countryCode&language=$language&search_text=$searchText', method: HttpMethod.GET)));
 }
 
 Future<PlaceIdDetailModel> getPlaceDetail({String placeId = ''}) async {
@@ -505,6 +511,7 @@ Future<LDBaseResponse> saveWallet(Map request) async {
 /// Update Bank Info
 Future updateBankDetail({String? bankName, String? bankCode, String? accountName, String? accountNumber}) async {
   MultipartRequest multiPartRequest = await getMultiPartRequest('update-profile');
+  multiPartRequest.fields['id'] = getIntAsync(USER_ID).toString();
   multiPartRequest.fields['email'] = getStringAsync(USER_EMAIL).validate();
   multiPartRequest.fields['contact_number'] = getStringAsync(USER_CONTACT_NUMBER).validate();
   multiPartRequest.fields['username'] = getStringAsync(USER_NAME).validate();

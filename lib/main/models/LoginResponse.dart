@@ -1,13 +1,15 @@
 class LoginResponse {
   UserData? data;
   String? message;
+  var status;
 
-  LoginResponse({this.data, this.message});
+  LoginResponse({this.data, this.message,this.status});
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) {
     return LoginResponse(
       data: json['data'] != null ? UserData.fromJson(json['data']) : null,
       message: json['message'],
+      status: json['status'],
     );
   }
 
@@ -17,6 +19,7 @@ class LoginResponse {
       data['data'] = this.data!.toJson();
     }
     data['message'] = this.message;
+    data['status'] = this.status;
     return data;
   }
 }
