@@ -89,6 +89,9 @@ class LoginScreenState extends State<LoginScreen> {
               await logout(context, isFromLogin: true);
             } else {
               if (getIntAsync(STATUS) == 1) {
+                updateUid(getStringAsync(UID)).then((value) {
+                  log("value...." + value.toString());
+                });
                 if (v.data!.countryId != null && v.data!.cityId != null) {
                   await getCountryDetailApiCall(v.data!.countryId.validate());
                   getCityDetailApiCall(v.data!.cityId.validate());
@@ -97,6 +100,7 @@ class LoginScreenState extends State<LoginScreen> {
                 }
               } else {
                 toast(language.userNotApproveMsg);
+                await logout(context, isDeleteAccount: true);
               }
             }
           });

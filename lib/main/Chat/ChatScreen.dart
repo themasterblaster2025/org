@@ -38,7 +38,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   UserData sender = UserData(
     name: getStringAsync(USER_NAME),
-    profileImage: getStringAsync(USER_PROFILE_PHOTO),
+    profileImage: appStore.userProfile,
     uid: getStringAsync(UID),
     playerId: getStringAsync(PLAYER_ID),
   );

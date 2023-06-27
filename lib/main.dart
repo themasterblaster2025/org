@@ -45,6 +45,7 @@ void main() async {
 
   appStore.setLogin(getBoolAsync(IS_LOGGED_IN), isInitializing: true);
   appStore.setUserEmail(getStringAsync(USER_EMAIL), isInitialization: true);
+  appStore.setUserProfile(getStringAsync(USER_PROFILE_PHOTO),isInitializing: true);
   appStore.setLanguage(
       getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguage));
   FilterAttributeModel? filterData =

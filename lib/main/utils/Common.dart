@@ -18,7 +18,7 @@ import 'Widgets.dart';
 
 InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, Function()? suffixOnTap, Widget? dateTime, Widget? prefixIcon}) {
   return InputDecoration(
-    contentPadding: EdgeInsets.all(12),
+    contentPadding: EdgeInsets.all(16),
     filled: true,
     prefixIcon: prefixIcon,
     hintText: hintText != null ? hintText : '',

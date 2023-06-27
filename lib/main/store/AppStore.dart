@@ -53,6 +53,9 @@ abstract class _AppStore with Store {
   int isVehicleOrder = 0;
 
   @observable
+  String userProfile = '';
+
+  @observable
   String currencyPosition = CURRENCY_POSITION_LEFT;
 
   @observable
@@ -160,5 +163,11 @@ abstract class _AppStore with Store {
   @action
   void setCompanyAddress(String val) {
     invoiceAddress = val;
+  }
+
+  @action
+  Future<void> setUserProfile(String val,{bool isInitializing = false}) async {
+    userProfile = val;
+    if (!isInitializing) await setValue(USER_PROFILE_PHOTO, val);
   }
 }

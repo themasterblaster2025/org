@@ -81,6 +81,7 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
           // appStore.userBankDetail.nameAsPerBank = nameCon.text.trim();
           // appStore.userBankDetail.ifscCode = ifscCCon.text.trim();
           appStore.setLoading(false);
+          finish(context);
           setState(() {});
         },
         onError: (error) {

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import '../../delivery/components/OTPDialog.dart';
 import '../../main/screens/LoginScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -82,6 +81,9 @@ class AuthServices {
                 Map request = {"email": userModel.email, "password": password};
                 await logInApi(request).then((res) async {
                   await signInWithEmailPassword(context, email: email.validate(), password: password.validate()).then((value) {
+                    updateUid(getStringAsync(UID)).then((value) {
+                      log("value...." + value.toString());
+                    });
                     appStore.setLoading(false);
                     UserCitySelectScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
                   });
@@ -121,9 +123,6 @@ class AuthServices {
       setValue(UID, userModel.uid.validate());
       setValue(USER_EMAIL, userModel.email.validate());
       setValue(IS_LOGGED_IN, true);
-      updateUid(getStringAsync(UID)).then((value) {
-        log("value...." + value.toString());
-      });
     }).catchError((e) {
       log(e.toString());
     });

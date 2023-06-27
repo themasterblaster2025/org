@@ -17,22 +17,6 @@ class UserService extends BaseService {
     ref = fireStore.collection(USER_COLLECTION);
   }
 
-  Future<void> updateUserInfo(Map data, String id, {File? profileImage}) async {
-    if (profileImage != null) {
-      String fileName = basename(profileImage.path);
-      Reference storageRef = _storage.ref().child("$USER_PROFILE_PHOTO/$fileName");
-      UploadTask uploadTask = storageRef.putFile(profileImage);
-      await uploadTask.then((e) async {
-        await e.ref.getDownloadURL().then((value) {
-          setValue(USER_PROFILE_PHOTO, value);
-          data.putIfAbsent("photoUrl", () => value);
-        });
-      });
-    }
-
-    return ref!.doc(id).update(data as Map<String, Object?>);
-  }
-
   Future<void> updateUserStatus(Map data, String id) async {
     return ref!.doc(id).update(data as Map<String, Object?>);
   }

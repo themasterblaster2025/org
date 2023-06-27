@@ -63,8 +63,8 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     if (imageProfile != null) {
       return Image.file(File(imageProfile!.path), height: 100, width: 100, fit: BoxFit.cover, alignment: Alignment.center).cornerRadiusWithClipRRect(100).center();
     } else {
-      if (getStringAsync(USER_PROFILE_PHOTO).isNotEmpty) {
-        return commonCachedNetworkImage(getStringAsync(USER_PROFILE_PHOTO).validate(), fit: BoxFit.cover, height: 100, width: 100).cornerRadiusWithClipRRect(100).center();
+      if (appStore.userProfile.isNotEmpty) {
+        return commonCachedNetworkImage(appStore.userProfile.validate(), fit: BoxFit.cover, height: 100, width: 100).cornerRadiusWithClipRRect(100).center();
       } else {
         return commonCachedNetworkImage('assets/profile.png', height: 90, width: 90).cornerRadiusWithClipRRect(50).paddingOnly(right: 4, bottom: 4).center();
       }
@@ -184,6 +184,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     AppTextField(
                       controller: contactNumberController,
                       textFieldType: TextFieldType.PHONE,
+                      enabled: false,
                       focus: contactFocus,
                       nextFocus: addressFocus,
                       decoration: commonInputDecoration(
@@ -196,6 +197,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                                 showCountryOnly: false,
                                 dialogSize: Size(context.width() - 60, context.height() * 0.6),
                                 showFlag: true,
+                                enabled: false,
                                 showFlagDialog: true,
                                 showOnlyCountryWhenClosed: false,
                                 alignLeft: false,

@@ -217,6 +217,22 @@ mixin _$AppStore on _AppStore, Store {
     });
   }
 
+  late final _$userProfileAtom =
+      Atom(name: '_AppStore.userProfile', context: context);
+
+  @override
+  String get userProfile {
+    _$userProfileAtom.reportRead();
+    return super.userProfile;
+  }
+
+  @override
+  set userProfile(String value) {
+    _$userProfileAtom.reportWrite(value, super.userProfile, () {
+      super.userProfile = value;
+    });
+  }
+
   late final _$currencyPositionAtom =
       Atom(name: '_AppStore.currencyPosition', context: context);
 
@@ -386,6 +402,15 @@ mixin _$AppStore on _AppStore, Store {
     return _$setFilteringAsyncAction.run(() => super.setFiltering(val));
   }
 
+  late final _$setUserProfileAsyncAction =
+      AsyncAction('_AppStore.setUserProfile', context: context);
+
+  @override
+  Future<void> setUserProfile(String val, {bool isInitializing = false}) {
+    return _$setUserProfileAsyncAction
+        .run(() => super.setUserProfile(val, isInitializing: isInitializing));
+  }
+
   late final _$_AppStoreActionController =
       ActionController(name: '_AppStore', context: context);
 
@@ -438,6 +463,7 @@ currencyCode: ${currencyCode},
 currencySymbol: ${currencySymbol},
 availableBal: ${availableBal},
 isVehicleOrder: ${isVehicleOrder},
+userProfile: ${userProfile},
 currencyPosition: ${currencyPosition},
 invoiceCompanyName: ${invoiceCompanyName},
 invoiceContactNumber: ${invoiceContactNumber},

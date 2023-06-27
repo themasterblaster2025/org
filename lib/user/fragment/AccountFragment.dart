@@ -47,7 +47,7 @@ class AccountFragmentState extends State<AccountFragment> {
         padding: EdgeInsets.only(left: 16, right: 16, bottom: context.height() * 0.1, top: 30),
         child: Column(
           children: [
-            commonCachedNetworkImage(getStringAsync(USER_PROFILE_PHOTO).validate(), height: 90, width: 90, fit: BoxFit.cover, alignment: Alignment.center).cornerRadiusWithClipRRect(50),
+            commonCachedNetworkImage(appStore.userProfile.validate(), height: 90, width: 90, fit: BoxFit.cover, alignment: Alignment.center).cornerRadiusWithClipRRect(50),
             12.height,
             Text(getStringAsync(NAME).validate(), style: boldTextStyle(size: 20)),
             6.height,

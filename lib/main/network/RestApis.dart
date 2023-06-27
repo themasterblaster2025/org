@@ -114,7 +114,6 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
     await setValue(USER_EMAIL, loginResponse.data!.email.validate());
     await setValue(USER_TOKEN, loginResponse.data!.apiToken.validate());
     await setValue(USER_CONTACT_NUMBER, loginResponse.data!.contactNumber.validate());
-    await setValue(USER_PROFILE_PHOTO, loginResponse.data!.profileImage.validate());
     await setValue(USER_TYPE, loginResponse.data!.userType.validate());
     await setValue(USER_NAME, loginResponse.data!.username.validate());
     await setValue(STATUS, loginResponse.data!.status.validate());
@@ -122,6 +121,7 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
     await setValue(COUNTRY_ID, loginResponse.data!.countryId.validate());
     await setValue(CITY_ID, loginResponse.data!.cityId.validate());
     await setValue(OTP_VERIFIED, loginResponse.data!.otpVerifyAt!=null);
+    appStore.setUserProfile(loginResponse.data!.profileImage.validate());
     await userService.getUser(email: loginResponse.data!.email.validate()).then((value) async {
       log(value);
       await setValue(UID, value.uid.validate());
@@ -189,6 +189,7 @@ Future<void> logout(BuildContext context, {bool isFromLogin = false, bool isDele
 
     await appStore.setLogin(false);
     appStore.setFiltering(false);
+    appStore.setUserProfile('');
     if (isFromLogin) {
       toast(language.credentialNotMatch);
     } else {
@@ -255,11 +256,11 @@ Future updateProfile({String? userName, String? name, String? userEmail, String?
       LoginResponse res = LoginResponse.fromJson(data);
 
       await setValue(NAME, res.data!.name.validate());
-      await setValue(USER_PROFILE_PHOTO, res.data!.profileImage.validate());
       await setValue(USER_NAME, res.data!.username.validate());
       await setValue(USER_ADDRESS, res.data!.address.validate());
       await setValue(USER_CONTACT_NUMBER, res.data!.contactNumber.validate());
       await appStore.setUserEmail(res.data!.email.validate());
+      appStore.setUserProfile(res.data!.profileImage.validate());
     }
   }, onError: (error) {
     toast(error.toString());
