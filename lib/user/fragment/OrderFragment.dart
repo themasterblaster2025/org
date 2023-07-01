@@ -73,7 +73,7 @@ class OrderFragmentState extends State<OrderFragment> {
   getOrderListApiCall() async {
     appStore.setLoading(true);
     FilterAttributeModel filterData = FilterAttributeModel.fromJson(getJSONAsync(FILTER_DATA));
-    await getOrderList(page: page, orderStatus: filterData.orderStatus, fromDate: filterData.fromDate, toDate: filterData.toDate).then((value) {
+    await getOrderList(page: page, orderStatus: filterData.orderStatus, fromDate: filterData.fromDate, toDate: filterData.toDate,excludeStatus:ORDER_DRAFT).then((value) {
       appStore.setLoading(false);
       appStore.setAllUnreadCount(value.allUnreadCount.validate());
       totalPage = value.pagination!.totalPages.validate(value: 1);

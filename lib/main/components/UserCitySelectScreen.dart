@@ -94,21 +94,21 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
 
   Future<void> updateCountryCityApiCall() async {
     appStore.setLoading(true);
-    await updateCountryCity(countryId: selectedCountry, cityId: selectedCity).then((value) {
+    await updateUserStatus({"id": getIntAsync(USER_ID), "country_id": selectedCountry, "city_id": selectedCity}).then((value) {
       appStore.setLoading(false);
       if (widget.isBack) {
         finish(context);
         LiveStream().emit('UpdateOrderData');
         widget.onUpdate!.call();
       } else {
-        if(getBoolAsync(OTP_VERIFIED)){
+        if (getBoolAsync(OTP_VERIFIED)) {
           if (getStringAsync(USER_TYPE) == CLIENT) {
             DashboardScreen().launch(context, isNewTask: true);
           } else {
             DeliveryDashBoard().launch(context, isNewTask: true);
           }
-        }else{
-          VerificationScreen().launch(context,isNewTask: true);
+        } else {
+          VerificationScreen().launch(context, isNewTask: true);
         }
       }
     }).catchError((error) {
@@ -161,10 +161,10 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Expanded(flex:1,child: Text(language.country, style: boldTextStyle())),
+                                  Expanded(flex: 1, child: Text(language.country, style: boldTextStyle())),
                                   16.width,
                                   Expanded(
-                                    flex:2,
+                                    flex: 2,
                                     child: DropdownButtonFormField<int>(
                                       value: selectedCountry,
                                       decoration: commonInputDecoration(),
@@ -191,23 +191,21 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                                 ],
                               ),
                               16.height,
-                              Row(
-                                children:[
-                                  Expanded(flex:1,child: Text(language.city, style: boldTextStyle())),
-                                  16.width,
-                                  Expanded(
-                                    flex: 2,
-                                    child:AppTextField(
-                                      controller: searchCityController,
-                                      textFieldType: TextFieldType.OTHER,
-                                      decoration: commonInputDecoration(hintText: language.selectCity, suffixIcon: Icons.search),
-                                      onChanged: (value) {
-                                        getCityApiCall(name: value);
-                                      },
-                                    ),
+                              Row(children: [
+                                Expanded(flex: 1, child: Text(language.city, style: boldTextStyle())),
+                                16.width,
+                                Expanded(
+                                  flex: 2,
+                                  child: AppTextField(
+                                    controller: searchCityController,
+                                    textFieldType: TextFieldType.OTHER,
+                                    decoration: commonInputDecoration(hintText: language.selectCity, suffixIcon: Icons.search),
+                                    onChanged: (value) {
+                                      getCityApiCall(name: value);
+                                    },
                                   ),
-                                ]
-                              ),
+                                ),
+                              ]),
                               16.height,
                               appStore.isLoading && cityData.isEmpty
                                   ? loaderWidget()

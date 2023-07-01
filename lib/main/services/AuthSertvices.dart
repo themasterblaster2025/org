@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../delivery/components/OTPDialog.dart';
 import '../../main/screens/LoginScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -72,28 +71,29 @@ class AuthServices {
           userModel.updatedAt = Timestamp.now().toDate().toString();
           userModel.playerId = getStringAsync(PLAYER_ID);
           await userService.addDocumentWithCustomId(user.uid, userModel.toJson()).then((value) async {
-            updateUid(user.uid).then((value) async {
-              if (userModel.userType == DELIVERY_MAN) {
-                appStore.setLogin(false);
-                appStore.setLoading(false);
-                LoginScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
-              } else {
-                Map request = {"email": userModel.email, "password": password};
-                await logInApi(request).then((res) async {
-                  await signInWithEmailPassword(context, email: email.validate(), password: password.validate()).then((value) {
-                    updateUid(getStringAsync(UID)).then((value) {
-                      log("value...." + value.toString());
-                    });
-                    appStore.setLoading(false);
-                    UserCitySelectScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+            if (userModel.userType == DELIVERY_MAN) {
+              appStore.setLogin(false);
+              appStore.setLoading(false);
+              LoginScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+            } else {
+              Map request = {"email": userModel.email, "password": password};
+              await logInApi(request).then((res) async {
+                await signInWithEmailPassword(context, email: email.validate(), password: password.validate()).then((value) {
+                  updateUserStatus({
+                    "id": getIntAsync(USER_ID),
+                    "uid": getStringAsync(UID),
+                  }).then((value) {
+                    log("value...." + value.toString());
                   });
-                }).catchError((e) {
                   appStore.setLoading(false);
-                  log(e.toString());
-                  toast(e.toString());
+                  UserCitySelectScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
                 });
-              }
-            });
+              }).catchError((e) {
+                appStore.setLoading(false);
+                log(e.toString());
+                toast(e.toString());
+              });
+            }
           }).catchError((e) {
             appStore.setLoading(false);
             toast(e.toString());
@@ -102,7 +102,7 @@ class AuthServices {
           appStore.setLoading(false);
           throw 'Something went wrong';
         }
-      }).catchError((e){
+      }).catchError((e) {
         appStore.setLoading(false);
       });
     } on FirebaseException catch (error) {

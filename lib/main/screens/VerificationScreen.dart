@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mighty_delivery/main/services/AuthSertvices.dart';
@@ -99,7 +98,8 @@ class VerificationScreenState extends State<VerificationScreen> {
                             builder: (context) => OTPDialog(
                                 phoneNumber: getStringAsync(USER_CONTACT_NUMBER),
                                 onUpdate: () {
-                                  updateOtpVerify().then((value) {
+                                  updateUserStatus({"id": getIntAsync(USER_ID), "otp_verify_at": DateTime.now().toString()}).then((value) {
+                                    setValue(OTP_VERIFIED, true);
                                     if (getStringAsync(USER_TYPE) == CLIENT) {
                                       DashboardScreen().launch(getContext, isNewTask: true);
                                     } else {

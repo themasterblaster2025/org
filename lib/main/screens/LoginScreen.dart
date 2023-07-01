@@ -89,7 +89,10 @@ class LoginScreenState extends State<LoginScreen> {
               await logout(context, isFromLogin: true);
             } else {
               if (getIntAsync(STATUS) == 1) {
-                updateUid(getStringAsync(UID)).then((value) {
+                updateUserStatus({
+                  "id": getIntAsync(USER_ID),
+                  "uid": getStringAsync(UID),
+                }).then((value) {
                   log("value...." + value.toString());
                 });
                 if (v.data!.countryId != null && v.data!.cityId != null) {

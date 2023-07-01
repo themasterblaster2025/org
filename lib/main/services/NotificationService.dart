@@ -16,6 +16,9 @@ class NotificationService {
       'contents': {
         'en': content,
       },
+      'data': {
+        'id': 'CHAT_${getIntAsync(USER_ID)}',
+      },
       'big_picture': image.validate().isNotEmpty ? image.validate() : '',
       'large_icon': image.validate().isNotEmpty ? image.validate() : '',
       'small_icon': mAppIconUrl,

@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
-import 'package:mighty_delivery/main/models/OrderDetailModel.dart';
 import '../../main.dart';
 import '../../main/components/BodyCornerWidget.dart';
 import '../../main/models/CityListModel.dart';
@@ -1142,7 +1141,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             children: [
               Text(pickAddressCont.text, style: primaryTextStyle()),
               8.height.visible(pickPhoneCont.text.isNotEmpty),
-              Text(pickPhoneCont.text, style: secondaryTextStyle())
+              Text('$pickupCountryCode ${pickPhoneCont.text.trim()}', style: secondaryTextStyle())
                   .visible(pickPhoneCont.text.isNotEmpty),
             ],
           ),
@@ -1164,7 +1163,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             children: [
               Text(deliverAddressCont.text, style: primaryTextStyle()),
               8.height.visible(deliverPhoneCont.text.isNotEmpty),
-              Text(deliverPhoneCont.text, style: secondaryTextStyle())
+              Text('$deliverCountryCode ${deliverPhoneCont.text.trim()}', style: secondaryTextStyle())
                   .visible(deliverPhoneCont.text.isNotEmpty),
             ],
           ),

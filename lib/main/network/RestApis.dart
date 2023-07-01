@@ -151,21 +151,6 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
   });
 }
 
-////// Update Location
-Future updateUid(String? uid) async {
-  MultipartRequest multiPartRequest = await getMultiPartRequest('update-profile');
-  multiPartRequest.fields['id'] = getIntAsync(USER_ID).toString();
-  multiPartRequest.fields['uid'] = uid.validate();
-
-  await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
-    if (data != null) {
-      //
-    }
-  }, onError: (error) {
-    toast(error.toString());
-  });
-}
-
 Future<void> logout(BuildContext context, {bool isFromLogin = false, bool isDeleteAccount = false, bool isVerification = false}) async {
   clearData() async {
     await removeKey(USER_ID);
@@ -183,6 +168,7 @@ Future<void> logout(BuildContext context, {bool isFromLogin = false, bool isDele
     await removeKey(CITY_DATA);
     await removeKey(FILTER_DATA);
     await removeKey(IS_VERIFIED_DELIVERY_MAN);
+    await removeKey(OTP_VERIFIED);
     if (!getBoolAsync(REMEMBER_ME)) {
       await removeKey(USER_EMAIL);
       await removeKey(USER_PASSWORD);
@@ -318,50 +304,16 @@ Future<VehicleListModel> getVehicleList({String? type, int? perPage, int? page, 
   }
 }
 
-/// Country
-Future updateCountryCity({int? countryId, int? cityId}) async {
-  MultipartRequest multiPartRequest = await getMultiPartRequest('update-profile');
-  multiPartRequest.fields['id'] = getIntAsync(USER_ID).toString();
-  multiPartRequest.fields['city_id'] = cityId.toString();
-  multiPartRequest.fields['country_id'] = countryId.toString();
-
-  await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
-    if (data != null) {
-      LoginResponse res = LoginResponse.fromJson(data);
-      if(res.data!=null){
-        await setValue(COUNTRY_ID, res.data!.countryId.validate());
-        await setValue(CITY_ID, res.data!.cityId.validate());
-      }
-    }
-  }, onError: (error) {
-    toast(error.toString());
-  });
-}
-
-/// Update otp verify
-Future updateOtpVerify() async {
-  MultipartRequest multiPartRequest = await getMultiPartRequest('update-profile');
-  multiPartRequest.fields['id'] = getIntAsync(USER_ID).toString();
-  multiPartRequest.fields['otp_verify_at'] = DateTime.now().toString();
-
-  await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
-    if (data != null) {
-      LoginResponse res = LoginResponse.fromJson(data);
-      if(res.data!=null) {
-        await setValue(OTP_VERIFIED, res.data!.otpVerifyAt != null);
-      }
-    }
-  }, onError: (error) {
-    toast(error.toString());
-  });
-}
-
 /// get OrderList
-Future<OrderListModel> getOrderList({required int page, String? orderStatus, String? fromDate, String? toDate}) async {
+Future<OrderListModel> getOrderList({required int page, String? orderStatus, String? fromDate, String? toDate,String? excludeStatus}) async {
   String endPoint = 'order-list?client_id=${getIntAsync(USER_ID)}&city_id=${getIntAsync(CITY_ID)}&page=$page';
 
   if (orderStatus.validate().isNotEmpty) {
     endPoint += '&status=$orderStatus';
+  }
+
+  if(excludeStatus.validate().isNotEmpty){
+    endPoint += '&exclude_status=$excludeStatus';
   }
 
   if (fromDate.validate().isNotEmpty && toDate.validate().isNotEmpty) {
@@ -436,23 +388,6 @@ Future<WithDrawListModel> getWithDrawList({int? page}) async {
 
 Future<LDBaseResponse> saveWithDrawRequest(Map request) async {
   return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('save-withdrawrequest', method: HttpMethod.POST, request: request)));
-}
-
-/// Update Location
-Future updateLocation({String? userName, String? userEmail, String? latitude, String? longitude}) async {
-  MultipartRequest multiPartRequest = await getMultiPartRequest('update-profile');
-  multiPartRequest.fields['id'] = getIntAsync(USER_ID).toString();
-  multiPartRequest.fields['latitude'] = latitude!;
-  multiPartRequest.fields['longitude'] = longitude!;
-  multiPartRequest.fields['uid'] = getStringAsync(UID);
-
-  await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
-    if (data != null) {
-      //
-    }
-  }, onError: (error) {
-    toast(error.toString());
-  });
 }
 
 /// Get Notification List
@@ -543,4 +478,8 @@ Future<UserProfileDetailModel> getUserProfile() async {
 
 Future<InvoiceSettingModel> getInvoiceSetting() async {
   return InvoiceSettingModel.fromJson(await handleResponse(await buildHttpResponse('get-setting', method: HttpMethod.GET)));
+}
+
+Future<LDBaseResponse> updateUserStatus(Map req) async {
+  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('update-user-status', request: req, method: HttpMethod.POST)));
 }

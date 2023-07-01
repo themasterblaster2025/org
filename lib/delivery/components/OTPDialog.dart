@@ -9,7 +9,6 @@ import 'package:nb_utils/nb_utils.dart' hide OTPTextField;
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 
-import '../../main/network/RestApis.dart';
 
 class OTPDialog extends StatefulWidget {
   final String? phoneNumber;
