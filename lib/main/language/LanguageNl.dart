@@ -1073,4 +1073,19 @@ class LanguageNl extends BaseLanguage {
 
   @override
   String get paymentStatusMessage => "Betalingsstatusbericht";
+
+  @override
+  String get rejected => "Afgewezen";
+
+  @override
+  String get notChangeMobileNo => "U kunt het contactnummer niet wijzigen";
+
+  @override
+  String get verification => "Verificatie";
+
+  @override
+  String get phoneNumberAlreadyVerified => "Het telefoonnummer is al geverifieerd.";
+
+  @override
+  String get verifyPhoneNumber => "Controleer het telefoonnummer";
 }

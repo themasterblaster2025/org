@@ -1072,4 +1072,19 @@ class LanguageId extends BaseLanguage {
 
   @override
   String get paymentStatusMessage => "Pesan Status Pembayaran";
+
+  @override
+  String get rejected => "Ditolak";
+
+  @override
+  String get notChangeMobileNo => "Anda tidak dapat mengubah nomor kontak";
+
+  @override
+  String get verification => "Verifikasi";
+
+  @override
+  String get phoneNumberAlreadyVerified => "Nomor telepon telah diverifikasi.";
+
+  @override
+  String get verifyPhoneNumber => "Verifikasi nomor telepon";
 }

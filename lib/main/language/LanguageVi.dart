@@ -1072,4 +1072,19 @@ class LanguageVi extends BaseLanguage {
 
   @override
   String get paymentStatusMessage => "Thông báo trạng thái thanh toán";
+
+  @override
+  String get rejected => "Vật bị loại bỏ";
+
+  @override
+  String get notChangeMobileNo => "Bạn không thể thay đổi số liên lạc";
+
+  @override
+  String get verification => "xác minh";
+
+  @override
+  String get phoneNumberAlreadyVerified => "Số điện thoại đã được xác minh.";
+
+  @override
+  String get verifyPhoneNumber => "Xác minh số điện thoại";
 }

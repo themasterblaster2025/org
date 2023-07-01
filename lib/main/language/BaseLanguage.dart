@@ -717,4 +717,14 @@ abstract class BaseLanguage {
   String get courierTransfer;
 
   String get paymentStatusMessage;
+
+  String get rejected;
+
+  String get notChangeMobileNo;
+
+  String get verification;
+
+  String get phoneNumberAlreadyVerified;
+
+  String get verifyPhoneNumber;
 }

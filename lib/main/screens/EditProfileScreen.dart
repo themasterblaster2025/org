@@ -228,7 +228,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                         return null;
                       },
                       onTap: () {
-                        toast('You cannot change Contact Number');
+                        toast(language.notChangeMobileNo);
                       },
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,

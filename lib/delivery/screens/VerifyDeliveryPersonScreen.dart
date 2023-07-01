@@ -146,13 +146,13 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
   }
 
   String getStatus(int i) {
-    String status = 'Pending';
+    String status = language.pending;
     if (i == 0) {
-      status = 'Pending';
+      status = language.pending;
     } else if (i == 1) {
-      status = 'Approved';
+      status = language.approved;
     } else if (i == 2) {
-      status = 'Rejected';
+      status = language.rejected;
     }
     return status;
   }

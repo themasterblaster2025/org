@@ -1073,4 +1073,19 @@ class LanguageFr extends BaseLanguage {
 
   @override
   String get paymentStatusMessage => "Message d'état de paiement";
+
+  @override
+  String get rejected => "Rejeté";
+
+  @override
+  String get notChangeMobileNo => "Vous ne pouvez pas modifier le numéro de contact";
+
+  @override
+  String get verification => "Vérification";
+
+  @override
+  String get phoneNumberAlreadyVerified => "Le numéro de téléphone a déjà vérifié.";
+
+  @override
+  String get verifyPhoneNumber => "Vérifiez le numéro de téléphone";
 }

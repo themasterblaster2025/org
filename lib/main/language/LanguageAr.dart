@@ -1072,4 +1072,19 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get paymentStatusMessage => "رسالة حالة الدفع";
+
+  @override
+  String get rejected => "مرفوض";
+
+  @override
+  String get notChangeMobileNo => "لا يمكنك تغيير رقم الاتصال";
+
+  @override
+  String get verification => "تَحَقّق";
+
+  @override
+  String get phoneNumberAlreadyVerified => "تم التحقق بالفعل من رقم الهاتف.";
+
+  @override
+  String get verifyPhoneNumber => "تحقق من رقم الهاتف";
 }

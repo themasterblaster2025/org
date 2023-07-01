@@ -1053,17 +1053,39 @@ class LanguagePt extends BaseLanguage {
   @override
   String get bankName => "Nome do banco";
 
-  @override String get courierAssigned => "Courier designado";
+  @override
+  String get courierAssigned => "Courier designado";
 
-  @override String get courierAccepted => "Courier aceito";
+  @override
+  String get courierAccepted => "Courier aceito";
 
-  @override String get courierPickedUp => "Courier pegou";
+  @override
+  String get courierPickedUp => "Courier pegou";
 
-  @override String get courierArrived => "Courier chegou";
+  @override
+  String get courierArrived => "Courier chegou";
 
-  @override String get courierDeparted => "Courier partiu";
+  @override
+  String get courierDeparted => "Courier partiu";
 
-  @override String get courierTransfer => "Transferência de correio";
+  @override
+  String get courierTransfer => "Transferência de correio";
 
-  @override String get paymentStatusMessage => "Mensagem de status de pagamento";
+  @override
+  String get paymentStatusMessage => "Mensagem de status de pagamento";
+
+  @override
+  String get rejected => "Rejeitado";
+
+  @override
+  String get notChangeMobileNo => "Você não pode alterar o número de contato";
+
+  @override
+  String get verification => "Verificação";
+
+  @override
+  String get phoneNumberAlreadyVerified => "O número de telefone já foi verificado.";
+
+  @override
+  String get verifyPhoneNumber => "Verifique o número de telefone";
 }

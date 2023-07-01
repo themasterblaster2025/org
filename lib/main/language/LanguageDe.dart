@@ -1073,4 +1073,19 @@ class LanguageDe extends BaseLanguage {
 
   @override
   String get paymentStatusMessage => "Zahlungsstatusnachricht";
+
+  @override
+  String get rejected => "Abgelehnt";
+
+  @override
+  String get notChangeMobileNo => "Sie können die Kontaktnummer nicht ändern";
+
+  @override
+  String get verification => "Überprüfung";
+
+  @override
+  String get phoneNumberAlreadyVerified => "Die Telefonnummer hat bereits überprüft.";
+
+  @override
+  String get verifyPhoneNumber => "Überprüfen Sie die Telefonnummer";
 }

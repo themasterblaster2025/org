@@ -1073,4 +1073,19 @@ class LanguageAf extends BaseLanguage {
 
   @override
   String get paymentStatusMessage => "Betalingsstatusboodskap";
+
+  @override
+  String get rejected => "Verwerp";
+
+  @override
+  String get notChangeMobileNo => "U kan nie die kontaknommer verander nie";
+
+  @override
+  String get verification => "Verifikasie";
+
+  @override
+  String get phoneNumberAlreadyVerified => "Telefoonnommer is reeds bevestig.";
+
+  @override
+  String get verifyPhoneNumber => "Verifieer telefoonnommer";
 }

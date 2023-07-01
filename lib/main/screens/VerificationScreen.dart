@@ -56,7 +56,7 @@ class VerificationScreenState extends State<VerificationScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Verification', style: boldTextStyle(color: Colors.white)),
+          title: Text(language.verification, style: boldTextStyle(color: Colors.white)),
           automaticallyImplyLeading: false,
           actions: [
             IconButton(
@@ -89,7 +89,7 @@ class VerificationScreenState extends State<VerificationScreen> {
                 InkWell(
                   onTap: () async {
                     if (getBoolAsync(OTP_VERIFIED).validate()) {
-                      toast('Phone number has already verified.');
+                      toast(language.phoneNumberAlreadyVerified);
                     } else {
                       appStore.setLoading(true);
                       log('-----${getStringAsync(USER_CONTACT_NUMBER)}');
@@ -110,41 +110,6 @@ class VerificationScreenState extends State<VerificationScreen> {
                                 verificationId: verificationId),
                             barrierDismissible: false);
                       });
-                      /* await FirebaseAuth.instance.verifyPhoneNumber(
-                        timeout: const Duration(seconds: 60),
-                        phoneNumber: getStringAsync(USER_CONTACT_NUMBER),
-                        verificationCompleted: (PhoneAuthCredential credential) async {
-                          appStore.setLoading(false);
-                          toast(language.verificationCompleted);
-                        },
-                        verificationFailed: (FirebaseAuthException e) {
-                          appStore.setLoading(false);
-                          if (e.code == 'invalid-phone-number') {
-                            toast(language.phoneNumberInvalid);
-                            throw language.phoneNumberInvalid;
-                          } else {
-                            toast(e.toString());
-                            throw e.toString();
-                          }
-                        },
-                        codeSent: (String verificationId, int? resendToken) async {
-                          appStore.setLoading(false);
-                          toast(language.codeSent);
-                          await showInDialog(context,
-                              builder: (context) => OTPDialog(
-                                  phoneNumber: getStringAsync(USER_CONTACT_NUMBER),
-                                  onUpdate: () {
-                                    updateOtpVerify().then((value) {
-                                      DashboardScreen().launch(context);
-                                    });
-                                  },
-                                  verificationId: verificationId),
-                              barrierDismissible: false);
-                        },
-                        codeAutoRetrievalTimeout: (String verificationId) {
-                          appStore.setLoading(false);
-                        },
-                      );*/
                     }
                   },
                   child: Container(
@@ -157,7 +122,7 @@ class VerificationScreenState extends State<VerificationScreen> {
                       children: [
                         Image.asset('assets/phone.png', height: 24, width: 24, fit: BoxFit.cover),
                         SizedBox(width: 8),
-                        Expanded(child: Text('Verify Phone Number', style: primaryTextStyle())),
+                        Expanded(child: Text(language.verifyPhoneNumber, style: primaryTextStyle())),
                         SizedBox(width: 16),
                         getBoolAsync(OTP_VERIFIED).validate() ? Icon(Icons.verified, color: Colors.green) : Icon(Icons.navigate_next),
                       ],

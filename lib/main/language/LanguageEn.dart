@@ -1072,4 +1072,19 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get paymentStatusMessage => "Payment Status Message";
+
+  @override
+  String get rejected => "Rejected";
+
+  @override
+  String get notChangeMobileNo => "You cannot change Contact Number";
+
+  @override
+  String get verification => "Verification";
+
+  @override
+  String get phoneNumberAlreadyVerified => "Phone number has already verified.";
+
+  @override
+  String get verifyPhoneNumber => "Verify Phone Number";
 }

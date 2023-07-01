@@ -1073,4 +1073,19 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get paymentStatusMessage => "भुगतान की स्थिति संदेश";
+
+  @override
+  String get rejected => "अस्वीकार कर दिया";
+
+  @override
+  String get notChangeMobileNo => "आप संपर्क नंबर नहीं बदल सकते";
+
+  @override
+  String get verification => "सत्यापन";
+
+  @override
+  String get phoneNumberAlreadyVerified => "फोन नंबर पहले ही सत्यापित हो चुका है।";
+
+  @override
+  String get verifyPhoneNumber => "फ़ोन नंबर सत्यापित करें";
 }

@@ -100,7 +100,7 @@ class AuthServices {
           });
         } else {
           appStore.setLoading(false);
-          throw 'Something went wrong';
+          throw language.somethingWentWrong;
         }
       }).catchError((e) {
         appStore.setLoading(false);
@@ -178,75 +178,6 @@ class AuthServices {
       });
     }
   }
-
-/*  Future<void> signInWithGoogle(BuildContext context) async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
-    GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
-
-    if (googleSignInAccount != null) {
-      //Authentication
-      final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
-
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleSignInAuthentication.accessToken,
-        idToken: googleSignInAuthentication.idToken,
-      );
-
-      final UserCredential authResult = await _auth.signInWithCredential(credential);
-      final User user = authResult.user!;
-
-      assert(!user.isAnonymous);
-
-      final User currentUser = _auth.currentUser!;
-      assert(user.uid == currentUser.uid);
-
-      googleSignIn.signOut();
-
-      String firstName = '';
-      String lastName = '';
-      if (currentUser.displayName.validate().split(' ').length >= 1) firstName = currentUser.displayName.splitBefore(' ');
-      if (currentUser.displayName.validate().split(' ').length >= 2) lastName = currentUser.displayName.splitAfter(' ');
-      Map req = {
-        "email": currentUser.email,
-        "login_type": LoginTypeGoogle,
-        "user_type": RIDER,
-        "first_name": firstName,
-        "last_name": lastName,
-        "username": (firstName + lastName).toLowerCase(),
-        "uid": currentUser.uid,
-        'accessToken': googleSignInAuthentication.accessToken,
-        if (!currentUser.phoneNumber.isEmptyOrNull) 'contact_number': currentUser.phoneNumber.validate(),
-      };
-
-      await logInApi(req, isSocialLogin: true).then((value) async {
-        Navigator.pop(context);
-        sharedPreferences.setString(UID, currentUser.uid);
-        await appStore.setUserProfile(currentUser.photoURL.toString());
-        await sharedPref.setString(USER_PROFILE_PHOTO, currentUser.photoURL.toString());
-        if (value.data!.contactNumber.isEmptyOrNull) {
-          launchScreen(context, EditProfileScreen(isGoogle: true), isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
-        } else {
-          if (value.data!.uid.isEmptyOrNull) {
-            await updateProfile(
-              uid: sharedPref.getString(UID).toString(),
-              userEmail: currentUser.email.validate(),
-            ).then((value) {
-              launchScreen(context, RiderDashBoardScreen(), isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
-            }).catchError((error) {
-              log(error.toString());
-            });
-          } else {
-            launchScreen(context, RiderDashBoardScreen(), isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
-          }
-        }
-      }).catchError((e) {
-        log(e.toString());
-        throw e;
-      });
-    } else {
-      throw errorSomethingWentWrong;
-    }
-  }*/
 }
 
 getCountryDetailApiCall(int countryId, context) async {

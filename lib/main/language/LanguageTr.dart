@@ -1072,4 +1072,19 @@ class LanguageTr extends BaseLanguage {
 
   @override
   String get paymentStatusMessage => "Ödeme Durumu Mesajı";
+
+  @override
+  String get rejected => "Reddedilmiş";
+
+  @override
+  String get notChangeMobileNo => "İletişim Numarasını Değiştiremezsiniz";
+
+  @override
+  String get verification => "Doğrulama";
+
+  @override
+  String get phoneNumberAlreadyVerified => "Telefon numarası zaten doğrulandı.";
+
+  @override
+  String get verifyPhoneNumber => "Telefon Numarasını Doğrulun";
 }
