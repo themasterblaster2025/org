@@ -1,6 +1,7 @@
 import '../../main/models/WalletListModel.dart';
 
 import '../../main/models/PaginationModel.dart';
+import 'VehicleModel.dart';
 
 class OrderListModel {
   PaginationModel? pagination;
@@ -8,10 +9,13 @@ class OrderListModel {
   int? allUnreadCount;
   UserWalletModel? walletData;
 
-  OrderListModel({this.pagination, this.data, this.allUnreadCount,this.walletData});
+  OrderListModel(
+      {this.pagination, this.data, this.allUnreadCount, this.walletData});
 
   OrderListModel.fromJson(Map<String, dynamic> json) {
-    pagination = json['pagination'] != null ? new PaginationModel.fromJson(json['pagination']) : null;
+    pagination = json['pagination'] != null
+        ? new PaginationModel.fromJson(json['pagination'])
+        : null;
     if (json['data'] != null) {
       data = <OrderData>[];
       json['data'].forEach((v) {
@@ -49,7 +53,14 @@ class PickupPoint {
   String? startTime;
   String? endTime;
 
-  PickupPoint({this.address, this.latitude, this.longitude, this.description, this.contactNumber, this.startTime, this.endTime});
+  PickupPoint(
+      {this.address,
+      this.latitude,
+      this.longitude,
+      this.description,
+      this.contactNumber,
+      this.startTime,
+      this.endTime});
 
   PickupPoint.fromJson(Map<String, dynamic> json) {
     address = json['address'];
@@ -113,6 +124,9 @@ class OrderData {
   num? totalParcel;
   int? autoAssign;
   List<dynamic>? cancelledDeliverManIds;
+  int? vehicleId;
+  VehicleData? vehicleData;
+  String? vehicleImage;
 
   OrderData(
       {this.id,
@@ -152,15 +166,22 @@ class OrderData {
       this.distanceCharge,
       this.totalParcel,
       this.autoAssign,
-      this.cancelledDeliverManIds});
+      this.cancelledDeliverManIds,
+      this.vehicleId,
+      this.vehicleData,
+      this.vehicleImage});
 
   OrderData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     clientId = json['client_id'];
     clientName = json['client_name'];
     date = json['date'];
-    pickupPoint = json['pickup_point'] != null ? new PickupPoint.fromJson(json['pickup_point']) : null;
-    deliveryPoint = json['delivery_point'] != null ? new PickupPoint.fromJson(json['delivery_point']) : null;
+    pickupPoint = json['pickup_point'] != null
+        ? new PickupPoint.fromJson(json['pickup_point'])
+        : null;
+    deliveryPoint = json['delivery_point'] != null
+        ? new PickupPoint.fromJson(json['delivery_point'])
+        : null;
     countryId = json['country_id'];
     countryName = json['country_name'];
     cityId = json['city_id'];
@@ -193,6 +214,11 @@ class OrderData {
     totalParcel = json['total_parcel'];
     autoAssign = json['auto_assign'];
     cancelledDeliverManIds = json['cancelled_delivery_man_ids'];
+    vehicleId = json['vehicle_id'];
+    vehicleData = json['vehicle_data'] != null
+        ? new VehicleData.fromJson(json['vehicle_data'])
+        : null;
+    vehicleImage = json['vehicle_image'];
   }
 
   Map<String, dynamic> toJson() {
@@ -239,6 +265,11 @@ class OrderData {
     data['total_parcel'] = this.totalParcel;
     data['auto_assign'] = this.autoAssign;
     data['cancelled_delivery_man_ids'] = this.cancelledDeliverManIds;
+    data['vehicle_id'] = this.vehicleId;
+    if (this.vehicleData != null) {
+      data['vehicle_data'] = this.vehicleData!.toJson();
+    }
+    data['vehicle_image'] = this.vehicleImage;
     return data;
   }
 }

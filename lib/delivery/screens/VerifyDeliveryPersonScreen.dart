@@ -145,6 +145,30 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
     });
   }
 
+  String getStatus(int i) {
+    String status = language.pending;
+    if (i == 0) {
+      status = language.pending;
+    } else if (i == 1) {
+      status = language.approved;
+    } else if (i == 2) {
+      status = language.rejected;
+    }
+    return status;
+  }
+
+  Color getColor(int i) {
+    Color color = colorPrimary;
+    if (i == 0) {
+      color = colorPrimary;
+    } else if (i == 1) {
+      color = Colors.green;
+    } else if (i == 2) {
+      color = Colors.red;
+    }
+    return color;
+  }
+
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
@@ -177,7 +201,7 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
                                 return DropdownMenuItem<DocumentData>(
                                     value: e,
                                     child: Text(
-                                      e.name! + '${e.isRequired==1 ? '*' : ''}',
+                                      e.name! + '${e.isRequired == 1 ? '*' : ''}',
                                       style: primaryTextStyle(),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -222,6 +246,13 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(deliveryPersonDocuments[index].documentName!, style: boldTextStyle()).expand(),
+                                Text(
+                                  getStatus(deliveryPersonDocuments[index].isVerified.validate()),
+                                  style: primaryTextStyle(
+                                    color: getColor(deliveryPersonDocuments[index].isVerified.validate()),
+                                  ),
+                                ),
+                                8.width,
                                 Container(
                                   height: 25,
                                   width: 25,
@@ -233,8 +264,8 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
                                   child: Icon(Icons.edit, color: colorPrimary, size: 14),
                                 ).onTap(() {
                                   getMultipleFile(deliveryPersonDocuments[index].documentId, updateId: deliveryPersonDocuments[index].id.validate());
-                                }).visible(deliveryPersonDocuments[index].isVerified == 0),
-                                8.width,
+                                }).visible(deliveryPersonDocuments[index].isVerified != 1),
+                                8.width.visible(deliveryPersonDocuments[index].isVerified != 1),
                                 Container(
                                   height: 25,
                                   width: 25,
@@ -246,7 +277,7 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
                                   child: Icon(Icons.delete, color: Colors.red, size: 14),
                                 ).onTap(() {
                                   deleteDoc(deliveryPersonDocuments[index].id);
-                                }).visible(deliveryPersonDocuments[index].isVerified == 0),
+                                }).visible(deliveryPersonDocuments[index].isVerified != 1),
                                 Icon(Icons.verified_user, color: Colors.green).visible(deliveryPersonDocuments[index].isVerified == 1),
                               ],
                             ),
@@ -257,10 +288,10 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
                                     decoration: boxDecorationWithRoundedCorners(backgroundColor: Colors.grey.withOpacity(0.2)),
                                     child: Text(deliveryPersonDocuments[index].deliveryManDocument!.split('/').last, style: primaryTextStyle()),
                                   ).onTap(() {
-                                   commonLaunchUrl(deliveryPersonDocuments[index].deliveryManDocument.validate());
+                                    commonLaunchUrl(deliveryPersonDocuments[index].deliveryManDocument.validate());
                                   })
                                 : commonCachedNetworkImage(deliveryPersonDocuments[index].deliveryManDocument!, height: 200, width: context.width(), fit: BoxFit.cover).cornerRadiusWithClipRRect(8).onTap(() {
-                                   commonLaunchUrl(deliveryPersonDocuments[index].deliveryManDocument!.validate());
+                                    commonLaunchUrl(deliveryPersonDocuments[index].deliveryManDocument!.validate());
                                   }),
                           ],
                         );

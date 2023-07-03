@@ -69,10 +69,10 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
       markers.add(
         Marker(
           markerId: MarkerId(widget.orderData.cityName.validate()),
-          position: widget.orderData.status == ORDER_ACTIVE
+          position: widget.orderData.status == ORDER_ACCEPTED
               ? LatLng(widget.orderData.pickupPoint!.latitude.toDouble(), widget.orderData.pickupPoint!.longitude.toDouble())
               : LatLng(widget.orderData.deliveryPoint!.latitude.toDouble(), widget.orderData.deliveryPoint!.longitude.toDouble()),
-          infoWindow: InfoWindow(title: widget.orderData.status == ORDER_ACTIVE ? widget.orderData.pickupPoint!.address.validate() : widget.orderData.deliveryPoint!.address.validate()),
+          infoWindow: InfoWindow(title: widget.orderData.status == ORDER_ACCEPTED ? widget.orderData.pickupPoint!.address.validate() : widget.orderData.deliveryPoint!.address.validate()),
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
         ),
       );
@@ -89,7 +89,7 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
     var result = await polylinePoints.getRouteBetweenCoordinates(
       googleMapAPIKey,
       PointLatLng(deliveryLatLng.latitude, deliveryLatLng.longitude),
-      widget.orderData.status == ORDER_ACTIVE
+      widget.orderData.status == ORDER_ACCEPTED
           ? PointLatLng(widget.orderData.pickupPoint!.latitude.toDouble(), widget.orderData.pickupPoint!.longitude.toDouble())
           : PointLatLng(widget.orderData.deliveryPoint!.latitude.toDouble(), widget.orderData.deliveryPoint!.longitude.toDouble()),
     );

@@ -49,21 +49,31 @@ class OrderFragmentState extends State<OrderFragment> {
   }
 
   Future<void> init() async {
-    getOrderListApiCall();
+    await getOrderListApiCall();
     await getAppSetting().then((value) {
       appStore.setOtpVerifyOnPickupDelivery(value.otpVerifyOnPickupDelivery == 1);
       appStore.setCurrencyCode(value.currencyCode ?? currencyCode);
       appStore.setCurrencySymbol(value.currency ?? currencySymbol);
       appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
+      appStore.isVehicleOrder = value.isVehicleInOrder ?? 0;
     }).catchError((error) {
       log(error.toString());
+    });
+    await getInvoiceSetting().then((value) {
+      if(value.invoiceData!=null && value.invoiceData!.isNotEmpty){
+        appStore.setInvoiceCompanyName(value.invoiceData!.firstWhere((element) => element.key=='company_name').value.validate());
+        appStore.setInvoiceContactNumber(value.invoiceData!.firstWhere((element) => element.key=='company_contact_number').value.validate());
+        appStore.setCompanyAddress(value.invoiceData!.firstWhere((element) => element.key=='company_address').value.validate());
+      }
+    }).catchError((error) {
+      toast(error.toString());
     });
   }
 
   getOrderListApiCall() async {
     appStore.setLoading(true);
     FilterAttributeModel filterData = FilterAttributeModel.fromJson(getJSONAsync(FILTER_DATA));
-    await getOrderList(page: page, orderStatus: filterData.orderStatus, fromDate: filterData.fromDate, toDate: filterData.toDate).then((value) {
+    await getOrderList(page: page, orderStatus: filterData.orderStatus, fromDate: filterData.fromDate, toDate: filterData.toDate,excludeStatus:ORDER_DRAFT).then((value) {
       appStore.setLoading(false);
       appStore.setAllUnreadCount(value.allUnreadCount.validate());
       totalPage = value.pagination!.totalPages.validate(value: 1);
@@ -268,7 +278,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                           onTap: () {
                                             OrderTrackingScreen(orderData: item).launch(context);
                                           },
-                                        ).visible(item.status == ORDER_DEPARTED || item.status == ORDER_ACTIVE),
+                                        ).visible(item.status == ORDER_DEPARTED || item.status == ORDER_ACCEPTED),
                                       ],
                                     ).paddingOnly(top: 16),
                                   ],

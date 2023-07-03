@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mighty_delivery/main/services/AuthSertvices.dart';
 import '../../main.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
@@ -8,12 +9,13 @@ import 'package:nb_utils/nb_utils.dart' hide OTPTextField;
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 
+
 class OTPDialog extends StatefulWidget {
   final String? phoneNumber;
   final Function()? onUpdate;
   final String? verificationId;
 
-  OTPDialog({this.phoneNumber, this.onUpdate,this.verificationId});
+  OTPDialog({this.phoneNumber, this.onUpdate, this.verificationId});
 
   @override
   OTPDialogState createState() => OTPDialogState();
@@ -31,11 +33,12 @@ class OTPDialogState extends State<OTPDialog> {
 
   void init() async {
     verId = widget.verificationId.validate();
-    setState(() { });
+    setState(() {});
   }
 
-  Future sendOTP() async {
+  /*Future sendOTP() async {
     appStore.setLoading(true);
+    log('********${widget.phoneNumber.validate()}');
     FirebaseAuth auth = FirebaseAuth.instance;
     await auth.verifyPhoneNumber(
       timeout: const Duration(seconds: 60),
@@ -64,7 +67,7 @@ class OTPDialogState extends State<OTPDialog> {
         appStore.setLoading(false);
       },
     );
-  }
+  }*/
 
   @override
   void setState(fn) {
@@ -85,9 +88,9 @@ class OTPDialogState extends State<OTPDialog> {
             Wrap(
               alignment: WrapAlignment.center,
               children: [
-                Text(language.enterTheCodeSendTo,style: secondaryTextStyle(size: 16)),
+                Text(language.enterTheCodeSendTo, style: secondaryTextStyle(size: 16)),
                 4.width,
-                Text(widget.phoneNumber.validate(),style: boldTextStyle()),
+                Text(widget.phoneNumber.validate(), style: boldTextStyle()),
               ],
             ),
             30.height,
@@ -120,10 +123,13 @@ class OTPDialogState extends State<OTPDialog> {
             Wrap(
               alignment: WrapAlignment.center,
               children: [
-                Text(language.didNotReceiveTheCode,style: secondaryTextStyle(size: 16)),
+                Text(language.didNotReceiveTheCode, style: secondaryTextStyle(size: 16)),
                 4.width,
-                Text(language.resend,style: boldTextStyle(color: colorPrimary)).onTap((){
-                  sendOTP();
+                Text(language.resend, style: boldTextStyle(color: colorPrimary)).onTap(() {
+                  sendOtp(context, phoneNumber: widget.phoneNumber.validate(), onUpdate: (verificationId){
+                    verId = verificationId;
+                    setState(() {});
+                  });
                 }),
               ],
             ),

@@ -994,4 +994,98 @@ class LanguageHi extends BaseLanguage {
 
   @override
   String get adminCommission => "व्यवस्थापक आयोग";
+
+  @override
+  String get assigned => "सौंपा गया";
+
+  @override
+  String get draft => "प्रारूप";
+
+  @override
+  String get created => "बनाया था";
+
+  @override
+  String get accepted => "स्वीकार किया हुआ";
+
+  //TODO
+  @override
+  String get vehicle => 'वाहन';
+
+  @override
+  String get add_vehicle => 'वाहन जोड़ें';
+
+  @override
+  String get update_vehicle => 'अद्यतन वाहन';
+
+  @override
+  String get vehicle_size => 'वाहन का आकार';
+
+  @override
+  String get vehicle_capacity => 'वाहन क्षमता';
+
+  @override
+  String get vehicle_image => 'वाहन छवि';
+
+  @override
+  String get select_vehicle => 'वाहन चुनें';
+
+  @override
+  String get enable_vehicle => 'वाहन सक्षम करें?';
+
+  @override
+  String get disable_vehicle => 'वाहन अक्षम करें?';
+
+  @override
+  String get enable_vehicle_msg => 'क्या आप इस वाहन को सक्षम करना चाहते हैं?';
+
+  @override
+  String get disable_vehicle_msg => 'क्या आप इस वाहन को अक्षम करना चाहते हैं?';
+
+  @override
+  String get delete_vehicle => 'वाहन हटाएं?';
+
+  @override
+  String get do_you_want_to_delete_this_vehicle => 'क्या आप इस वाहन को हटाना चाहते हैं?';
+
+  @override
+  String get vehicle_name => 'वाहन का नाम';
+
+  @override
+  String get bankName => "बैंक का नाम";
+
+  @override
+  String get courierAssigned => "कूरियर सौंपा";
+
+  @override
+  String get courierAccepted => "कूरियर ने स्वीकार किया";
+
+  @override
+  String get courierPickedUp => "कूरियर पिकअप";
+
+  @override
+  String get courierArrived => "कूरियर आ गया";
+
+  @override
+  String get courierDeparted => "कूरियर ने प्रस्थान किया";
+
+  @override
+  String get courierTransfer => "कूरियर अंतरण";
+
+  @override
+  String get paymentStatusMessage => "भुगतान की स्थिति संदेश";
+
+  @override
+  String get rejected => "अस्वीकार कर दिया";
+
+  @override
+  String get notChangeMobileNo => "आप संपर्क नंबर नहीं बदल सकते";
+
+  @override
+  String get verification => "सत्यापन";
+
+  @override
+  String get phoneNumberAlreadyVerified => "फोन नंबर पहले ही सत्यापित हो चुका है।";
+
+  @override
+  String get verifyPhoneNumber => "फ़ोन नंबर सत्यापित करें";
 }

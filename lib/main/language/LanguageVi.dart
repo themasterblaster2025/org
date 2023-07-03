@@ -993,4 +993,98 @@ class LanguageVi extends BaseLanguage {
 
   @override
   String get adminCommission => "Ủy ban quản trị";
+
+  @override
+  String get assigned => "Giao";
+
+  @override
+  String get draft => "Bản thảo";
+
+  @override
+  String get created => "Tạo";
+
+  @override
+  String get accepted => "Đã được chấp nhận";
+
+  //TODO
+  @override
+  String get vehicle => 'phương tiện giao thông';
+
+  @override
+  String get add_vehicle => 'thêm xe';
+
+  @override
+  String get update_vehicle => 'cập nhật xe';
+
+  @override
+  String get vehicle_size => 'kích thước xe';
+
+  @override
+  String get vehicle_capacity => 'công suất xe';
+
+  @override
+  String get vehicle_image => 'hình ảnh xe';
+
+  @override
+  String get select_vehicle => 'chọn xe';
+
+  @override
+  String get enable_vehicle => 'cho phép xe?';
+
+  @override
+  String get disable_vehicle => 'vô hiệu hóa phương tiện??';
+
+  @override
+  String get enable_vehicle_msg => 'Bạn có muốn kích hoạt phương tiện này không?';
+
+  @override
+  String get disable_vehicle_msg => 'Bạn có muốn tắt phương tiện này không?';
+
+  @override
+  String get delete_vehicle => 'xóa xe?';
+
+  @override
+  String get do_you_want_to_delete_this_vehicle => 'Bạn có muốn xóa phương tiện này không?';
+
+  @override
+  String get vehicle_name => 'tên xe';
+
+  @override
+  String get bankName => "Tên ngân hàng";
+
+  @override
+  String get courierAssigned => "Chuyển phát nhanh được giao";
+
+  @override
+  String get courierAccepted => "Chuyển phát nhanh chấp nhận";
+
+  @override
+  String get courierPickedUp => "Chuyển phát nhanh";
+
+  @override
+  String get courierArrived => "Chuyển phát nhanh đã đến";
+
+  @override
+  String get courierDeparted => "Chuyển phát nhanh khởi hành";
+
+  @override
+  String get courierTransfer => "Chuyển giao chuyển phát nhanh";
+
+  @override
+  String get paymentStatusMessage => "Thông báo trạng thái thanh toán";
+
+  @override
+  String get rejected => "Vật bị loại bỏ";
+
+  @override
+  String get notChangeMobileNo => "Bạn không thể thay đổi số liên lạc";
+
+  @override
+  String get verification => "xác minh";
+
+  @override
+  String get phoneNumberAlreadyVerified => "Số điện thoại đã được xác minh.";
+
+  @override
+  String get verifyPhoneNumber => "Xác minh số điện thoại";
 }

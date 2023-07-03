@@ -1,13 +1,15 @@
 class LoginResponse {
   UserData? data;
   String? message;
+  var status;
 
-  LoginResponse({this.data, this.message});
+  LoginResponse({this.data, this.message,this.status});
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) {
     return LoginResponse(
       data: json['data'] != null ? UserData.fromJson(json['data']) : null,
       message: json['message'],
+      status: json['status'],
     );
   }
 
@@ -17,6 +19,7 @@ class LoginResponse {
       data['data'] = this.data!.toJson();
     }
     data['message'] = this.message;
+    data['status'] = this.status;
     return data;
   }
 }
@@ -48,6 +51,7 @@ class UserData {
   int? isVerifiedDeliveryMan;
   String? deletedAt;
   UserBankAccount? userBankAccount;
+  String? otpVerifyAt;
 
   UserData(
       {this.apiToken,
@@ -75,7 +79,8 @@ class UserData {
       this.lastNotificationSeen,
       this.isVerifiedDeliveryMan,
       this.deletedAt,
-      this.userBankAccount});
+      this.userBankAccount,
+      this.otpVerifyAt});
 
   UserData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -104,6 +109,7 @@ class UserData {
     isVerifiedDeliveryMan = json['is_verified_delivery_man'];
     deletedAt = json['deleted_at'];
     userBankAccount = json['user_bank_account'] != null ? new UserBankAccount.fromJson(json['user_bank_account']) : null;
+    otpVerifyAt = json['otp_verify_at'];
   }
 
   Map<String, dynamic> toJson() {
@@ -136,6 +142,7 @@ class UserData {
     if (this.userBankAccount != null) {
       data['user_bank_account'] = this.userBankAccount!.toJson();
     }
+    data['otp_verify_at'] = this.otpVerifyAt;
     return data;
   }
 }

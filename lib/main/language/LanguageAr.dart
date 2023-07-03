@@ -993,4 +993,98 @@ class LanguageAr extends BaseLanguage {
 
   @override
   String get adminCommission => "اللجنة الإدارية";
+
+  @override
+  String get assigned => "تعيين";
+
+  @override
+  String get draft => "مشروع";
+
+  @override
+  String get created => "مخلوق";
+
+  @override
+  String get accepted => "وافقت";
+
+  //TODO
+  @override
+  String get vehicle => 'عربة';
+
+  @override
+  String get add_vehicle => 'أضف مركبة';
+
+  @override
+  String get update_vehicle => 'تحديث السيارة';
+
+  @override
+  String get vehicle_size => 'حجم السيارة';
+
+  @override
+  String get vehicle_capacity => 'قدرة السيارة';
+
+  @override
+  String get vehicle_image => 'صورة السيارة';
+
+  @override
+  String get select_vehicle => 'اختر السيارة';
+
+  @override
+  String get enable_vehicle => 'تمكين السيارة';
+
+  @override
+  String get disable_vehicle => 'تعطيل السيارة';
+
+  @override
+  String get enable_vehicle_msg => 'هل تريد تمكين هذه السيارة؟';
+
+  @override
+  String get disable_vehicle_msg => 'هل تريد تعطيل هذه السيارة؟';
+
+  @override
+  String get delete_vehicle => 'حذف السيارة؟';
+
+  @override
+  String get do_you_want_to_delete_this_vehicle => 'هل تريد حذف هذه السيارة؟';
+
+  @override
+  String get vehicle_name => 'قدرة السيارة';
+
+  @override
+  String get bankName => 'اسم البنك';
+
+  @override
+  String get courierAssigned => "تم تعيين البريد السريع";
+
+  @override
+  String get courierAccepted => "قبل البريد السريع";
+
+  @override
+  String get courierPickedUp => "Courier التقاط";
+
+  @override
+  String get courierArrived => "وصل البريد السريع";
+
+  @override
+  String get courierDeparted => "غادر البريد";
+
+  @override
+  String get courierTransfer => "نقل البريد";
+
+  @override
+  String get paymentStatusMessage => "رسالة حالة الدفع";
+
+  @override
+  String get rejected => "مرفوض";
+
+  @override
+  String get notChangeMobileNo => "لا يمكنك تغيير رقم الاتصال";
+
+  @override
+  String get verification => "تَحَقّق";
+
+  @override
+  String get phoneNumberAlreadyVerified => "تم التحقق بالفعل من رقم الهاتف.";
+
+  @override
+  String get verifyPhoneNumber => "تحقق من رقم الهاتف";
 }

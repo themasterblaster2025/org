@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,6 +8,7 @@ import '../../main.dart';
 import '../../main/components/BodyCornerWidget.dart';
 import '../../main/models/OrderListModel.dart';
 import '../../main/network/RestApis.dart';
+import '../../main/services/AuthSertvices.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
@@ -62,8 +62,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   Future<void> init() async {
     mIsUpdate = widget.orderData != null;
     if (mIsUpdate) {
-      picUpController.text =
-          DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.orderData!.pickupDatetime.validate().isEmpty ? DateTime.now().toString() : widget.orderData!.pickupDatetime.validate()));
+      picUpController.text = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.orderData!.pickupDatetime.validate().isEmpty ? DateTime.now().toString() : widget.orderData!.pickupDatetime.validate()));
       reasonController.text = widget.orderData!.reason.validate();
       reason = widget.orderData!.reason.validate();
       log(picUpController);
@@ -93,7 +92,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
       picUpSignature: imageSignature,
       reason: reasonController.text,
       deliverySignature: deliverySignature,
-      orderStatus: widget.orderData!.status == ORDER_DEPARTED ? ORDER_COMPLETED : ORDER_PICKED_UP,
+      orderStatus: widget.orderData!.status == ORDER_DEPARTED ? ORDER_DELIVERED : ORDER_PICKED_UP,
     ).then((value) {
       appStore.setLoading(false);
       toast(widget.orderData!.status == ORDER_DEPARTED ? language.orderDeliveredSuccessfully : language.orderPickupSuccessfully);
@@ -148,43 +147,6 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
       imageProfile = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 100);
     }
     setState(() {});
-  }
-
-  sendOtp() async {
-    appStore.setLoading(true);
-    await FirebaseAuth.instance.verifyPhoneNumber(
-      timeout: const Duration(seconds: 60),
-      phoneNumber: widget.orderData!.status == ORDER_DEPARTED ? widget.orderData!.deliveryPoint!.contactNumber.validate() : widget.orderData!.pickupPoint!.contactNumber.validate(),
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        appStore.setLoading(false);
-        toast(language.verificationCompleted);
-      },
-      verificationFailed: (FirebaseAuthException e) {
-        appStore.setLoading(false);
-        if (e.code == 'invalid-phone-number') {
-          toast(language.phoneNumberInvalid);
-          throw language.phoneNumberInvalid;
-        } else {
-          toast(e.toString());
-          throw e.toString();
-        }
-      },
-      codeSent: (String verificationId, int? resendToken) async {
-        appStore.setLoading(false);
-        toast(language.codeSent);
-        await showInDialog(context,
-            builder: (context) => OTPDialog(
-                phoneNumber: widget.orderData!.status == ORDER_DEPARTED ? widget.orderData!.deliveryPoint!.contactNumber.validate() : widget.orderData!.pickupPoint!.contactNumber.validate(),
-                onUpdate: () {
-                  saveOrderData();
-                },
-                verificationId: verificationId),
-            barrierDismissible: false);
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {
-        appStore.setLoading(false);
-      },
-    );
   }
 
   @override
@@ -306,8 +268,8 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                             ],
                           ),
                         ),
-                      Text(language.deliveryTimeSignature, style: boldTextStyle()).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
-                      8.height.visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
+                      Text(language.deliveryTimeSignature, style: boldTextStyle()).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
+                      8.height.visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
                       if (widget.orderData!.status == ORDER_DEPARTED)
                         Container(
                           height: 150,
@@ -322,7 +284,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                               strokeColor: colorPrimary,
                             ),
                           ),
-                        ).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
+                        ).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
                       if (widget.orderData!.status == ORDER_DEPARTED)
                         Align(
                           alignment: Alignment.bottomRight,
@@ -338,10 +300,11 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                               ),
                             ],
                           ),
-                        ).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_COMPLETED),
+                        ).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
                       16.height,
                       CheckboxListTile(
                         value: mIsCheck,
+                        activeColor: colorPrimary,
                         title: Text(widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY ? language.paymentCollectFrom : language.paymentCollectFromPickup, style: primaryTextStyle()),
                         onChanged: (val) {
                           mIsCheck = val!;
@@ -360,12 +323,27 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                               if (!mIsCheck && widget.orderData!.paymentId == null && widget.isShowPayment) {
                                 return toast(language.pleaseConfirmPayment);
                               } else {
-                                appStore.isOtpVerifyOnPickupDelivery ? sendOtp() : saveOrderData();
+                                appStore.isOtpVerifyOnPickupDelivery
+                                    ? sendOtp(
+                                        context,
+                                        phoneNumber: widget.orderData!.status == ORDER_DEPARTED ? widget.orderData!.deliveryPoint!.contactNumber.validate() : widget.orderData!.pickupPoint!.contactNumber.validate(),
+                                        onUpdate: (verificationId) async {
+                                          await showInDialog(context,
+                                              builder: (context) => OTPDialog(
+                                                  phoneNumber: widget.orderData!.status == ORDER_DEPARTED ? widget.orderData!.deliveryPoint!.contactNumber.validate() : widget.orderData!.pickupPoint!.contactNumber.validate(),
+                                                  onUpdate: () {
+                                                    saveOrderData();
+                                                  },
+                                                  verificationId: verificationId),
+                                              barrierDismissible: false);
+                                        },
+                                      )
+                                    : saveOrderData();
                               }
                             },
                           ).expand(),
-                          if (widget.orderData!.status == ORDER_ACTIVE && widget.orderData!.status == ORDER_ARRIVED) 16.width,
-                          if (widget.orderData!.status == ORDER_ACTIVE && widget.orderData!.status == ORDER_ARRIVED)
+                          if (widget.orderData!.status == ORDER_ACCEPTED && widget.orderData!.status == ORDER_ARRIVED) 16.width,
+                          if (widget.orderData!.status == ORDER_ACCEPTED && widget.orderData!.status == ORDER_ARRIVED)
                             AppButton(
                               width: context.width(),
                               text: language.cancelOrder,
@@ -410,7 +388,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
       }
     }
 
-    if (widget.orderData!.status == ORDER_ACTIVE || widget.orderData!.status == ORDER_ARRIVED) {
+    if (widget.orderData!.status == ORDER_ACCEPTED || widget.orderData!.status == ORDER_ARRIVED) {
       if (imageSignature == null) {
         imageSignature = await saveSignature(pickupScreenshotController);
         log(imageSignature!.path);
@@ -423,7 +401,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
       }
     }
 
-    if (widget.orderData!.paymentId == null && widget.orderData!.paymentCollectFrom == PAYMENT_ON_PICKUP && (widget.orderData!.status == ORDER_ACTIVE || widget.orderData!.status == ORDER_ARRIVED)) {
+    if (widget.orderData!.paymentId == null && widget.orderData!.paymentCollectFrom == PAYMENT_ON_PICKUP && (widget.orderData!.status == ORDER_ACCEPTED || widget.orderData!.status == ORDER_ARRIVED)) {
       appStore.setLoading(true);
       await paymentConfirmDialog(widget.orderData!);
       appStore.setLoading(false);
@@ -447,8 +425,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   }
 
   Future<void> paymentConfirmDialog(OrderData orderData) {
-    return showConfirmDialogCustom(context,
-        primaryColor: colorPrimary, dialogType: DialogType.CONFIRMATION, title: orderTitle(orderData.status!), positiveText: language.yes, negativeText: language.cancel, onAccept: (c) async {
+    return showConfirmDialogCustom(context, primaryColor: colorPrimary, dialogType: DialogType.CONFIRMATION, title: orderTitle(orderData.status!), positiveText: language.yes, negativeText: language.cancel, onAccept: (c) async {
       appStore.setLoading(true);
       Map req = {
         'order_id': orderData.id,

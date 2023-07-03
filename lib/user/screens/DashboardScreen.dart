@@ -26,6 +26,7 @@ class DashboardScreen extends StatefulWidget {
 
 class DashboardScreenState extends State<DashboardScreen> {
   List<BottomNavigationBarItemModel> bottomNavBarItems = [];
+
   int currentIndex = 0;
 
   @override

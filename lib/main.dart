@@ -6,15 +6,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:mighty_delivery/main/Chat/ChatScreen.dart';
+import 'package:mighty_delivery/main/models/LoginResponse.dart';
+import 'package:mighty_delivery/main/screens/LoginScreen.dart';
+import 'package:mighty_delivery/user/screens/OrderDetailScreen.dart';
 import '../main/models/models.dart';
 import '../main/screens/SplashScreen.dart';
 import '../main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'AppTheme.dart';
-import 'main/Services/ChatMessagesService.dart';
-import 'main/Services/NotificationService.dart';
-import 'main/Services/UserServices.dart';
+import 'main/network/RestApis.dart';
+import 'main/services/ChatMessagesService.dart';
+import 'main/services/NotificationService.dart';
+import 'main/services/UserServices.dart';
 import 'main/language/AppLocalizations.dart';
 import 'main/language/BaseLanguage.dart';
 import 'main/models/FileModel.dart';
@@ -30,7 +35,7 @@ ChatMessageService chatMessageService = ChatMessageService();
 NotificationService notificationService = NotificationService();
 late List<FileModel> fileList = [];
 bool isCurrentlyOnNoInternet = false;
-late StreamSubscription<Position> positionStream;
+StreamSubscription<Position>? positionStream;
 
 bool mIsEnterKey = false;
 String mSelectedImage = "assets/default_wallpaper.png";
@@ -45,6 +50,7 @@ void main() async {
 
   appStore.setLogin(getBoolAsync(IS_LOGGED_IN), isInitializing: true);
   appStore.setUserEmail(getStringAsync(USER_EMAIL), isInitialization: true);
+  appStore.setUserProfile(getStringAsync(USER_PROFILE_PHOTO), isInitializing: true);
   appStore.setLanguage(getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguage));
   FilterAttributeModel? filterData = FilterAttributeModel.fromJson(getJSONAsync(FILTER_DATA));
   appStore.setFiltering(filterData.orderStatus != null || !filterData.fromDate.isEmptyOrNull || !filterData.toDate.isEmptyOrNull);
@@ -55,10 +61,22 @@ void main() async {
   } else if (themeModeIndex == appThemeMode.themeModeDark) {
     appStore.setDarkMode(true);
   }
-
   await OneSignal.shared.setAppId(mOneSignalAppId);
 
   saveOneSignalPlayerId();
+  OneSignal.shared.setNotificationOpenedHandler((OSNotificationOpenedResult notification) async {
+    var notId = notification.notification.additionalData!["id"];
+    if (notId != null) {
+      if (!appStore.isLoggedIn) {
+        LoginScreen().launch(getContext);
+      } else if (notId.toString().contains('CHAT')) {
+        UserData user = await getUserDetail(int.parse(notId.toString  ().replaceAll("CHAT_", "")));
+        ChatScreen(userData: user).launch(getContext);
+      } else {
+        OrderDetailScreen(orderId: int.parse(notId.toString())).launch(getContext);
+      }
+    }
+  });
   runApp(MyApp());
 }
 
@@ -110,7 +128,7 @@ class MyAppState extends State<MyApp> {
             child: child!,
           );
         },
-        title: language.appName,
+        title: mAppName,
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,

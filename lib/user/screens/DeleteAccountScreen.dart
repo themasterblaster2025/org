@@ -6,7 +6,7 @@ import '../../main/utils/Common.dart';
 import '../../main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-import '../../main/Services/AuthSertvices.dart';
+import '../../main/services/AuthSertvices.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Constants.dart';
 
@@ -84,7 +84,11 @@ class DeleteAccountScreenState extends State<DeleteAccountScreen> {
                               positiveText: language.yes,
                               negativeText: language.no,
                               onAccept: (c) async {
-                                await deleteAccount(context);
+                                if (getStringAsync(USER_EMAIL) == 'jose@gmail.com' || getStringAsync(USER_EMAIL) == 'mark@gmail.com') {
+                                  toast(language.demoMsg);
+                                } else {
+                                  await deleteAccount(context);
+                                }
                               },
                             ),
                           },

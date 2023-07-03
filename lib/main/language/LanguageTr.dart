@@ -993,4 +993,98 @@ class LanguageTr extends BaseLanguage {
 
   @override
   String get adminCommission => "Yönetici komisyonu";
+
+  @override
+  String get assigned => "Atanmış";
+
+  @override
+  String get draft => "Taslak";
+
+  @override
+  String get created => "Yaratılmış";
+
+  @override
+  String get accepted => "Kabul edilmiş";
+
+  //TODO
+  @override
+  String get vehicle => 'araç';
+
+  @override
+  String get add_vehicle => 'araç ekle';
+
+  @override
+  String get update_vehicle => 'aracı güncelle';
+
+  @override
+  String get vehicle_size => 'araç boyutu';
+
+  @override
+  String get vehicle_capacity => 'araç kapasitesi';
+
+  @override
+  String get vehicle_image => 'araç resmi';
+
+  @override
+  String get select_vehicle => 'araç seç';
+
+  @override
+  String get enable_vehicle => 'araç etkinleştirilsin mi?';
+
+  @override
+  String get disable_vehicle => 'aracı devre dışı bırak?';
+
+  @override
+  String get enable_vehicle_msg => 'Bu aracı etkinleştirmek istiyor musunuz?';
+
+  @override
+  String get disable_vehicle_msg => 'Bu aracı devre dışı bırakmak istiyor musunuz?';
+
+  @override
+  String get delete_vehicle => 'araç silinsin mi?';
+
+  @override
+  String get do_you_want_to_delete_this_vehicle => 'Bu aracı silmek istiyor musunuz?';
+
+  @override
+  String get vehicle_name => 'araç adı';
+
+  @override
+  String get bankName => "Banka adı";
+
+  @override
+  String get courierAssigned => "Kurye atandı";
+
+  @override
+  String get courierAccepted => "Kurye kabul edildi";
+
+  @override
+  String get courierPickedUp => "Kurye pickedup";
+
+  @override
+  String get courierArrived => "Courier geldi";
+
+  @override
+  String get courierDeparted => "Kurye ayrıldı";
+
+  @override
+  String get courierTransfer => "Kurye transferi";
+
+  @override
+  String get paymentStatusMessage => "Ödeme Durumu Mesajı";
+
+  @override
+  String get rejected => "Reddedilmiş";
+
+  @override
+  String get notChangeMobileNo => "İletişim Numarasını Değiştiremezsiniz";
+
+  @override
+  String get verification => "Doğrulama";
+
+  @override
+  String get phoneNumberAlreadyVerified => "Telefon numarası zaten doğrulandı.";
+
+  @override
+  String get verifyPhoneNumber => "Telefon Numarasını Doğrulun";
 }

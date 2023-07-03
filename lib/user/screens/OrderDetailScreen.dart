@@ -58,7 +58,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
       appStore.setLoading(false);
       orderData = value.data!;
       orderHistory = value.orderHistory!;
-      payment = value.payment?? Payment();
+      payment = value.payment ?? Payment();
       if (orderData!.extraCharges.runtimeType == List<dynamic>) {
         (orderData!.extraCharges as List<dynamic>).forEach((element) {
           list.add(ExtraChargeRequestModel.fromJson(element));
@@ -311,6 +311,39 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                   ],
                                 ),
                               ),
+                              12.height,
+                              if (orderData!.vehicleData != null) Text(language.vehicle, style: boldTextStyle()),
+                              if (orderData!.vehicleData != null) 12.height,
+                              if (orderData!.vehicleData != null)
+                                Container(
+                                    decoration: BoxDecoration(color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
+                                    padding: EdgeInsets.all(12),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                language.vehicle_name,
+                                                style: primaryTextStyle(),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Text('${orderData!.vehicleData!.title.validate()}', style: primaryTextStyle()),
+                                            )
+                                          ],
+                                        ),
+                                        // if (orderModel.vehicleData!.vehicleImage != null)
+                                        if (orderData!.vehicleImage != null)
+                                          Container(
+                                            margin: EdgeInsets.all(10),
+                                            child: ClipRRect(borderRadius: BorderRadius.circular(10), child: commonCachedNetworkImage(orderData!.vehicleImage, fit: BoxFit.fill, height: 100, width: 150)),
+                                          ),
+                                      ],
+                                    )),
+                              12.height,
                               if (userData != null)
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -346,7 +379,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                         ChatScreen(userData: userData).launch(context);
                                                       },
                                                       icon: Icon(Icons.chat))
-                                                  .visible(orderData!.status != ORDER_COMPLETED && orderData!.status != ORDER_CANCELLED)
+                                                  .visible(orderData!.status != ORDER_DELIVERED && orderData!.status != ORDER_CANCELLED && userData!.userType!=ADMIN && userData!.userType!=DEMO_ADMIN)
                                             ],
                                           ),
                                           if (getStringAsync(USER_TYPE) == CLIENT && userData!.isVerifiedDeliveryMan == 1)
@@ -499,9 +532,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                   width: context.width(),
                                   decoration: BoxDecoration(color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary.withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
                                   padding: EdgeInsets.all(12),
-                                  child: Text(
-                                      '${language.note} ${payment!.deliveryManFee == 0 ? language.cancelBeforePickMsg : language.cancelAfterPickMsg}',
-                                      style: secondaryTextStyle(color: Colors.red)),
+                                  child: Text('${language.note} ${payment!.deliveryManFee == 0 ? language.cancelBeforePickMsg : language.cancelAfterPickMsg}', style: secondaryTextStyle(color: Colors.red)),
                                 ),
                               Align(
                                 alignment: Alignment.bottomCenter,
@@ -530,7 +561,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     ),
                                   ],
                                 ),
-                              ).visible(getStringAsync(USER_TYPE) == CLIENT && orderData!.status != ORDER_COMPLETED && orderData!.status != ORDER_CANCELLED)
+                              ).visible(getStringAsync(USER_TYPE) == CLIENT && orderData!.status != ORDER_DELIVERED && orderData!.status != ORDER_CANCELLED)
                             ],
                           ),
                         ),
@@ -540,7 +571,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                             ReturnOrderScreen(orderData!).launch(context);
                           }, width: context.width())
                               .paddingAll(16),
-                        ).visible(orderData!.status == ORDER_COMPLETED && !orderData!.returnOrderId! && getStringAsync(USER_TYPE) == CLIENT),
+                        ).visible(orderData!.status == ORDER_DELIVERED && !orderData!.returnOrderId! && getStringAsync(USER_TYPE) == CLIENT),
                       ],
                     )
                   : SizedBox(),

@@ -63,8 +63,8 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     if (imageProfile != null) {
       return Image.file(File(imageProfile!.path), height: 100, width: 100, fit: BoxFit.cover, alignment: Alignment.center).cornerRadiusWithClipRRect(100).center();
     } else {
-      if (getStringAsync(USER_PROFILE_PHOTO).isNotEmpty) {
-        return commonCachedNetworkImage(getStringAsync(USER_PROFILE_PHOTO).validate(), fit: BoxFit.cover, height: 100, width: 100).cornerRadiusWithClipRRect(100).center();
+      if (appStore.userProfile.isNotEmpty) {
+        return commonCachedNetworkImage(appStore.userProfile.validate(), fit: BoxFit.cover, height: 100, width: 100).cornerRadiusWithClipRRect(100).center();
       } else {
         return commonCachedNetworkImage('assets/profile.png', height: 90, width: 90).cornerRadiusWithClipRRect(50).paddingOnly(right: 4, bottom: 4).center();
       }
@@ -89,7 +89,6 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     ).then((value) {
       finish(context);
       appStore.setLoading(false);
-      toast(language.profileUpdateMsg);
     }).catchError((error) {
       log(error);
       appStore.setLoading(false);
@@ -184,6 +183,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     AppTextField(
                       controller: contactNumberController,
                       textFieldType: TextFieldType.PHONE,
+                      readOnly: true,
                       focus: contactFocus,
                       nextFocus: addressFocus,
                       decoration: commonInputDecoration(
@@ -196,6 +196,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                                 showCountryOnly: false,
                                 dialogSize: Size(context.width() - 60, context.height() * 0.6),
                                 showFlag: true,
+                                enabled: false,
                                 showFlagDialog: true,
                                 showOnlyCountryWhenClosed: false,
                                 alignLeft: false,
@@ -223,8 +224,11 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                       validator: (value) {
                         if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-                        if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
+                      //  if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
                         return null;
+                      },
+                      onTap: () {
+                        toast(language.notChangeMobileNo);
                       },
                       inputFormatters: [
                         FilteringTextInputFormatter.digitsOnly,
@@ -252,7 +256,11 @@ class EditProfileScreenState extends State<EditProfileScreen> {
         padding: EdgeInsets.all(16),
         child: commonButton(language.saveChanges, () {
           if (_formKey.currentState!.validate()) {
-            save();
+            if (getStringAsync(USER_EMAIL) == 'jose@gmail.com' || getStringAsync(USER_EMAIL) == 'mark@gmail.com') {
+              toast(language.demoMsg);
+            } else {
+              save();
+            }
           }
         }),
       ),

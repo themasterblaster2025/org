@@ -24,13 +24,13 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
 
   DateTime? fromDate, toDate;
   List<String> statusList = [
-    ORDER_CREATE,
-    ORDER_ACTIVE,
+    ORDER_CREATED,
+    ORDER_ACCEPTED,
     ORDER_CANCELLED,
     ORDER_ASSIGNED,
     ORDER_ARRIVED,
     ORDER_PICKED_UP,
-    ORDER_COMPLETED,
+    ORDER_DELIVERED,
     ORDER_DEPARTED,
   ];
   String? selectedStatus;

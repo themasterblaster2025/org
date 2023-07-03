@@ -994,4 +994,98 @@ class LanguageDe extends BaseLanguage {
 
   @override
   String get adminCommission => "Administratorkommission";
+
+  @override
+  String get assigned => "Zugewiesen";
+
+  @override
+  String get draft => "Luftzug";
+
+  @override
+  String get created => "Erstellt";
+
+  @override
+  String get accepted => "Akzeptiert";
+
+  //TODO
+  @override
+  String get vehicle => 'voertuig';
+
+  @override
+  String get add_vehicle => 'voertuig toevoegen';
+
+  @override
+  String get update_vehicle => 'voertuig updaten';
+
+  @override
+  String get vehicle_size => 'voertuig grootte';
+
+  @override
+  String get vehicle_capacity => 'voertuig capaciteit';
+
+  @override
+  String get vehicle_image => 'voertuig afbeelding';
+
+  @override
+  String get select_vehicle => 'voertuig selecteren';
+
+  @override
+  String get enable_vehicle => 'voertuig inschakelen';
+
+  @override
+  String get disable_vehicle => 'voertuig uitschakelen';
+
+  @override
+  String get enable_vehicle_msg => 'Wil je hier het voertuig actief maken?';
+
+  @override
+  String get disable_vehicle_msg => 'Wil je hier dat voertuig deaktiveer?';
+
+  @override
+  String get delete_vehicle => 'voertuig verwijderen?';
+
+  @override
+  String get do_you_want_to_delete_this_vehicle => 'Wilt u dit voertuig verwijderen?';
+
+  @override
+  String get vehicle_name => 'voertuig naam';
+
+  @override
+  String get bankName => "Bank Name";
+
+  @override
+  String get courierAssigned => "Kurier zugewiesen";
+
+  @override
+  String get courierAccepted => "Kurier akzeptiert";
+
+  @override
+  String get courierPickedUp => "Kurier ausgewählt";
+
+  @override
+  String get courierArrived => "Kurier kam an";
+
+  @override
+  String get courierDeparted => "Kurier reiste ab";
+
+  @override
+  String get courierTransfer => "Kuriertransfer";
+
+  @override
+  String get paymentStatusMessage => "Zahlungsstatusnachricht";
+
+  @override
+  String get rejected => "Abgelehnt";
+
+  @override
+  String get notChangeMobileNo => "Sie können die Kontaktnummer nicht ändern";
+
+  @override
+  String get verification => "Überprüfung";
+
+  @override
+  String get phoneNumberAlreadyVerified => "Die Telefonnummer hat bereits überprüft.";
+
+  @override
+  String get verifyPhoneNumber => "Überprüfen Sie die Telefonnummer";
 }

@@ -10,7 +10,8 @@ import '../../main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
-import '../Services/AuthSertvices.dart';
+import '../network/RestApis.dart';
+import '../services/AuthSertvices.dart';
 
 class RegisterScreen extends StatefulWidget {
   final String? userType;
@@ -59,25 +60,43 @@ class RegisterScreenState extends State<RegisterScreen> {
   Future<void> registerApiCall() async {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
+      hideKeyboard(context);
       if (isAcceptedTc) {
         appStore.setLoading(true);
-        authService
-            .signUpWithEmailPassword(context,
-                lName: nameController.text,
-                userName: userNameController.text,
-                name: nameController.text.trim(),
-                email: emailController.text.trim(),
-                password: passController.text.trim(),
-                mobileNumber: '$countryCode ${phoneController.text.trim()}',
-                userType: widget.userType)
-            .then((res) async {
-          appStore.setLoading(false);
-          //
+        var request = {
+          "name": nameController.text,
+          "username": userNameController.text,
+          "user_type": widget.userType,
+          "contact_number": '$countryCode ${phoneController.text.trim()}',
+          "email": emailController.text.trim(),
+          "password": passController.text.trim(),
+          "player_id": getStringAsync(PLAYER_ID).validate(),
+        };
+        await signUpApi(request).then((res) async {
+          authService
+              .signUpWithEmailPassword(getContext,
+                  lName: res.data!.name,
+                  userName: res.data!.username,
+                  name: res.data!.name,
+                  email: res.data!.email,
+                  password: passController.text.trim(),
+                  mobileNumber: res.data!.contactNumber,
+                  userType: res.data!.userType,
+                  userData: res)
+              .then((res) async {
+           //
+          }).catchError((e) {
+            appStore.setLoading(false);
+            log(e.toString());
+            toast(e.toString());
+          });
         }).catchError((e) {
           appStore.setLoading(false);
           toast(e.toString());
+          log(e.toString());
+          return;
         });
-      }else{
+      } else {
         toast(language.acceptTermService);
       }
     }
@@ -210,7 +229,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           ),
                           validator: (value) {
                             if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-                            if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
+                           // if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
                             return null;
                           },
                           inputFormatters: [

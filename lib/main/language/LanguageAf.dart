@@ -994,4 +994,98 @@ class LanguageAf extends BaseLanguage {
 
   @override
   String get adminCommission => "Adminkommissie";
+
+  @override
+  String get assigned => "Toegewys";
+
+  @override
+  String get draft => "Konsep";
+
+  @override
+  String get created => "Geskep";
+
+  @override
+  String get accepted => "Aanvaar";
+
+  //TODO
+  @override
+  String get vehicle => 'voertuig';
+
+  @override
+  String get add_vehicle => 'voertuig byvoeg';
+
+  @override
+  String get update_vehicle => 'voertuig opdateer';
+
+  @override
+  String get vehicle_size => 'voertuig grootte';
+
+  @override
+  String get vehicle_capacity => 'voertuig kapasiteit';
+
+  @override
+  String get vehicle_image => 'voertuig beeld';
+
+  @override
+  String get select_vehicle => 'kies voertuig';
+
+  @override
+  String get enable_vehicle => 'voertuig in staat stel';
+
+  @override
+  String get disable_vehicle => 'voertuig uitskakel?';
+
+  @override
+  String get enable_vehicle_msg => 'Wil jy hierdie voertuig aktiveer?';
+
+  @override
+  String get disable_vehicle_msg => 'Wil jy hierdie voertuig deaktiveer?';
+
+  @override
+  String get delete_vehicle => 'voertuig uitvee?';
+
+  @override
+  String get do_you_want_to_delete_this_vehicle => 'Wil jy hierdie voertuig uitvee?';
+
+  @override
+  String get vehicle_name => 'voertuig naam';
+
+  @override
+  String get bankName => "Bank Naam";
+
+  @override
+  String get courierAssigned => "Koerier toegewys";
+
+  @override
+  String get courierAccepted => "Koerier aanvaar";
+
+  @override
+  String get courierPickedUp => "Courier PickedUp";
+
+  @override
+  String get courierArrived => "Courier het opgedaag";
+
+  @override
+  String get courierDeparted => "Courier het vertrek";
+
+  @override
+  String get courierTransfer => "Koerieroordrag";
+
+  @override
+  String get paymentStatusMessage => "Betalingsstatusboodskap";
+
+  @override
+  String get rejected => "Verwerp";
+
+  @override
+  String get notChangeMobileNo => "U kan nie die kontaknommer verander nie";
+
+  @override
+  String get verification => "Verifikasie";
+
+  @override
+  String get phoneNumberAlreadyVerified => "Telefoonnommer is reeds bevestig.";
+
+  @override
+  String get verifyPhoneNumber => "Verifieer telefoonnommer";
 }

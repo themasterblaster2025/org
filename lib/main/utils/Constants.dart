@@ -5,10 +5,12 @@ const mHelpAndSupport = 'https://support.meetmighty.com/';
 const mContactPref = 'hello@meetmighty.com';
 const mCodeCanyonURL = 'https://codecanyon.net/user/meetmighty/portfolio/';
 
-const mBaseUrl = 'https://meetmighty.com/mobile/mighty-local-delivery/api/';
-//const mBaseUrl = 'http://192.168.1.230/meetmighty/local-delivery-laravel/api/';
+/// Don't add slash at the end of the url
+const DOMAIN_URL = 'https://meetmighty.com/mobile/mighty-local-delivery';
+//const DOMAIN_URL = 'http://192.168.1.230/meetmighty/local-delivery-laravel';
+const mBaseUrl = "$DOMAIN_URL/api/";
 
-const googleMapAPIKey = 'AIzaSyCDD0QOjZNS05ByZlnv-VcwH2id3WzS2Lw';
+const googleMapAPIKey = 'AIzaSyCGRSk7rUwHzf8vhRIzPp3bmiJDaRt8Ev4';
 
 const mOneSignalAppId = 'f2e9c538-d4ad-45d4-8c57-fd081c987fb6';
 const mOneSignalRestKey = 'NzcwNjExNzYtYTJjOS00NGNkLWE2ZTUtY2JmMDEyNTFhYTFm';
@@ -55,6 +57,7 @@ const FILTER_DATA = 'FILTER_DATA';
 const UID = 'UID';
 const IS_VERIFIED_DELIVERY_MAN = 'IS_VERIFIED_DELIVERY_MAN';
 const RECENT_ADDRESS_LIST = 'RECENT_ADDRESS_LIST';
+const OTP_VERIFIED = "OTP_VERIFIED";
 
 const COUNTRY_ID = 'COUNTRY_ID';
 const COUNTRY_DATA = 'COUNTRY_DATA';
@@ -64,6 +67,8 @@ const CITY_DATA = 'CITY_DATA';
 
 const CLIENT = 'client';
 const DELIVERY_MAN = 'delivery_man';
+const ADMIN = 'admin';
+const DEMO_ADMIN = 'demo+admin';
 
 const CHARGE_TYPE_FIXED = 'fixed';
 const CHARGE_TYPE_PERCENTAGE = 'percentage';
@@ -96,19 +101,19 @@ const REQUESTED = 'requested';
 const APPROVED = 'approved';
 
 // OrderStatus
-const COURIER_ASSIGNED = 'courier_assigned';
-const COURIER_DEPARTED = 'courier_departed';
-const COURIER_TRANSFER = 'courier_transfer';
-const ORDER_CREATE = 'create';
-const ORDER_ACTIVE = 'active';
+const ORDER_CREATED = 'create';
+const ORDER_ACCEPTED = 'active';
 const ORDER_CANCELLED = 'cancelled';
 const ORDER_DELAYED = 'delayed';
 const ORDER_ASSIGNED = 'courier_assigned';
 const ORDER_ARRIVED = 'courier_arrived';
 const ORDER_PICKED_UP = 'courier_picked_up';
-const ORDER_COMPLETED = 'completed';
+const ORDER_DELIVERED = 'completed';
 const ORDER_DRAFT = 'draft';
 const ORDER_DEPARTED = 'courier_departed';
+const ORDER_TRANSFER = 'courier_transfer';
+const ORDER_PAYMENT = 'payment_status_message';
+const ORDER_FAIL = 'failed';
 
 const TRANSACTION_ORDER_FEE = "order_fee";
 const TRANSACTION_TOPUP = "topup";
@@ -186,3 +191,10 @@ extension MessageExtension on MessageType {
     }
   }
 }
+
+const mStripeIdentifier = 'IN';
+
+const mInvoiceCompanyName = 'Roberts Private Limited';
+const mInvoiceAddress = 'Sarah Street 9, Beijing, Ahmedabad';
+const mInvoiceContactNumber = '+91 9845345665';
+

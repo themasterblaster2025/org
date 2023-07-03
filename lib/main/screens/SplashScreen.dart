@@ -10,6 +10,7 @@ import '../../user/screens/DashboardScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
+import 'VerificationScreen.dart';
 
 class SplashScreen extends StatefulWidget {
   static String tag = '/SplashScreen';
@@ -36,10 +37,14 @@ class SplashScreenState extends State<SplashScreen> {
               logout(context);
             } else {
               if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
-                if (getStringAsync(USER_TYPE) == CLIENT) {
-                  DashboardScreen().launch(context, isNewTask: true);
+                if (getBoolAsync(OTP_VERIFIED)) {
+                  if (getStringAsync(USER_TYPE) == CLIENT) {
+                    DashboardScreen().launch(context, isNewTask: true);
+                  } else {
+                    DeliveryDashBoard().launch(context, isNewTask: true);
+                  }
                 } else {
-                  DeliveryDashBoard().launch(context, isNewTask: true);
+                  VerificationScreen().launch(context, isNewTask: true);
                 }
               } else {
                 UserCitySelectScreen().launch(context);
@@ -74,7 +79,7 @@ class SplashScreenState extends State<SplashScreen> {
           children: [
             Image.asset('assets/app_logo.jpg', height: 80, width: 80, fit: BoxFit.fill).cornerRadiusWithClipRRect(defaultRadius),
             16.height,
-            Text(language.appName, style: boldTextStyle(size: 20), textAlign: TextAlign.center),
+            Text(mAppName, style: boldTextStyle(size: 20), textAlign: TextAlign.center),
           ],
         ),
       ),

@@ -42,7 +42,6 @@ class NotificationScreenState extends State<NotificationScreen> {
   }
 
   void init() async {
-    print('call');
     getNotification(page: currentPage).then((value) {
       appStore.setLoading(false);
       appStore.setAllUnreadCount(value.allUnreadCount.validate());

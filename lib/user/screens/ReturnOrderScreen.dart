@@ -99,7 +99,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
         "total_weight": widget.orderData.totalWeight!,
         "total_distance": widget.orderData.totalDistance!,
         "payment_collect_from": paymentCollectFrom,
-        "status": ORDER_CREATE,
+        "status": ORDER_CREATED,
         "payment_type": "",
         "payment_status": "",
         "fixed_charges": widget.orderData.fixedCharges!,

@@ -13,6 +13,7 @@ import '../../main/models/CountryListModel.dart';
 import '../../main/models/OrderListModel.dart';
 import '../../main/models/ParcelTypeListModel.dart';
 import '../../main/models/PaymentModel.dart';
+import '../../main/models/VehicleModel.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
@@ -101,6 +102,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   List<ExtraChargeRequestModel> extraChargeList = [];
 
+  int? selectedVehicle;
+  List<VehicleData> vehicleList = [];
+  VehicleData? vehicleData;
+
   @override
   void initState() {
     super.initState();
@@ -113,6 +118,16 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     await getCityDetailApiCall(getIntAsync(CITY_ID));
     getParcelTypeListApiCall();
     extraChargesList();
+    getVehicleList(cityID: cityData!.id);
+    await getAppSetting().then((value) {
+      appStore.setCurrencyCode(value.currencyCode ?? currencyCode);
+      appStore.setCurrencySymbol(value.currency ?? currencySymbol);
+      appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
+      appStore.isVehicleOrder = value.isVehicleInOrder ?? 0;
+      setState(() {});
+    }).catchError((error) {
+      log(error.toString());
+    });
 
     if (widget.orderData != null) {
       if (widget.orderData!.totalWeight != 0) weightController.text = widget.orderData!.totalWeight!.toString();
@@ -161,6 +176,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     await getCityDetail(cityId).then((value) async {
       await setValue(CITY_DATA, value.data!.toJson());
       cityData = value.data!;
+      getVehicleApiCall();
       setState(() {});
     }).catchError((error) {});
   }
@@ -175,6 +191,20 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     }).catchError((error) {
       appStore.setLoading(false);
       toast(error.toString());
+    });
+  }
+
+  getVehicleApiCall({String? name}) async {
+    appStore.setLoading(true);
+    await getVehicleList(cityID: cityData!.id).then((value) {
+      appStore.setLoading(false);
+      vehicleList.clear();
+      vehicleList = value.data!;
+      if (value.data!.isNotEmpty) selectedVehicle = value.data![0].id;
+      setState(() {});
+    }).catchError((error) {
+      appStore.setLoading(false);
+      toast(error);
     });
   }
 
@@ -215,6 +245,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       "date": DateTime.now().toString(),
       "country_id": getIntAsync(COUNTRY_ID).toString(),
       "city_id": getIntAsync(CITY_ID).toString(),
+      if (appStore.isVehicleOrder != 0) "vehicle_id": selectedVehicle.toString(),
       "pickup_point": {
         "start_time": (!isDeliverNow && pickFromDateTime != null) ? pickFromDateTime.toString() : DateTime.now().toString(),
         "end_time": (!isDeliverNow && pickToDateTime != null) ? pickToDateTime.toString() : null,
@@ -274,8 +305,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             cashConfirmDialog();
           }
         }
-      }else{
-        DashboardScreen().launch(context, isNewTask: true);
+      } else {
+        DashboardScreen().launch(
+          context,
+          isNewTask: true,
+        );
       }
     }).catchError((error) {
       appStore.setLoading(false);
@@ -603,6 +637,44 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               });
             }).toList(),
           ),
+          16.height,
+          Visibility(
+            visible: appStore.isVehicleOrder != 0,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(language.select_vehicle, style: boldTextStyle()),
+                8.height,
+                DropdownButtonFormField<int>(
+                  isExpanded: true,
+                  value: selectedVehicle,
+                  decoration: commonInputDecoration(),
+                  dropdownColor: Theme.of(context).cardColor,
+                  style: primaryTextStyle(),
+                  items: vehicleList.map<DropdownMenuItem<int>>((item) {
+                    return DropdownMenuItem(
+                      value: item.id,
+                      child: Row(
+                        children: [
+                          commonCachedNetworkImage(item.vehicleImage.validate(), height: 40, width: 40),
+                          SizedBox(width: 16),
+                          Text(item.title.validate(), style: primaryTextStyle()),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    selectedVehicle = value;
+                    setState(() {});
+                  },
+                  validator: (value) {
+                    if (selectedVehicle == null) return errorThisFieldRequired;
+                    return null;
+                  },
+                ),
+              ],
+            ),
+          ),
         ],
       );
     });
@@ -692,7 +764,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           textInputAction: TextInputAction.next,
           validator: (value) {
             if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-            if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
+            //  if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
             return null;
           },
           inputFormatters: [
@@ -799,7 +871,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           ),
           validator: (value) {
             if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-            if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
+            // if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
             return null;
           },
           inputFormatters: [
@@ -858,7 +930,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Number of parcels', style: primaryTextStyle()),
+                  Text(language.numberOfParcels, style: primaryTextStyle()),
                   16.width,
                   Text('${totalParcelController.text}', style: primaryTextStyle()),
                 ],
@@ -882,7 +954,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             children: [
               Text(pickAddressCont.text, style: primaryTextStyle()),
               8.height.visible(pickPhoneCont.text.isNotEmpty),
-              Text(pickPhoneCont.text, style: secondaryTextStyle()).visible(pickPhoneCont.text.isNotEmpty),
+              Text('$pickupCountryCode ${pickPhoneCont.text.trim()}', style: secondaryTextStyle()).visible(pickPhoneCont.text.isNotEmpty),
             ],
           ),
         ),
@@ -902,7 +974,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             children: [
               Text(deliverAddressCont.text, style: primaryTextStyle()),
               8.height.visible(deliverPhoneCont.text.isNotEmpty),
-              Text(deliverPhoneCont.text, style: secondaryTextStyle()).visible(deliverPhoneCont.text.isNotEmpty),
+              Text('$deliverCountryCode ${deliverPhoneCont.text.trim()}', style: secondaryTextStyle()).visible(deliverPhoneCont.text.isNotEmpty),
             ],
           ),
         ),
@@ -920,11 +992,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               padding: EdgeInsets.all(16),
               decoration: boxDecorationWithRoundedCorners(
                   border: Border.all(
-                      color: isSelected == mData.index
-                          ? colorPrimary
-                          : appStore.isDarkMode
-                          ? Colors.transparent
-                          : borderColor),
+                    color: isSelected == mData.index
+                        ? colorPrimary
+                        : appStore.isDarkMode
+                            ? Colors.transparent
+                            : borderColor,
+                  ),
                   backgroundColor: context.cardColor),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -1076,7 +1149,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     positiveText: language.yes,
                     negativeText: language.no,
                     onAccept: () {
-                      createOrderApiCall(ORDER_CREATE);
+                      createOrderApiCall(ORDER_CREATED);
                     },
                   );
                 }

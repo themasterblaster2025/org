@@ -993,4 +993,98 @@ class LanguageId extends BaseLanguage {
 
   @override
   String get adminCommission => "Komisi Admin";
+
+  @override
+  String get assigned => "DitugaskanL";
+
+  @override
+  String get draft => "KonsepL";
+
+  @override
+  String get created => "DibuatL";
+
+  @override
+  String get accepted => "DiterimaL";
+
+  //TODO
+  @override
+  String get vehicle => 'kendaraan';
+
+  @override
+  String get add_vehicle => 'menambah kendaraan';
+
+  @override
+  String get update_vehicle => 'memperbarui kendaraan';
+
+  @override
+  String get vehicle_size => 'ukuran kendaraan';
+
+  @override
+  String get vehicle_capacity => 'kapasitas kendaraan';
+
+  @override
+  String get vehicle_image => 'gambar kendaraan';
+
+  @override
+  String get select_vehicle => 'pilih kendaraan';
+
+  @override
+  String get enable_vehicle => 'aktifkan kendaraan?';
+
+  @override
+  String get disable_vehicle => 'melumpuhkan kendaraan?';
+
+  @override
+  String get enable_vehicle_msg => 'Apakah Anda ingin mengaktifkan kendaraan ini?';
+
+  @override
+  String get disable_vehicle_msg => 'Apakah Anda ingin menonaktifkan kendaraan ini?';
+
+  @override
+  String get delete_vehicle => 'hapus kendaraan?';
+
+  @override
+  String get do_you_want_to_delete_this_vehicle => 'Apakah Anda ingin menghapus kendaraan ini?';
+
+  @override
+  String get vehicle_name => 'nama kendaraan';
+
+  @override
+  String get bankName => "Nama Bank";
+
+  @override
+  String get courierAssigned => "Kurir ditugaskan";
+
+  @override
+  String get courierAccepted => "Kurir diterima";
+
+  @override
+  String get courierPickedUp => "Pickedup kurir";
+
+  @override
+  String get courierArrived => "Kurir tiba";
+
+  @override
+  String get courierDeparted => "Kurir berangkat";
+
+  @override
+  String get courierTransfer => "Transfer kurir";
+
+  @override
+  String get paymentStatusMessage => "Pesan Status Pembayaran";
+
+  @override
+  String get rejected => "Ditolak";
+
+  @override
+  String get notChangeMobileNo => "Anda tidak dapat mengubah nomor kontak";
+
+  @override
+  String get verification => "Verifikasi";
+
+  @override
+  String get phoneNumberAlreadyVerified => "Nomor telepon telah diverifikasi.";
+
+  @override
+  String get verifyPhoneNumber => "Verifikasi nomor telepon";
 }

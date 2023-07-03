@@ -994,4 +994,98 @@ class LanguageEs extends BaseLanguage {
 
   @override
   String get adminCommission => "Comisión administrativa";
+
+  @override
+  String get assigned => "Asignado";
+
+  @override
+  String get draft => "Borrador";
+
+  @override
+  String get created => "Creado";
+
+  @override
+  String get accepted => "Aceptado";
+
+  //TODO
+  @override
+  String get vehicle => 'vehículo';
+
+  @override
+  String get add_vehicle => 'añadir vehiculo';
+
+  @override
+  String get update_vehicle => 'actualizar vehículo';
+
+  @override
+  String get vehicle_size => 'tamaño del vehículo';
+
+  @override
+  String get vehicle_capacity => 'capacidad del vehículo';
+
+  @override
+  String get vehicle_image => 'imagen del vehículo';
+
+  @override
+  String get select_vehicle => 'seleccionar vehículo';
+
+  @override
+  String get enable_vehicle => 'habilitar vehículo?';
+
+  @override
+  String get disable_vehicle => 'desactivar vehiculo?';
+
+  @override
+  String get enable_vehicle_msg => '¿Quieres habilitar este vehículo';
+
+  @override
+  String get disable_vehicle_msg => '¿Quieres inhabilitar este vehículo';
+
+  @override
+  String get delete_vehicle => 'voertuig verwijderen?';
+
+  @override
+  String get do_you_want_to_delete_this_vehicle => '¿Quieres eliminar este vehículo';
+
+  @override
+  String get vehicle_name => 'nombre del vehículo';
+
+  @override
+  String get bankName => "Nombre del banco";
+
+  @override
+  String get courierAssigned => "Mensajería asignada";
+
+  @override
+  String get courierAccepted => "Correo aceptado";
+
+  @override
+  String get courierPickedUp => "Mensajería recogida";
+
+  @override
+  String get courierArrived => "Llegó el servicio de mensajería";
+
+  @override
+  String get courierDeparted => "Courier se fue";
+
+  @override
+  String get courierTransfer => "Transferencia de mensajería";
+
+  @override
+  String get paymentStatusMessage => "Mensaje de estado de pago";
+
+  @override
+  String get rejected => "Rechazado";
+
+  @override
+  String get notChangeMobileNo => "No puede cambiar el número de contacto";
+
+  @override
+  String get verification => "Verificación";
+
+  @override
+  String get phoneNumberAlreadyVerified => "El número de teléfono ya ha verificado.";
+
+  @override
+  String get verifyPhoneNumber => "Verificar el número de teléfono";
 }

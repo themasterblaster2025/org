@@ -19,7 +19,7 @@ class DeliveryDashBoard extends StatefulWidget {
 }
 
 class DeliveryDashBoardState extends State<DeliveryDashBoard> {
-  List<String> statusList = [ORDER_ASSIGNED, ORDER_ACTIVE, ORDER_ARRIVED, ORDER_PICKED_UP, ORDER_DEPARTED, ORDER_COMPLETED, ORDER_CANCELLED];
+  List<String> statusList = [ORDER_ASSIGNED, ORDER_ACCEPTED, ORDER_ARRIVED, ORDER_PICKED_UP, ORDER_DEPARTED, ORDER_DELIVERED, ORDER_CANCELLED];
   int currentIndex = 1;
 
   @override
@@ -37,7 +37,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
     });
     if (await checkPermission()) {
       positionStream = Geolocator.getPositionStream().listen((event) async {
-        await updateLocation(latitude: event.latitude.toString(), longitude: event.longitude.toString()).then((value) {
+        await updateUserStatus({"id": getIntAsync(USER_ID), "latitude": event.latitude.toString(), "longitude": event.longitude.toString()}).then((value) {
           log('Location updated:$event');
         }).catchError((error) {
           log(error);
@@ -49,6 +49,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
       appStore.setCurrencyCode(value.currencyCode ?? currencyCode);
       appStore.setCurrencySymbol(value.currency ?? currencySymbol);
       appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
+      appStore.isVehicleOrder = value.isVehicleInOrder ?? 0;
     }).catchError((error) {
       log(error.toString());
     });

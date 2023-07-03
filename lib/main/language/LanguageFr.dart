@@ -994,4 +994,98 @@ class LanguageFr extends BaseLanguage {
 
   @override
   String get adminCommission => "Commission administrative";
+
+  @override
+  String get assigned => "Attribué";
+
+  @override
+  String get draft => "Brouillon";
+
+  @override
+  String get created => "Créé";
+
+  @override
+  String get accepted => "Accepté";
+
+  //TODO
+  @override
+  String get vehicle => 'véhicule';
+
+  @override
+  String get add_vehicle => 'ajouter un véhicule';
+
+  @override
+  String get update_vehicle => 'véhicule de mise à jour';
+
+  @override
+  String get vehicle_size => 'taille du véhicule';
+
+  @override
+  String get vehicle_capacity => 'capacité du véhicule';
+
+  @override
+  String get vehicle_image => 'photo du véhicule';
+
+  @override
+  String get select_vehicle => 'sélectionner un véhicule';
+
+  @override
+  String get enable_vehicle => 'activer le véhicule ?';
+
+  @override
+  String get disable_vehicle => 'désactiver le véhicule ?';
+
+  @override
+  String get enable_vehicle_msg => 'Voulez-vous activer ce véhicule ?';
+
+  @override
+  String get disable_vehicle_msg => 'Voulez-vous désactiver ce véhicule ?';
+
+  @override
+  String get delete_vehicle => 'supprimer le véhicule ?';
+
+  @override
+  String get do_you_want_to_delete_this_vehicle => 'Voulez-vous supprimer ce véhicule ?';
+
+  @override
+  String get vehicle_name => 'nom du véhicule';
+
+  @override
+  String get bankName => "Nom de banque";
+
+  @override
+  String get courierAssigned => "Courrier affecté";
+
+  @override
+  String get courierAccepted => "Courier accepté";
+
+  @override
+  String get courierPickedUp => "Pickep";
+
+  @override
+  String get courierArrived => "Courier est arrivé";
+
+  @override
+  String get courierDeparted => "Courier est parti";
+
+  @override
+  String get courierTransfer => "Transfert de courrier";
+
+  @override
+  String get paymentStatusMessage => "Message d'état de paiement";
+
+  @override
+  String get rejected => "Rejeté";
+
+  @override
+  String get notChangeMobileNo => "Vous ne pouvez pas modifier le numéro de contact";
+
+  @override
+  String get verification => "Vérification";
+
+  @override
+  String get phoneNumberAlreadyVerified => "Le numéro de téléphone a déjà vérifié.";
+
+  @override
+  String get verifyPhoneNumber => "Vérifiez le numéro de téléphone";
 }

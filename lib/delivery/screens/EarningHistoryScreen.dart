@@ -80,7 +80,7 @@ class EarningHistoryScreenState extends State<EarningHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Earning History')),
+      appBar: AppBar(title: Text(language.earningHistory)),
       body: Stack(
         children: [
           BodyCornerWidget(

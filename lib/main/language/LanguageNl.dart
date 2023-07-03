@@ -994,4 +994,98 @@ class LanguageNl extends BaseLanguage {
 
   @override
   String get adminCommission => "Admincommissie";
+
+  @override
+  String get assigned => "Toegewezen";
+
+  @override
+  String get draft => "Voorlopige versie";
+
+  @override
+  String get created => "Gecreëerd";
+
+  @override
+  String get accepted => "Geaccepteerd";
+
+  //TODO
+  @override
+  String get vehicle => 'voertuig';
+
+  @override
+  String get add_vehicle => 'voertuig toevoegen';
+
+  @override
+  String get update_vehicle => 'voertuig opdateer';
+
+  @override
+  String get vehicle_size => 'voertuig grootte';
+
+  @override
+  String get vehicle_capacity => 'voertuig capaciteit';
+
+  @override
+  String get vehicle_image => 'voertuig afbeelding';
+
+  @override
+  String get select_vehicle => 'voertuig selecteren';
+
+  @override
+  String get enable_vehicle => 'voertuig inschakelen';
+
+  @override
+  String get disable_vehicle => 'voertuig uitschakelen';
+
+  @override
+  String get enable_vehicle_msg => 'Wil je hier het voertuig actief maken?';
+
+  @override
+  String get disable_vehicle_msg => 'Wil je hier dat voertuig deaktiveer?';
+
+  @override
+  String get delete_vehicle => 'voertuig verwijderen?';
+
+  @override
+  String get do_you_want_to_delete_this_vehicle => 'Wilt u dit voertuig verwijderen?';
+
+  @override
+  String get vehicle_name => 'voertuig naam';
+
+  @override
+  String get bankName => "Banknaam";
+
+  @override
+  String get courierAssigned => "Koerier toegewezen";
+
+  @override
+  String get courierAccepted => "Courier aanvaard";
+
+  @override
+  String get courierPickedUp => "Koerier pickedup";
+
+  @override
+  String get courierArrived => "Koerier arriveerde";
+
+  @override
+  String get courierDeparted => "Koerier vertrok";
+
+  @override
+  String get courierTransfer => "Koerieroverdracht";
+
+  @override
+  String get paymentStatusMessage => "Betalingsstatusbericht";
+
+  @override
+  String get rejected => "Afgewezen";
+
+  @override
+  String get notChangeMobileNo => "U kunt het contactnummer niet wijzigen";
+
+  @override
+  String get verification => "Verificatie";
+
+  @override
+  String get phoneNumberAlreadyVerified => "Het telefoonnummer is al geverifieerd.";
+
+  @override
+  String get verifyPhoneNumber => "Controleer het telefoonnummer";
 }

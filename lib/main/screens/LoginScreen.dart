@@ -13,9 +13,10 @@ import 'package:nb_utils/nb_utils.dart';
 import '../../delivery/screens/DeliveryDashBoard.dart';
 import '../../main.dart';
 import '../../user/screens/DashboardScreen.dart';
-import '../Services/AuthSertvices.dart';
 import '../components/UserCitySelectScreen.dart';
 import '../models/CityListModel.dart';
+import '../services/AuthSertvices.dart';
+import 'VerificationScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   static String tag = '/LoginScreen';
@@ -81,29 +82,36 @@ class LoginScreenState extends State<LoginScreen> {
           await setValue(USER_EMAIL, emailController.text);
           await setValue(USER_PASSWORD, passController.text);
         }
-        authService.signInWithEmailPassword(context, email: emailController.text, password: passController.text).then((value) async {
-          await logInApi(req).then((value) async {
+        await logInApi(req).then((v) async {
+          authService.signInWithEmailPassword(context, email: emailController.text, password: passController.text).then((value) async {
             appStore.setLoading(false);
-            if (value.data!.userType != CLIENT && value.data!.userType != DELIVERY_MAN) {
+            if (v.data!.userType != CLIENT && v.data!.userType != DELIVERY_MAN) {
               await logout(context, isFromLogin: true);
             } else {
               if (getIntAsync(STATUS) == 1) {
-                if (value.data!.countryId != null && value.data!.cityId != null) {
-                  await getCountryDetailApiCall(value.data!.countryId.validate());
-                  getCityDetailApiCall(value.data!.cityId.validate());
+                updateUserStatus({
+                  "id": getIntAsync(USER_ID),
+                  "uid": getStringAsync(UID),
+                }).then((value) {
+                  log("value...." + value.toString());
+                });
+                if (v.data!.countryId != null && v.data!.cityId != null) {
+                  await getCountryDetailApiCall(v.data!.countryId.validate());
+                  getCityDetailApiCall(v.data!.cityId.validate());
                 } else {
                   UserCitySelectScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
                 }
               } else {
                 toast(language.userNotApproveMsg);
+                await logout(context, isDeleteAccount: true);
               }
             }
-          }).catchError((e) {
-            appStore.setLoading(false);
-            toast(e.toString());
           });
+        }).catchError((e) {
+          appStore.setLoading(false);
+          toast(e.toString());
         });
-      }else{
+      } else {
         toast(language.acceptTermService);
       }
     }
@@ -119,10 +127,14 @@ class LoginScreenState extends State<LoginScreen> {
     await getCityDetail(cityId).then((value) async {
       await setValue(CITY_DATA, value.data!.toJson());
       if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
-        if (getStringAsync(USER_TYPE) == CLIENT) {
-          DashboardScreen().launch(context, isNewTask: true);
+        if (getBoolAsync(OTP_VERIFIED)) {
+          if (getStringAsync(USER_TYPE) == CLIENT) {
+            DashboardScreen().launch(context, isNewTask: true);
+          } else {
+            DeliveryDashBoard().launch(context, isNewTask: true);
+          }
         } else {
-          DeliveryDashBoard().launch(context, isNewTask: true);
+          VerificationScreen().launch(context, isNewTask: true);
         }
       } else {
         UserCitySelectScreen().launch(context, isNewTask: true);
@@ -155,11 +167,11 @@ class LoginScreenState extends State<LoginScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        30.height,
+                        24.height,
                         Text(language.signIn, style: boldTextStyle(size: headingSize)),
                         8.height,
                         Text(language.signInWithYourCredential, style: secondaryTextStyle(size: 16)),
-                        30.height,
+                        16.height,
                         Text(language.email, style: primaryTextStyle()),
                         8.height,
                         AppTextField(
@@ -186,6 +198,7 @@ class LoginScreenState extends State<LoginScreen> {
                           contentPadding: EdgeInsets.zero,
                           controlAffinity: ListTileControlAffinity.leading,
                           activeColor: colorPrimary,
+                          dense: true,
                           title: Text(language.rememberMe, style: primaryTextStyle()),
                           value: mIsCheck,
                           onChanged: (val) async {
@@ -200,6 +213,7 @@ class LoginScreenState extends State<LoginScreen> {
                           contentPadding: EdgeInsets.zero,
                           controlAffinity: ListTileControlAffinity.leading,
                           activeColor: colorPrimary,
+                          dense: true,
                           title: RichTextWidget(
                             list: [
                               TextSpan(text: '${language.iAgreeToThe} ', style: secondaryTextStyle()),
@@ -243,7 +257,7 @@ class LoginScreenState extends State<LoginScreen> {
                             ForgotPasswordScreen().launch(context);
                           }),
                         ),
-                        16.height,
+                        SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
