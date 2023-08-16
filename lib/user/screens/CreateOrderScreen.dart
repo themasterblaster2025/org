@@ -1068,46 +1068,44 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(title: Text(language.createOrder)),
-        body: BodyCornerWidget(
-          child: Stack(
-            children: [
-              SingleChildScrollView(
-                padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: List.generate(4, (index) {
-                          return Container(
-                            alignment: Alignment.center,
-                            height: 35,
-                            width: 35,
-                            decoration: BoxDecoration(
-                              color: selectedTabIndex >= index ? colorPrimary : (appStore.isDarkMode ? scaffoldSecondaryDark : borderColor),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Text('${index + 1}', style: primaryTextStyle(color: selectedTabIndex >= index ? Colors.white : null)),
-                          );
-                        }).toList(),
-                      ),
-                      30.height,
-                      if (selectedTabIndex == 0) createOrderWidget1(),
-                      if (selectedTabIndex == 1) createOrderWidget2(),
-                      if (selectedTabIndex == 2) createOrderWidget3(),
-                      if (selectedTabIndex == 3) createOrderWidget4(),
-                    ],
-                  ),
+        appBar: commonAppBarWidget(language.createOrder),
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: List.generate(4, (index) {
+                        return Container(
+                          alignment: Alignment.center,
+                          height: 35,
+                          width: 35,
+                          decoration: BoxDecoration(
+                            color: selectedTabIndex >= index ? colorPrimary : (appStore.isDarkMode ? scaffoldSecondaryDark : borderColor),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text('${index + 1}', style: primaryTextStyle(color: selectedTabIndex >= index ? Colors.white : null)),
+                        );
+                      }).toList(),
+                    ),
+                    30.height,
+                    if (selectedTabIndex == 0) createOrderWidget1(),
+                    if (selectedTabIndex == 1) createOrderWidget2(),
+                    if (selectedTabIndex == 2) createOrderWidget3(),
+                    if (selectedTabIndex == 3) createOrderWidget4(),
+                  ],
                 ),
               ),
-              Observer(
-                builder: (context) => loaderWidget().visible(appStore.isLoading),
-              ),
-            ],
-          ),
+            ),
+            Observer(
+              builder: (context) => loaderWidget().visible(appStore.isLoading),
+            ),
+          ],
         ),
         bottomNavigationBar: Container(
           padding: EdgeInsets.all(16),

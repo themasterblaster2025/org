@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import '../../main/components/theme_selection_dialog.dart';
 import '../../user/screens/WalletScreen.dart';
 import '../../main.dart';
 import '../../main/network/RestApis.dart';
@@ -40,79 +42,142 @@ class AccountFragmentState extends State<AccountFragment> {
     if (mounted) super.setState(fn);
   }
 
+  Widget accountSettingItemWidget(String? img, String title, Function() onTap, {bool isLast = false, IconData? suffixIcon}) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ListTile(
+            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+            minLeadingWidth: 16,
+            dense: true,
+            leading: commonCachedNetworkImage(img, height: 18, fit: BoxFit.fill, width: 18, color: textPrimaryColorGlobal),
+            title: Text(title, style: primaryTextStyle()),
+            trailing: suffixIcon != null ? Icon(suffixIcon, color: Colors.green) : Icon(Icons.navigate_next, color: appStore.isDarkMode ? Colors.white : Colors.grey),
+            onTap: onTap),
+        if (!isLast)
+          Divider(
+            height: 0,
+          )
+      ],
+    );
+  }
+
+  Widget mTitle(String value) {
+    return Text(value.toUpperCase(), style: boldTextStyle(size: 12, letterSpacing: 0.7, color: textSecondaryColorGlobal)).paddingOnly(left: 16, right: 16, top: 24, bottom: 4);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) => SingleChildScrollView(
-        padding: EdgeInsets.only(left: 16, right: 16, bottom: context.height() * 0.1, top: 30),
+        padding: EdgeInsets.only(bottom: context.height() * 0.1, top: 16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            commonCachedNetworkImage(appStore.userProfile.validate(), height: 90, width: 90, fit: BoxFit.cover, alignment: Alignment.center).cornerRadiusWithClipRRect(50),
-            12.height,
-            Text(getStringAsync(NAME).validate(), style: boldTextStyle(size: 20)),
-            6.height,
-            Text(appStore.userEmail.validate(), style: secondaryTextStyle(size: 16)),
-            16.height,
-            ListView(
-              padding: EdgeInsets.zero,
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
+            Row(
               children: [
-                settingItemWidget(Icons.drafts_outlined, language.drafts, () {
-                  DraftOrderListScreen().launch(context);
-                }),
-                settingItemWidget(Icons.wallet, language.wallet, () {
-                  WalletScreen().launch(context);
-                }),
-                settingItemWidget(Icons.account_balance, language.bankDetails, () {
-                  BankDetailScreen().launch(context);
-                }),
-                settingItemWidget(Icons.person_outline, language.editProfile, () {
-                  EditProfileScreen().launch(context);
-                }),
-                settingItemWidget(Icons.lock_outline, language.changePassword, () {
-                  ChangePasswordScreen().launch(context);
-                }),
-                settingItemWidget(Icons.language, language.language, () {
-                  LanguageScreen().launch(context);
-                }),
-                settingItemWidget(Icons.wb_sunny_outlined, language.theme, () {
-                  ThemeScreen().launch(context);
-                }),
-                settingItemWidget(Icons.assignment_outlined, language.privacyPolicy, () {
-                 commonLaunchUrl(mPrivacyPolicy);
-                }),
-                settingItemWidget(Icons.help_outline, language.helpAndSupport, () {
-                 commonLaunchUrl(mHelpAndSupport);
-                }),
-                settingItemWidget(Icons.assignment_outlined, language.termAndCondition, () {
-                 commonLaunchUrl(mTermAndCondition);
-                }),
-                settingItemWidget(Icons.info_outline, language.aboutUs, () {
-                  AboutUsScreen().launch(context);
-                }),
-                settingItemWidget(Icons.delete_forever, language.deleteAccount, () {
-                  DeleteAccountScreen().launch(context);
-                }),
-                settingItemWidget(
-                  Icons.logout,
-                  language.logout,
-                  () async {
-                    await showConfirmDialogCustom(
-                      context,
-                      primaryColor: colorPrimary,
-                      title: language.logoutConfirmationMsg,
-                      positiveText: language.yes,
-                      negativeText: language.no,
-                      onAccept: (c) {
-                        logout(context);
-                      },
-                    );
-                  },
-                  isLast: true,
+                Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    Container(
+                        decoration: boxDecorationWithRoundedCorners(boxShape: BoxShape.circle, border: Border.all(width: 2, color: colorPrimary)),
+                        child: commonCachedNetworkImage(appStore.userProfile.validate(), height: 65, width: 65, fit: BoxFit.cover, alignment: Alignment.center).cornerRadiusWithClipRRect(50)),
+                    Container(
+                      decoration: boxDecorationWithRoundedCorners(boxShape: BoxShape.circle, border: Border.all(width: 1, color: white), backgroundColor: colorPrimary),
+                      padding: EdgeInsets.all(4),
+                      child: commonCachedNetworkImage('https://cdn-icons-png.flaticon.com/128/3917/3917376.png', color: white, height: 14, width: 14),
+                    )
+                  ],
                 ),
+                10.width,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(getStringAsync(NAME).validate(), style: boldTextStyle(size: 20)),
+                    6.height,
+                    Text(appStore.userEmail.validate(), style: secondaryTextStyle(size: 16)),
+                  ],
+                )
               ],
+            ).paddingSymmetric(horizontal: 16).onTap(() {
+              EditProfileScreen().launch(context);
+            }),
+
+            ///TODO
+            mTitle('Orders, Wallet and more'),
+            accountSettingItemWidget("https://cdn-icons-png.flaticon.com/128/5070/5070394.png", language.drafts, () {
+              DraftOrderListScreen().launch(context);
+            }),
+            accountSettingItemWidget("https://cdn-icons-png.flaticon.com/128/7653/7653271.png", language.wallet, () {
+              WalletScreen().launch(context);
+            }),
+            accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3914/3914398.png', language.bankDetails, () {
+              BankDetailScreen().launch(context);
+            }, isLast: true),
+
+            ///TODO
+            mTitle('Account'),
+            accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3917/3917591.png', language.changePassword, () {
+              ChangePasswordScreen().launch(context);
+            }),
+            accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3917/3917538.png', language.language, () {
+              LanguageScreen().launch(context);
+            }),
+            accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/6853/6853936.png', language.theme, () async {
+              await showInDialog(context, shape: RoundedRectangleBorder(borderRadius: radius()),
+              builder: (_) => ThemeSelectionDialog(), contentPadding: EdgeInsets.zero);
+
+            }),
+            accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3917/3917378.png', language.deleteAccount, () async {
+               DeleteAccountScreen().launch(context);
+
+            }, isLast: true),
+
+            ///TODO
+            mTitle('General'),
+            accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3914/3914394.png', language.privacyPolicy, () {
+              commonLaunchUrl(mPrivacyPolicy);
+            }),
+            accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3916/3916699.png', language.helpAndSupport, () {
+              commonLaunchUrl(mHelpAndSupport);
+            }),
+            accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3914/3914394.png', language.termAndCondition, () {
+              commonLaunchUrl(mTermAndCondition);
+            }),
+            accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3916/3916699.png', language.aboutUs, () {
+              AboutUsScreen().launch(context);
+            }, isLast: true),
+
+            30.height,
+            Container(
+              decoration: boxDecorationWithRoundedCorners(border: Border.all(color: context.dividerColor, width: 1)),
+              padding: EdgeInsets.all(16),
+              width: context.width(),
+              child: Text(language.logout, style: primaryTextStyle(), textAlign: TextAlign.center),
+            ).onTap(() async {
+              await showConfirmDialogCustom(
+                context,
+                primaryColor: colorPrimary,
+                title: language.logoutConfirmationMsg,
+                positiveText: language.yes,
+                negativeText: language.no,
+                onAccept: (c) {
+                  logout(context);
+                },
+              );
+            }).paddingAll(16),
+
+            ///TODO
+            FutureBuilder<PackageInfo>(
+              future: PackageInfo.fromPlatform(),
+              builder: (_, snap) {
+                if (snap.hasData) {
+                  return Text('Version ${snap.data!.version.validate()}', style: secondaryTextStyle()).center();
+                }
+                return SizedBox();
+              },
             ),
+            30.height,
           ],
         ),
       ),

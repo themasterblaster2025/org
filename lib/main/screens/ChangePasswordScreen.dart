@@ -66,58 +66,57 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(language.changePassword)),
+      appBar: commonAppBarWidget(language.changePassword),
       body: Stack(
         children: [
           Form(
             key: formKey,
-            child: BodyCornerWidget(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.only(left: 16, top: 30, right: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(language.oldPassword, style: primaryTextStyle()),
-                    8.height,
-                    AppTextField(
-                      controller: oldPassController,
-                      textFieldType: TextFieldType.PASSWORD,
-                      focus: oldPassFocus,
-                      nextFocus: newPassFocus,
-                      decoration: commonInputDecoration(),
-                      errorThisFieldRequired: language.fieldRequiredMsg,
-                      errorMinimumPasswordLength: language.passwordInvalid,
-                    ),
-                    16.height,
-                    Text(language.newPassword, style: primaryTextStyle()),
-                    8.height,
-                    AppTextField(
-                      controller: newPassController,
-                      textFieldType: TextFieldType.PASSWORD,
-                      focus: newPassFocus,
-                      nextFocus: confirmPassFocus,
-                      decoration: commonInputDecoration(),
-                      errorThisFieldRequired: language.fieldRequiredMsg,
-                      errorMinimumPasswordLength: language.passwordInvalid,
-                    ),
-                    16.height,
-                    Text(language.confirmPassword, style: primaryTextStyle()),
-                    8.height,
-                    AppTextField(
-                      controller: confirmPassController,
-                      textFieldType: TextFieldType.PASSWORD,
-                      focus: confirmPassFocus,
-                      decoration: commonInputDecoration(),
-                      errorThisFieldRequired: language.fieldRequiredMsg,
-                      errorMinimumPasswordLength: language.passwordInvalid,
-                      validator: (val) {
-                        if (val!.isEmpty) return language.fieldRequiredMsg;
-                        if (val != newPassController.text) return language.passwordNotMatch;
-                        return null;
-                      },
-                    ),
-                  ],
-                ),
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(left: 16, top: 16, right: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+
+                  Text(language.oldPassword, style: primaryTextStyle()),
+                  8.height,
+                  AppTextField(
+                    controller: oldPassController,
+                    textFieldType: TextFieldType.PASSWORD,
+                    focus: oldPassFocus,
+                    nextFocus: newPassFocus,
+                    decoration: commonInputDecoration(),
+                    errorThisFieldRequired: language.fieldRequiredMsg,
+                    errorMinimumPasswordLength: language.passwordInvalid,
+                  ),
+                  16.height,
+                  Text(language.newPassword, style: primaryTextStyle()),
+                  8.height,
+                  AppTextField(
+                    controller: newPassController,
+                    textFieldType: TextFieldType.PASSWORD,
+                    focus: newPassFocus,
+                    nextFocus: confirmPassFocus,
+                    decoration: commonInputDecoration(),
+                    errorThisFieldRequired: language.fieldRequiredMsg,
+                    errorMinimumPasswordLength: language.passwordInvalid,
+                  ),
+                  16.height,
+                  Text(language.confirmPassword, style: primaryTextStyle()),
+                  8.height,
+                  AppTextField(
+                    controller: confirmPassController,
+                    textFieldType: TextFieldType.PASSWORD,
+                    focus: confirmPassFocus,
+                    decoration: commonInputDecoration(),
+                    errorThisFieldRequired: language.fieldRequiredMsg,
+                    errorMinimumPasswordLength: language.passwordInvalid,
+                    validator: (val) {
+                      if (val!.isEmpty) return language.fieldRequiredMsg;
+                      if (val != newPassController.text) return language.passwordNotMatch;
+                      return null;
+                    },
+                  ),
+                ],
               ),
             ),
           ),

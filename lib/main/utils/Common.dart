@@ -2,6 +2,7 @@ import 'dart:core';
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:html/parser.dart';
@@ -14,6 +15,8 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import '../../main.dart';
+import '../network/RestApis.dart';
+import '../services/AuthSertvices.dart';
 import 'Widgets.dart';
 
 InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, Function()? suffixOnTap, Widget? dateTime, Widget? prefixIcon}) {
@@ -42,6 +45,7 @@ Widget commonCachedNetworkImage(
   double? height,
   double? width,
   BoxFit? fit,
+  Color? color,
   AlignmentGeometry? alignment,
   bool usePlaceholderIfUrlEmpty = true,
   double? radius,
@@ -53,6 +57,7 @@ Widget commonCachedNetworkImage(
       imageUrl: url!,
       height: height,
       width: width,
+      color:color ,
       fit: fit,
       alignment: alignment as Alignment? ?? Alignment.center,
       errorWidget: (_, s, d) {
@@ -213,26 +218,27 @@ Future<void> saveOneSignalPlayerId() async {
   });
 }
 
+///todo
 String statusTypeIcon({String? type}) {
-  String icon = 'assets/icons/ic_create.png';
+  String icon = 'https://cdn-icons-png.flaticon.com/128/7928/7928226.png';
   if (type == ORDER_ASSIGNED) {
-    icon = 'assets/icons/ic_assign.png';
+    icon = 'https://cdn-icons-png.flaticon.com/128/9238/9238295.png';
   } else if (type == ORDER_ACCEPTED) {
-    icon = 'assets/icons/ic_active.png';
+    icon = 'https://cdn-icons-png.flaticon.com/128/7857/7857199.png';
   } else if (type == ORDER_PICKED_UP) {
-    icon = 'assets/icons/ic_picked.png';
+    icon = 'https://cdn-icons-png.flaticon.com/128/10786/10786479.png';
   } else if (type == ORDER_ARRIVED) {
-    icon = 'assets/icons/ic_arrived.png';
+    icon = 'https://cdn-icons-png.flaticon.com/128/7928/7928244.png';
   } else if (type == ORDER_DEPARTED) {
-    icon = 'assets/icons/ic_departed.png';
+    icon = 'https://cdn-icons-png.flaticon.com/128/5073/5073999.png';
   } else if (type == ORDER_DELIVERED) {
-    icon = 'assets/icons/ic_completed.png';
+    icon = 'https://cdn-icons-png.flaticon.com/128/9239/9239921.png';
   } else if (type == ORDER_CANCELLED) {
-    icon = 'assets/icons/ic_cancelled.png';
+    icon = 'https://cdn-icons-png.flaticon.com/128/9291/9291733.png';
   } else if (type == ORDER_CREATED) {
-    icon = 'assets/icons/ic_create.png';
+    icon = 'https://cdn-icons-png.flaticon.com/128/3914/3914461.png';
   } else if (type == ORDER_DRAFT) {
-    icon = 'assets/icons/ic_draft.png';
+    icon = 'https://cdn-icons-png.flaticon.com/128/10469/10469584.png';
   }
   return icon;
 }
@@ -387,4 +393,42 @@ cashConfirmDialog() {
       );
     },
   );
+}
+
+Future deleteAccount(BuildContext context) async {
+  Map req = {"id": getIntAsync(USER_ID)};
+  appStore.setLoading(true);
+  await deleteUser(req).then((value) async {
+    await userService.removeDocument(getStringAsync(UID)).then((value) async {
+      await deleteUserFirebase().then((value) async {
+        await logout(context,isDeleteAccount: true).then((value) async {
+          appStore.setLoading(false);
+          await removeKey(USER_EMAIL);
+          await removeKey(USER_PASSWORD);
+        });
+      }).catchError((error) {
+        appStore.setLoading(false);
+        toast(error.toString());
+      });
+    }).catchError((error) {
+      appStore.setLoading(false);
+      toast(error.toString());
+    });
+  }).catchError((error) {
+    appStore.setLoading(false);
+    toast(error.toString());
+  });
+}
+
+String timeAgo(String date) {
+  if(date.contains("week ago")){
+    return date.splitBefore("week ago").trim()+"w";
+  }
+   if(date.contains("year ago")){
+    return date.splitBefore("year ago").trim()+"y";
+  }
+   if(date.contains("month ago")){
+    return date.splitBefore("month ago").trim()+"m";
+  }
+  return date.toString();
 }

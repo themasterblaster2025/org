@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mighty_delivery/main/utils/Colors.dart';
 import '../../main.dart';
 import '../../main/components/BodyCornerWidget.dart';
 import '../../main/utils/Common.dart';
@@ -59,42 +60,20 @@ class DeleteAccountScreenState extends State<DeleteAccountScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(language.deleteAccount)),
+      appBar: commonAppBarWidget(language.deleteAccount),
       body: Stack(
         children: [
-          BodyCornerWidget(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(language.deleteAccountMsg1, style: primaryTextStyle()),
-                  16.height,
-                  Text(language.account, style: boldTextStyle()),
-                  8.height,
-                  Text(language.deleteAccountMsg2, style: primaryTextStyle()),
-                  24.height,
-                  commonButton(
-                      language.deleteAccount,
-                      () async => {
-                            await showConfirmDialogCustom(
-                              context,
-                              title: language.deleteAccountConfirmMsg,
-                              dialogType: DialogType.DELETE,
-                              positiveText: language.yes,
-                              negativeText: language.no,
-                              onAccept: (c) async {
-                                if (getStringAsync(USER_EMAIL) == 'jose@gmail.com' || getStringAsync(USER_EMAIL) == 'mark@gmail.com') {
-                                  toast(language.demoMsg);
-                                } else {
-                                  await deleteAccount(context);
-                                }
-                              },
-                            ),
-                          },
-                      color: Colors.red),
-                ],
-              ),
+          SingleChildScrollView(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Confirm account deletion', style: boldTextStyle(size: 18)),
+                Divider(),
+                8.height,
+                Text(language.deleteAccountMsg2, style: primaryTextStyle()),
+                24.height,
+              ],
             ),
           ),
           Observer(builder: (context) {
@@ -102,6 +81,41 @@ class DeleteAccountScreenState extends State<DeleteAccountScreen> {
           }),
         ],
       ),
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // commonButton(
+          //     "No, I don\'t want to delete",
+          //         (){
+          //       finish(context);
+          //     },
+          //     width: context.width(),
+          //     color: colorPrimary),
+          // 8.height,
+          commonButton(
+              language.deleteAccount,
+                  () async => {
+                await showConfirmDialogCustom(
+                  context,
+                  title: language.deleteAccountConfirmMsg,
+                  dialogType: DialogType.DELETE,
+                  positiveText: language.yes,
+                  negativeText: language.no,
+                  onAccept: (c) async {
+                    if (getStringAsync(USER_EMAIL) == 'jose@gmail.com' || getStringAsync(USER_EMAIL) == 'mark@gmail.com') {
+                      toast(language.demoMsg);
+                    } else {
+                      await deleteAccount(context);
+                    }
+                  },
+                ),
+              },
+              width: context.width(),
+              color: Colors.red,
+              textColor: Colors.white),
+
+        ],
+      ).paddingAll(16),
     );
   }
 }

@@ -53,7 +53,7 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
       }
       if (filterData!.toDate != null) {
         toDate = DateTime.tryParse(filterData!.toDate!);
-        if(toDate!=null) {
+        if (toDate != null) {
           toDateController.text = toDate.toString();
         }
       }
@@ -68,7 +68,7 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(24),
+      padding: EdgeInsets.all(16),
       child: Form(
         key: _formKey,
         child: Column(
@@ -78,33 +78,20 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.clear).onTap(() {
-                      finish(context);
-                    }),
-                    16.width,
-                    Text(language.filter, style: boldTextStyle(size: 18)),
-                  ],
-                ),
-                Text(language.reset, style: primaryTextStyle()).onTap(() {
-                  selectedStatus = null;
-                  fromDate = null;
-                  toDate = null;
-                  fromDateController.clear();
-                  toDateController.clear();
-                  FocusScope.of(context).unfocus();
-                  setState(() {});
+                Text(language.filter, style: boldTextStyle(size: 18)),
+                Icon(Icons.close).onTap(() {
+                  finish(context);
                 }),
               ],
             ),
-            30.height,
-            Text(language.status, style: boldTextStyle()),
+            8.height,
+            Divider(),
             16.height,
+            Text(language.status, style: boldTextStyle()),
+            8.height,
             Wrap(
               spacing: 8,
-              runSpacing: 8,
+              runSpacing: 0,
               children: statusList.map((item) {
                 return Chip(
                   backgroundColor: selectedStatus == item ? colorPrimary : Colors.transparent,
@@ -112,10 +99,10 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
                   elevation: 0,
                   labelStyle: primaryTextStyle(color: selectedStatus == item ? white : Colors.grey),
                   padding: EdgeInsets.zero,
-                  labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  labelPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 2),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(defaultRadius),
-                    side: BorderSide(color: selectedStatus == item ? colorPrimary : borderColor,width: appStore.isDarkMode ? 0.2 : 1),
+                    side: BorderSide(color: selectedStatus == item ? colorPrimary : borderColor, width: appStore.isDarkMode ? 0.2 : 1),
                   ),
                 ).onTap(() {
                   selectedStatus = item;
@@ -125,7 +112,7 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
             ),
             16.height,
             Text(language.date, style: boldTextStyle()),
-            16.height,
+            8.height,
             Row(
               children: [
                 Text(language.from, style: primaryTextStyle()).withWidth(50),
@@ -172,15 +159,33 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
                 ).expand(),
               ],
             ),
-            16.height,
-            commonButton(language.applyFilter, () {
-              if (_formKey.currentState!.validate()) {
-                finish(context);
-                setValue(FILTER_DATA, FilterAttributeModel(orderStatus: selectedStatus, fromDate: fromDate.toString(), toDate: toDate.toString()).toJson());
-                appStore.setFiltering(selectedStatus!=null || fromDate!=null || toDate!=null);
-                LiveStream().emit("UpdateOrderData");
-              }
-            }, width: context.width()),
+            20.height,
+            Row(
+              children: [
+                outlineButton(language.reset, () {
+                  selectedStatus = null;
+                  fromDate = null;
+                  toDate = null;
+                  fromDateController.clear();
+                  toDateController.clear();
+                  FocusScope.of(context).unfocus();
+                  setState(() {});
+                }, color: colorPrimary)
+                    .expand(),
+                16.width,
+                commonButton(
+                  language.applyFilter,
+                  () {
+                    if (_formKey.currentState!.validate()) {
+                      finish(context);
+                      setValue(FILTER_DATA, FilterAttributeModel(orderStatus: selectedStatus, fromDate: fromDate.toString(), toDate: toDate.toString()).toJson());
+                      appStore.setFiltering(selectedStatus != null || fromDate != null || toDate != null);
+                      LiveStream().emit("UpdateOrderData");
+                    }
+                  },
+                ).expand(),
+              ],
+            ),
           ],
         ),
       ),

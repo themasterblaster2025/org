@@ -61,22 +61,27 @@ void main() async {
   } else if (themeModeIndex == appThemeMode.themeModeDark) {
     appStore.setDarkMode(true);
   }
-  await OneSignal.shared.setAppId(mOneSignalAppId);
 
-  saveOneSignalPlayerId();
-  OneSignal.shared.setNotificationOpenedHandler((OSNotificationOpenedResult notification) async {
-    var notId = notification.notification.additionalData!["id"];
-    if (notId != null) {
-      if (!appStore.isLoggedIn) {
-        LoginScreen().launch(getContext);
-      } else if (notId.toString().contains('CHAT')) {
-        UserData user = await getUserDetail(int.parse(notId.toString  ().replaceAll("CHAT_", "")));
-        ChatScreen(userData: user).launch(getContext);
-      } else {
-        OrderDetailScreen(orderId: int.parse(notId.toString())).launch(getContext);
+  if(isMobile){
+
+    await OneSignal.shared.setAppId(mOneSignalAppId);
+
+    saveOneSignalPlayerId();
+    OneSignal.shared.setNotificationOpenedHandler((OSNotificationOpenedResult notification) async {
+      var notId = notification.notification.additionalData!["id"];
+      if (notId != null) {
+        if (!appStore.isLoggedIn) {
+          LoginScreen().launch(getContext);
+        } else if (notId.toString().contains('CHAT')) {
+          UserData user = await getUserDetail(int.parse(notId.toString  ().replaceAll("CHAT_", "")));
+          ChatScreen(userData: user).launch(getContext);
+        } else {
+          OrderDetailScreen(orderId: int.parse(notId.toString())).launch(getContext);
+        }
       }
-    }
-  });
+    });
+  }
+  defaultRadius =10;
   runApp(MyApp());
 }
 
@@ -135,7 +140,7 @@ class MyAppState extends State<MyApp> {
         themeMode: appStore.isDarkMode ? ThemeMode.dark : ThemeMode.light,
         home: SplashScreen(),
         supportedLocales: LanguageDataModel.languageLocales(),
-        localizationsDelegates: [AppLocalizations(), GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate, GlobalCupertinoLocalizations.delegate],
+        localizationsDelegates: [AppLocalizations(), GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate, GlobalCupertinoLocalizations.delegate,],
         localeResolutionCallback: (locale, supportedLocales) => locale,
         locale: Locale(appStore.selectedLanguage.validate(value: defaultLanguage)),
       );

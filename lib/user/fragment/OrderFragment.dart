@@ -6,6 +6,7 @@ import '../../main.dart';
 import '../../main/models/OrderListModel.dart';
 import '../../main/models/models.dart';
 import '../../main/network/RestApis.dart';
+import '../../main/utils/Images.dart';
 import '../../user/screens/OrderTrackingScreen.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
@@ -60,10 +61,10 @@ class OrderFragmentState extends State<OrderFragment> {
       log(error.toString());
     });
     await getInvoiceSetting().then((value) {
-      if(value.invoiceData!=null && value.invoiceData!.isNotEmpty){
-        appStore.setInvoiceCompanyName(value.invoiceData!.firstWhere((element) => element.key=='company_name').value.validate());
-        appStore.setInvoiceContactNumber(value.invoiceData!.firstWhere((element) => element.key=='company_contact_number').value.validate());
-        appStore.setCompanyAddress(value.invoiceData!.firstWhere((element) => element.key=='company_address').value.validate());
+      if (value.invoiceData != null && value.invoiceData!.isNotEmpty) {
+        appStore.setInvoiceCompanyName(value.invoiceData!.firstWhere((element) => element.key == 'company_name').value.validate());
+        appStore.setInvoiceContactNumber(value.invoiceData!.firstWhere((element) => element.key == 'company_contact_number').value.validate());
+        appStore.setCompanyAddress(value.invoiceData!.firstWhere((element) => element.key == 'company_address').value.validate());
       }
     }).catchError((error) {
       toast(error.toString());
@@ -73,12 +74,12 @@ class OrderFragmentState extends State<OrderFragment> {
   getOrderListApiCall() async {
     appStore.setLoading(true);
     FilterAttributeModel filterData = FilterAttributeModel.fromJson(getJSONAsync(FILTER_DATA));
-    await getOrderList(page: page, orderStatus: filterData.orderStatus, fromDate: filterData.fromDate, toDate: filterData.toDate,excludeStatus:ORDER_DRAFT).then((value) {
+    await getOrderList(page: page, orderStatus: filterData.orderStatus, fromDate: filterData.fromDate, toDate: filterData.toDate, excludeStatus: ORDER_DRAFT).then((value) {
       appStore.setLoading(false);
       appStore.setAllUnreadCount(value.allUnreadCount.validate());
       totalPage = value.pagination!.totalPages.validate(value: 1);
       page = value.pagination!.currentPage.validate(value: 1);
-      if(value.walletData!=null){
+      if (value.walletData != null) {
         appStore.availableBal = value.walletData!.totalAmount;
       }
       isLastPage = false;
@@ -149,9 +150,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                       children: [
                                         Container(
                                           decoration: boxDecorationWithRoundedCorners(
-                                              borderRadius: BorderRadius.circular(8),
-                                              border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
-                                              backgroundColor: Colors.transparent),
+                                              borderRadius: BorderRadius.circular(8), border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), backgroundColor: Colors.transparent),
                                           padding: EdgeInsets.all(8),
                                           child: Image.asset(parcelTypeIcon(item.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
                                         ),
@@ -164,7 +163,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                             Row(
                                               children: [
                                                 item.date != null ? Text(printDate(item.date!), style: secondaryTextStyle()).expand() : SizedBox(),
-                                                if(item.status != ORDER_CANCELLED) Text(printAmount(item.totalAmount ?? 0), style: boldTextStyle()),
+                                                if (item.status != ORDER_CANCELLED) Text(printAmount(item.totalAmount ?? 0), style: boldTextStyle()),
                                               ],
                                             ),
                                           ],
@@ -188,7 +187,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                         Row(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            ImageIcon(AssetImage('assets/icons/ic_pick_location.png'), size: 24, color: colorPrimary),
+                                            ImageIcon(AssetImage(ic_from), size: 24, color: colorPrimary),
                                             12.width,
                                             Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -226,7 +225,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                         Row(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            ImageIcon(AssetImage('assets/icons/ic_delivery_location.png'), size: 24, color: colorPrimary),
+                                            ImageIcon(AssetImage(ic_to), size: 24, color: colorPrimary),
                                             12.width,
                                             Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,7 +240,7 @@ class OrderFragmentState extends State<OrderFragment> {
                                             12.width,
                                             if (item.deliveryPoint!.contactNumber != null)
                                               Image.asset('assets/icons/ic_call.png', width: 24, height: 24).onTap(() {
-                                               commonLaunchUrl('tel:${item.deliveryPoint!.contactNumber}');
+                                                commonLaunchUrl('tel:${item.deliveryPoint!.contactNumber}');
                                               }),
                                           ],
                                         ),
@@ -250,15 +249,16 @@ class OrderFragmentState extends State<OrderFragment> {
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        if(item.status != ORDER_CANCELLED) Row(
-                                          children: [
-                                            Text(language.invoice, style: primaryTextStyle(color: colorPrimary)),
-                                            4.width,
-                                            Icon(Icons.download_rounded, color: colorPrimary),
-                                          ],
-                                        ).onTap(() {
-                                          generateInvoiceCall(item);
-                                        }),
+                                        if (item.status != ORDER_CANCELLED)
+                                          Row(
+                                            children: [
+                                              Text(language.invoice, style: primaryTextStyle(color: colorPrimary)),
+                                              4.width,
+                                              Icon(Icons.download_rounded, color: colorPrimary),
+                                            ],
+                                          ).onTap(() {
+                                            generateInvoiceCall(item);
+                                          }),
                                         AppButton(
                                           elevation: 0,
                                           height: 35,

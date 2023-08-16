@@ -103,154 +103,148 @@ class EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(language.editProfile)),
-      body: BodyCornerWidget(
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Stack(
-                      children: [
-                        profileImage(),
-                        Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Container(
-                            margin: EdgeInsets.only(top: 60, left: 80),
-                            height: 35,
-                            width: 35,
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), color: colorPrimary),
-                            child: IconButton(
-                              onPressed: () {
-                                getImage();
-                              },
-                              icon: Icon(
-                                Icons.edit,
-                                color: white,
-                                size: 20,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    16.height,
-                    Text(language.email, style: primaryTextStyle()),
-                    8.height,
-                    AppTextField(
-                      readOnly: true,
-                      controller: emailController,
-                      textFieldType: TextFieldType.EMAIL,
-                      focus: emailFocus,
-                      nextFocus: usernameFocus,
-                      decoration: commonInputDecoration(),
-                      onTap: () {
-                        toast(language.notChangeEmail);
-                      },
-                    ),
-                    16.height,
-                    Text(language.username, style: primaryTextStyle()),
-                    8.height,
-                    AppTextField(
-                      readOnly: true,
-                      controller: usernameController,
-                      textFieldType: TextFieldType.USERNAME,
-                      focus: usernameFocus,
-                      nextFocus: nameFocus,
-                      decoration: commonInputDecoration(),
-                      onTap: () {
-                        toast(language.notChangeUsername);
-                      },
-                    ),
-                    16.height,
-                    Text(language.name, style: primaryTextStyle()),
-                    8.height,
-                    AppTextField(
-                      controller: nameController,
-                      textFieldType: TextFieldType.NAME,
-                      focus: nameFocus,
-                      nextFocus: addressFocus,
-                      decoration: commonInputDecoration(),
-                      errorThisFieldRequired: language.fieldRequiredMsg,
-                    ),
-                    16.height,
-                    Text(language.contactNumber, style: primaryTextStyle()),
-                    8.height,
-                    AppTextField(
-                      controller: contactNumberController,
-                      textFieldType: TextFieldType.PHONE,
-                      readOnly: true,
-                      focus: contactFocus,
-                      nextFocus: addressFocus,
-                      decoration: commonInputDecoration(
-                        prefixIcon: IntrinsicHeight(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              CountryCodePicker(
-                                initialSelection: countryCode,
-                                showCountryOnly: false,
-                                dialogSize: Size(context.width() - 60, context.height() * 0.6),
-                                showFlag: true,
-                                enabled: false,
-                                showFlagDialog: true,
-                                showOnlyCountryWhenClosed: false,
-                                alignLeft: false,
-                                textStyle: primaryTextStyle(),
-                                dialogBackgroundColor: Theme.of(context).cardColor,
-                                barrierColor: Colors.black12,
-                                dialogTextStyle: primaryTextStyle(),
-                                searchDecoration: InputDecoration(
-                                  iconColor: Theme.of(context).dividerColor,
-                                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
-                                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: colorPrimary)),
-                                ),
-                                searchStyle: primaryTextStyle(),
-                                onInit: (c) {
-                                  countryCode = c!.dialCode!;
-                                },
-                                onChanged: (c) {
-                                  countryCode = c.dialCode!;
-                                },
-                              ),
-                              VerticalDivider(color: Colors.grey.withOpacity(0.5)),
-                            ],
+      appBar: commonAppBarWidget(language.editProfile),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            padding: EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 16),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Stack(
+                    children: [
+                      profileImage(),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 60, left: 80),
+                          padding: EdgeInsets.all(6),
+                          decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary,border: Border.all(width: 1,color: Colors.white),boxShape: BoxShape.circle),
+                          child:Icon(
+                              Icons.edit,
+                              color: white,
+                              size: 16,
                           ),
                         ),
+                      )
+                    ],
+                  ).onTap((){
+                   getImage();
+                  },highlightColor: Colors.transparent,splashColor: Colors.transparent),
+                  16.height,
+                  Text(language.email, style: primaryTextStyle()),
+                  8.height,
+                  AppTextField(
+                    readOnly: true,
+                    controller: emailController,
+                    textFieldType: TextFieldType.EMAIL,
+                    focus: emailFocus,
+                    nextFocus: usernameFocus,
+                    decoration: commonInputDecoration(),
+                    onTap: () {
+                      toast(language.notChangeEmail);
+                    },
+                  ),
+                  16.height,
+                  Text(language.username, style: primaryTextStyle()),
+                  8.height,
+                  AppTextField(
+                    readOnly: true,
+                    controller: usernameController,
+                    textFieldType: TextFieldType.USERNAME,
+                    focus: usernameFocus,
+                    nextFocus: nameFocus,
+                    decoration: commonInputDecoration(),
+                    onTap: () {
+                      toast(language.notChangeUsername);
+                    },
+                  ),
+                  16.height,
+                  Text(language.name, style: primaryTextStyle()),
+                  8.height,
+                  AppTextField(
+                    controller: nameController,
+                    textFieldType: TextFieldType.NAME,
+                    focus: nameFocus,
+                    nextFocus: addressFocus,
+                    decoration: commonInputDecoration(),
+                    errorThisFieldRequired: language.fieldRequiredMsg,
+                  ),
+                  16.height,
+                  Text(language.contactNumber, style: primaryTextStyle()),
+                  8.height,
+                  AppTextField(
+                    controller: contactNumberController,
+                    textFieldType: TextFieldType.PHONE,
+                    readOnly: true,
+                    focus: contactFocus,
+                    nextFocus: addressFocus,
+                    decoration: commonInputDecoration(
+                      prefixIcon: IntrinsicHeight(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CountryCodePicker(
+                              initialSelection: countryCode,
+                              showCountryOnly: false,
+                              dialogSize: Size(context.width() - 60, context.height() * 0.6),
+                              showFlag: true,
+                              enabled: false,
+                              showFlagDialog: true,
+                              showOnlyCountryWhenClosed: false,
+                              alignLeft: false,
+                              textStyle: primaryTextStyle(),
+                              dialogBackgroundColor: Theme.of(context).cardColor,
+                              barrierColor: Colors.black12,
+                              dialogTextStyle: primaryTextStyle(),
+                              searchDecoration: InputDecoration(
+                                iconColor: Theme.of(context).dividerColor,
+                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
+                                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: colorPrimary)),
+                              ),
+                              searchStyle: primaryTextStyle(),
+                              onInit: (c) {
+                                countryCode = c!.dialCode!;
+                              },
+                              onChanged: (c) {
+                                countryCode = c.dialCode!;
+                              },
+                            ),
+                            VerticalDivider(color: Colors.grey.withOpacity(0.5)),
+                          ],
+                        ),
                       ),
-                      validator: (value) {
-                        if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-                      //  if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
-                        return null;
-                      },
-                      onTap: () {
-                        toast(language.notChangeMobileNo);
-                      },
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
                     ),
-                    16.height,
-                    Text(language.address, style: primaryTextStyle()),
-                    8.height,
-                    AppTextField(
-                      controller: addressController,
-                      textFieldType: TextFieldType.MULTILINE,
-                      focus: addressFocus,
-                      decoration: commonInputDecoration(),
-                    ),
-                    16.height,
-                  ],
-                ),
+                    validator: (value) {
+                      if (value!.trim().isEmpty) return language.fieldRequiredMsg;
+                    //  if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
+                      return null;
+                    },
+                    onTap: () {
+                      toast(language.notChangeMobileNo);
+                    },
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                  ),
+                  16.height,
+                  Text(language.address, style: primaryTextStyle()),
+                  8.height,
+                  AppTextField(
+                    controller: addressController,
+                    textFieldType: TextFieldType.MULTILINE,
+                    focus: addressFocus,
+                    decoration: commonInputDecoration(),
+                  ),
+                  16.height,
+                ],
               ),
             ),
-            Observer(builder: (_) => loaderWidget().visible(appStore.isLoading)),
-          ],
-        ),
+          ),
+          Observer(builder: (_) => loaderWidget().visible(appStore.isLoading)),
+        ],
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(16),

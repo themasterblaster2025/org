@@ -3,10 +3,8 @@ import '../../main.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-
-import '../components/BodyCornerWidget.dart';
 import '../utils/Common.dart';
+import '../utils/Widgets.dart';
 
 class AboutUsScreen extends StatefulWidget {
   static String tag = '/AboutUsScreen';
@@ -34,72 +32,26 @@ class AboutUsScreenState extends State<AboutUsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(language.aboutUs)),
-      body: BodyCornerWidget(
-        child: Container(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset('assets/app_logo.jpg',height: 80,width: 80).cornerRadiusWithClipRRect(16),
-              16.height,
-              Text(mAppName, style: primaryTextStyle(size: 20)),
-              8.height,
-              FutureBuilder<PackageInfo>(
-                future: PackageInfo.fromPlatform(),
-                builder: (_, snap) {
-                  if (snap.hasData) {
-                    return Text('v${snap.data!.version.validate()}', style: secondaryTextStyle());
-                  }
-                  return SizedBox();
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: Column(
-        mainAxisSize: MainAxisSize.min,
+      appBar: commonAppBarWidget(language.aboutUs),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: AppButton(
-              padding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-              color: colorPrimary,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.contact_support_outlined, color: Colors.white),
-                  8.width,
-                  Text(language.contactUs, style: boldTextStyle(color: white)),
-                ],
-              ),
-              onTap: () {
-                commonLaunchUrl('mailto:$mContactPref');
-              },
-            ),
-          ),
           16.height,
-          Align(
-            alignment: Alignment.topRight,
-            child: AppButton(
-              padding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-              color: colorPrimary,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Image.asset('assets/icons/ic_purchase.png', height: 24, color: white),
-                  8.width,
-                  Text(language.purchase, style: boldTextStyle(color: white)),
-                ],
-              ),
-              onTap: () {
-                commonLaunchUrl(mCodeCanyonURL);
-              },
-            ),
+          Text(mAppName, style: boldTextStyle(size: 20, letterSpacing: 0.5)),
+          8.height,
+          Text(mAppDescription, style: secondaryTextStyle(), textAlign: TextAlign.start),
+          30.height,
+          Text(language.contactUs, style: primaryTextStyle(size: 14), textAlign: TextAlign.justify),
+          4.height,
+          GestureDetector(
+            onTap: () async {
+              commonLaunchUrl('mailto:$mContactPref');
+            },
+            child: Text(mContactPref, style: primaryTextStyle(color: colorPrimary)),
           ),
         ],
-      ).paddingAll(16),
+      ).center().paddingAll(16),
+      bottomNavigationBar: Text(mCopyright, style: secondaryTextStyle(size: 12), textAlign: TextAlign.center).paddingAll(10),
     );
   }
 }

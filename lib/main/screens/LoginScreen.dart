@@ -145,142 +145,148 @@ class LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary,
+      backgroundColor: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimaryLight,
+      appBar: commonAppBarWidget(language.signIn,showBack: false),
       body: Stack(
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                height: context.height() * 0.25,
-                child:
-                    Container(height: 90, width: 90, alignment: Alignment.center, decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle), child: Image.asset('assets/app_logo_primary.png', height: 70, width: 70)),
-              ),
-              Container(
-                width: context.width(),
-                padding: EdgeInsets.only(left: 24, right: 24),
-                decoration: BoxDecoration(color: appStore.isDarkMode ? scaffoldColorDark : Colors.white, borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
-                child: SingleChildScrollView(
-                  child: Form(
-                    key: formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        24.height,
-                        Text(language.signIn, style: boldTextStyle(size: headingSize)),
-                        8.height,
-                        Text(language.signInWithYourCredential, style: secondaryTextStyle(size: 16)),
-                        16.height,
-                        Text(language.email, style: primaryTextStyle()),
-                        8.height,
-                        AppTextField(
-                          controller: emailController,
-                          textFieldType: TextFieldType.EMAIL,
-                          focus: emailFocus,
-                          nextFocus: passFocus,
-                          decoration: commonInputDecoration(),
-                          errorThisFieldRequired: language.fieldRequiredMsg,
-                          errorInvalidEmail: language.emailInvalid,
-                        ),
-                        16.height,
-                        Text(language.password, style: primaryTextStyle()),
-                        8.height,
-                        AppTextField(
-                          controller: passController,
-                          textFieldType: TextFieldType.PASSWORD,
-                          focus: passFocus,
-                          decoration: commonInputDecoration(),
-                          errorThisFieldRequired: language.fieldRequiredMsg,
-                          errorMinimumPasswordLength: language.passwordInvalid,
-                        ),
-                        CheckboxListTile(
-                          contentPadding: EdgeInsets.zero,
-                          controlAffinity: ListTileControlAffinity.leading,
-                          activeColor: colorPrimary,
-                          dense: true,
-                          title: Text(language.rememberMe, style: primaryTextStyle()),
-                          value: mIsCheck,
-                          onChanged: (val) async {
-                            mIsCheck = val!;
-                            if (!mIsCheck) {
-                              removeKey(REMEMBER_ME);
-                            }
-                            setState(() {});
-                          },
-                        ),
-                        CheckboxListTile(
-                          contentPadding: EdgeInsets.zero,
-                          controlAffinity: ListTileControlAffinity.leading,
-                          activeColor: colorPrimary,
-                          dense: true,
-                          title: RichTextWidget(
-                            list: [
-                              TextSpan(text: '${language.iAgreeToThe} ', style: secondaryTextStyle()),
-                              TextSpan(
-                                text: language.termOfService,
-                                style: boldTextStyle(color: colorPrimary, size: 14),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    commonLaunchUrl(mTermAndCondition);
-                                  },
-                              ),
-                              TextSpan(text: ' & ', style: secondaryTextStyle()),
-                              TextSpan(
-                                text: language.privacyPolicy,
-                                style: boldTextStyle(color: colorPrimary, size: 14),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    commonLaunchUrl(mPrivacyPolicy);
-                                  },
-                              ),
-                            ],
-                          ),
-                          value: isAcceptedTc,
-                          onChanged: (val) async {
-                            isAcceptedTc = val!;
-                            setState(() {});
-                          },
-                        ),
-                        16.height,
-                        commonButton(
-                          language.signIn,
-                          () {
-                            loginApiCall();
-                          },
-                          width: context.width(),
-                        ),
-                        6.height,
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: Text(language.forgotPasswordQue, style: primaryTextStyle(color: colorPrimary)).onTap(() {
-                            ForgotPasswordScreen().launch(context);
-                          }),
-                        ),
-                        SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(language.doNotHaveAccount, style: primaryTextStyle()),
-                            4.width,
-                            Text(language.signUp, style: boldTextStyle(color: colorPrimary)).onTap(() {
-                              RegisterScreen().launch(context, duration: Duration(milliseconds: 500), pageRouteAnimation: PageRouteAnimation.Slide);
-                            }),
-                          ],
-                        ),
-                        16.height,
-                      ],
-                    ),
+          SingleChildScrollView(
+            padding: EdgeInsets.all(16),
+            physics: BouncingScrollPhysics(),
+            child: Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(language.email, style: primaryTextStyle()),
+                  8.height,
+                  AppTextField(
+                    controller: emailController,
+                    textFieldType: TextFieldType.EMAIL,
+                    focus: emailFocus,
+                    nextFocus: passFocus,
+                    decoration: commonInputDecoration(),
+                    errorThisFieldRequired: language.fieldRequiredMsg,
+                    errorInvalidEmail: language.emailInvalid,
                   ),
-                ),
-              ).expand(),
-            ],
-          ),
+                  16.height,
+                  Text(language.password, style: primaryTextStyle()),
+                  8.height,
+                  AppTextField(
+                    controller: passController,
+                    textFieldType: TextFieldType.PASSWORD,
+                    focus: passFocus,
+                    decoration: commonInputDecoration(),
+                    errorThisFieldRequired: language.fieldRequiredMsg,
+                    errorMinimumPasswordLength: language.passwordInvalid,
+                  ),
+                  16.height,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: Checkbox(
+                              shape: RoundedRectangleBorder(borderRadius: radius(4)),
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              focusColor: colorPrimary,
+                              activeColor: colorPrimary,
+                              value: mIsCheck,
+                              onChanged: (bool? value) async {
+                                mIsCheck = value!;
+                                if (!mIsCheck) {
+                                  removeKey(REMEMBER_ME);
+                                }
+                                setState(() {});
+                              },
+                            ),
+                          ),
+                          10.width,
+                          Text(language.rememberMe, style: primaryTextStyle())
+                        ],
+                      ),
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: Text(language.forgotPasswordQue, style: primaryTextStyle()).onTap(() {
+                          ForgotPasswordScreen().launch(context);
+                        }),
+                      ),
+                    ],
+                  ),
+                  16.height,
+                  Row(
+                    children: [
+                      SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: Checkbox(
+                          shape: RoundedRectangleBorder(borderRadius: radius(4)),
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          focusColor: colorPrimary,
+                          activeColor: colorPrimary,
+                          value: isAcceptedTc,
+                          onChanged: (bool? value) async {
+                            isAcceptedTc = value!;
+                            setState(() {});
+                          },
+                        ),
+                      ),
+                      10.width,
+                      RichTextWidget(
+                        list: [
+                          TextSpan(text: '${language.iAgreeToThe} ', style: secondaryTextStyle()),
+                          TextSpan(
+                            text: language.termOfService,
+                            style: boldTextStyle(color: colorPrimary, size: 14),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                commonLaunchUrl(mTermAndCondition);
+                              },
+                          ),
+                          TextSpan(text: ' & ', style: secondaryTextStyle()),
+                          TextSpan(
+                            text: language.privacyPolicy,
+                            style: boldTextStyle(color: colorPrimary, size: 14),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                commonLaunchUrl(mPrivacyPolicy);
+                              },
+                          ),
+                        ],
+                      ).expand()
+                    ],
+                  ),
+                  30.height,
+                  commonButton(
+                    language.signIn,
+                    () {
+                      loginApiCall();
+                    },
+                    width: context.width(),
+                  ),
+                  30.height,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(language.doNotHaveAccount, style: primaryTextStyle()),
+                      4.width,
+                      Text(language.signUp, style: boldTextStyle(color: colorPrimary)).onTap(() {
+                        RegisterScreen().launch(context, duration: Duration(milliseconds: 500), pageRouteAnimation: PageRouteAnimation.Slide);
+                      }),
+                    ],
+                  ),
+                  16.height,
+                ],
+              ),
+            ),
+          ).expand(),
           Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
         ],
       ),
       bottomNavigationBar: Container(
-        color: context.scaffoldBackgroundColor,
+        color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimaryLight,
         padding: EdgeInsets.all(16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

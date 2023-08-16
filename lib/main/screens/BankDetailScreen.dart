@@ -10,6 +10,7 @@ import '../network/NetworkUtils.dart';
 import '../network/RestApis.dart';
 import '../utils/Common.dart';
 import '../utils/Constants.dart';
+import '../utils/Widgets.dart';
 
 class BankDetailScreen extends StatefulWidget {
   final bool? isWallet;
@@ -102,53 +103,59 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
     return Observer(
         builder: (context) {
           return Scaffold(
-            appBar: AppBar(title: Text(language.bankDetails)),
-            body: BodyCornerWidget(
-              child: Stack(
-                children: [
-                  SingleChildScrollView(
-                    padding: EdgeInsets.all(12),
-                    child: Form(
-                      key: formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          16.height,
-                          AppTextField(
-                            isValidationRequired: true,
-                            controller: bankNameCon,
-                            textFieldType: TextFieldType.NAME,
-                            decoration: commonInputDecoration(hintText: language.bankName),
-                          ),
-                          16.height,
-                          AppTextField(
-                            isValidationRequired: true,
-                            controller: accNumberCon,
-                            textFieldType: TextFieldType.PHONE,
-                            decoration: commonInputDecoration(hintText: language.accountNumber),
-                          ),
-                          16.height,
-                          AppTextField(
-                            isValidationRequired: true,
-                            controller: nameCon,
-                            textFieldType: TextFieldType.NAME,
-                            decoration: commonInputDecoration(hintText: language.nameAsPerBank),
-                          ),
-                          16.height,
-                          AppTextField(
-                            isValidationRequired: true,
-                            controller: ifscCCon,
-                            textFieldType: TextFieldType.NAME,
-                            decoration: commonInputDecoration(hintText: language.ifscCode),
-                          ),
-                          30.height,
-                        ],
-                      ),
+            appBar: commonAppBarWidget(language.bankDetails),
+            body: Stack(
+              children: [
+                SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        8.height,
+                        Text(language.bankName, style: primaryTextStyle()),
+                        8.height,
+                        AppTextField(
+                          isValidationRequired: true,
+                          controller: bankNameCon,
+                          textFieldType: TextFieldType.NAME,
+                          decoration: commonInputDecoration(hintText: language.bankName),
+                        ),
+                        16.height,
+                        Text(language.accountNumber, style: primaryTextStyle()),
+                        8.height,
+                        AppTextField(
+                          isValidationRequired: true,
+                          controller: accNumberCon,
+                          textFieldType: TextFieldType.PHONE,
+                          decoration: commonInputDecoration(hintText: language.accountNumber),
+                        ),
+                        16.height,
+                        Text(language.nameAsPerBank, style: primaryTextStyle()),
+                        8.height,
+                        AppTextField(
+                          isValidationRequired: true,
+                          controller: nameCon,
+                          textFieldType: TextFieldType.NAME,
+                          decoration: commonInputDecoration(hintText: language.nameAsPerBank),
+                        ),
+                        16.height,
+                        Text(language.ifscCode, style: primaryTextStyle()),
+                        8.height,
+                        AppTextField(
+                          isValidationRequired: true,
+                          controller: ifscCCon,
+                          textFieldType: TextFieldType.NAME,
+                          decoration: commonInputDecoration(hintText: language.ifscCode),
+                        ),
+                        30.height,
+                      ],
                     ),
                   ),
-                  loaderWidget().visible(appStore.isLoading)
-                ],
-              ),
+                ),
+                loaderWidget().visible(appStore.isLoading)
+              ],
             ),
             bottomNavigationBar: AppButton(
                 color: colorPrimary,

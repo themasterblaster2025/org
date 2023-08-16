@@ -1,6 +1,7 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mighty_delivery/main/utils/Widgets.dart';
 import '../../user/screens/WalletScreen.dart';
 import '../../main.dart';
 import '../../main/components/BodyCornerWidget.dart';
@@ -81,8 +82,8 @@ class DashboardScreenState extends State<DashboardScreen> {
 
     return Scaffold(
       extendBody: true,
-      appBar: AppBar(
-        title: Text('${getTitle()}'),
+      appBar: commonAppBarWidget(
+       getTitle(),
         actions: [
           Row(
             children: [
@@ -145,14 +146,12 @@ class DashboardScreenState extends State<DashboardScreen> {
               },
             );
           }).visible(currentIndex == 0),
-        ],
+        ],showBack: false
       ),
-      body: BodyCornerWidget(
-        child: [
-          OrderFragment(),
-          AccountFragment(),
-        ][currentIndex],
-      ),
+      body: [
+        OrderFragment(),
+        AccountFragment(),
+      ][currentIndex],
       floatingActionButton: FloatingActionButton(
         backgroundColor: appStore.availableBal >= 0 ? colorPrimary : textSecondaryColorGlobal,
         child: Icon(Icons.add, color: Colors.white),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import '../../main/components/theme_selection_dialog.dart';
 import '../../main/screens/BankDetailScreen.dart';
 import '../../main.dart';
 import '../../main/components/BodyCornerWidget.dart';
@@ -90,8 +91,10 @@ class DProfileFragmentState extends State<DProfileFragment> {
                     settingItemWidget(Icons.language, language.language, () {
                       LanguageScreen().launch(context);
                     }),
-                    settingItemWidget(Icons.wb_sunny_outlined, language.theme, () {
-                      ThemeScreen().launch(context);
+                    settingItemWidget(Icons.wb_sunny_outlined, language.theme, () async {
+                     // ThemeScreen().launch(context);
+                      await showInDialog(context, shape: RoundedRectangleBorder(borderRadius: radius()),
+                          builder: (_) => ThemeSelectionDialog(), contentPadding: EdgeInsets.zero);
                     }),
                     settingItemWidget(Icons.assignment_outlined, language.privacyPolicy, () {
                       commonLaunchUrl(mPrivacyPolicy);
