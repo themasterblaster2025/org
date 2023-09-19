@@ -14,7 +14,6 @@ import 'package:flutterwave_standard/flutterwave.dart';
 import 'package:flutterwave_standard/view/view_utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:mercado_pago_mobile_checkout/mercado_pago_mobile_checkout.dart';
 import '../../main/components/BodyCornerWidget.dart';
 import '../../main/models/PaymentGatewayListModel.dart';
 import '../../main/network/RestApis.dart';
@@ -441,41 +440,41 @@ class PaymentScreenState extends State<PaymentScreen> {
     return configuration;
   }
 
-  /// Mercado Pago payment
-  void mercadoPagoPayment() async {
-    var body = json.encode({
-      "items": [
-        {"title": "Courier", "description": "Courier Delivery", "quantity": 1, "currency_id": appStore.currencyCode, "unit_price": widget.totalAmount}
-      ],
-      "payer": {"email": getStringAsync(USER_EMAIL)}
-    });
-
-    try {
-      final response = await http.post(
-        Uri.parse('https://api.mercadopago.com/checkout/preferences?access_token=${mercadoPagoAccessToken.toString()}'),
-        body: body,
-        headers: {'Content-type': "application/json"},
-      );
-      String? preferenceId = json.decode(response.body)['id'];
-      if (preferenceId != null) {
-        PaymentResult result = await MercadoPagoMobileCheckout.startCheckout(
-          mercadoPagoPublicKey!,
-          preferenceId,
-        );
-        if (result.status == 'approved') {
-          if (widget.isWallet == true) {
-            paymentConfirm();
-          } else {
-            savePaymentApiCall(paymentStatus: 'paid', paymentType: PAYMENT_TYPE_MERCADOPAGO, txnId: result.id.toString());
-          }
-        }
-      } else {
-        toast(json.decode(response.body)['message']);
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
+  // /// Mercado Pago payment
+  // void mercadoPagoPayment() async {
+  //   var body = json.encode({
+  //     "items": [
+  //       {"title": "Courier", "description": "Courier Delivery", "quantity": 1, "currency_id": appStore.currencyCode, "unit_price": widget.totalAmount}
+  //     ],
+  //     "payer": {"email": getStringAsync(USER_EMAIL)}
+  //   });
+  //
+  //   try {
+  //     final response = await http.post(
+  //       Uri.parse('https://api.mercadopago.com/checkout/preferences?access_token=${mercadoPagoAccessToken.toString()}'),
+  //       body: body,
+  //       headers: {'Content-type': "application/json"},
+  //     );
+  //     String? preferenceId = json.decode(response.body)['id'];
+  //     if (preferenceId != null) {
+  //       PaymentResult result = await MercadoPagoMobileCheckout.startCheckout(
+  //         mercadoPagoPublicKey!,
+  //         preferenceId,
+  //       );
+  //       if (result.status == 'approved') {
+  //         if (widget.isWallet == true) {
+  //           paymentConfirm();
+  //         } else {
+  //           savePaymentApiCall(paymentStatus: 'paid', paymentType: PAYMENT_TYPE_MERCADOPAGO, txnId: result.id.toString());
+  //         }
+  //       }
+  //     } else {
+  //       toast(json.decode(response.body)['message']);
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
 
   /// PayTm Payment
   void paytmPayment() async {
@@ -681,7 +680,7 @@ class PaymentScreenState extends State<PaymentScreen> {
                             } else if (selectedPaymentType == PAYMENT_TYPE_PAYTABS) {
                               payTabsPayment();
                             } else if (selectedPaymentType == PAYMENT_TYPE_MERCADOPAGO) {
-                              mercadoPagoPayment();
+                            //  mercadoPagoPayment();
                             } else if (selectedPaymentType == PAYMENT_TYPE_PAYTM) {
                               paytmPayment();
                             } else if (selectedPaymentType == PAYMENT_TYPE_MYFATOORAH) {

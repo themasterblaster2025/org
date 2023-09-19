@@ -37,11 +37,11 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
     });
     if (await checkPermission()) {
       positionStream = Geolocator.getPositionStream().listen((event) async {
-        await updateUserStatus({"id": getIntAsync(USER_ID), "latitude": event.latitude.toString(), "longitude": event.longitude.toString()}).then((value) {
-          log('Location updated:$event');
-        }).catchError((error) {
-          log(error);
-        });
+        // await updateUserStatus({"id": getIntAsync(USER_ID), "latitude": event.latitude.toString(), "longitude": event.longitude.toString()}).then((value) {
+        //   log('Location updated:$event');
+        // }).catchError((error) {
+        //   log(error);
+        // });
       });
     }
     await getAppSetting().then((value) {

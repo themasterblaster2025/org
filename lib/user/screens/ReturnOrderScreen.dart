@@ -113,7 +113,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
         toast(value.message);
         finish(context);
         if (isSelected == 2) {
-          PaymentScreen(orderId: value.orderId.validate(), totalAmount: widget.orderData.totalAmount??0).launch(context);
+         PaymentScreen(orderId: value.orderId.validate(), totalAmount: widget.orderData.totalAmount??0).launch(context);
         } else if (isSelected == 3) {
           log("-----" + appStore.availableBal.toString());
 

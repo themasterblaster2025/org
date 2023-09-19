@@ -9,7 +9,6 @@ import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../user/screens/CreateOrderScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
-
 import '../../main.dart';
 
 class DraftOrderListScreen extends StatefulWidget {

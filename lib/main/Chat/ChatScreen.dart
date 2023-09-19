@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import '../../main/utils/Colors.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
-
 import '../../main.dart';
 import '../services/ChatMessagesService.dart';
 import '../models/ChatMessageModel.dart';
@@ -51,6 +50,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     chatMessageService = ChatMessageService();
     chatMessageService.setUnReadStatusToTrue(senderId: sender.uid!, receiverId: widget.userData!.uid!);
+    print(widget.userData!.uid!);
     setState(() {});
   }
 
@@ -163,6 +163,11 @@ class _ChatScreenState extends State<ChatScreen> {
                 itemBuilder: (context, snap, index) {
                   ChatMessageModel data = ChatMessageModel.fromJson(snap[index].data() as Map<String, dynamic>);
                   data.isMe = data.senderId == sender.uid;
+                  print("=========>${data.message}");
+
+                  print(data.isMe);
+                  print(data.senderId);
+
                   return ChatItemWidget(data: data);
                 },
               ).paddingBottom(76),
