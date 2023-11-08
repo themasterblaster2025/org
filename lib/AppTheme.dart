@@ -5,8 +5,6 @@ import '../main/utils/Colors.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class AppTheme {
-
-
   //
   AppTheme._();
 
@@ -24,7 +22,7 @@ class AppTheme {
     appBarTheme: AppBarTheme(
       color: colorPrimary,
       elevation: 0,
-      systemOverlayStyle: SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light, statusBarColor: colorPrimary),
+      systemOverlayStyle: SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light, statusBarColor: Colors.transparent),
     ),
     dialogTheme: DialogTheme(shape: dialogShape()),
     bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.white),
@@ -57,7 +55,7 @@ class AppTheme {
       elevation: 0,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarIconBrightness: Brightness.light,
-        statusBarColor: scaffoldSecondaryDark,
+        statusBarColor: Colors.transparent,
       ),
     ),
     dialogTheme: DialogTheme(shape: dialogShape()),

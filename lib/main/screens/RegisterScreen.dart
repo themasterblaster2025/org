@@ -10,6 +10,7 @@ import '../../main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
+import '../components/CommonScaffoldComponent.dart';
 import '../network/RestApis.dart';
 import '../services/AuthSertvices.dart';
 
@@ -84,7 +85,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                   userType: res.data!.userType,
                   userData: res)
               .then((res) async {
-           //
+            //
           }).catchError((e) {
             appStore.setLoading(false);
             log(e.toString());
@@ -104,9 +105,8 @@ class RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimaryLight,
-      appBar: commonAppBarWidget(language.signUp),
+    return CommonScaffoldComponent(
+      appBarTitle: language.signUp,
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -117,6 +117,7 @@ class RegisterScreenState extends State<RegisterScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  16.height,
                   Text(language.name, style: primaryTextStyle()),
                   8.height,
                   AppTextField(
@@ -196,7 +197,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                     ),
                     validator: (value) {
                       if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-                     // if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
+                      // if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
                       return null;
                     },
                     inputFormatters: [

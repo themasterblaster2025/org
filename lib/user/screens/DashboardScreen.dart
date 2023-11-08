@@ -1,7 +1,9 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
 import '../../user/screens/WalletScreen.dart';
 import '../../main.dart';
 import '../../main/components/BodyCornerWidget.dart';
@@ -69,7 +71,7 @@ class DashboardScreenState extends State<DashboardScreen> {
   String getTitle() {
     String title = language.myOrders;
     if (currentIndex == 0) {
-      title = language.myOrders;
+      title = 'Hey 👋, ${getStringAsync(NAME)} ';
     } else if (currentIndex == 1) {
       title = language.account;
     }
@@ -81,72 +83,81 @@ class DashboardScreenState extends State<DashboardScreen> {
     getOrderListApiCall();
 
     return Scaffold(
-      extendBody: true,
-      appBar: commonAppBarWidget(
-       getTitle(),
-        actions: [
-          Row(
-            children: [
-              Icon(Icons.location_on, color: Colors.white),
-              8.width,
-              Text(CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate(), style: primaryTextStyle(color: white)),
-            ],
-          ).onTap(() {
-            UserCitySelectScreen(
-                isBack: true,
-                onUpdate: () {
-                  setState(() {});
-                }).launch(context);
-          }).paddingOnly(right: 16),
-          Stack(
-            children: [
-              Align(alignment: AlignmentDirectional.center, child: Icon(Icons.notifications)),
-              Observer(builder: (context) {
-                return Positioned(
-                  right: 2,
-                  top: 8,
-                  child: Container(
-                    height: 20,
-                    width: 20,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
-                    child: Text('${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}', style: primaryTextStyle(size: appStore.allUnreadCount > 99 ? 8 : 12, color: Colors.white)),
-                  ),
-                ).visible(appStore.allUnreadCount != 0);
-              }),
-            ],
-          ).withWidth(40).onTap(() {
-            NotificationScreen().launch(context);
-          }).visible(currentIndex == 0),
-          Stack(
-            children: [
-              Align(
-                alignment: AlignmentDirectional.center,
-                child: ImageIcon(AssetImage('assets/icons/ic_filter.png'), size: 18, color: Colors.white),
+      extendBody:  true,
+      backgroundColor: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimaryLight,
+
+      appBar: PreferredSize(preferredSize: Size(context.width(),100),
+        child: commonAppBarWidget(getTitle(),
+            actions: [
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 12),
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                decoration: boxDecorationRoundedWithShadow(defaultRadius.toInt(),backgroundColor: Colors.white24),
+                child: Row(
+                  children: [
+                    Icon(Icons.location_on, color: Colors.white,size: 18),
+                    8.width,
+                    Text(CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate(), style: primaryTextStyle(color: white)),
+                  ],
+                ).onTap(() {
+                  UserCitySelectScreen(
+                    isBack: true,
+                    onUpdate: () {
+                      setState(() {});
+                    },
+                  ).launch(context);
+                }),
               ),
-              Observer(builder: (context) {
-                return Positioned(
-                  right: 8,
-                  top: 16,
-                  child: Container(
-                    height: 10,
-                    width: 10,
-                    decoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
+              Stack(
+                children: [
+                  Align(alignment: AlignmentDirectional.center, child: Icon(Icons.notifications)),
+                  Observer(builder: (context) {
+                    return Positioned(
+                      right: 2,
+                      top: 8,
+                      child: Container(
+                        height: 20,
+                        width: 20,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
+                        child: Text('${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}', style: primaryTextStyle(size: appStore.allUnreadCount > 99 ? 8 : 12, color: Colors.white)),
+                      ),
+                    ).visible(appStore.allUnreadCount != 0);
+                  }),
+                ],
+              ).withWidth(40).onTap(() {
+                NotificationScreen().launch(context);
+              }).visible(currentIndex == 0),
+              Stack(
+                children: [
+                  Align(
+                    alignment: AlignmentDirectional.center,
+                    child: ImageIcon(AssetImage('assets/icons/ic_filter.png'), size: 18, color: Colors.white),
                   ),
-                ).visible(appStore.isFiltering);
-              }),
+                  Observer(builder: (context) {
+                    return Positioned(
+                      right: 8,
+                      top: 16,
+                      child: Container(
+                        height: 10,
+                        width: 10,
+                        decoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
+                      ),
+                    ).visible(appStore.isFiltering);
+                  }),
+                ],
+              ).withWidth(40).onTap(() {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(defaultRadius), topRight: Radius.circular(defaultRadius))),
+                  builder: (context) {
+                    return FilterOrderComponent();
+                  },
+                );
+              }).visible(currentIndex == 0),
             ],
-          ).withWidth(40).onTap(() {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(defaultRadius), topRight: Radius.circular(defaultRadius))),
-              builder: (context) {
-                return FilterOrderComponent();
-              },
-            );
-          }).visible(currentIndex == 0),
-        ],showBack: false
+            showBack: false),
       ),
       body: [
         OrderFragment(),
@@ -166,15 +177,13 @@ class DashboardScreenState extends State<DashboardScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: AnimatedBottomNavigationBar(
-        backgroundColor: context.cardColor,
-        icons: [Icons.reorder, Icons.person],
+        backgroundColor: bottomNavigationColor,
+        icons: [AntDesign.home, FontAwesome.user_o],
         activeIndex: currentIndex,
         gapLocation: GapLocation.center,
         notchSmoothness: NotchSmoothness.defaultEdge,
         activeColor: colorPrimary,
         inactiveColor: Colors.grey,
-        leftCornerRadius: 30,
-        rightCornerRadius: 30,
         onTap: (index) => setState(() => currentIndex = index),
       ),
     );

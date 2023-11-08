@@ -1,22 +1,16 @@
 import 'dart:async';
-
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:mighty_delivery/main/Chat/ChatScreen.dart';
-import 'package:mighty_delivery/main/models/LoginResponse.dart';
-import 'package:mighty_delivery/main/screens/LoginScreen.dart';
-import 'package:mighty_delivery/user/screens/OrderDetailScreen.dart';
 import '../main/models/models.dart';
 import '../main/screens/SplashScreen.dart';
 import '../main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'AppTheme.dart';
-import 'main/network/RestApis.dart';
 import 'main/services/ChatMessagesService.dart';
 import 'main/services/NotificationService.dart';
 import 'main/services/UserServices.dart';
@@ -62,26 +56,8 @@ void main() async {
     appStore.setDarkMode(true);
   }
 
-  if(isMobile){
-
-    await OneSignal.shared.setAppId(mOneSignalAppId);
-
-    saveOneSignalPlayerId();
-    OneSignal.shared.setNotificationOpenedHandler((OSNotificationOpenedResult notification) async {
-      var notId = notification.notification.additionalData!["id"];
-      if (notId != null) {
-        if (!appStore.isLoggedIn) {
-          LoginScreen().launch(getContext);
-        } else if (notId.toString().contains('CHAT')) {
-          UserData user = await getUserDetail(int.parse(notId.toString  ().replaceAll("CHAT_", "")));
-          ChatScreen(userData: user).launch(getContext);
-        } else {
-          OrderDetailScreen(orderId: int.parse(notId.toString())).launch(getContext);
-        }
-      }
-    });
-  }
-  defaultRadius =10;
+  oneSignalSettings();
+  defaultRadius = 10;
   runApp(MyApp());
 }
 
@@ -140,7 +116,13 @@ class MyAppState extends State<MyApp> {
         themeMode: appStore.isDarkMode ? ThemeMode.dark : ThemeMode.light,
         home: SplashScreen(),
         supportedLocales: LanguageDataModel.languageLocales(),
-        localizationsDelegates: [AppLocalizations(), GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate, GlobalCupertinoLocalizations.delegate,],
+        localizationsDelegates: [
+          AppLocalizations(),
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          CountryLocalizations.delegate,
+        ],
         localeResolutionCallback: (locale, supportedLocales) => locale,
         locale: Locale(appStore.selectedLanguage.validate(value: defaultLanguage)),
       );

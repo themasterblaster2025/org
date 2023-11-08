@@ -66,6 +66,8 @@ abstract class _AppStore with Store {
 
   @observable
   String invoiceAddress = mInvoiceAddress;
+  @observable
+  String invoiceCompanyLogo = '';
 
   @action
   Future<void> setLoading(bool val) async {
@@ -154,7 +156,10 @@ abstract class _AppStore with Store {
   void setInvoiceCompanyName(String val) {
     invoiceCompanyName = val;
   }
-
+  @action
+  void setInvoiceCompanyLogo(String val) {
+    invoiceCompanyLogo = val;
+  }
   @action
   void setInvoiceContactNumber(String val) {
     invoiceContactNumber = val;

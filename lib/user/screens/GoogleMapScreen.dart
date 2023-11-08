@@ -9,7 +9,6 @@ import '../../main.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
-import 'package:google_maps_webservice/places.dart';
 
 class GoogleMapScreen extends StatefulWidget {
   static final kInitialPosition = LatLng(-33.8567844, 151.213108);
@@ -38,7 +37,6 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
             apiKey: googleMapAPIKey,
             hintText: language.searchAddress,
             searchingText: language.pleaseWait,
-            autocompleteComponents: [Component(Component.country,CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate(value: 'IN'))],
             selectText: widget.isPick ? language.confirmPickupLocation : language.confirmDeliveryLocation,
             outsideOfPickAreaText: language.addressNotInArea,
             initialPosition: GoogleMapScreen.kInitialPosition,

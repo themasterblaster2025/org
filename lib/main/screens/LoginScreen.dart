@@ -46,7 +46,7 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> init() async {
-    setStatusBarColor(appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, statusBarIconBrightness: Brightness.light);
+    // setStatusBarColor(appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, statusBarIconBrightness: Brightness.light);
     if (getStringAsync(PLAYER_ID).isEmpty) {
       await saveOneSignalPlayerId().then((value) {
         //
@@ -146,7 +146,7 @@ class LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimaryLight,
-      appBar: commonAppBarWidget(language.signIn,showBack: false),
+      appBar: commonAppBarWidget(language.signIn, showBack: false),
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -157,6 +157,7 @@ class LoginScreenState extends State<LoginScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  16.height,
                   Text(language.email, style: primaryTextStyle()),
                   8.height,
                   AppTextField(
@@ -234,8 +235,9 @@ class LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       10.width,
-                      RichTextWidget(
-                        list: [
+                      RichText(
+                        text: TextSpan(
+                            children: [
                           TextSpan(text: '${language.iAgreeToThe} ', style: secondaryTextStyle()),
                           TextSpan(
                             text: language.termOfService,
@@ -254,7 +256,7 @@ class LoginScreenState extends State<LoginScreen> {
                                 commonLaunchUrl(mPrivacyPolicy);
                               },
                           ),
-                        ],
+                        ]),
                       ).expand()
                     ],
                   ),
@@ -281,7 +283,7 @@ class LoginScreenState extends State<LoginScreen> {
                 ],
               ),
             ),
-          ).expand(),
+          ),
           Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
         ],
       ),

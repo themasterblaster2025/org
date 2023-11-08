@@ -65,6 +65,7 @@ class OrderFragmentState extends State<OrderFragment> {
         appStore.setInvoiceCompanyName(value.invoiceData!.firstWhere((element) => element.key == 'company_name').value.validate());
         appStore.setInvoiceContactNumber(value.invoiceData!.firstWhere((element) => element.key == 'company_contact_number').value.validate());
         appStore.setCompanyAddress(value.invoiceData!.firstWhere((element) => element.key == 'company_address').value.validate());
+        appStore.setInvoiceCompanyLogo(value.invoiceData!.firstWhere((element) => element.key == 'company_logo').value.validate());
       }
     }).catchError((error) {
       toast(error.toString());

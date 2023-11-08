@@ -15,15 +15,20 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import '../../main.dart';
+import '../../user/screens/OrderDetailScreen.dart';
+import '../Chat/ChatScreen.dart';
+import '../models/LoginResponse.dart';
 import '../network/RestApis.dart';
+import '../screens/LoginScreen.dart';
 import '../services/AuthSertvices.dart';
 import 'Widgets.dart';
 
-InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, Function()? suffixOnTap, Widget? dateTime, Widget? prefixIcon}) {
+InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, Function()? suffixOnTap, Widget? dateTime, Widget? prefixIcon, bool? isFill = true}) {
   return InputDecoration(
     contentPadding: EdgeInsets.all(16),
-    filled: true,
+    filled: isFill,
     prefixIcon: prefixIcon,
+    isDense: true,
     hintText: hintText != null ? hintText : '',
     hintStyle: secondaryTextStyle(size: 16, color: Colors.grey),
     fillColor: Colors.grey.withOpacity(0.15),
@@ -57,7 +62,7 @@ Widget commonCachedNetworkImage(
       imageUrl: url!,
       height: height,
       width: width,
-      color:color ,
+      color: color,
       fit: fit,
       alignment: alignment as Alignment? ?? Alignment.center,
       errorWidget: (_, s, d) {
@@ -212,9 +217,40 @@ Future<bool> checkPermission() async {
   }
 }
 
+oneSignalSettings() async {
+  if (isMobile) {
+    OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+    OneSignal.Debug.setAlertLevel(OSLogLevel.none);
+    OneSignal.consentRequired(false);
+    OneSignal.Notifications.requestPermission(true);
+
+    OneSignal.initialize(mOneSignalAppId);
+
+    saveOneSignalPlayerId();
+    OneSignal.Notifications.addClickListener((notification) async {
+      var notId = notification.notification.additionalData!["id"];
+      if (notId != null) {
+        if (!appStore.isLoggedIn) {
+          LoginScreen().launch(getContext);
+        } else if (notId.toString().contains('CHAT')) {
+          UserData user = await getUserDetail(int.parse(notId.toString().replaceAll("CHAT_", "")));
+          ChatScreen(userData: user).launch(getContext);
+        } else {
+          OrderDetailScreen(orderId: int.parse(notId.toString())).launch(getContext);
+        }
+      }
+    });
+  }
+}
+
 Future<void> saveOneSignalPlayerId() async {
-  await OneSignal.shared.getDeviceState().then((value) async {
-    if (value!.userId.validate().isNotEmpty) await setValue(PLAYER_ID, value.userId.validate());
+  OneSignal.User.pushSubscription.addObserver((state) async {
+    print(OneSignal.User.pushSubscription.optedIn);
+    print("Player Id" + OneSignal.User.pushSubscription.id.toString());
+    print(OneSignal.User.pushSubscription.token);
+    print(state.current.jsonRepresentation());
+
+    if (OneSignal.User.pushSubscription.id.validate().isNotEmpty) await setValue(PLAYER_ID, OneSignal.User.pushSubscription.id.validate());
   });
 }
 
@@ -296,9 +332,9 @@ String historyStatus(String orderStatus) {
     return language.completed;
   } else if (orderStatus == ORDER_CANCELLED) {
     return language.cancelled;
-  }else if (orderStatus == ORDER_TRANSFER) {
+  } else if (orderStatus == ORDER_TRANSFER) {
     return language.courierTransfer;
-  }else if (orderStatus == ORDER_PAYMENT) {
+  } else if (orderStatus == ORDER_PAYMENT) {
     return language.paymentStatusMessage;
   }
   return language.assigned;
@@ -366,7 +402,9 @@ String paymentType(String paymentType) {
 }
 
 String printAmount(var amount) {
-  return appStore.currencyPosition == CURRENCY_POSITION_LEFT ? '${appStore.currencySymbol} ${amount.toStringAsFixed(digitAfterDecimal)}' : '${amount.toStringAsFixed(digitAfterDecimal)} ${appStore.currencySymbol}';
+  return appStore.currencyPosition == CURRENCY_POSITION_LEFT
+      ? '${appStore.currencySymbol} ${amount.toStringAsFixed(digitAfterDecimal)}'
+      : '${amount.toStringAsFixed(digitAfterDecimal)} ${appStore.currencySymbol}';
 }
 
 Future<void> commonLaunchUrl(String url, {bool forceWebView = false}) async {
@@ -401,7 +439,7 @@ Future deleteAccount(BuildContext context) async {
   await deleteUser(req).then((value) async {
     await userService.removeDocument(getStringAsync(UID)).then((value) async {
       await deleteUserFirebase().then((value) async {
-        await logout(context,isDeleteAccount: true).then((value) async {
+        await logout(context, isDeleteAccount: true).then((value) async {
           appStore.setLoading(false);
           await removeKey(USER_EMAIL);
           await removeKey(USER_PASSWORD);
@@ -421,14 +459,14 @@ Future deleteAccount(BuildContext context) async {
 }
 
 String timeAgo(String date) {
-  if(date.contains("week ago")){
-    return date.splitBefore("week ago").trim()+"w";
+  if (date.contains("week ago")) {
+    return date.splitBefore("week ago").trim() + "w";
   }
-   if(date.contains("year ago")){
-    return date.splitBefore("year ago").trim()+"y";
+  if (date.contains("year ago")) {
+    return date.splitBefore("year ago").trim() + "y";
   }
-   if(date.contains("month ago")){
-    return date.splitBefore("month ago").trim()+"m";
+  if (date.contains("month ago")) {
+    return date.splitBefore("month ago").trim() + "m";
   }
   return date.toString();
 }

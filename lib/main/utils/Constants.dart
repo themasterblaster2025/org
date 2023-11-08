@@ -9,7 +9,6 @@ const mCodeCanyonURL = 'https://codecanyon.net/user/meetmighty/portfolio/';
 
 /// Don't add slash at the end of the url
 const DOMAIN_URL = 'https://meetmighty.com/mobile/mighty-local-delivery';
-//const DOMAIN_URL = 'http://192.168.1.230/meetmighty/local-delivery-laravel';
 const mBaseUrl = "$DOMAIN_URL/api/";
 
 const googleMapAPIKey = 'AIzaSyCGRSk7rUwHzf8vhRIzPp3bmiJDaRt8Ev4';
