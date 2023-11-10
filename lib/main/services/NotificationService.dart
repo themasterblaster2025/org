@@ -5,6 +5,7 @@ import 'package:http/http.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../utils/Constants.dart';
+import '../utils/Images.dart';
 
 class NotificationService {
   Future<void> sendPushNotifications(String title, String content, {String? id, String? image, String? receiverPlayerId}) async {
@@ -21,7 +22,7 @@ class NotificationService {
       },
       'big_picture': image.validate().isNotEmpty ? image.validate() : '',
       'large_icon': image.validate().isNotEmpty ? image.validate() : '',
-      'small_icon': mAppIconUrl,
+      'small_icon': ic_logo,
       'app_id': mOneSignalAppId,
       'android_channel_id': mOneSignalChannelId,
       'include_player_ids': [receiverPlayerId],

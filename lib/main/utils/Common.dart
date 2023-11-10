@@ -26,19 +26,19 @@ import 'Widgets.dart';
 InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, Function()? suffixOnTap, Widget? dateTime, Widget? prefixIcon, bool? isFill = true}) {
   return InputDecoration(
     contentPadding: EdgeInsets.all(16),
-    filled: isFill,
+    filled: true,
     prefixIcon: prefixIcon,
     isDense: true,
     hintText: hintText != null ? hintText : '',
     hintStyle: secondaryTextStyle(size: 16, color: Colors.grey),
-    fillColor: Colors.grey.withOpacity(0.15),
+    fillColor:colorPrimary.withOpacity(0.06),
     counterText: '',
     suffixIcon: dateTime != null
         ? dateTime
         : suffixIcon != null
-            ? Icon(suffixIcon, color: Colors.grey, size: 22).onTap(suffixOnTap)
+            ? Icon(suffixIcon, color:colorPrimary, size: 22).onTap(suffixOnTap)
             : null,
-    enabledBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.none), borderRadius: BorderRadius.circular(defaultRadius)),
+    enabledBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.solid,color: colorPrimaryLight), borderRadius: BorderRadius.circular(defaultRadius)),
     focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
     errorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(defaultRadius)),
     focusedErrorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(defaultRadius)),

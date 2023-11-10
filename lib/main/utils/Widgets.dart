@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import '../../main.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -44,6 +45,7 @@ Widget outlineButton(String title, Function() onTap, {double? width, Color? colo
 Widget scheduleOptionWidget(BuildContext context, bool isSelected, String imagePath, String title) {
   return Container(
     padding: EdgeInsets.all(16),
+    alignment: Alignment.center,
     decoration: boxDecorationWithRoundedCorners(
         border: Border.all(
             color: isSelected
@@ -51,12 +53,15 @@ Widget scheduleOptionWidget(BuildContext context, bool isSelected, String imageP
                 : appStore.isDarkMode
                     ? Colors.transparent
                     : borderColor),
-        backgroundColor: context.cardColor),
+        backgroundColor:isSelected?colorPrimary: context.cardColor),
     child: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        ImageIcon(AssetImage(imagePath), size: 20, color: isSelected ? colorPrimary : Colors.grey),
-        16.width,
-        Text(title, style: boldTextStyle()).expand(),
+        Icon(title == language.schedule ? Feather.calendar : Feather.clock, size: 18,color: isSelected?Colors.white:context.iconColor),
+        // ImageIcon(AssetImage(imagePath), size: 20, color: isSelected ? colorPrimary : Colors.grey),
+        8.width,
+        Text(title, style: boldTextStyle(color: isSelected?Colors.white:textPrimaryColorGlobal)),
       ],
     ),
   );

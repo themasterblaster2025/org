@@ -1,4 +1,33 @@
+//region App name
 const mAppName = 'Mighty Delivery';
+//endregion
+
+//region Baseurl
+//Note: Domain url is where you uploaded your laravel code
+const DOMAIN_URL = 'https://meetmighty.com/mobile/mighty-local-delivery'; // Don't add slash at the end of the url
+//endregion
+
+//region Google map key
+const googleMapAPIKey = 'AIzaSyCGRSk7rUwHzf8vhRIzPp3bmiJDaRt8Ev4';
+//endregion
+
+//region onesignal keys
+const mOneSignalAppId = 'f2e9c538-d4ad-45d4-8c57-fd081c987fb6';
+const mOneSignalRestKey = 'NzcwNjExNzYtYTJjOS00NGNkLWE2ZTUtY2JmMDEyNTFhYTFm';
+const mOneSignalChannelId = 'e2422a99-3f76-4afa-a190-e80ab9370270';
+//endregion
+
+//region languages and phone code
+const defaultLanguage = "en";
+const defaultPhoneCode = '+91';
+//endregion
+
+//region country symnbol and code
+const currencySymbol = '₹';
+const currencyCode = 'INR';
+//endregion
+
+//region App description and links
 const mAppDescription = 'You can deliver exactly when the user wants and can start processing the user’s order almost immediately after you receive it, or you can deliver on a specific day and time.';
 const mCopyright = '© 2023 MeetMighty IT Solutions';
 const mPrivacyPolicy = 'https://meetmighty.com/codecanyon/document/mighty-delivery/';
@@ -6,17 +35,23 @@ const mTermAndCondition = 'https://meetmighty.com/codecanyon/document/mighty-del
 const mHelpAndSupport = 'https://support.meetmighty.com/';
 const mContactPref = 'hello@meetmighty.com';
 const mCodeCanyonURL = 'https://codecanyon.net/user/meetmighty/portfolio/';
+//endregion
 
-/// Don't add slash at the end of the url
-const DOMAIN_URL = 'https://meetmighty.com/mobile/mighty-local-delivery';
+const mInvoiceCompanyName = 'Roberts Private Limited';
+const mInvoiceAddress = 'Sarah Street 9, Beijing, Ahmedabad';
+const mInvoiceContactNumber = '+91 9845345665';
+
+//region contact num lenghth
+const minContactLength = 10;
+const maxContactLength = 14;
+const digitAfterDecimal = 2;
+//endregion
+
+//region url
 const mBaseUrl = "$DOMAIN_URL/api/";
+//endregion
 
-const googleMapAPIKey = 'AIzaSyCGRSk7rUwHzf8vhRIzPp3bmiJDaRt8Ev4';
-
-const mOneSignalAppId = 'f2e9c538-d4ad-45d4-8c57-fd081c987fb6';
-const mOneSignalRestKey = 'NzcwNjExNzYtYTJjOS00NGNkLWE2ZTUtY2JmMDEyNTFhYTFm';
-const mOneSignalChannelId = 'e2422a99-3f76-4afa-a190-e80ab9370270';
-
+//region bank list
 const BANK_LIST = [
   'HDFC',
   'Bank of baroda',
@@ -24,21 +59,9 @@ const BANK_LIST = [
   'Bank of India',
   'Indian Bank',
 ];
+//endregion
 
-const defaultLanguage = "en";
-
-const defaultPhoneCode = '+91';
-
-const minContactLength = 10;
-const maxContactLength = 14;
-const digitAfterDecimal = 2;
-
-// font size
-const headingSize = 24;
-const currencySymbol = '₹';
-const currencyCode = 'INR';
-
-// SharedReference keys
+//region SharedReference keys
 const IS_LOGGED_IN = 'IS_LOGIN';
 const IS_FIRST_TIME = 'IS_FIRST_TIME';
 
@@ -59,21 +82,26 @@ const UID = 'UID';
 const IS_VERIFIED_DELIVERY_MAN = 'IS_VERIFIED_DELIVERY_MAN';
 const RECENT_ADDRESS_LIST = 'RECENT_ADDRESS_LIST';
 const OTP_VERIFIED = "OTP_VERIFIED";
-
+const REMEMBER_ME = 'REMEMBER_ME';
 const COUNTRY_ID = 'COUNTRY_ID';
 const COUNTRY_DATA = 'COUNTRY_DATA';
-
 const CITY_ID = 'City';
 const CITY_DATA = 'CITY_DATA';
+//endregion
 
+//region user role
 const CLIENT = 'client';
 const DELIVERY_MAN = 'delivery_man';
 const ADMIN = 'admin';
 const DEMO_ADMIN = 'demo+admin';
+//endregion
 
+//region charge type
 const CHARGE_TYPE_FIXED = 'fixed';
 const CHARGE_TYPE_PERCENTAGE = 'percentage';
+//endregion
 
+//region payment type
 const PAYMENT_TYPE_STRIPE = 'stripe';
 const PAYMENT_TYPE_RAZORPAY = 'razorpay';
 const PAYMENT_TYPE_PAYSTACK = 'paystack';
@@ -85,23 +113,26 @@ const PAYMENT_TYPE_PAYTM = 'paytm';
 const PAYMENT_TYPE_MYFATOORAH = 'myfatoorah';
 const PAYMENT_TYPE_CASH = 'cash';
 const PAYMENT_TYPE_WALLET = 'wallet';
+//endregion
 
+//region payment status
 const PAYMENT_PENDING = 'pending';
 const PAYMENT_FAILED = 'failed';
 const PAYMENT_PAID = 'paid';
-
 const PAYMENT_ON_DELIVERY = "on_delivery";
 const PAYMENT_ON_PICKUP = "on_pickup";
+//end region
 
+//region keys
 const RESTORE = 'restore';
 const FORCE_DELETE = 'forcedelete';
 const DELETE_USER = 'deleted_at';
-
 const DECLINE = 'decline';
 const REQUESTED = 'requested';
 const APPROVED = 'approved';
+//endregion
 
-// OrderStatus
+//region OrderStatus
 const ORDER_CREATED = 'create';
 const ORDER_ACCEPTED = 'active';
 const ORDER_CANCELLED = 'cancelled';
@@ -115,7 +146,9 @@ const ORDER_DEPARTED = 'courier_departed';
 const ORDER_TRANSFER = 'courier_transfer';
 const ORDER_PAYMENT = 'payment_status_message';
 const ORDER_FAIL = 'failed';
+//endregion
 
+//region transaction keys
 const TRANSACTION_ORDER_FEE = "order_fee";
 const TRANSACTION_TOPUP = "topup";
 const TRANSACTION_ORDER_CANCEL_CHARGE = "order_cancel_charge";
@@ -123,9 +156,11 @@ const TRANSACTION_ORDER_CANCEL_REFUND = "order_cancel_refund";
 const TRANSACTION_CORRECTION = "correction";
 const TRANSACTION_COMMISSION = "commission";
 const TRANSACTION_WITHDRAW = "withdraw";
+//endregion
 
 const stripeURL = 'https://api.stripe.com/v1/payment_intents';
 
+//region appTheme
 class AppThemeMode {
   final int themeModeLight = 1;
   final int themeModeDark = 2;
@@ -133,40 +168,24 @@ class AppThemeMode {
 }
 
 AppThemeMode appThemeMode = AppThemeMode();
+//endregion
 
-const REMEMBER_ME = 'REMEMBER_ME';
-
-const mAppIconUrl = "assets/app_logo.jpg";
-
-///FireBase Collection Name
+//region FireBase Collection Name
 const MESSAGES_COLLECTION = "messages";
 const USER_COLLECTION = "users";
 const CONTACT_COLLECTION = "contact";
 const CHAT_DATA_IMAGES = "chatImages";
+//endregion
 
+//region chat
 const IS_ENTER_KEY = "IS_ENTER_KEY";
 const SELECTED_WALLPAPER = "SELECTED_WALLPAPER";
 const PER_PAGE_CHAT_COUNT = 50;
-
 const TEXT = "TEXT";
 const IMAGE = "IMAGE";
-
 const VIDEO = "VIDEO";
 const AUDIO = "AUDIO";
 
-const FIXED_CHARGES = "fixed_charges";
-const MIN_DISTANCE = "min_distance";
-const MIN_WEIGHT = "min_weight";
-const PER_DISTANCE_CHARGE = "per_distance_charges";
-const PER_WEIGHT_CHARGE = "per_weight_charges";
-
-// Currency Position
-const CURRENCY_POSITION_LEFT = 'left';
-const CURRENCY_POSITION_RIGHT = 'right';
-
-const CREDIT = 'credit';
-
-//chat
 List<String> rtlLanguage = ['ar', 'ur'];
 
 enum MessageType {
@@ -193,9 +212,17 @@ extension MessageExtension on MessageType {
   }
 }
 
+//endregion
+const FIXED_CHARGES = "fixed_charges";
+const MIN_DISTANCE = "min_distance";
+const MIN_WEIGHT = "min_weight";
+const PER_DISTANCE_CHARGE = "per_distance_charges";
+const PER_WEIGHT_CHARGE = "per_weight_charges";
+
+//region Currency Position
+const CURRENCY_POSITION_LEFT = 'left';
+const CURRENCY_POSITION_RIGHT = 'right';
+//endregion
+const CREDIT = 'credit';
+
 const mStripeIdentifier = 'IN';
-
-const mInvoiceCompanyName = 'Roberts Private Limited';
-const mInvoiceAddress = 'Sarah Street 9, Beijing, Ahmedabad';
-const mInvoiceContactNumber = '+91 9845345665';
-

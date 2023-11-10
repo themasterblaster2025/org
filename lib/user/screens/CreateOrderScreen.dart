@@ -8,6 +8,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 import '../../main.dart';
 import '../../main/components/BodyCornerWidget.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/CityListModel.dart';
 import '../../main/models/CountryListModel.dart';
 import '../../main/models/OrderListModel.dart';
@@ -526,81 +527,131 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             ],
           ).visible(!isDeliverNow),
           16.height,
-          Text(language.weight, style: boldTextStyle()),
-          8.height,
-          Container(
-            decoration: BoxDecoration(border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), borderRadius: BorderRadius.circular(defaultRadius)),
-            child: IntrinsicHeight(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(language.weight, style: primaryTextStyle()).paddingAll(12).expand(),
-                  VerticalDivider(thickness: 1),
-                  Icon(Icons.remove, color: appStore.isDarkMode ? Colors.white : Colors.grey).paddingAll(12).onTap(() {
-                    if (weightController.text.toDouble() > 1) {
-                      weightController.text = (weightController.text.toDouble() - 1).toString();
-                    }
-                  }),
-                  VerticalDivider(thickness: 1),
-                  Container(
-                    width: 50,
-                    child: AppTextField(
-                      controller: weightController,
-                      textAlign: TextAlign.center,
-                      maxLength: 5,
-                      textFieldType: TextFieldType.PHONE,
-                      decoration: InputDecoration(
-                        counterText: '',
-                        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: colorPrimary)),
-                        border: InputBorder.none,
+          // Text(language.weight, style: boldTextStyle()),
+          // 8.height,
+
+          Row(
+            children: [
+              Text(language.weight, style: primaryTextStyle()).expand(),
+              Container(
+                decoration: BoxDecoration(border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), borderRadius: BorderRadius.circular(defaultRadius)),
+                child: IntrinsicHeight(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.remove, color: appStore.isDarkMode ? Colors.white : Colors.grey).paddingAll(12).onTap(() {
+                        if (weightController.text.toDouble() > 1) {
+                          weightController.text = (weightController.text.toDouble() - 1).toString();
+                        }
+                      }),
+                      VerticalDivider(thickness: 1),
+                      Container(
+                        width: 50,
+                        child: AppTextField(
+                          controller: weightController,
+                          textAlign: TextAlign.center,
+                          maxLength: 5,
+                          textFieldType: TextFieldType.PHONE,
+                          decoration: InputDecoration(
+                            counterText: '',
+                            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: colorPrimary)),
+                            border: InputBorder.none,
+                          ),
+                        ),
                       ),
-                    ),
+                      VerticalDivider(thickness: 1),
+                      Icon(Icons.add, color: appStore.isDarkMode ? Colors.white : Colors.grey).paddingAll(12).onTap(() {
+                        weightController.text = (weightController.text.toDouble() + 1).toString();
+                      }),
+                    ],
                   ),
-                  VerticalDivider(thickness: 1),
-                  Icon(Icons.add, color: appStore.isDarkMode ? Colors.white : Colors.grey).paddingAll(12).onTap(() {
-                    weightController.text = (weightController.text.toDouble() + 1).toString();
-                  }),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
           16.height,
-          Text(language.numberOfParcels, style: boldTextStyle()),
-          8.height,
-          Container(
-            decoration: BoxDecoration(border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), borderRadius: BorderRadius.circular(defaultRadius)),
-            child: IntrinsicHeight(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(language.numberOfParcels, style: primaryTextStyle()).paddingAll(12).expand(),
-                  VerticalDivider(thickness: 1),
-                  Icon(Icons.remove, color: appStore.isDarkMode ? Colors.white : Colors.grey).paddingAll(12).onTap(() {
-                    if (totalParcelController.text.toInt() > 1) {
-                      totalParcelController.text = (totalParcelController.text.toInt() - 1).toString();
-                    }
-                  }),
-                  VerticalDivider(thickness: 1),
-                  Container(
-                    width: 50,
-                    child: AppTextField(
-                      controller: totalParcelController,
-                      textAlign: TextAlign.center,
-                      maxLength: 2,
-                      textFieldType: TextFieldType.PHONE,
-                      decoration: InputDecoration(
-                        counterText: '',
-                        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: colorPrimary)),
-                        border: InputBorder.none,
+          // Text(language.numberOfParcels, style: boldTextStyle()),
+          // 8.height,
+          Row(
+            children: [
+              Text(language.numberOfParcels, style: primaryTextStyle()).expand(),
+              Container(
+                decoration: BoxDecoration(border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), borderRadius: BorderRadius.circular(defaultRadius)),
+                child: IntrinsicHeight(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.remove, color: appStore.isDarkMode ? Colors.white : Colors.grey).paddingAll(12).onTap(() {
+                        if (totalParcelController.text.toInt() > 1) {
+                          totalParcelController.text = (totalParcelController.text.toInt() - 1).toString();
+                        }
+                      }),
+                      VerticalDivider(thickness: 1),
+                      Container(
+                        width: 50,
+                        child: AppTextField(
+                          controller: totalParcelController,
+                          textAlign: TextAlign.center,
+                          maxLength: 2,
+                          textFieldType: TextFieldType.PHONE,
+                          decoration: InputDecoration(
+                            counterText: '',
+                            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: colorPrimary)),
+                            border: InputBorder.none,
+                          ),
+                        ),
                       ),
-                    ),
+                      VerticalDivider(thickness: 1),
+                      Icon(Icons.add, color: appStore.isDarkMode ? Colors.white : Colors.grey).paddingAll(12).onTap(() {
+                        totalParcelController.text = (totalParcelController.text.toInt() + 1).toString();
+                      }),
+                    ],
                   ),
-                  VerticalDivider(thickness: 1),
-                  Icon(Icons.add, color: appStore.isDarkMode ? Colors.white : Colors.grey).paddingAll(12).onTap(() {
-                    totalParcelController.text = (totalParcelController.text.toInt() + 1).toString();
-                  }),
-                ],
+                ),
               ),
+            ],
+          ),
+
+          Visibility(
+            visible: appStore.isVehicleOrder != 0,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                16.height,
+                Row(
+                  children: [
+                    Text(language.select_vehicle, style: primaryTextStyle()).expand(),
+                    8.height,
+                    DropdownButtonFormField<int>(
+                      isExpanded: true,
+                      value: selectedVehicle,
+                      decoration: commonInputDecoration(),
+                      dropdownColor: Theme.of(context).cardColor,
+                      style: primaryTextStyle(),
+                      items: vehicleList.map<DropdownMenuItem<int>>((item) {
+                        return DropdownMenuItem(
+                          value: item.id,
+                          child: Row(
+                            children: [
+                              commonCachedNetworkImage(item.vehicleImage.validate(), height: 40, width: 40),
+                              SizedBox(width: 16),
+                              Text(item.title.validate(), style: primaryTextStyle()),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        selectedVehicle = value;
+                        setState(() {});
+                      },
+                      validator: (value) {
+                        if (selectedVehicle == null) return errorThisFieldRequired;
+                        return null;
+                      },
+                    ).expand(),
+                  ],
+                ),
+              ],
             ),
           ),
           16.height,
@@ -615,18 +666,18 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               return null;
             },
           ),
-          16.height,
+          8.height,
           Wrap(
             spacing: 8,
             runSpacing: 0,
             children: parcelTypeList.map((item) {
               return Chip(
                 backgroundColor: context.scaffoldBackgroundColor,
-                label: Text(item.label!),
+                label: Text(item.label!, style: secondaryTextStyle()),
                 elevation: 0,
                 labelStyle: primaryTextStyle(color: Colors.grey),
                 padding: EdgeInsets.zero,
-                labelPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                labelPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(defaultRadius),
                   side: BorderSide(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
@@ -636,44 +687,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 setState(() {});
               });
             }).toList(),
-          ),
-          16.height,
-          Visibility(
-            visible: appStore.isVehicleOrder != 0,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(language.select_vehicle, style: boldTextStyle()),
-                8.height,
-                DropdownButtonFormField<int>(
-                  isExpanded: true,
-                  value: selectedVehicle,
-                  decoration: commonInputDecoration(),
-                  dropdownColor: Theme.of(context).cardColor,
-                  style: primaryTextStyle(),
-                  items: vehicleList.map<DropdownMenuItem<int>>((item) {
-                    return DropdownMenuItem(
-                      value: item.id,
-                      child: Row(
-                        children: [
-                          commonCachedNetworkImage(item.vehicleImage.validate(), height: 40, width: 40),
-                          SizedBox(width: 16),
-                          Text(item.title.validate(), style: primaryTextStyle()),
-                        ],
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    selectedVehicle = value;
-                    setState(() {});
-                  },
-                  validator: (value) {
-                    if (selectedVehicle == null) return errorThisFieldRequired;
-                    return null;
-                  },
-                ),
-              ],
-            ),
           ),
         ],
       );
@@ -686,7 +699,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       children: [
         Text(language.pickupInformation, style: boldTextStyle()),
         16.height,
-        Text(language.pickupLocation, style: primaryTextStyle()),
+
+        ///TODO add key
+        Text('Location', style: primaryTextStyle()),
         8.height,
         AppTextField(
           controller: pickAddressCont,
@@ -718,7 +733,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           },
         ),
         16.height,
-        Text(language.pickupContactNumber, style: primaryTextStyle()),
+        Text(language.contactNumber, style: primaryTextStyle()),
         8.height,
         AppTextField(
           controller: pickPhoneCont,
@@ -772,7 +787,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           ],
         ),
         16.height,
-        Text(language.pickupDescription, style: primaryTextStyle()),
+        Text(language.description, style: primaryTextStyle()),
         8.height,
         TextField(
           controller: pickDesCont,
@@ -979,7 +994,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           ),
         ),
         Divider(height: 30),
-        OrderSummeryWidget(extraChargesList: extraChargeList, totalDistance: totalDistance, totalWeight: weightController.text.toDouble(), distanceCharge: distanceCharge, weightCharge: weightCharge, totalAmount: totalAmount),
+        OrderSummeryWidget(
+            extraChargesList: extraChargeList,
+            totalDistance: totalDistance,
+            totalWeight: weightController.text.toDouble(),
+            distanceCharge: distanceCharge,
+            weightCharge: weightCharge,
+            totalAmount: totalAmount),
         16.height,
         Text(language.payment, style: boldTextStyle()),
         16.height,
@@ -1067,8 +1088,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           return false;
         }
       },
-      child: Scaffold(
-        appBar: commonAppBarWidget(language.createOrder),
+      child: CommonScaffoldComponent(
+        appBarTitle: language.createOrder,
         body: Stack(
           children: [
             SingleChildScrollView(
@@ -1109,7 +1130,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         ),
         bottomNavigationBar: Container(
           padding: EdgeInsets.all(16),
-          color: context.scaffoldBackgroundColor,
           child: Row(
             children: [
               if (selectedTabIndex != 0)
@@ -1117,7 +1137,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   FocusScope.of(context).requestFocus(new FocusNode());
                   selectedTabIndex--;
                   setState(() {});
-                }).paddingRight(16).expand(),
+                },color: colorPrimary).paddingRight(16).expand(),
               commonButton(selectedTabIndex != 3 ? language.next : language.createOrder, () async {
                 FocusScope.of(context).requestFocus(new FocusNode());
                 if (selectedTabIndex != 3) {

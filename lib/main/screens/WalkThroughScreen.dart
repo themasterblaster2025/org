@@ -30,7 +30,19 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
-      appBar: AppBar(backgroundColor: Colors.transparent),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        actions: [
+          Text(language.skip, style: boldTextStyle(color: grey)).onTap(
+            () async {
+              await setValue(IS_FIRST_TIME, false);
+              LoginScreen().launch(context, isNewTask: true, duration: Duration(milliseconds: 1000), pageRouteAnimation: PageRouteAnimation.Scale);
+            },
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+          ).paddingRight(16),
+        ],
+      ),
       body: Stack(
         children: [
           PageView(
@@ -49,24 +61,12 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
             },
           ),
           Positioned(
-            right: 16,
-            top: context.statusBarHeight + 20,
-            child: Text(language.skip, style: boldTextStyle(color: grey)).onTap(
-              () async {
-                await setValue(IS_FIRST_TIME, false);
-                LoginScreen().launch(context, isNewTask: true, duration: Duration(milliseconds: 1000), pageRouteAnimation: PageRouteAnimation.Scale);
-              },
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-            ),
-          ),
-          Positioned(
             bottom: 30,
             left: 16,
             right: 16,
             child: Column(
               children: [
-                Text(pages[currentPage].title!, style: boldTextStyle(size: headingSize), textAlign: TextAlign.center).paddingOnly(left: 30, right: 30),
+                Text(pages[currentPage].title!, style: boldTextStyle(size: 24), textAlign: TextAlign.center).paddingOnly(left: 30, right: 30),
                 16.height,
                 Text(pages[currentPage].subTitle!, textAlign: TextAlign.center, style: secondaryTextStyle(size: 16)).paddingOnly(left: 30, right: 30),
                 50.height,
