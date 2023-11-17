@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:mighty_delivery/main/utils/Widgets.dart';
 import '../../main.dart';
 import '../../main/components/BodyCornerWidget.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/OrderListModel.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/services/AuthSertvices.dart';
@@ -62,7 +64,8 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   Future<void> init() async {
     mIsUpdate = widget.orderData != null;
     if (mIsUpdate) {
-      picUpController.text = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.orderData!.pickupDatetime.validate().isEmpty ? DateTime.now().toString() : widget.orderData!.pickupDatetime.validate()));
+      picUpController.text =
+          DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.orderData!.pickupDatetime.validate().isEmpty ? DateTime.now().toString() : widget.orderData!.pickupDatetime.validate()));
       reasonController.text = widget.orderData!.reason.validate();
       reason = widget.orderData!.reason.validate();
       log(picUpController);
@@ -156,10 +159,10 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.orderData!.status == ORDER_DEPARTED ? language.orderDeliver : language.orderPickup),
-        leading: IconButton(
+    return CommonScaffoldComponent(
+      appBar: commonAppBarWidget(
+        widget.orderData!.status == ORDER_DEPARTED ? language.orderDeliver : language.orderPickup,
+        backWidget: IconButton(
           onPressed: () {
             finish(context, false);
           },
@@ -326,11 +329,15 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                                 appStore.isOtpVerifyOnPickupDelivery
                                     ? sendOtp(
                                         context,
-                                        phoneNumber: widget.orderData!.status == ORDER_DEPARTED ? widget.orderData!.deliveryPoint!.contactNumber.validate() : widget.orderData!.pickupPoint!.contactNumber.validate(),
+                                        phoneNumber: widget.orderData!.status == ORDER_DEPARTED
+                                            ? widget.orderData!.deliveryPoint!.contactNumber.validate()
+                                            : widget.orderData!.pickupPoint!.contactNumber.validate(),
                                         onUpdate: (verificationId) async {
                                           await showInDialog(context,
                                               builder: (context) => OTPDialog(
-                                                  phoneNumber: widget.orderData!.status == ORDER_DEPARTED ? widget.orderData!.deliveryPoint!.contactNumber.validate() : widget.orderData!.pickupPoint!.contactNumber.validate(),
+                                                  phoneNumber: widget.orderData!.status == ORDER_DEPARTED
+                                                      ? widget.orderData!.deliveryPoint!.contactNumber.validate()
+                                                      : widget.orderData!.pickupPoint!.contactNumber.validate(),
                                                   onUpdate: () {
                                                     saveOrderData();
                                                   },
@@ -425,7 +432,8 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   }
 
   Future<void> paymentConfirmDialog(OrderData orderData) {
-    return showConfirmDialogCustom(context, primaryColor: colorPrimary, dialogType: DialogType.CONFIRMATION, title: orderTitle(orderData.status!), positiveText: language.yes, negativeText: language.cancel, onAccept: (c) async {
+    return showConfirmDialogCustom(context,
+        primaryColor: colorPrimary, dialogType: DialogType.CONFIRMATION, title: orderTitle(orderData.status!), positiveText: language.yes, negativeText: language.cancel, onAccept: (c) async {
       appStore.setLoading(true);
       Map req = {
         'order_id': orderData.id,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:mighty_delivery/main/utils/Colors.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
@@ -80,17 +82,17 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(language.cancelOrder, style: boldTextStyle(size: 18)),
-              Icon(Icons.clear).onTap(() {
+              Icon(Ionicons.close_circle_outline,color:colorPrimary,).onTap(() {
                 finish(context);
               }),
             ],
           ),
           16.height,
-          Text(language.reason, style: boldTextStyle()),
+          Text(language.reason, style: primaryTextStyle()),
           8.height,
           DropdownButtonFormField<String>(
             value: reason,
-            isExpanded: true,
+            isExpanded: true,isDense: true,
             decoration: commonInputDecoration(),
             items: (getStringAsync(USER_TYPE) == CLIENT ? userCancelOrderReasonList : deliveryBoyCancelOrderReasonList).map((e) {
               return DropdownMenuItem(
@@ -120,14 +122,11 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
             },
           ).visible(reason.validate().trim() == language.other.trim()),
           16.height,
-          Align(
-            alignment: Alignment.centerRight,
-            child: commonButton(language.submit, () {
-              if (formKey.currentState!.validate()) {
-                updateOrderApiCall();
-              }
-            }),
-          )
+          commonButton(language.submit, () {
+            if (formKey.currentState!.validate()) {
+              updateOrderApiCall();
+            }
+          },width: context.width())
         ],
       ),
     );

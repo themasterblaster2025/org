@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/OrderListModel.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Colors.dart';
@@ -73,8 +75,8 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: commonAppBarWidget(language.draftOrder),
+    return CommonScaffoldComponent(
+      appBarTitle: language.draftOrder,
       body: Observer(builder: (context) {
         return Stack(
           children: [
@@ -85,129 +87,70 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
                     padding: EdgeInsets.all(16),
                     children: orderList.map((item) {
                       return Container(
-                        margin: EdgeInsets.only(bottom: 16),
-                        decoration: boxDecorationRoundedWithShadow(
-                          defaultRadius.toInt(),
-                          shadowColor: appStore.isDarkMode ? Colors.transparent : null,
-                          backgroundColor: context.cardColor,
-                        ),
+                        margin: EdgeInsets.only(bottom: 8),
+                        padding: EdgeInsets.all(12),
+                        decoration: boxDecorationWithRoundedCorners(
+                            borderRadius: BorderRadius.circular(defaultRadius), border: Border.all(color: colorPrimary.withOpacity(0.3)), backgroundColor: Colors.transparent),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Row(
+                            item.date != null ? Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                item.date != null ? Text(printDate(item.date!), style: secondaryTextStyle()).paddingLeft(16) : SizedBox(),
-                                Container(
-                                  child: Icon(MaterialIcons.delete_outline, color: Colors.red),
-                                  padding: EdgeInsets.all(4),
-                                  decoration: BoxDecoration(
-                                    color: Colors.red.withOpacity(0.4),
-                                    borderRadius: BorderRadius.only(topRight: Radius.circular(defaultRadius), bottomLeft: Radius.circular(defaultRadius)),
-                                  ),
-                                ).onTap(() {
-                                  showConfirmDialogCustom(
-                                    context,
-                                    dialogType: DialogType.DELETE,
-                                    onAccept: (p0) {
-                                      deleteOrderApiCall(item.id!.toInt());
-                                    },
-                                  );
-                                }),
+                                Text(DateFormat('dd MMM yyyy').format(DateTime.parse(item.date!).toLocal()), style: secondaryTextStyle()),
+                                Text( DateFormat('hh:mm a').format(DateTime.parse(item.date!).toLocal()), style: secondaryTextStyle()),
+
                               ],
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(16),
-                              child: Column(
-                                children: [
-                                  item.parcelType != null
-                                      ? Row(
-                                          children: [
-                                            Container(
-                                              decoration: boxDecorationWithRoundedCorners(
-                                                borderRadius: BorderRadius.circular(8),
-                                                border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
-                                                backgroundColor: Colors.transparent,
+                            ): SizedBox(),
+                            8.height,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                item.parcelType != null
+                                    ? Row(
+                                        children: [
+                                          Container(
+                                            decoration: boxDecorationWithRoundedCorners(
+                                                borderRadius: BorderRadius.circular(8), border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), backgroundColor: context.cardColor),
+                                            padding: EdgeInsets.all(8),
+                                            child: Image.asset(parcelTypeIcon(item.parcelType.validate()), height: 24, width: 24, color: colorPrimary),
+                                          ),
+                                          8.width,
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text(item.parcelType.validate(), style: boldTextStyle()).expand(),
+                                                  Text('${printAmount(item.totalAmount ?? 0)}', style: primaryTextStyle()),
+                                                ],
                                               ),
-                                              padding: EdgeInsets.all(8),
-                                              child: Image.asset(parcelTypeIcon(item.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
-                                            ),
-                                            8.width,
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(item.parcelType.validate(), style: boldTextStyle()),
-                                                4.height,
-                                                Row(
-                                                  children: [
-                                                    item.date != null ? Text(printDate(item.date!), style: secondaryTextStyle()).expand() : SizedBox(),
-                                                    Text('${printAmount(item.totalAmount??0)}', style: boldTextStyle()),
-                                                  ],
-                                                ),
-                                              ],
-                                            ).expand(),
-                                          ],
-                                        )
-                                      : Row(
-                                          children: [
-                                            item.date != null ? Text(printDate(item.date!), style: secondaryTextStyle()).expand() : SizedBox(),
-                                            Text('${printAmount(item.totalAmount??0)}', style: boldTextStyle()),
-                                          ],
-                                        ),
-                                  if (item.pickupPoint!.address != null || item.deliveryPoint!.address != null)
-                                    Column(
-                                      children: [
-                                        Divider(height: 30, thickness: 1),
-                                        if (item.pickupPoint!.address != null)
-                                          Row(
-                                            children: [
-                                              ImageIcon(AssetImage('assets/icons/ic_pick_location.png'),size: 24,color: colorPrimary),
-                                              12.width,
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                              Row(
                                                 children: [
-                                                  Text('${item.pickupPoint!.address}', style: primaryTextStyle()),
-                                                  4.height.visible(item.pickupPoint!.contactNumber != null),
-                                                  Row(
-                                                    children: [
-                                                      Icon(Icons.call, color: Colors.green, size: 18).onTap(() {
-                                                       commonLaunchUrl('tel:${item.pickupPoint!.contactNumber}');
-                                                      }),
-                                                      8.width,
-                                                      Text('${item.pickupPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
-                                                    ],
-                                                  ).visible(item.pickupPoint!.contactNumber != null),
+                                                  Text('# ${item.id.validate()}', style: boldTextStyle()).expand(),
+                                                  Icon(Ionicons.md_trash_outline, color: Colors.red).onTap(() {
+                                                    showConfirmDialogCustom(
+                                                      context,
+                                                      dialogType: DialogType.DELETE,
+                                                      onAccept: (p0) {
+                                                        deleteOrderApiCall(item.id!.toInt());
+                                                      },
+                                                    );
+                                                  }),
                                                 ],
-                                              ).expand(),
+                                              ),
                                             ],
-                                          ),
-                                        16.height,
-                                        if (item.deliveryPoint!.address != null)
-                                          Row(
-                                            children: [
-                                              ImageIcon(AssetImage('assets/icons/ic_delivery_location.png'),size: 24,color: colorPrimary),
-                                              12.width,
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text('${item.deliveryPoint!.address}', style: primaryTextStyle()),
-                                                  4.height.visible(item.deliveryPoint!.contactNumber != null),
-                                                  Row(
-                                                    children: [
-                                                      Icon(Icons.call, color: Colors.green, size: 18).onTap((){
-                                                       commonLaunchUrl('tel:${item.deliveryPoint!.contactNumber}');
-                                                      }),
-                                                      8.width,
-                                                      Text('${item.deliveryPoint!.contactNumber ?? ""}', style: primaryTextStyle()),
-                                                    ],
-                                                  ).visible(item.deliveryPoint!.contactNumber != null),
-                                                ],
-                                              ).expand(),
-                                            ],
-                                          ),
-                                      ],
-                                    ),
-                                ],
-                              ),
+                                          ).expand(),
+                                        ],
+                                      )
+                                    : Row(
+                                        children: [
+                                          // item.date != null ? Text(printDate(item.date!), style: secondaryTextStyle()).expand() : SizedBox(),
+                                          Text('${printAmount(item.totalAmount ?? 0)}', style: boldTextStyle()),
+                                        ],
+                                      ),
+                              ],
                             ),
                           ],
                         ),

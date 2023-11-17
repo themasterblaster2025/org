@@ -1,16 +1,16 @@
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:mighty_delivery/main/utils/Widgets.dart';
 import '../../main/utils/Colors.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import '../../main.dart';
+import '../components/CommonScaffoldComponent.dart';
 import '../services/ChatMessagesService.dart';
 import '../models/ChatMessageModel.dart';
 import '../models/FileModel.dart';
 import '../models/LoginResponse.dart';
-import '../services/UserServices.dart';
 import '../utils/Constants.dart';
 import 'ChatItemWidget.dart';
 
@@ -120,27 +120,16 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     log(widget.userData!.uid);
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: StreamBuilder<UserData>(
-          stream: UserService().singleUser(widget.userData!.uid),
-          builder: (context, snap) {
-            if (snap.hasData) {
-              return Row(
-                children: [
-                  Icon(Icons.arrow_back, color: whiteColor).paddingSymmetric(vertical: 16).onTap(() => finish(context)),
-                  10.width,
-                  CircleAvatar(backgroundColor: context.cardColor, backgroundImage: NetworkImage(widget.userData!.profileImage.validate()), minRadius: 20),
-                  10.width,
-                  Text(widget.userData!.name.validate(), style: TextStyle(color: whiteColor)).paddingSymmetric(vertical: 16).expand(),
-                ],
-              );
-            }
-            return snapWidgetHelper(snap, loadingWidget: Offstage());
-          },
+    return CommonScaffoldComponent(showBack: false,
+      appBar: commonAppBarWidget(
+        '',
+        titleWidget: Row(
+          children: [
+            CircleAvatar(backgroundColor: context.cardColor, backgroundImage: NetworkImage(widget.userData!.profileImage.validate()), minRadius: 20),
+            10.width,
+            Text(widget.userData!.name.validate(), style: TextStyle(color: whiteColor)).paddingSymmetric(vertical: 16).expand(),
+          ],
         ),
-        backgroundColor: context.primaryColor,
       ),
       body: Container(
         height: context.height(),

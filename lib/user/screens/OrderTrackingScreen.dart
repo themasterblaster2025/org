@@ -4,6 +4,7 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../main.dart';
 import '../../main/components/BodyCornerWidget.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/LoginResponse.dart';
 import '../../main/models/OrderListModel.dart';
 import '../../main/network/RestApis.dart';
@@ -121,23 +122,21 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(language.trackOrder)),
-      body: BodyCornerWidget(
-        child: sourceLocation != null
-            ? GoogleMap(
-                markers: markers.map((e) => e).toSet(),
-                polylines: _polylines,
-                mapType: MapType.normal,
-                initialCameraPosition: CameraPosition(
-                  target: sourceLocation!,
-                  zoom: cameraZoom,
-                  tilt: cameraTilt,
-                  bearing: cameraBearing,
-                ),
-              )
-            : loaderWidget(),
-      ),
+    return CommonScaffoldComponent(
+      appBarTitle: language.trackOrder,
+      body: sourceLocation != null
+          ? GoogleMap(
+              markers: markers.map((e) => e).toSet(),
+              polylines: _polylines,
+              mapType: MapType.normal,
+              initialCameraPosition: CameraPosition(
+                target: sourceLocation!,
+                zoom: cameraZoom,
+                tilt: cameraTilt,
+                bearing: cameraBearing,
+              ),
+            )
+          : loaderWidget(),
     );
   }
 }

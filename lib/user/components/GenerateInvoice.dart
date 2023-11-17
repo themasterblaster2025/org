@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:flutter/material.dart' as mi;
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import '../../main.dart';
 import '../../main/models/CountryListModel.dart';
@@ -34,7 +36,7 @@ generateInvoiceCall(OrderData orderData) async {
   });
 
   final invoice = Invoice(
-    supplier: Supplier(name: appStore.invoiceCompanyName, address: appStore.invoiceAddress, contactNumber: appStore.invoiceContactNumber),
+    supplier: Supplier(name: appStore.invoiceCompanyName, address: appStore.invoiceAddress, contactNumber: appStore.invoiceContactNumber, logo: appStore.invoiceCompanyLogo),
     customer: Customer(
       name: '${orderData.clientName}',
       address: '${orderData.deliveryPoint!.address}',
@@ -114,10 +116,11 @@ class PdfInvoiceApi {
         await PdfGoogleFonts.padaukRegular(),
       ]),
     );
+    final netImage = await networkImage(invoice.supplier.logo);
 
     pdf.addPage(MultiPage(
       build: (context) => [
-        buildTitle(invoice),
+        buildTitle(invoice, netImage),
         SizedBox(height: 2 * PdfPageFormat.cm),
         buildHeader(invoice),
         SizedBox(height: 1 * PdfPageFormat.cm),
@@ -159,17 +162,24 @@ class PdfInvoiceApi {
     ]);
   }
 
-  static Widget buildTitle(Invoice invoice) {
+  static Widget buildTitle(Invoice invoice, netImage) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: Text(
-                "${language.invoiceCapital}",
-                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: PdfColors.blue),
+              child: Row(
+                children: [
+                  pw.Image(netImage, height: 100, width: 100),
+                  SizedBox(width: 16),
+                  Text(
+                    "${language.invoiceCapital}",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: PdfColors.blue),
+                  ),
+                ],
               ),
             ),
             SizedBox(width: 16),
@@ -379,9 +389,7 @@ class Supplier {
   final String address;
   final String contactNumber;
 
-  const Supplier({
-    required this.name,
-    required this.address,
-    required this.contactNumber,
-  });
+  final String logo;
+
+  const Supplier({required this.name, required this.address, required this.contactNumber, required this.logo});
 }

@@ -31,14 +31,14 @@ InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, F
     isDense: true,
     hintText: hintText != null ? hintText : '',
     hintStyle: secondaryTextStyle(size: 16, color: Colors.grey),
-    fillColor:colorPrimary.withOpacity(0.06),
+    fillColor: colorPrimary.withOpacity(0.06),
     counterText: '',
     suffixIcon: dateTime != null
         ? dateTime
         : suffixIcon != null
-            ? Icon(suffixIcon, color:colorPrimary, size: 22).onTap(suffixOnTap)
+            ? Icon(suffixIcon, color: colorPrimary, size: 22).onTap(suffixOnTap)
             : null,
-    enabledBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.solid,color: colorPrimaryLight), borderRadius: BorderRadius.circular(defaultRadius)),
+    enabledBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.solid, color: colorPrimaryLight), borderRadius: BorderRadius.circular(defaultRadius)),
     focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
     errorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(defaultRadius)),
     focusedErrorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(defaultRadius)),
@@ -90,15 +90,25 @@ Color statusColor(String status) {
   Color color = colorPrimary;
   switch (status) {
     case ORDER_ACCEPTED:
-      return colorPrimary;
+      return acceptColor;
+    case ORDER_CREATED:
+      return CreatedColorColor;
+    case ORDER_DEPARTED:
+      return acceptColor;
+    case ORDER_ASSIGNED:
+      return pendingApprovalColorColor;
+    case ORDER_PICKED_UP:
+      return in_progressColor;
+    case ORDER_ARRIVED:
+      return in_progressColor;
     case ORDER_CANCELLED:
-      return Colors.red;
+      return cancelledColor;
     case ORDER_DELIVERED:
-      return Colors.green;
+      return completedColor;
     case ORDER_DRAFT:
-      return Colors.grey;
+      return holdColor;
     case ORDER_DELAYED:
-      return Colors.grey;
+      return WaitingStatusColor;
   }
   return color;
 }

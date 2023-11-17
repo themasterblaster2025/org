@@ -1,5 +1,4 @@
 import 'dart:core';
-
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 import '../../main.dart';
-import '../../main/components/BodyCornerWidget.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/CityListModel.dart';
 import '../../main/models/CountryListModel.dart';
@@ -21,10 +19,9 @@ import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Widgets.dart';
 import '../../user/components/CreateOrderConfirmationDialog.dart';
-import '../../user/components/PaymentScreen.dart';
+import 'PaymentScreen.dart';
 import '../../user/screens/DashboardScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
-
 import '../../main/components/OrderSummeryWidget.dart';
 import '../../main/components/PickAddressBottomSheet.dart';
 import '../../main/models/AutoCompletePlacesListModel.dart';
@@ -918,82 +915,25 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           padding: EdgeInsets.all(16),
           decoration: boxDecorationWithRoundedCorners(
             borderRadius: BorderRadius.circular(defaultRadius),
-            border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+            border: Border.all(color: colorPrimary.withOpacity(0.2)),
             backgroundColor: Colors.transparent,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(language.parcelType, style: primaryTextStyle()),
-                  16.width,
-                  Text(parcelTypeCont.text, style: primaryTextStyle(), maxLines: 3, textAlign: TextAlign.end, overflow: TextOverflow.ellipsis).expand(),
-                ],
-              ),
+              rowWidget(title: language.parcelType, value: parcelTypeCont.text),
               8.height,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(language.weight, style: primaryTextStyle()),
-                  16.width,
-                  Text('${weightController.text} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weightType}', style: primaryTextStyle()),
-                ],
-              ),
+              rowWidget(title: language.weight, value: '${weightController.text} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weightType}'),
               8.height,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(language.numberOfParcels, style: primaryTextStyle()),
-                  16.width,
-                  Text('${totalParcelController.text}', style: primaryTextStyle()),
-                ],
-              ),
+              rowWidget(title: language.numberOfParcels, value: '${totalParcelController.text}'),
             ],
           ),
         ),
         16.height,
-        Text(language.pickupLocation, style: boldTextStyle()),
-        8.height,
-        Container(
-          width: context.width(),
-          padding: EdgeInsets.all(16),
-          decoration: boxDecorationWithRoundedCorners(
-            borderRadius: BorderRadius.circular(defaultRadius),
-            border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
-            backgroundColor: Colors.transparent,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(pickAddressCont.text, style: primaryTextStyle()),
-              8.height.visible(pickPhoneCont.text.isNotEmpty),
-              Text('$pickupCountryCode ${pickPhoneCont.text.trim()}', style: secondaryTextStyle()).visible(pickPhoneCont.text.isNotEmpty),
-            ],
-          ),
-        ),
+        addressComponent(title: language.pickupLocation, address: pickAddressCont.text, phoneNumber: '$pickupCountryCode ${pickPhoneCont.text.trim()}'),
         16.height,
-        Text(language.deliveryLocation, style: boldTextStyle()),
-        8.height,
-        Container(
-          width: context.width(),
-          padding: EdgeInsets.all(16),
-          decoration: boxDecorationWithRoundedCorners(
-            borderRadius: BorderRadius.circular(defaultRadius),
-            border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
-            backgroundColor: Colors.transparent,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(deliverAddressCont.text, style: primaryTextStyle()),
-              8.height.visible(deliverPhoneCont.text.isNotEmpty),
-              Text('$deliverCountryCode ${deliverPhoneCont.text.trim()}', style: secondaryTextStyle()).visible(deliverPhoneCont.text.isNotEmpty),
-            ],
-          ),
-        ),
-        Divider(height: 30),
+        addressComponent(title: language.deliveryLocation, address: deliverAddressCont.text, phoneNumber: '$deliverCountryCode ${deliverPhoneCont.text.trim()}'),
+        16.height,
         OrderSummeryWidget(
             extraChargesList: extraChargeList,
             totalDistance: totalDistance,
@@ -1005,27 +945,22 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         Text(language.payment, style: boldTextStyle()),
         16.height,
         Wrap(
-          spacing: 16,
-          runSpacing: 16,
+          spacing: 8,
+          runSpacing: 8,
           children: mPaymentList.map((mData) {
             return Container(
-              width: 130,
-              padding: EdgeInsets.all(16),
-              decoration: boxDecorationWithRoundedCorners(
-                  border: Border.all(
-                    color: isSelected == mData.index
-                        ? colorPrimary
-                        : appStore.isDarkMode
-                            ? Colors.transparent
-                            : borderColor,
-                  ),
-                  backgroundColor: context.cardColor),
+              width: (context.width() - 48) / 3,
+              padding: EdgeInsets.all(8),
+              alignment: Alignment.center,
+              decoration: boxDecorationWithRoundedCorners(border: Border.all(color: isSelected == mData.index ? colorPrimary : borderColor), backgroundColor: Colors.transparent),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ImageIcon(AssetImage(mData.image.validate()), size: 20, color: isSelected == mData.index ? colorPrimary : Colors.grey),
-                  16.width,
-                  Text(mData.title!, style: boldTextStyle()).expand(),
+                  ImageIcon(AssetImage(mData.image.validate()), size: 20, color: isSelected == mData.index ? colorPrimary : dividerColor),
+                  8.width,
+                  Text(mData.title!, style: primaryTextStyle(color: isSelected == mData.index ? colorPrimary : textSecondaryColorGlobal)),
                 ],
               ),
             ).onTap(() {
@@ -1036,11 +971,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         ),
         16.height,
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(language.paymentCollectFrom, style: boldTextStyle()),
             16.width,
             DropdownButtonFormField<String>(
               isExpanded: true,
+              isDense: true,
               value: paymentCollectFrom,
               decoration: commonInputDecoration(),
               items: [
@@ -1054,6 +991,50 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             ).expand(),
           ],
         ).visible(isSelected == 1),
+      ],
+    );
+  }
+
+  Widget rowWidget({required String title, required String value}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(title, style: secondaryTextStyle()),
+        16.width,
+        Text(value, style: boldTextStyle(size: 14), maxLines: 3, textAlign: TextAlign.end, overflow: TextOverflow.ellipsis).expand(),
+      ],
+    );
+  }
+
+  Widget addressComponent({required String title, required String address, required String phoneNumber}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: boldTextStyle()),
+        8.height,
+        Container(
+          width: context.width(),
+          padding: EdgeInsets.all(16),
+          decoration: boxDecorationWithRoundedCorners(
+            borderRadius: BorderRadius.circular(defaultRadius),
+            border: Border.all(color: colorPrimary.withOpacity(0.2)),
+            backgroundColor: Colors.transparent,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(address, style: primaryTextStyle()),
+              8.height.visible(address.isNotEmpty),
+              Row(
+                children: [
+                  Icon(Icons.call, size: 14),
+                  8.width,
+                  Text(phoneNumber, style: secondaryTextStyle()).visible(phoneNumber.isNotEmpty),
+                ],
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -1100,16 +1081,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(4, (index) {
                         return Container(
                           alignment: Alignment.center,
-                          height: 35,
-                          width: 35,
+                          height: selectedTabIndex == index ? 35 : 25,
+                          width: selectedTabIndex == index ? 35 : 25,
+                          margin: EdgeInsets.symmetric(horizontal: 8),
                           decoration: BoxDecoration(
-                            color: selectedTabIndex >= index ? colorPrimary : (appStore.isDarkMode ? scaffoldSecondaryDark : borderColor),
-                            shape: BoxShape.circle,
-                          ),
+                              color: selectedTabIndex >= index ? colorPrimary : (appStore.isDarkMode ? scaffoldSecondaryDark : borderColor),
+                              shape: BoxShape.circle,
+                              border: Border.all(color: selectedTabIndex >= index ? colorPrimary : (appStore.isDarkMode ? colorPrimaryLight : colorPrimary))),
                           child: Text('${index + 1}', style: primaryTextStyle(color: selectedTabIndex >= index ? Colors.white : null)),
                         );
                       }).toList(),
@@ -1137,7 +1119,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   FocusScope.of(context).requestFocus(new FocusNode());
                   selectedTabIndex--;
                   setState(() {});
-                },color: colorPrimary).paddingRight(16).expand(),
+                }, color: colorPrimary)
+                    .paddingRight(16)
+                    .expand(),
               commonButton(selectedTabIndex != 3 ? language.next : language.createOrder, () async {
                 FocusScope.of(context).requestFocus(new FocusNode());
                 if (selectedTabIndex != 3) {
@@ -1161,12 +1145,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     setState(() {});
                   }
                 } else {
-                  showConfirmDialog(
+                  showConfirmDialogCustom(
                     context,
-                    language.createOrderConfirmationMsg,
-                    positiveText: language.yes,
+                    title: language.createOrderConfirmationMsg,
+                    positiveText: language.yes,primaryColor: colorPrimary,
                     negativeText: language.no,
-                    onAccept: () {
+                    onAccept: (v) {
                       createOrderApiCall(ORDER_CREATED);
                     },
                   );

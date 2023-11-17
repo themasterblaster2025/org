@@ -71,7 +71,7 @@ class DashboardScreenState extends State<DashboardScreen> {
   String getTitle() {
     String title = language.myOrders;
     if (currentIndex == 0) {
-      title = 'Hey 👋, ${getStringAsync(NAME)} ';
+      title = 'Hey ${getStringAsync(NAME)} 👋';
     } else if (currentIndex == 1) {
       title = language.account;
     }
@@ -82,20 +82,19 @@ class DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     getOrderListApiCall();
 
-    return Scaffold(
-      extendBody:  true,
-      backgroundColor: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimaryLight,
-
-      appBar: PreferredSize(preferredSize: Size(context.width(),60),
+    return CommonScaffoldComponent(
+      extendedBody: true,
+      appBar: PreferredSize(
+        preferredSize: Size(context.width(), 60),
         child: commonAppBarWidget(getTitle(),
             actions: [
               Container(
-                margin: EdgeInsets.symmetric(vertical: 12,horizontal: 12),
+                margin: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                 padding: EdgeInsets.symmetric(horizontal: 8),
-                decoration: boxDecorationRoundedWithShadow(defaultRadius.toInt(),backgroundColor: Colors.white24),
+                decoration: boxDecorationWithRoundedCorners(borderRadius: radius(defaultRadius), backgroundColor: Colors.white24),
                 child: Row(
                   children: [
-                    Icon(Ionicons.ios_location_outline, color: Colors.white,size: 18),
+                    Icon(Ionicons.ios_location_outline, color: Colors.white, size: 18),
                     8.width,
                     Text(CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate(), style: primaryTextStyle(color: white)),
                   ],
@@ -106,34 +105,35 @@ class DashboardScreenState extends State<DashboardScreen> {
                       setState(() {});
                     },
                   ).launch(context);
-                },highlightColor: Colors.transparent,hoverColor: Colors.transparent,splashColor: Colors.transparent),
+                }, highlightColor: Colors.transparent, hoverColor: Colors.transparent, splashColor: Colors.transparent),
               ),
-              Stack(clipBehavior: Clip.none,
+              4.width,
+              Stack(
+                clipBehavior: Clip.none,
                 children: [
                   Align(alignment: AlignmentDirectional.center, child: Icon(Ionicons.md_notifications_outline)),
-                 if(appStore.allUnreadCount != 0) Observer(builder: (context) {
-                    return Positioned(
-                      right: -5,
-                      top: 8,
-                      child: Container(
-                        height: 20,
-                        width: 20,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
-                        child: Text('${'99+'}', style: boldTextStyle(size: appStore.allUnreadCount > 99 ? 10 : 10)),
-                      ),
-                    );
-                  }),
+                  if (appStore.allUnreadCount != 0)
+                    Observer(builder: (context) {
+                      return Positioned(
+                        right: -5,
+                        top: 8,
+                        child: Container(
+                          height: 20,
+                          width: 20,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
+                          child: Text(appStore.allUnreadCount.toString(), style: boldTextStyle(size: appStore.allUnreadCount > 99 ? 10 : 10)),
+                        ),
+                      );
+                    }),
                 ],
               ).onTap(() {
                 NotificationScreen().launch(context);
-              },highlightColor: Colors.transparent,hoverColor: Colors.transparent,splashColor: Colors.transparent).visible(currentIndex == 0),
+              }, highlightColor: Colors.transparent, hoverColor: Colors.transparent, splashColor: Colors.transparent).visible(currentIndex == 0),
+              8.width,
               Stack(
                 children: [
-                 Align(
-                     alignment: AlignmentDirectional.center,
-
-                     child: Icon(Ionicons.md_options_outline)),
+                  Align(alignment: AlignmentDirectional.center, child: Icon(Ionicons.md_options_outline)),
                   Observer(builder: (context) {
                     return Positioned(
                       right: 8,
@@ -155,7 +155,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                     return FilterOrderComponent();
                   },
                 );
-              },splashColor: Colors.transparent,hoverColor: Colors.transparent,highlightColor: Colors.transparent).visible(currentIndex == 0),
+              }, splashColor: Colors.transparent, hoverColor: Colors.transparent, highlightColor: Colors.transparent).visible(currentIndex == 0),
             ],
             showBack: false),
       ),

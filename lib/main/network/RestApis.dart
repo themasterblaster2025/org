@@ -288,7 +288,8 @@ Future<CountryDetailModel> getCountryDetail(int id) async {
 }
 
 Future<CityListModel> getCityList({required int countryId, String? name}) async {
-  return CityListModel.fromJson(await handleResponse(await buildHttpResponse(name != null ? 'city-list?country_id=$countryId&name=$name&per_page=-1' : 'city-list?country_id=$countryId&per_page=-1', method: HttpMethod.GET)));
+  return CityListModel.fromJson(
+      await handleResponse(await buildHttpResponse(name != null ? 'city-list?country_id=$countryId&name=$name&per_page=-1' : 'city-list?country_id=$countryId&per_page=-1', method: HttpMethod.GET)));
 }
 
 Future<CityDetailModel> getCityDetail(int id) async {
@@ -305,14 +306,14 @@ Future<VehicleListModel> getVehicleList({String? type, int? perPage, int? page, 
 }
 
 /// get OrderList
-Future<OrderListModel> getOrderList({required int page, String? orderStatus, String? fromDate, String? toDate,String? excludeStatus}) async {
+Future<OrderListModel> getOrderList({required int page, String? orderStatus, String? fromDate, String? toDate, String? excludeStatus}) async {
   String endPoint = 'order-list?client_id=${getIntAsync(USER_ID)}&city_id=${getIntAsync(CITY_ID)}&page=$page';
 
   if (orderStatus.validate().isNotEmpty) {
     endPoint += '&status=$orderStatus';
   }
 
-  if(excludeStatus.validate().isNotEmpty){
+  if (excludeStatus.validate().isNotEmpty) {
     endPoint += '&exclude_status=$excludeStatus';
   }
 
@@ -325,7 +326,8 @@ Future<OrderListModel> getOrderList({required int page, String? orderStatus, Str
 
 /// get deliveryBoy orderList
 Future<OrderListModel> getDeliveryBoyOrderList({required int page, required int deliveryBoyID, required int countryId, required int cityId, required String orderStatus}) async {
-  return OrderListModel.fromJson(await handleResponse(await buildHttpResponse('order-list?delivery_man_id=$deliveryBoyID&page=$page&city_id=$cityId&country_id=$countryId&status=$orderStatus', method: HttpMethod.GET)));
+  return OrderListModel.fromJson(
+      await handleResponse(await buildHttpResponse('order-list?delivery_man_id=$deliveryBoyID&page=$page&city_id=$cityId&country_id=$countryId&status=$orderStatus', method: HttpMethod.GET)));
 }
 
 /// update status
@@ -391,8 +393,12 @@ Future<LDBaseResponse> saveWithDrawRequest(Map request) async {
 }
 
 /// Get Notification List
-Future<NotificationListModel> getNotification({required int page}) async {
-  return NotificationListModel.fromJson(await handleResponse(await buildHttpResponse('notification-list?page=$page', method: HttpMethod.POST)));
+Future<NotificationListModel> getNotification({required int page, Map? request}) async {
+  if (request != null) {
+    return NotificationListModel.fromJson(await handleResponse(await buildHttpResponse('notification-list?limit=20&page=$page', request: request, method: HttpMethod.POST)));
+  } else {
+    return NotificationListModel.fromJson(await handleResponse(await buildHttpResponse('notification-list?limit=20&page=$page', method: HttpMethod.POST)));
+  }
 }
 
 /// Get Document List
@@ -420,7 +426,8 @@ Future<LDBaseResponse> cancelAutoAssignOrder(Map request) async {
 }
 
 Future<AutoCompletePlacesListModel> placeAutoCompleteApi({String searchText = '', String countryCode = "in", String language = 'en'}) async {
-  return AutoCompletePlacesListModel.fromJson(await handleResponse(await buildHttpResponse('place-autocomplete-api?country_code=$countryCode&language=$language&search_text=$searchText', method: HttpMethod.GET)));
+  return AutoCompletePlacesListModel.fromJson(
+      await handleResponse(await buildHttpResponse('place-autocomplete-api?country_code=$countryCode&language=$language&search_text=$searchText', method: HttpMethod.GET)));
 }
 
 Future<PlaceIdDetailModel> getPlaceDetail({String placeId = ''}) async {

@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import '../../main.dart';
 import '../../main/components/BodyCornerWidget.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -38,7 +39,7 @@ class DeleteAccountScreenState extends State<DeleteAccountScreen> {
     await deleteUser(req).then((value) async {
       await userService.removeDocument(getStringAsync(UID)).then((value) async {
         await deleteUserFirebase().then((value) async {
-          await logout(context,isDeleteAccount: true).then((value) async {
+          await logout(context, isDeleteAccount: true).then((value) async {
             appStore.setLoading(false);
             await removeKey(USER_EMAIL);
             await removeKey(USER_PASSWORD);
@@ -59,8 +60,8 @@ class DeleteAccountScreenState extends State<DeleteAccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: commonAppBarWidget(language.deleteAccount),
+    return CommonScaffoldComponent(
+      appBarTitle: language.deleteAccount,
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -94,26 +95,25 @@ class DeleteAccountScreenState extends State<DeleteAccountScreen> {
           // 8.height,
           commonButton(
               language.deleteAccount,
-                  () async => {
-                await showConfirmDialogCustom(
-                  context,
-                  title: language.deleteAccountConfirmMsg,
-                  dialogType: DialogType.DELETE,
-                  positiveText: language.yes,
-                  negativeText: language.no,
-                  onAccept: (c) async {
-                    if (getStringAsync(USER_EMAIL) == 'jose@gmail.com' || getStringAsync(USER_EMAIL) == 'mark@gmail.com') {
-                      toast(language.demoMsg);
-                    } else {
-                      await deleteAccount(context);
-                    }
+              () async => {
+                    await showConfirmDialogCustom(
+                      context,
+                      title: language.deleteAccountConfirmMsg,
+                      dialogType: DialogType.DELETE,
+                      positiveText: language.yes,
+                      negativeText: language.no,
+                      onAccept: (c) async {
+                        if (getStringAsync(USER_EMAIL) == 'jose@gmail.com' || getStringAsync(USER_EMAIL) == 'mark@gmail.com') {
+                          toast(language.demoMsg);
+                        } else {
+                          await deleteAccount(context);
+                        }
+                      },
+                    ),
                   },
-                ),
-              },
               width: context.width(),
               color: Colors.red,
               textColor: Colors.white),
-
         ],
       ).paddingAll(16),
     );

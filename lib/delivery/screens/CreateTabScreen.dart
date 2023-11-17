@@ -1,6 +1,6 @@
-import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import '../../delivery/screens/ReceivedScreenOrderScreen.dart';
@@ -10,9 +10,9 @@ import '../../main/network/RestApis.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
+import '../../main/utils/Images.dart';
 import '../../user/screens/OrderDetailScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
-
 import '../../main.dart';
 
 class CreateTabScreen extends StatefulWidget {
@@ -125,12 +125,8 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                 return GestureDetector(
                   child: Container(
                     margin: EdgeInsets.only(bottom: 16),
-                    decoration: boxDecorationRoundedWithShadow(
-                      defaultRadius.toInt(),
-                      backgroundColor: context.cardColor,
-                      shadowColor: appStore.isDarkMode ? Colors.transparent : null,
-                    ),
-                    padding: EdgeInsets.all(16),
+                    decoration: boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(defaultRadius), border: Border.all(color: colorPrimary.withOpacity(0.3)), backgroundColor: Colors.transparent),
+                    padding: EdgeInsets.all(12),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,7 +156,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                               },
                             ).visible(data.autoAssign == 1 && data.status == ORDER_ASSIGNED),
                             widget.orderStatus != ORDER_CANCELLED
-                                ? AppButton(
+                                ? AppButton(elevation: 0,
                                     text: buttonText(widget.orderStatus!),
                                     padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                                     textStyle: boldTextStyle(color: Colors.white),
@@ -193,29 +189,33 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                 : SizedBox()
                           ],
                         ),
-                        Divider(height: 30, thickness: 1),
+                        8.height,
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            if (data.pickupDatetime != null)
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(language.picked, style: boldTextStyle(size: 18)),
-                                  4.height,
-                                  Text('${language.at} ${printDate(data.pickupDatetime!)}', style: secondaryTextStyle()),
-                                  16.height,
-                                ],
-                              ),
+
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                ImageIcon(AssetImage('assets/icons/ic_pick_location.png'), size: 24, color: colorPrimary),
+                                ImageIcon(AssetImage(ic_from), size: 24, color: colorPrimary),
                                 12.width,
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('${data.pickupPoint!.address}', style: primaryTextStyle()),
+                                    Column(crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        if (data.pickupDatetime != null)
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(language.picked, style: secondaryTextStyle()),
+                                              4.height,
+                                              Text('${language.at} ${printDate(data.pickupDatetime!)}', style: secondaryTextStyle()),
+                                            ],
+                                          ),
+                                        Text('${data.pickupPoint!.address}', style: primaryTextStyle()),
+                                      ],
+                                    ),
                                     if (data.pickupDatetime == null && data.pickupPoint!.endTime != null && data.pickupPoint!.startTime != null)
                                       Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.endTime!).toLocal())}',
                                               style: secondaryTextStyle())
@@ -224,36 +224,40 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                 ).expand(),
                                 12.width,
                                 if (data.pickupPoint!.contactNumber != null)
-                                  Image.asset('assets/icons/ic_call.png', width: 24, height: 24).onTap(() {
-                                    commonLaunchUrl('tel:${data.pickupPoint!.contactNumber}');
-                                  }),
+                                Icon(Ionicons.ios_call_outline, size: 20, color: colorPrimary).onTap(() {
+                                  commonLaunchUrl('tel:${data.pickupPoint!.contactNumber}');
+                                }),
                               ],
                             ),
                           ],
                         ),
-                        DottedLine(dashColor: borderColor).paddingSymmetric(vertical: 16, horizontal: 24),
+                        16.height,
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            if (data.deliveryDatetime != null)
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(language.delivered, style: boldTextStyle(size: 18)),
-                                  4.height,
-                                  Text('${language.at} ${printDate(data.deliveryDatetime!)}', style: secondaryTextStyle()),
-                                  16.height,
-                                ],
-                              ),
+
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                ImageIcon(AssetImage('assets/icons/ic_delivery_location.png'), size: 24, color: colorPrimary),
+                                ImageIcon(AssetImage(ic_to), size: 24, color: colorPrimary),
                                 12.width,
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('${data.deliveryPoint!.address}', style: primaryTextStyle()),
+                                    Column(crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        if (data.deliveryDatetime != null)
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(language.delivered, style: secondaryTextStyle()),
+                                              4.height,
+                                              Text('${language.at} ${printDate(data.deliveryDatetime!)}', style: secondaryTextStyle()),
+                                            ],
+                                          ),
+                                        Text('${data.deliveryPoint!.address}', style: primaryTextStyle()),
+                                      ],
+                                    ),
                                     if (data.deliveryDatetime == null && data.deliveryPoint!.endTime != null && data.deliveryPoint!.startTime != null)
                                       Text('${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.endTime!).toLocal())}',
                                               style: secondaryTextStyle())
@@ -262,9 +266,9 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                                 ).expand(),
                                 12.width,
                                 if (data.deliveryPoint!.contactNumber != null)
-                                  Image.asset('assets/icons/ic_call.png', width: 24, height: 24).onTap(() {
-                                    commonLaunchUrl('tel:${data.deliveryPoint!.contactNumber}');
-                                  }),
+                                Icon(Ionicons.ios_call_outline, size: 20, color: colorPrimary).onTap(() {
+                                  commonLaunchUrl('tel:${data.deliveryPoint!.contactNumber}');
+                                }),
                               ],
                             ),
                           ],
@@ -276,7 +280,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                               decoration: boxDecorationWithRoundedCorners(
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
-                                backgroundColor: Colors.transparent,
+                                backgroundColor: context.cardColor,
                               ),
                               padding: EdgeInsets.all(8),
                               child: Image.asset(parcelTypeIcon(data.parcelType.validate()), height: 24, width: 24, color: Colors.grey),

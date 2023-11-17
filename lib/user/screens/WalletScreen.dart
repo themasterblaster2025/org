@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mighty_delivery/main/models/LoginResponse.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/screens/BankDetailScreen.dart';
 import '../../main/utils/Colors.dart';
-import '../../user/components/PaymentScreen.dart';
+import 'PaymentScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../delivery/screens/WithDrawScreen.dart';
@@ -71,7 +72,7 @@ class WalletScreenState extends State<WalletScreen> {
 
       currentPage = value.pagination!.currentPage!;
       totalPage = value.pagination!.totalPages!;
-      if(value.walletBalance!=null) totalAmount = value.walletBalance!.totalAmount ?? 0;
+      if (value.walletBalance != null) totalAmount = value.walletBalance!.totalAmount ?? 0;
       if (currentPage == 1) {
         walletData.clear();
       }
@@ -91,120 +92,118 @@ class WalletScreenState extends State<WalletScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         appStore.availableBal = totalAmount;
-        finish(context,true);
+        finish(context, true);
         return false;
       },
-      child: Scaffold(
-        appBar: AppBar(title: Text(language.wallet)),
+      child: CommonScaffoldComponent(
+        appBarTitle: language.wallet,
         body: Stack(
           children: [
-            BodyCornerWidget(
-              child: SingleChildScrollView(
-                controller: scrollController,
-                padding: EdgeInsets.only(left: 16, top: 30, right: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary),
-                      padding: EdgeInsets.all(16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(language.availableBalance, style: primaryTextStyle(size: 16, color: white.withOpacity(0.7))),
-                              6.height,
-                              Text('${printAmount(totalAmount)}', style: boldTextStyle(size: 22, color: Colors.white)),
-                            ],
-                          ),
-                          commonButton(language.addMoney, () {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return Dialog(
-                                  insetPadding: EdgeInsets.all(16),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(language.addMoney, style: boldTextStyle(size: 18)),
-                                      Divider(),
-                                      16.height,
-                                      Text(language.amount, style: primaryTextStyle()),
-                                      8.height,
-                                      AppTextField(
-                                        controller: amountCont,
-                                        textFieldType: TextFieldType.PHONE,
-                                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                        decoration: commonInputDecoration(),
-                                      ),
-                                      16.height,
-                                      commonButton(
-                                        language.add,
-                                        () async {
-                                          Navigator.pop(context);
-                                          // bool? res = await PaymentScreen(
-                                          //   totalAmount: amountCont.text.toDouble(),
-                                          //   isWallet: true,
-                                          // ).launch(context);
-                                          // if (res == true) {
-                                          //   getWalletData();
-                                          // }
-                                        },
-                                        width: context.width(),
-                                      ),
-                                      16.height,
-                                    ],
-                                  ).paddingAll(16),
-                                );
-                              },
-                            );
-                          }, color:  context.cardColor, textColor: colorPrimary)
-                        ],
-                      ),
-                    ),
-                    16.height,
-                    ListView.builder(
-                      padding: EdgeInsets.only(top: 8, bottom: 8),
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: walletData.length,
-                      shrinkWrap: true,
-                      itemBuilder: (_, index) {
-                        WalletModel data = walletData[index];
-                        return Container(
-                          margin: EdgeInsets.only(bottom: 16),
-                          padding: EdgeInsets.all(8),
-                          decoration: boxDecorationRoundedWithShadow(defaultRadius.toInt(),backgroundColor: context.cardColor,shadowColor: appStore.isDarkMode ? Colors.transparent : null),
-                          child: Row(
-                            children: [
-                              Container(
-                                decoration: boxDecorationWithRoundedCorners(backgroundColor: Colors.grey.withOpacity(0.2)),
-                                padding: EdgeInsets.all(6),
-                                child: Icon(data.type == CREDIT ? Icons.add : Icons.remove, color: colorPrimary),
-                              ),
-                              10.width,
-                              Expanded(
+            SingleChildScrollView(
+              controller: scrollController,
+              padding: EdgeInsets.only(left: 16, top: 30, right: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    decoration: boxDecorationWithRoundedCorners(backgroundColor: Colors.transparent, border: Border.all(color: colorPrimary.withOpacity(0.3))),
+                    padding: EdgeInsets.all(16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(language.availableBalance, style: secondaryTextStyle(size: 16)),
+                            6.height,
+                            Text('${printAmount(totalAmount)}', style: boldTextStyle(size: 22)),
+                          ],
+                        ),
+                        commonButton(language.addMoney, () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return Dialog(
+                                insetPadding: EdgeInsets.all(16),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Text(transactionType(data.transactionType!), style: boldTextStyle(size: 16)),
-                                    SizedBox(height: 8),
-                                    Text(printDate(data.createdAt.validate()), style: secondaryTextStyle(size: 12)),
+                                    Text(language.addMoney, style: boldTextStyle(size: 18)),
+                                    Divider(),
+                                    16.height,
+                                    Text(language.amount, style: primaryTextStyle()),
+                                    8.height,
+                                    AppTextField(
+                                      controller: amountCont,
+                                      textFieldType: TextFieldType.PHONE,
+                                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                      decoration: commonInputDecoration(),
+                                    ),
+                                    16.height,
+                                    commonButton(
+                                      language.add,
+                                      () async {
+                                        Navigator.pop(context);
+                                        // bool? res = await PaymentScreen(
+                                        //   totalAmount: amountCont.text.toDouble(),
+                                        //   isWallet: true,
+                                        // ).launch(context);
+                                        // if (res == true) {
+                                        //   getWalletData();
+                                        // }
+                                      },
+                                      width: context.width(),
+                                    ),
+                                    16.height,
                                   ],
-                                ),
+                                ).paddingAll(16),
+                              );
+                            },
+                          );
+                        }, color: colorPrimary.withOpacity(0.08), textColor: colorPrimary)
+                      ],
+                    ),
+                  ),
+                  16.height,
+                  ListView.builder(
+                    padding: EdgeInsets.only(top: 8, bottom: 8),
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: walletData.length,
+                    shrinkWrap: true,
+                    itemBuilder: (_, index) {
+                      WalletModel data = walletData[index];
+                      return Container(
+                        margin: EdgeInsets.only(bottom: 16),
+                        padding: EdgeInsets.all(8),
+                        decoration: boxDecorationWithRoundedCorners(borderRadius: radius(defaultRadius),backgroundColor: Colors.transparent,border: Border.all(color: colorPrimary.withOpacity(0.08))),
+                        child: Row(
+                          children: [
+                            Container(
+                              decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary.withOpacity(0.08)),
+                              padding: EdgeInsets.all(6),
+                              child: Icon(data.type == CREDIT ? Icons.add : Icons.remove, color: colorPrimary),
+                            ),
+                            10.width,
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(transactionType(data.transactionType!), style: secondaryTextStyle(color: textPrimaryColorGlobal)),
+                                  SizedBox(height: 8),
+                                  Text(printDate(data.createdAt.validate()), style: secondaryTextStyle(size: 12)),
+                                ],
                               ),
-                              Text('${printAmount(data.amount)}', style: secondaryTextStyle(color:data.type == CREDIT? Colors.green:Colors.red))
-                            ],
-                          ),
-                        );
-                      },
-                    )
-                  ],
-                ),
+                            ),
+                            Text('${data.type == CREDIT ? '+' : '-'} ${printAmount(data.amount)}', style: boldTextStyle(color: data.type == CREDIT ? Colors.green : Colors.red))
+                          ],
+                        ),
+                      );
+                    },
+                  )
+                ],
               ),
             ),
             Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),

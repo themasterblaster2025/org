@@ -82,7 +82,7 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
                 Container(alignment: Alignment.center,
                   margin: EdgeInsets.only(right: 16),
                   padding: EdgeInsets.all(4),
-                  decoration: boxDecorationWithRoundedCorners(boxShape: BoxShape.circle,backgroundColor:colorPrimaryLight,border: Border.all()),
+                  decoration: boxDecorationWithRoundedCorners(boxShape: BoxShape.circle,backgroundColor:Colors.transparent,border: Border.all()),
                   child: Icon(AntDesign.close,size: 16,).onTap(() {
                     finish(context);
                   }),
@@ -108,7 +108,7 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
               runSpacing: 0,
               children: statusList.map((item) {
                 return Chip(
-                  backgroundColor: selectedStatus == item ? colorPrimary : colorPrimaryLight,
+                  backgroundColor: selectedStatus == item ? colorPrimary : Colors.transparent,
                   label: Text(orderStatus(item)),
                   elevation: 0,
                   labelStyle: primaryTextStyle(size: 14,color: selectedStatus == item ? white : textPrimaryColorGlobal),

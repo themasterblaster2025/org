@@ -14,14 +14,11 @@ class BodyCornerWidget extends StatelessWidget {
     return Container(
       color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary,
       child: Container(
-        color: context.scaffoldBackgroundColor,
+        color: colorPrimaryLight,
         height: context.height(),
         width: context.width(),
         child: child,
-      ).cornerRadiusWithClipRRectOnly(
-        topRight: 24,
-        topLeft: 24,
-      ),
+      ).cornerRadiusWithClipRRectOnly(topRight: 24, topLeft: 24),
     );
   }
 }

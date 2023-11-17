@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:mighty_delivery/main/utils/Widgets.dart';
 import '../../delivery/fragment/DProfileFragment.dart';
 import '../../delivery/screens/CreateTabScreen.dart';
-import '../../main/components/BodyCornerWidget.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/screens/NotificationScreen.dart';
-import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
-
 import '../../main.dart';
 import '../../main/network/RestApis.dart';
 
@@ -36,13 +36,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
       setState(() {});
     });
     if (await checkPermission()) {
-      positionStream = Geolocator.getPositionStream().listen((event) async {
-        // await updateUserStatus({"id": getIntAsync(USER_ID), "latitude": event.latitude.toString(), "longitude": event.longitude.toString()}).then((value) {
-        //   log('Location updated:$event');
-        // }).catchError((error) {
-        //   log(error);
-        // });
-      });
+      positionStream = Geolocator.getPositionStream().listen((event) async {});
     }
     await getAppSetting().then((value) {
       appStore.setOtpVerifyOnPickupDelivery(value.otpVerifyOnPickupDelivery == 1);
@@ -64,62 +58,60 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: statusList.length,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary,
-          automaticallyImplyLeading: false,
-          actions: [
-            Stack(
-              children: [
-                Align(
-                  alignment: AlignmentDirectional.center,
-                  child: Icon(Icons.notifications),
-                ),
-                Observer(builder: (context) {
-                  return Positioned(
-                    right: 2,
-                    top: 8,
-                    child: Container(
-                      height: 20,
-                      width: 20,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
-                      child: Text('${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}', style: primaryTextStyle(size: appStore.allUnreadCount < 99 ? 12 : 8, color: Colors.white)),
-                    ),
-                  ).visible(appStore.allUnreadCount != 0);
-                }),
-              ],
-            ).withWidth(40).onTap(() {
-              NotificationScreen().launch(context);
-            }),
-            4.width,
-            IconButton(
-              padding: EdgeInsets.only(right: 8),
-              onPressed: () async {
-                DProfileFragment().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
-              },
-              icon: Icon(Icons.settings),
+      child: CommonScaffoldComponent(
+        appBar: PreferredSize(
+          preferredSize: Size(context.width(),90),
+          child: commonAppBarWidget('Hey ${getStringAsync(NAME)} 👋',showBack: false,
+            actions: [
+              Stack(clipBehavior: Clip.none,
+                children: [
+                  Align(
+                    alignment: AlignmentDirectional.center,
+                    child: Icon(Ionicons.md_notifications_outline),
+                  ),
+                  Observer(builder: (context) {
+                    return Positioned(
+                      right: 0,
+                      top: 2,
+                      child: Container(
+                        height: 20,
+                        width: 20,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
+                        child: Text('${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}', style: primaryTextStyle(size: appStore.allUnreadCount < 99 ? 12 : 8, color: Colors.white)),
+                      ),
+                    ).visible(appStore.allUnreadCount != 0);
+                  }),
+                ],
+              ).withWidth(40).onTap(() {
+                NotificationScreen().launch(context);
+              }),
+              IconButton(
+                padding: EdgeInsets.only(right: 8),
+                onPressed: () async {
+                  DProfileFragment().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+                },
+                icon: Icon(Ionicons.settings_outline),
+              ),
+            ],
+            bottom: TabBar(
+              isScrollable: true,
+              unselectedLabelColor: Colors.white70,
+              indicator: BoxDecoration(color: Colors.transparent),
+              labelColor: Colors.white,
+              indicatorSize: TabBarIndicatorSize.label,
+              unselectedLabelStyle: secondaryTextStyle(),
+              labelStyle: boldTextStyle(),
+              tabs: statusList.map((e) {
+                return Tab(text: orderStatus(e));
+              }).toList(),
             ),
-          ],
-          bottom: TabBar(
-            isScrollable: true,
-            unselectedLabelColor: Colors.white70,
-            indicator: BoxDecoration(color: Colors.transparent),
-            labelColor: Colors.white,
-            indicatorSize: TabBarIndicatorSize.label,
-            unselectedLabelStyle: secondaryTextStyle(),
-            labelStyle: boldTextStyle(),
-            tabs: statusList.map((e) {
-              return Tab(text: orderStatus(e));
-            }).toList(),
           ),
         ),
-        body: BodyCornerWidget(
-          child: TabBarView(
-            children: statusList.map((e) {
-              return CreateTabScreen(orderStatus: e);
-            }).toList(),
-          ),
+        body: TabBarView(
+          children: statusList.map((e) {
+            return CreateTabScreen(orderStatus: e);
+          }).toList(),
         ),
       ),
     );

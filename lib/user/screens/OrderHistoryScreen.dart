@@ -24,16 +24,6 @@ class OrderHistoryScreen extends StatefulWidget {
 
 class OrderHistoryScreenState extends State<OrderHistoryScreen> {
   @override
-  void initState() {
-    super.initState();
-    init();
-  }
-
-  Future<void> init() async {
-    //
-  }
-
-  @override
   void setState(fn) {
     if (mounted) super.setState(fn);
   }
@@ -42,7 +32,7 @@ class OrderHistoryScreenState extends State<OrderHistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: commonAppBarWidget(language.orderHistory),
-      body: Observer(builder :(context) {
+      body: Observer(builder: (context) {
         return ListView.builder(
           padding: EdgeInsets.all(16),
           itemCount: widget.orderHistory.length,
@@ -51,31 +41,23 @@ class OrderHistoryScreenState extends State<OrderHistoryScreen> {
             return TimelineTile(
               alignment: TimelineAlign.start,
               isFirst: index == 0 ? true : false,
-              isLast: index == (widget.orderHistory.length - 1)
-                  ? true
-                  : false,
+              axis: TimelineAxis.vertical,
+              isLast: index == (widget.orderHistory.length - 1) ? true : false,
               indicatorStyle: IndicatorStyle(width: 15, color: colorPrimary),
               afterLineStyle: LineStyle(color: colorPrimary, thickness: 3),
               beforeLineStyle: LineStyle(color: colorPrimary, thickness: 3),
               endChild: Row(
                 children: [
-                  ImageIcon(AssetImage(
-                      statusTypeIcon(type: mData.historyType)),
-                      color: colorPrimary, size: 30),
-                  16.width,
+                  ImageIcon(NetworkImage(statusTypeIcon(type: mData.historyType)), color: colorPrimary.withOpacity(0.8), size: 20),
+                  12.width,
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                          '${mData.historyType!
-                              .replaceAll("_", " ")
-                              .capitalizeFirstLetter()}',
-                          style: boldTextStyle()),
-                      8.height,
+                      Text('${mData.historyType!.replaceAll("_", " ").capitalizeFirstLetter()}', style: boldTextStyle()),
+                      2.height,
                       Text(messageData(mData)),
-                      8.height,
-                      Text('${printDate('${mData.createdAt}')}',
-                          style: secondaryTextStyle()),
+                      2.height,
+                      Text('${printDate('${mData.createdAt}')}', style: secondaryTextStyle(size: 12)),
                     ],
                   ).expand(),
                 ],
@@ -83,18 +65,16 @@ class OrderHistoryScreenState extends State<OrderHistoryScreen> {
             );
           },
         );
-
-      }  ),
+      }),
     );
   }
-
 
   messageData(OrderHistory orderData) {
     if (getStringAsync(USER_TYPE) == CLIENT) {
       if (orderData.historyType == ORDER_ASSIGNED) {
         return 'Your Order#${orderData.orderId} has been assigned to ${orderData.historyData!.deliveryManName}.';
       } else if (orderData.historyType == ORDER_TRANSFER) {
-        return 'Your Order#${orderData.orderId} has been transfered to ${orderData.historyData!.deliveryManName}.';
+        return 'Your Order#${orderData.orderId} has been transferred to ${orderData.historyData!.deliveryManName}.';
       } else {
         return '${orderData.historyMessage}';
       }

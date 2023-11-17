@@ -48,16 +48,13 @@ class AccountFragmentState extends State<AccountFragment> {
       children: [
         ListTile(
             contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-            minLeadingWidth: 16,
+            minLeadingWidth: 14,
             dense: true,
             leading: commonCachedNetworkImage(img, height: 18, fit: BoxFit.fill, width: 18, color: textPrimaryColorGlobal),
             title: Text(title, style: primaryTextStyle()),
             trailing: suffixIcon != null ? Icon(suffixIcon, color: Colors.green) : Icon(Icons.navigate_next, color: appStore.isDarkMode ? Colors.white : Colors.grey),
             onTap: onTap),
-        if (!isLast)
-          Divider(
-            height: 0,
-          )
+        if (isLast) Divider(height: 0)
       ],
     );
   }
@@ -124,13 +121,10 @@ class AccountFragmentState extends State<AccountFragment> {
               LanguageScreen().launch(context);
             }),
             accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/6853/6853936.png', language.theme, () async {
-              await showInDialog(context, shape: RoundedRectangleBorder(borderRadius: radius()),
-              builder: (_) => ThemeSelectionDialog(), contentPadding: EdgeInsets.zero);
-
+              await showInDialog(context, shape: RoundedRectangleBorder(borderRadius: radius()), builder: (_) => ThemeSelectionDialog(), contentPadding: EdgeInsets.zero);
             }),
             accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3917/3917378.png', language.deleteAccount, () async {
-               DeleteAccountScreen().launch(context);
-
+              DeleteAccountScreen().launch(context);
             }, isLast: true),
 
             ///TODO
@@ -146,14 +140,12 @@ class AccountFragmentState extends State<AccountFragment> {
             }),
             accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3916/3916699.png', language.aboutUs, () {
               AboutUsScreen().launch(context);
-            }, isLast: true),
-
-            30.height,
+            }, isLast: false),
             Container(
-              decoration: boxDecorationWithRoundedCorners(border: Border.all(color: context.dividerColor, width: 1)),
+              decoration: boxDecorationWithRoundedCorners(border: Border.all(color: colorPrimary, width: 1),backgroundColor:Colors.transparent),
               padding: EdgeInsets.all(16),
               width: context.width(),
-              child: Text(language.logout, style: primaryTextStyle(), textAlign: TextAlign.center),
+              child: Text(language.logout, style: boldTextStyle(size: 18,color: colorPrimary), textAlign: TextAlign.center),
             ).onTap(() async {
               await showConfirmDialogCustom(
                 context,

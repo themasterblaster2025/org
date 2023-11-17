@@ -1,5 +1,6 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -31,20 +32,23 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 16),
-        decoration: appStore.isDarkMode
-            ? boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(defaultRadius), backgroundColor: context.cardColor)
-            : boxDecorationRoundedWithShadow(defaultRadius.toInt()),
-        padding: EdgeInsets.all(16),
+        decoration: boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(defaultRadius), border: Border.all(color: colorPrimary.withOpacity(0.3)), backgroundColor: Colors.transparent),
+        padding: EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('${language.order}# ${widget.item.id}', style: secondaryTextStyle(size: 16)).expand(),
+                widget.item.date != null
+                    ? Text(DateFormat('dd MMM yyyy').format(DateTime.parse(widget.item.date!).toLocal()) + " at " + DateFormat('hh:mm a').format(DateTime.parse(widget.item.date!).toLocal()),
+                            style: primaryTextStyle(size: 14))
+                        .expand()
+                    : SizedBox(),
                 Container(
-                  decoration: BoxDecoration(color: statusColor(widget.item.status.validate()).withOpacity(0.15), borderRadius: BorderRadius.circular(defaultRadius)),
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Text(orderStatus(widget.item.status!), style: boldTextStyle(color: statusColor(widget.item.status.validate()))),
+                  decoration: BoxDecoration(color: statusColor(widget.item.status.validate()).withOpacity(0.08), borderRadius: BorderRadius.circular(6)),
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                  child: Text(orderStatus(widget.item.status!), style: primaryTextStyle(size: 14, color: statusColor(widget.item.status.validate()))),
                 ),
               ],
             ),
@@ -54,9 +58,9 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
               children: [
                 Container(
                   decoration: boxDecorationWithRoundedCorners(
-                      borderRadius: BorderRadius.circular(8), border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), backgroundColor: Colors.transparent),
+                      borderRadius: BorderRadius.circular(8), border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), backgroundColor: context.cardColor),
                   padding: EdgeInsets.all(8),
-                  child: Image.asset(parcelTypeIcon(widget.item.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
+                  child: Image.asset(parcelTypeIcon(widget.item.parcelType.validate()), height: 24, width: 24, color: colorPrimary),
                 ),
                 8.width,
                 Column(
@@ -66,7 +70,7 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                     4.height,
                     Row(
                       children: [
-                        widget.item.date != null ? Text(printDate(widget.item.date!), style: secondaryTextStyle()).expand() : SizedBox(),
+                        Text('# ${widget.item.id}', style: boldTextStyle(size: 14)).expand(),
                         if (widget.item.status != ORDER_CANCELLED) Text(printAmount(widget.item.totalAmount ?? 0), style: boldTextStyle()),
                       ],
                     ),
@@ -74,20 +78,10 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                 ).expand(),
               ],
             ),
-            Divider(height: 30, thickness: 1),
+            8.height,
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (widget.item.pickupDatetime != null)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(language.picked, style: boldTextStyle(size: 18)),
-                      4.height,
-                      Text('${language.at} ${printDate(widget.item.pickupDatetime!)}', style: secondaryTextStyle()),
-                      16.height,
-                    ],
-                  ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -96,36 +90,36 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        if (widget.item.pickupDatetime != null)
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(language.picked, style: secondaryTextStyle(size: 12)),
+                              4.height,
+                              Text('${language.at} ${printDate(widget.item.pickupDatetime!)}', style: secondaryTextStyle(size: 12)),
+                            ],
+                          ),
+                        4.height,
                         Text('${widget.item.pickupPoint!.address}', style: primaryTextStyle()),
                         if (widget.item.pickupDatetime == null && widget.item.pickupPoint!.endTime != null && widget.item.pickupPoint!.startTime != null)
                           Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(widget.item.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(widget.item.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(widget.item.pickupPoint!.endTime!).toLocal())}',
-                                  style: secondaryTextStyle())
-                              .paddingOnly(top: 8),
+                                  style: secondaryTextStyle(size: 12,color: Colors.red))
+                              ,
                       ],
                     ).expand(),
                     12.width,
                     if (widget.item.pickupPoint!.contactNumber != null)
-                      Image.asset('assets/icons/ic_call.png', width: 24, height: 24).onTap(() {
+                      Icon(Ionicons.ios_call_outline, size: 20, color: colorPrimary).onTap(() {
                         commonLaunchUrl('tel:${widget.item.pickupPoint!.contactNumber}');
                       }),
                   ],
                 ),
               ],
             ),
-            DottedLine(dashColor: borderColor).paddingSymmetric(vertical: 16, horizontal: 24),
+            16.height,
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (widget.item.deliveryDatetime != null)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(language.delivered, style: boldTextStyle(size: 18)),
-                      4.height,
-                      Text('${language.at} ${printDate(widget.item.deliveryDatetime!)}', style: secondaryTextStyle()),
-                      16.height,
-                    ],
-                  ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -134,35 +128,55 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('${widget.item.deliveryPoint!.address}', style: primaryTextStyle()),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (widget.item.deliveryDatetime != null)
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(language.delivered, style: secondaryTextStyle(size: 12)),
+                                  4.height,
+                                  Text('${language.at} ${printDate(widget.item.deliveryDatetime!)}', style: secondaryTextStyle(size: 12)),
+                                ],
+                              ),
+                            4.height,
+                            Text('${widget.item.deliveryPoint!.address}', style: primaryTextStyle(), textAlign: TextAlign.start),
+                          ],
+                        ),
                         if (widget.item.deliveryDatetime == null && widget.item.deliveryPoint!.endTime != null && widget.item.deliveryPoint!.startTime != null)
-                          Text('${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(widget.item.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(widget.item.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(widget.item.deliveryPoint!.endTime!).toLocal())}',
-                                  style: secondaryTextStyle())
-                              .paddingOnly(top: 8),
+                          Text(
+                              '${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(widget.item.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(widget.item.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(widget.item.deliveryPoint!.endTime!).toLocal())}',
+                              style: secondaryTextStyle(color: Colors.red,size: 12))
                       ],
                     ).expand(),
                     12.width,
                     if (widget.item.deliveryPoint!.contactNumber != null)
-                      Image.asset('assets/icons/ic_call.png', width: 24, height: 24).onTap(() {
+                      Icon(Ionicons.ios_call_outline, size: 20, color: colorPrimary).onTap(() {
                         commonLaunchUrl('tel:${widget.item.deliveryPoint!.contactNumber}');
                       }),
                   ],
                 ),
               ],
             ),
+            if (widget.item.status != ORDER_CANCELLED || (widget.item.status == ORDER_DEPARTED || widget.item.status == ORDER_ACCEPTED)) 16.height,
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 if (widget.item.status != ORDER_CANCELLED)
-                  Row(
-                    children: [
-                      Text(language.invoice, style: primaryTextStyle(color: colorPrimary)),
-                      4.width,
-                      Icon(Icons.download_rounded, color: colorPrimary),
-                    ],
-                  ).onTap(() {
-                    generateInvoiceCall(widget.item);
-                  }),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12,vertical: 4),
+                    decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary),
+                    child: Row(
+                      children: [
+                        Text(language.invoice, style: secondaryTextStyle(color: Colors.white)),
+                        4.width,
+                        Icon(Ionicons.md_download_outline, color: Colors.white,size: 18).paddingBottom(4),
+                      ],
+                    ).onTap(() {
+                      generateInvoiceCall(widget.item);
+                    }),
+                  ),
                 AppButton(
                   elevation: 0,
                   height: 35,
@@ -184,7 +198,7 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                   },
                 ).visible(widget.item.status == ORDER_DEPARTED || widget.item.status == ORDER_ACCEPTED),
               ],
-            ).paddingOnly(top: 16),
+            ),
           ],
         ),
       ),

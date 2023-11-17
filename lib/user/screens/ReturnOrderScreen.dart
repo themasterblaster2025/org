@@ -12,7 +12,7 @@ import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/DataProviders.dart';
 import '../../main/utils/Widgets.dart';
-import '../../user/components/PaymentScreen.dart';
+import 'PaymentScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';

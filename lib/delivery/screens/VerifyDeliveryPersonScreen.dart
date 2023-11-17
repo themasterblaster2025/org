@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:http/http.dart';
 import '../../main/components/BodyCornerWidget.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/DeliveryDocumentListModel.dart';
 import '../../main/models/DocumentListModel.dart';
 import '../../main/network/RestApis.dart';
@@ -176,137 +177,132 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(language.verifyDocument)),
-      body: BodyCornerWidget(
-        child: Observer(
-          builder: (_) => Stack(
-            children: [
-              SingleChildScrollView(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        if (documents.isNotEmpty)
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(defaultRadius), color: Colors.grey.withOpacity(0.15)),
-                            child: DropdownButtonFormField<DocumentData>(
-                              decoration: InputDecoration.collapsed(hintText: null),
-                              hint: Text(language.selectDocument, style: primaryTextStyle()),
-                              value: selectedDoc,
-                              dropdownColor: context.cardColor,
-                              items: documents.map((DocumentData e) {
-                                return DropdownMenuItem<DocumentData>(
-                                    value: e,
-                                    child: Text(
-                                      e.name! + '${e.isRequired == 1 ? '*' : ''}',
-                                      style: primaryTextStyle(),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ));
-                              }).toList(),
-                              onChanged: (DocumentData? value) async {
-                                selectedDoc = value;
-                                docId = value!.id!;
-                                setState(() {});
-                              },
-                            ),
-                          ).expand(),
-                        if (docId != 0)
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            margin: EdgeInsets.only(left: 16),
-                            decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary, borderRadius: BorderRadius.circular(defaultRadius)),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.add, color: Colors.white, size: 24),
-                                8.width,
-                                Text(language.addDocument, style: secondaryTextStyle(color: Colors.white)),
-                              ],
-                            ),
-                          ).onTap(() {
-                            getMultipleFile(docId);
-                          }).visible(!uploadedDocList!.contains(docId)),
-                      ],
-                    ),
-                    30.height,
-                    ListView.separated(
-                      shrinkWrap: true,
-                      itemCount: deliveryPersonDocuments.length,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(deliveryPersonDocuments[index].documentName!, style: boldTextStyle()).expand(),
-                                Text(
-                                  getStatus(deliveryPersonDocuments[index].isVerified.validate()),
-                                  style: primaryTextStyle(
-                                    color: getColor(deliveryPersonDocuments[index].isVerified.validate()),
-                                  ),
+    return CommonScaffoldComponent(
+      appBarTitle: language.verifyDocument,
+      body: Observer(
+        builder: (_) => Stack(
+          children: [
+            SingleChildScrollView(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      if (documents.isNotEmpty)
+                        Container(
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(defaultRadius), color: Colors.transparent),
+                          child: DropdownButtonFormField<DocumentData>(
+                            decoration: commonInputDecoration(),
+                            hint: Text(language.selectDocument, style: primaryTextStyle()),
+                            value: selectedDoc,
+                            dropdownColor: context.cardColor,
+                            items: documents.map((DocumentData e) {
+                              return DropdownMenuItem<DocumentData>(
+                                value: e,
+                                child: Text(e.name! + '${e.isRequired == 1 ? '*' : ''}', style: primaryTextStyle(), maxLines: 1, overflow: TextOverflow.ellipsis),
+                              );
+                            }).toList(),
+                            onChanged: (DocumentData? value) async {
+                              selectedDoc = value;
+                              docId = value!.id!;
+                              setState(() {});
+                            },
+                          ),
+                        ).expand(),
+                      if (docId != 0)
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          margin: EdgeInsets.only(left: 16),
+                          decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary, borderRadius: BorderRadius.circular(defaultRadius)),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.add, color: Colors.white, size: 24),
+                              8.width,
+                              Text(language.addDocument, style: secondaryTextStyle(color: Colors.white)),
+                            ],
+                          ),
+                        ).onTap(() {
+                          getMultipleFile(docId);
+                        }).visible(!uploadedDocList!.contains(docId)),
+                    ],
+                  ),
+                  30.height,
+                  ListView.separated(
+                    shrinkWrap: true,
+                    itemCount: deliveryPersonDocuments.length,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(deliveryPersonDocuments[index].documentName!, style: boldTextStyle()).expand(),
+                              Text(
+                                getStatus(deliveryPersonDocuments[index].isVerified.validate()),
+                                style: primaryTextStyle(
+                                  color: getColor(deliveryPersonDocuments[index].isVerified.validate()),
                                 ),
-                                8.width,
-                                Container(
-                                  height: 25,
-                                  width: 25,
-                                  decoration: BoxDecoration(
-                                    color: colorPrimary.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(4),
-                                    border: Border.all(color: colorPrimary),
-                                  ),
-                                  child: Icon(Icons.edit, color: colorPrimary, size: 14),
+                              ),
+                              8.width,
+                              Container(
+                                height: 25,
+                                width: 25,
+                                decoration: BoxDecoration(
+                                  color: colorPrimary.withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(color: colorPrimary),
+                                ),
+                                child: Icon(Icons.edit, color: colorPrimary, size: 14),
+                              ).onTap(() {
+                                getMultipleFile(deliveryPersonDocuments[index].documentId, updateId: deliveryPersonDocuments[index].id.validate());
+                              }).visible(deliveryPersonDocuments[index].isVerified != 1),
+                              8.width.visible(deliveryPersonDocuments[index].isVerified != 1),
+                              Container(
+                                height: 25,
+                                width: 25,
+                                decoration: BoxDecoration(
+                                  color: Colors.red.withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(color: Colors.red),
+                                ),
+                                child: Icon(Icons.delete, color: Colors.red, size: 14),
+                              ).onTap(() {
+                                deleteDoc(deliveryPersonDocuments[index].id);
+                              }).visible(deliveryPersonDocuments[index].isVerified != 1),
+                              Icon(Icons.verified_user, color: Colors.green).visible(deliveryPersonDocuments[index].isVerified == 1),
+                            ],
+                          ),
+                          12.height,
+                          deliveryPersonDocuments[index].deliveryManDocument!.contains('.pdf')
+                              ? Container(
+                                  padding: EdgeInsets.all(8),
+                                  decoration: boxDecorationWithRoundedCorners(backgroundColor: Colors.grey.withOpacity(0.2)),
+                                  child: Text(deliveryPersonDocuments[index].deliveryManDocument!.split('/').last, style: primaryTextStyle()),
                                 ).onTap(() {
-                                  getMultipleFile(deliveryPersonDocuments[index].documentId, updateId: deliveryPersonDocuments[index].id.validate());
-                                }).visible(deliveryPersonDocuments[index].isVerified != 1),
-                                8.width.visible(deliveryPersonDocuments[index].isVerified != 1),
-                                Container(
-                                  height: 25,
-                                  width: 25,
-                                  decoration: BoxDecoration(
-                                    color: Colors.red.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(4),
-                                    border: Border.all(color: Colors.red),
-                                  ),
-                                  child: Icon(Icons.delete, color: Colors.red, size: 14),
-                                ).onTap(() {
-                                  deleteDoc(deliveryPersonDocuments[index].id);
-                                }).visible(deliveryPersonDocuments[index].isVerified != 1),
-                                Icon(Icons.verified_user, color: Colors.green).visible(deliveryPersonDocuments[index].isVerified == 1),
-                              ],
-                            ),
-                            12.height,
-                            deliveryPersonDocuments[index].deliveryManDocument!.contains('.pdf')
-                                ? Container(
-                                    padding: EdgeInsets.all(8),
-                                    decoration: boxDecorationWithRoundedCorners(backgroundColor: Colors.grey.withOpacity(0.2)),
-                                    child: Text(deliveryPersonDocuments[index].deliveryManDocument!.split('/').last, style: primaryTextStyle()),
-                                  ).onTap(() {
-                                    commonLaunchUrl(deliveryPersonDocuments[index].deliveryManDocument.validate());
-                                  })
-                                : commonCachedNetworkImage(deliveryPersonDocuments[index].deliveryManDocument!, height: 200, width: context.width(), fit: BoxFit.cover).cornerRadiusWithClipRRect(8).onTap(() {
-                                    commonLaunchUrl(deliveryPersonDocuments[index].deliveryManDocument!.validate());
-                                  }),
-                          ],
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        return Divider(height: 30);
-                      },
-                    ),
-                  ],
-                ),
+                                  commonLaunchUrl(deliveryPersonDocuments[index].deliveryManDocument.validate());
+                                })
+                              : commonCachedNetworkImage(deliveryPersonDocuments[index].deliveryManDocument!, height: 200, width: context.width(), fit: BoxFit.cover)
+                                  .cornerRadiusWithClipRRect(8)
+                                  .onTap(() {
+                                  commonLaunchUrl(deliveryPersonDocuments[index].deliveryManDocument!.validate());
+                                }),
+                        ],
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return Divider(height: 30);
+                    },
+                  ),
+                ],
               ),
-              emptyWidget().visible(!appStore.isLoading && documents.isEmpty && deliveryPersonDocuments.isEmpty),
-              loaderWidget().center().visible(appStore.isLoading),
-            ],
-          ),
+            ),
+            emptyWidget().visible(!appStore.isLoading && documents.isEmpty && deliveryPersonDocuments.isEmpty),
+            loaderWidget().center().visible(appStore.isLoading),
+          ],
         ),
       ),
     );

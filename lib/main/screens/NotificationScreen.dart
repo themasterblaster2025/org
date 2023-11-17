@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import '../../main/models/NotificationModel.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Colors.dart';
@@ -7,6 +8,7 @@ import '../../main/utils/Common.dart';
 import '../../user/screens/OrderDetailScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 import '../../main.dart';
+import '../components/CommonScaffoldComponent.dart';
 import '../utils/Widgets.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -37,11 +39,11 @@ class NotificationScreenState extends State<NotificationScreen> {
         }
       }
     });
-    afterBuildCreated(() => appStore.setLoading(true));
+    appStore.setLoading(true);
   }
 
-  void init() async {
-    getNotification(page: currentPage).then((value) {
+  void init({Map? request}) async {
+    getNotification(page: currentPage,request: request).then((value) {
       appStore.setLoading(false);
       appStore.setAllUnreadCount(value.allUnreadCount.validate());
       mIsLastPage = value.notificationData!.length < currentPage;
@@ -63,34 +65,48 @@ class NotificationScreenState extends State<NotificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: commonAppBarWidget(language.notifications),
+    return CommonScaffoldComponent(
+      appBarTitle: language.notifications,
+      action: [
+        TextButton(
+            onPressed: () {
+              Map req = {
+                "type": "markas_read",
+              };
+              appStore.setLoading(true);
+
+              init(request: req);
+            },
+            child: Text('Mark All as read', style: secondaryTextStyle(color: Colors.white))).paddingRight(8)
+      ],
       body: Observer(builder: (context) {
         return Stack(
           children: [
             notificationData.isNotEmpty
-                ? ListView.separated(
+                ? ListView.builder(
                     controller: scrollController,
-                    padding: EdgeInsets.only(top: 8),
+                    padding: EdgeInsets.all(16),
                     itemCount: notificationData.length,
                     itemBuilder: (_, index) {
                       NotificationData data = notificationData[index];
                       return Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16,vertical: 12),
-                        color: data.readAt != null ? Colors.transparent : Colors.grey.withOpacity(0.2),
+                        margin: EdgeInsets.only(bottom: 8),
+                        decoration: boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(defaultRadius), backgroundColor: colorPrimary.withOpacity(0.08)),
+                        padding: EdgeInsets.all(12),
+                        // color: data.readAt != null ? Colors.transparent : Colors.grey.withOpacity(0.2),
                         child: Row(
                           children: [
                             Container(
-                              height: 44,
-                              width: 44,
+                              height: 32,
+                              width: 32,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: colorPrimary.withOpacity(0.15),
                               ),
-                              child: commonCachedNetworkImage(statusTypeIcon(type: data.data!.type), fit: BoxFit.fill,color: colorPrimary,width: 22, height:  22),
+                              child: commonCachedNetworkImage(statusTypeIcon(type: data.data!.type), fit: BoxFit.fill, color: colorPrimary, width: 18, height: 18),
                             ),
-                            16.width,
+                            8.width,
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -103,7 +119,12 @@ class NotificationScreenState extends State<NotificationScreen> {
                                   ],
                                 ),
                                 6.height,
-                                Text('${data.data!.message}', style: primaryTextStyle(size: 14)),
+                                Row(
+                                  children: [
+                                    Text('${data.data!.message}', style: primaryTextStyle(size: 14)).expand(),
+                                    if (data.readAt.isEmptyOrNull) Icon(Entypo.dot_single, color: colorPrimary),
+                                  ],
+                                ),
                               ],
                             ).expand(),
                           ],
@@ -115,9 +136,6 @@ class NotificationScreenState extends State<NotificationScreen> {
                           }
                         }),
                       );
-                    },
-                    separatorBuilder: (context, index) {
-                      return Divider(height: 0,);
                     },
                   )
                 : !appStore.isLoading

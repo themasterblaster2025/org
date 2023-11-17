@@ -7,6 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import '../../main/components/BodyCornerWidget.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/OrderListModel.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
@@ -80,7 +81,9 @@ class TrackingScreenState extends State<TrackingScreen> {
         markers.add(
           Marker(
             markerId: MarkerId('Destination'),
-            position: e.status == ORDER_ACCEPTED ? LatLng(e.pickupPoint!.latitude.toDouble(), e.pickupPoint!.longitude.toDouble()) : LatLng(e.deliveryPoint!.latitude.toDouble(), e.deliveryPoint!.longitude.toDouble()),
+            position: e.status == ORDER_ACCEPTED
+                ? LatLng(e.pickupPoint!.latitude.toDouble(), e.pickupPoint!.longitude.toDouble())
+                : LatLng(e.deliveryPoint!.latitude.toDouble(), e.deliveryPoint!.longitude.toDouble()),
             infoWindow: InfoWindow(title: e.status == ORDER_ACCEPTED ? e.pickupPoint!.address : e.deliveryPoint!.address),
             icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
           ),
@@ -93,7 +96,6 @@ class TrackingScreenState extends State<TrackingScreen> {
       }
       setState(() {});
     });
-
 
     orderLatLong = LatLng(widget.latLng!.latitude, widget.latLng!.longitude);
   }
@@ -138,100 +140,96 @@ class TrackingScreenState extends State<TrackingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(language.trackingOrder),
-      ),
-      body: BodyCornerWidget(
-        child: sourceLocation != null
-            ? Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  GoogleMap(
-                    markers: markers.map((e) => e).toSet(),
-                    polylines: _polylines,
-                    mapType: MapType.normal,
-                    initialCameraPosition: CameraPosition(
-                      target: sourceLocation!,
-                      zoom: cameraZoom,
-                      tilt: cameraTilt,
-                      bearing: cameraBearing,
-                    ),
-                    onMapCreated: onMapCreated,
+    return CommonScaffoldComponent(
+      appBarTitle: language.trackingOrder,
+      body: sourceLocation != null
+          ? Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                GoogleMap(
+                  markers: markers.map((e) => e).toSet(),
+                  polylines: _polylines,
+                  mapType: MapType.normal,
+                  initialCameraPosition: CameraPosition(
+                    target: sourceLocation!,
+                    zoom: cameraZoom,
+                    tilt: cameraTilt,
+                    bearing: cameraBearing,
                   ),
-                  Container(
-                    height: 200,
-                    color: context.scaffoldBackgroundColor,
-                    child: ListView.separated(
-                        padding: EdgeInsets.symmetric(vertical: 16),
-                        shrinkWrap: true,
-                        itemCount: widget.order.length,
-                        itemBuilder: (_, index) {
-                          OrderData data = widget.order[index];
-                          return Container(
-                            color: orderId == data.id ? colorPrimary.withOpacity(0.1) : Colors.transparent,
-                            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text('${language.order}# ${data.id}', style: boldTextStyle()),
-                                    Row(
-                                      children: [
-                                        Container(
-                                          child: Image.asset('assets/icons/ic_google_map.png', height: 30, width: 30),
-                                          decoration: boxDecorationRoundedWithShadow(defaultRadius.toInt()),
-                                          padding: EdgeInsets.all(2),
-                                        ).onTap(
-                                          () {
-                                            if (data.status == ORDER_ACCEPTED) {
-                                              MapsLauncher.launchCoordinates(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble());
-                                            } else {
-                                              MapsLauncher.launchCoordinates(data.deliveryPoint!.latitude.toDouble(), data.deliveryPoint!.longitude.toDouble());
-                                            }
-                                          },
-                                        ),
-                                        16.width,
-                                        AppButton(
-                                          padding: EdgeInsets.zero,
-                                          color: colorPrimary,
-                                          text: language.track,
-                                          textStyle: primaryTextStyle(color: Colors.white),
-                                          onTap: () async {
-                                            orderId = data.id;
-                                            orderLatLong = data.status == ORDER_ACCEPTED
-                                                ? LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble())
-                                                : LatLng(data.deliveryPoint!.latitude.toDouble(), data.deliveryPoint!.longitude.toDouble());
-                                            await setPolyLines(orderLat: orderLatLong);
-                                            setState(() {});
-                                          },
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Icon(Icons.location_on, color: colorPrimary),
-                                    Text(data.status == ORDER_ACCEPTED ? data.pickupPoint!.address.validate() : data.deliveryPoint!.address.validate(), style: primaryTextStyle()).expand(),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                        separatorBuilder: (_, index) {
-                          return Divider();
-                        }),
-                  ),
-                ],
-              )
-            : loaderWidget(),
-      ),
+                  onMapCreated: onMapCreated,
+                ),
+                Container(
+                  height: 200,
+                  color: context.scaffoldBackgroundColor,
+                  child: ListView.separated(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      shrinkWrap: true,
+                      itemCount: widget.order.length,
+                      itemBuilder: (_, index) {
+                        OrderData data = widget.order[index];
+                        return Container(
+                          color: orderId == data.id ? colorPrimary.withOpacity(0.1) : Colors.transparent,
+                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text('${language.order}# ${data.id}', style: boldTextStyle()),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        child: Image.asset('assets/icons/ic_google_map.png', height: 30, width: 30),
+                                        decoration: boxDecorationRoundedWithShadow(defaultRadius.toInt()),
+                                        padding: EdgeInsets.all(2),
+                                      ).onTap(
+                                        () {
+                                          if (data.status == ORDER_ACCEPTED) {
+                                            MapsLauncher.launchCoordinates(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble());
+                                          } else {
+                                            MapsLauncher.launchCoordinates(data.deliveryPoint!.latitude.toDouble(), data.deliveryPoint!.longitude.toDouble());
+                                          }
+                                        },
+                                      ),
+                                      16.width,
+                                      AppButton(
+                                        padding: EdgeInsets.zero,
+                                        color: colorPrimary,
+                                        text: language.track,
+                                        textStyle: primaryTextStyle(color: Colors.white),
+                                        onTap: () async {
+                                          orderId = data.id;
+                                          orderLatLong = data.status == ORDER_ACCEPTED
+                                              ? LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble())
+                                              : LatLng(data.deliveryPoint!.latitude.toDouble(), data.deliveryPoint!.longitude.toDouble());
+                                          await setPolyLines(orderLat: orderLatLong);
+                                          setState(() {});
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Icon(Icons.location_on, color: colorPrimary),
+                                  Text(data.status == ORDER_ACCEPTED ? data.pickupPoint!.address.validate() : data.deliveryPoint!.address.validate(), style: primaryTextStyle()).expand(),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      separatorBuilder: (_, index) {
+                        return Divider();
+                      }),
+                ),
+              ],
+            )
+          : loaderWidget(),
     );
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/components/theme_selection_dialog.dart';
 import '../../main/screens/BankDetailScreen.dart';
 import '../../main.dart';
@@ -13,7 +15,6 @@ import 'package:nb_utils/nb_utils.dart';
 import '../../main/screens/AboutUsScreen.dart';
 import '../../main/screens/ChangePasswordScreen.dart';
 import '../../main/screens/EditProfileScreen.dart';
-import '../../main/screens/ThemeScreen.dart';
 import '../../main/components/UserCitySelectScreen.dart';
 import '../../user/screens/DeleteAccountScreen.dart';
 import '../../user/screens/WalletScreen.dart';
@@ -46,92 +47,142 @@ class DProfileFragmentState extends State<DProfileFragment> {
     if (mounted) super.setState(fn);
   }
 
+  Widget accountSettingItemWidget(String? img, String title, Function() onTap, {bool isLast = false, IconData? suffixIcon}) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ListTile(
+            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+            minLeadingWidth: 14,
+            dense: true,
+            leading: commonCachedNetworkImage(img, height: 18, fit: BoxFit.fill, width: 18, color: textPrimaryColorGlobal),
+            title: Text(title, style: primaryTextStyle()),
+            trailing: suffixIcon != null ? Icon(suffixIcon, color: Colors.green) : Icon(Icons.navigate_next, color: appStore.isDarkMode ? Colors.white : Colors.grey),
+            onTap: onTap),
+        if (isLast) Divider(height: 0)
+      ],
+    );
+  }
+
+  Widget mTitle(String value) {
+    return Text(value.toUpperCase(), style: boldTextStyle(size: 12, letterSpacing: 0.7, color: textSecondaryColorGlobal)).paddingOnly(left: 16, right: 16, top: 24, bottom: 4);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(language.profile)),
+    return CommonScaffoldComponent(
+      appBarTitle: language.profile,
       body: Observer(
-        builder: (_) => BodyCornerWidget(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              children: [
-                commonCachedNetworkImage(appStore.userProfile.validate(), height: 90, width: 90, fit: BoxFit.cover, alignment: Alignment.center).cornerRadiusWithClipRRect(50),
-                12.height,
-                Text(getStringAsync(NAME).validate(), style: boldTextStyle(size: 20)),
-                6.height,
-                Text(appStore.userEmail, style: secondaryTextStyle(size: 16)),
-                16.height,
-                ListView(
-                  padding: EdgeInsets.zero,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  children: [
-                    settingItemWidget(Icons.person_outline, language.editProfile, () {
-                      EditProfileScreen().launch(context);
-                    }),
-                    settingItemWidget(Icons.assignment_outlined, language.verifyDocument, () {
-                      VerifyDeliveryPersonScreen().launch(context);
-                    }, suffixIcon: getBoolAsync(IS_VERIFIED_DELIVERY_MAN) ? Icons.verified_user : null),
-                    settingItemWidget(Icons.add_card_outlined, language.earningHistory, () {
-                      EarningHistoryScreen().launch(context);
-                    }),
-                    settingItemWidget(Icons.wallet, language.wallet, () {
-                      WalletScreen().launch(context);
-                    }),
-                    settingItemWidget(Icons.credit_card, language.bankDetails, () {
-                      BankDetailScreen().launch(context);
-                    }),
-                    settingItemWidget(Icons.lock_outline, language.changePassword, () {
-                      ChangePasswordScreen().launch(context);
-                    }),
-                    settingItemWidget(Icons.location_on_outlined, language.changeLocation, () {
-                      UserCitySelectScreen(isBack: true).launch(context);
-                    }),
-                    settingItemWidget(Icons.language, language.language, () {
-                      LanguageScreen().launch(context);
-                    }),
-                    settingItemWidget(Icons.wb_sunny_outlined, language.theme, () async {
-                     // ThemeScreen().launch(context);
-                      await showInDialog(context, shape: RoundedRectangleBorder(borderRadius: radius()),
-                          builder: (_) => ThemeSelectionDialog(), contentPadding: EdgeInsets.zero);
-                    }),
-                    settingItemWidget(Icons.assignment_outlined, language.privacyPolicy, () {
-                      commonLaunchUrl(mPrivacyPolicy);
-                    }),
-                    settingItemWidget(Icons.help_outline, language.helpAndSupport, () {
-                      commonLaunchUrl(mHelpAndSupport);
-                    }),
-                    settingItemWidget(Icons.assignment_outlined, language.termAndCondition, () {
-                      commonLaunchUrl(mTermAndCondition);
-                    }),
-                    settingItemWidget(Icons.info_outline, language.aboutUs, () {
-                      AboutUsScreen().launch(context);
-                    }),
-                    settingItemWidget(Icons.delete_forever, language.deleteAccount, () {
-                      DeleteAccountScreen().launch(context);
-                    }),
-                    settingItemWidget(
-                      Icons.logout,
-                      language.logout,
-                      () async {
-                        await showConfirmDialogCustom(
-                          context,
-                          primaryColor: colorPrimary,
-                          title: language.logoutConfirmationMsg,
-                          positiveText: language.yes,
-                          negativeText: language.no,
-                          onAccept: (c) {
-                            logout(context);
-                          },
-                        );
+        builder: (_) => SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Stack(
+                    alignment: Alignment.bottomRight,
+                    children: [
+                      Container(
+                          decoration: boxDecorationWithRoundedCorners(boxShape: BoxShape.circle, border: Border.all(width: 2, color: colorPrimary)),
+                          child: commonCachedNetworkImage(appStore.userProfile.validate(), height: 65, width: 65, fit: BoxFit.cover, alignment: Alignment.center).cornerRadiusWithClipRRect(50)),
+                      Container(
+                        decoration: boxDecorationWithRoundedCorners(boxShape: BoxShape.circle, border: Border.all(width: 1, color: white), backgroundColor: colorPrimary),
+                        padding: EdgeInsets.all(4),
+                        child: commonCachedNetworkImage('https://cdn-icons-png.flaticon.com/128/3917/3917376.png', color: white, height: 14, width: 14),
+                      )
+                    ],
+                  ),
+                  10.width,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(getStringAsync(NAME).validate(), style: boldTextStyle(size: 20)),
+                      6.height,
+                      Text(appStore.userEmail.validate(), style: secondaryTextStyle(size: 16)),
+                    ],
+                  )
+                ],
+              ).onTap(() {
+                EditProfileScreen().launch(context);
+              }).paddingOnly(top: 12, right: 12, left: 12),
+              ListView(
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                children: [
+                  ///TODO
+                  mTitle('Orders, Wallet and more'),
+                  accountSettingItemWidget("https://cdn-icons-png.flaticon.com/128/7928/7928322.png", language.earningHistory, () {
+                    EarningHistoryScreen().launch(context);
+                  }),
+                  accountSettingItemWidget("https://cdn-icons-png.flaticon.com/128/7653/7653271.png", language.wallet, () {
+                    WalletScreen().launch(context);
+                  }),
+                  accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3914/3914398.png', language.bankDetails, () {
+                    BankDetailScreen().launch(context);
+                  }, isLast: true),
+
+                  mTitle('Account'),
+                  accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/11271/11271916.png', language.verifyDocument, () {
+                    VerifyDeliveryPersonScreen().launch(context);
+                  }, suffixIcon: getBoolAsync(IS_VERIFIED_DELIVERY_MAN) ? Icons.verified_user : null),
+                  accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3917/3917591.png', language.changePassword, () {
+                    ChangePasswordScreen().launch(context);
+                  }),
+                  accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3917/3917538.png', language.language, () {
+                    LanguageScreen().launch(context);
+                  }),
+                  accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/6853/6853936.png', language.theme, () async {
+                    await showInDialog(context, shape: RoundedRectangleBorder(borderRadius: radius()), builder: (_) => ThemeSelectionDialog(), contentPadding: EdgeInsets.zero);
+                  }),
+                  accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3917/3917378.png', language.deleteAccount, () async {
+                    DeleteAccountScreen().launch(context);
+                  }, isLast: true),
+
+                  mTitle('General'),
+                  accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3914/3914394.png', language.privacyPolicy, () {
+                    commonLaunchUrl(mPrivacyPolicy);
+                  }),
+                  accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3916/3916699.png', language.helpAndSupport, () {
+                    commonLaunchUrl(mHelpAndSupport);
+                  }),
+                  accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3914/3914394.png', language.termAndCondition, () {
+                    commonLaunchUrl(mTermAndCondition);
+                  }),
+                  accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3916/3916699.png', language.aboutUs, () {
+                    AboutUsScreen().launch(context);
+                  }, isLast: false),
+
+                  Container(
+                    decoration: boxDecorationWithRoundedCorners(border: Border.all(color: colorPrimary, width: 1), backgroundColor: colorPrimaryLight),
+                    padding: EdgeInsets.all(16),
+                    width: context.width(),
+                    child: Text(language.logout, style: boldTextStyle(size: 18, color: colorPrimary), textAlign: TextAlign.center),
+                  ).onTap(() async {
+                    await showConfirmDialogCustom(
+                      context,
+                      primaryColor: colorPrimary,
+                      title: language.logoutConfirmationMsg,
+                      positiveText: language.yes,
+                      negativeText: language.no,
+                      onAccept: (c) {
+                        logout(context);
                       },
-                      isLast: true,
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                    );
+                  }).paddingAll(16),
+
+                  ///TODO
+                  FutureBuilder<PackageInfo>(
+                    future: PackageInfo.fromPlatform(),
+                    builder: (_, snap) {
+                      if (snap.hasData) {
+                        return Text('Version ${snap.data!.version.validate()}', style: secondaryTextStyle()).center();
+                      }
+                      return SizedBox();
+                    },
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
