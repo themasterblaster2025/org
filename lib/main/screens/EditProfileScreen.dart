@@ -14,6 +14,8 @@ import '../../main/utils/Constants.dart';
 import '../../main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import '../utils/Images.dart';
+
 class EditProfileScreen extends StatefulWidget {
   static String tag = '/EditProfileScreen';
 
@@ -66,7 +68,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
       if (appStore.userProfile.isNotEmpty) {
         return commonCachedNetworkImage(appStore.userProfile.validate(), fit: BoxFit.cover, height: 100, width: 100).cornerRadiusWithClipRRect(100).center();
       } else {
-        return commonCachedNetworkImage('assets/profile.png', height: 90, width: 90).cornerRadiusWithClipRRect(50).paddingOnly(right: 4, bottom: 4).center();
+        return commonCachedNetworkImage(ic_profile, height: 90, width: 90).cornerRadiusWithClipRRect(50).paddingOnly(right: 4, bottom: 4).center();
       }
     }
   }

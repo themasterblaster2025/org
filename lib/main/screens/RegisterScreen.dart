@@ -12,7 +12,7 @@ import 'package:nb_utils/nb_utils.dart';
 import '../../main.dart';
 import '../components/CommonScaffoldComponent.dart';
 import '../network/RestApis.dart';
-import '../services/AuthSertvices.dart';
+import '../services/AuthServices.dart';
 
 class RegisterScreen extends StatefulWidget {
   final String? userType;
@@ -42,16 +42,6 @@ class RegisterScreenState extends State<RegisterScreen> {
   FocusNode passFocus = FocusNode();
 
   bool isAcceptedTc = false;
-
-  @override
-  void initState() {
-    super.initState();
-    init();
-  }
-
-  Future<void> init() async {
-    log(widget.userType);
-  }
 
   @override
   void setState(fn) {

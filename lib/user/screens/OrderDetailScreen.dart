@@ -364,7 +364,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     8.height,
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [Text(language.vehicle_name, style: secondaryTextStyle()), Text('${orderData!.vehicleData!.title.validate()}', style: primaryTextStyle())],
+                                      children: [Text(language.vehicleName, style: secondaryTextStyle()), Text('${orderData!.vehicleData!.title.validate()}', style: primaryTextStyle())],
                                     ),
                                   ],
                                 ),

@@ -15,7 +15,7 @@ import '../../main.dart';
 import '../../user/screens/DashboardScreen.dart';
 import '../components/UserCitySelectScreen.dart';
 import '../models/CityListModel.dart';
-import '../services/AuthSertvices.dart';
+import '../services/AuthServices.dart';
 import 'VerificationScreen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -46,7 +46,6 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> init() async {
-    // setStatusBarColor(appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary, statusBarIconBrightness: Brightness.light);
     if (getStringAsync(PLAYER_ID).isEmpty) {
       await saveOneSignalPlayerId().then((value) {
         //
@@ -236,8 +235,7 @@ class LoginScreenState extends State<LoginScreen> {
                       ),
                       10.width,
                       RichText(
-                        text: TextSpan(
-                            children: [
+                        text: TextSpan(children: [
                           TextSpan(text: '${language.iAgreeToThe} ', style: secondaryTextStyle()),
                           TextSpan(
                             text: language.termOfService,

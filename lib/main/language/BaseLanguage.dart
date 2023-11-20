@@ -23,11 +23,11 @@ abstract class BaseLanguage {
 
   String get from;
 
-  String get applyFilter;
-
   String get to;
 
   String get toDateValidationMsg;
+
+  String get applyFilter;
 
   String get payment;
 
@@ -46,10 +46,6 @@ abstract class BaseLanguage {
   String get logoutConfirmationMsg;
 
   String get yes;
-
-  String get pickedAt;
-
-  String get deliveredAt;
 
   String get trackOrder;
 
@@ -78,10 +74,6 @@ abstract class BaseLanguage {
   String get deliveryInformation;
 
   String get packageInformation;
-
-  String get pickup;
-
-  String get delivery;
 
   String get deliveryCharge;
 
@@ -115,10 +107,6 @@ abstract class BaseLanguage {
 
   String get draftOrder;
 
-  String get orderDetails;
-
-  String get distance;
-
   String get parcelDetails;
 
   String get aboutDeliveryMan;
@@ -143,8 +131,6 @@ abstract class BaseLanguage {
 
   String get saveChanges;
 
-  String get profileUpdateMsg;
-
   String get editProfile;
 
   String get notChangeEmail;
@@ -161,39 +147,17 @@ abstract class BaseLanguage {
 
   String get userNotApproveMsg;
 
-  String get signInAccount;
-
-  String get signInWithYourCredential;
-
   String get password;
 
   String get forgotPasswordQue;
 
   String get signIn;
 
-  String get or;
-
-  String get continueWithGoogle;
-
   String get doNotHaveAccount;
 
   String get signUp;
 
   String get name;
-
-  String get notification;
-
-  String get selectUsertypeMsg;
-
-  String get createAnAccount;
-
-  String get signUpWithYourCredential;
-
-  String get userType;
-
-  String get client;
-
-  String get deliveryMan;
 
   String get alreadyHaveAnAccount;
 
@@ -210,8 +174,6 @@ abstract class BaseLanguage {
   String get getStarted;
 
   String get profile;
-
-  String get trackOrderLocation;
 
   String get track;
 
@@ -239,11 +201,7 @@ abstract class BaseLanguage {
 
   String get pickupDatetime;
 
-  String get hour;
-
   String get deliveryDatetime;
-
-  String get pickupTimeSignature;
 
   String get save;
 
@@ -253,21 +211,9 @@ abstract class BaseLanguage {
 
   String get reason;
 
-  String get pickupDelivery;
-
-  String get selectPickupTimeMsg;
-
   String get selectDeliveryTimeMsg;
 
-  String get selectPickupSignMsg;
-
-  String get selectDeliverySignMsg;
-
-  String get selectReasonMsg;
-
   String get orderCancelledSuccessfully;
-
-  String get collectPaymentConfirmationMsg;
 
   String get trackingOrder;
 
@@ -307,8 +253,6 @@ abstract class BaseLanguage {
 
   String get logout;
 
-  String get changeLocation;
-
   String get selectCity;
 
   String get next;
@@ -345,10 +289,6 @@ abstract class BaseLanguage {
 
   String get orderCancelConfirmation;
 
-  String get id;
-
-  String get contactNumberValidation;
-
   String get rememberMe;
 
   String get becomeADeliveryBoy;
@@ -358,8 +298,6 @@ abstract class BaseLanguage {
   String get no;
 
   String get confirmPickup;
-
-  String get version;
 
   String get contactUs;
 
@@ -375,8 +313,6 @@ abstract class BaseLanguage {
 
   String get notifications;
 
-  String get contactLength;
-
   String get pickupLocation;
 
   String get deliveryLocation;
@@ -386,8 +322,6 @@ abstract class BaseLanguage {
   String get paymentType;
 
   String get orderId;
-
-  String get createdAt;
 
   String get viewHistory;
 
@@ -445,10 +379,6 @@ abstract class BaseLanguage {
 
   String get deliveryDescription;
 
-  String get pickupContactNumber;
-
-  String get pickupDescription;
-
   String get success;
 
   String get paypal;
@@ -478,8 +408,6 @@ abstract class BaseLanguage {
   String get resend;
 
   String get numberOfParcels;
-
-  String get verified;
 
   String get invoice;
 
@@ -627,10 +555,6 @@ abstract class BaseLanguage {
 
   String get add;
 
-  String get moneyDeposited;
-
-  String get moneyDebited;
-
   String get bankNotFound;
 
   String get internetIsConnected;
@@ -673,34 +597,11 @@ abstract class BaseLanguage {
 
   String get accepted;
 
-  //TODO
   String get vehicle;
 
-  String get add_vehicle;
+  String get selectVehicle;
 
-  String get update_vehicle;
-
-  String get vehicle_size;
-
-  String get vehicle_capacity;
-
-  String get vehicle_image;
-
-  String get select_vehicle;
-
-  String get enable_vehicle;
-
-  String get disable_vehicle;
-
-  String get enable_vehicle_msg;
-
-  String get disable_vehicle_msg;
-
-  String get delete_vehicle;
-
-  String get do_you_want_to_delete_this_vehicle;
-
-  String get vehicle_name;
+  String get vehicleName;
 
   String get bankName;
 
@@ -724,7 +625,31 @@ abstract class BaseLanguage {
 
   String get verification;
 
-  String get phoneNumberAlreadyVerified;
+  String get ordersWalletMore;
 
-  String get verifyPhoneNumber;
+  String get general;
+
+  String get version;
+
+  String get confirmationCode;
+
+  String get confirmationCodeSent;
+
+  String get getOTP;
+
+  String get weSend;
+
+  String get oneTimePassword;
+
+  String get on;
+
+  String get phoneNumberVerification;
+
+  String get location;
+
+  String get hey;
+
+  String get markAllRead;
+
+  String get confirmAccountDeletion;
 }

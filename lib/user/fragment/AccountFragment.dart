@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import '../../main/components/theme_selection_dialog.dart';
+import '../../main/utils/Images.dart';
 import '../../user/screens/WalletScreen.dart';
 import '../../main.dart';
 import '../../main/network/RestApis.dart';
@@ -27,15 +28,6 @@ class AccountFragment extends StatefulWidget {
 }
 
 class AccountFragmentState extends State<AccountFragment> {
-  @override
-  void initState() {
-    super.initState();
-    init();
-  }
-
-  Future<void> init() async {
-    //
-  }
 
   @override
   void setState(fn) {
@@ -50,7 +42,7 @@ class AccountFragmentState extends State<AccountFragment> {
             contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 2),
             minLeadingWidth: 14,
             dense: true,
-            leading: commonCachedNetworkImage(img, height: 18, fit: BoxFit.fill, width: 18, color: textPrimaryColorGlobal),
+            leading: Image.asset(img.validate(), height: 18, fit: BoxFit.fill, width: 18, color: textPrimaryColorGlobal),
             title: Text(title, style: primaryTextStyle()),
             trailing: suffixIcon != null ? Icon(suffixIcon, color: Colors.green) : Icon(Icons.navigate_next, color: appStore.isDarkMode ? Colors.white : Colors.grey),
             onTap: onTap),
@@ -82,7 +74,7 @@ class AccountFragmentState extends State<AccountFragment> {
                     Container(
                       decoration: boxDecorationWithRoundedCorners(boxShape: BoxShape.circle, border: Border.all(width: 1, color: white), backgroundColor: colorPrimary),
                       padding: EdgeInsets.all(4),
-                      child: commonCachedNetworkImage('https://cdn-icons-png.flaticon.com/128/3917/3917376.png', color: white, height: 14, width: 14),
+                      child: Image.asset(ic_edit, color: white, height: 14, width: 14),
                     )
                   ],
                 ),
@@ -100,45 +92,41 @@ class AccountFragmentState extends State<AccountFragment> {
               EditProfileScreen().launch(context);
             }),
 
-            ///TODO
-            mTitle('Orders, Wallet and more'),
-            accountSettingItemWidget("https://cdn-icons-png.flaticon.com/128/5070/5070394.png", language.drafts, () {
+            mTitle(language.ordersWalletMore),
+            accountSettingItemWidget(ic_draft, language.drafts, () {
               DraftOrderListScreen().launch(context);
             }),
-            accountSettingItemWidget("https://cdn-icons-png.flaticon.com/128/7653/7653271.png", language.wallet, () {
+            accountSettingItemWidget(ic_wallet, language.wallet, () {
               WalletScreen().launch(context);
             }),
-            accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3914/3914398.png', language.bankDetails, () {
+            accountSettingItemWidget(ic_bank_detail, language.bankDetails, () {
               BankDetailScreen().launch(context);
             }, isLast: true),
 
-            ///TODO
-            mTitle('Account'),
-            accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3917/3917591.png', language.changePassword, () {
+            mTitle(language.account),
+            accountSettingItemWidget(ic_change_password, language.changePassword, () {
               ChangePasswordScreen().launch(context);
             }),
-            accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3917/3917538.png', language.language, () {
+            accountSettingItemWidget(ic_languages, language.language, () {
               LanguageScreen().launch(context);
             }),
-            accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/6853/6853936.png', language.theme, () async {
+            accountSettingItemWidget(ic_dark_mode, language.theme, () async {
               await showInDialog(context, shape: RoundedRectangleBorder(borderRadius: radius()), builder: (_) => ThemeSelectionDialog(), contentPadding: EdgeInsets.zero);
             }),
-            accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3917/3917378.png', language.deleteAccount, () async {
+            accountSettingItemWidget(ic_delete_account, language.deleteAccount, () async {
               DeleteAccountScreen().launch(context);
             }, isLast: true),
-
-            ///TODO
-            mTitle('General'),
-            accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3914/3914394.png', language.privacyPolicy, () {
+            mTitle(language.general),
+            accountSettingItemWidget(ic_document, language.privacyPolicy, () {
               commonLaunchUrl(mPrivacyPolicy);
             }),
-            accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3916/3916699.png', language.helpAndSupport, () {
+            accountSettingItemWidget(ic_information, language.helpAndSupport, () {
               commonLaunchUrl(mHelpAndSupport);
             }),
-            accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3914/3914394.png', language.termAndCondition, () {
+            accountSettingItemWidget(ic_document, language.termAndCondition, () {
               commonLaunchUrl(mTermAndCondition);
             }),
-            accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3916/3916699.png', language.aboutUs, () {
+            accountSettingItemWidget(ic_information, language.aboutUs, () {
               AboutUsScreen().launch(context);
             }, isLast: false),
             Container(
@@ -159,12 +147,11 @@ class AccountFragmentState extends State<AccountFragment> {
               );
             }).paddingAll(16),
 
-            ///TODO
             FutureBuilder<PackageInfo>(
               future: PackageInfo.fromPlatform(),
               builder: (_, snap) {
                 if (snap.hasData) {
-                  return Text('Version ${snap.data!.version.validate()}', style: secondaryTextStyle()).center();
+                  return Text('${language.version} ${snap.data!.version.validate()}', style: secondaryTextStyle()).center();
                 }
                 return SizedBox();
               },

@@ -82,7 +82,10 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(language.cancelOrder, style: boldTextStyle(size: 18)),
-              Icon(Ionicons.close_circle_outline,color:colorPrimary,).onTap(() {
+              Icon(
+                Ionicons.close_circle_outline,
+                color: colorPrimary,
+              ).onTap(() {
                 finish(context);
               }),
             ],
@@ -92,13 +95,11 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
           8.height,
           DropdownButtonFormField<String>(
             value: reason,
-            isExpanded: true,isDense: true,
+            isExpanded: true,
+            isDense: true,
             decoration: commonInputDecoration(),
             items: (getStringAsync(USER_TYPE) == CLIENT ? userCancelOrderReasonList : deliveryBoyCancelOrderReasonList).map((e) {
-              return DropdownMenuItem(
-                value: e,
-                child: Text(e),
-              );
+              return DropdownMenuItem(value: e, child: Text(e));
             }).toList(),
             onChanged: (String? val) {
               reason = val;
@@ -126,7 +127,7 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
             if (formKey.currentState!.validate()) {
               updateOrderApiCall();
             }
-          },width: context.width())
+          }, width: context.width())
         ],
       ),
     );

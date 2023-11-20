@@ -5,6 +5,7 @@ import '../../main/components/BodyCornerWidget.dart';
 import '../../main/utils/Colors.dart';
 import 'package:nb_utils/nb_utils.dart';
 import '../../main.dart';
+import '../components/CommonScaffoldComponent.dart';
 import '../models/LoginResponse.dart';
 import '../network/NetworkUtils.dart';
 import '../network/RestApis.dart';
@@ -100,72 +101,70 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Observer(
-        builder: (context) {
-          return Scaffold(
-            appBar: commonAppBarWidget(language.bankDetails),
-            body: Stack(
-              children: [
-                SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-                  child: Form(
-                    key: formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        8.height,
-                        Text(language.bankName, style: primaryTextStyle()),
-                        8.height,
-                        AppTextField(
-                          isValidationRequired: true,
-                          controller: bankNameCon,
-                          textFieldType: TextFieldType.NAME,
-                          decoration: commonInputDecoration(hintText: language.bankName),
-                        ),
-                        16.height,
-                        Text(language.accountNumber, style: primaryTextStyle()),
-                        8.height,
-                        AppTextField(
-                          isValidationRequired: true,
-                          controller: accNumberCon,
-                          textFieldType: TextFieldType.PHONE,
-                          decoration: commonInputDecoration(hintText: language.accountNumber),
-                        ),
-                        16.height,
-                        Text(language.nameAsPerBank, style: primaryTextStyle()),
-                        8.height,
-                        AppTextField(
-                          isValidationRequired: true,
-                          controller: nameCon,
-                          textFieldType: TextFieldType.NAME,
-                          decoration: commonInputDecoration(hintText: language.nameAsPerBank),
-                        ),
-                        16.height,
-                        Text(language.ifscCode, style: primaryTextStyle()),
-                        8.height,
-                        AppTextField(
-                          isValidationRequired: true,
-                          controller: ifscCCon,
-                          textFieldType: TextFieldType.NAME,
-                          decoration: commonInputDecoration(hintText: language.ifscCode),
-                        ),
-                        30.height,
-                      ],
+    return Observer(builder: (context) {
+      return CommonScaffoldComponent(
+        appBarTitle: language.bankDetails,
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Form(
+                key: formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    8.height,
+                    Text(language.bankName, style: primaryTextStyle()),
+                    8.height,
+                    AppTextField(
+                      isValidationRequired: true,
+                      controller: bankNameCon,
+                      textFieldType: TextFieldType.NAME,
+                      decoration: commonInputDecoration(hintText: language.bankName),
                     ),
-                  ),
+                    16.height,
+                    Text(language.accountNumber, style: primaryTextStyle()),
+                    8.height,
+                    AppTextField(
+                      isValidationRequired: true,
+                      controller: accNumberCon,
+                      textFieldType: TextFieldType.PHONE,
+                      decoration: commonInputDecoration(hintText: language.accountNumber),
+                    ),
+                    16.height,
+                    Text(language.nameAsPerBank, style: primaryTextStyle()),
+                    8.height,
+                    AppTextField(
+                      isValidationRequired: true,
+                      controller: nameCon,
+                      textFieldType: TextFieldType.NAME,
+                      decoration: commonInputDecoration(hintText: language.nameAsPerBank),
+                    ),
+                    16.height,
+                    Text(language.ifscCode, style: primaryTextStyle()),
+                    8.height,
+                    AppTextField(
+                      isValidationRequired: true,
+                      controller: ifscCCon,
+                      textFieldType: TextFieldType.NAME,
+                      decoration: commonInputDecoration(hintText: language.ifscCode),
+                    ),
+                    30.height,
+                  ],
                 ),
-                loaderWidget().visible(appStore.isLoading)
-              ],
+              ),
             ),
-            bottomNavigationBar: AppButton(
-                color: colorPrimary,
-                textColor: Colors.white,
-                text: language.save,
-                onTap: () {
-                  saveBankDetail();
-                }).paddingAll(16),
-          );
-        }
-    );
+            loaderWidget().visible(appStore.isLoading)
+          ],
+        ),
+        bottomNavigationBar: AppButton(
+            color: colorPrimary,
+            textColor: Colors.white,
+            text: language.save,
+            onTap: () {
+              saveBankDetail();
+            }).paddingAll(16),
+      );
+    });
   }
 }

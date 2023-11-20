@@ -7,6 +7,8 @@ import '../../main/utils/Common.dart';
 import '../../main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import '../components/CommonScaffoldComponent.dart';
+
 class ForgotPasswordScreen extends StatefulWidget {
   @override
   ForgotPasswordScreenState createState() => ForgotPasswordScreenState();
@@ -55,34 +57,31 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(language.forgotPassword)),
-      body: BodyCornerWidget(
-        child: Stack(
-          children: [
-            Form(
-              key: formKey,
-              child: SingleChildScrollView(
-                padding: EdgeInsets.only(left: 16, top: 30, right: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(language.email, style: primaryTextStyle()),
-                    8.height,
-                    AppTextField(
-                      controller: forgotEmailController,
-                      textFieldType: TextFieldType.EMAIL,
-                      decoration: commonInputDecoration(),
-                      errorThisFieldRequired: language.fieldRequiredMsg,
-                      errorInvalidEmail: language.emailInvalid,
-                    ),
-                  ],
-                ),
+    return CommonScaffoldComponent(appBarTitle:language.forgotPassword ,
+      body: Stack(
+        children: [
+          Form(
+            key: formKey,
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(left: 16, top: 30, right: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(language.email, style: primaryTextStyle()),
+                  8.height,
+                  AppTextField(
+                    controller: forgotEmailController,
+                    textFieldType: TextFieldType.EMAIL,
+                    decoration: commonInputDecoration(),
+                    errorThisFieldRequired: language.fieldRequiredMsg,
+                    errorInvalidEmail: language.emailInvalid,
+                  ),
+                ],
               ),
             ),
-            Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
-          ],
-        ),
+          ),
+          Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
+        ],
       ),
       bottomNavigationBar: commonButton(language.submit, () {
         if (formKey.currentState!.validate()) {

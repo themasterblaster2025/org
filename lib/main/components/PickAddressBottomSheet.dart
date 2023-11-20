@@ -18,15 +18,6 @@ class PickAddressBottomSheet extends StatefulWidget {
 }
 
 class PickAddressBottomSheetState extends State<PickAddressBottomSheet> {
-  @override
-  void initState() {
-    super.initState();
-    init();
-  }
-
-  void init() async {
-    //
-  }
 
   @override
   void setState(fn) {

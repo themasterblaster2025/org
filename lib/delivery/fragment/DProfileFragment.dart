@@ -5,7 +5,6 @@ import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/components/theme_selection_dialog.dart';
 import '../../main/screens/BankDetailScreen.dart';
 import '../../main.dart';
-import '../../main/components/BodyCornerWidget.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/screens/LanguageScreen.dart';
 import '../../main/utils/Colors.dart';
@@ -15,7 +14,7 @@ import 'package:nb_utils/nb_utils.dart';
 import '../../main/screens/AboutUsScreen.dart';
 import '../../main/screens/ChangePasswordScreen.dart';
 import '../../main/screens/EditProfileScreen.dart';
-import '../../main/components/UserCitySelectScreen.dart';
+import '../../main/utils/Images.dart';
 import '../../user/screens/DeleteAccountScreen.dart';
 import '../../user/screens/WalletScreen.dart';
 import '../screens/EarningHistoryScreen.dart';
@@ -52,10 +51,11 @@ class DProfileFragmentState extends State<DProfileFragment> {
       mainAxisSize: MainAxisSize.min,
       children: [
         ListTile(
+
             contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 2),
             minLeadingWidth: 14,
             dense: true,
-            leading: commonCachedNetworkImage(img, height: 18, fit: BoxFit.fill, width: 18, color: textPrimaryColorGlobal),
+            leading: Image.asset(img.validate(), height: 18, fit: BoxFit.fill, width: 18, color: textPrimaryColorGlobal),
             title: Text(title, style: primaryTextStyle()),
             trailing: suffixIcon != null ? Icon(suffixIcon, color: Colors.green) : Icon(Icons.navigate_next, color: appStore.isDarkMode ? Colors.white : Colors.grey),
             onTap: onTap),
@@ -87,7 +87,7 @@ class DProfileFragmentState extends State<DProfileFragment> {
                       Container(
                         decoration: boxDecorationWithRoundedCorners(boxShape: BoxShape.circle, border: Border.all(width: 1, color: white), backgroundColor: colorPrimary),
                         padding: EdgeInsets.all(4),
-                        child: commonCachedNetworkImage('https://cdn-icons-png.flaticon.com/128/3917/3917376.png', color: white, height: 14, width: 14),
+                        child: Image.asset(ic_edit, color: white, height: 14, width: 14),
                       )
                     ],
                   ),
@@ -109,51 +109,50 @@ class DProfileFragmentState extends State<DProfileFragment> {
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 children: [
-                  ///TODO
-                  mTitle('Orders, Wallet and more'),
-                  accountSettingItemWidget("https://cdn-icons-png.flaticon.com/128/7928/7928322.png", language.earningHistory, () {
+                  mTitle(language.ordersWalletMore),
+                  accountSettingItemWidget(ic_earning, language.earningHistory, () {
                     EarningHistoryScreen().launch(context);
                   }),
-                  accountSettingItemWidget("https://cdn-icons-png.flaticon.com/128/7653/7653271.png", language.wallet, () {
+                  accountSettingItemWidget(ic_wallet, language.wallet, () {
                     WalletScreen().launch(context);
                   }),
-                  accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3914/3914398.png', language.bankDetails, () {
+                  accountSettingItemWidget(ic_bank_detail, language.bankDetails, () {
                     BankDetailScreen().launch(context);
                   }, isLast: true),
 
-                  mTitle('Account'),
-                  accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/11271/11271916.png', language.verifyDocument, () {
+                  mTitle(language.account),
+                  accountSettingItemWidget(ic_verification, language.verifyDocument, () {
                     VerifyDeliveryPersonScreen().launch(context);
                   }, suffixIcon: getBoolAsync(IS_VERIFIED_DELIVERY_MAN) ? Icons.verified_user : null),
-                  accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3917/3917591.png', language.changePassword, () {
+                  accountSettingItemWidget(ic_change_password, language.changePassword, () {
                     ChangePasswordScreen().launch(context);
                   }),
-                  accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3917/3917538.png', language.language, () {
+                  accountSettingItemWidget(ic_languages, language.language, () {
                     LanguageScreen().launch(context);
                   }),
-                  accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/6853/6853936.png', language.theme, () async {
+                  accountSettingItemWidget(ic_dark_mode, language.theme, () async {
                     await showInDialog(context, shape: RoundedRectangleBorder(borderRadius: radius()), builder: (_) => ThemeSelectionDialog(), contentPadding: EdgeInsets.zero);
                   }),
-                  accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3917/3917378.png', language.deleteAccount, () async {
+                  accountSettingItemWidget(ic_delete_account, language.deleteAccount, () async {
                     DeleteAccountScreen().launch(context);
                   }, isLast: true),
 
-                  mTitle('General'),
-                  accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3914/3914394.png', language.privacyPolicy, () {
+                  mTitle(language.general),
+                  accountSettingItemWidget(ic_document, language.privacyPolicy, () {
                     commonLaunchUrl(mPrivacyPolicy);
                   }),
-                  accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3916/3916699.png', language.helpAndSupport, () {
+                  accountSettingItemWidget(ic_information, language.helpAndSupport, () {
                     commonLaunchUrl(mHelpAndSupport);
                   }),
-                  accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3914/3914394.png', language.termAndCondition, () {
+                  accountSettingItemWidget(ic_document, language.termAndCondition, () {
                     commonLaunchUrl(mTermAndCondition);
                   }),
-                  accountSettingItemWidget('https://cdn-icons-png.flaticon.com/128/3916/3916699.png', language.aboutUs, () {
+                  accountSettingItemWidget(ic_information, language.aboutUs, () {
                     AboutUsScreen().launch(context);
                   }, isLast: false),
 
                   Container(
-                    decoration: boxDecorationWithRoundedCorners(border: Border.all(color: colorPrimary, width: 1), backgroundColor: colorPrimaryLight),
+                    decoration: boxDecorationWithRoundedCorners(border: Border.all(color: colorPrimary, width: 1), backgroundColor: Colors.transparent),
                     padding: EdgeInsets.all(16),
                     width: context.width(),
                     child: Text(language.logout, style: boldTextStyle(size: 18, color: colorPrimary), textAlign: TextAlign.center),
@@ -169,13 +168,11 @@ class DProfileFragmentState extends State<DProfileFragment> {
                       },
                     );
                   }).paddingAll(16),
-
-                  ///TODO
                   FutureBuilder<PackageInfo>(
                     future: PackageInfo.fromPlatform(),
                     builder: (_, snap) {
                       if (snap.hasData) {
-                        return Text('Version ${snap.data!.version.validate()}', style: secondaryTextStyle()).center();
+                        return Text('${language.version} ${snap.data!.version.validate()}', style: secondaryTextStyle()).center();
                       }
                       return SizedBox();
                     },

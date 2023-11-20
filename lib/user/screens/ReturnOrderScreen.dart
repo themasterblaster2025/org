@@ -3,7 +3,9 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
+import 'package:mighty_delivery/main/utils/Images.dart';
 import '../../main/components/BodyCornerWidget.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/OrderListModel.dart';
 import '../../main/models/PaymentModel.dart';
 import '../../main/network/RestApis.dart';
@@ -104,7 +106,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
         "payment_status": "",
         "fixed_charges": widget.orderData.fixedCharges!,
         "parent_order_id": widget.orderData.id!,
-        "total_amount": widget.orderData.totalAmount??0,
+        "total_amount": widget.orderData.totalAmount ?? 0,
         "reason": reason!.validate().trim() != language.other.trim() ? reason : reasonController.text
       };
       appStore.setLoading(true);
@@ -113,17 +115,17 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
         toast(value.message);
         finish(context);
         if (isSelected == 2) {
-         PaymentScreen(orderId: value.orderId.validate(), totalAmount: widget.orderData.totalAmount??0).launch(context);
+          PaymentScreen(orderId: value.orderId.validate(), totalAmount: widget.orderData.totalAmount ?? 0).launch(context);
         } else if (isSelected == 3) {
           log("-----" + appStore.availableBal.toString());
 
-          if (appStore.availableBal > (widget.orderData.totalAmount??0)) {
+          if (appStore.availableBal > (widget.orderData.totalAmount ?? 0)) {
             savePaymentApiCall(paymentType: PAYMENT_TYPE_WALLET, paymentStatus: PAYMENT_PAID, totalAmount: widget.orderData.totalAmount.toString(), orderID: value.orderId.toString());
           } else {
             toast(language.balanceInsufficient);
             bool? res = await WalletScreen().launch(context);
             if (res == true) {
-              if (appStore.availableBal > (widget.orderData.totalAmount??0)) {
+              if (appStore.availableBal > (widget.orderData.totalAmount ?? 0)) {
                 savePaymentApiCall(paymentType: PAYMENT_TYPE_WALLET, paymentStatus: PAYMENT_PAID, totalAmount: widget.orderData.totalAmount.toString(), orderID: value.orderId.toString());
               } else {
                 cashConfirmDialog();
@@ -132,7 +134,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
               cashConfirmDialog();
             }
           }
-        }else{
+        } else {
           DashboardScreen().launch(context, isNewTask: true);
         }
       }).catchError((error) {
@@ -170,283 +172,281 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(language.returnOrder)),
-      body: BodyCornerWidget(
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              padding: EdgeInsets.all(16),
-              child: Form(
-                key: formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        scheduleOptionWidget(context, isDeliverNow, 'assets/icons/ic_clock.png', language.deliveryNow).onTap(() {
-                          isDeliverNow = true;
-                          setState(() {});
-                        }).expand(),
-                        16.width,
-                        scheduleOptionWidget(context, !isDeliverNow, 'assets/icons/ic_schedule.png', language.schedule).onTap(() {
-                          isDeliverNow = false;
-                          setState(() {});
-                        }).expand(),
-                      ],
-                    ),
-                    16.height,
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(language.pickTime, style: primaryTextStyle()),
-                        16.height,
-                        Container(
-                          padding: EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
-                            borderRadius: BorderRadius.circular(defaultRadius),
-                          ),
-                          child: Column(
-                            children: [
-                              DateTimePicker(
-                                type: DateTimePickerType.date,
-                                firstDate: DateTime.now(),
-                                lastDate: DateTime(2050),
-                                onChanged: (value) {
-                                  pickDate = DateTime.parse(value);
-                                  setState(() {});
-                                },
-                                validator: (value) {
-                                  if (value!.isEmpty) return errorThisFieldRequired;
-                                  return null;
-                                },
-                                decoration: commonInputDecoration(suffixIcon: Icons.calendar_today),
-                              ),
-                              16.height,
-                              Row(
-                                children: [
-                                  Text(language.from, style: primaryTextStyle()).expand(flex: 1),
-                                  8.width,
-                                  DateTimePicker(
-                                    type: DateTimePickerType.time,
-                                    onChanged: (value) {
-                                      pickFromTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
-                                      setState(() {});
-                                    },
-                                    validator: (value) {
-                                      if (value.validate().isEmpty) return errorThisFieldRequired;
-                                      return null;
-                                    },
-                                    decoration: commonInputDecoration(suffixIcon: Icons.access_time),
-                                  ).expand(flex: 2),
-                                ],
-                              ),
-                              16.height,
-                              Row(
-                                children: [
-                                  Text(language.to, style: primaryTextStyle()).expand(flex: 1),
-                                  8.width,
-                                  DateTimePicker(
-                                    type: DateTimePickerType.time,
-                                    onChanged: (value) {
-                                      pickToTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
-                                      setState(() {});
-                                    },
-                                    validator: (value) {
-                                      if (value.validate().isEmpty) return errorThisFieldRequired;
-                                      double fromTimeInHour = pickFromTime!.hour + pickFromTime!.minute / 60;
-                                      double toTimeInHour = pickToTime!.hour + pickToTime!.minute / 60;
-                                      double difference = toTimeInHour - fromTimeInHour;
-                                      print(difference);
-                                      if (difference <= 0) {
-                                        return language.endTimeValidationMsg;
-                                      }
-                                      return null;
-                                    },
-                                    decoration: commonInputDecoration(suffixIcon: Icons.access_time),
-                                  ).expand(flex: 2),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                        16.height,
-                        Text(language.deliverTime, style: primaryTextStyle()),
-                        16.height,
-                        Container(
-                          padding: EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
-                            borderRadius: BorderRadius.circular(defaultRadius),
-                          ),
-                          child: Column(
-                            children: [
-                              DateTimePicker(
-                                type: DateTimePickerType.date,
-                                firstDate: DateTime.now(),
-                                lastDate: DateTime(2050),
-                                onChanged: (value) {
-                                  deliverDate = DateTime.parse(value);
-                                  setState(() {});
-                                },
-                                validator: (value) {
-                                  if (value!.isEmpty) return errorThisFieldRequired;
-                                  return null;
-                                },
-                                decoration: commonInputDecoration(suffixIcon: Icons.calendar_today),
-                              ),
-                              16.height,
-                              Row(
-                                children: [
-                                  Text(language.from, style: primaryTextStyle()).expand(flex: 1),
-                                  8.width,
-                                  DateTimePicker(
-                                    type: DateTimePickerType.time,
-                                    onChanged: (value) {
-                                      deliverFromTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
-                                      setState(() {});
-                                    },
-                                    validator: (value) {
-                                      if (value.validate().isEmpty) return errorThisFieldRequired;
-                                      return null;
-                                    },
-                                    decoration: commonInputDecoration(suffixIcon: Icons.access_time),
-                                  ).expand(flex: 2),
-                                ],
-                              ),
-                              16.height,
-                              Row(
-                                children: [
-                                  Text(language.to, style: primaryTextStyle()).expand(flex: 1),
-                                  8.width,
-                                  DateTimePicker(
-                                    type: DateTimePickerType.time,
-                                    onChanged: (value) {
-                                      deliverToTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
-                                      setState(() {});
-                                    },
-                                    validator: (value) {
-                                      if (value!.isEmpty) return errorThisFieldRequired;
-                                      double fromTimeInHour = deliverFromTime!.hour + deliverFromTime!.minute / 60;
-                                      double toTimeInHour = deliverToTime!.hour + deliverToTime!.minute / 60;
-                                      double difference = toTimeInHour - fromTimeInHour;
-                                      if (difference < 0) {
-                                        return language.endTimeValidationMsg;
-                                      }
-                                      return null;
-                                    },
-                                    decoration: commonInputDecoration(suffixIcon: Icons.access_time),
-                                  ).expand(flex: 2),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ).visible(!isDeliverNow),
-                    16.height,
-                    Text(language.payment, style: boldTextStyle()),
-                    16.height,
-                    Wrap(
-                      spacing: 16,
-                      runSpacing: 16,
-                      children: mPaymentList.map((mData) {
-                        return Container(
-                          width: 130,
-                          padding: EdgeInsets.all(16),
-                          decoration: boxDecorationWithRoundedCorners(
-                              border: Border.all(
-                                  color: isSelected == mData.index
-                                      ? colorPrimary
-                                      : appStore.isDarkMode
-                                      ? Colors.transparent
-                                      : borderColor),
-                              backgroundColor: context.cardColor),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              ImageIcon(AssetImage(mData.image.validate()), size: 20, color: isSelected == mData.index ? colorPrimary : Colors.grey),
-                              16.width,
-                              Text(mData.title!, style: boldTextStyle()).expand(),
-                            ],
-                          ),
-                        ).onTap(() {
-                          isSelected = mData.index!;
-                          setState(() {});
-                        });
-                      }).toList(),
-                    ),
-                    16.height,
-                    Row(
-                      children: [
-                        Text(language.paymentCollectFrom, style: boldTextStyle()),
-                        16.width,
-                        DropdownButtonFormField<String>(
-                          isExpanded: true,
-                          value: paymentCollectFrom,
-                          decoration: commonInputDecoration(),
-                          items: [
-                            DropdownMenuItem(value: PAYMENT_ON_PICKUP, child: Text(language.pickupLocation, style: primaryTextStyle(),maxLines: 1)),
-                            DropdownMenuItem(value: PAYMENT_ON_DELIVERY, child: Text(language.deliveryLocation, style: primaryTextStyle(),maxLines: 1)),
-                          ],
-                          onChanged: (value) {
-                            paymentCollectFrom = value!;
-                            setState(() {});
-                          },
-                        ).expand(),
-                      ],
-                    ).visible(isSelected==1),
-                    16.height,
-                    Text(language.reason, style: boldTextStyle()),
-                    8.height,
-                    DropdownButtonFormField<String>(
-                      value: reason,
-                      isExpanded: true,
-                      decoration: commonInputDecoration(),
-                      items: returnOrderReasonList.map((e) {
-                        return DropdownMenuItem(
-                          value: e,
-                          child: Text(e),
-                        );
-                      }).toList(),
-                      onChanged: (String? val) {
-                        reason = val;
+    return CommonScaffoldComponent(
+      appBarTitle: language.returnOrder,
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            padding: EdgeInsets.all(16),
+            child: Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      scheduleOptionWidget(context, isDeliverNow, ic_clock, language.deliveryNow).onTap(() {
+                        isDeliverNow = true;
                         setState(() {});
-                      },
-                      validator: (value) {
-                        if (value == null) return language.fieldRequiredMsg;
-                        return null;
-                      },
-                    ),
-                    16.height,
-                    AppTextField(
-                      controller: reasonController,
-                      textFieldType: TextFieldType.OTHER,
-                      decoration: commonInputDecoration(hintText: language.writeReasonHere),
-                      maxLines: 3,
-                      minLines: 3,
-                      validator: (value) {
-                        if (value!.isEmpty) return language.fieldRequiredMsg;
-                        return null;
-                      },
-                    ).visible(reason.validate().trim() == language.other.trim()),
-                    16.height,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(language.total, style: boldTextStyle()),
-                        16.width,
-                        Text('${printAmount(widget.orderData.totalAmount??0)}', style: boldTextStyle(size: 20)),
-                      ],
-                    ),
-                  ],
-                ),
+                      }).expand(),
+                      16.width,
+                      scheduleOptionWidget(context, !isDeliverNow, ic_schedule, language.schedule).onTap(() {
+                        isDeliverNow = false;
+                        setState(() {});
+                      }).expand(),
+                    ],
+                  ),
+                  16.height,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(language.pickTime, style: primaryTextStyle()),
+                      16.height,
+                      Container(
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                          borderRadius: BorderRadius.circular(defaultRadius),
+                        ),
+                        child: Column(
+                          children: [
+                            DateTimePicker(
+                              type: DateTimePickerType.date,
+                              firstDate: DateTime.now(),
+                              lastDate: DateTime(2050),
+                              onChanged: (value) {
+                                pickDate = DateTime.parse(value);
+                                setState(() {});
+                              },
+                              validator: (value) {
+                                if (value!.isEmpty) return errorThisFieldRequired;
+                                return null;
+                              },
+                              decoration: commonInputDecoration(suffixIcon: Icons.calendar_today),
+                            ),
+                            16.height,
+                            Row(
+                              children: [
+                                Text(language.from, style: primaryTextStyle()).expand(flex: 1),
+                                8.width,
+                                DateTimePicker(
+                                  type: DateTimePickerType.time,
+                                  onChanged: (value) {
+                                    pickFromTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
+                                    setState(() {});
+                                  },
+                                  validator: (value) {
+                                    if (value.validate().isEmpty) return errorThisFieldRequired;
+                                    return null;
+                                  },
+                                  decoration: commonInputDecoration(suffixIcon: Icons.access_time),
+                                ).expand(flex: 2),
+                              ],
+                            ),
+                            16.height,
+                            Row(
+                              children: [
+                                Text(language.to, style: primaryTextStyle()).expand(flex: 1),
+                                8.width,
+                                DateTimePicker(
+                                  type: DateTimePickerType.time,
+                                  onChanged: (value) {
+                                    pickToTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
+                                    setState(() {});
+                                  },
+                                  validator: (value) {
+                                    if (value.validate().isEmpty) return errorThisFieldRequired;
+                                    double fromTimeInHour = pickFromTime!.hour + pickFromTime!.minute / 60;
+                                    double toTimeInHour = pickToTime!.hour + pickToTime!.minute / 60;
+                                    double difference = toTimeInHour - fromTimeInHour;
+                                    print(difference);
+                                    if (difference <= 0) {
+                                      return language.endTimeValidationMsg;
+                                    }
+                                    return null;
+                                  },
+                                  decoration: commonInputDecoration(suffixIcon: Icons.access_time),
+                                ).expand(flex: 2),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                      16.height,
+                      Text(language.deliverTime, style: primaryTextStyle()),
+                      16.height,
+                      Container(
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                          borderRadius: BorderRadius.circular(defaultRadius),
+                        ),
+                        child: Column(
+                          children: [
+                            DateTimePicker(
+                              type: DateTimePickerType.date,
+                              firstDate: DateTime.now(),
+                              lastDate: DateTime(2050),
+                              onChanged: (value) {
+                                deliverDate = DateTime.parse(value);
+                                setState(() {});
+                              },
+                              validator: (value) {
+                                if (value!.isEmpty) return errorThisFieldRequired;
+                                return null;
+                              },
+                              decoration: commonInputDecoration(suffixIcon: Icons.calendar_today),
+                            ),
+                            16.height,
+                            Row(
+                              children: [
+                                Text(language.from, style: primaryTextStyle()).expand(flex: 1),
+                                8.width,
+                                DateTimePicker(
+                                  type: DateTimePickerType.time,
+                                  onChanged: (value) {
+                                    deliverFromTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
+                                    setState(() {});
+                                  },
+                                  validator: (value) {
+                                    if (value.validate().isEmpty) return errorThisFieldRequired;
+                                    return null;
+                                  },
+                                  decoration: commonInputDecoration(suffixIcon: Icons.access_time),
+                                ).expand(flex: 2),
+                              ],
+                            ),
+                            16.height,
+                            Row(
+                              children: [
+                                Text(language.to, style: primaryTextStyle()).expand(flex: 1),
+                                8.width,
+                                DateTimePicker(
+                                  type: DateTimePickerType.time,
+                                  onChanged: (value) {
+                                    deliverToTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
+                                    setState(() {});
+                                  },
+                                  validator: (value) {
+                                    if (value!.isEmpty) return errorThisFieldRequired;
+                                    double fromTimeInHour = deliverFromTime!.hour + deliverFromTime!.minute / 60;
+                                    double toTimeInHour = deliverToTime!.hour + deliverToTime!.minute / 60;
+                                    double difference = toTimeInHour - fromTimeInHour;
+                                    if (difference < 0) {
+                                      return language.endTimeValidationMsg;
+                                    }
+                                    return null;
+                                  },
+                                  decoration: commonInputDecoration(suffixIcon: Icons.access_time),
+                                ).expand(flex: 2),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ).visible(!isDeliverNow),
+                  16.height,
+                  Text(language.payment, style: boldTextStyle()),
+                  16.height,
+                  Wrap(
+                    spacing: 16,
+                    runSpacing: 16,
+                    children: mPaymentList.map((mData) {
+                      return Container(
+                        width: 130,
+                        padding: EdgeInsets.all(16),
+                        decoration: boxDecorationWithRoundedCorners(
+                            border: Border.all(
+                                color: isSelected == mData.index
+                                    ? colorPrimary
+                                    : appStore.isDarkMode
+                                        ? Colors.transparent
+                                        : borderColor),
+                            backgroundColor: context.cardColor),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ImageIcon(AssetImage(mData.image.validate()), size: 20, color: isSelected == mData.index ? colorPrimary : Colors.grey),
+                            16.width,
+                            Text(mData.title!, style: boldTextStyle()).expand(),
+                          ],
+                        ),
+                      ).onTap(() {
+                        isSelected = mData.index!;
+                        setState(() {});
+                      });
+                    }).toList(),
+                  ),
+                  16.height,
+                  Row(
+                    children: [
+                      Text(language.paymentCollectFrom, style: boldTextStyle()),
+                      16.width,
+                      DropdownButtonFormField<String>(
+                        isExpanded: true,
+                        value: paymentCollectFrom,
+                        decoration: commonInputDecoration(),
+                        items: [
+                          DropdownMenuItem(value: PAYMENT_ON_PICKUP, child: Text(language.pickupLocation, style: primaryTextStyle(), maxLines: 1)),
+                          DropdownMenuItem(value: PAYMENT_ON_DELIVERY, child: Text(language.deliveryLocation, style: primaryTextStyle(), maxLines: 1)),
+                        ],
+                        onChanged: (value) {
+                          paymentCollectFrom = value!;
+                          setState(() {});
+                        },
+                      ).expand(),
+                    ],
+                  ).visible(isSelected == 1),
+                  16.height,
+                  Text(language.reason, style: boldTextStyle()),
+                  8.height,
+                  DropdownButtonFormField<String>(
+                    value: reason,
+                    isExpanded: true,
+                    decoration: commonInputDecoration(),
+                    items: returnOrderReasonList.map((e) {
+                      return DropdownMenuItem(
+                        value: e,
+                        child: Text(e),
+                      );
+                    }).toList(),
+                    onChanged: (String? val) {
+                      reason = val;
+                      setState(() {});
+                    },
+                    validator: (value) {
+                      if (value == null) return language.fieldRequiredMsg;
+                      return null;
+                    },
+                  ),
+                  16.height,
+                  AppTextField(
+                    controller: reasonController,
+                    textFieldType: TextFieldType.OTHER,
+                    decoration: commonInputDecoration(hintText: language.writeReasonHere),
+                    maxLines: 3,
+                    minLines: 3,
+                    validator: (value) {
+                      if (value!.isEmpty) return language.fieldRequiredMsg;
+                      return null;
+                    },
+                  ).visible(reason.validate().trim() == language.other.trim()),
+                  16.height,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(language.total, style: boldTextStyle()),
+                      16.width,
+                      Text('${printAmount(widget.orderData.totalAmount ?? 0)}', style: boldTextStyle(size: 20)),
+                    ],
+                  ),
+                ],
               ),
             ),
-            Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
-          ],
-        ),
+          ),
+          Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
+        ],
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(16),

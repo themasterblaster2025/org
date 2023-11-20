@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mighty_delivery/main/components/CommonScaffoldComponent.dart';
-import 'package:mighty_delivery/main/services/AuthSertvices.dart';
+import 'package:mighty_delivery/main/services/AuthServices.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -87,66 +87,23 @@ class VerificationScreenState extends State<VerificationScreen> {
                     padding: EdgeInsets.all(16.0),
                     child: Column(
                       children: [
-                        // InkWell(
-                        //   onTap: () async {
-                        //     if (getBoolAsync(OTP_VERIFIED).validate()) {
-                        //       toast(language.phoneNumberAlreadyVerified);
-                        //     } else {
-                        //       appStore.setLoading(true);
-                        //       log('-----${getStringAsync(USER_CONTACT_NUMBER)}');
-                        //       sendOtp(context, phoneNumber: getStringAsync(USER_CONTACT_NUMBER), onUpdate: (verificationId) async {
-                        //         await showInDialog(context,
-                        //             builder: (context) => OTPDialog(
-                        //                 phoneNumber: '+917600495926',
-                        //                 onUpdate: () {
-                        //                   updateUserStatus({"id": getIntAsync(USER_ID), "otp_verify_at": DateTime.now().toString()}).then((value) {
-                        //                     setValue(OTP_VERIFIED, true);
-                        //                     if (getStringAsync(USER_TYPE) == CLIENT) {
-                        //                       DashboardScreen().launch(getContext, isNewTask: true);
-                        //                     } else {
-                        //                       DeliveryDashBoard().launch(getContext, isNewTask: true);
-                        //                     }
-                        //                   });
-                        //                 },
-                        //                 verificationId: verificationId),
-                        //             barrierDismissible: false);
-                        //       });
-                        //     }
-                        //   },
-                        //   child: Container(
-                        //     padding: EdgeInsets.all(16),
-                        //     decoration: BoxDecoration(
-                        //       border: Border.all(color: borderColor),
-                        //       borderRadius: BorderRadius.circular(defaultRadius),
-                        //     ),
-                        //     child: Row(
-                        //       children: [
-                        //         Image.asset('assets/phone.png', height: 24, width: 24, fit: BoxFit.cover),
-                        //         SizedBox(width: 8),
-                        //         Expanded(child: Text(language.verifyPhoneNumber, style: primaryTextStyle())),
-                        //         SizedBox(width: 16),
-                        //         getBoolAsync(OTP_VERIFIED).validate() ? Icon(Icons.verified, color: Colors.green) : Icon(Icons.navigate_next),
-                        //       ],
-                        //     ),
-                        //   ),
-                        // ),
                         16.height,
-                        Text('Phone Number Verification', style: boldTextStyle(size: 18)),
+                        Text(language.phoneNumberVerification, style: boldTextStyle(size: 18)),
                         16.height,
                         RichText(
                           textAlign: TextAlign.center,
                           text: TextSpan(
                             style: secondaryTextStyle(),
                             children: [
-                              TextSpan(text: 'We will send you an '),
-                              TextSpan(text: 'One Time Password', style: boldTextStyle()),
-                              TextSpan(text: " on " + getStringAsync(USER_CONTACT_NUMBER).replaceAll(RegExp(r'(?<=.*).(?=.{2})'), '*') ?? "-")
+                              TextSpan(text: '${language.weSend} '),
+                              TextSpan(text: language.oneTimePassword, style: boldTextStyle()),
+                              TextSpan(text: " ${language.on} " + getStringAsync(USER_CONTACT_NUMBER).replaceAll(RegExp(r'(?<=.*).(?=.{2})'), '*') ?? "-")
                             ],
                           ),
                         ),
 
                         16.height,
-                        commonButton('Get OTP', () {
+                        commonButton(language.getOTP, () {
                           // isOtpSend = true;
                           sendOtp(context, phoneNumber: getStringAsync(USER_CONTACT_NUMBER).validate(), onUpdate: (verificationId) {
                             verId = verificationId;
@@ -163,10 +120,9 @@ class VerificationScreenState extends State<VerificationScreen> {
                     child: Column(
                       children: [
                         16.height,
-                        ///TODO ADD KEY
-                        Text('Enter Confirmation code', style: boldTextStyle(size: 18)),
+                        Text(language.confirmationCode, style: boldTextStyle(size: 18)),
                         16.height,
-                        Text("Enter the confirmation code have sent to " + getStringAsync(USER_CONTACT_NUMBER).replaceAll(RegExp(r'(?<=.*).(?=.{2})'), '*') ?? "-",
+                        Text("${language.confirmationCodeSent} " + getStringAsync(USER_CONTACT_NUMBER).replaceAll(RegExp(r'(?<=.*).(?=.{2})'), '*') ?? "-",
                             style: secondaryTextStyle(size: 16), textAlign: TextAlign.center),
                         30.height,
                         otp.OTPTextField(
@@ -199,7 +155,7 @@ class VerificationScreenState extends State<VerificationScreen> {
                           ],
                         ),
                         16.height,
-                        commonButton('Submit', () async {
+                        commonButton(language.submit, () async {
                           appStore.setLoading(true);
                           AuthCredential credential = PhoneAuthProvider.credential(verificationId: verId, smsCode: otpPin.validate());
                           await FirebaseAuth.instance.signInWithCredential(credential).then((value) {

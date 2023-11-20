@@ -71,7 +71,7 @@ class DashboardScreenState extends State<DashboardScreen> {
   String getTitle() {
     String title = language.myOrders;
     if (currentIndex == 0) {
-      title = 'Hey ${getStringAsync(NAME)} 👋';
+      title = '${language.hey} ${getStringAsync(NAME)} 👋';
     } else if (currentIndex == 1) {
       title = language.account;
     }

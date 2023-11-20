@@ -8,7 +8,7 @@ import '../../main/utils/Common.dart';
 import '../../main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-import '../../main/services/AuthSertvices.dart';
+import '../../main/services/AuthServices.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Constants.dart';
 
@@ -18,16 +18,6 @@ class DeleteAccountScreen extends StatefulWidget {
 }
 
 class DeleteAccountScreenState extends State<DeleteAccountScreen> {
-  @override
-  void initState() {
-    super.initState();
-    init();
-  }
-
-  void init() async {
-    //
-  }
-
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
@@ -69,7 +59,7 @@ class DeleteAccountScreenState extends State<DeleteAccountScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Confirm account deletion', style: boldTextStyle(size: 18)),
+                Text(language.confirmAccountDeletion, style: boldTextStyle(size: 18)),
                 Divider(),
                 8.height,
                 Text(language.deleteAccountMsg2, style: primaryTextStyle()),
@@ -85,14 +75,6 @@ class DeleteAccountScreenState extends State<DeleteAccountScreen> {
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // commonButton(
-          //     "No, I don\'t want to delete",
-          //         (){
-          //       finish(context);
-          //     },
-          //     width: context.width(),
-          //     color: colorPrimary),
-          // 8.height,
           commonButton(
               language.deleteAccount,
               () async => {

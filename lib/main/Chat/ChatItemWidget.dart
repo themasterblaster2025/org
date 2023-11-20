@@ -20,13 +20,6 @@ class ChatItemWidget extends StatefulWidget {
 class _ChatItemWidgetState extends State<ChatItemWidget> {
   String? images;
 
-  void initState() {
-    super.initState();
-    init();
-  }
-
-  init() async {}
-
   @override
   Widget build(BuildContext context) {
     String time;

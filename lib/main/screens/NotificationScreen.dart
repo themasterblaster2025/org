@@ -9,7 +9,6 @@ import '../../user/screens/OrderDetailScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 import '../../main.dart';
 import '../components/CommonScaffoldComponent.dart';
-import '../utils/Widgets.dart';
 
 class NotificationScreen extends StatefulWidget {
   @override
@@ -77,7 +76,7 @@ class NotificationScreenState extends State<NotificationScreen> {
 
               init(request: req);
             },
-            child: Text('Mark All as read', style: secondaryTextStyle(color: Colors.white))).paddingRight(8)
+            child: Text(language.markAllRead, style: secondaryTextStyle(color: Colors.white))).paddingRight(8)
       ],
       body: Observer(builder: (context) {
         return Stack(

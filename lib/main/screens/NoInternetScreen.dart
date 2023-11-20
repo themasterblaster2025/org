@@ -7,16 +7,6 @@ class NoInternetScreen extends StatefulWidget {
 
 class _NoInternetScreenState extends State<NoInternetScreen> {
   @override
-  void initState() {
-    super.initState();
-    init();
-  }
-
-  void init() async {
-    //
-  }
-
-  @override
   void setState(fn) {
     if (mounted) super.setState(fn);
   }

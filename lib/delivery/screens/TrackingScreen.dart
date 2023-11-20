@@ -1,20 +1,18 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:maps_launcher/maps_launcher.dart';
-import '../../main/components/BodyCornerWidget.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/OrderListModel.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
-
 import '../../main.dart';
+import '../../main/utils/Images.dart';
 
 class TrackingScreen extends StatefulWidget {
   final int? orderId;
@@ -180,7 +178,7 @@ class TrackingScreenState extends State<TrackingScreen> {
                                   Row(
                                     children: [
                                       Container(
-                                        child: Image.asset('assets/icons/ic_google_map.png', height: 30, width: 30),
+                                        child: Image.asset(ic_google_map, height: 30, width: 30),
                                         decoration: boxDecorationRoundedWithShadow(defaultRadius.toInt()),
                                         padding: EdgeInsets.all(2),
                                       ).onTap(

@@ -19,16 +19,6 @@ class LanguageScreenState extends State<LanguageScreen> {
   int? currentIndex = 0;
 
   @override
-  void initState() {
-    super.initState();
-    init();
-  }
-
-  Future<void> init() async {
-    //
-  }
-
-  @override
   void setState(fn) {
     if (mounted) super.setState(fn);
   }
@@ -44,10 +34,9 @@ class LanguageScreenState extends State<LanguageScreen> {
           LanguageDataModel data = localeLanguageList[index];
           return Container(
             margin: EdgeInsets.only(bottom: 8),
-            decoration:
-                boxDecorationWithRoundedCorners(
-                    backgroundColor: Colors.transparent,
-                    border: Border.all(color: getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguage) == data.languageCode ? colorPrimary : dividerColor)),
+            decoration: boxDecorationWithRoundedCorners(
+                backgroundColor: Colors.transparent,
+                border: Border.all(color: getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguage) == data.languageCode ? colorPrimary : dividerColor)),
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
               children: [

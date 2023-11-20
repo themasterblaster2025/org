@@ -17,6 +17,7 @@ import '../../main/network/RestApis.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
+import '../../main/utils/Images.dart';
 import '../../main/utils/Widgets.dart';
 import '../../user/components/CreateOrderConfirmationDialog.dart';
 import 'PaymentScreen.dart';
@@ -30,7 +31,6 @@ import '../../main/models/PlaceIdDetailModel.dart';
 import 'WalletScreen.dart';
 
 class CreateOrderScreen extends StatefulWidget {
-  static String tag = '/CreateOrderScreen';
 
   final OrderData? orderData;
 
@@ -373,12 +373,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         children: [
           Row(
             children: [
-              scheduleOptionWidget(context, isDeliverNow, 'assets/icons/ic_clock.png', language.deliveryNow).onTap(() {
+              scheduleOptionWidget(context, isDeliverNow, ic_clock, language.deliveryNow).onTap(() {
                 isDeliverNow = true;
                 setState(() {});
               }).expand(),
               16.width,
-              scheduleOptionWidget(context, !isDeliverNow, 'assets/icons/ic_schedule.png', language.schedule).onTap(() {
+              scheduleOptionWidget(context, !isDeliverNow, ic_schedule, language.schedule).onTap(() {
                 isDeliverNow = false;
                 setState(() {});
               }).expand(),
@@ -617,7 +617,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 16.height,
                 Row(
                   children: [
-                    Text(language.select_vehicle, style: primaryTextStyle()).expand(),
+                    Text(language.selectVehicle, style: primaryTextStyle()).expand(),
                     8.height,
                     DropdownButtonFormField<int>(
                       isExpanded: true,
@@ -696,9 +696,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       children: [
         Text(language.pickupInformation, style: boldTextStyle()),
         16.height,
-
-        ///TODO add key
-        Text('Location', style: primaryTextStyle()),
+        Text(language.location, style: primaryTextStyle()),
         8.height,
         AppTextField(
           controller: pickAddressCont,

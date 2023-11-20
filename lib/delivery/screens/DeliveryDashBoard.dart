@@ -61,7 +61,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
       child: CommonScaffoldComponent(
         appBar: PreferredSize(
           preferredSize: Size(context.width(),90),
-          child: commonAppBarWidget('Hey ${getStringAsync(NAME)} 👋',showBack: false,
+          child: commonAppBarWidget('${language.hey} ${getStringAsync(NAME)} 👋',showBack: false,
             actions: [
               Stack(clipBehavior: Clip.none,
                 children: [

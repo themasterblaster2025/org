@@ -15,16 +15,6 @@ class AboutUsScreen extends StatefulWidget {
 
 class AboutUsScreenState extends State<AboutUsScreen> {
   @override
-  void initState() {
-    super.initState();
-    init();
-  }
-
-  Future<void> init() async {
-    //
-  }
-
-  @override
   void setState(fn) {
     if (mounted) super.setState(fn);
   }

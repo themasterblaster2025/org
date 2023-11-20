@@ -7,6 +7,7 @@ import '../../main/utils/Common.dart';
 import '../../main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import '../components/CommonScaffoldComponent.dart';
 import '../utils/Constants.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
@@ -26,16 +27,6 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
   FocusNode oldPassFocus = FocusNode();
   FocusNode newPassFocus = FocusNode();
   FocusNode confirmPassFocus = FocusNode();
-
-  @override
-  void initState() {
-    super.initState();
-    init();
-  }
-
-  Future<void> init() async {
-    //
-  }
 
   Future<void> submit() async {
     Map req = {
@@ -65,8 +56,8 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: commonAppBarWidget(language.changePassword),
+    return CommonScaffoldComponent(
+      appBarTitle: language.changePassword,
       body: Stack(
         children: [
           Form(
@@ -76,7 +67,6 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   Text(language.oldPassword, style: primaryTextStyle()),
                   8.height,
                   AppTextField(

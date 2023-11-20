@@ -10,6 +10,7 @@ import '../../user/screens/DashboardScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
+import '../utils/Images.dart';
 import 'VerificationScreen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -77,7 +78,7 @@ class SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset('assets/app_logo.jpg', height: 80, width: 80, fit: BoxFit.fill).cornerRadiusWithClipRRect(defaultRadius),
+            Image.asset(ic_logo, height: 80, width: 80, fit: BoxFit.fill).cornerRadiusWithClipRRect(defaultRadius),
             16.height,
             Text(mAppName, style: boldTextStyle(size: 20), textAlign: TextAlign.center),
           ],

@@ -152,7 +152,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 itemBuilder: (context, snap, index) {
                   ChatMessageModel data = ChatMessageModel.fromJson(snap[index].data() as Map<String, dynamic>);
                   data.isMe = data.senderId == sender.uid;
-                  print("=========>${data.message}");
 
                   print(data.isMe);
                   print(data.senderId);

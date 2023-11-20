@@ -19,16 +19,6 @@ class CreateOrderConfirmationDialog extends StatefulWidget {
 
 class CreateOrderConfirmationDialogState extends State<CreateOrderConfirmationDialog> {
   @override
-  void initState() {
-    super.initState();
-    init();
-  }
-
-  Future<void> init() async {
-    //
-  }
-
-  @override
   void setState(fn) {
     if (mounted) super.setState(fn);
   }

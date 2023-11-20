@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/main/services/AuthSertvices.dart';
+import 'package:mighty_delivery/main/services/AuthServices.dart';
 import '../../main.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
@@ -36,38 +36,6 @@ class OTPDialogState extends State<OTPDialog> {
     setState(() {});
   }
 
-  /*Future sendOTP() async {
-    appStore.setLoading(true);
-    log('********${widget.phoneNumber.validate()}');
-    FirebaseAuth auth = FirebaseAuth.instance;
-    await auth.verifyPhoneNumber(
-      timeout: const Duration(seconds: 60),
-      phoneNumber: widget.phoneNumber.validate(),
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        appStore.setLoading(false);
-        toast(language.verificationCompleted);
-      },
-      verificationFailed: (FirebaseAuthException e) {
-        appStore.setLoading(false);
-        if (e.code == 'invalid-phone-number') {
-          toast(language.phoneNumberInvalid);
-          throw language.phoneNumberInvalid;
-        } else {
-          toast(e.toString());
-          throw e.toString();
-        }
-      },
-      codeSent: (String verificationId, int? resendToken) async {
-        appStore.setLoading(false);
-        toast(language.codeSent);
-        verId = verificationId;
-        setState(() {});
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {
-        appStore.setLoading(false);
-      },
-    );
-  }*/
 
   @override
   void setState(fn) {

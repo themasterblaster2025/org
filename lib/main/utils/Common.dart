@@ -20,7 +20,7 @@ import '../Chat/ChatScreen.dart';
 import '../models/LoginResponse.dart';
 import '../network/RestApis.dart';
 import '../screens/LoginScreen.dart';
-import '../services/AuthSertvices.dart';
+import '../services/AuthServices.dart';
 import 'Widgets.dart';
 
 InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, Function()? suffixOnTap, Widget? dateTime, Widget? prefixIcon, bool? isFill = true}) {

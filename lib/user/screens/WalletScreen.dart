@@ -147,13 +147,6 @@ class WalletScreenState extends State<WalletScreen> {
                                       language.add,
                                       () async {
                                         Navigator.pop(context);
-                                        // bool? res = await PaymentScreen(
-                                        //   totalAmount: amountCont.text.toDouble(),
-                                        //   isWallet: true,
-                                        // ).launch(context);
-                                        // if (res == true) {
-                                        //   getWalletData();
-                                        // }
                                       },
                                       width: context.width(),
                                     ),

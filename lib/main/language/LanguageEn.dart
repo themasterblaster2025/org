@@ -68,12 +68,6 @@ class LanguageEn extends BaseLanguage {
   String get yes => "Yes";
 
   @override
-  String get pickedAt => "Picked at";
-
-  @override
-  String get deliveredAt => "Delivered at";
-
-  @override
   String get trackOrder => "Track Order";
 
   @override
@@ -114,12 +108,6 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get packageInformation => "Package Information";
-
-  @override
-  String get pickup => "Pickup";
-
-  @override
-  String get delivery => "Delivery";
 
   @override
   String get deliveryCharge => "Delivery Charge";
@@ -170,12 +158,6 @@ class LanguageEn extends BaseLanguage {
   String get draftOrder => "Draft Order";
 
   @override
-  String get orderDetails => "Order Details";
-
-  @override
-  String get distance => "Distance";
-
-  @override
   String get parcelDetails => "Parcel Details";
 
   @override
@@ -212,9 +194,6 @@ class LanguageEn extends BaseLanguage {
   String get saveChanges => "Save Changes";
 
   @override
-  String get profileUpdateMsg => "Profile Updated Successfully";
-
-  @override
   String get editProfile => "Edit Profile";
 
   @override
@@ -239,12 +218,6 @@ class LanguageEn extends BaseLanguage {
   String get userNotApproveMsg => "You profile is under review. Wait some time or contact to your administrator.";
 
   @override
-  String get signInAccount => "Sign in Account";
-
-  @override
-  String get signInWithYourCredential => "Sign In with your credentials";
-
-  @override
   String get password => "Password";
 
   @override
@@ -254,12 +227,6 @@ class LanguageEn extends BaseLanguage {
   String get signIn => "Sign In";
 
   @override
-  String get or => "Or";
-
-  @override
-  String get continueWithGoogle => "Continue with Google";
-
-  @override
   String get doNotHaveAccount => "Don\'t have an account?";
 
   @override
@@ -267,27 +234,6 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get name => "Name";
-
-  @override
-  String get notification => "Notification";
-
-  @override
-  String get selectUsertypeMsg => "Please Select Usertype";
-
-  @override
-  String get createAnAccount => "Create an account";
-
-  @override
-  String get signUpWithYourCredential => "Sign Up with your credentials";
-
-  @override
-  String get userType => "User Type";
-
-  @override
-  String get client => "Client";
-
-  @override
-  String get deliveryMan => "Delivery Man";
 
   @override
   String get alreadyHaveAnAccount => "Already have an account?";
@@ -312,9 +258,6 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get profile => "Profile";
-
-  @override
-  String get trackOrderLocation => "Track Order Location";
 
   @override
   String get track => "Track";
@@ -356,13 +299,7 @@ class LanguageEn extends BaseLanguage {
   String get pickupDatetime => "Pickup date and time";
 
   @override
-  String get hour => "Hour";
-
-  @override
   String get deliveryDatetime => "Delivery date and time";
-
-  @override
-  String get pickupTimeSignature => "Pickup time Signature";
 
   @override
   String get save => "Save";
@@ -377,28 +314,10 @@ class LanguageEn extends BaseLanguage {
   String get reason => "Reason";
 
   @override
-  String get pickupDelivery => "Pickup Delivery";
-
-  @override
-  String get selectPickupTimeMsg => "Please Select PickUp Time";
-
-  @override
   String get selectDeliveryTimeMsg => "Please Select delivery Time";
 
   @override
-  String get selectPickupSignMsg => "Please Pickup Signature";
-
-  @override
-  String get selectDeliverySignMsg => "Please Delivery Signature";
-
-  @override
-  String get selectReasonMsg => "Please select reason";
-
-  @override
   String get orderCancelledSuccessfully => "Order cancelled successfully";
-
-  @override
-  String get collectPaymentConfirmationMsg => "Are you sure collect this payment?";
 
   @override
   String get trackingOrder => "Tracking Order";
@@ -458,9 +377,6 @@ class LanguageEn extends BaseLanguage {
   String get logout => "Logout";
 
   @override
-  String get changeLocation => "Change Location";
-
-  @override
   String get selectCity => "Select City";
 
   @override
@@ -515,12 +431,6 @@ class LanguageEn extends BaseLanguage {
   String get orderCancelConfirmation => "Are you sure you want to cancel this order?";
 
   @override
-  String get id => "Id";
-
-  @override
-  String get contactNumberValidation => "Contact number cannot contain more than 10 digits.";
-
-  @override
   String get rememberMe => "Remember Me";
 
   @override
@@ -534,9 +444,6 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get confirmPickup => "Confirm Pickup";
-
-  @override
-  String get version => "Version";
 
   @override
   String get contactUs => "Contact Us";
@@ -560,9 +467,6 @@ class LanguageEn extends BaseLanguage {
   String get notifications => "Notifications";
 
   @override
-  String get contactLength => "Contact number length must be of 10 to 14 digit.";
-
-  @override
   String get pickupLocation => "Pickup Location";
 
   @override
@@ -576,9 +480,6 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get orderId => "Order Id";
-
-  @override
-  String get createdAt => "Created at: ";
 
   @override
   String get viewHistory => "View History";
@@ -665,12 +566,6 @@ class LanguageEn extends BaseLanguage {
   String get deliveryDescription => "Delivery Description";
 
   @override
-  String get pickupContactNumber => "Pickup Contact Number";
-
-  @override
-  String get pickupDescription => "Pickup Description";
-
-  @override
   String get success => "Success";
 
   @override
@@ -714,9 +609,6 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get numberOfParcels => "Number of Parcels";
-
-  @override
-  String get verified => "Verified";
 
   @override
   String get invoice => "Invoice";
@@ -824,7 +716,8 @@ class LanguageEn extends BaseLanguage {
   String get deleteAccountMsg1 => 'Are you sure you want to delete your account? Please read how account deletion will affect.';
 
   @override
-  String get deleteAccountMsg2 => 'Deleting your account removes personal information from our database. Your email becomes permanently reserved and same email cannot be re-used to register a new account.';
+  String get deleteAccountMsg2 =>
+      'Deleting your account removes personal information from our database. Your email becomes permanently reserved and same email cannot be re-used to register a new account.';
 
   @override
   String get deleteAccountConfirmMsg => 'Are you sure you want to delete Account?';
@@ -938,12 +831,6 @@ class LanguageEn extends BaseLanguage {
   String get add => "Add";
 
   @override
-  String get moneyDeposited => "Money Deposited";
-
-  @override
-  String get moneyDebited => "Money Debited";
-
-  @override
   String get bankNotFound => "opps,your Bank detail not found";
 
   @override
@@ -1006,48 +893,14 @@ class LanguageEn extends BaseLanguage {
   @override
   String get accepted => "Accepted";
 
-  //TODO
   @override
   String get vehicle => 'Vehicle';
 
   @override
-  String get add_vehicle => 'Add Vehicle';
+  String get selectVehicle => 'Select Vehicle';
 
   @override
-  String get update_vehicle => 'Update Vehicle';
-
-  @override
-  String get vehicle_size => 'Vehicle Size';
-
-  @override
-  String get vehicle_capacity => 'Vehicle Capacity';
-
-  @override
-  String get vehicle_image => 'Vehicle Image';
-
-  @override
-  String get select_vehicle => 'Select Vehicle';
-
-  @override
-  String get enable_vehicle => 'Enable Vehicle?';
-
-  @override
-  String get disable_vehicle => 'Disable Vehicle?';
-
-  @override
-  String get enable_vehicle_msg => 'Do you want to enable this vehicle?';
-
-  @override
-  String get disable_vehicle_msg => 'Do you want to disable this vehicle?';
-
-  @override
-  String get delete_vehicle => 'Delete Vehicle?';
-
-  @override
-  String get do_you_want_to_delete_this_vehicle => 'Do you want to delete this vehicle?';
-
-  @override
-  String get vehicle_name => 'Vehicle Name';
+  String get vehicleName => 'Vehicle Name';
 
   @override
   String get bankName => 'Bank Name';
@@ -1081,10 +934,45 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get verification => "Verification";
+  @override
+  String get ordersWalletMore => "Orders, Wallet and more";
 
   @override
-  String get phoneNumberAlreadyVerified => "Phone number has already verified.";
+  String get general => "General";
 
   @override
-  String get verifyPhoneNumber => "Verify Phone Number";
+  String get version => "Version";
+
+  @override
+  String get confirmationCode => "Enter Confirmation code";
+
+  @override
+  String get confirmationCodeSent => "Enter the confirmation code have sent to";
+
+  @override
+  String get getOTP => "Get OTP";
+  @override
+  String get weSend => "We will send you an";
+
+  @override
+  String get oneTimePassword => "One Time Password";
+
+  @override
+  String get on => "on";
+
+  @override
+  String get phoneNumberVerification => "Phone Number Verification";
+
+  @override
+  String get location => "Location";
+
+  @override
+  String get hey => "Hey";
+
+  @override
+  String get markAllRead => "Mark All as read";
+
+  @override
+  String get confirmAccountDeletion => "Confirm account deletion";
+
 }
