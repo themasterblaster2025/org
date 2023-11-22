@@ -55,7 +55,7 @@ class PickAddressBottomSheetState extends State<PickAddressBottomSheet> {
               finish(context);
             }
           }).paddingAll(16),
-          Divider(),
+          Divider(color: context.dividerColor),
           ListView.separated(
             shrinkWrap: true,
             itemCount: (getStringListAsync(RECENT_ADDRESS_LIST) ?? []).length,
@@ -81,7 +81,7 @@ class PickAddressBottomSheetState extends State<PickAddressBottomSheet> {
               }).paddingSymmetric(vertical: 8, horizontal: 16);
             },
             separatorBuilder: (context, index) {
-              return Divider();
+              return    Divider(color: context.dividerColor);
             },
           ).expand(),
         ],

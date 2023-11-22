@@ -1,14 +1,17 @@
 class LoginResponse {
   UserData? data;
   String? message;
+
+  String? isEmailVerification;
   var status;
 
-  LoginResponse({this.data, this.message,this.status});
+  LoginResponse({this.data, this.message,this.status,this.isEmailVerification});
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) {
     return LoginResponse(
       data: json['data'] != null ? UserData.fromJson(json['data']) : null,
       message: json['message'],
+      isEmailVerification : json['is_email_verification'],
       status: json['status'],
     );
   }
@@ -18,6 +21,7 @@ class LoginResponse {
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
+    data['is_email_verification'] = this.isEmailVerification;
     data['message'] = this.message;
     data['status'] = this.status;
     return data;
@@ -52,6 +56,7 @@ class UserData {
   String? deletedAt;
   UserBankAccount? userBankAccount;
   String? otpVerifyAt;
+  String? emailVerifiedAt;
 
   UserData(
       {this.apiToken,

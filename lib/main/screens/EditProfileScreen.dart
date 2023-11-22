@@ -4,6 +4,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../main.dart';
 import '../../main/components/BodyCornerWidget.dart';
@@ -14,10 +15,16 @@ import '../../main/utils/Constants.dart';
 import '../../main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import '../components/CommonScaffoldComponent.dart';
+import '../models/LoginResponse.dart';
 import '../utils/Images.dart';
+import 'UserCitySelectScreen.dart';
 
 class EditProfileScreen extends StatefulWidget {
   static String tag = '/EditProfileScreen';
+  final bool? isGoogle;
+
+  EditProfileScreen({this.isGoogle = false});
 
   @override
   EditProfileScreenState createState() => EditProfileScreenState();
@@ -89,11 +96,46 @@ class EditProfileScreenState extends State<EditProfileScreen> {
       address: addressController.text.validate(),
       contactNumber: '$countryCode ${contactNumberController.text.trim()}',
     ).then((value) {
-      finish(context);
-      appStore.setLoading(false);
+      // finish(context);
     }).catchError((error) {
       log(error);
       appStore.setLoading(false);
+    });
+  }
+
+  Future updateProfile({String? userName, String? name, String? userEmail, String? address, String? contactNumber, File? file}) async {
+    MultipartRequest multiPartRequest = await getMultiPartRequest('update-profile');
+    multiPartRequest.fields['id'] = getIntAsync(USER_ID).toString();
+    multiPartRequest.fields['username'] = userName.validate();
+    multiPartRequest.fields['email'] = userEmail ?? appStore.userEmail;
+    multiPartRequest.fields['name'] = name.validate();
+    multiPartRequest.fields['contact_number'] = contactNumber.validate();
+    multiPartRequest.fields['address'] = address.validate();
+
+    if (file != null) multiPartRequest.files.add(await MultipartFile.fromPath('profile_image', file.path));
+
+    await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
+      if (data != null) {
+        LoginResponse res = LoginResponse.fromJson(data);
+        if (res.data != null) {
+          appStore.setLoading(false);
+          if (widget.isGoogle == true) {
+            UserCitySelectScreen().launch(context, isNewTask: true);
+          } else {
+            Navigator.pop(context);
+          }
+          await setValue(NAME, res.data!.name.validate());
+          await setValue(USER_NAME, res.data!.username.validate());
+          await setValue(USER_ADDRESS, res.data!.address.validate());
+          await setValue(USER_CONTACT_NUMBER, res.data!.contactNumber.validate());
+          await appStore.setUserEmail(res.data!.email.validate());
+          appStore.setUserProfile(res.data!.profileImage.validate());
+        }
+        toast(res.message.toString());
+      }
+    }, onError: (error) {
+      appStore.setLoading(false);
+      toast(error.toString());
     });
   }
 
@@ -104,8 +146,9 @@ class EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: commonAppBarWidget(language.editProfile),
+    return CommonScaffoldComponent(
+      showBack: !widget.isGoogle.validate(),
+      appBarTitle: language.editProfile,
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -123,18 +166,18 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                         child: Container(
                           margin: EdgeInsets.only(top: 60, left: 80),
                           padding: EdgeInsets.all(6),
-                          decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary,border: Border.all(width: 1,color: Colors.white),boxShape: BoxShape.circle),
-                          child:Icon(
-                              Icons.edit,
-                              color: white,
-                              size: 16,
+                          decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary, border: Border.all(width: 1, color: Colors.white), boxShape: BoxShape.circle),
+                          child: Icon(
+                            Icons.edit,
+                            color: white,
+                            size: 16,
                           ),
                         ),
                       )
                     ],
-                  ).onTap((){
-                   getImage();
-                  },highlightColor: Colors.transparent,splashColor: Colors.transparent),
+                  ).onTap(() {
+                    getImage();
+                  }, highlightColor: Colors.transparent, splashColor: Colors.transparent),
                   16.height,
                   Text(language.email, style: primaryTextStyle()),
                   8.height,
@@ -180,7 +223,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                   AppTextField(
                     controller: contactNumberController,
                     textFieldType: TextFieldType.PHONE,
-                    readOnly: true,
+                    readOnly: !widget.isGoogle.validate(),
                     focus: contactFocus,
                     nextFocus: addressFocus,
                     decoration: commonInputDecoration(
@@ -193,7 +236,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                               showCountryOnly: false,
                               dialogSize: Size(context.width() - 60, context.height() * 0.6),
                               showFlag: true,
-                              enabled: false,
+                              enabled: widget.isGoogle.validate(),
                               showFlagDialog: true,
                               showOnlyCountryWhenClosed: false,
                               alignLeft: false,
@@ -221,11 +264,11 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                     validator: (value) {
                       if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-                    //  if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
+                      //  if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
                       return null;
                     },
                     onTap: () {
-                      toast(language.notChangeMobileNo);
+                      if (!widget.isGoogle.validate()) toast(language.notChangeMobileNo);
                     },
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
@@ -238,6 +281,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     controller: addressController,
                     textFieldType: TextFieldType.MULTILINE,
                     focus: addressFocus,
+                    textInputAction: TextInputAction.done,
                     decoration: commonInputDecoration(),
                   ),
                   16.height,

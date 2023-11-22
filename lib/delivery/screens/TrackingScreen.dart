@@ -222,7 +222,7 @@ class TrackingScreenState extends State<TrackingScreen> {
                         );
                       },
                       separatorBuilder: (_, index) {
-                        return Divider();
+                        return Divider(color: context.dividerColor);
                       }),
                 ),
               ],

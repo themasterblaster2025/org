@@ -21,6 +21,7 @@ import '../../main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
+import '../models/AddressListModel.dart';
 import '../models/AppSettingModel.dart';
 import '../models/AutoCompletePlacesListModel.dart';
 import '../models/InvoiceSettingModel.dart';
@@ -83,7 +84,7 @@ Future<LoginResponse> signUpApi(Map request) async {
 }
 
 Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async {
-  Response response = await buildHttpResponse('login', request: request, method: HttpMethod.POST);
+  Response response = await buildHttpResponse(isSocialLogin ? 'social-login' : 'login', request: request, method: HttpMethod.POST);
   if (!response.statusCode.isSuccessful()) {
     if (response.body.isJson()) {
       var json = jsonDecode(response.body);
@@ -228,34 +229,7 @@ Future sendMultiPartRequest(MultipartRequest multiPartRequest, {Function(dynamic
 }
 
 /// Profile Update
-Future updateProfile({String? userName, String? name, String? userEmail, String? address, String? contactNumber, File? file}) async {
-  MultipartRequest multiPartRequest = await getMultiPartRequest('update-profile');
-  multiPartRequest.fields['id'] = getIntAsync(USER_ID).toString();
-  multiPartRequest.fields['username'] = userName.validate();
-  multiPartRequest.fields['email'] = userEmail ?? appStore.userEmail;
-  multiPartRequest.fields['name'] = name.validate();
-  multiPartRequest.fields['contact_number'] = contactNumber.validate();
-  multiPartRequest.fields['address'] = address.validate();
 
-  if (file != null) multiPartRequest.files.add(await MultipartFile.fromPath('profile_image', file.path));
-
-  await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
-    if (data != null) {
-      LoginResponse res = LoginResponse.fromJson(data);
-      if (res.data != null) {
-        await setValue(NAME, res.data!.name.validate());
-        await setValue(USER_NAME, res.data!.username.validate());
-        await setValue(USER_ADDRESS, res.data!.address.validate());
-        await setValue(USER_CONTACT_NUMBER, res.data!.contactNumber.validate());
-        await appStore.setUserEmail(res.data!.email.validate());
-        appStore.setUserProfile(res.data!.profileImage.validate());
-      }
-      toast(res.message.toString());
-    }
-  }, onError: (error) {
-    toast(error.toString());
-  });
-}
 
 Future<UserData> getUserDetail(int id) async {
   return UserData.fromJson(await handleResponse(await buildHttpResponse('user-detail?id=$id', method: HttpMethod.GET)).then((value) => value['data']));
@@ -489,4 +463,58 @@ Future<InvoiceSettingModel> getInvoiceSetting() async {
 
 Future<LDBaseResponse> updateUserStatus(Map req) async {
   return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('update-user-status', request: req, method: HttpMethod.POST)));
+}
+
+Future updateUid(String? uid) async {
+  MultipartRequest multiPartRequest = await getMultiPartRequest('update-profile');
+  multiPartRequest.fields['id'] = getIntAsync(USER_ID).toString();
+  multiPartRequest.fields['email'] = getStringAsync(USER_EMAIL).validate();
+  multiPartRequest.fields['username'] = getStringAsync(USER_NAME).validate();
+  multiPartRequest.fields['uid'] = uid.validate();
+
+  await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
+    if (data != null) {
+      //
+    }
+  }, onError: (error) {
+    log(error.toString());
+  });
+}
+
+Future updatePlayerId() async {
+  MultipartRequest multiPartRequest = await getMultiPartRequest('update-profile');
+  multiPartRequest.fields['id'] = getIntAsync(USER_ID).toString();
+  multiPartRequest.fields['email'] = getStringAsync(USER_EMAIL).validate();
+  multiPartRequest.fields['username'] = getStringAsync(USER_NAME).validate();
+  multiPartRequest.fields['player_id'] = getStringAsync(PLAYER_ID);
+
+  await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
+    if (data != null) {
+      //
+    }
+  }, onError: (error) {
+    log(error.toString());
+  });
+}
+
+Future<AddressListModel> getAddressList({int? page}) async {
+  return AddressListModel.fromJson(await handleResponse(await buildHttpResponse(
+      page != null ? 'useraddress-list?page=$page&user_id=${getIntAsync(USER_ID)}&city_id=${getIntAsync(CITY_ID)}' : 'useraddress-list?per_page=-1&user_id=${getIntAsync(USER_ID)}&city_id=${getIntAsync(CITY_ID)}',
+      method: HttpMethod.GET)));
+}
+
+Future<LDBaseResponse> saveUserAddress(Map req) async {
+  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('useraddress-save', method: HttpMethod.POST, request: req)));
+}
+
+Future<LDBaseResponse> deleteUserAddress(int id) async {
+  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('useraddress-delete/$id', method: HttpMethod.POST)));
+}
+
+Future<LDBaseResponse> verifyOtpEmail(Map req) async {
+  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('verify-otp-for-email', request: req, method: HttpMethod.POST)));
+}
+
+Future<LDBaseResponse> resendOtpEmail() async {
+  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('resend-otp-for-email', method: HttpMethod.POST)));
 }

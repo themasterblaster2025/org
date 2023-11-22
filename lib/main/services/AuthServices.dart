@@ -1,17 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 import '../../main/screens/LoginScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../delivery/screens/DeliveryDashBoard.dart';
 import '../../main.dart';
 import '../../user/screens/DashboardScreen.dart';
-import '../components/UserCitySelectScreen.dart';
+import '../screens/EditProfileScreen.dart';
+import '../screens/UserCitySelectScreen.dart';
 import '../models/CityListModel.dart';
 import '../models/LoginResponse.dart';
 import '../network/RestApis.dart';
+import '../screens/EmailVerificationScreen.dart';
 import '../screens/VerificationScreen.dart';
+import '../utils/Common.dart';
 import '../utils/Constants.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -37,10 +42,10 @@ class AuthServices {
             userCredential = value.user!;
           });
         } on FirebaseException catch (error) {
-          toast(error.message);
+          toast(getMessageFromErrorCode(error));
         }
       } else {
-        toast(error.message);
+        toast(getMessageFromErrorCode(error));
       }
     }
     return userCredential;
@@ -86,7 +91,12 @@ class AuthServices {
                     log("value...." + value.toString());
                   });
                   appStore.setLoading(false);
-                  UserCitySelectScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+                  if (res.isEmailVerification == '1' && !res.data!.emailVerifiedAt.isEmptyOrNull)
+                    EmailVerificationScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+                  else if (!res.data!.otpVerifyAt.isEmptyOrNull)
+                    VerificationScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+                  else
+                    UserCitySelectScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
                 });
               }).catchError((e) {
                 appStore.setLoading(false);
@@ -107,7 +117,7 @@ class AuthServices {
       });
     } on FirebaseException catch (error) {
       appStore.setLoading(false);
-      toast(error.message);
+      toast(getMessageFromErrorCode(error));
     }
   }
 
@@ -178,29 +188,168 @@ class AuthServices {
       });
     }
   }
+
+  Future<void> loginFromFirebase(User currentUser, String loginType, String? accessToken, {String userType = CLIENT}) async {
+    String firstName = '';
+    String lastName = '';
+    if (loginType == LoginTypeGoogle) {
+      if (currentUser.displayName.validate().split(' ').length >= 1) firstName = currentUser.displayName.splitBefore(' ');
+      if (currentUser.displayName.validate().split(' ').length >= 2) lastName = currentUser.displayName.splitAfter(' ');
+    } else {
+      firstName = getStringAsync('appleGivenName').validate();
+      lastName = getStringAsync('appleFamilyName').validate();
+    }
+
+    Map req = {
+      "email": currentUser.email,
+      "username": (firstName + lastName).toLowerCase(),
+      "name": firstName,
+      "login_type": loginType,
+      "user_type": userType,
+      "accessToken": accessToken,
+      if (!currentUser.phoneNumber.isEmptyOrNull) 'contact_number': currentUser.phoneNumber.validate(),
+    };
+
+    await logInApi(req, isSocialLogin: true).then((value) async {
+      //  Navigator.pop(getContext);
+
+      UserData userModel = UserData();
+
+      /// Create user
+      userModel.uid = currentUser.uid;
+      userModel.email = value.data!.email;
+      userModel.contactNumber = value.data!.contactNumber;
+      userModel.name = value.data!.name;
+      userModel.username = value.data!.username;
+      userModel.userType = value.data!.userType;
+      userModel.longitude = value.data!.longitude;
+      userModel.latitude = value.data!.longitude;
+      userModel.countryName = value.data!.countryName;
+      userModel.cityName = value.data!.cityName;
+      userModel.status = value.data!.status;
+      userModel.playerId = value.data!.playerId;
+      userModel.profileImage = value.data!.profileImage;
+      userModel.createdAt = Timestamp.now().toDate().toString();
+      userModel.updatedAt = Timestamp.now().toDate().toString();
+      userModel.playerId = getStringAsync(PLAYER_ID);
+      await userService.addDocumentWithCustomId(currentUser.uid, userModel.toJson()).then((v) async {
+        await setValue(USER_PROFILE_PHOTO, currentUser.photoURL.toString());
+        if (value.data!.contactNumber.isEmptyOrNull) {
+          EditProfileScreen(isGoogle: true).launch(getContext, isNewTask: true);
+        } else {
+          if (value.data!.countryId != null && value.data!.cityId != null) {
+            await getCountryDetailApiCall(value.data!.countryId.validate());
+            getCityDetailApiCall(value.data!.cityId.validate());
+          } else {
+            UserCitySelectScreen().launch(getContext, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+          }
+          if (value.data!.uid.isEmptyOrNull) await updateUid(getStringAsync(UID)).catchError((error) {});
+          if (value.data!.playerId.isEmptyOrNull) await updatePlayerId().catchError((error) {});
+        }
+      }).catchError((e) {
+        appStore.setLoading(false);
+        toast(e.toString());
+      });
+    }).catchError((e) {
+      log(e.toString());
+      throw e;
+    });
+  }
+
+  Future<void> signInWithGoogle({String userType = CLIENT}) async {
+    final GoogleSignIn googleSignIn = GoogleSignIn();
+    GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+
+    if (googleSignInAccount != null) {
+      //Authentication
+      final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+
+      final UserCredential authResult = await _auth.signInWithCredential(credential);
+      final User user = authResult.user!;
+
+      assert(!user.isAnonymous);
+
+      final User currentUser = _auth.currentUser!;
+      print("data" + user.uid.toString());
+      setValue(UID, currentUser.uid);
+      assert(user.uid == currentUser.uid);
+
+      googleSignIn.signOut();
+
+      await loginFromFirebase(user, LoginTypeGoogle, googleSignInAuthentication.accessToken, userType: userType);
+    } else {
+      throw errorSomethingWentWrong;
+    }
+  }
+
+  /// Sign-In with Apple.
+  Future<void> appleLogIn(String? userType) async {
+    if (await TheAppleSignIn.isAvailable()) {
+      AuthorizationResult result = await TheAppleSignIn.performRequests(
+        [
+          AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+        ],
+      );
+      switch (result.status) {
+        case AuthorizationStatus.authorized:
+          final appleIdCredential = result.credential!;
+          final oAuthProvider = OAuthProvider('apple.com');
+          final credential = oAuthProvider.credential(
+            idToken: String.fromCharCodes(appleIdCredential.identityToken!),
+            accessToken: String.fromCharCodes(appleIdCredential.authorizationCode!),
+          );
+          final authResult = await _auth.signInWithCredential(credential);
+          final user = authResult.user!;
+
+          if (result.credential!.email != null) {
+            await saveAppleData(result);
+          }
+
+          await loginFromFirebase(user, LoginTypeApple, String.fromCharCodes(appleIdCredential.authorizationCode!), userType: userType.validate());
+          break;
+        case AuthorizationStatus.error:
+          throw ("Sign in failed: ${result.error!.localizedDescription}");
+        case AuthorizationStatus.cancelled:
+          throw ('User cancelled');
+      }
+    } else {
+      throw ('Apple SignIn is not available for your device');
+    }
+  }
+
+  Future<void> saveAppleData(AuthorizationResult result) async {
+    await setValue('appleEmail', result.credential!.email.validate());
+    await setValue('appleGivenName', result.credential!.fullName!.givenName.validate());
+    await setValue('appleFamilyName', result.credential!.fullName!.familyName.validate());
+  }
 }
 
-getCountryDetailApiCall(int countryId, context) async {
+getCountryDetailApiCall(int countryId) async {
   await getCountryDetail(countryId).then((value) {
     setValue(COUNTRY_DATA, value.data!.toJson());
   }).catchError((error) {});
 }
 
-getCityDetailApiCall(int cityId, context) async {
+getCityDetailApiCall(int cityId) async {
   await getCityDetail(cityId).then((value) async {
     await setValue(CITY_DATA, value.data!.toJson());
     if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
       if (getBoolAsync(OTP_VERIFIED)) {
         if (getStringAsync(USER_TYPE) == CLIENT) {
-          DashboardScreen().launch(context, isNewTask: true);
+          DashboardScreen().launch(getContext, isNewTask: true);
         } else {
-          DeliveryDashBoard().launch(context, isNewTask: true);
+          DeliveryDashBoard().launch(getContext, isNewTask: true);
         }
       } else {
-        VerificationScreen().launch(context, isNewTask: true);
+        VerificationScreen().launch(getContext, isNewTask: true);
       }
     } else {
-      UserCitySelectScreen().launch(context, isNewTask: true);
+      UserCitySelectScreen().launch(getContext, isNewTask: true);
     }
   }).catchError((error) {});
 }

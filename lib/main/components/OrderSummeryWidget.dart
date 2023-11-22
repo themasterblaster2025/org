@@ -169,7 +169,7 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
               }).toList()),
             ],
           ).visible(extraList.length != 0),
-          Divider(),
+          Divider(color: context.dividerColor),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

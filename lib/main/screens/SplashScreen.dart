@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../delivery/screens/DeliveryDashBoard.dart';
-import '../../main/components/UserCitySelectScreen.dart';
+import 'UserCitySelectScreen.dart';
 import '../../main/models/CityListModel.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/screens/LoginScreen.dart';
@@ -28,7 +28,6 @@ class SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> init() async {
-    // setStatusBarColor(appStore.isDarkMode ? Colors.black : Colors.white, statusBarBrightness: appStore.isDarkMode ? Brightness.light : Brightness.dark);
     Future.delayed(
       Duration(seconds: 1),
       () async {

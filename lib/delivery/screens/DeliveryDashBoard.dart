@@ -67,7 +67,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
                 children: [
                   Align(
                     alignment: AlignmentDirectional.center,
-                    child: Icon(Ionicons.md_notifications_outline),
+                    child: Icon(Ionicons.md_notifications_outline,color: Colors.white),
                   ),
                   Observer(builder: (context) {
                     return Positioned(
@@ -91,11 +91,11 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
                 onPressed: () async {
                   DProfileFragment().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
                 },
-                icon: Icon(Ionicons.settings_outline),
+                icon: Icon(Ionicons.settings_outline,color: Colors.white),
               ),
             ],
             bottom: TabBar(
-              isScrollable: true,
+              isScrollable: true,tabAlignment: TabAlignment.start,
               unselectedLabelColor: Colors.white70,
               indicator: BoxDecoration(color: Colors.transparent),
               labelColor: Colors.white,

@@ -215,7 +215,7 @@ class WithDrawScreenState extends State<WithDrawScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(language.addMoney, style: boldTextStyle(size: 18)),
-                        Divider(),
+                        Divider(color: context.dividerColor),
                         16.height,
                         Text(language.amount, style: primaryTextStyle()),
                         8.height,

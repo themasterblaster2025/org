@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/CountryListModel.dart';
 import '../../main/models/PlaceAddressModel.dart';
 import '../../main/utils/Constants.dart';
@@ -13,8 +14,9 @@ import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 class GoogleMapScreen extends StatefulWidget {
   static final kInitialPosition = LatLng(-33.8567844, 151.213108);
   final bool isPick;
+  final bool isSaveAddress;
 
-  GoogleMapScreen({this.isPick = true});
+  GoogleMapScreen({this.isPick = true, this.isSaveAddress = false});
 
   @override
   _GoogleMapScreenState createState() => _GoogleMapScreenState();
@@ -27,10 +29,12 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.isPick ? language.selectPickupLocation : language.selectDeliveryLocation),
-      ),
+    return CommonScaffoldComponent(
+      appBarTitle: widget.isSaveAddress
+          ? 'Select Location'
+          : widget.isPick
+              ? language.selectPickupLocation
+              : language.selectDeliveryLocation,
       body: Column(
         children: [
           PlacePicker(

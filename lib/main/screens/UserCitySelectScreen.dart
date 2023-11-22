@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:lottie/lottie.dart';
+import 'package:mighty_delivery/main/screens/EmailVerificationScreen.dart';
 import '../../delivery/screens/DeliveryDashBoard.dart';
 import '../../main.dart';
-import '../../main/components/BodyCornerWidget.dart';
-import '../../main/models/CityListModel.dart';
-import '../../main/models/CountryListModel.dart';
-import '../../main/network/RestApis.dart';
-import '../../main/utils/Colors.dart';
-import '../../main/utils/Common.dart';
-import '../../main/utils/Constants.dart';
+import '../models/CityListModel.dart';
+import '../models/CountryListModel.dart';
+import '../network/RestApis.dart';
+import '../utils/Colors.dart';
+import '../utils/Common.dart';
+import '../utils/Constants.dart';
 import '../../user/screens/DashboardScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
-
-import '../screens/VerificationScreen.dart';
+import 'VerificationScreen.dart';
 import '../utils/Images.dart';
-import 'CommonScaffoldComponent.dart';
+import '../components/CommonScaffoldComponent.dart';
 
 class UserCitySelectScreen extends StatefulWidget {
   static String tag = '/UserCitySelectScreen';
@@ -109,8 +107,6 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
           } else {
             DeliveryDashBoard().launch(context, isNewTask: true);
           }
-        } else {
-          VerificationScreen().launch(context, isNewTask: true);
         }
       }
     }).catchError((error) {
@@ -137,6 +133,7 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
       },
       child: CommonScaffoldComponent(
         appBarTitle: language.selectRegion,
+        showBack: widget.isBack,
         body: Observer(builder: (context) {
           return appStore.isLoading && countryData.isEmpty
               ? loaderWidget()

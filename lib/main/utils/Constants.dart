@@ -4,7 +4,7 @@ const mAppName = 'Mighty Delivery';
 
 //region Baseurl
 //Note: Domain url is where you uploaded your laravel code
-const DOMAIN_URL = 'https://meetmighty.com/mobile/mighty-local-delivery'; // Don't add slash at the end of the url
+const DOMAIN_URL = 'https://apps.meetmighty.com/mighty-local-delivery'; // Don't add slash at the end of the url
 //endregion
 
 //region Google map key
@@ -87,6 +87,14 @@ const COUNTRY_ID = 'COUNTRY_ID';
 const COUNTRY_DATA = 'COUNTRY_DATA';
 const CITY_ID = 'City';
 const CITY_DATA = 'CITY_DATA';
+
+const EMAIL_VERIFIED = 'EMAIL_VERIFIED_AT';
+const IS_EMAIL_VERIFICATION = 'IS_EMAIL_VERIFICATION';
+//endregion
+
+//region login type
+const LoginTypeGoogle = 'google';
+const LoginTypeApple = 'apple';
 //endregion
 
 //region user role

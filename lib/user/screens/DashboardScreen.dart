@@ -7,7 +7,7 @@ import '../../main/components/CommonScaffoldComponent.dart';
 import '../../user/screens/WalletScreen.dart';
 import '../../main.dart';
 import '../../main/components/BodyCornerWidget.dart';
-import '../../main/components/UserCitySelectScreen.dart';
+import '../../main/screens/UserCitySelectScreen.dart';
 import '../../main/models/CityListModel.dart';
 import '../../main/models/models.dart';
 import '../../main/network/RestApis.dart';
@@ -90,7 +90,7 @@ class DashboardScreenState extends State<DashboardScreen> {
             actions: [
               Container(
                 margin: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-                padding: EdgeInsets.symmetric(horizontal: 8),
+                padding: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
                 decoration: boxDecorationWithRoundedCorners(borderRadius: radius(defaultRadius), backgroundColor: Colors.white24),
                 child: Row(
                   children: [
@@ -111,7 +111,7 @@ class DashboardScreenState extends State<DashboardScreen> {
               Stack(
                 clipBehavior: Clip.none,
                 children: [
-                  Align(alignment: AlignmentDirectional.center, child: Icon(Ionicons.md_notifications_outline)),
+                  Align(alignment: AlignmentDirectional.center, child: Icon(Ionicons.md_notifications_outline,color: Colors.white)),
                   if (appStore.allUnreadCount != 0)
                     Observer(builder: (context) {
                       return Positioned(
@@ -133,7 +133,7 @@ class DashboardScreenState extends State<DashboardScreen> {
               8.width,
               Stack(
                 children: [
-                  Align(alignment: AlignmentDirectional.center, child: Icon(Ionicons.md_options_outline)),
+                  Align(alignment: AlignmentDirectional.center, child: Icon(Ionicons.md_options_outline,color: Colors.white)),
                   Observer(builder: (context) {
                     return Positioned(
                       right: 8,
@@ -163,7 +163,7 @@ class DashboardScreenState extends State<DashboardScreen> {
         OrderFragment(),
         AccountFragment(),
       ][currentIndex],
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton(shape: RoundedRectangleBorder(borderRadius: radius(40)),
         backgroundColor: appStore.availableBal >= 0 ? colorPrimary : textSecondaryColorGlobal,
         child: Icon(AntDesign.plus, color: Colors.white),
         onPressed: () {

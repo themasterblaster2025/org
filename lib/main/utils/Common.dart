@@ -21,6 +21,7 @@ import '../models/LoginResponse.dart';
 import '../network/RestApis.dart';
 import '../screens/LoginScreen.dart';
 import '../services/AuthServices.dart';
+import 'Images.dart';
 import 'Widgets.dart';
 
 InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, Function()? suffixOnTap, Widget? dateTime, Widget? prefixIcon, bool? isFill = true}) {
@@ -266,42 +267,29 @@ Future<void> saveOneSignalPlayerId() async {
 
 ///todo
 String statusTypeIcon({String? type}) {
-  String icon = 'https://cdn-icons-png.flaticon.com/128/7928/7928226.png';
+  String icon = ic_order;
   if (type == ORDER_ASSIGNED) {
-    icon = 'https://cdn-icons-png.flaticon.com/128/9238/9238295.png';
+    icon = ic_order_assigned;
   } else if (type == ORDER_ACCEPTED) {
-    icon = 'https://cdn-icons-png.flaticon.com/128/7857/7857199.png';
+    icon = ic_order_accept;
   } else if (type == ORDER_PICKED_UP) {
-    icon = 'https://cdn-icons-png.flaticon.com/128/10786/10786479.png';
+    icon = ic_order_pickedUp;
   } else if (type == ORDER_ARRIVED) {
-    icon = 'https://cdn-icons-png.flaticon.com/128/7928/7928244.png';
+    icon = ic_order_arrived;
   } else if (type == ORDER_DEPARTED) {
-    icon = 'https://cdn-icons-png.flaticon.com/128/5073/5073999.png';
+    icon = ic_order_departed;
   } else if (type == ORDER_DELIVERED) {
-    icon = 'https://cdn-icons-png.flaticon.com/128/9239/9239921.png';
+    icon = ic_order_delivered;
   } else if (type == ORDER_CANCELLED) {
-    icon = 'https://cdn-icons-png.flaticon.com/128/9291/9291733.png';
+    icon = ic_order_cancelled;
   } else if (type == ORDER_CREATED) {
-    icon = 'https://cdn-icons-png.flaticon.com/128/3914/3914461.png';
+    icon = ic_order_created;
   } else if (type == ORDER_DRAFT) {
-    icon = 'https://cdn-icons-png.flaticon.com/128/10469/10469584.png';
+    icon = ic_order_draft;
+  } else if (type == ORDER_TRANSFER) {
+    icon = ic_order_transfer;
   }
   return icon;
-}
-
-Widget settingItemWidget(IconData icon, String title, Function() onTap, {bool isLast = false, IconData? suffixIcon}) {
-  return Column(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      ListTile(
-          contentPadding: EdgeInsets.zero,
-          leading: Icon(icon, size: 30, color: colorPrimary),
-          title: Text(title),
-          trailing: suffixIcon != null ? Icon(suffixIcon, color: Colors.green) : Icon(Icons.navigate_next, color: appStore.isDarkMode ? Colors.white : Colors.grey),
-          onTap: onTap),
-      if (!isLast) Divider()
-    ],
-  );
 }
 
 String? orderTitle(String orderStatus) {
@@ -480,3 +468,34 @@ String timeAgo(String date) {
   }
   return date.toString();
 }
+
+String getMessageFromErrorCode(FirebaseException error) {
+  switch (error.code) {
+    case "ERROR_EMAIL_ALREADY_IN_USE":
+    case "account-exists-with-different-credential":
+    case "email-already-in-use":
+      return "The email address is already in use by another account.";
+    case "ERROR_WRONG_PASSWORD":
+    case "wrong-password":
+      return "Wrong email/password combination.";
+    case "ERROR_USER_NOT_FOUND":
+    case "user-not-found":
+      return "No user found with this email.";
+    case "ERROR_USER_DISABLED":
+    case "user-disabled":
+      return "User disabled.";
+    case "ERROR_TOO_MANY_REQUESTS":
+    case "operation-not-allowed":
+      return "Too many requests to log into this account.";
+    case "ERROR_OPERATION_NOT_ALLOWED":
+    case "operation-not-allowed":
+      return "Server error, please try again later.";
+    case "ERROR_INVALID_EMAIL":
+    case "invalid-email":
+      return "Email address is invalid.";
+    default:
+      return error.message.toString();
+  }
+}
+
+List<String> userTypeList = [CLIENT, DELIVERY_MAN];

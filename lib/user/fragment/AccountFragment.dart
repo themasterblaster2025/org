@@ -19,6 +19,7 @@ import 'package:nb_utils/nb_utils.dart';
 
 import '../../main/screens/AboutUsScreen.dart';
 import '../screens/DeleteAccountScreen.dart';
+import '../screens/MyAddressListScreen.dart';
 
 class AccountFragment extends StatefulWidget {
   static String tag = '/AccountFragment';
@@ -28,7 +29,6 @@ class AccountFragment extends StatefulWidget {
 }
 
 class AccountFragmentState extends State<AccountFragment> {
-
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
@@ -58,108 +58,114 @@ class AccountFragmentState extends State<AccountFragment> {
   @override
   Widget build(BuildContext context) {
     return Observer(
-      builder: (_) => SingleChildScrollView(
-        padding: EdgeInsets.only(bottom: context.height() * 0.1, top: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+      builder: (_) =>
+          SingleChildScrollView(
+            padding: EdgeInsets.only(bottom: context.height() * 0.1, top: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Stack(
-                  alignment: Alignment.bottomRight,
+                Row(
                   children: [
-                    Container(
-                        decoration: boxDecorationWithRoundedCorners(boxShape: BoxShape.circle, border: Border.all(width: 2, color: colorPrimary)),
-                        child: commonCachedNetworkImage(appStore.userProfile.validate(), height: 65, width: 65, fit: BoxFit.cover, alignment: Alignment.center).cornerRadiusWithClipRRect(50)),
-                    Container(
-                      decoration: boxDecorationWithRoundedCorners(boxShape: BoxShape.circle, border: Border.all(width: 1, color: white), backgroundColor: colorPrimary),
-                      padding: EdgeInsets.all(4),
-                      child: Image.asset(ic_edit, color: white, height: 14, width: 14),
+                    Stack(
+                      alignment: Alignment.bottomRight,
+                      children: [
+                        Container(
+                            decoration: boxDecorationWithRoundedCorners(boxShape: BoxShape.circle, border: Border.all(width: 2, color: colorPrimary)),
+                            child: commonCachedNetworkImage(appStore.userProfile.validate(), height: 65, width: 65, fit: BoxFit.cover, alignment: Alignment.center).cornerRadiusWithClipRRect(50)),
+                        Container(
+                          decoration: boxDecorationWithRoundedCorners(boxShape: BoxShape.circle, border: Border.all(width: 1, color: white), backgroundColor: colorPrimary),
+                          padding: EdgeInsets.all(4),
+                          child: Image.asset(ic_edit, color: white, height: 14, width: 14),
+                        )
+                      ],
+                    ),
+                    10.width,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(getStringAsync(NAME).validate(), style: boldTextStyle(size: 20)),
+                        6.height,
+                        Text(appStore.userEmail.validate(), style: secondaryTextStyle(size: 16)),
+                      ],
                     )
                   ],
+                ).paddingSymmetric(horizontal: 16).onTap(() {
+                  EditProfileScreen().launch(context);
+                }),
+
+                mTitle(language.ordersWalletMore),
+                accountSettingItemWidget(ic_draft, language.drafts, () {
+                  DraftOrderListScreen().launch(context);
+                }),
+                accountSettingItemWidget(ic_wallet, language.wallet, () {
+                  WalletScreen().launch(context);
+                }),
+                accountSettingItemWidget(ic_bank_detail, language.bankDetails, () {
+                  BankDetailScreen().launch(context);
+                },),
+
+                ///TODO ADD KEY
+                accountSettingItemWidget(ic_bank_detail, 'My Addresses', () {
+                  MyAddressListScreen().launch(context);
+                } ,isLast: true),
+
+                mTitle(language.account),
+                accountSettingItemWidget(ic_change_password, language.changePassword, () {
+                  ChangePasswordScreen().launch(context);
+                }),
+                accountSettingItemWidget(ic_languages, language.language, () {
+                  LanguageScreen().launch(context);
+                }),
+                accountSettingItemWidget(ic_dark_mode, language.theme, () async {
+                  await showInDialog(context, shape: RoundedRectangleBorder(borderRadius: radius()), builder: (_) => ThemeSelectionDialog(), contentPadding: EdgeInsets.zero);
+                }),
+                accountSettingItemWidget(ic_delete_account, language.deleteAccount, () async {
+                  DeleteAccountScreen().launch(context);
+                }, isLast: true),
+                mTitle(language.general),
+                accountSettingItemWidget(ic_document, language.privacyPolicy, () {
+                  commonLaunchUrl(mPrivacyPolicy);
+                }),
+                accountSettingItemWidget(ic_information, language.helpAndSupport, () {
+                  commonLaunchUrl(mHelpAndSupport);
+                }),
+                accountSettingItemWidget(ic_document, language.termAndCondition, () {
+                  commonLaunchUrl(mTermAndCondition);
+                }),
+                accountSettingItemWidget(ic_information, language.aboutUs, () {
+                  AboutUsScreen().launch(context);
+                }, isLast: false),
+                Container(
+                  decoration: boxDecorationWithRoundedCorners(border: Border.all(color: colorPrimary, width: 1), backgroundColor: Colors.transparent),
+                  padding: EdgeInsets.all(16),
+                  width: context.width(),
+                  child: Text(language.logout, style: boldTextStyle(size: 18, color: colorPrimary), textAlign: TextAlign.center),
+                ).onTap(() async {
+                  await showConfirmDialogCustom(
+                    context,
+                    primaryColor: colorPrimary,
+                    title: language.logoutConfirmationMsg,
+                    positiveText: language.yes,
+                    negativeText: language.no,
+                    onAccept: (c) {
+                      logout(context);
+                    },
+                  );
+                }).paddingAll(16),
+
+                FutureBuilder<PackageInfo>(
+                  future: PackageInfo.fromPlatform(),
+                  builder: (_, snap) {
+                    if (snap.hasData) {
+                      return Text('${language.version} ${snap.data!.version.validate()}', style: secondaryTextStyle()).center();
+                    }
+                    return SizedBox();
+                  },
                 ),
-                10.width,
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(getStringAsync(NAME).validate(), style: boldTextStyle(size: 20)),
-                    6.height,
-                    Text(appStore.userEmail.validate(), style: secondaryTextStyle(size: 16)),
-                  ],
-                )
+                30.height,
               ],
-            ).paddingSymmetric(horizontal: 16).onTap(() {
-              EditProfileScreen().launch(context);
-            }),
-
-            mTitle(language.ordersWalletMore),
-            accountSettingItemWidget(ic_draft, language.drafts, () {
-              DraftOrderListScreen().launch(context);
-            }),
-            accountSettingItemWidget(ic_wallet, language.wallet, () {
-              WalletScreen().launch(context);
-            }),
-            accountSettingItemWidget(ic_bank_detail, language.bankDetails, () {
-              BankDetailScreen().launch(context);
-            }, isLast: true),
-
-            mTitle(language.account),
-            accountSettingItemWidget(ic_change_password, language.changePassword, () {
-              ChangePasswordScreen().launch(context);
-            }),
-            accountSettingItemWidget(ic_languages, language.language, () {
-              LanguageScreen().launch(context);
-            }),
-            accountSettingItemWidget(ic_dark_mode, language.theme, () async {
-              await showInDialog(context, shape: RoundedRectangleBorder(borderRadius: radius()), builder: (_) => ThemeSelectionDialog(), contentPadding: EdgeInsets.zero);
-            }),
-            accountSettingItemWidget(ic_delete_account, language.deleteAccount, () async {
-              DeleteAccountScreen().launch(context);
-            }, isLast: true),
-            mTitle(language.general),
-            accountSettingItemWidget(ic_document, language.privacyPolicy, () {
-              commonLaunchUrl(mPrivacyPolicy);
-            }),
-            accountSettingItemWidget(ic_information, language.helpAndSupport, () {
-              commonLaunchUrl(mHelpAndSupport);
-            }),
-            accountSettingItemWidget(ic_document, language.termAndCondition, () {
-              commonLaunchUrl(mTermAndCondition);
-            }),
-            accountSettingItemWidget(ic_information, language.aboutUs, () {
-              AboutUsScreen().launch(context);
-            }, isLast: false),
-            Container(
-              decoration: boxDecorationWithRoundedCorners(border: Border.all(color: colorPrimary, width: 1),backgroundColor:Colors.transparent),
-              padding: EdgeInsets.all(16),
-              width: context.width(),
-              child: Text(language.logout, style: boldTextStyle(size: 18,color: colorPrimary), textAlign: TextAlign.center),
-            ).onTap(() async {
-              await showConfirmDialogCustom(
-                context,
-                primaryColor: colorPrimary,
-                title: language.logoutConfirmationMsg,
-                positiveText: language.yes,
-                negativeText: language.no,
-                onAccept: (c) {
-                  logout(context);
-                },
-              );
-            }).paddingAll(16),
-
-            FutureBuilder<PackageInfo>(
-              future: PackageInfo.fromPlatform(),
-              builder: (_, snap) {
-                if (snap.hasData) {
-                  return Text('${language.version} ${snap.data!.version.validate()}', style: secondaryTextStyle()).center();
-                }
-                return SizedBox();
-              },
             ),
-            30.height,
-          ],
-        ),
-      ),
+          ),
     );
   }
 }

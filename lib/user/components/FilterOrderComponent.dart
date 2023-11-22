@@ -100,7 +100,7 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
                     ,
               ],
             ),
-            Divider(height: 20),
+            Divider(height: 20,color: context.dividerColor),
             Text(language.status, style: boldTextStyle()),
             8.height,
             Wrap(

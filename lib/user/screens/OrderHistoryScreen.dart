@@ -48,7 +48,7 @@ class OrderHistoryScreenState extends State<OrderHistoryScreen> {
               beforeLineStyle: LineStyle(color: colorPrimary, thickness: 3),
               endChild: Row(
                 children: [
-                  ImageIcon(NetworkImage(statusTypeIcon(type: mData.historyType)), color: colorPrimary.withOpacity(0.8), size: 20),
+                  ImageIcon(AssetImage(statusTypeIcon(type: mData.historyType)), color: colorPrimary.withOpacity(0.8), size: 20),
                   12.width,
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

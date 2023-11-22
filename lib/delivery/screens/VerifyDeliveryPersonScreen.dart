@@ -294,7 +294,7 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
                       );
                     },
                     separatorBuilder: (context, index) {
-                      return Divider(height: 30);
+                      return Divider(height: 30,color: context.dividerColor);
                     },
                   ),
                 ],

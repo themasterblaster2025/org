@@ -273,7 +273,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                             ),
                           ],
                         ),
-                        Divider(height: 30, thickness: 1),
+                        Divider(height: 30, thickness: 1,color: context.dividerColor),
                         Row(
                           children: [
                             Container(

@@ -59,7 +59,7 @@ class DProfileFragmentState extends State<DProfileFragment> {
             title: Text(title, style: primaryTextStyle()),
             trailing: suffixIcon != null ? Icon(suffixIcon, color: Colors.green) : Icon(Icons.navigate_next, color: appStore.isDarkMode ? Colors.white : Colors.grey),
             onTap: onTap),
-        if (isLast) Divider(height: 0)
+        // if (isLast) Divider(height: 0)
       ],
     );
   }
@@ -177,6 +177,7 @@ class DProfileFragmentState extends State<DProfileFragment> {
                       return SizedBox();
                     },
                   ),
+                  16.height,
                 ],
               ),
             ],

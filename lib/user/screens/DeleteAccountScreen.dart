@@ -60,7 +60,7 @@ class DeleteAccountScreenState extends State<DeleteAccountScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(language.confirmAccountDeletion, style: boldTextStyle(size: 18)),
-                Divider(),
+                Divider(color: context.dividerColor),
                 8.height,
                 Text(language.deleteAccountMsg2, style: primaryTextStyle()),
                 24.height,

@@ -103,7 +103,7 @@ class NotificationScreenState extends State<NotificationScreen> {
                                 shape: BoxShape.circle,
                                 color: colorPrimary.withOpacity(0.15),
                               ),
-                              child: commonCachedNetworkImage(statusTypeIcon(type: data.data!.type), fit: BoxFit.fill, color: colorPrimary, width: 18, height: 18),
+                              child: Image.asset(statusTypeIcon(type: data.data!.type), fit: BoxFit.fill, color: colorPrimary, width: 18, height: 18),
                             ),
                             8.width,
                             Column(

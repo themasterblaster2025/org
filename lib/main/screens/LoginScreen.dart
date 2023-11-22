@@ -13,7 +13,8 @@ import 'package:nb_utils/nb_utils.dart';
 import '../../delivery/screens/DeliveryDashBoard.dart';
 import '../../main.dart';
 import '../../user/screens/DashboardScreen.dart';
-import '../components/UserCitySelectScreen.dart';
+import 'EmailVerificationScreen.dart';
+import 'UserCitySelectScreen.dart';
 import '../models/CityListModel.dart';
 import '../services/AuthServices.dart';
 import 'VerificationScreen.dart';
@@ -38,6 +39,7 @@ class LoginScreenState extends State<LoginScreen> {
   bool mIsCheck = false;
 
   bool isAcceptedTc = false;
+  String userType = CLIENT;
 
   @override
   void initState() {
@@ -84,6 +86,7 @@ class LoginScreenState extends State<LoginScreen> {
         await logInApi(req).then((v) async {
           authService.signInWithEmailPassword(context, email: emailController.text, password: passController.text).then((value) async {
             appStore.setLoading(false);
+            log("Email verify at :${v.data!.emailVerifiedAt}");
             if (v.data!.userType != CLIENT && v.data!.userType != DELIVERY_MAN) {
               await logout(context, isFromLogin: true);
             } else {
@@ -98,7 +101,12 @@ class LoginScreenState extends State<LoginScreen> {
                   await getCountryDetailApiCall(v.data!.countryId.validate());
                   getCityDetailApiCall(v.data!.cityId.validate());
                 } else {
-                  UserCitySelectScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+                  if (v.isEmailVerification == '1' && !v.data!.emailVerifiedAt.isEmptyOrNull)
+                    EmailVerificationScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+                  else if (!v.data!.otpVerifyAt.isEmptyOrNull)
+                    VerificationScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+                  else
+                    UserCitySelectScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
                 }
               } else {
                 toast(language.userNotApproveMsg);
@@ -139,6 +147,30 @@ class LoginScreenState extends State<LoginScreen> {
         UserCitySelectScreen().launch(context, isNewTask: true);
       }
     }).catchError((error) {});
+  }
+
+  void googleSignIn() async {
+    hideKeyboard(context);
+    appStore.setLoading(true);
+
+    await authService.signInWithGoogle(userType: userType).then((value) async {
+      appStore.setLoading(false);
+    }).catchError((e) {
+      appStore.setLoading(false);
+      toast(e.toString());
+      print(e.toString());
+    });
+  }
+
+  appleLoginApi() async {
+    hideKeyboard(context);
+    appStore.setLoading(true);
+    await authService.appleLogIn(userType).then((value) {
+      appStore.setLoading(false);
+    }).catchError((e) {
+      appStore.setLoading(false);
+      toast(e.toString());
+    });
   }
 
   @override
@@ -278,6 +310,162 @@ class LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                   16.height,
+                  Row(
+                    children: [
+                      Spacer(),
+                      Divider().expand(),
+                      16.width,
+                      Text('or Sign in with', style: secondaryTextStyle()),
+                      16.width,
+                      Divider().expand(),
+                      Spacer(),
+                    ],
+                  ),
+                  16.height,
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: !isIOS ? (context.width() - 32) : (context.width() - 40) / 2,
+                        child: OutlinedButton(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset('assets/icons/ic_google.png', height: 30, width: 30),
+                              8.width,
+                              Text('Google', style: primaryTextStyle()),
+                            ],
+                          ),
+                          style: OutlinedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius)),
+                            elevation: 0,
+                          ),
+                          onPressed: () {
+                            showDialog<void>(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext dialogContext) {
+                                return StatefulBuilder(
+                                  builder: (context, setState) {
+                                    return AlertDialog(
+                                      actionsPadding: EdgeInsets.all(16),
+                                      contentPadding: EdgeInsets.zero,
+                                      shape: RoundedRectangleBorder(borderRadius: radius(defaultRadius)),
+                                      title: Text('Select User Type', style: boldTextStyle(size: 18)),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: userTypeList.map((item) {
+                                          return RadioListTile<String>(
+                                            value: item,
+                                            activeColor: colorPrimary,
+                                            contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                                            title: Text('${item == CLIENT ? 'User' : item == DELIVERY_MAN ? 'Deliver Person' : ''}'),
+                                            groupValue: userType,
+                                            onChanged: (val) {
+                                              userType = val.validate();
+                                              setState(() {});
+                                            },
+                                          );
+                                        }).toList(),
+                                      ),
+                                      actions: <Widget>[
+                                        Row(
+                                          children: [
+                                            outlineButton(language.cancel, () {
+                                              Navigator.pop(context);
+                                            }).expand(),
+                                            16.width,
+                                            commonButton('Continue', () {
+                                              finish(context);
+                                              googleSignIn();
+                                            }, color: colorPrimary)
+                                                .expand(),
+                                          ],
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                      if (isIOS) 8.width,
+                      if (isIOS)
+                        SizedBox(
+                          width: (context.width() - 40) / 2,
+                          child: OutlinedButton(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset('assets/icons/ic_apple.png', height: 30, width: 30),
+                                8.width,
+
+                                ///TODO ADD KEY
+                                Text('Apple', style: primaryTextStyle()),
+                              ],
+                            ),
+                            style: OutlinedButton.styleFrom(
+                              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius)),
+                              elevation: 0,
+                            ),
+                            onPressed: () {
+                              showDialog<void>(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (BuildContext dialogContext) {
+                                  return StatefulBuilder(
+                                    builder: (context, setState) {
+                                      return AlertDialog(
+                                        actionsPadding: EdgeInsets.all(16),
+                                        contentPadding: EdgeInsets.zero,
+                                        shape: RoundedRectangleBorder(borderRadius: radius(defaultRadius)),
+
+                                        ///TODO ADD KEY
+                                        title: Text('Select User Type', style: boldTextStyle(size: 18)),
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: userTypeList.map((item) {
+                                            return RadioListTile<String>(
+                                              value: item,
+                                              activeColor: colorPrimary,
+                                              contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                                              title: Text('${item == CLIENT ? 'User' : item == DELIVERY_MAN ? 'Delivery Person' : ''}'),
+                                              groupValue: userType,
+                                              onChanged: (val) {
+                                                userType = val.validate();
+                                                setState(() {});
+                                              },
+                                            );
+                                          }).toList(),
+                                        ),
+                                        actions: <Widget>[
+                                          Row(
+                                            children: [
+                                              outlineButton(language.cancel, () {
+                                                Navigator.pop(context);
+                                              }).expand(),
+                                              16.width,
+                                              commonButton('Continue', () {
+                                                finish(context);
+                                                appleLoginApi();
+                                              }, color: colorPrimary)
+                                                  .expand(),
+                                            ],
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                    ],
+                  ),
                 ],
               ),
             ),
