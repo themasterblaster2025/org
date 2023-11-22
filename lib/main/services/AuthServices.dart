@@ -91,9 +91,9 @@ class AuthServices {
                     log("value...." + value.toString());
                   });
                   appStore.setLoading(false);
-                  if (res.isEmailVerification == '1' && !res.data!.emailVerifiedAt.isEmptyOrNull)
+                  if (res.isEmailVerification == '1' && res.data!.emailVerifiedAt.isEmptyOrNull)
                     EmailVerificationScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
-                  else if (!res.data!.otpVerifyAt.isEmptyOrNull)
+                  else if (res.data!.otpVerifyAt.isEmptyOrNull)
                     VerificationScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
                   else
                     UserCitySelectScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);

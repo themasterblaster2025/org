@@ -16,6 +16,10 @@ import '../utils/Constants.dart';
 import 'VerificationScreen.dart';
 
 class EmailVerificationScreen extends StatefulWidget {
+  final bool? isSignIn;
+
+  EmailVerificationScreen({this.isSignIn = false});
+
   @override
   EmailVerificationScreenState createState() => EmailVerificationScreenState();
 }
@@ -23,7 +27,7 @@ class EmailVerificationScreen extends StatefulWidget {
 class EmailVerificationScreenState extends State<EmailVerificationScreen> {
   otp.OtpFieldController otpController = otp.OtpFieldController();
 
-  bool? isOtpSend = false;
+  bool? isEmailSend = false;
   String verId = '';
   String? otpPin = '';
 
@@ -69,12 +73,11 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
   resendOtpEmailApiCall() async {
     appStore.setLoading(true);
     await resendOtpEmail().then((value) {
-      otpController.clear();
+
       hideKeyboard(context);
       appStore.setLoading(false);
       toast(value.message.toString());
     }).catchError((e) {
-      otpController.clear();
       hideKeyboard(context);
       appStore.setLoading(false);
       toast(e['message']);
@@ -118,52 +121,80 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
         ],
         body: Stack(
           children: [
-            Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  16.height,
-                  Text(language.confirmationCode, style: boldTextStyle(size: 18)),
-                  16.height,
-                  Text("${language.confirmationCodeSent} " + getStringAsync(USER_EMAIL).replaceAll(RegExp(r'(?<=.{3}).(?=.*@)'), '*') ?? "-",
-                      style: secondaryTextStyle(size: 16), textAlign: TextAlign.center),
-                  30.height,
-                  otp.OTPTextField(
-                    controller: otpController,
-                    length: 6,
-                    width: MediaQuery.of(context).size.width,
-                    fieldWidth: 35,
-                    otpFieldStyle: o.OtpFieldStyle(borderColor: context.dividerColor, enabledBorderColor: colorPrimary),
-                    style: primaryTextStyle(),
-                    textFieldAlignment: MainAxisAlignment.spaceAround,
-                    fieldStyle: FieldStyle.box,
-                    onChanged: (s) {
-                      //
-                    },
-                    onCompleted: (pin) async {
-                      otpPin = pin;
+            widget.isSignIn == true &&isEmailSend == false
+                ? Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        16.height,
+                        Text('Email Verification', style: boldTextStyle(size: 18)),
+                        16.height,
+                        RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            style: secondaryTextStyle(),
+                            children: [
+                              TextSpan(text: '${language.weSend} '),
+                              TextSpan(text: language.oneTimePassword, style: boldTextStyle()),
+                              TextSpan(text: " ${language.on} " + getStringAsync(USER_EMAIL).replaceAll(RegExp(r'(?<=.{3}).(?=.*@)'), '*') ?? "-")
+                            ],
+                          ),
+                        ),
+                        16.height,
+                        commonButton('Get Email', () {
+                          resendOtpEmailApiCall();
+                          isEmailSend = true;
+                          setState(() {});
+                        }, width: context.width())
+                      ],
+                    ),
+                  )
+                : Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        16.height,
+                        Text(language.confirmationCode, style: boldTextStyle(size: 18)),
+                        16.height,
+                        Text("${language.confirmationCodeSent} " + getStringAsync(USER_EMAIL).replaceAll(RegExp(r'(?<=.{3}).(?=.*@)'), '*') ?? "-",
+                            style: secondaryTextStyle(size: 16), textAlign: TextAlign.center),
+                        30.height,
+                        otp.OTPTextField(
+                          controller: otpController,
+                          length: 5,
+                          width: MediaQuery.of(context).size.width,
+                          fieldWidth: 35,
+                          otpFieldStyle: o.OtpFieldStyle(borderColor: context.dividerColor, focusBorderColor: colorPrimary),
+                          style: primaryTextStyle(),
+                          textFieldAlignment: MainAxisAlignment.spaceAround,
+                          fieldStyle: FieldStyle.box,
+                          onChanged: (s) {
+                            //
+                          },
+                          onCompleted: (pin) async {
+                            otpPin = pin;
 
-                      setState(() {});
-                    },
+                            setState(() {});
+                          },
+                        ),
+                        30.height,
+                        Wrap(
+                          alignment: WrapAlignment.center,
+                          children: [
+                            Text(language.didNotReceiveTheCode, style: secondaryTextStyle(size: 16)),
+                            4.width,
+                            Text(language.resend, style: boldTextStyle(color: colorPrimary)).onTap(() {
+                              resendOtpEmailApiCall();
+                            }),
+                          ],
+                        ),
+                        16.height,
+                        commonButton(language.submit, () async {
+                          verifyOtpEmailApiCall(otpPin);
+                        }, width: context.width())
+                      ],
+                    ),
                   ),
-                  30.height,
-                  Wrap(
-                    alignment: WrapAlignment.center,
-                    children: [
-                      Text(language.didNotReceiveTheCode, style: secondaryTextStyle(size: 16)),
-                      4.width,
-                      Text(language.resend, style: boldTextStyle(color: colorPrimary)).onTap(() {
-                        resendOtpEmailApiCall();
-                      }),
-                    ],
-                  ),
-                  16.height,
-                  commonButton(language.submit, () async {
-                    verifyOtpEmailApiCall(otpPin);
-                  }, width: context.width())
-                ],
-              ),
-            ),
             Observer(builder: (context) => Visibility(visible: appStore.isLoading, child: Positioned.fill(child: loaderWidget()))),
           ],
         ),

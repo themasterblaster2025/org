@@ -34,3 +34,6 @@ const ic_order_created = 'assets/icon/ic_order_created.png';
 const ic_order_draft = 'assets/icon/ic_order_draft.png';
 const ic_order_transfer = 'assets/icon/ic_order_transfer.png';
 const ic_order = 'assets/icon/ic_order.png';
+
+const ic_apple='assets/icons/ic_apple.png';
+const ic_google='assets/icons/ic_google.png';

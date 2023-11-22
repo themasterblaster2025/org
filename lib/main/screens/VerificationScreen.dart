@@ -78,7 +78,7 @@ class VerificationScreenState extends State<VerificationScreen> {
                       16.height,
                       commonButton(language.getOTP, () {
                         // isOtpSend = true;
-                        sendOtp(context, phoneNumber:'+917600495926'.validate(), onUpdate: (verificationId) {
+                        sendOtp(context, phoneNumber: getStringAsync(USER_CONTACT_NUMBER).validate(), onUpdate: (verificationId) {
                           verId = verificationId;
                           isOtpSend = true;
                           setState(() {});
@@ -102,7 +102,7 @@ class VerificationScreenState extends State<VerificationScreen> {
                         length: 6,
                         width: MediaQuery.of(context).size.width,
                         fieldWidth: 35,
-                        otpFieldStyle: o.OtpFieldStyle(borderColor: context.dividerColor,enabledBorderColor: context.dividerColor,focusBorderColor: colorPrimary),
+                        otpFieldStyle: o.OtpFieldStyle(borderColor: context.dividerColor, focusBorderColor: colorPrimary),
                         style: primaryTextStyle(),
                         textFieldAlignment: MainAxisAlignment.spaceAround,
                         fieldStyle: FieldStyle.box,
