@@ -721,9 +721,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             contentPadding: EdgeInsets.only(bottom: 8),
             value: isPickSavedAddress,
             controlAffinity: ListTileControlAffinity.leading,
-
-            ///TODO ADD KEY
-            title: Text('Select Address From save', style: primaryTextStyle()),
+            title: Text(language.selectAddressSave, style: primaryTextStyle()),
             dense: true,
             activeColor: colorPrimary,
             onChanged: (value) {
@@ -738,9 +736,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 padding: EdgeInsets.all(12),
                 child: DropdownButton<AddressData>(
                   value: pickAddressData,
-
-                  ///TODO ADD KEY
-                  hint: Text('Select Address', style: primaryTextStyle()),
+                  hint: Text(language.selectAddress, style: primaryTextStyle()),
                   dropdownColor: context.cardColor,
                   isExpanded: true,
                   itemHeight: 90,
@@ -893,9 +889,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             contentPadding: EdgeInsets.only(bottom: 8),
             value: isDeliverySavedAddress,
             controlAffinity: ListTileControlAffinity.leading,
-
-            ///TODO ADD KEK
-            title: Text("Select Address from save Address", style: primaryTextStyle()),
+            title: Text(language.selectAddressSave, style: primaryTextStyle()),
             dense: true,
             activeColor: colorPrimary,
             onChanged: (value) {
@@ -910,9 +904,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 padding: EdgeInsets.all(12),
                 child: DropdownButton<AddressData>(
                   value: deliveryAddressData,
-
-                  ///tODO ADD KEY
-                  hint: Text('Select Address', style: primaryTextStyle()),
+                  hint: Text(language.selectAddress, style: primaryTextStyle()),
                   dropdownColor: context.cardColor,
                   isExpanded: true,
                   itemHeight: 90,

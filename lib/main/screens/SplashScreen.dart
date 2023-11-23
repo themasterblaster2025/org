@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mighty_delivery/main/screens/EmailVerificationScreen.dart';
 import '../../delivery/screens/DeliveryDashBoard.dart';
 import 'UserCitySelectScreen.dart';
 import '../../main/models/CityListModel.dart';
@@ -36,18 +37,20 @@ class SplashScreenState extends State<SplashScreen> {
             if (value.deletedAt != null) {
               logout(context);
             } else {
-              if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
-                if (getBoolAsync(OTP_VERIFIED)) {
+              if (!getBoolAsync(EMAIL_VERIFIED) && getStringAsync(IS_EMAIL_VERIFICATION) == '1') {
+                EmailVerificationScreen().launch(context, isNewTask: true);
+              } else if (value.otpVerifyAt.isEmptyOrNull) {
+                VerificationScreen().launch(context, isNewTask: true);
+              } else {
+                if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
                   if (getStringAsync(USER_TYPE) == CLIENT) {
                     DashboardScreen().launch(context, isNewTask: true);
                   } else {
                     DeliveryDashBoard().launch(context, isNewTask: true);
                   }
                 } else {
-                  VerificationScreen().launch(context, isNewTask: true);
+                  UserCitySelectScreen().launch(context, isNewTask: true);
                 }
-              } else {
-                UserCitySelectScreen().launch(context);
               }
             }
           }).catchError((e) {

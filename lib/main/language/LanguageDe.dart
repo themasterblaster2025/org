@@ -326,4 +326,16 @@ class LanguageDe extends BaseLanguage {
   @override String get hey => 'Hey';
   @override String get markAllRead => 'Alles als gelesen markieren';
   @override String get confirmAccountDeletion => 'Bestätigen Sie das Konto Löschen';
+
+  @override String get signWith => 'oder anmelden mit';
+  @override String get selectUserType => 'Wählen Sie Benutzerart';
+  @override String get lblUser => 'Benutzer';
+  @override String get lblDeliveryBoy => 'Lieferjunge';
+  @override String get lblContinue => 'Weitermachen';
+  @override String get delete => 'Löschen';
+  @override String get lblMyAddresses => 'Meine Adressen';
+  @override String get selectAddressSave => 'Wählen Sie die Adresse vom Speichern aus';
+  @override String get selectAddress => 'Adresse auswählen';
+  @override String get deleteLocation => 'Standort löschen?';
+  @override String get sureWantToDeleteAddress => 'Möchten Sie diese Adresse sicher löschen?';
 }

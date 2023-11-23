@@ -326,4 +326,16 @@ class LanguageFr extends BaseLanguage {
   @override String get hey => "Hé";
   @override String get markAllRead => "Tout marquer comme lu";
   @override String get confirmAccountDeletion => "Confirmer la suppression du compte";
+
+  @override String get signWith => "ou se connecter avec";
+  @override String get selectUserType => "Sélectionner le type d'utilisateur";
+  @override String get lblUser => "Utilisateur";
+  @override String get lblDeliveryBoy => "Livreur";
+  @override String get lblContinue => "Continuer";
+  @override String get delete => "Supprimer";
+  @override String get lblMyAddresses => "Mes adresses";
+  @override String get selectAddressSave => "Sélectionnez l'adresse dans SAVE";
+  @override String get selectAddress => "Sélectionner l'adresse";
+  @override String get deleteLocation => "Supprimer l'emplacement?";
+  @override String get sureWantToDeleteAddress => "Êtes-vous sûr de vouloir supprimer cette adresse?";
 }

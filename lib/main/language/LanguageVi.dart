@@ -326,4 +326,15 @@ class LanguageVi extends BaseLanguage {
   @override String get hey => 'Chào';
   @override String get markAllRead => 'Đánh dấu tất cả như đã đọc';
   @override String get confirmAccountDeletion => 'Xác nhận xóa tài khoản';
+  @override String get signWith => 'hoặc đăng nhập với';
+  @override String get selectUserType => 'Chọn loại người dùng';
+  @override String get lblUser => 'Người dùng';
+  @override String get lblDeliveryBoy => 'Người giao hàng';
+  @override String get lblContinue => 'Tiếp tục';
+  @override String get delete => 'Xóa bỏ';
+  @override String get lblMyAddresses => 'Địa chỉ của tôi';
+  @override String get selectAddressSave => 'Chọn địa chỉ từ lưu';
+  @override String get selectAddress => 'Chọn địa chỉ';
+  @override String get deleteLocation => 'Xóa vị trí?';
+  @override String get sureWantToDeleteAddress => 'Bạn có chắc chắn muốn xóa địa chỉ này không?';
 }

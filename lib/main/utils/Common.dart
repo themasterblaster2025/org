@@ -265,7 +265,6 @@ Future<void> saveOneSignalPlayerId() async {
   });
 }
 
-///todo
 String statusTypeIcon({String? type}) {
   String icon = ic_order;
   if (type == ORDER_ASSIGNED) {

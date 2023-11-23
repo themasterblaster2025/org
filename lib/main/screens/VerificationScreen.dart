@@ -12,10 +12,12 @@ import 'package:otp_text_field/otp_field.dart' as otp;
 import 'package:otp_text_field/otp_field_style.dart' as o;
 
 import '../../main.dart';
+import '../models/CityListModel.dart';
 import '../network/RestApis.dart';
 import '../utils/Colors.dart';
 import '../utils/Common.dart';
 import '../utils/Constants.dart';
+import 'UserCitySelectScreen.dart';
 
 class VerificationScreen extends StatefulWidget {
   @override
@@ -78,7 +80,7 @@ class VerificationScreenState extends State<VerificationScreen> {
                       16.height,
                       commonButton(language.getOTP, () {
                         // isOtpSend = true;
-                        sendOtp(context, phoneNumber: getStringAsync(USER_CONTACT_NUMBER).validate(), onUpdate: (verificationId) {
+                        sendOtp(context, phoneNumber: "+917600495926", onUpdate: (verificationId) {
                           verId = verificationId;
                           isOtpSend = true;
                           setState(() {});
@@ -136,10 +138,14 @@ class VerificationScreenState extends State<VerificationScreen> {
                           appStore.setLoading(false);
                           updateUserStatus({"id": getIntAsync(USER_ID), "otp_verify_at": DateTime.now().toString()}).then((value) {
                             setValue(OTP_VERIFIED, true);
-                            if (getStringAsync(USER_TYPE) == CLIENT) {
-                              DashboardScreen().launch(getContext, isNewTask: true);
+                            if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
+                              if (getStringAsync(USER_TYPE) == CLIENT) {
+                                DashboardScreen().launch(context, isNewTask: true);
+                              } else {
+                                DeliveryDashBoard().launch(context, isNewTask: true);
+                              }
                             } else {
-                              DeliveryDashBoard().launch(getContext, isNewTask: true);
+                              UserCitySelectScreen().launch(context, isNewTask: true);
                             }
                           });
                         }).catchError((error) {

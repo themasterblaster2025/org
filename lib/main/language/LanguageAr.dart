@@ -326,4 +326,16 @@ class LanguageAr extends BaseLanguage {
   @override String get hey => 'يا';
   @override String get markAllRead => 'اشر عليها بانها قرات';
   @override String get confirmAccountDeletion => 'تأكيد حذف الحساب';
+
+  @override String get signWith => 'أو تسجيل الدخول مع';
+  @override String get selectUserType => 'حدد نوع المستخدم';
+  @override String get lblUser => 'مستخدم';
+  @override String get lblDeliveryBoy => 'فتى التوصيل';
+  @override String get lblContinue => 'يكمل';
+  @override String get delete => 'يمسح';
+  @override String get lblMyAddresses => 'عناويني';
+  @override String get selectAddressSave => 'حدد العنوان من حفظ';
+  @override String get selectAddress => 'حدد العنوان';
+  @override String get deleteLocation => 'حذف الموقع؟';
+  @override String get sureWantToDeleteAddress => 'هل أنت متأكد من حذف هذا العنوان؟';
 }

@@ -326,4 +326,16 @@ class LanguageEs extends BaseLanguage {
   @override String get hey => 'Ey';
   @override String get markAllRead => 'Marcar todo como leido';
   @override String get confirmAccountDeletion => 'Confirmar la eliminación de la cuenta';
+
+  @override String get signWith => 'o iniciar sesión con';
+  @override String get selectUserType => 'Seleccione Tipo de usuario';
+  @override String get lblUser => 'Usuario';
+  @override String get lblDeliveryBoy => 'Chico de entrega';
+  @override String get lblContinue => 'Continuar';
+  @override String get delete => 'Borrar';
+  @override String get lblMyAddresses => 'Mis direcciones';
+  @override String get selectAddressSave => 'Seleccione la dirección de guardar';
+  @override String get selectAddress => 'Seleccionar dirección';
+  @override String get deleteLocation => '¿Eliminar la ubicación?';
+  @override String get sureWantToDeleteAddress => '¿Está seguro de que quiere eliminar esta dirección?';
 }

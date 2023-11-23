@@ -122,6 +122,9 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
     await setValue(COUNTRY_ID, loginResponse.data!.countryId.validate());
     await setValue(CITY_ID, loginResponse.data!.cityId.validate());
     await setValue(OTP_VERIFIED, loginResponse.data!.otpVerifyAt != null);
+    await setValue(EMAIL_VERIFIED, loginResponse.data!.emailVerifiedAt != null);
+    setValue(IS_EMAIL_VERIFICATION, loginResponse.isEmailVerification);
+
     appStore.setUserProfile(loginResponse.data!.profileImage.validate());
     await userService.getUser(email: loginResponse.data!.email.validate()).then((value) async {
       log(value);
@@ -229,7 +232,6 @@ Future sendMultiPartRequest(MultipartRequest multiPartRequest, {Function(dynamic
 }
 
 /// Profile Update
-
 
 Future<UserData> getUserDetail(int id) async {
   return UserData.fromJson(await handleResponse(await buildHttpResponse('user-detail?id=$id', method: HttpMethod.GET)).then((value) => value['data']));
@@ -499,7 +501,9 @@ Future updatePlayerId() async {
 
 Future<AddressListModel> getAddressList({int? page}) async {
   return AddressListModel.fromJson(await handleResponse(await buildHttpResponse(
-      page != null ? 'useraddress-list?page=$page&user_id=${getIntAsync(USER_ID)}&city_id=${getIntAsync(CITY_ID)}' : 'useraddress-list?per_page=-1&user_id=${getIntAsync(USER_ID)}&city_id=${getIntAsync(CITY_ID)}',
+      page != null
+          ? 'useraddress-list?page=$page&user_id=${getIntAsync(USER_ID)}&city_id=${getIntAsync(CITY_ID)}'
+          : 'useraddress-list?per_page=-1&user_id=${getIntAsync(USER_ID)}&city_id=${getIntAsync(CITY_ID)}',
       method: HttpMethod.GET)));
 }
 

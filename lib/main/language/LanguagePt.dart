@@ -326,4 +326,16 @@ class LanguagePt extends BaseLanguage {
   @override String get hey => 'Ei';
   @override String get markAllRead => 'Marcar tudo como lido';
   @override String get confirmAccountDeletion => 'Confirme a exclusão da conta';
+
+  @override String get signWith => 'ou fazer login com';
+  @override String get selectUserType => 'Selecione Tipo de usuário';
+  @override String get lblUser => 'Do utilizador';
+  @override String get lblDeliveryBoy => 'Entregador';
+  @override String get lblContinue => 'Continuar';
+  @override String get delete => 'Excluir';
+  @override String get lblMyAddresses => 'Meus endereços';
+  @override String get selectAddressSave => 'Selecione Endereço de Salvar';
+  @override String get selectAddress => 'Selecione o endereço';
+  @override String get deleteLocation => 'Excluir localização?';
+  @override String get sureWantToDeleteAddress => 'Você tem certeza que deseja excluir este endereço?';
 }

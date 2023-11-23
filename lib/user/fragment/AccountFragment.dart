@@ -103,12 +103,9 @@ class AccountFragmentState extends State<AccountFragment> {
                 accountSettingItemWidget(ic_bank_detail, language.bankDetails, () {
                   BankDetailScreen().launch(context);
                 },),
-
-                ///TODO ADD KEY
-                accountSettingItemWidget(ic_bank_detail, 'My Addresses', () {
+                accountSettingItemWidget(ic_bank_detail, language.lblMyAddresses, () {
                   MyAddressListScreen().launch(context);
                 } ,isLast: true),
-
                 mTitle(language.account),
                 accountSettingItemWidget(ic_change_password, language.changePassword, () {
                   ChangePasswordScreen().launch(context);

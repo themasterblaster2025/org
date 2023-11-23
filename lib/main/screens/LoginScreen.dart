@@ -87,8 +87,7 @@ class LoginScreenState extends State<LoginScreen> {
         await logInApi(req).then((v) async {
           authService.signInWithEmailPassword(context, email: emailController.text, password: passController.text).then((value) async {
             appStore.setLoading(false);
-            setValue(IS_EMAIL_VERIFICATION, v.isEmailVerification);
-            log("Email verify at :${v.isEmailVerification}");
+
             if (v.data!.userType != CLIENT && v.data!.userType != DELIVERY_MAN) {
               await logout(context, isFromLogin: true);
             } else {
@@ -99,7 +98,11 @@ class LoginScreenState extends State<LoginScreen> {
                 }).then((value) {
                   log("value...." + value.toString());
                 });
-                if (v.isEmailVerification == '0' && v.data!.emailVerifiedAt.isEmptyOrNull)
+                log("Email verify at :${v.isEmailVerification}");
+                log('v.data!.emailVerifiedAt ${v.data!.emailVerifiedAt}');
+                log('v.data!.otp ${v.data!.otpVerifyAt}');
+
+                if (v.isEmailVerification == '1' && v.data!.emailVerifiedAt.isEmptyOrNull)
                   EmailVerificationScreen(isSignIn: true).launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
                 else if (v.data!.otpVerifyAt.isEmptyOrNull)
                   VerificationScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
@@ -318,9 +321,7 @@ class LoginScreenState extends State<LoginScreen> {
                       Spacer(),
                       Divider().expand(),
                       16.width,
-
-                      ///TODO ADD KEY
-                      Text('or Sign in with', style: secondaryTextStyle()),
+                      Text(language.signWith, style: secondaryTextStyle()),
                       16.width,
                       Divider().expand(),
                       Spacer(),
@@ -396,9 +397,7 @@ class LoginScreenState extends State<LoginScreen> {
               actionsPadding: EdgeInsets.all(16),
               contentPadding: EdgeInsets.zero,
               shape: RoundedRectangleBorder(borderRadius: radius(defaultRadius)),
-
-              ///TODO ADD KEY
-              title: Text('Select User Type', style: boldTextStyle(size: 18)),
+              title: Text(language.selectUserType, style: boldTextStyle(size: 18)),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: userTypeList.map((item) {
@@ -406,7 +405,7 @@ class LoginScreenState extends State<LoginScreen> {
                     value: item,
                     activeColor: colorPrimary,
                     contentPadding: EdgeInsets.symmetric(horizontal: 16),
-                    title: Text('${item == CLIENT ? 'User' : item == DELIVERY_MAN ? 'Delivery Person' : ''}'),
+                    title: Text('${item == CLIENT ? language.lblUser : item == DELIVERY_MAN ? language.lblDeliveryBoy : ''}'),
                     groupValue: userType,
                     onChanged: (val) {
                       userType = val.validate();
@@ -422,7 +421,7 @@ class LoginScreenState extends State<LoginScreen> {
                       Navigator.pop(context);
                     }).expand(),
                     16.width,
-                    commonButton('Continue', () {
+                    commonButton(language.lblContinue, () {
                       finish(context);
                       onContinue();
                     }, color: colorPrimary)

@@ -652,4 +652,16 @@ abstract class BaseLanguage {
   String get markAllRead;
 
   String get confirmAccountDeletion;
+
+  String get signWith;
+  String get selectUserType;
+  String get lblUser;
+  String get lblDeliveryBoy;
+  String get lblContinue;
+  String get delete;
+  String get lblMyAddresses;
+  String get selectAddressSave;
+  String get selectAddress;
+  String get deleteLocation;
+  String get sureWantToDeleteAddress;
 }

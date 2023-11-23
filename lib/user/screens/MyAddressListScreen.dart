@@ -122,9 +122,8 @@ class MyAddressListScreenState extends State<MyAddressListScreen> {
                                   barrierDismissible: false,
                                   builder: (BuildContext dialogContext) {
                                     return DeleteConfirmationDialog(
-                                      ///TODO ADD KEY
-                                      title: 'Delete Location?',
-                                      subtitle: 'Are you sure want to delete this address?',
+                                      title: language.deleteLocation,
+                                      subtitle: language.sureWantToDeleteAddress,
                                       onDelete: () {
                                         deleteUserAddressApiCall(item.id.validate());
                                       },

@@ -85,7 +85,7 @@ class UserData {
       this.isVerifiedDeliveryMan,
       this.deletedAt,
       this.userBankAccount,
-      this.otpVerifyAt});
+      this.otpVerifyAt,this.emailVerifiedAt});
 
   UserData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -115,6 +115,8 @@ class UserData {
     deletedAt = json['deleted_at'];
     userBankAccount = json['user_bank_account'] != null ? new UserBankAccount.fromJson(json['user_bank_account']) : null;
     otpVerifyAt = json['otp_verify_at'];
+    emailVerifiedAt = json['email_verified_at'];
+
   }
 
   Map<String, dynamic> toJson() {
@@ -148,6 +150,8 @@ class UserData {
       data['user_bank_account'] = this.userBankAccount!.toJson();
     }
     data['otp_verify_at'] = this.otpVerifyAt;
+    data['email_verified_at'] = this.emailVerifiedAt;
+
     return data;
   }
 }

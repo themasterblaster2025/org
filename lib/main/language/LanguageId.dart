@@ -326,4 +326,16 @@ class LanguageId extends BaseLanguage {
   @override String get hey => 'Hai';
   @override String get markAllRead => 'Tandai semua telah dibaca';
   @override String get confirmAccountDeletion => 'Konfirmasi Penghapusan Akun';
+
+  @override String get signWith => 'atau masuk dengan';
+  @override String get selectUserType => 'Pilih jenis pengguna';
+  @override String get lblUser => 'Pengguna';
+  @override String get lblDeliveryBoy => 'Laki-laki pengantar';
+  @override String get lblContinue => 'Melanjutkan';
+  @override String get delete => 'Menghapus';
+  @override String get lblMyAddresses => 'Alamat saya';
+  @override String get selectAddressSave => 'Pilih Alamat Dari Simpan';
+  @override String get selectAddress => 'Pilih Alamat';
+  @override String get deleteLocation => 'Hapus lokasi?';
+  @override String get sureWantToDeleteAddress => 'Apakah Anda yakin ingin menghapus alamat ini?';
 }

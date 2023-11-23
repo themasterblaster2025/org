@@ -975,4 +975,37 @@ class LanguageEn extends BaseLanguage {
   @override
   String get confirmAccountDeletion => "Confirm account deletion";
 
+  @override
+  String get signWith => "or Sign in with";
+
+  @override
+  String get selectUserType => "Select User Type";
+
+  @override
+  String get lblUser => "User";
+
+  @override
+  String get lblDeliveryBoy => "Delivery Boy";
+
+  @override
+  String get lblContinue => "Continue";
+
+  @override
+  String get delete => "Delete";
+
+  @override
+  String get lblMyAddresses => "My Addresses";
+
+  @override
+  String get selectAddressSave => "Select Address From save";
+
+  @override
+  String get selectAddress => "Select Address";
+
+  @override
+  String get deleteLocation => "Delete Location?";
+
+  @override
+  String get sureWantToDeleteAddress => "Are you sure want to delete this address?";
+
 }

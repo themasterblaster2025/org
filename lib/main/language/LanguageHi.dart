@@ -326,4 +326,16 @@ class LanguageHi extends BaseLanguage {
   @override String get hey => 'अरे';
   @override String get markAllRead => 'सभी को पढ़ा हुआ मार्क करें';
   @override String get confirmAccountDeletion => 'खाता विलोपन की पुष्टि करें';
+
+  @override String get signWith => 'या के साथ साइन इन करें';
+  @override String get selectUserType => 'उपयोगकर्ता प्रकार का चयन करें';
+  @override String get lblUser => 'उपयोगकर्ता';
+  @override String get lblDeliveryBoy => 'वितरण करने वाला लड़का';
+  @override String get lblContinue => 'जारी रखना';
+  @override String get delete => 'मिटाना';
+  @override String get lblMyAddresses => 'मेरे पते';
+  @override String get selectAddressSave => 'सहेजें से पता चुनें';
+  @override String get selectAddress => 'पता चुनें';
+  @override String get deleteLocation => 'स्थान हटाएं?';
+  @override String get sureWantToDeleteAddress => 'क्या आप निश्चित रूप से इस पते को हटाना चाहते हैं?';
 }

@@ -326,4 +326,15 @@ class LanguageNl extends BaseLanguage {
   @override String get hey => 'Hoi';
   @override String get markAllRead => 'Alles als gelezen markeren';
   @override String get confirmAccountDeletion => 'Bevestig accountverwijdering';
+  @override String get signWith => 'of log in met';
+  @override String get selectUserType => 'Selecteer Gebruikersype';
+  @override String get lblUser => 'Gebruiker';
+  @override String get lblDeliveryBoy => 'Bezorger';
+  @override String get lblContinue => 'Doorgaan';
+  @override String get delete => 'Verwijderen';
+  @override String get lblMyAddresses => 'Mijn adressen';
+  @override String get selectAddressSave => 'Selecteer adres van opslaan';
+  @override String get selectAddress => 'Selecteer adres';
+  @override String get deleteLocation => 'Locatie verwijderen?';
+  @override String get sureWantToDeleteAddress => 'Wilt u dit adres zeker verwijderen?';
 }

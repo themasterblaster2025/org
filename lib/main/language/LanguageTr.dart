@@ -326,4 +326,16 @@ class LanguageTr extends BaseLanguage {
   @override String get hey => "Hey";
   @override String get markAllRead => "Hepsini okuduğunu işaretle";
   @override String get confirmAccountDeletion => "Hesap Silini onaylayın";
+
+  @override String get signWith => "veya oturum aç";
+  @override String get selectUserType => "Kullanıcı Türünü Seçin";
+  @override String get lblUser => "Kullanıcı";
+  @override String get lblDeliveryBoy => "Kurye";
+  @override String get lblContinue => "Devam etmek";
+  @override String get delete => "Silmek";
+  @override String get lblMyAddresses => "Adresim";
+  @override String get selectAddressSave => "Kaydet'den adresi seçin";
+  @override String get selectAddress => "Adresi seçin";
+  @override String get deleteLocation => "Konumu Sil?";
+  @override String get sureWantToDeleteAddress => "Bu adresi silmek istiyorsunuz?";
 }

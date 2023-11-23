@@ -8,6 +8,7 @@ import 'package:otp_text_field/style.dart';
 import 'package:otp_text_field/otp_field.dart' as otp;
 import 'package:otp_text_field/otp_field_style.dart' as o;
 import '../../main.dart';
+import 'LoginScreen.dart';
 import 'UserCitySelectScreen.dart';
 import '../network/RestApis.dart';
 import '../utils/Colors.dart';
@@ -17,8 +18,9 @@ import 'VerificationScreen.dart';
 
 class EmailVerificationScreen extends StatefulWidget {
   final bool? isSignIn;
+  final bool? isSignUp;
 
-  EmailVerificationScreen({this.isSignIn = false});
+  EmailVerificationScreen({this.isSignIn = false, this.isSignUp = false});
 
   @override
   EmailVerificationScreenState createState() => EmailVerificationScreenState();
@@ -53,13 +55,18 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
   verifyOtpEmailApiCall(pin) async {
     hideKeyboard(context);
     appStore.setLoading(true);
-    await verifyOtpEmail({"code": pin}).then((value) {
+    await verifyOtpEmail({"code": pin}).then((value) async {
       setValue(EMAIL_VERIFIED, true);
       toast(value.message.toString());
-      if (!getBoolAsync(OTP_VERIFIED)) {
-        VerificationScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+      if (widget.isSignUp == true) {
+        toast(language.userNotApproveMsg);
+        LoginScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
       } else {
-        UserCitySelectScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+        if (!getBoolAsync(OTP_VERIFIED)) {
+          VerificationScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+        } else {
+          UserCitySelectScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+        }
       }
       appStore.setLoading(false);
     }).catchError((e) {
@@ -73,7 +80,6 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
   resendOtpEmailApiCall() async {
     appStore.setLoading(true);
     await resendOtpEmail().then((value) {
-
       hideKeyboard(context);
       appStore.setLoading(false);
       toast(value.message.toString());
@@ -96,13 +102,13 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
         appBarTitle: language.verification,
         showBack: false,
         action: [
-          IconButton(
-            onPressed: () async {
-              appStore.setLoading(true);
-              await userDetailGet();
-            },
-            icon: Icon(Icons.refresh),
-          ),
+          // IconButton(
+          //   onPressed: () async {
+          //     appStore.setLoading(true);
+          //     await userDetailGet();
+          //   },
+          //   icon: Icon(Icons.refresh),
+          // ),
           IconButton(
             onPressed: () async {
               await showConfirmDialogCustom(
@@ -121,12 +127,14 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
         ],
         body: Stack(
           children: [
-            widget.isSignIn == true &&isEmailSend == false
+            widget.isSignIn == true && isEmailSend == false
                 ? Padding(
                     padding: EdgeInsets.all(16.0),
                     child: Column(
                       children: [
                         16.height,
+
+                        ///TODO ADD KEY
                         Text('Email Verification', style: boldTextStyle(size: 18)),
                         16.height,
                         RichText(
@@ -141,6 +149,8 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
                           ),
                         ),
                         16.height,
+
+                        ///TODO ADD KEY
                         commonButton('Get Email', () {
                           resendOtpEmailApiCall();
                           isEmailSend = true;

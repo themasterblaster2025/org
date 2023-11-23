@@ -37,9 +37,7 @@ class DeleteConfirmationDialog extends StatelessWidget {
               Navigator.pop(context);
             }).expand(),
             16.width,
-
-            ///TODO ADD KEY
-            commonButton('Delete', () {
+            commonButton(language.delete, () {
               finish(context);
               onDelete?.call();
             }, color: Colors.red)

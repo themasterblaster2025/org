@@ -77,9 +77,19 @@ class AuthServices {
           userModel.playerId = getStringAsync(PLAYER_ID);
           await userService.addDocumentWithCustomId(user.uid, userModel.toJson()).then((value) async {
             if (userModel.userType == DELIVERY_MAN) {
-              appStore.setLogin(false);
               appStore.setLoading(false);
-              LoginScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+              if (userData.isEmailVerification == '1' && userData.data!.emailVerifiedAt.isEmptyOrNull) {
+                appStore.setLogin(true);
+                setValue(USER_EMAIL, userData.data!.email.validate());
+                appStore.setUserEmail(userData.data!.email.validate());
+                setValue(USER_PASSWORD, password);
+                await setValue(USER_TOKEN, userData.data!.apiToken.validate());
+
+                EmailVerificationScreen(isSignUp: true).launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+              } else {
+                appStore.setLogin(false);
+                LoginScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+              }
             } else {
               Map request = {"email": userModel.email, "password": password};
               await logInApi(request).then((res) async {

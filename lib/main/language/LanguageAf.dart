@@ -326,4 +326,16 @@ class LanguageAf extends BaseLanguage {
   @override String get hey => "Haai";
   @override String get markAllRead => "Merk alles as gelees";
   @override String get confirmAccountDeletion => "Bevestig die verwydering van rekening";
+
+  @override String get signWith => 'of teken aan met';
+  @override String get selectUserType => 'Kies gebruikerstipe';
+  @override String get lblUser => 'Gebruiker';
+  @override String get lblDeliveryBoy => 'Aflewering Boy';
+  @override String get lblContinue => 'Aanhou';
+  @override String get delete => 'Verwyder';
+  @override String get lblMyAddresses => 'My adresse';
+  @override String get selectAddressSave => 'Kies adres uit Save';
+  @override String get selectAddress => 'Kies adres';
+  @override String get deleteLocation => 'Ligging verwyder?';
+  @override String get sureWantToDeleteAddress => 'Wil u seker hierdie adres uitvee?';
 }
