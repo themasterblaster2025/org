@@ -212,7 +212,7 @@ class AuthServices {
 
     Map req = {
       "email": currentUser.email,
-      "username": (firstName + lastName).toLowerCase(),
+      "username": currentUser.email,
       "name": firstName,
       "login_type": loginType,
       "user_type": userType,

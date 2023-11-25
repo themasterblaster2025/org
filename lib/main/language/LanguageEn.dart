@@ -1008,4 +1008,6 @@ class LanguageEn extends BaseLanguage {
   @override
   String get sureWantToDeleteAddress => "Are you sure want to delete this address?";
 
+
+
 }

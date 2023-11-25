@@ -64,7 +64,7 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
         markerId: id,
         position: LatLng(deliveryBoyData!.latitude.toDouble(), deliveryBoyData!.longitude.toDouble()),
         infoWindow: InfoWindow(title: '${deliveryBoyData!.name.validate()}', snippet: 'Last update at ${dateParse(deliveryBoyData!.updatedAt!)}'),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
       );
       markers.add(deliveryBoyMarker);
       markers.add(

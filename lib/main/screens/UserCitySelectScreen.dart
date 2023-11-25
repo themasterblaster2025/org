@@ -108,6 +108,8 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
             DeliveryDashBoard().launch(context, isNewTask: true);
           }
         }
+        else
+          VerificationScreen().launch(context, isNewTask: true);
       }
     }).catchError((error) {
       appStore.setLoading(false);
@@ -138,90 +140,90 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
           return appStore.isLoading && countryData.isEmpty
               ? loaderWidget()
               : SingleChildScrollView(
-                  padding: EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      16.height,
-                      Image.asset(ic_select_region, height: 180, fit: BoxFit.contain),
-                      30.height,
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(flex: 1, child: Text(language.country, style: boldTextStyle())),
-                              16.width,
-                              Expanded(
-                                flex: 2,
-                                child: DropdownButtonFormField<int>(
-                                  value: selectedCountry,
-                                  decoration: commonInputDecoration(),
-                                  items: countryData.map<DropdownMenuItem<int>>((item) {
-                                    return DropdownMenuItem(
-                                      value: item.id,
-                                      child: Text(item.name ?? ''),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    selectedCountry = value!;
-                                    setValue(COUNTRY_ID, selectedCountry);
-                                    getCountryDetailApiCall();
-                                    selectedCity = null;
-                                    getCityApiCall();
-                                    setState(() {});
-                                  },
-                                  validator: (value) {
-                                    if (selectedCountry == null) return errorThisFieldRequired;
-                                    return null;
-                                  },
-                                ),
-                              ),
-                            ],
+            padding: EdgeInsets.all(16),
+            child: Column(
+              children: [
+                16.height,
+                Image.asset(ic_select_region, height: 180, fit: BoxFit.contain),
+                30.height,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(flex: 1, child: Text(language.country, style: boldTextStyle())),
+                        16.width,
+                        Expanded(
+                          flex: 2,
+                          child: DropdownButtonFormField<int>(
+                            value: selectedCountry,
+                            decoration: commonInputDecoration(),
+                            items: countryData.map<DropdownMenuItem<int>>((item) {
+                              return DropdownMenuItem(
+                                value: item.id,
+                                child: Text(item.name ?? ''),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              selectedCountry = value!;
+                              setValue(COUNTRY_ID, selectedCountry);
+                              getCountryDetailApiCall();
+                              selectedCity = null;
+                              getCityApiCall();
+                              setState(() {});
+                            },
+                            validator: (value) {
+                              if (selectedCountry == null) return errorThisFieldRequired;
+                              return null;
+                            },
                           ),
-                          16.height,
-                          Row(children: [
-                            Expanded(flex: 1, child: Text(language.city, style: boldTextStyle())),
-                            16.width,
-                            Expanded(
-                              flex: 2,
-                              child: AppTextField(
-                                controller: searchCityController,
-                                textFieldType: TextFieldType.OTHER,
-                                decoration: commonInputDecoration(hintText: language.selectCity, suffixIcon: Icons.search),
-                                onChanged: (value) {
-                                  getCityApiCall(name: value);
-                                },
-                              ),
-                            ),
-                          ]),
-                          16.height,
-                          appStore.isLoading && cityData.isEmpty
-                              ? loaderWidget()
-                              : ListView.builder(
-                                  itemCount: cityData.length,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, index) {
-                                    CityModel mData = cityData[index];
-                                    return ListTile(
-                                      contentPadding: EdgeInsets.zero,
-                                      title: Text(mData.name!, style: selectedCity == mData.id ? boldTextStyle(color: colorPrimary) : primaryTextStyle()),
-                                      trailing: selectedCity == mData.id ? Icon(Icons.check_circle, color: colorPrimary) : SizedBox(),
-                                      onTap: () {
-                                        selectedCity = mData.id!;
-                                        setValue(CITY_ID, selectedCity);
-                                        setValue(CITY_DATA, mData.toJson());
-                                        updateCountryCityApiCall();
-                                      },
-                                    );
-                                  },
-                                )
-                        ],
+                        ),
+                      ],
+                    ),
+                    16.height,
+                    Row(children: [
+                      Expanded(flex: 1, child: Text(language.city, style: boldTextStyle())),
+                      16.width,
+                      Expanded(
+                        flex: 2,
+                        child: AppTextField(
+                          controller: searchCityController,
+                          textFieldType: TextFieldType.OTHER,
+                          decoration: commonInputDecoration(hintText: language.selectCity, suffixIcon: Icons.search),
+                          onChanged: (value) {
+                            getCityApiCall(name: value);
+                          },
+                        ),
                       ),
-                    ],
-                  ),
-                );
+                    ]),
+                    16.height,
+                    appStore.isLoading && cityData.isEmpty
+                        ? loaderWidget()
+                        : ListView.builder(
+                      itemCount: cityData.length,
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        CityModel mData = cityData[index];
+                        return ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: Text(mData.name!, style: selectedCity == mData.id ? boldTextStyle(color: colorPrimary) : primaryTextStyle()),
+                          trailing: selectedCity == mData.id ? Icon(Icons.check_circle, color: colorPrimary) : SizedBox(),
+                          onTap: () {
+                            selectedCity = mData.id!;
+                            setValue(CITY_ID, selectedCity);
+                            setValue(CITY_DATA, mData.toJson());
+                            updateCountryCityApiCall();
+                          },
+                        );
+                      },
+                    )
+                  ],
+                ),
+              ],
+            ),
+          );
         }),
       ),
     );

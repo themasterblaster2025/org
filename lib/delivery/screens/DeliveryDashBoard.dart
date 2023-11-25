@@ -6,7 +6,9 @@ import 'package:mighty_delivery/main/utils/Widgets.dart';
 import '../../delivery/fragment/DProfileFragment.dart';
 import '../../delivery/screens/CreateTabScreen.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
+import '../../main/models/CityListModel.dart';
 import '../../main/screens/NotificationScreen.dart';
+import '../../main/screens/UserCitySelectScreen.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -36,7 +38,14 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
       setState(() {});
     });
     if (await checkPermission()) {
-      positionStream = Geolocator.getPositionStream().listen((event) async {});
+      positionStream = Geolocator.getPositionStream().listen((event) async {
+        updateUserStatus({
+          "latitude": getIntAsync(USER_ID),
+          "longitude": getStringAsync(UID),
+        }).then((value) {
+          log("value...." + value.toString());
+        });
+      });
     }
     await getAppSetting().then((value) {
       appStore.setOtpVerifyOnPickupDelivery(value.otpVerifyOnPickupDelivery == 1);
@@ -60,14 +69,36 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
       length: statusList.length,
       child: CommonScaffoldComponent(
         appBar: PreferredSize(
-          preferredSize: Size(context.width(),90),
-          child: commonAppBarWidget('${language.hey} ${getStringAsync(NAME)} 👋',showBack: false,
+          preferredSize: Size(context.width(), 110),
+          child: commonAppBarWidget(
+            '${language.hey} ${getStringAsync(NAME)} 👋',
+            showBack: false,
             actions: [
-              Stack(clipBehavior: Clip.none,
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 12,horizontal: 8),
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: boxDecorationWithRoundedCorners(borderRadius: radius(defaultRadius), backgroundColor: Colors.white24),
+                child: Row(
+                  children: [
+                    Icon(Ionicons.ios_location_outline, color: Colors.white, size: 18),
+                    8.width,
+                    Text(CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate(), style: primaryTextStyle(color: white)),
+                  ],
+                ).onTap(() {
+                  UserCitySelectScreen(
+                    isBack: true,
+                    onUpdate: () {
+                      setState(() {});
+                    },
+                  ).launch(context);
+                }, highlightColor: Colors.transparent, hoverColor: Colors.transparent, splashColor: Colors.transparent),
+              ),
+              Stack(
+                clipBehavior: Clip.none,
                 children: [
                   Align(
                     alignment: AlignmentDirectional.center,
-                    child: Icon(Ionicons.md_notifications_outline,color: Colors.white),
+                    child: Icon(Ionicons.md_notifications_outline, color: Colors.white),
                   ),
                   Observer(builder: (context) {
                     return Positioned(
@@ -83,7 +114,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
                     ).visible(appStore.allUnreadCount != 0);
                   }),
                 ],
-              ).withWidth(40).onTap(() {
+              ).withWidth(30).onTap(() {
                 NotificationScreen().launch(context);
               }),
               IconButton(
@@ -91,11 +122,12 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
                 onPressed: () async {
                   DProfileFragment().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
                 },
-                icon: Icon(Ionicons.settings_outline,color: Colors.white),
+                icon: Icon(Ionicons.settings_outline, color: Colors.white),
               ),
             ],
             bottom: TabBar(
-              isScrollable: true,tabAlignment: TabAlignment.start,
+              isScrollable: true,
+              tabAlignment: TabAlignment.start,
               unselectedLabelColor: Colors.white70,
               indicator: BoxDecoration(color: Colors.transparent),
               labelColor: Colors.white,
