@@ -80,7 +80,7 @@ class VerificationScreenState extends State<VerificationScreen> {
                       16.height,
                       commonButton(language.getOTP, () {
                         // isOtpSend = true;
-                        sendOtp(context, phoneNumber: "+917600495926", onUpdate: (verificationId) {
+                        sendOtp(context, phoneNumber: getStringAsync(USER_CONTACT_NUMBER), onUpdate: (verificationId) {
                           verId = verificationId;
                           isOtpSend = true;
                           setState(() {});
