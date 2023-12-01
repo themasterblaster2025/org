@@ -303,8 +303,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                           ],
                         ),
                       ).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
-                    16.height,
-                    CheckboxListTile(
+                    CheckboxListTile(dense: true,contentPadding: EdgeInsets.zero,
                       value: mIsCheck,
                       activeColor: colorPrimary,
                       title: Text(widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY ? language.paymentCollectFrom : language.paymentCollectFromPickup, style: primaryTextStyle()),

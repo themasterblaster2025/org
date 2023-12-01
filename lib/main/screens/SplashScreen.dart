@@ -37,6 +37,7 @@ class SplashScreenState extends State<SplashScreen> {
             if (value.deletedAt != null) {
               logout(context);
             } else {
+              setValue(OTP_VERIFIED, value.otpVerifyAt != null);
               if (!getBoolAsync(EMAIL_VERIFIED) && getStringAsync(IS_EMAIL_VERIFICATION) == '1') {
                 EmailVerificationScreen().launch(context, isNewTask: true);
               } else if (value.otpVerifyAt.isEmptyOrNull) {

@@ -50,32 +50,6 @@ Future<LoginResponse> signUpApi(Map request) async {
   return await handleResponse(response).then((json) async {
     var loginResponse = LoginResponse.fromJson(json);
 
-    // await setValue(USER_ID, loginResponse.data!.id.validate());
-    // await setValue(NAME, loginResponse.data!.name.validate());
-    // await setValue(USER_EMAIL, loginResponse.data!.email.validate());
-    // await setValue(USER_TOKEN, loginResponse.data!.fcmToken.validate());
-    // await setValue(USER_CONTACT_NUMBER, loginResponse.data!.contactNumber.validate());
-    // await setValue(USER_PROFILE_PHOTO, loginResponse.data!.profileImage.validate());
-    // await setValue(USER_TYPE, loginResponse.data!.userType.validate());
-    // await setValue(USER_NAME, loginResponse.data!.username.validate());
-    // await setValue(USER_ADDRESS, loginResponse.data!.address.validate());
-    // await setValue(COUNTRY_ID, loginResponse.data!.countryId.validate());
-    // await setValue(CITY_ID, loginResponse.data!.cityId.validate());
-    // await userService.getUser(email: loginResponse.data!.email.validate()).then((value) async {
-    //   await setValue(UID, value.uid.validate());
-    // }).catchError((e) {
-    //   log(e.toString());
-    //   if (e.toString() == "User not found") {
-    //     toast('user Not Found');
-    //   }
-    // });
-    // await setValue(IS_VERIFIED_DELIVERY_MAN, loginResponse.data!.isVerifiedDeliveryMan == 1);
-    //
-    // await appStore.setUserEmail(loginResponse.data!.email.validate());
-    // await appStore.setLogin(true);
-    //
-    // await setValue(USER_PASSWORD, request['password']);
-
     return loginResponse;
   }).catchError((e) {
     log(e.toString());
@@ -97,18 +71,6 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
 
   return await handleResponse(response).then((json) async {
     var loginResponse = LoginResponse.fromJson(json);
-
-    /*if (request['login_type'] == LoginTypeGoogle) {
-      await setValue(USER_PHOTO_URL, request['image']);
-    } else {
-      await setValue(USER_PHOTO_URL, loginResponse.userData!.profile_image.validate());
-    }
-
-    await setValue(GENDER, loginResponse.userData!.gender.validate());
-    await setValue(NAME, loginResponse.userData!.name.validate());
-    await setValue(BIO, loginResponse.userData!.bio.validate());
-    await setValue(DOB, loginResponse.userData!.dob.validate());
-*/
 
     await setValue(USER_ID, loginResponse.data!.id.validate());
     await setValue(NAME, loginResponse.data!.name.validate());
@@ -136,10 +98,6 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
       }
     });
     await setValue(IS_VERIFIED_DELIVERY_MAN, loginResponse.data!.isVerifiedDeliveryMan == 1);
-    /* await appStore.setUserName(loginResponse.userData!.username.validate());
-    await appStore.setRole(loginResponse.userData!.user_type.validate());
-    await appStore.setToken(loginResponse.userData!.api_token.validate());
-    await appStore.setUserID(loginResponse.userData!.id.validate());*/
     await appStore.setUserEmail(loginResponse.data!.email.validate());
     if (getIntAsync(STATUS) == 1) {
       await appStore.setLogin(true);

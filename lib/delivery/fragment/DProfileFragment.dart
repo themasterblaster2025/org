@@ -51,7 +51,6 @@ class DProfileFragmentState extends State<DProfileFragment> {
       mainAxisSize: MainAxisSize.min,
       children: [
         ListTile(
-
             contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 2),
             minLeadingWidth: 14,
             dense: true,
@@ -59,7 +58,7 @@ class DProfileFragmentState extends State<DProfileFragment> {
             title: Text(title, style: primaryTextStyle()),
             trailing: suffixIcon != null ? Icon(suffixIcon, color: Colors.green) : Icon(Icons.navigate_next, color: appStore.isDarkMode ? Colors.white : Colors.grey),
             onTap: onTap),
-        // if (isLast) Divider(height: 0)
+        if (isLast) Divider(height: 0, color: context.dividerColor)
       ],
     );
   }
@@ -119,7 +118,6 @@ class DProfileFragmentState extends State<DProfileFragment> {
                   accountSettingItemWidget(ic_bank_detail, language.bankDetails, () {
                     BankDetailScreen().launch(context);
                   }, isLast: true),
-
                   mTitle(language.account),
                   accountSettingItemWidget(ic_verification, language.verifyDocument, () {
                     VerifyDeliveryPersonScreen().launch(context);
@@ -136,7 +134,6 @@ class DProfileFragmentState extends State<DProfileFragment> {
                   accountSettingItemWidget(ic_delete_account, language.deleteAccount, () async {
                     DeleteAccountScreen().launch(context);
                   }, isLast: true),
-
                   mTitle(language.general),
                   accountSettingItemWidget(ic_document, language.privacyPolicy, () {
                     commonLaunchUrl(mPrivacyPolicy);
@@ -150,7 +147,6 @@ class DProfileFragmentState extends State<DProfileFragment> {
                   accountSettingItemWidget(ic_information, language.aboutUs, () {
                     AboutUsScreen().launch(context);
                   }, isLast: false),
-
                   Container(
                     decoration: boxDecorationWithRoundedCorners(border: Border.all(color: colorPrimary, width: 1), backgroundColor: Colors.transparent),
                     padding: EdgeInsets.all(16),

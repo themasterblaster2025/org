@@ -179,7 +179,7 @@ class TrackingScreenState extends State<TrackingScreen> {
                                     children: [
                                       Container(
                                         child: Image.asset(ic_google_map, height: 30, width: 30),
-                                        decoration: boxDecorationRoundedWithShadow(defaultRadius.toInt()),
+                                        decoration: boxDecorationWithRoundedCorners(borderRadius: radius(defaultRadius), backgroundColor: context.cardColor),
                                         padding: EdgeInsets.all(2),
                                       ).onTap(
                                         () {
