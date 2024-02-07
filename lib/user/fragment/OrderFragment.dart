@@ -1,20 +1,11 @@
-import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:intl/intl.dart';
 import '../../main.dart';
 import '../../main/models/OrderListModel.dart';
 import '../../main/models/models.dart';
 import '../../main/network/RestApis.dart';
-import '../../main/utils/Images.dart';
-import '../../user/screens/OrderTrackingScreen.dart';
-import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
-import '../../user/screens/OrderDetailScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
-
-import '../components/GenerateInvoice.dart';
 import '../components/OrderCardComponent.dart';
 
 class OrderFragment extends StatefulWidget {
@@ -26,7 +17,6 @@ class OrderFragment extends StatefulWidget {
 
 class OrderFragmentState extends State<OrderFragment> {
   List<OrderData> orderList = [];
-  ScrollController scrollController = ScrollController();
   int page = 1;
   int totalPage = 1;
   bool isLastPage = false;
@@ -35,14 +25,6 @@ class OrderFragmentState extends State<OrderFragment> {
   void initState() {
     super.initState();
     init();
-    scrollController.addListener(() {
-      if (scrollController.position.pixels == scrollController.position.maxScrollExtent && !appStore.isLoading) {
-        if (page < totalPage) {
-          page++;
-          getOrderListApiCall();
-        }
-      }
-    });
     LiveStream().on('UpdateOrderData', (p0) {
       page = 1;
       getOrderListApiCall();
@@ -50,8 +32,13 @@ class OrderFragmentState extends State<OrderFragment> {
     });
   }
 
-  Future<void> init() async {
+  Future<void> getOrderData() async {
     await getOrderListApiCall();
+  }
+
+  Future<void> init() async {
+    getOrderData();
+
     await getAppSetting().then((value) {
       appStore.setOtpVerifyOnPickupDelivery(value.otpVerifyOnPickupDelivery == 1);
       appStore.setCurrencyCode(value.currencyCode ?? currencyCode);
@@ -70,31 +57,34 @@ class OrderFragmentState extends State<OrderFragment> {
       }
     }).catchError((error) {
       toast(error.toString());
+    }).whenComplete(() {
+      appStore.setLoading(false);
     });
   }
 
   getOrderListApiCall() async {
     appStore.setLoading(true);
+
     FilterAttributeModel filterData = FilterAttributeModel.fromJson(getJSONAsync(FILTER_DATA));
+
     await getOrderList(page: page, orderStatus: filterData.orderStatus, fromDate: filterData.fromDate, toDate: filterData.toDate, excludeStatus: ORDER_DRAFT).then((value) {
-      appStore.setLoading(false);
       appStore.setAllUnreadCount(value.allUnreadCount.validate());
       totalPage = value.pagination!.totalPages.validate(value: 1);
       page = value.pagination!.currentPage.validate(value: 1);
+
       if (value.walletData != null) {
         appStore.availableBal = value.walletData!.totalAmount;
       }
+
       isLastPage = false;
-      if (page == 1) {
-        orderList.clear();
-      }
+      if (page == 1) orderList.clear();
       orderList.addAll(value.data!);
+
       setState(() {});
     }).catchError((e) {
       isLastPage = true;
-      appStore.setLoading(false);
       toast(e.toString(), print: true);
-    });
+    }).whenComplete(() => appStore.setLoading(false));
   }
 
   @override
@@ -104,37 +94,41 @@ class OrderFragmentState extends State<OrderFragment> {
 
   @override
   void dispose() {
-    scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        await Future.delayed(Duration(milliseconds: 1500));
-        page = 1;
-        init();
+    return AnimatedListView(
+      itemCount: orderList.length,
+      shrinkWrap: true,
+      physics: BouncingScrollPhysics(),
+      listAnimationType: ListAnimationType.Slide,
+      padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 60),
+      flipConfiguration: FlipConfiguration(duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn),
+      fadeInConfiguration: FadeInConfiguration(duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn),
+      onNextPage: () {
+        if (page < totalPage) {
+          page++;
+          setState(() {});
+          getOrderData();
+        }
       },
-      child: Observer(builder: (context) {
-        return Stack(
-          children: [
-            orderList.isNotEmpty
-                ? ListView(
-                    shrinkWrap: true,
-                    controller: scrollController,
-                    padding: EdgeInsets.only(left: 16, right: 16, bottom: context.height() * 0.1, top: 16),
-                    children: orderList.map((item) {
-                      return item.status != ORDER_DRAFT ? OrderCardComponent(item: item) : SizedBox();
-                    }).toList(),
-                  )
-                : !appStore.isLoading
-                    ? emptyWidget()
-                    : SizedBox(),
-            loaderWidget().center().visible(appStore.isLoading)
-          ],
-        );
-      }),
+      emptyWidget: Stack(
+        children: [
+          loaderWidget().visible(appStore.isLoading),
+          emptyWidget().visible(!appStore.isLoading),
+        ],
+      ),
+      onSwipeRefresh: () async {
+        page = 1;
+        getOrderData();
+        return Future.value(true);
+      },
+      itemBuilder: (context, i) {
+        OrderData item = orderList[i];
+        return item.status != ORDER_DRAFT ? OrderCardComponent(item: item) : SizedBox();
+      },
     );
   }
 }

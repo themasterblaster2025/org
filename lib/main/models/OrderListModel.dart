@@ -9,6 +9,8 @@ class OrderListModel {
   int? allUnreadCount;
   UserWalletModel? walletData;
 
+
+
   OrderListModel(
       {this.pagination, this.data, this.allUnreadCount, this.walletData});
 

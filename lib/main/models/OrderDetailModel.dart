@@ -1,3 +1,5 @@
+import 'package:mighty_delivery/main/models/LoginResponse.dart';
+
 import 'OrderListModel.dart';
 
 class OrderDetailModel {
@@ -5,7 +7,10 @@ class OrderDetailModel {
   Payment? payment;
   List<OrderHistory>? orderHistory;
 
-  OrderDetailModel({this.data, this.orderHistory});
+  UserData? clientDetail;
+  UserData? deliveryManDetail;
+
+  OrderDetailModel({this.data, this.orderHistory, this.clientDetail, this.deliveryManDetail});
 
   OrderDetailModel.fromJson(Map<String, dynamic> json) {
     data = json['data'] != null ? new OrderData.fromJson(json['data']) : null;
@@ -16,6 +21,8 @@ class OrderDetailModel {
         orderHistory!.add(new OrderHistory.fromJson(v));
       });
     }
+    clientDetail = json['client_detail'] != null ? new UserData.fromJson(json['client_detail']) : null;
+    deliveryManDetail = json['delivery_man_detail'] != null ? new UserData.fromJson(json['delivery_man_detail']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -28,6 +35,12 @@ class OrderDetailModel {
     }
     if (this.orderHistory != null) {
       data['order_history'] = this.orderHistory!.map((v) => v.toJson()).toList();
+    }
+    if (this.clientDetail != null) {
+      data['client_detail'] = this.clientDetail!.toJson();
+    }
+    if (this.deliveryManDetail != null) {
+      data['delivery_man_detail'] = this.deliveryManDetail!.toJson();
     }
     return data;
   }

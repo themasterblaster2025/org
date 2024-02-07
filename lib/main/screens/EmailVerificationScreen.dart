@@ -122,7 +122,7 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
                 },
               );
             },
-            icon: Icon(Icons.logout),
+            icon: Icon(Icons.logout,color: Colors.white),
           ),
         ],
         body: Stack(

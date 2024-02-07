@@ -4,7 +4,6 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
 import '../../main.dart';
 import '../../main/Chat/ChatScreen.dart';
-import '../../main/components/BodyCornerWidget.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/CountryListModel.dart';
 import '../../main/models/ExtraChargeRequestModel.dart';
@@ -57,37 +56,26 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
 
   orderDetailApiCall() async {
     appStore.setLoading(true);
+
     await getOrderDetails(widget.orderId).then((value) {
-      appStore.setLoading(false);
       orderData = value.data!;
       orderHistory = value.orderHistory!;
       payment = value.payment ?? Payment();
+
       if (orderData!.extraCharges.runtimeType == List<dynamic>) {
         (orderData!.extraCharges as List<dynamic>).forEach((element) {
           list.add(ExtraChargeRequestModel.fromJson(element));
         });
       }
       if (getStringAsync(USER_TYPE) == CLIENT) {
-        if (orderData!.deliveryManId != null) userDetailApiCall(orderData!.deliveryManId!);
+        userData = value.deliveryManDetail;
       } else {
-        if (orderData!.clientId != null) userDetailApiCall(orderData!.clientId!);
+        userData = value.clientDetail;
       }
       setState(() {});
     }).catchError((error) {
-      appStore.setLoading(false);
       toast(error.toString());
-    });
-  }
-
-  userDetailApiCall(int id) async {
-    appStore.setLoading(true);
-    await getUserDetail(id).then((value) {
-      appStore.setLoading(false);
-      userData = value;
-      setState(() {});
-    }).catchError((error) {
-      appStore.setLoading(false);
-    });
+    }).whenComplete(() => appStore.setLoading(false));
   }
 
   @override
@@ -105,21 +93,17 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        finish(context, true);
-        return false;
-      },
-      child: CommonScaffoldComponent(
-        appBarTitle: '${orderData != null ? orderData!.status!.replaceAll("_", " ").capitalizeFirstLetter() : ''}',
-        body: Stack(
-          children: [
-            orderData != null
-                ? Stack(
-                    children: [
-                      SingleChildScrollView(
-                        padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 100),
-                        child: Column(
+    return CommonScaffoldComponent(
+      appBarTitle: '${orderData != null ? orderData!.status!.replaceAll("_", " ").capitalizeFirstLetter() : ''}',
+      body: Stack(
+        children: [
+          orderData != null
+              ? Stack(
+                  children: [
+                    AnimatedScrollView(
+                      padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 100),
+                      children: [
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
@@ -168,8 +152,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                       Row(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          ImageIcon(AssetImage(ic_from), size: 24, color: colorPrimary),
-                                          12.width,
                                           Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
@@ -183,7 +165,18 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                   ],
                                                 ),
                                               4.height,
-                                              Text('${orderData!.pickupPoint!.address}', style: secondaryTextStyle()),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  openMap(double.parse(orderData!.pickupPoint!.longitude.validate()), double.parse(orderData!.pickupPoint!.longitude.validate()));
+                                                },
+                                                child: Row(
+                                                  children: [
+                                                    ImageIcon(AssetImage(ic_from), size: 24, color: colorPrimary),
+                                                    12.width,
+                                                    Text('${orderData!.pickupPoint!.address}', style: secondaryTextStyle()).expand(),
+                                                  ],
+                                                ),
+                                              ),
                                               if (orderData!.pickupDatetime == null && orderData!.pickupPoint!.endTime != null && orderData!.pickupPoint!.startTime != null)
                                                 Text(
                                                     '${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(orderData!.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.pickupPoint!.endTime!).toLocal())}',
@@ -207,8 +200,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          ImageIcon(AssetImage(ic_to), size: 24, color: colorPrimary),
-                                          12.width,
                                           Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
@@ -225,7 +216,18 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                       ],
                                                     ),
                                                   4.height,
-                                                  Text('${orderData!.deliveryPoint!.address}', style: secondaryTextStyle(), textAlign: TextAlign.start),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      openMap(double.parse(orderData!.deliveryPoint!.longitude.validate()), double.parse(orderData!.deliveryPoint!.longitude.validate()));
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        ImageIcon(AssetImage(ic_to), size: 24, color: colorPrimary),
+                                                        12.width,
+                                                        Text('${orderData!.deliveryPoint!.address}', style: secondaryTextStyle(), textAlign: TextAlign.start).expand(),
+                                                      ],
+                                                    ),
+                                                  ),
                                                 ],
                                               ),
                                               if (orderData!.deliveryDatetime == null && orderData!.deliveryPoint!.endTime != null && orderData!.deliveryPoint!.startTime != null)
@@ -608,23 +610,22 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                   ),
                                 ],
                               ),
-                            ).visible(getStringAsync(USER_TYPE) == CLIENT && orderData!.status != ORDER_DELIVERED && orderData!.status != ORDER_CANCELLED)
+                            ).visible(getStringAsync(USER_TYPE) == CLIENT && orderData!.status != ORDER_DELIVERED && orderData!.status != ORDER_CANCELLED),
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: commonButton(language.returnOrder, () {
+                                ReturnOrderScreen(orderData!).launch(context);
+                              }, width: context.width()),
+                            ).visible(orderData!.status == ORDER_DELIVERED && !orderData!.returnOrderId! && getStringAsync(USER_TYPE) == CLIENT),
                           ],
                         ),
-                      ),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: commonButton(language.returnOrder, () {
-                          ReturnOrderScreen(orderData!).launch(context);
-                        }, width: context.width())
-                            .paddingAll(16),
-                      ).visible(orderData!.status == ORDER_DELIVERED && !orderData!.returnOrderId! && getStringAsync(USER_TYPE) == CLIENT),
-                    ],
-                  )
-                : SizedBox(),
-            Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
-          ],
-        ),
+                      ],
+                    ),
+                  ],
+                )
+              : SizedBox(),
+          Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
+        ],
       ),
     );
   }

@@ -53,7 +53,7 @@ class VerificationScreenState extends State<VerificationScreen> {
               },
             );
           },
-          icon: Icon(Icons.logout),
+          icon: Icon(Icons.logout,color: Colors.white),
         ),
       ],
       body: Stack(

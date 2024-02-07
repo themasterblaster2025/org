@@ -6,7 +6,6 @@ import 'package:mighty_delivery/main/utils/Widgets.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
 import '../../user/screens/WalletScreen.dart';
 import '../../main.dart';
-import '../../main/components/BodyCornerWidget.dart';
 import '../../main/screens/UserCitySelectScreen.dart';
 import '../../main/models/CityListModel.dart';
 import '../../main/models/models.dart';

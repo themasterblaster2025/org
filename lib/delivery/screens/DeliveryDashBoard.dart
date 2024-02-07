@@ -39,12 +39,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
     });
     if (await checkPermission()) {
       positionStream = Geolocator.getPositionStream().listen((event) async {
-        updateUserStatus({
-          "latitude": getIntAsync(USER_ID),
-          "longitude": getStringAsync(UID),
-        }).then((value) {
-          log("value...." + value.toString());
-        });
+        await updateUserStatus({"id": getIntAsync(USER_ID), "latitude": event.latitude.toString(), "longitude": event.longitude.toString()}).then((value) {});
       });
     }
     await getAppSetting().then((value) {
@@ -75,7 +70,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
             showBack: false,
             actions: [
               Container(
-                margin: EdgeInsets.symmetric(vertical: 12,horizontal: 8),
+                margin: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: boxDecorationWithRoundedCorners(borderRadius: radius(defaultRadius), backgroundColor: Colors.white24),
                 child: Row(

@@ -91,142 +91,150 @@ class WalletScreenState extends State<WalletScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      onPopInvoked: (v) async {
         appStore.availableBal = totalAmount;
         finish(context, true);
-        return false;
+        return Future.value(false);
       },
       child: CommonScaffoldComponent(
-        appBarTitle: language.wallet,
-        body: Stack(
-          children: [
-            SingleChildScrollView(
-              controller: scrollController,
-              padding: EdgeInsets.only(left: 16, top: 30, right: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    decoration: boxDecorationWithRoundedCorners(backgroundColor: Colors.transparent, border: Border.all(color: colorPrimary.withOpacity(0.3))),
-                    padding: EdgeInsets.all(16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        appBar: PreferredSize(
+          preferredSize: Size(context.width(), 130),
+          child: commonAppBarWidget(
+            language.earningHistory,
+            bottom: PreferredSize(
+              preferredSize: Size(context.width(), 80),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(language.availableBalance, style: secondaryTextStyle(size: 16)),
-                            6.height,
-                            Text('${printAmount(totalAmount)}', style: boldTextStyle(size: 22)),
-                          ],
-                        ),
-                        commonButton(language.addMoney, () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return Dialog(
-                                insetPadding: EdgeInsets.all(16),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(language.addMoney, style: boldTextStyle(size: 18)),
-                                    Divider(color: context.dividerColor),
-                                    16.height,
-                                    Text(language.amount, style: primaryTextStyle()),
-                                    8.height,
-                                    AppTextField(
-                                      controller: amountCont,
-                                      textFieldType: TextFieldType.PHONE,
-                                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                      decoration: commonInputDecoration(),
-                                    ),
-                                    16.height,
-                                    commonButton(
-                                      language.add,
-                                      () async {
-                                        Navigator.pop(context);
-                                      },
-                                      width: context.width(),
-                                    ),
-                                    16.height,
-                                  ],
-                                ).paddingAll(16),
-                              );
-                            },
-                          );
-                        }, color: colorPrimary.withOpacity(0.08), textColor: colorPrimary)
+                        Text(language.availableBalance, style: secondaryTextStyle(size: 16, color: Colors.white)),
+                        6.height,
+                        Text('${printAmount(totalAmount)}', style: boldTextStyle(size: 24, color: Colors.white)),
                       ],
                     ),
-                  ),
-                  16.height,
-                  ListView.builder(
-                    padding: EdgeInsets.only(top: 8, bottom: 8),
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: walletData.length,
-                    shrinkWrap: true,
-                    itemBuilder: (_, index) {
-                      WalletModel data = walletData[index];
-                      return Container(
-                        margin: EdgeInsets.only(bottom: 16),
-                        padding: EdgeInsets.all(8),
-                        decoration: boxDecorationWithRoundedCorners(borderRadius: radius(defaultRadius),backgroundColor: Colors.transparent,border: Border.all(color: colorPrimary.withOpacity(0.08))),
-                        child: Row(
-                          children: [
-                            Container(
-                              decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary.withOpacity(0.08)),
-                              padding: EdgeInsets.all(6),
-                              child: Icon(data.type == CREDIT ? Icons.add : Icons.remove, color: colorPrimary),
-                            ),
-                            10.width,
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(transactionType(data.transactionType!), style: secondaryTextStyle(color: textPrimaryColorGlobal)),
-                                  SizedBox(height: 8),
-                                  Text(printDate(data.createdAt.validate()), style: secondaryTextStyle(size: 12)),
-                                ],
-                              ),
-                            ),
-                            Text('${data.type == CREDIT ? '+' : '-'} ${printAmount(data.amount)}', style: boldTextStyle(color: data.type == CREDIT ? Colors.green : Colors.red))
-                          ],
-                        ),
+                    commonButton(language.addMoney, () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Dialog(
+                            insetPadding: EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(language.addMoney, style: boldTextStyle(size: 18)),
+                                Divider(color: context.dividerColor),
+                                16.height,
+                                Text(language.amount, style: primaryTextStyle()),
+                                8.height,
+                                AppTextField(
+                                  controller: amountCont,
+                                  textFieldType: TextFieldType.PHONE,
+                                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                  decoration: commonInputDecoration(),
+                                ),
+                                16.height,
+                                commonButton(
+                                  language.add,
+                                  () async {
+                                    Navigator.pop(context);
+                                  },
+                                  width: context.width(),
+                                ),
+                                16.height,
+                              ],
+                            ).paddingAll(16),
+                          );
+                        },
                       );
-                    },
-                  )
+                    }, color: Colors.white38, textColor: Colors.white)
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        body: Stack(
+          children: [
+            AnimatedListView(
+              padding: EdgeInsets.all(16),
+              itemCount: walletData.length,
+              emptyWidget: Stack(
+                children: [
+                  loaderWidget().visible(appStore.isLoading),
+                  emptyWidget().visible(!appStore.isLoading),
                 ],
               ),
+              onPageScrollChange: () {
+                appStore.setLoading(true);
+              },
+              onNextPage: () {
+                if (currentPage < totalPage) {
+                  appStore.setLoading(true);
+                  currentPage++;
+                  getWalletData();
+                }
+              },
+              shrinkWrap: true,
+              itemBuilder: (_, index) {
+                WalletModel data = walletData[index];
+                return walletCard(data);
+              },
             ),
             Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
           ],
         ),
-        bottomNavigationBar: Padding(
-          padding: EdgeInsets.all(16),
-          child: Row(
-            children: [
-              if (totalAmount != 0)
-                Expanded(
-                  child: commonButton(
-                    language.withdraw,
-                    () {
-                      if (userBankAccount != null)
-                        WithDrawScreen(
-                          onTap: () {
-                            init();
-                          },
-                        ).launch(context);
-                      else {
-                        toast(language.bankNotFound);
-                        BankDetailScreen(isWallet: true).launch(context);
-                      }
-                    },
-                  ),
-                ),
-            ],
+        bottomNavigationBar: totalAmount != 0
+            ? commonButton(
+                language.withdraw,
+                () {
+                  if (userBankAccount != null)
+                    WithDrawScreen(
+                      onTap: () {
+                        init();
+                      },
+                    ).launch(context);
+                  else {
+                    toast(language.bankNotFound);
+                    BankDetailScreen(isWallet: true).launch(context);
+                  }
+                },
+              ).paddingSymmetric(horizontal: 16, vertical: 8)
+            : SizedBox(),
+      ),
+    );
+  }
+
+  Widget walletCard(WalletModel data) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 16),
+      padding: EdgeInsets.all(8),
+      decoration: boxDecorationWithRoundedCorners(borderRadius: radius(defaultRadius), backgroundColor: Colors.transparent, border: Border.all(color: colorPrimary.withOpacity(0.08))),
+      child: Row(
+        children: [
+          Container(
+            decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary.withOpacity(0.08)),
+            padding: EdgeInsets.all(6),
+            child: Icon(data.type == CREDIT ? Icons.add : Icons.remove, color: colorPrimary),
           ),
-        ),
+          10.width,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(transactionType(data.transactionType!), style: secondaryTextStyle(color: textPrimaryColorGlobal)),
+                SizedBox(height: 8),
+                Text(printDate(data.createdAt.validate()), style: secondaryTextStyle(size: 12)),
+              ],
+            ),
+          ),
+          Text('${data.type == CREDIT ? '+' : '-'} ${printAmount(data.amount)}', style: boldTextStyle(color: data.type == CREDIT ? Colors.green : Colors.red))
+        ],
       ),
     );
   }

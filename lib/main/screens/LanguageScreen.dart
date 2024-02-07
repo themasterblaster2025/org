@@ -3,10 +3,8 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
-
 import '../../main.dart';
 import '../components/CommonScaffoldComponent.dart';
-import '../utils/Widgets.dart';
 
 class LanguageScreen extends StatefulWidget {
   static String tag = '/LanguageScreen';
@@ -27,13 +25,12 @@ class LanguageScreenState extends State<LanguageScreen> {
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
       appBarTitle: language.language,
-      body: ListView(
-        padding: EdgeInsets.all(16),
-        shrinkWrap: true,
+      body: AnimatedScrollView(
+        padding: EdgeInsets.all(8),
         children: List.generate(localeLanguageList.length, (index) {
           LanguageDataModel data = localeLanguageList[index];
           return Container(
-            margin: EdgeInsets.only(bottom: 8),
+            margin: EdgeInsets.all(8),
             decoration: boxDecorationWithRoundedCorners(
                 backgroundColor: Colors.transparent,
                 border: Border.all(color: getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguage) == data.languageCode ? colorPrimary : dividerColor)),

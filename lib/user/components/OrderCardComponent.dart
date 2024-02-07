@@ -85,8 +85,6 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ImageIcon(AssetImage(ic_from), size: 24, color: colorPrimary),
-                    12.width,
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -100,11 +98,22 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                             ],
                           ),
                         4.height,
-                        Text('${widget.item.pickupPoint!.address}', style: primaryTextStyle()),
+                        GestureDetector(
+                          onTap: () {
+                            openMap(double.parse(widget.item.pickupPoint!.longitude.validate()), double.parse(widget.item.pickupPoint!.longitude.validate()));
+                          },
+                          child: Row(
+                            children: [
+                              ImageIcon(AssetImage(ic_from), size: 24, color: colorPrimary),
+                              12.width,
+                              Text('${widget.item.pickupPoint!.address}', style: primaryTextStyle()).expand(),
+                            ],
+                          ),
+                        ),
                         if (widget.item.pickupDatetime == null && widget.item.pickupPoint!.endTime != null && widget.item.pickupPoint!.startTime != null)
-                          Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(widget.item.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(widget.item.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(widget.item.pickupPoint!.endTime!).toLocal())}',
-                                  style: secondaryTextStyle(size: 12,color: Colors.red))
-                              ,
+                          Text(
+                              '${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(widget.item.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(widget.item.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(widget.item.pickupPoint!.endTime!).toLocal())}',
+                              style: secondaryTextStyle(size: 12, color: Colors.red)),
                       ],
                     ).expand(),
                     12.width,
@@ -123,8 +132,6 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ImageIcon(AssetImage(ic_to), size: 24, color: colorPrimary),
-                    12.width,
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -141,13 +148,24 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                                 ],
                               ),
                             4.height,
-                            Text('${widget.item.deliveryPoint!.address}', style: primaryTextStyle(), textAlign: TextAlign.start),
+                            GestureDetector(
+                              onTap: () {
+                                openMap(double.parse(widget.item.deliveryPoint!.longitude.validate()), double.parse(widget.item.deliveryPoint!.longitude.validate()));
+                              },
+                              child: Row(
+                                children: [
+                                  ImageIcon(AssetImage(ic_to), size: 24, color: colorPrimary),
+                                  12.width,
+                                  Text('${widget.item.deliveryPoint!.address}', style: primaryTextStyle(), textAlign: TextAlign.start).expand(),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                         if (widget.item.deliveryDatetime == null && widget.item.deliveryPoint!.endTime != null && widget.item.deliveryPoint!.startTime != null)
                           Text(
                               '${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(widget.item.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(widget.item.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(widget.item.deliveryPoint!.endTime!).toLocal())}',
-                              style: secondaryTextStyle(color: Colors.red,size: 12))
+                              style: secondaryTextStyle(color: Colors.red, size: 12))
                       ],
                     ).expand(),
                     12.width,
@@ -165,13 +183,13 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
               children: [
                 if (widget.item.status != ORDER_CANCELLED)
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12,vertical: 4),
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                     decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary),
                     child: Row(
                       children: [
                         Text(language.invoice, style: secondaryTextStyle(color: Colors.white)),
                         4.width,
-                        Icon(Ionicons.md_download_outline, color: Colors.white,size: 18).paddingBottom(4),
+                        Icon(Ionicons.md_download_outline, color: Colors.white, size: 18).paddingBottom(4),
                       ],
                     ).onTap(() {
                       generateInvoiceCall(widget.item);

@@ -14,6 +14,7 @@ import 'package:flutterwave_standard/flutterwave.dart';
 import 'package:flutterwave_standard/view/view_utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:mighty_delivery/main/utils/Images.dart';
 import '../../main/components/BodyCornerWidget.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/PaymentGatewayListModel.dart';
@@ -435,7 +436,7 @@ class PaymentScreenState extends State<PaymentScreen> {
 
     var theme = IOSThemeConfigurations();
 
-    theme.logoImage = "assets/app_logo_white.png";
+    theme.logoImage = ic_logo_transparent;
 
     configuration.iOSThemeConfigurations = theme;
 

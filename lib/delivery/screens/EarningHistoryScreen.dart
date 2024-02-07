@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
@@ -59,7 +60,6 @@ class EarningHistoryScreenState extends State<EarningHistoryScreen> {
   getPaymentListApi() async {
     appStore.setLoading(true);
     await getPaymentList(page: currentPage).then((value) {
-      appStore.setLoading(false);
       currentPage = value.pagination!.currentPage!;
       totalPage = value.pagination!.totalPages!;
       if (currentPage == 1) {
@@ -68,9 +68,8 @@ class EarningHistoryScreenState extends State<EarningHistoryScreen> {
       earningList.addAll(value.data!);
       setState(() {});
     }).catchError((e) {
-      appStore.setLoading(false);
       log(e);
-    });
+    }).whenComplete(() => appStore.setLoading(false));
   }
 
   @override
@@ -81,87 +80,106 @@ class EarningHistoryScreenState extends State<EarningHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
-      appBarTitle: language.earningHistory,
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            controller: scrollController,
-            padding: EdgeInsets.only(left: 16, top: 30, right: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  decoration: boxDecorationWithRoundedCorners(borderRadius: radius(defaultRadius), backgroundColor: Colors.transparent, border: Border.all(color: colorPrimary.withOpacity(appStore.isDarkMode?0.6:0.08))),
-                  padding: EdgeInsets.all(16),
-                  child: IntrinsicHeight(
-                    child: Row(
+      appBar: PreferredSize(
+        preferredSize: Size(context.width(), 130),
+        child: commonAppBarWidget(
+          language.earningHistory,
+          bottom: PreferredSize(
+            preferredSize: Size(context.width(), 80),
+            child: Container(
+              decoration: boxDecorationWithRoundedCorners(
+                  borderRadius: radius(defaultRadius), backgroundColor: Colors.transparent, border: Border.all(color: colorPrimary.withOpacity(appStore.isDarkMode ? 0.6 : 0.08))),
+              padding: EdgeInsets.all(16),
+              child: IntrinsicHeight(
+                child: Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(language.earning, style: primaryTextStyle(size: 16), textAlign: TextAlign.center),
-                            6.height,
-                            Text('${printAmount(earningDetail.deliveryManCommission ?? 0)}', style: boldTextStyle(size: 20), textAlign: TextAlign.center),
-                          ],
-                        ).expand(),
-                        VerticalDivider(color: textPrimaryColorGlobal),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(language.adminCommission, style: primaryTextStyle(size: 16), textAlign: TextAlign.center),
-                            6.height,
-                            Text('${printAmount(earningDetail.adminCommission ?? 0)}', style: boldTextStyle(size: 20), textAlign: TextAlign.center),
-                          ],
-                        ).expand(),
+                        Text(language.earning, style: primaryTextStyle(size: 16, color: Colors.white), textAlign: TextAlign.center),
+                        6.height,
+                        Text('${printAmount(earningDetail.deliveryManCommission ?? 0)}', style: boldTextStyle(size: 20, color: Colors.white), textAlign: TextAlign.center),
                       ],
-                    ),
-                  ),
+                    ).expand(),
+                    VerticalDivider(color: Colors.white),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(language.adminCommission, style: primaryTextStyle(size: 16, color: Colors.white), textAlign: TextAlign.center),
+                        6.height,
+                        Text('${printAmount(earningDetail.adminCommission ?? 0)}', style: boldTextStyle(size: 20, color: Colors.white), textAlign: TextAlign.center),
+                      ],
+                    ).expand(),
+                  ],
                 ),
-                16.height,
-                ListView.builder(
-                  padding: EdgeInsets.only(top: 8, bottom: 8),
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: earningList.length,
-                  shrinkWrap: true,
-                  itemBuilder: (_, index) {
-                    EarningData data = earningList[index];
-                    return Container(
-                      margin: EdgeInsets.only(bottom: 16),
-                      padding: EdgeInsets.all(8),
-                      decoration: boxDecorationWithRoundedCorners(borderRadius: radius(defaultRadius), backgroundColor: Colors.transparent, border: Border.all(color: colorPrimary.withOpacity(appStore.isDarkMode?0.6:0.08))),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [Text('${language.orderId}: #${data.orderId}', style: boldTextStyle()), Spacer(), Text('${data.paymentType}', style: primaryTextStyle())],
-                          ),
-                          SizedBox(height: 4),
-                          Text(printDate(data.createdAt.validate()), style: secondaryTextStyle()),
-                          SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(language.earning, textAlign: TextAlign.center, style: secondaryTextStyle(size: 14)),
-                              Text('${printAmount(data.deliveryManCommission ?? 0)}', style: boldTextStyle(size: 16)),
-                            ],
-                          ),
-                          SizedBox(height: 4),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(language.adminCommission, textAlign: TextAlign.center, style: secondaryTextStyle(size: 14)),
-                              Text('${printAmount(data.adminCommission ?? 0)}', style: boldTextStyle(size: 16)),
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ],
+              ),
             ),
           ),
+        ),
+      ),
+      body: Stack(
+        children: [
+          AnimatedListView(
+            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            itemCount: earningList.length,
+            shrinkWrap: true,
+            emptyWidget: Stack(
+              children: [
+                loaderWidget().visible(appStore.isLoading),
+                emptyWidget().visible(!appStore.isLoading),
+              ],
+            ),
+            onPageScrollChange: () {
+              appStore.setLoading(true);
+            },
+            onNextPage: () {
+              if (currentPage < totalPage) {
+                appStore.setLoading(true);
+                currentPage++;
+                getPaymentListApi();
+              }
+            },
+            itemBuilder: (_, index) {
+              EarningData data = earningList[index];
+              return earningCardWidget(data);
+            },
+          ),
           Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
+        ],
+      ),
+    );
+  }
+
+  Widget earningCardWidget(EarningData data) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 16),
+      padding: EdgeInsets.all(8),
+      decoration: boxDecorationWithRoundedCorners(
+          borderRadius: radius(defaultRadius), backgroundColor: Colors.transparent, border: Border.all(color: colorPrimary.withOpacity(appStore.isDarkMode ? 0.6 : 0.08))),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [Text('${language.orderId}: #${data.orderId}', style: boldTextStyle()), Spacer(), Text('${data.paymentType}', style: primaryTextStyle())],
+          ),
+          SizedBox(height: 4),
+          Text(printDate(data.createdAt.validate()), style: secondaryTextStyle()),
+          SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(language.earning, textAlign: TextAlign.center, style: secondaryTextStyle(size: 14)),
+              Text('${printAmount(data.deliveryManCommission ?? 0)}', style: boldTextStyle(size: 16)),
+            ],
+          ),
+          SizedBox(height: 4),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(language.adminCommission, textAlign: TextAlign.center, style: secondaryTextStyle(size: 14)),
+              Text('${printAmount(data.adminCommission ?? 0)}', style: boldTextStyle(size: 16)),
+            ],
+          ),
         ],
       ),
     );
