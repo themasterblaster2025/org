@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
+import 'package:nb_utils/nb_utils.dart';
+
 import '../../main.dart';
 import '../../main/Chat/ChatScreen.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
+import '../../main/components/OrderSummeryWidget.dart';
 import '../../main/models/CountryListModel.dart';
 import '../../main/models/ExtraChargeRequestModel.dart';
 import '../../main/models/LoginResponse.dart';
+import '../../main/models/OrderDetailModel.dart';
 import '../../main/models/OrderListModel.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Colors.dart';
@@ -17,10 +21,6 @@ import '../../main/utils/Images.dart';
 import '../../main/utils/Widgets.dart';
 import '../../user/components/CancelOrderDialog.dart';
 import '../../user/screens/ReturnOrderScreen.dart';
-import 'package:nb_utils/nb_utils.dart';
-
-import '../../main/components/OrderSummeryWidget.dart';
-import '../../main/models/OrderDetailModel.dart';
 import 'OrderHistoryScreen.dart';
 
 class OrderDetailScreen extends StatefulWidget {
@@ -178,9 +178,9 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                 ),
                                               ),
                                               if (orderData!.pickupDatetime == null && orderData!.pickupPoint!.endTime != null && orderData!.pickupPoint!.startTime != null)
-                                                Text(
-                                                    '${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(orderData!.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.pickupPoint!.endTime!).toLocal())}',
-                                                    style: secondaryTextStyle(size: 12, color: Colors.red)),
+                                                Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(orderData!.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.pickupPoint!.endTime!).toLocal())}',
+                                                        style: secondaryTextStyle(size: 12, color: Colors.red))
+                                                    .paddingOnly(top: 4),
                                             ],
                                           ).expand(),
                                           12.width,
@@ -231,9 +231,9 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                 ],
                                               ),
                                               if (orderData!.deliveryDatetime == null && orderData!.deliveryPoint!.endTime != null && orderData!.deliveryPoint!.startTime != null)
-                                                Text(
-                                                    '${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(orderData!.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.deliveryPoint!.endTime!).toLocal())}',
-                                                    style: secondaryTextStyle(color: Colors.red, size: 12))
+                                                Text('${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(orderData!.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(orderData!.deliveryPoint!.endTime!).toLocal())}',
+                                                        style: secondaryTextStyle(color: Colors.red, size: 12))
+                                                    .paddingOnly(top: 4)
                                             ],
                                           ).expand(),
                                           12.width,
@@ -423,7 +423,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                           }),
                                                           InkWell(
                                                               onTap: () {
-                                                                ChatScreen(userData: userData).launch(context);
+                                                                commonLaunchUrl('tel:${userData!.contactNumber}');
+                                                                //   ChatScreen(userData: userData).launch(context);
                                                               },
                                                               child: Icon(Ionicons.call_outline, size: 22, color: colorPrimary))
                                                         ],

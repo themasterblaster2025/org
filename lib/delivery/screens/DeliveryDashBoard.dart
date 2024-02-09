@@ -3,17 +3,18 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
+import 'package:nb_utils/nb_utils.dart';
+
 import '../../delivery/fragment/DProfileFragment.dart';
 import '../../delivery/screens/CreateTabScreen.dart';
+import '../../main.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/CityListModel.dart';
+import '../../main/network/RestApis.dart';
 import '../../main/screens/NotificationScreen.dart';
 import '../../main/screens/UserCitySelectScreen.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
-import 'package:nb_utils/nb_utils.dart';
-import '../../main.dart';
-import '../../main/network/RestApis.dart';
 
 class DeliveryDashBoard extends StatefulWidget {
   @override

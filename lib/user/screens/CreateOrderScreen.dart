@@ -1,18 +1,26 @@
 import 'dart:core';
+
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
+import 'package:nb_utils/nb_utils.dart';
+
 import '../../main.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
+import '../../main/components/OrderSummeryWidget.dart';
+import '../../main/components/PickAddressBottomSheet.dart';
 import '../../main/models/AddressListModel.dart';
+import '../../main/models/AutoCompletePlacesListModel.dart';
 import '../../main/models/CityListModel.dart';
 import '../../main/models/CountryListModel.dart';
+import '../../main/models/ExtraChargeRequestModel.dart';
 import '../../main/models/OrderListModel.dart';
 import '../../main/models/ParcelTypeListModel.dart';
 import '../../main/models/PaymentModel.dart';
+import '../../main/models/PlaceIdDetailModel.dart';
 import '../../main/models/VehicleModel.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Colors.dart';
@@ -21,14 +29,8 @@ import '../../main/utils/Constants.dart';
 import '../../main/utils/Images.dart';
 import '../../main/utils/Widgets.dart';
 import '../../user/components/CreateOrderConfirmationDialog.dart';
-import 'PaymentScreen.dart';
 import '../../user/screens/DashboardScreen.dart';
-import 'package:nb_utils/nb_utils.dart';
-import '../../main/components/OrderSummeryWidget.dart';
-import '../../main/components/PickAddressBottomSheet.dart';
-import '../../main/models/AutoCompletePlacesListModel.dart';
-import '../../main/models/ExtraChargeRequestModel.dart';
-import '../../main/models/PlaceIdDetailModel.dart';
+import 'PaymentScreen.dart';
 import 'WalletScreen.dart';
 
 class CreateOrderScreen extends StatefulWidget {
@@ -732,14 +734,14 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         isPickSavedAddress
             ? Container(
                 decoration: boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(defaultRadius), backgroundColor: Colors.grey.withOpacity(0.15)),
-                height: 90,
+                //   height: 90,
                 padding: EdgeInsets.all(12),
                 child: DropdownButton<AddressData>(
                   value: pickAddressData,
                   hint: Text(language.selectAddress, style: primaryTextStyle()),
                   dropdownColor: context.cardColor,
                   isExpanded: true,
-                  itemHeight: 90,
+                  itemHeight: 80,
                   underline: Container(color: Colors.red),
                   menuMaxHeight: context.height() * 0.6,
                   items: addressList.map((AddressData e) {
@@ -900,14 +902,14 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         isDeliverySavedAddress
             ? Container(
                 decoration: boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(defaultRadius), backgroundColor: Colors.grey.withOpacity(0.15)),
-                height: 90,
+                // height: 90,
                 padding: EdgeInsets.all(12),
                 child: DropdownButton<AddressData>(
                   value: deliveryAddressData,
                   hint: Text(language.selectAddress, style: primaryTextStyle()),
                   dropdownColor: context.cardColor,
                   isExpanded: true,
-                  itemHeight: 90,
+                  itemHeight: 80,
                   underline: Container(color: Colors.red),
                   menuMaxHeight: context.height() * 0.6,
                   items: addressList.map((AddressData e) {

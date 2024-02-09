@@ -1008,6 +1008,9 @@ class LanguageEn extends BaseLanguage {
   @override
   String get sureWantToDeleteAddress => "Are you sure want to delete this address?";
 
-
-
+  @override
+  String get withdrawMoney => 'Withdraw Money';
+  @override
+  @override
+  String get fromDateValidationMsg => 'From Date is must';
 }

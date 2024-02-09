@@ -2,20 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mighty_delivery/main/models/LoginResponse.dart';
-import '../../main/components/CommonScaffoldComponent.dart';
-import '../../main/screens/BankDetailScreen.dart';
-import '../../main/utils/Colors.dart';
-import 'PaymentScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../delivery/screens/WithDrawScreen.dart';
 import '../../main.dart';
-import '../../main/components/BodyCornerWidget.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/WalletListModel.dart';
 import '../../main/network/RestApis.dart';
+import '../../main/screens/BankDetailScreen.dart';
+import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Widgets.dart';
+import 'PaymentScreen.dart';
 
 class WalletScreen extends StatefulWidget {
   static String tag = '/WalletScreen';
@@ -143,6 +142,13 @@ class WalletScreenState extends State<WalletScreen> {
                                   language.add,
                                   () async {
                                     Navigator.pop(context);
+                                    bool? res = await PaymentScreen(
+                                      totalAmount: amountCont.text.toDouble(),
+                                      isWallet: true,
+                                    ).launch(context);
+                                    if (res == true) {
+                                      getWalletData();
+                                    }
                                   },
                                   width: context.width(),
                                 ),

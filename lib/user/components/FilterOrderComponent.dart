@@ -1,14 +1,14 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:nb_utils/nb_utils.dart';
+
+import '../../main.dart';
 import '../../main/models/models.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Widgets.dart';
-import 'package:nb_utils/nb_utils.dart';
-
-import '../../main.dart';
 
 class FilterOrderComponent extends StatefulWidget {
   static String tag = '/FilterOrderComponent';
@@ -18,7 +18,7 @@ class FilterOrderComponent extends StatefulWidget {
 }
 
 class FilterOrderComponentState extends State<FilterOrderComponent> {
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   TextEditingController fromDateController = TextEditingController();
   TextEditingController toDateController = TextEditingController();
   FilterAttributeModel? filterData;
@@ -79,28 +79,34 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(alignment: Alignment.center,
+                Container(
+                  alignment: Alignment.center,
                   margin: EdgeInsets.only(right: 16),
                   padding: EdgeInsets.all(4),
-                  decoration: boxDecorationWithRoundedCorners(boxShape: BoxShape.circle,backgroundColor:Colors.transparent,border: Border.all()),
-                  child: Icon(AntDesign.close,size: 16,).onTap(() {
+                  decoration: boxDecorationWithRoundedCorners(boxShape: BoxShape.circle, backgroundColor: Colors.transparent, border: Border.all()),
+                  child: Icon(
+                    AntDesign.close,
+                    size: 16,
+                  ).onTap(() {
                     finish(context);
                   }),
                 ),
                 Text(language.filter, style: boldTextStyle()).expand(),
-                TextButton(child: Text(language.reset,style: boldTextStyle()),onPressed:  () {
-                  selectedStatus = null;
-                  fromDate = null;
-                  toDate = null;
-                  fromDateController.clear();
-                  toDateController.clear();
-                  FocusScope.of(context).unfocus();
-                  setState(() {});
-                },)
-                    ,
+                TextButton(
+                  child: Text(language.reset, style: boldTextStyle()),
+                  onPressed: () {
+                    selectedStatus = null;
+                    fromDate = null;
+                    toDate = null;
+                    fromDateController.clear();
+                    toDateController.clear();
+                    FocusScope.of(context).unfocus();
+                    setState(() {});
+                  },
+                ),
               ],
             ),
-            Divider(height: 20,color: context.dividerColor),
+            Divider(height: 20, color: context.dividerColor),
             Text(language.status, style: boldTextStyle()),
             8.height,
             Wrap(
@@ -111,7 +117,7 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
                   backgroundColor: selectedStatus == item ? colorPrimary : Colors.transparent,
                   label: Text(orderStatus(item)),
                   elevation: 0,
-                  labelStyle: primaryTextStyle(size: 14,color: selectedStatus == item ? white : textPrimaryColorGlobal),
+                  labelStyle: primaryTextStyle(size: 14, color: selectedStatus == item ? white : textPrimaryColorGlobal),
                   padding: EdgeInsets.zero,
                   labelPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   shape: RoundedRectangleBorder(
@@ -131,7 +137,8 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
               children: [
                 DateTimePicker(
                   controller: fromDateController,
-                  type: DateTimePickerType.date,fieldHintText:language.from ,
+                  type: DateTimePickerType.date,
+                  fieldHintText: language.from,
                   lastDate: DateTime.now(),
                   firstDate: DateTime(2010),
                   onChanged: (value) {
@@ -139,7 +146,12 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
                     fromDateController.text = value;
                     setState(() {});
                   },
-                  decoration: commonInputDecoration(suffixIcon: Ionicons.calendar_outline,hintText: language.from),
+                  validator: (value) {
+                    if (fromDate == null && toDate != null) {
+                      return "must select start date";
+                    }
+                  },
+                  decoration: commonInputDecoration(suffixIcon: Ionicons.calendar_outline, hintText: language.from),
                 ).expand(),
                 16.width,
                 DateTimePicker(
@@ -161,23 +173,22 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
                     }
                     return null;
                   },
-                  decoration: commonInputDecoration(suffixIcon:Ionicons.calendar_outline,hintText: language.to),
+                  decoration: commonInputDecoration(suffixIcon: Ionicons.calendar_outline, hintText: language.to),
                 ).expand(),
               ],
             ),
-
             20.height,
-            commonButton(
-              language.applyFilter,
-              () {
-                if (_formKey.currentState!.validate()) {
-                  finish(context);
-                  setValue(FILTER_DATA, FilterAttributeModel(orderStatus: selectedStatus, fromDate: fromDate.toString(), toDate: toDate.toString()).toJson());
-                  appStore.setFiltering(selectedStatus != null || fromDate != null || toDate != null);
-                  LiveStream().emit("UpdateOrderData");
+            commonButton(language.applyFilter, () {
+              if (_formKey.currentState!.validate()) {
+                finish(context);
+                if (fromDate != null && toDate == null) {
+                  toDate = DateTime.parse(DateTime.now().toString());
                 }
-              },width: context.width()
-            ),
+                setValue(FILTER_DATA, FilterAttributeModel(orderStatus: selectedStatus, fromDate: fromDate.toString(), toDate: toDate.toString()).toJson());
+                appStore.setFiltering(selectedStatus != null || fromDate != null || toDate != null);
+                LiveStream().emit("UpdateOrderData");
+              }
+            }, width: context.width()),
           ],
         ),
       ),

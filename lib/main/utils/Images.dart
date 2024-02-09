@@ -1,4 +1,4 @@
-const ic_logo = "assets/app_logo.png";
+const ic_logo = "assets/app_logo.jpg";
 const ic_logo_transparent = "assets/app_logo_white.png";
 const ic_from = "assets/ic_from.png";
 const ic_to = "assets/ic_to.png";
@@ -33,5 +33,5 @@ const ic_order_draft = 'assets/icon/ic_order_draft.png';
 const ic_order_transfer = 'assets/icon/ic_order_transfer.png';
 const ic_order = 'assets/icon/ic_order.png';
 
-const ic_apple='assets/icons/ic_apple.png';
-const ic_google='assets/icons/ic_google.png';
+const ic_apple = 'assets/icons/ic_apple.png';
+const ic_google = 'assets/icons/ic_google.png';

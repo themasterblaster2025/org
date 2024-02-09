@@ -3,8 +3,11 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:nb_utils/nb_utils.dart';
+
 import '../../delivery/screens/ReceivedScreenOrderScreen.dart';
 import '../../delivery/screens/TrackingScreen.dart';
+import '../../main.dart';
 import '../../main/models/OrderListModel.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Colors.dart';
@@ -12,8 +15,6 @@ import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Images.dart';
 import '../../user/screens/OrderDetailScreen.dart';
-import 'package:nb_utils/nb_utils.dart';
-import '../../main.dart';
 
 class CreateTabScreen extends StatefulWidget {
   final String? orderStatus;
@@ -261,6 +262,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                 if (data.pickupDatetime == null && data.pickupPoint!.endTime != null && data.pickupPoint!.startTime != null)
                   Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.endTime!).toLocal())}',
                           style: secondaryTextStyle(size: 12, color: Colors.red))
+                      .paddingOnly(top: 4)
                       .expand(),
               ],
             ),
@@ -302,6 +304,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                 if (data.deliveryDatetime == null && data.deliveryPoint!.endTime != null && data.deliveryPoint!.startTime != null)
                   Text('${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.endTime!).toLocal())}',
                           style: secondaryTextStyle(color: Colors.red, size: 12))
+                      .paddingOnly(top: 4)
                       .expand()
               ],
             ),

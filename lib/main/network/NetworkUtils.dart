@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
-import '../../main/utils/Common.dart';
-import '../../main/utils/Constants.dart';
+import 'package:http/http.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
+import '../../main/utils/Common.dart';
+import '../../main/utils/Constants.dart';
 import 'RestApis.dart';
 
 Map<String, String> buildHeaderTokens() {
@@ -20,6 +20,7 @@ Map<String, String> buildHeaderTokens() {
   };
 
   if (appStore.isLoggedIn) {
+    print("user token==============${getStringAsync(USER_TOKEN)}");
     header.putIfAbsent(HttpHeaders.authorizationHeader, () => 'Bearer ${getStringAsync(USER_TOKEN)}');
   }
   log(jsonEncode(header));
@@ -84,7 +85,7 @@ Future handleResponse(Response response, [bool? avoidTokenError]) async {
       }).catchError((e) {
         throw TokenException(e);
       });
-    }else{
+    } else {
       throw '';
     }
   }
@@ -101,6 +102,7 @@ Future handleResponse(Response response, [bool? avoidTokenError]) async {
     }
   }
 }
+
 enum HttpMethod { GET, POST, DELETE, PUT }
 
 class TokenException implements Exception {

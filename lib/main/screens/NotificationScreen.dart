@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:nb_utils/nb_utils.dart';
+
+import '../../main.dart';
 import '../../main/models/NotificationModel.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../user/screens/OrderDetailScreen.dart';
-import 'package:nb_utils/nb_utils.dart';
-import '../../main.dart';
 import '../components/CommonScaffoldComponent.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -90,7 +91,7 @@ class NotificationScreenState extends State<NotificationScreen> {
                 ],
               ),
               onPageScrollChange: () {
-                appStore.setLoading(true);
+                //  appStore.setLoading(true);
               },
               onNextPage: () {
                 if (!mIsLastPage) {

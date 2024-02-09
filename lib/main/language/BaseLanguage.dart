@@ -664,4 +664,6 @@ abstract class BaseLanguage {
   String get selectAddress;
   String get deleteLocation;
   String get sureWantToDeleteAddress;
+  String get withdrawMoney;
+  String get fromDateValidationMsg;
 }

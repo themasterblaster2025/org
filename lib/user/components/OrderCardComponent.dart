@@ -1,4 +1,3 @@
-import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
@@ -111,9 +110,10 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                           ),
                         ),
                         if (widget.item.pickupDatetime == null && widget.item.pickupPoint!.endTime != null && widget.item.pickupPoint!.startTime != null)
-                          Text(
-                              '${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(widget.item.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(widget.item.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(widget.item.pickupPoint!.endTime!).toLocal())}',
-                              style: secondaryTextStyle(size: 12, color: Colors.red)),
+                          Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(widget.item.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(widget.item.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(widget.item.pickupPoint!.endTime!).toLocal())}',
+                                  style: secondaryTextStyle(size: 12, color: Colors.red))
+                              .paddingOnly(top: 4)
+                              .paddingOnly(top: 4),
                       ],
                     ).expand(),
                     12.width,
@@ -163,9 +163,9 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                           ],
                         ),
                         if (widget.item.deliveryDatetime == null && widget.item.deliveryPoint!.endTime != null && widget.item.deliveryPoint!.startTime != null)
-                          Text(
-                              '${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(widget.item.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(widget.item.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(widget.item.deliveryPoint!.endTime!).toLocal())}',
-                              style: secondaryTextStyle(color: Colors.red, size: 12))
+                          Text('${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(widget.item.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(widget.item.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(widget.item.deliveryPoint!.endTime!).toLocal())}',
+                                  style: secondaryTextStyle(color: Colors.red, size: 12))
+                              .paddingOnly(top: 4)
                       ],
                     ).expand(),
                     12.width,
