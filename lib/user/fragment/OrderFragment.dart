@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:nb_utils/nb_utils.dart';
+
 import '../../main.dart';
 import '../../main/models/OrderListModel.dart';
 import '../../main/models/models.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
-import 'package:nb_utils/nb_utils.dart';
 import '../components/OrderCardComponent.dart';
 
 class OrderFragment extends StatefulWidget {
@@ -45,6 +46,7 @@ class OrderFragmentState extends State<OrderFragment> {
       appStore.setCurrencySymbol(value.currency ?? currencySymbol);
       appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
       appStore.isVehicleOrder = value.isVehicleInOrder ?? 0;
+      appStore.setDistanceUnit(value.distanceUnit ?? DISTANCE_UNIT_KM);
     }).catchError((error) {
       log(error.toString());
     });

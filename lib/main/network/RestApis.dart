@@ -482,3 +482,7 @@ Future<LDBaseResponse> verifyOtpEmail(Map req) async {
 Future<LDBaseResponse> resendOtpEmail() async {
   return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('resend-otp-for-email', method: HttpMethod.POST)));
 }
+
+Future<DirectionsResponse> getDistanceBetweenLatLng(String origins, String destinations) async {
+  return DirectionsResponse.fromJson(await handleResponse(await buildHttpResponse('distance-matrix-api?origins=$origins&destinations=$destinations', method: HttpMethod.GET)));
+}

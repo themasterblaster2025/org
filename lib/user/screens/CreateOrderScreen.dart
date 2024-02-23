@@ -212,38 +212,53 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     });
   }
 
-  getTotalAmount() {
-    totalDistance = calculateDistance(
-      isPickSavedAddress ? pickAddressData!.latitude.validate().toDouble() : pickLat.toDouble(),
-      isPickSavedAddress ? pickAddressData!.longitude.validate().toDouble() : pickLong.toDouble(),
-      isDeliverySavedAddress ? deliveryAddressData!.latitude.validate().toDouble() : deliverLat.toDouble(),
-      isDeliverySavedAddress ? deliveryAddressData!.longitude.validate().toDouble() : deliverLong.toDouble(),
-    );
-    totalAmount = 0;
-    weightCharge = 0;
-    distanceCharge = 0;
-    totalExtraCharge = 0;
+  getTotalAmount() async {
+    // totalDistance = calculateDistance(
+    //   isPickSavedAddress ? pickAddressData!.latitude.validate().toDouble() : pickLat.toDouble(),
+    //   isPickSavedAddress ? pickAddressData!.longitude.validate().toDouble() : pickLong.toDouble(),
+    //   isDeliverySavedAddress ? deliveryAddressData!.latitude.validate().toDouble() : deliverLat.toDouble(),
+    //   isDeliverySavedAddress ? deliveryAddressData!.longitude.validate().toDouble() : deliverLong.toDouble(),
+    // );
+    String? originLat = isPickSavedAddress ? pickAddressData!.latitude.validate() : pickLat;
+    String? originLong = isPickSavedAddress ? pickAddressData!.longitude.validate() : pickLong;
+    String? destinationLat = isDeliverySavedAddress ? deliveryAddressData!.latitude.validate() : deliverLat;
+    String? destinationLong = isDeliverySavedAddress ? deliveryAddressData!.longitude.validate() : deliverLong;
+    String origins = "${originLat},${originLong}";
+    String destinations = "${destinationLat},${destinationLong}";
+    await getDistanceBetweenLatLng(origins, destinations).then((value) {
+      print(value.rows[0].elements[0].distance.text.toString().split(' ')[0].toDouble());
+      double distanceInKms = value.rows[0].elements[0].distance.text.toString().split(' ')[0].toDouble();
+      if (appStore.distanceUnit == DISTANCE_UNIT_MILE) {
+        totalDistance = (MILES_PER_KM * distanceInKms);
+      } else {
+        totalDistance = distanceInKms;
+      }
+      totalAmount = 0;
+      weightCharge = 0;
+      distanceCharge = 0;
+      totalExtraCharge = 0;
 
-    /// calculate weight Charge
-    if (weightController.text.toDouble() > cityData!.minWeight!) {
-      weightCharge = ((weightController.text.toDouble() - cityData!.minWeight!) * cityData!.perWeightCharges!).toStringAsFixed(digitAfterDecimal).toDouble();
-    }
+      /// calculate weight Charge
+      if (weightController.text.toDouble() > cityData!.minWeight!) {
+        weightCharge = ((weightController.text.toDouble() - cityData!.minWeight!) * cityData!.perWeightCharges!).toStringAsFixed(digitAfterDecimal).toDouble();
+      }
 
-    /// calculate distance Charge
-    if (totalDistance > cityData!.minDistance!) {
-      distanceCharge = ((totalDistance - cityData!.minDistance!) * cityData!.perDistanceCharges!).toStringAsFixed(digitAfterDecimal).toDouble();
-    }
+      /// calculate distance Charge
+      if (totalDistance > cityData!.minDistance!) {
+        distanceCharge = ((totalDistance - cityData!.minDistance!) * cityData!.perDistanceCharges!).toStringAsFixed(digitAfterDecimal).toDouble();
+      }
 
-    /// total amount
-    totalAmount = cityData!.fixedCharges! + weightCharge + distanceCharge;
+      /// total amount
+      totalAmount = cityData!.fixedCharges! + weightCharge + distanceCharge;
 
-    /// calculate extra charges
-    cityData!.extraCharges!.forEach((element) {
-      totalExtraCharge += countExtraCharge(totalAmount: totalAmount, charges: element.charges!, chargesType: element.chargesType!);
+      /// calculate extra charges
+      cityData!.extraCharges!.forEach((element) {
+        totalExtraCharge += countExtraCharge(totalAmount: totalAmount, charges: element.charges!, chargesType: element.chargesType!);
+      });
+
+      /// All Charges
+      totalAmount = (totalAmount + totalExtraCharge).toStringAsFixed(digitAfterDecimal).toDouble();
     });
-
-    /// All Charges
-    totalAmount = (totalAmount + totalExtraCharge).toStringAsFixed(digitAfterDecimal).toDouble();
   }
 
   createOrderApiCall(String orderStatus) async {
@@ -1290,7 +1305,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     if (difference.inMinutes > 0) return toast(language.pickupDeliverValidationMsg);
                     selectedTabIndex++;
                     if (selectedTabIndex == 3) {
-                      getTotalAmount();
+                      await getTotalAmount();
                     }
                     setState(() {});
                   }

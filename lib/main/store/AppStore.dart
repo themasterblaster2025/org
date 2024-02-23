@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../main/language/AppLocalizations.dart';
-import '../../main/language/BaseLanguage.dart';
-import '../../main/utils/Colors.dart';
-import '../../main/utils/Constants.dart';
 import 'package:mobx/mobx.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
+import '../../main/language/AppLocalizations.dart';
+import '../../main/language/BaseLanguage.dart';
+import '../../main/utils/Colors.dart';
+import '../../main/utils/Constants.dart';
 
 part 'AppStore.g.dart';
 
@@ -68,6 +68,8 @@ abstract class _AppStore with Store {
   String invoiceAddress = mInvoiceAddress;
   @observable
   String invoiceCompanyLogo = '';
+  @observable
+  String distanceUnit = '';
 
   @action
   Future<void> setLoading(bool val) async {
@@ -156,10 +158,12 @@ abstract class _AppStore with Store {
   void setInvoiceCompanyName(String val) {
     invoiceCompanyName = val;
   }
+
   @action
   void setInvoiceCompanyLogo(String val) {
     invoiceCompanyLogo = val;
   }
+
   @action
   void setInvoiceContactNumber(String val) {
     invoiceContactNumber = val;
@@ -171,8 +175,13 @@ abstract class _AppStore with Store {
   }
 
   @action
-  Future<void> setUserProfile(String val,{bool isInitializing = false}) async {
+  Future<void> setUserProfile(String val, {bool isInitializing = false}) async {
     userProfile = val;
     if (!isInitializing) await setValue(USER_PROFILE_PHOTO, val);
+  }
+
+  @action
+  void setDistanceUnit(String val) {
+    distanceUnit = val;
   }
 }

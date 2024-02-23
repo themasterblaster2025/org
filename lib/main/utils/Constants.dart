@@ -234,3 +234,6 @@ const CURRENCY_POSITION_RIGHT = 'right';
 const CREDIT = 'credit';
 
 const mStripeIdentifier = 'IN';
+const DISTANCE_UNIT_KM = 'km';
+const DISTANCE_UNIT_MILE = 'mile';
+const double MILES_PER_KM = 0.621371;
