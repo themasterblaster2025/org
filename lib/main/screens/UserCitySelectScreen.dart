@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/main/screens/EmailVerificationScreen.dart';
+import 'package:nb_utils/nb_utils.dart';
+
 import '../../delivery/screens/DeliveryDashBoard.dart';
 import '../../main.dart';
+import '../../user/screens/DashboardScreen.dart';
+import '../components/CommonScaffoldComponent.dart';
 import '../models/CityListModel.dart';
 import '../models/CountryListModel.dart';
 import '../network/RestApis.dart';
 import '../utils/Colors.dart';
 import '../utils/Common.dart';
 import '../utils/Constants.dart';
-import '../../user/screens/DashboardScreen.dart';
-import 'package:nb_utils/nb_utils.dart';
-import 'VerificationScreen.dart';
 import '../utils/Images.dart';
-import '../components/CommonScaffoldComponent.dart';
+import 'VerificationScreen.dart';
 
 class UserCitySelectScreen extends StatefulWidget {
   static String tag = '/UserCitySelectScreen';

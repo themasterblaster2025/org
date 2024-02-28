@@ -7,8 +7,8 @@ import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
-import '../../main/components/BodyCornerWidget.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
+import '../../main/models/CountryListModel.dart';
 import '../../main/models/PlaceAddressModel.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
@@ -40,6 +40,7 @@ class AddAddressScreenState extends State<AddAddressScreen> {
   }
 
   void init() async {
+    countryCode = CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.isEmptyOrNull ? defaultPhoneCode : CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate();
     if (widget.addressData != null) {
       addressController.text = widget.addressData!.address.validate();
       countryCode = widget.addressData!.contactNumber.validate().split(" ").first;
@@ -130,6 +131,7 @@ class AddAddressScreenState extends State<AddAddressScreen> {
                           children: [
                             CountryCodePicker(
                               initialSelection: countryCode,
+                              //  initialSelection: CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate(),
                               showCountryOnly: false,
                               dialogSize: Size(context.width() - 60, context.height() * 0.6),
                               showFlag: true,

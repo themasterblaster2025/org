@@ -6,15 +6,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:nb_utils/nb_utils.dart';
+
 import '../../main.dart';
-import '../../main/components/BodyCornerWidget.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Widgets.dart';
-import 'package:nb_utils/nb_utils.dart';
-
 import '../components/CommonScaffoldComponent.dart';
 import '../models/LoginResponse.dart';
 import '../utils/Images.dart';

@@ -5,6 +5,8 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -108,10 +110,16 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   int? selectedVehicle;
   List<VehicleData> vehicleList = [];
   VehicleData? vehicleData;
+  List<Marker> markers = [];
+  GoogleMapController? googleMapController;
+  Set<Polyline> _polylines = {};
+  List<LatLng> polylineCoordinates = [];
+  PolylinePoints polylinePoints = PolylinePoints();
 
   @override
   void initState() {
     super.initState();
+    polylinePoints = PolylinePoints();
     afterBuildCreated(() {
       init();
     });
@@ -405,6 +413,43 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
+  }
+
+  void setMapFitToCenter(Set<Polyline> p) {
+    double minLat = p.first.points.first.latitude;
+    double minLong = p.first.points.first.longitude;
+    double maxLat = p.first.points.first.latitude;
+    double maxLong = p.first.points.first.longitude;
+
+    p.forEach((poly) {
+      poly.points.forEach((point) {
+        if (point.latitude < minLat) minLat = point.latitude;
+        if (point.latitude > maxLat) maxLat = point.latitude;
+        if (point.longitude < minLong) minLong = point.longitude;
+        if (point.longitude > maxLong) maxLong = point.longitude;
+      });
+    });
+    googleMapController?.animateCamera(CameraUpdate.newLatLngBounds(LatLngBounds(southwest: LatLng(minLat, minLong), northeast: LatLng(maxLat, maxLong)), 20));
+  }
+
+  setPolylines() async {
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      googleMapAPIKey,
+      PointLatLng(isPickSavedAddress ? pickAddressData!.latitude.toDouble() : pickLat.toDouble(), isPickSavedAddress ? pickAddressData!.longitude.toDouble() : pickLong.toDouble()),
+      PointLatLng(
+          isDeliverySavedAddress ? deliveryAddressData!.latitude.toDouble() : deliverLat.toDouble(), isDeliverySavedAddress ? deliveryAddressData!.longitude.toDouble() : deliverLong.toDouble()),
+    );
+    if (result.points.isNotEmpty) {
+      result.points.forEach((PointLatLng point) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      });
+    } else {
+      print("--address not found ---");
+    }
+    setState(() {
+      Polyline polyline = Polyline(polylineId: PolylineId("poly"), color: Color.fromARGB(255, 40, 122, 198), width: 5, points: polylineCoordinates);
+      _polylines.add(polyline);
+    });
   }
 
   Widget createOrderWidget1() {
@@ -1064,99 +1109,163 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     );
   }
 
+  void onMapCreated(GoogleMapController controller) async {
+    setState(() {
+      googleMapController = controller;
+      setPolylines().then((_) => setMapFitToCenter(_polylines));
+    });
+  }
+
   Widget createOrderWidget4() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(language.packageInformation, style: boldTextStyle()),
-        8.height,
-        Container(
-          padding: EdgeInsets.all(16),
-          decoration: boxDecorationWithRoundedCorners(
-            borderRadius: BorderRadius.circular(defaultRadius),
-            border: Border.all(color: colorPrimary.withOpacity(0.2)),
-            backgroundColor: Colors.transparent,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              rowWidget(title: language.parcelType, value: parcelTypeCont.text),
-              8.height,
-              rowWidget(title: language.weight, value: '${weightController.text} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weightType}'),
-              8.height,
-              rowWidget(title: language.numberOfParcels, value: '${totalParcelController.text}'),
-            ],
-          ),
-        ),
-        16.height,
-        addressComponent(
-            title: language.pickupLocation,
-            address: isPickSavedAddress ? pickAddressData!.address.validate() : pickAddressCont.text,
-            phoneNumber: isPickSavedAddress ? pickAddressData!.contactNumber.validate() : '$pickupCountryCode ${pickPhoneCont.text.trim()}'),
-        16.height,
-        addressComponent(
-            title: language.deliveryLocation,
-            address: isDeliverySavedAddress ? deliveryAddressData!.address.validate() : deliverAddressCont.text,
-            phoneNumber: isDeliverySavedAddress ? deliveryAddressData!.contactNumber.validate() : '$deliverCountryCode ${deliverPhoneCont.text.trim()}'),
-        16.height,
-        OrderSummeryWidget(
-            extraChargesList: extraChargeList,
-            totalDistance: totalDistance,
-            totalWeight: weightController.text.toDouble(),
-            distanceCharge: distanceCharge,
-            weightCharge: weightCharge,
-            totalAmount: totalAmount),
-        16.height,
-        Text(language.payment, style: boldTextStyle()),
-        16.height,
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: mPaymentList.map((mData) {
-            return Container(
-              width: (context.width() - 48) / 3,
-              padding: EdgeInsets.all(8),
-              alignment: Alignment.center,
-              decoration: boxDecorationWithRoundedCorners(border: Border.all(color: isSelected == mData.index ? colorPrimary : borderColor), backgroundColor: Colors.transparent),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ImageIcon(AssetImage(mData.image.validate()), size: 20, color: isSelected == mData.index ? colorPrimary : dividerColor),
-                  8.width,
-                  Text(mData.title!, style: primaryTextStyle(color: isSelected == mData.index ? colorPrimary : textSecondaryColorGlobal)),
-                ],
-              ),
-            ).onTap(() {
-              isSelected = mData.index!;
-              setState(() {});
-            });
-          }).toList(),
-        ),
-        16.height,
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(language.paymentCollectFrom, style: boldTextStyle()),
-            16.width,
-            DropdownButtonFormField<String>(
-              isExpanded: true,
-              isDense: true,
-              value: paymentCollectFrom,
-              decoration: commonInputDecoration(),
-              items: [
-                DropdownMenuItem(value: PAYMENT_ON_PICKUP, child: Text(language.pickupLocation, style: primaryTextStyle(), maxLines: 1)),
-                DropdownMenuItem(value: PAYMENT_ON_DELIVERY, child: Text(language.deliveryLocation, style: primaryTextStyle(), maxLines: 1)),
-              ],
-              onChanged: (value) {
-                paymentCollectFrom = value!;
-                setState(() {});
-              },
-            ).expand(),
-          ],
-        ).visible(isSelected == 1),
+        markers.isNotEmpty
+            ? Container(
+                width: context.width(),
+                height: context.height() * 0.67,
+                child: Stack(
+                  children: [
+                    GoogleMap(
+                      markers: markers.map((e) => e).toSet(),
+                      polylines: _polylines,
+                      mapType: MapType.normal,
+                      cameraTargetBounds: CameraTargetBounds.unbounded,
+                      initialCameraPosition: CameraPosition(
+                          // bearing: 192.8334901395799,
+                          target:
+                              LatLng(isPickSavedAddress ? pickAddressData!.latitude.toDouble() : pickLat.toDouble(), isPickSavedAddress ? pickAddressData!.longitude.toDouble() : pickLong.toDouble()),
+                          zoom: 12),
+                      onMapCreated: onMapCreated,
+                      tiltGesturesEnabled: true,
+                      scrollGesturesEnabled: true,
+                      zoomGesturesEnabled: true,
+                      // trafficEnabled: true,
+                    )
+                  ],
+                ),
+              )
+            : loaderWidget(),
       ],
+    );
+  }
+
+  Widget createOrderWidget5() {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(language.packageInformation, style: boldTextStyle()),
+          8.height,
+          Container(
+            padding: EdgeInsets.all(16),
+            decoration: boxDecorationWithRoundedCorners(
+              borderRadius: BorderRadius.circular(defaultRadius),
+              border: Border.all(color: colorPrimary.withOpacity(0.2)),
+              backgroundColor: Colors.transparent,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                rowWidget(title: language.parcelType, value: parcelTypeCont.text),
+                8.height,
+                rowWidget(title: language.weight, value: '${weightController.text} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weightType}'),
+                8.height,
+                rowWidget(title: language.numberOfParcels, value: '${totalParcelController.text}'),
+              ],
+            ),
+          ),
+          16.height,
+          addressComponent(
+              title: language.pickupLocation,
+              address: isPickSavedAddress ? pickAddressData!.address.validate() : pickAddressCont.text,
+              phoneNumber: isPickSavedAddress ? pickAddressData!.contactNumber.validate() : '$pickupCountryCode ${pickPhoneCont.text.trim()}'),
+          16.height,
+          addressComponent(
+              title: language.deliveryLocation,
+              address: isDeliverySavedAddress ? deliveryAddressData!.address.validate() : deliverAddressCont.text,
+              phoneNumber: isDeliverySavedAddress ? deliveryAddressData!.contactNumber.validate() : '$deliverCountryCode ${deliverPhoneCont.text.trim()}'),
+          16.height,
+          OrderSummeryWidget(
+              extraChargesList: extraChargeList,
+              totalDistance: totalDistance,
+              totalWeight: weightController.text.toDouble(),
+              distanceCharge: distanceCharge,
+              weightCharge: weightCharge,
+              totalAmount: totalAmount),
+          16.height,
+          Text(language.payment, style: boldTextStyle()),
+          16.height,
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: mPaymentList.map((mData) {
+              return Container(
+                width: (context.width() - 48) / 3,
+                padding: EdgeInsets.all(8),
+                alignment: Alignment.center,
+                decoration: boxDecorationWithRoundedCorners(border: Border.all(color: isSelected == mData.index ? colorPrimary : borderColor), backgroundColor: Colors.transparent),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ImageIcon(AssetImage(mData.image.validate()), size: 20, color: isSelected == mData.index ? colorPrimary : dividerColor),
+                    8.width,
+                    Text(mData.title!, style: primaryTextStyle(color: isSelected == mData.index ? colorPrimary : textSecondaryColorGlobal)),
+                  ],
+                ),
+              ).onTap(() {
+                isSelected = mData.index!;
+                setState(() {});
+              });
+            }).toList(),
+          ),
+          16.height,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(language.paymentCollectFrom, style: boldTextStyle()),
+              16.width,
+              DropdownButtonFormField<String>(
+                isExpanded: true,
+                isDense: true,
+                value: paymentCollectFrom,
+                decoration: commonInputDecoration(),
+                items: [
+                  DropdownMenuItem(value: PAYMENT_ON_PICKUP, child: Text(language.pickupLocation, style: primaryTextStyle(), maxLines: 1)),
+                  DropdownMenuItem(value: PAYMENT_ON_DELIVERY, child: Text(language.deliveryLocation, style: primaryTextStyle(), maxLines: 1)),
+                ],
+                onChanged: (value) {
+                  paymentCollectFrom = value!;
+                  setState(() {});
+                },
+              ).expand(),
+            ],
+          ).visible(isSelected == 1),
+          30.height,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(language.paymentCollectFrom, style: boldTextStyle()),
+              16.width,
+              DropdownButtonFormField<String>(
+                isExpanded: true,
+                isDense: true,
+                value: paymentCollectFrom,
+                decoration: commonInputDecoration(),
+                items: [
+                  DropdownMenuItem(value: PAYMENT_ON_PICKUP, child: Text(language.pickupLocation, style: primaryTextStyle(), maxLines: 1)),
+                  DropdownMenuItem(value: PAYMENT_ON_DELIVERY, child: Text(language.deliveryLocation, style: primaryTextStyle(), maxLines: 1)),
+                ],
+                onChanged: (value) {
+                  paymentCollectFrom = value!;
+                  setState(() {});
+                },
+              ).expand(),
+            ],
+          ).visible(isSelected == 1),
+        ],
+      ),
     );
   }
 
@@ -1247,7 +1356,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(4, (index) {
+                      children: List.generate(5, (index) {
                         return Container(
                           alignment: Alignment.center,
                           height: selectedTabIndex == index ? 35 : 25,
@@ -1266,6 +1375,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     if (selectedTabIndex == 1) createOrderWidget2(),
                     if (selectedTabIndex == 2) createOrderWidget3(),
                     if (selectedTabIndex == 3) createOrderWidget4(),
+                    if (selectedTabIndex == 4) createOrderWidget5(),
                   ],
                 ),
               ),
@@ -1287,9 +1397,34 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 }, color: colorPrimary)
                     .paddingRight(16)
                     .expand(),
-              commonButton(selectedTabIndex != 3 ? language.next : language.createOrder, () async {
+              commonButton(selectedTabIndex != 4 ? language.next : language.createOrder, () async {
                 FocusScope.of(context).requestFocus(new FocusNode());
-                if (selectedTabIndex != 3) {
+                log('------selected tab index${selectedTabIndex}');
+                if (selectedTabIndex == 2) {
+                  markers.clear();
+                  markers.add(
+                    Marker(
+                      markerId: MarkerId("1"),
+                      position: isPickSavedAddress
+                          ? LatLng(pickAddressData!.latitude.validate().toDouble(), pickAddressData!.longitude.validate().toDouble())
+                          : LatLng(pickLat.toDouble(), pickLong.toDouble()),
+                      infoWindow: InfoWindow(title: "Source Location"),
+                      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+                    ),
+                  );
+                  markers.add(
+                    Marker(
+                      markerId: MarkerId("2"),
+                      position: isDeliverySavedAddress
+                          ? LatLng(deliveryAddressData!.latitude.validate().toDouble(), deliveryAddressData!.longitude.validate().toDouble())
+                          : LatLng(deliverLat.toDouble(), deliverLong.toDouble()),
+                      infoWindow: InfoWindow(title: "Destination Location"),
+                      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+                    ),
+                  );
+                  setState(() {});
+                }
+                if (selectedTabIndex != 4) {
                   if (_formKey.currentState!.validate()) {
                     Duration difference = Duration();
                     Duration differenceCurrentTime = Duration();
@@ -1304,7 +1439,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     if (differenceCurrentTime.inMinutes > 0) return toast(language.pickupCurrentValidationMsg);
                     if (difference.inMinutes > 0) return toast(language.pickupDeliverValidationMsg);
                     selectedTabIndex++;
-                    if (selectedTabIndex == 3) {
+                    if (selectedTabIndex == 4) {
                       await getTotalAmount();
                     }
                     setState(() {});
