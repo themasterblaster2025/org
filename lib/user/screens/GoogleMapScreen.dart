@@ -1,15 +1,14 @@
 import 'dart:convert';
 
-import '../../main/components/CommonScaffoldComponent.dart';
-import '../../main/models/CountryListModel.dart';
-import '../../main/models/PlaceAddressModel.dart';
-import '../../main/utils/Constants.dart';
-import 'package:nb_utils/nb_utils.dart';
-
-import '../../main.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
+import 'package:nb_utils/nb_utils.dart';
+
+import '../../main.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
+import '../../main/models/PlaceAddressModel.dart';
+import '../../main/utils/Constants.dart';
 
 class GoogleMapScreen extends StatefulWidget {
   static final kInitialPosition = LatLng(-33.8567844, 151.213108);
@@ -22,10 +21,31 @@ class GoogleMapScreen extends StatefulWidget {
   _GoogleMapScreenState createState() => _GoogleMapScreenState();
 }
 
-class _GoogleMapScreenState extends State<GoogleMapScreen> {
+class _GoogleMapScreenState extends State<GoogleMapScreen> with WidgetsBindingObserver {
   PickResult? selectedPlace;
   bool showPlacePickerInContainer = false;
   bool showGoogleMapInContainer = false;
+  GlobalKey<_GoogleMapScreenState> placePickerKey = GlobalKey<_GoogleMapScreenState>();
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      setState(() {
+        placePickerKey = GlobalKey<_GoogleMapScreenState>();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +58,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
       body: Column(
         children: [
           PlacePicker(
+            key: placePickerKey,
             apiKey: googleMapAPIKey,
             hintText: language.searchAddress,
             searchingText: language.pleaseWait,

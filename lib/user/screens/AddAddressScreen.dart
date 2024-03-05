@@ -2,6 +2,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:mighty_delivery/main/models/AddressListModel.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -81,6 +82,7 @@ class AddAddressScreenState extends State<AddAddressScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
+      showBack: true,
       appBarTitle: language.addNewAddress,
       body: Stack(
         children: [
@@ -107,12 +109,16 @@ class AddAddressScreenState extends State<AddAddressScreen> {
                       return null;
                     },
                     onTap: () async {
-                      PlaceAddressModel? res = await GoogleMapScreen(isSaveAddress: true).launch(context);
-                      if (res != null) {
-                        addressController.text = res.placeAddress ?? "";
-                        latitude = res.latitude;
-                        longitude = res.longitude;
-                        setState(() {});
+                      if (!await Geolocator.isLocationServiceEnabled()) {
+                        await Geolocator.openLocationSettings().then((value) => false).catchError((e) => false);
+                      } else {
+                        PlaceAddressModel? res = await GoogleMapScreen(isSaveAddress: true).launch(context);
+                        if (res != null) {
+                          addressController.text = res.placeAddress ?? "";
+                          latitude = res.latitude;
+                          longitude = res.longitude;
+                          setState(() {});
+                        }
                       }
                     },
                   ),

@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -6,21 +7,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:nb_utils/nb_utils.dart';
+
 import '../main/models/models.dart';
 import '../main/screens/SplashScreen.dart';
 import '../main/utils/Constants.dart';
-import 'package:nb_utils/nb_utils.dart';
 import 'AppTheme.dart';
-import 'main/services/ChatMessagesService.dart';
-import 'main/services/NotificationService.dart';
-import 'main/services/UserServices.dart';
 import 'main/language/AppLocalizations.dart';
 import 'main/language/BaseLanguage.dart';
 import 'main/models/FileModel.dart';
 import 'main/screens/NoInternetScreen.dart';
+import 'main/services/ChatMessagesService.dart';
+import 'main/services/NotificationService.dart';
+import 'main/services/UserServices.dart';
 import 'main/store/AppStore.dart';
 import 'main/utils/Common.dart';
 import 'main/utils/DataProviders.dart';
+import 'main/utils/firebase_options.dart';
 
 AppStore appStore = AppStore();
 late BaseLanguage language;
@@ -36,7 +39,9 @@ String mSelectedImage = "assets/default_wallpaper.png";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp().then((value) {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  ).then((value) {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   });
 
@@ -61,6 +66,13 @@ void main() async {
   runApp(MyApp());
 }
 
+Future<void> initializeDefault() async {
+  FirebaseApp app = await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  print('Initialized default app $app');
+}
+
 class MyApp extends StatefulWidget {
   @override
   MyAppState createState() => MyAppState();
@@ -68,6 +80,8 @@ class MyApp extends StatefulWidget {
 
 class MyAppState extends State<MyApp> {
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  late StreamSubscription<Position> _streamSubscription;
+  String message = 'empty';
 
   @override
   void initState() {
@@ -90,6 +104,15 @@ class MyAppState extends State<MyApp> {
         log('connected');
       }
     });
+    _streamSubscription = await Geolocator.getPositionStream().listen(_onData, onError: _onError);
+  }
+
+  void _onData(Position position) {
+    print("location enabled");
+  }
+
+  Future<void> _onError(dynamic error) async {
+    await checkPermission();
   }
 
   @override

@@ -1,10 +1,13 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:nb_utils/nb_utils.dart';
+
+import '../../main.dart';
 import '../../main/models/PlaceAddressModel.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Constants.dart';
-import 'package:nb_utils/nb_utils.dart';
-import '../../main.dart';
 import '../../user/screens/GoogleMapScreen.dart';
 
 class PickAddressBottomSheet extends StatefulWidget {
@@ -18,7 +21,6 @@ class PickAddressBottomSheet extends StatefulWidget {
 }
 
 class PickAddressBottomSheetState extends State<PickAddressBottomSheet> {
-
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
@@ -49,10 +51,14 @@ class PickAddressBottomSheetState extends State<PickAddressBottomSheet> {
               Text(language.addNewAddress, style: boldTextStyle(color: colorPrimary)),
             ],
           ).onTap(() async {
-            PlaceAddressModel? res = await GoogleMapScreen(isPick: widget.isPickup).launch(context);
-            if (res != null) {
-              widget.onPick.call(res);
-              finish(context);
+            if (!await Geolocator.isLocationServiceEnabled()) {
+              await Geolocator.openLocationSettings().then((value) => false).catchError((e) => false);
+            } else {
+              PlaceAddressModel? res = await GoogleMapScreen(isPick: widget.isPickup).launch(context);
+              if (res != null) {
+                widget.onPick.call(res);
+                finish(context);
+              }
             }
           }).paddingAll(16),
           Divider(color: context.dividerColor),
@@ -81,7 +87,7 @@ class PickAddressBottomSheetState extends State<PickAddressBottomSheet> {
               }).paddingSymmetric(vertical: 8, horizontal: 16);
             },
             separatorBuilder: (context, index) {
-              return    Divider(color: context.dividerColor);
+              return Divider(color: context.dividerColor);
             },
           ).expand(),
         ],

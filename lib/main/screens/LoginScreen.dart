@@ -1,6 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:nb_utils/nb_utils.dart';
+
+import '../../delivery/screens/DeliveryDashBoard.dart';
+import '../../main.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/screens/ForgotPasswordScreen.dart';
 import '../../main/screens/RegisterScreen.dart';
@@ -8,16 +12,12 @@ import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Widgets.dart';
-import 'package:nb_utils/nb_utils.dart';
-
-import '../../delivery/screens/DeliveryDashBoard.dart';
-import '../../main.dart';
 import '../../user/screens/DashboardScreen.dart';
+import '../models/CityListModel.dart';
+import '../services/AuthServices.dart';
 import '../utils/Images.dart';
 import 'EmailVerificationScreen.dart';
 import 'UserCitySelectScreen.dart';
-import '../models/CityListModel.dart';
-import '../services/AuthServices.dart';
 import 'VerificationScreen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -122,6 +122,7 @@ class LoginScreenState extends State<LoginScreen> {
           });
         }).catchError((e) {
           appStore.setLoading(false);
+          print("errror==========================${e.toString()} ");
           toast(e.toString());
         });
       } else {

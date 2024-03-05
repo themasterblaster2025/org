@@ -126,6 +126,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   }
 
   Future<void> init() async {
+    pickupCountryCode = CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.isEmptyOrNull ? defaultPhoneCode : CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate();
+    deliverCountryCode = CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.isEmptyOrNull ? defaultPhoneCode : CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate();
     await getCityDetailApiCall(getIntAsync(CITY_ID));
     getParcelTypeListApiCall();
     getAddressListApi();
@@ -1221,28 +1223,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             }).toList(),
           ),
           16.height,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(language.paymentCollectFrom, style: boldTextStyle()),
-              16.width,
-              DropdownButtonFormField<String>(
-                isExpanded: true,
-                isDense: true,
-                value: paymentCollectFrom,
-                decoration: commonInputDecoration(),
-                items: [
-                  DropdownMenuItem(value: PAYMENT_ON_PICKUP, child: Text(language.pickupLocation, style: primaryTextStyle(), maxLines: 1)),
-                  DropdownMenuItem(value: PAYMENT_ON_DELIVERY, child: Text(language.deliveryLocation, style: primaryTextStyle(), maxLines: 1)),
-                ],
-                onChanged: (value) {
-                  paymentCollectFrom = value!;
-                  setState(() {});
-                },
-              ).expand(),
-            ],
-          ).visible(isSelected == 1),
-          30.height,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
