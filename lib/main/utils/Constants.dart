@@ -91,6 +91,7 @@ const CITY_DATA = 'CITY_DATA';
 
 const EMAIL_VERIFIED = 'EMAIL_VERIFIED_AT';
 const IS_EMAIL_VERIFICATION = 'IS_EMAIL_VERIFICATION';
+const LOGIN_TYPE = 'LOGIN_TYPE';
 //endregion
 
 //region login type

@@ -60,10 +60,10 @@ Future<Response> buildHttpResponse(String endPoint, {HttpMethod method = HttpMet
 
       return response;
     } catch (e) {
-      throw errorSomethingWentWrong;
+      throw language.errorSomethingWentWrong;
     }
   } else {
-    throw errorInternetNotAvailable;
+    throw language.errorInternetNotAvailable;
   }
 }
 
@@ -71,7 +71,7 @@ Future<Response> buildHttpResponse(String endPoint, {HttpMethod method = HttpMet
 
 Future handleResponse(Response response, [bool? avoidTokenError]) async {
   if (!await isNetworkAvailable()) {
-    throw errorInternetNotAvailable;
+    throw language.errorInternetNotAvailable;
   }
   if (response.statusCode == 401) {
     if (appStore.isLoggedIn) {
@@ -98,7 +98,7 @@ Future handleResponse(Response response, [bool? avoidTokenError]) async {
       throw parseHtmlString(body['message']);
     } on Exception catch (e) {
       log(e);
-      throw errorSomethingWentWrong;
+      throw language.errorSomethingWentWrong;
     }
   }
 }

@@ -679,4 +679,16 @@ class LanguageNl extends BaseLanguage {
   String get withdrawMoney => 'geld opnemen';
   @override
   String get fromDateValidationMsg => 'Vanaf de datum is must';
+  @override
+  String get errorMessage => 'Probeer het opnieuw';
+  @override
+  String get errorSomethingWentWrong => 'Er is iets fout gegaan';
+  @override
+  String get errorThisFieldRequired => 'dit veld is verplicht';
+  @override
+  String get errorInternetNotAvailable => 'Uw internet werkt niet';
+  @override
+  String get mustSelectStartDate => 'Moet de startdatum selecteren';
+  @override
+  String get accept => 'Aanvaarden';
 }

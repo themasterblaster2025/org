@@ -666,4 +666,10 @@ abstract class BaseLanguage {
   String get sureWantToDeleteAddress;
   String get withdrawMoney;
   String get fromDateValidationMsg;
+  String get errorMessage;
+  String get errorSomethingWentWrong;
+  String get errorThisFieldRequired;
+  String get errorInternetNotAvailable;
+  String get mustSelectStartDate;
+  String get accept;
 }

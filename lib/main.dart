@@ -107,7 +107,11 @@ class MyAppState extends State<MyApp> {
     _streamSubscription = await Geolocator.getPositionStream().listen(_onData, onError: _onError);
   }
 
-  void _onData(Position position) {
+  Future<void> _onData(Position position) async {
+    if (!await Geolocator.isLocationServiceEnabled()) {
+      print("on data-----------{$Geolocator.isLocationServiceEnabled()}");
+      await Geolocator.openLocationSettings().then((value) => false).catchError((e) => false);
+    }
     print("location enabled");
   }
 

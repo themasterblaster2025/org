@@ -679,4 +679,16 @@ class LanguageId extends BaseLanguage {
   String get withdrawMoney => 'menarik uang';
   @override
   String get fromDateValidationMsg => 'Dari tanggal adalah harus';
+  @override
+  String get errorMessage => 'Silakan coba lagi';
+  @override
+  String get errorSomethingWentWrong => 'Ada yang salah';
+  @override
+  String get errorThisFieldRequired => 'Bagian ini diperlukan';
+  @override
+  String get errorInternetNotAvailable => 'Internet Anda tidak berfungsi';
+  @override
+  String get mustSelectStartDate => 'harus memilih tanggal mulai';
+  @override
+  String get accept => 'Menerima';
 }

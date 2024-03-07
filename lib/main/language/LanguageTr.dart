@@ -678,4 +678,16 @@ class LanguageTr extends BaseLanguage {
   String get withdrawMoney => 'para çekmek';
   @override
   String get fromDateValidationMsg => 'Tarihten itibaren zorunlu';
+  @override
+  String get errorMessage => 'Lütfen tekrar deneyin';
+  @override
+  String get errorSomethingWentWrong => 'Bir şeyler yanlış gitti';
+  @override
+  String get errorThisFieldRequired => 'Bu alan gereklidir';
+  @override
+  String get errorInternetNotAvailable => 'İnternetiniz çalışmıyor';
+  @override
+  String get mustSelectStartDate => 'Başlangıç ​​tarihini seçmeli';
+  @override
+  String get accept => 'Kabul etmek';
 }

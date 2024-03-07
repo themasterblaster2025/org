@@ -8,13 +8,14 @@ import 'package:geolocator/geolocator.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-import 'package:url_launcher/url_launcher.dart';
-import '../../main/utils/Colors.dart';
-import '../../main/utils/Constants.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../main.dart';
+import '../../main/utils/Colors.dart';
+import '../../main/utils/Constants.dart';
 import '../../user/screens/OrderDetailScreen.dart';
 import '../Chat/ChatScreen.dart';
 import '../models/LoginResponse.dart';
@@ -26,6 +27,7 @@ import 'Widgets.dart';
 
 InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, Function()? suffixOnTap, Widget? dateTime, Widget? prefixIcon, bool? isFill = true}) {
   return InputDecoration(
+    errorMaxLines: 3,
     contentPadding: EdgeInsets.all(16),
     filled: true,
     prefixIcon: prefixIcon,
@@ -230,14 +232,20 @@ Future<bool> checkPermission() async {
 
 oneSignalSettings() async {
   if (isMobile) {
+    PermissionStatus status = await Permission.notification.status;
+    if (!status.isGranted) {
+      await Permission.notification.request();
+    }
+
     OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
     OneSignal.Debug.setAlertLevel(OSLogLevel.none);
     OneSignal.consentRequired(false);
-    OneSignal.Notifications.requestPermission(true);
-
     OneSignal.initialize(mOneSignalAppId);
-
+    OneSignal.Notifications.requestPermission(true);
     saveOneSignalPlayerId();
+    OneSignal.Notifications.addPermissionObserver((state) {
+      print("Has permission " + state.toString());
+    });
     OneSignal.Notifications.addClickListener((notification) async {
       var notId = notification.notification.additionalData!["id"];
       if (notId != null) {
@@ -250,6 +258,11 @@ oneSignalSettings() async {
           OrderDetailScreen(orderId: int.parse(notId.toString())).launch(getContext);
         }
       }
+    });
+    OneSignal.Notifications.addForegroundWillDisplayListener((event) {
+      print('NOTIFICATION WILL DISPLAY LISTENER CALLED WITH: ${event.notification.jsonRepresentation()}');
+      event.preventDefault();
+      event.notification.display();
     });
   }
 }

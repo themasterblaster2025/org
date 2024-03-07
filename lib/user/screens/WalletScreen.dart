@@ -141,14 +141,19 @@ class WalletScreenState extends State<WalletScreen> {
                                 commonButton(
                                   language.add,
                                   () async {
-                                    Navigator.pop(context);
-                                    bool? res = await PaymentScreen(
-                                      totalAmount: amountCont.text.toDouble(),
-                                      isWallet: true,
-                                    ).launch(context);
-                                    if (res == true) {
-                                      getWalletData();
+                                    if (amountCont.text.isNotEmpty) {
+                                      Navigator.pop(context);
+                                      bool? res = await PaymentScreen(
+                                        totalAmount: amountCont.text.toDouble(),
+                                        isWallet: true,
+                                      ).launch(context);
+                                      if (res == true) {
+                                        getWalletData();
+                                      }
+                                    } else {
+                                      toast(language.addAmount);
                                     }
+
                                   },
                                   width: context.width(),
                                 ),

@@ -680,4 +680,16 @@ class LanguageDe extends BaseLanguage {
   String get withdrawMoney => 'Geld abheben';
   @override
   String get fromDateValidationMsg => 'Ab Datum ist Muss';
+  @override
+  String get errorMessage => 'Bitte versuche es erneut';
+  @override
+  String get errorSomethingWentWrong => 'Etwas ist schief gelaufen';
+  @override
+  String get errorThisFieldRequired => 'Dieses Feld ist erforderlich';
+  @override
+  String get errorInternetNotAvailable => 'Ihr Internet funktioniert nicht';
+  @override
+  String get mustSelectStartDate => 'Muss das Startdatum auswählen';
+  @override
+  String get accept => 'Akzeptieren';
 }

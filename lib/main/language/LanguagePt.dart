@@ -679,4 +679,16 @@ class LanguagePt extends BaseLanguage {
   String get withdrawMoney => 'Retirar dinheiro';
   @override
   String get fromDateValidationMsg => 'Da data é deve';
+  @override
+  String get errorMessage => 'Por favor, tente novamente';
+  @override
+  String get errorSomethingWentWrong => 'Algo deu errado';
+  @override
+  String get errorThisFieldRequired => 'Este campo é obrigatório';
+  @override
+  String get errorInternetNotAvailable => 'Sua internet não está funcionando';
+  @override
+  String get mustSelectStartDate => 'deve selecionar a data de início';
+  @override
+  String get accept => 'Aceitar';
 }

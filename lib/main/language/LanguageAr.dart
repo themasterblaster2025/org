@@ -679,4 +679,16 @@ class LanguageAr extends BaseLanguage {
   String get withdrawMoney => 'سحب المال';
   @override
   String get fromDateValidationMsg => 'من التاريخ يجب';
+  @override
+  String get errorMessage => 'حاول مرة اخرى';
+  @override
+  String get errorSomethingWentWrong => 'هناك خطأ ما';
+  @override
+  String get errorThisFieldRequired => 'هذه الخانة مطلوبه';
+  @override
+  String get errorInternetNotAvailable => 'الإنترنت الخاص بك لا يعمل';
+  @override
+  String get mustSelectStartDate => 'يجب تحديد تاريخ البدء';
+  @override
+  String get accept => 'يقبل';
 }

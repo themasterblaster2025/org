@@ -40,6 +40,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> with WidgetsBindingOb
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    print("--onResume called");
     if (state == AppLifecycleState.resumed) {
       setState(() {
         placePickerKey = GlobalKey<_GoogleMapScreenState>();

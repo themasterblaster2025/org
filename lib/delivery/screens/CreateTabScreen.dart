@@ -441,7 +441,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
 
   buttonText(String orderStatus) {
     if (orderStatus == ORDER_ASSIGNED) {
-      return language.active;
+      return language.accept;
     } else if (orderStatus == ORDER_ACCEPTED) {
       return language.pickUp;
     } else if (orderStatus == ORDER_ARRIVED) {

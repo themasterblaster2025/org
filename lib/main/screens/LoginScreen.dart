@@ -162,6 +162,8 @@ class LoginScreenState extends State<LoginScreen> {
 
     await authService.signInWithGoogle(userType: userType).then((value) async {
       appStore.setLoading(false);
+      await setValue(USER_PASSWORD, passController.text);
+      await setValue(LOGIN_TYPE, LoginTypeGoogle);
     }).catchError((e) {
       appStore.setLoading(false);
       toast(e.toString());

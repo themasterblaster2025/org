@@ -679,4 +679,16 @@ class LanguageEs extends BaseLanguage {
   String get withdrawMoney => 'retirar dinero';
   @override
   String get fromDateValidationMsg => 'Desde la fecha es imprescindible';
+  @override
+  String get errorMessage => 'Inténtalo de nuevo';
+  @override
+  String get errorSomethingWentWrong => 'Algo salió mal';
+  @override
+  String get errorThisFieldRequired => 'Este campo es obligatorio';
+  @override
+  String get errorInternetNotAvailable => 'Tu Internet no funciona';
+  @override
+  String get mustSelectStartDate => 'debe seleccionar la fecha de inicio';
+  @override
+  String get accept => 'Aceptar';
 }

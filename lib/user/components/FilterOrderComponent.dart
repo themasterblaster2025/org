@@ -148,7 +148,7 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
                   },
                   validator: (value) {
                     if (fromDate == null && toDate != null) {
-                      return "must select start date";
+                      return language.mustSelectStartDate;
                     }
                   },
                   decoration: commonInputDecoration(suffixIcon: Ionicons.calendar_outline, hintText: language.from),

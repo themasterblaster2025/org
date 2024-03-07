@@ -495,7 +495,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         setState(() {});
                       },
                       validator: (value) {
-                        if (value!.isEmpty) return errorThisFieldRequired;
+                        if (value!.isEmpty) return language.errorThisFieldRequired;
                         return null;
                       },
                       decoration: commonInputDecoration(suffixIcon: Icons.calendar_today, hintText: language.date),
@@ -511,7 +511,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                             setState(() {});
                           },
                           validator: (value) {
-                            if (value.validate().isEmpty) return errorThisFieldRequired;
+                            if (value.validate().isEmpty) return language.errorThisFieldRequired;
                             return null;
                           },
                           decoration: commonInputDecoration(suffixIcon: Icons.access_time, hintText: language.from),
@@ -525,7 +525,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                             setState(() {});
                           },
                           validator: (value) {
-                            if (value.validate().isEmpty) return errorThisFieldRequired;
+                            if (value.validate().isEmpty) return language.errorThisFieldRequired;
                             double fromTimeInHour = pickFromTime!.hour + pickFromTime!.minute / 60;
                             double toTimeInHour = pickToTime!.hour + pickToTime!.minute / 60;
                             double difference = toTimeInHour - fromTimeInHour;
@@ -563,7 +563,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         setState(() {});
                       },
                       validator: (value) {
-                        if (value!.isEmpty) return errorThisFieldRequired;
+                        if (value!.isEmpty) return language.errorThisFieldRequired;
                         return null;
                       },
                       decoration: commonInputDecoration(suffixIcon: Icons.calendar_today, hintText: language.date),
@@ -579,7 +579,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                             setState(() {});
                           },
                           validator: (value) {
-                            if (value.validate().isEmpty) return errorThisFieldRequired;
+                            if (value.validate().isEmpty) return language.errorThisFieldRequired;
                             return null;
                           },
                           decoration: commonInputDecoration(suffixIcon: Icons.access_time, hintText: language.from),
@@ -593,7 +593,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                             setState(() {});
                           },
                           validator: (value) {
-                            if (value!.isEmpty) return errorThisFieldRequired;
+                            if (value!.isEmpty) return language.errorThisFieldRequired;
                             double fromTimeInHour = deliverFromTime!.hour + deliverFromTime!.minute / 60;
                             double toTimeInHour = deliverToTime!.hour + deliverToTime!.minute / 60;
                             double difference = toTimeInHour - fromTimeInHour;
@@ -728,7 +728,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     setState(() {});
                   },
                   validator: (value) {
-                    if (selectedVehicle == null) return errorThisFieldRequired;
+                    if (selectedVehicle == null) return language.errorThisFieldRequired;
                     return null;
                   },
                 ),
@@ -915,7 +915,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         ),
                       ),
                     ),
-                    textInputAction: TextInputAction.next,
+                    textInputAction: TextInputAction.go,
                     validator: (value) {
                       if (value!.trim().isEmpty) return language.fieldRequiredMsg;
                       //  if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
@@ -1045,7 +1045,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   8.height,
                   AppTextField(
                     controller: deliverPhoneCont,
-                    textInputAction: TextInputAction.next,
+                    textInputAction: TextInputAction.go,
                     focus: deliverPhoneFocus,
                     nextFocus: deliverDesFocus,
                     textFieldType: TextFieldType.PHONE,

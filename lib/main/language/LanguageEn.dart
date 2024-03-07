@@ -1011,6 +1011,17 @@ class LanguageEn extends BaseLanguage {
   @override
   String get withdrawMoney => 'Withdraw Money';
   @override
-  @override
   String get fromDateValidationMsg => 'From Date is must';
+  @override
+  String get errorMessage => 'Please try again';
+  @override
+  String get errorSomethingWentWrong => 'Something Went Wrong';
+  @override
+  String get errorThisFieldRequired => 'This field is required';
+  @override
+  String get errorInternetNotAvailable => 'Your internet is not working';
+  @override
+  String get mustSelectStartDate => 'must select start date';
+  @override
+  String get accept => 'Accept';
 }

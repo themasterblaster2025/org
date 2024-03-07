@@ -679,4 +679,16 @@ class LanguageHi extends BaseLanguage {
   String get withdrawMoney => 'पैसे निकाले';
   @override
   String get fromDateValidationMsg => 'तारीख से होना चाहिए';
+  @override
+  String get errorMessage => 'कृपया पुन: प्रयास करें';
+  @override
+  String get errorSomethingWentWrong => 'कुछ गलत हो गया';
+  @override
+  String get errorThisFieldRequired => 'यह फ़ील्ड आवश्यक है';
+  @override
+  String get errorInternetNotAvailable => 'आपका इंटरनेट काम नहीं कर रहा है';
+  @override
+  String get mustSelectStartDate => 'प्रारंभ तिथि का चयन करना चाहिए';
+  @override
+  String get accept => 'स्वीकार करना';
 }

@@ -138,6 +138,12 @@ Future<void> logout(BuildContext context, {bool isFromLogin = false, bool isDele
       await removeKey(USER_EMAIL);
       await removeKey(USER_PASSWORD);
     }
+    if (getStringAsync(LOGIN_TYPE) == LoginTypeGoogle) {
+      await removeKey(USER_EMAIL);
+      await removeKey(USER_PASSWORD);
+      await removeKey(LOGIN_TYPE);
+      await removeKey(REMEMBER_ME);
+    }
 
     await appStore.setLogin(false);
     appStore.setFiltering(false);

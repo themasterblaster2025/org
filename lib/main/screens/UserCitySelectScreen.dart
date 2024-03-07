@@ -169,7 +169,7 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                               setState(() {});
                             },
                             validator: (value) {
-                              if (selectedCountry == null) return errorThisFieldRequired;
+                              if (selectedCountry == null) return language.errorThisFieldRequired;
                               return null;
                             },
                           ),

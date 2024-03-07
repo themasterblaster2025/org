@@ -678,4 +678,16 @@ class LanguageVi extends BaseLanguage {
   String get withdrawMoney => 'rút tiền';
   @override
   String get fromDateValidationMsg => 'Từ ngày là phải';
+  @override
+  String get errorMessage => 'Vui lòng thử lại';
+  @override
+  String get errorSomethingWentWrong => 'Có gì đó đã sai';
+  @override
+  String get errorThisFieldRequired => 'Trường này được yêu cầu';
+  @override
+  String get errorInternetNotAvailable => 'Internet của bạn không hoạt động';
+  @override
+  String get mustSelectStartDate => 'Phải chọn ngày bắt đầu';
+  @override
+  String get accept => 'Chấp nhận';
 }

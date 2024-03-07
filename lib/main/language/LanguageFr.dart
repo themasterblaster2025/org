@@ -680,4 +680,16 @@ class LanguageFr extends BaseLanguage {
   String get withdrawMoney => 'retirer de l\'argent';
   @override
   String get fromDateValidationMsg => 'À partir de la date est indispensable';
+  @override
+  String get errorMessage => 'Veuillez réessayer';
+  @override
+  String get errorSomethingWentWrong => "Quelque chose s'est mal passé";
+  @override
+  String get errorThisFieldRequired => 'Ce champ est obligatoire';
+  @override
+  String get errorInternetNotAvailable => 'Votre Internet ne fonctionne pas';
+  @override
+  String get mustSelectStartDate => 'doit sélectionner la date de début';
+  @override
+  String get accept => 'Accepter';
 }

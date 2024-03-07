@@ -680,4 +680,16 @@ class LanguageAf extends BaseLanguage {
   String get withdrawMoney => 'onttrek geld';
   @override
   String get fromDateValidationMsg => 'Vanaf datum is moet';
+  @override
+  String get errorMessage => 'Probeer asseblief weer';
+  @override
+  String get errorSomethingWentWrong => 'Iets het verkeerd geloop';
+  @override
+  String get errorThisFieldRequired => 'Hierdie veld word vereis';
+  @override
+  String get errorInternetNotAvailable => 'U internet werk nie';
+  @override
+  String get mustSelectStartDate => 'Moet die begindatum kies';
+  @override
+  String get accept => 'Aanvaar';
 }
