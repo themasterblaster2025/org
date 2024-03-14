@@ -182,9 +182,6 @@ abstract class BaseLanguage {
   String get pickUp;
 
   String get departed;
-
-  String get orderPickupSuccessfully;
-
   String get imagePickToCamera;
 
   String get imagePicToGallery;
@@ -469,12 +466,6 @@ abstract class BaseLanguage {
 
   String get orderArrived;
 
-  String get orderActiveSuccessfully;
-
-  String get orderDepartedSuccessfully;
-
-  String get orderDeliveredSuccessfully;
-
   String get deleteAccount;
 
   String get deleteAccountMsg1;
@@ -530,9 +521,6 @@ abstract class BaseLanguage {
   String get addMoney;
 
   String get amount;
-
-  String get addAmount;
-
   String get credentialNotMatch;
 
   String get accountNumber;
@@ -558,9 +546,6 @@ abstract class BaseLanguage {
   String get bankNotFound;
 
   String get internetIsConnected;
-
-  String get invalidUrl;
-
   String get balanceInsufficientCashPayment;
 
   String get ok;
@@ -672,4 +657,26 @@ abstract class BaseLanguage {
   String get errorInternetNotAvailable;
   String get mustSelectStartDate;
   String get accept;
+
+  String get onlineRecievedAmount;
+  String get totalWithdrawn;
+  String get manualRecieved;
+  String get lastLocation;
+  String get latitude;
+  String get longitude;
+  String get getEmail;
+  String get emailVerification;
+  String get selectLocation;
+  String get demoUserNote;
+  String get yourOrder;
+  String get hasBeenAssignedTo;
+  String get hasBeenTransferedTo;
+  String get lastUpdatedAt;
+  String get transactionFailed;
+  String get orderPickupSuccessfully;
+  String get orderActiveSuccessfully;
+  String get orderDepartedSuccessfully;
+  String get orderDeliveredSuccessfully;
+  String get addAmount;
+  String get invalidUrl;
 }

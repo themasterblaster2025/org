@@ -272,9 +272,6 @@ class LanguageEn extends BaseLanguage {
   String get departed => "Departed";
 
   @override
-  String get orderPickupSuccessfully => "Order pickup Successfully";
-
-  @override
   String get imagePickToCamera => "Image Pic to Camera";
 
   @override
@@ -701,15 +698,6 @@ class LanguageEn extends BaseLanguage {
   String get orderArrived => "Order Arrived";
 
   @override
-  String get orderActiveSuccessfully => "Order Active Successfully";
-
-  @override
-  String get orderDepartedSuccessfully => "Order Departed Successfully";
-
-  @override
-  String get orderDeliveredSuccessfully => "Order Delivered Successfully";
-
-  @override
   String get deleteAccount => 'Delete Account';
 
   @override
@@ -795,9 +783,6 @@ class LanguageEn extends BaseLanguage {
   String get amount => "Amount";
 
   @override
-  String get addAmount => "Add Amount";
-
-  @override
   String get credentialNotMatch => "These credential do not match our records";
 
   @override
@@ -835,10 +820,6 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get internetIsConnected => "Internet is connected.";
-
-  @override
-  String get invalidUrl => "Invalid Url";
-
   @override
   String get balanceInsufficientCashPayment => "Balance is insufficient,Order is created with Cash Payment.";
 
@@ -1024,4 +1005,46 @@ class LanguageEn extends BaseLanguage {
   String get mustSelectStartDate => 'must select start date';
   @override
   String get accept => 'Accept';
+  @override
+  String get onlineRecievedAmount => 'Online Amount Received';
+  @override
+  String get totalWithdrawn => 'Total Withdraw Amount';
+  @override
+  String get manualRecieved => 'Mannual Received';
+  @override
+  String get lastLocation => 'Last Location';
+  @override
+  String get latitude => 'Latitude';
+  @override
+  String get longitude => 'Longitude';
+  @override
+  String get emailVerification => 'Email Verification';
+  @override
+  String get getEmail => 'Get Email';
+  @override
+  String get selectLocation => 'Select Location';
+  @override
+  String get demoUserNote => 'NOTE: Drag-drop address place search is disable for demo user';
+  @override
+  String get yourOrder => 'Your Order';
+  @override
+  String get hasBeenAssignedTo => 'has been assigned to';
+  @override
+  String get hasBeenTransferedTo => 'has been transferred to';
+  @override
+  String get lastUpdatedAt => 'Last update at';
+  @override
+  String get transactionFailed => 'Transaction Failed!! Try again.';
+  @override
+  String get orderPickupSuccessfully => 'Congrats!!Order pickedup Successfully.';
+  @override
+  String get orderActiveSuccessfully => 'Congrats!!Order Actived Successfully.';
+  @override
+  String get orderDepartedSuccessfully => 'Congrats!!Order has been Departed Successfully.';
+  @override
+  String get orderDeliveredSuccessfully => 'Congrats!!Order has been Delivered Successfully.';
+  @override
+  String get addAmount => 'Amount field is empty.Please add amount';
+  @override
+  String get invalidUrl => 'Invalid Url!.Please enter valid Url';
 }

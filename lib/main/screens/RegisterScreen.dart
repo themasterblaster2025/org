@@ -30,13 +30,13 @@ class RegisterScreenState extends State<RegisterScreen> {
   String countryCode = defaultPhoneCode;
 
   TextEditingController nameController = TextEditingController();
-  TextEditingController userNameController = TextEditingController();
+  // TextEditingController userNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController passController = TextEditingController();
 
   FocusNode nameFocus = FocusNode();
-  FocusNode userNameFocus = FocusNode();
+//  FocusNode userNameFocus = FocusNode();
   FocusNode emailFocus = FocusNode();
   FocusNode phoneFocus = FocusNode();
   FocusNode passFocus = FocusNode();
@@ -56,7 +56,7 @@ class RegisterScreenState extends State<RegisterScreen> {
         appStore.setLoading(true);
         var request = {
           "name": nameController.text,
-          "username": userNameController.text,
+          "username": emailController.text,
           "user_type": widget.userType,
           "contact_number": '$countryCode ${phoneController.text.trim()}',
           "email": emailController.text.trim(),
@@ -114,23 +114,23 @@ class RegisterScreenState extends State<RegisterScreen> {
                     controller: nameController,
                     textFieldType: TextFieldType.NAME,
                     focus: nameFocus,
-                    nextFocus: userNameFocus,
-                    decoration: commonInputDecoration(),
-                    errorThisFieldRequired: language.fieldRequiredMsg,
-                  ),
-                  16.height,
-                  Text(language.username, style: primaryTextStyle()),
-                  8.height,
-                  AppTextField(
-                    controller: userNameController,
-                    textFieldType: TextFieldType.USERNAME,
-                    focus: userNameFocus,
                     nextFocus: emailFocus,
                     decoration: commonInputDecoration(),
                     errorThisFieldRequired: language.fieldRequiredMsg,
-                    errorInvalidUsername: language.usernameInvalid,
                   ),
                   16.height,
+                  // Text(language.username, style: primaryTextStyle()),
+                  // 8.height,
+                  // AppTextField(
+                  //   controller: userNameController,
+                  //   textFieldType: TextFieldType.USERNAME,
+                  //   focus: userNameFocus,
+                  //   nextFocus: emailFocus,
+                  //   decoration: commonInputDecoration(),
+                  //   errorThisFieldRequired: language.fieldRequiredMsg,
+                  //   errorInvalidUsername: language.usernameInvalid,
+                  // ),
+                  // 16.height,
                   Text(language.email, style: primaryTextStyle()),
                   8.height,
                   AppTextField(
@@ -216,6 +216,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           focusColor: colorPrimary,
                           activeColor: colorPrimary,
+                          checkColor: Colors.white,
                           value: isAcceptedTc,
                           onChanged: (bool? value) async {
                             isAcceptedTc = value!;

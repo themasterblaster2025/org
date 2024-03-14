@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import '../../main/components/BodyCornerWidget.dart';
-import '../../main/utils/Constants.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:timeline_tile/timeline_tile.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../main.dart';
 import '../../main/models/OrderDetailModel.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
+import '../../main/utils/Constants.dart';
 import '../../main/utils/Widgets.dart';
 
 class OrderHistoryScreen extends StatefulWidget {
@@ -72,9 +71,9 @@ class OrderHistoryScreenState extends State<OrderHistoryScreen> {
   messageData(OrderHistory orderData) {
     if (getStringAsync(USER_TYPE) == CLIENT) {
       if (orderData.historyType == ORDER_ASSIGNED) {
-        return 'Your Order#${orderData.orderId} has been assigned to ${orderData.historyData!.deliveryManName}.';
+        return '${language.yourOrder}#${orderData.orderId} ${language.hasBeenAssignedTo} ${orderData.historyData!.deliveryManName}.';
       } else if (orderData.historyType == ORDER_TRANSFER) {
-        return 'Your Order#${orderData.orderId} has been transferred to ${orderData.historyData!.deliveryManName}.';
+        return '${language.yourOrder}#${orderData.orderId} ${language.hasBeenTransferedTo}${orderData.historyData!.deliveryManName}.';
       } else {
         return '${orderData.historyMessage}';
       }

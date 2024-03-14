@@ -231,6 +231,7 @@ class LoginScreenState extends State<LoginScreen> {
                             width: 20,
                             child: Checkbox(
                               shape: RoundedRectangleBorder(borderRadius: radius(4)),
+                              checkColor: Colors.white,
                               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               focusColor: colorPrimary,
                               activeColor: colorPrimary,
@@ -264,6 +265,7 @@ class LoginScreenState extends State<LoginScreen> {
                         width: 20,
                         child: Checkbox(
                           shape: RoundedRectangleBorder(borderRadius: radius(4)),
+                          checkColor: Colors.white,
                           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           focusColor: colorPrimary,
                           activeColor: colorPrimary,

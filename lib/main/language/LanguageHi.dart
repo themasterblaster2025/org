@@ -182,8 +182,6 @@ class LanguageHi extends BaseLanguage {
   @override
   String get departed => 'स्वर्गवासी';
   @override
-  String get orderPickupSuccessfully => 'ऑर्डर पिकअप सफलतापूर्वक';
-  @override
   String get imagePickToCamera => 'कैमरे के लिए छवि तस्वीर';
   @override
   String get imagePicToGallery => 'गैलरी के लिए छवि तस्वीर';
@@ -468,12 +466,6 @@ class LanguageHi extends BaseLanguage {
   @override
   String get orderArrived => 'आदेश आ गया';
   @override
-  String get orderActiveSuccessfully => 'सफलतापूर्वक सक्रिय आदेश दें';
-  @override
-  String get orderDepartedSuccessfully => 'आदेश सफलतापूर्वक प्रस्थान किया';
-  @override
-  String get orderDeliveredSuccessfully => 'आदेश सफलतापूर्वक दिया गया';
-  @override
   String get deleteAccount => 'खाता हटा दो';
   @override
   String get deleteAccountMsg1 => 'क्या आप इस खाते को हटाने के लिए सुनिश्चित हैं? कृपया पढ़ें कि खाता विलोपन कैसे प्रभावित करेगा।';
@@ -531,8 +523,6 @@ class LanguageHi extends BaseLanguage {
   @override
   String get amount => 'मात्रा';
   @override
-  String get addAmount => 'राशि जोड़ें';
-  @override
   String get credentialNotMatch => 'ये क्रेडेंशियल हमारे रिकॉर्ड से मेल नहीं खाते हैं';
   @override
   String get accountNumber => 'खाता संख्या';
@@ -558,8 +548,6 @@ class LanguageHi extends BaseLanguage {
   String get bankNotFound => 'opps, आपका बैंक विवरण नहीं मिला';
   @override
   String get internetIsConnected => 'इंटरनेट जुड़ा हुआ है।';
-  @override
-  String get invalidUrl => 'असामान्य यूआरएल';
   @override
   String get balanceInsufficientCashPayment => 'शेष राशि अपर्याप्त है, आदेश नकद भुगतान के साथ बनाया जाता है।';
   @override
@@ -691,4 +679,46 @@ class LanguageHi extends BaseLanguage {
   String get mustSelectStartDate => 'प्रारंभ तिथि का चयन करना चाहिए';
   @override
   String get accept => 'स्वीकार करना';
+  @override
+  String get onlineRecievedAmount => 'ऑनलाइन राशि प्राप्त की गई';
+  @override
+  String get totalWithdrawn => 'कुल निकासी राशि';
+  @override
+  String get manualRecieved => 'मर्दाना पुनः प्राप्त किया';
+  @override
+  String get lastLocation => 'पिछला स्थान';
+  @override
+  String get latitude => 'अक्षांश';
+  @override
+  String get longitude => 'देशान्तर';
+  @override
+  String get emailVerification => 'ईमेल सत्यापन';
+  @override
+  String get getEmail => 'ईमेल प्राप्त करें';
+  @override
+  String get selectLocation => 'स्थान चुनें';
+  @override
+  String get demoUserNote => 'नोट: ड्रैग-ड्रॉप पता स्थान खोज डेमो उपयोगकर्ता के लिए अक्षम है';
+  @override
+  String get yourOrder => 'आपका आदेश';
+  @override
+  String get hasBeenAssignedTo => 'को सौंपा गया है';
+  @override
+  String get hasBeenTransferedTo => 'में स्थानांतरित कर दिया गया है';
+  @override
+  String get lastUpdatedAt => 'पर अंतिम अद्यतन';
+  @override
+  String get transactionFailed => 'लेन - देन विफल!! पुनः प्रयास करें।';
+  @override
+  String get orderPickupSuccessfully => 'बधाई हो !! ऑर्डर पिकअप सफलतापूर्वक।';
+  @override
+  String get orderActiveSuccessfully => 'बधाई हो !! आदेश सफलतापूर्वक काम किया।';
+  @override
+  String get orderDepartedSuccessfully => 'बधाई हो !! आदेश को सफलतापूर्वक छोड़ दिया गया है।';
+  @override
+  String get orderDeliveredSuccessfully => 'बधाई हो !! आदेश सफलतापूर्वक दिया गया है।';
+  @override
+  String get addAmount => 'राशि फ़ील्ड खाली है। कृपया राशि जोड़ें';
+  @override
+  String get invalidUrl => 'अमान्य url! .Lease वैध URL दर्ज करें';
 }

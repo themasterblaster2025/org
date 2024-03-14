@@ -5,8 +5,12 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
+import 'package:nb_utils/nb_utils.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
+
 import '../../main.dart';
-import '../../main/components/BodyCornerWidget.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/OrderListModel.dart';
 import '../../main/network/RestApis.dart';
@@ -15,11 +19,6 @@ import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../user/components/CancelOrderDialog.dart';
-import 'package:nb_utils/nb_utils.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:screenshot/screenshot.dart';
-import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
-
 import '../components/OTPDialog.dart';
 
 class ReceivedScreenOrderScreen extends StatefulWidget {
@@ -166,7 +165,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
           onPressed: () {
             finish(context, false);
           },
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
         ),
       ),
       body: Observer(builder: (context) {
@@ -188,15 +187,14 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                         child: Row(
                           children: [
                             Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(defaultRadius),
-                                  bottomLeft: Radius.circular(defaultRadius),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(defaultRadius),
+                                    bottomLeft: Radius.circular(defaultRadius),
+                                  ),
                                 ),
-                              ),
-                              padding: EdgeInsets.all(8),
-                              child: Icon(Icons.info_outlined),
-                            ),
+                                padding: EdgeInsets.all(8),
+                                child: Icon(Icons.info_outlined)),
                             16.width,
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -303,9 +301,12 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                           ],
                         ),
                       ).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
-                    CheckboxListTile(dense: true,contentPadding: EdgeInsets.zero,
+                    CheckboxListTile(
+                      dense: true,
+                      contentPadding: EdgeInsets.zero,
                       value: mIsCheck,
                       activeColor: colorPrimary,
+                      checkColor: Colors.white,
                       title: Text(widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY ? language.paymentCollectFrom : language.paymentCollectFromPickup, style: primaryTextStyle()),
                       onChanged: (val) {
                         mIsCheck = val!;

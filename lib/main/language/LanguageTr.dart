@@ -182,8 +182,6 @@ class LanguageTr extends BaseLanguage {
   @override
   String get departed => "Ayrılmış";
   @override
-  String get orderPickupSuccessfully => "Başarıyla Pikap Sipariş Edin";
-  @override
   String get imagePickToCamera => "Resim fotoğrafı kamera";
   @override
   String get imagePicToGallery => "Galeri için resim fotoğrafı";
@@ -468,12 +466,6 @@ class LanguageTr extends BaseLanguage {
   @override
   String get orderArrived => "Sipariş geldi";
   @override
-  String get orderActiveSuccessfully => "Başarılı bir şekilde aktif sipariş";
-  @override
-  String get orderDepartedSuccessfully => "Sipariş başarıyla ayrıldı";
-  @override
-  String get orderDeliveredSuccessfully => "Başarılı bir şekilde teslim edilen sipariş";
-  @override
   String get deleteAccount => "Hesabı sil";
   @override
   String get deleteAccountMsg1 => "Hesabınızı silmek istediğinizden emin misiniz? Lütfen hesap silme işleminin nasıl etkileyeceğini okuyun.";
@@ -530,8 +522,6 @@ class LanguageTr extends BaseLanguage {
   @override
   String get amount => "Miktar";
   @override
-  String get addAmount => "Miktar ekle";
-  @override
   String get credentialNotMatch => "Bu kimlik bilgileri kayıtlarımıza uymuyor";
   @override
   String get accountNumber => "Hesap numarası";
@@ -557,8 +547,6 @@ class LanguageTr extends BaseLanguage {
   String get bankNotFound => "OPPS, banka detayınız bulunamadı";
   @override
   String get internetIsConnected => "İnternet bağlıdır.";
-  @override
-  String get invalidUrl => "Geçersiz URL";
   @override
   String get balanceInsufficientCashPayment => "Bakiye yetersizdir, nakit ödeme ile sipariş oluşturulur.";
   @override
@@ -690,4 +678,46 @@ class LanguageTr extends BaseLanguage {
   String get mustSelectStartDate => 'Başlangıç ​​tarihini seçmeli';
   @override
   String get accept => 'Kabul etmek';
+  @override
+  String get onlineRecievedAmount => 'Çevrimiçi Miktar Alındı';
+  @override
+  String get totalWithdrawn => 'Toplam geri çekilme miktarı';
+  @override
+  String get manualRecieved => 'Mannual aldı';
+  @override
+  String get lastLocation => 'Son Konum';
+  @override
+  String get latitude => 'Enlem';
+  @override
+  String get longitude => 'Boylam';
+  @override
+  String get emailVerification => 'Eposta Doğrulama';
+  @override
+  String get getEmail => 'E -posta Al';
+  @override
+  String get selectLocation => 'Konumu seçin';
+  @override
+  String get demoUserNote => 'Not: Drag-Drop Adresi Yer Arama Demo Kullanıcısı için Devre Dışı Bırak';
+  @override
+  String get yourOrder => 'Siparişiniz';
+  @override
+  String get hasBeenAssignedTo => 'atandı';
+  @override
+  String get hasBeenTransferedTo => 'devredildi';
+  @override
+  String get lastUpdatedAt => 'Son güncelleme';
+  @override
+  String get transactionFailed => 'İşlem başarısız!! Tekrar deneyin.';
+  @override
+  String get orderPickupSuccessfully => 'Tebrikler! Başarılı bir şekilde seçin.';
+  @override
+  String get orderActiveSuccessfully => 'Tebrikler !! Sipariş başarılı bir şekilde hareket etti.';
+  @override
+  String get orderDepartedSuccessfully => 'Tebrikler !! Emir başarıyla ayrıldı.';
+  @override
+  String get orderDeliveredSuccessfully => 'Tebrikler !! Emir başarıyla teslim edildi.';
+  @override
+  String get addAmount => 'Tutar alanı boş. Lütfen Miktar Ekle';
+  @override
+  String get invalidUrl => 'Geçersiz URL!';
 }

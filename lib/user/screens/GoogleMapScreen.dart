@@ -52,7 +52,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> with WidgetsBindingOb
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
       appBarTitle: widget.isSaveAddress
-          ? 'Select Location'
+          ? language.selectLocation
           : widget.isPick
               ? language.selectPickupLocation
               : language.selectDeliveryLocation,
@@ -102,7 +102,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> with WidgetsBindingOb
           Container(
             color: Colors.red.shade50,
             padding: EdgeInsets.all(8),
-            child: Text('NOTE: Drag-drop address place search is disable for demo user', style: secondaryTextStyle(color: Colors.red)),
+            child: Text(language.demoUserNote, style: secondaryTextStyle(color: Colors.red)),
           ),
         ],
       ),

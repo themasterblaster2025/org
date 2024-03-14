@@ -182,8 +182,6 @@ class LanguageId extends BaseLanguage {
   @override
   String get departed => 'Almarhum';
   @override
-  String get orderPickupSuccessfully => 'Pesan pesanan berhasil';
-  @override
   String get imagePickToCamera => 'Gambar gambar ke kamera';
   @override
   String get imagePicToGallery => 'Gambar gambar ke galeri';
@@ -468,12 +466,6 @@ class LanguageId extends BaseLanguage {
   @override
   String get orderArrived => 'Pesanan tiba';
   @override
-  String get orderActiveSuccessfully => 'Pesan aktif dengan sukses';
-  @override
-  String get orderDepartedSuccessfully => 'Pesanan berhasil';
-  @override
-  String get orderDeliveredSuccessfully => 'Pesanan berhasil disampaikan';
-  @override
   String get deleteAccount => 'Hapus akun';
   @override
   String get deleteAccountMsg1 => 'Apakah Anda yakin ingin menghapus akun Anda? Harap baca bagaimana penghapusan akun akan mempengaruhi.';
@@ -531,8 +523,6 @@ class LanguageId extends BaseLanguage {
   @override
   String get amount => 'Jumlah';
   @override
-  String get addAmount => 'Tambahkan jumlah';
-  @override
   String get credentialNotMatch => 'Kredensial ini tidak cocok dengan catatan kami';
   @override
   String get accountNumber => 'Nomor akun';
@@ -558,8 +548,6 @@ class LanguageId extends BaseLanguage {
   String get bankNotFound => 'opps, detail bank Anda tidak ditemukan';
   @override
   String get internetIsConnected => 'Internet terhubung.';
-  @override
-  String get invalidUrl => 'URL tidak valid';
   @override
   String get balanceInsufficientCashPayment => 'Saldo tidak cukup, pesanan dibuat dengan pembayaran tunai.';
   @override
@@ -691,4 +679,46 @@ class LanguageId extends BaseLanguage {
   String get mustSelectStartDate => 'harus memilih tanggal mulai';
   @override
   String get accept => 'Menerima';
+  @override
+  String get onlineRecievedAmount => 'Jumlah online diterima';
+  @override
+  String get totalWithdrawn => 'Jumlah penarikan total';
+  @override
+  String get manualRecieved => 'Manusia diterima';
+  @override
+  String get lastLocation => 'Lokasi terakhir';
+  @override
+  String get latitude => 'Garis Lintang';
+  @override
+  String get longitude => 'Garis bujur';
+  @override
+  String get emailVerification => 'Verifikasi email';
+  @override
+  String get getEmail => 'Dapatkan email';
+  @override
+  String get selectLocation => 'Pilih lokasi';
+  @override
+  String get demoUserNote => 'Catatan: Pencarian tempat alamat drag-drop dinonaktifkan untuk pengguna demo';
+  @override
+  String get yourOrder => 'Pesanan Anda';
+  @override
+  String get hasBeenAssignedTo => 'telah ditugaskan untuk';
+  @override
+  String get hasBeenTransferedTo => 'telah ditransfer ke';
+  @override
+  String get lastUpdatedAt => 'Pembaruan terakhir di';
+  @override
+  String get transactionFailed => 'Transaksi gagal!! Coba lagi.';
+  @override
+  String get orderPickupSuccessfully => 'Selamat !! Pesanan berhasil.';
+  @override
+  String get orderActiveSuccessfully => 'Selamat !! Memesan dengan sukses.';
+  @override
+  String get orderDepartedSuccessfully => 'Selamat !! Pesanan telah berhasil.';
+  @override
+  String get orderDeliveredSuccessfully => 'Selamat !! Pesanan telah berhasil disampaikan.';
+  @override
+  String get addAmount => 'Bidang Jumlah Kosong. Harap Tambahkan Jumlah';
+  @override
+  String get invalidUrl => 'URL tidak valid! .PLEASE MASUK URL yang valid';
 }

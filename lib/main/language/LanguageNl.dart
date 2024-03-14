@@ -182,8 +182,6 @@ class LanguageNl extends BaseLanguage {
   @override
   String get departed => 'Vertrokken';
   @override
-  String get orderPickupSuccessfully => 'Bestel ophalen met succes';
-  @override
   String get imagePickToCamera => 'Afbeelding foto naar camera';
   @override
   String get imagePicToGallery => 'Afbeelding foto naar galerij';
@@ -468,12 +466,6 @@ class LanguageNl extends BaseLanguage {
   @override
   String get orderArrived => 'Bestelling is aangekomen';
   @override
-  String get orderActiveSuccessfully => 'Bestel met succes actief';
-  @override
-  String get orderDepartedSuccessfully => 'Bestellen met succes vertrokken';
-  @override
-  String get orderDeliveredSuccessfully => 'Bestel met succes geleverd';
-  @override
   String get deleteAccount => 'Account verwijderen';
   @override
   String get deleteAccountMsg1 => 'Weet u zeker dat u uw account wilt verwijderen? Lees hoe accountverwijdering zal beïnvloeden.';
@@ -531,8 +523,6 @@ class LanguageNl extends BaseLanguage {
   @override
   String get amount => 'Hoeveelheid';
   @override
-  String get addAmount => 'Voeg het bedrag toe';
-  @override
   String get credentialNotMatch => 'Deze inloggegevens komen niet overeen met onze records';
   @override
   String get accountNumber => 'Rekeningnummer';
@@ -558,8 +548,6 @@ class LanguageNl extends BaseLanguage {
   String get bankNotFound => 'OPPS, uw bankdetail niet gevonden';
   @override
   String get internetIsConnected => 'Internet is verbonden.';
-  @override
-  String get invalidUrl => 'Ongeldige URL';
   @override
   String get balanceInsufficientCashPayment => 'Het saldo is onvoldoende, bestelling wordt gemaakt met contante betaling.';
   @override
@@ -691,4 +679,47 @@ class LanguageNl extends BaseLanguage {
   String get mustSelectStartDate => 'Moet de startdatum selecteren';
   @override
   String get accept => 'Aanvaarden';
+  @override
+  String get onlineRecievedAmount => 'Online bedrag ontvangen';
+  @override
+  String get totalWithdrawn => 'Totaal opnamebedrag';
+  @override
+  String get manualRecieved => 'Mannueel ontvangen';
+  @override
+  String get lastLocation => 'Laatste locatie';
+  @override
+  String get latitude => 'Breedtegraad';
+  @override
+  String get longitude => 'Lengtegraad';
+  @override
+  String get emailVerification => 'email verificatie';
+  @override
+  String get getEmail => 'Krijg e -mail';
+  @override
+  String get selectLocation => 'Selecteer een locatie';
+  @override
+  String get demoUserNote => 'OPMERKING: Zoeken naar drag-drop-adres Plaats is uitgeschakeld voor demo-gebruiker';
+  @override
+  String get yourOrder => 'Jouw bestelling';
+  @override
+  String get hasBeenAssignedTo => 'is toegewezen aan';
+  @override
+  String get hasBeenTransferedTo => 'is overgedragen aan';
+  @override
+  String get lastUpdatedAt => 'Laatste update op';
+  @override
+  String get transactionFailed => 'Transactie mislukt!! Probeer het nog eens.';
+
+  @override
+  String get orderPickupSuccessfully => 'Gefeliciteerd !! Bestel met succes een pick -up.';
+  @override
+  String get orderActiveSuccessfully => 'Gefeliciteerd !! bestel met succes geactiveerd.';
+  @override
+  String get orderDepartedSuccessfully => 'Gefeliciteerd !! De bestelling is met succes vertrokken.';
+  @override
+  String get orderDeliveredSuccessfully => 'Gefeliciteerd !! De bestelling is met succes afgeleverd.';
+  @override
+  String get addAmount => 'Bedragsveld is leeg. Voeg het bedrag toe';
+  @override
+  String get invalidUrl => 'Ongeldige URL!. Voer de geldige URL in';
 }

@@ -62,6 +62,7 @@ dependencies:
 
   # MAP
   geolocator: ^10.1.0
+  geocode: ^1.0.3
   google_maps_flutter: ^2.5.3
   flutter_polyline_points: ^2.0.0
   maps_launcher: ^2.2.0

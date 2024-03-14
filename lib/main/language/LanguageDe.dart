@@ -182,8 +182,6 @@ class LanguageDe extends BaseLanguage {
   @override
   String get departed => 'abgereist';
   @override
-  String get orderPickupSuccessfully => 'Pickup erfolgreich bestellen';
-  @override
   String get imagePickToCamera => 'Bildbild zur Kamera';
   @override
   String get imagePicToGallery => 'Bildbild zur Galerie';
@@ -468,12 +466,6 @@ class LanguageDe extends BaseLanguage {
   @override
   String get orderArrived => 'Bestellung angekommen';
   @override
-  String get orderActiveSuccessfully => 'Erfolgreich aktiv bestellen';
-  @override
-  String get orderDepartedSuccessfully => 'Reihenfolge erfolgreich abgereist';
-  @override
-  String get orderDeliveredSuccessfully => 'Reihenfolge erfolgreich geliefert';
-  @override
   String get deleteAccount => 'Konto löschen';
   @override
   String get deleteAccountMsg1 => 'Sind Sie sicher, dass Sie Ihr Konto löschen möchten? Bitte lesen Sie, wie sich die Löschung des Kontos auswirkt.';
@@ -531,8 +523,6 @@ class LanguageDe extends BaseLanguage {
   @override
   String get amount => 'Menge';
   @override
-  String get addAmount => 'Menge hinzufügen';
-  @override
   String get credentialNotMatch => 'Diese Anmeldeinformationen stimmen nicht mit unseren Datensätzen überein';
   @override
   String get accountNumber => 'Accountnummer';
@@ -558,8 +548,6 @@ class LanguageDe extends BaseLanguage {
   String get bankNotFound => 'OPPS, Ihr Bankdetail nicht gefunden';
   @override
   String get internetIsConnected => 'Das Internet ist verbunden.';
-  @override
-  String get invalidUrl => 'Ungültige URL';
   @override
   String get balanceInsufficientCashPayment => 'Saldo ist unzureichend, die Bestellung wird mit Barzahlung erstellt.';
   @override
@@ -692,4 +680,45 @@ class LanguageDe extends BaseLanguage {
   String get mustSelectStartDate => 'Muss das Startdatum auswählen';
   @override
   String get accept => 'Akzeptieren';
+  @override
+  String get onlineRecievedAmount => 'Online -Betrag erhalten';
+  @override
+  String get totalWithdrawn => 'Gesamtabzugsbetrag';
+  @override
+  String get manualRecieved => 'Mannual erhalten';
+  @override
+  String get lastLocation => 'Letzter Standort';
+  @override
+  String get latitude => 'Breite';
+  @override
+  String get longitude => 'Längengrad';
+  String get emailVerification => 'E-Mail-Verifizierung';
+  @override
+  String get getEmail => 'Holen Sie sich eine E -Mail';
+  @override
+  String get selectLocation => 'Ort auswählen';
+  @override
+  String get demoUserNote => 'HINWEIS: Die Suche nach Drag-Drop-Adresse ist für den Demo-Benutzer deaktiviert';
+  @override
+  String get yourOrder => 'Deine Bestellung';
+  @override
+  String get hasBeenAssignedTo => 'wurde zugewiesen';
+  @override
+  String get hasBeenTransferedTo => 'wurde an übertragen auf';
+  @override
+  String get lastUpdatedAt => 'Letztes Update bei';
+  @override
+  String get transactionFailed => 'Transaktion fehlgeschlagen!! Versuchen Sie es erneut.';
+  @override
+  String get orderPickupSuccessfully => 'Herzlichen Glückwunsch !! Bestellung erfolgreich.';
+  @override
+  String get orderActiveSuccessfully => 'Herzlichen Glückwunsch !! Order erfolgreich gehandelt.';
+  @override
+  String get orderDepartedSuccessfully => 'Herzlichen Glückwunsch !! Die Bestellung wurde erfolgreich verlassen.';
+  @override
+  String get orderDeliveredSuccessfully => 'Herzlichen Glückwunsch !! Die Bestellung wurde erfolgreich geliefert.';
+  @override
+  String get addAmount => 'Das Feld des Betrags ist leer. Bitte addieren Sie den Betrag';
+  @override
+  String get invalidUrl => 'Ungültige URL! .Please Geben Sie eine gültige URL ein';
 }

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mighty_delivery/main/components/CommonScaffoldComponent.dart';
+import 'package:nb_utils/nb_utils.dart';
+
+import '../../main.dart';
 import '../../main/models/models.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/DataProviders.dart';
 import '../../main/utils/Widgets.dart';
-import 'package:nb_utils/nb_utils.dart';
-
-import '../../main.dart';
 import 'LoginScreen.dart';
 
 class WalkThroughScreen extends StatefulWidget {
@@ -50,8 +50,15 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
             children: List.generate(
               pages.length,
               (index) {
-                return Center(
-                  child: Image.asset(pages[index].image!, width: context.width(), height: context.height() * 0.4, fit: BoxFit.cover),
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(child: Image.asset(pages[index].image!, width: context.width(), height: context.height() * 0.4, fit: BoxFit.cover)),
+                    Text(pages[currentPage].title!, style: boldTextStyle(size: 24), textAlign: TextAlign.center).paddingOnly(left: 30, right: 30),
+                    16.height,
+                    Text(pages[currentPage].subTitle!, textAlign: TextAlign.center, style: secondaryTextStyle(size: 16)).paddingOnly(left: 30, right: 30),
+                  ],
                 );
               },
             ),
@@ -66,10 +73,10 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
             right: 16,
             child: Column(
               children: [
-                Text(pages[currentPage].title!, style: boldTextStyle(size: 24), textAlign: TextAlign.center).paddingOnly(left: 30, right: 30),
-                16.height,
-                Text(pages[currentPage].subTitle!, textAlign: TextAlign.center, style: secondaryTextStyle(size: 16)).paddingOnly(left: 30, right: 30),
-                50.height,
+                // Text(pages[currentPage].title!, style: boldTextStyle(size: 24), textAlign: TextAlign.center).paddingOnly(left: 30, right: 30),
+                // 16.height,
+                // Text(pages[currentPage].subTitle!, textAlign: TextAlign.center, style: secondaryTextStyle(size: 16)).paddingOnly(left: 30, right: 30),
+                // 50.height,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

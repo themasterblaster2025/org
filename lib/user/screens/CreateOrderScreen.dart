@@ -784,6 +784,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           CheckboxListTile(
             contentPadding: EdgeInsets.only(bottom: 8),
             value: isPickSavedAddress,
+            checkColor: Colors.white,
             controlAffinity: ListTileControlAffinity.leading,
             title: Text(language.selectAddressSave, style: primaryTextStyle()),
             dense: true,
@@ -955,6 +956,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             controlAffinity: ListTileControlAffinity.leading,
             title: Text(language.selectAddressSave, style: primaryTextStyle()),
             dense: true,
+            checkColor: Colors.white,
             activeColor: colorPrimary,
             onChanged: (value) {
               isDeliverySavedAddress = value.validate();
@@ -1375,7 +1377,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   selectedTabIndex--;
                   setState(() {});
                 }, color: colorPrimary)
-                    .paddingRight(16)
+                    .paddingRight(isRTL ? 4 : 16)
+                    .paddingLeft(isRTL ? 16 : 0)
                     .expand(),
               commonButton(selectedTabIndex != 4 ? language.next : language.createOrder, () async {
                 FocusScope.of(context).requestFocus(new FocusNode());

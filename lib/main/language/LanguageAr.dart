@@ -182,8 +182,6 @@ class LanguageAr extends BaseLanguage {
   @override
   String get departed => 'الراحل';
   @override
-  String get orderPickupSuccessfully => 'طلب التقاط بنجاح';
-  @override
   String get imagePickToCamera => 'صورة صورة للكاميرا';
   @override
   String get imagePicToGallery => 'صورة صورة للمعرض';
@@ -468,12 +466,6 @@ class LanguageAr extends BaseLanguage {
   @override
   String get orderArrived => 'وصل الأمر';
   @override
-  String get orderActiveSuccessfully => 'اطلب نشط بنجاح';
-  @override
-  String get orderDepartedSuccessfully => 'غادر الأمر بنجاح';
-  @override
-  String get orderDeliveredSuccessfully => 'تم تسليم الطلب بنجاح';
-  @override
   String get deleteAccount => 'حذف الحساب';
   @override
   String get deleteAccountMsg1 => 'هل انت متأكد انك تريد حذف حسابك؟ يرجى قراءة كيفية تأثير حذف الحساب.';
@@ -531,8 +523,6 @@ class LanguageAr extends BaseLanguage {
   @override
   String get amount => 'كمية';
   @override
-  String get addAmount => 'أضف المبلغ';
-  @override
   String get credentialNotMatch => 'هذه الاعتماد لا تتطابق مع سجلاتنا';
   @override
   String get accountNumber => 'رقم حساب';
@@ -558,8 +548,6 @@ class LanguageAr extends BaseLanguage {
   String get bankNotFound => 'OPPS ، لم يتم العثور على تفاصيل البنوك الخاصة بك';
   @override
   String get internetIsConnected => 'الإنترنت متصل.';
-  @override
-  String get invalidUrl => 'URL غير صالح';
   @override
   String get balanceInsufficientCashPayment => 'الرصيد غير كافٍ ، يتم إنشاء الطلب مع الدفع النقدي.';
   @override
@@ -691,4 +679,46 @@ class LanguageAr extends BaseLanguage {
   String get mustSelectStartDate => 'يجب تحديد تاريخ البدء';
   @override
   String get accept => 'يقبل';
+  @override
+  String get onlineRecievedAmount => 'مبلغ عبر الإنترنت تم استلامه';
+  @override
+  String get totalWithdrawn => 'إجمالي مبلغ السحب';
+  @override
+  String get manualRecieved => 'تم استلامها';
+  @override
+  String get lastLocation => 'اخر موقع';
+  @override
+  String get latitude => 'خط العرض';
+  @override
+  String get longitude => 'خط الطول';
+  @override
+  String get emailVerification => 'تأكيد بواسطة البريد الالكتروني';
+  @override
+  String get getEmail => 'احصل على البريد الإلكتروني';
+  @override
+  String get selectLocation => 'اختر موقعا';
+  @override
+  String get demoUserNote => 'ملاحظة: يتم تعطيل البحث عن مكان عنوان السحب للمستخدم التجريبي';
+  @override
+  String get yourOrder => 'طلبك';
+  @override
+  String get hasBeenAssignedTo => 'تم تعيينه ل';
+  @override
+  String get hasBeenTransferedTo => 'تم نقله إلى';
+  @override
+  String get lastUpdatedAt => 'التحديث الأخير في';
+  @override
+  String get transactionFailed => 'فشل الاجراء!! حاول ثانية.';
+  @override
+  String get orderPickupSuccessfully => 'تهانينا !! طلب التقاط بنجاح.';
+  @override
+  String get orderActiveSuccessfully => 'تهانينا !! طلب النجاح بنجاح.';
+  @override
+  String get orderDepartedSuccessfully => 'تهانينا !! لقد غادر النظام بنجاح.';
+  @override
+  String get orderDeliveredSuccessfully => 'تهانينا !! تم تسليم الطلب بنجاح.';
+  @override
+  String get addAmount => 'حقل المبلغ فارغ.';
+  @override
+  String get invalidUrl => 'عنوان URL غير صالح! .LEASE أدخل عنوان URL صالح';
 }

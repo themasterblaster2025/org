@@ -4,16 +4,17 @@ import 'package:mighty_delivery/main/components/CommonScaffoldComponent.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:otp_text_field/style.dart';
 import 'package:otp_text_field/otp_field.dart' as otp;
 import 'package:otp_text_field/otp_field_style.dart' as o;
+import 'package:otp_text_field/style.dart';
+
 import '../../main.dart';
-import 'LoginScreen.dart';
-import 'UserCitySelectScreen.dart';
 import '../network/RestApis.dart';
 import '../utils/Colors.dart';
 import '../utils/Common.dart';
 import '../utils/Constants.dart';
+import 'LoginScreen.dart';
+import 'UserCitySelectScreen.dart';
 import 'VerificationScreen.dart';
 
 class EmailVerificationScreen extends StatefulWidget {
@@ -122,7 +123,7 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
                 },
               );
             },
-            icon: Icon(Icons.logout,color: Colors.white),
+            icon: Icon(Icons.logout, color: Colors.white),
           ),
         ],
         body: Stack(
@@ -135,7 +136,7 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
                         16.height,
 
                         ///TODO ADD KEY
-                        Text('Email Verification', style: boldTextStyle(size: 18)),
+                        Text(language.emailVerification, style: boldTextStyle(size: 18)),
                         16.height,
                         RichText(
                           textAlign: TextAlign.center,
@@ -151,7 +152,7 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
                         16.height,
 
                         ///TODO ADD KEY
-                        commonButton('Get Email', () {
+                        commonButton(language.getEmail, () {
                           resendOtpEmailApiCall();
                           isEmailSend = true;
                           setState(() {});

@@ -1,16 +1,17 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:nb_utils/nb_utils.dart';
+
 import '../../main.dart';
-import '../../main/components/BodyCornerWidget.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/LoginResponse.dart';
 import '../../main/models/OrderListModel.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
-import 'package:nb_utils/nb_utils.dart';
 
 class OrderTrackingScreen extends StatefulWidget {
   static String tag = '/OrderTrackingScreen';
@@ -63,8 +64,8 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
       deliveryBoyMarker = Marker(
         markerId: id,
         position: LatLng(deliveryBoyData!.latitude.toDouble(), deliveryBoyData!.longitude.toDouble()),
-        infoWindow: InfoWindow(title: '${deliveryBoyData!.name.validate()}', snippet: 'Last update at ${dateParse(deliveryBoyData!.updatedAt!)}'),
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+        infoWindow: InfoWindow(title: '${deliveryBoyData!.name.validate()}', snippet: '${language.lastUpdatedAt} ${dateParse(deliveryBoyData!.updatedAt!)}'),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
       );
       markers.add(deliveryBoyMarker);
       markers.add(

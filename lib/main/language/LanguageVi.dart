@@ -182,8 +182,6 @@ class LanguageVi extends BaseLanguage {
   @override
   String get departed => 'Ra đi';
   @override
-  String get orderPickupSuccessfully => 'Đặt hàng thành công';
-  @override
   String get imagePickToCamera => 'Hình ảnh pic đến camera';
   @override
   String get imagePicToGallery => 'Hình ảnh pic đến thư viện';
@@ -468,12 +466,6 @@ class LanguageVi extends BaseLanguage {
   @override
   String get orderArrived => 'Đơn đặt hàng đã đến';
   @override
-  String get orderActiveSuccessfully => 'Đặt hàng hoạt động thành công';
-  @override
-  String get orderDepartedSuccessfully => 'Đặt hàng đã khởi hành thành công';
-  @override
-  String get orderDeliveredSuccessfully => 'Đơn đặt hàng được giao thành công';
-  @override
   String get deleteAccount => 'Xóa tài khoản';
   @override
   String get deleteAccountMsg1 => 'Bạn có chắc rằng bạn muốn xóa tài khoản của bạn? Vui lòng đọc cách xóa tài khoản sẽ ảnh hưởng.';
@@ -531,8 +523,6 @@ class LanguageVi extends BaseLanguage {
   @override
   String get amount => 'Số lượng';
   @override
-  String get addAmount => 'Thêm số tiền';
-  @override
   String get credentialNotMatch => 'Thông tin xác thực này không khớp với hồ sơ của chúng tôi';
   @override
   String get accountNumber => 'Số tài khoản';
@@ -558,8 +548,6 @@ class LanguageVi extends BaseLanguage {
   String get bankNotFound => 'opps, không tìm thấy chi tiết ngân hàng của bạn';
   @override
   String get internetIsConnected => 'Internet được kết nối.';
-  @override
-  String get invalidUrl => 'URL không hợp lệ';
   @override
   String get balanceInsufficientCashPayment => 'Số dư là không đủ, đơn đặt hàng được tạo bằng thanh toán bằng tiền mặt.';
   @override
@@ -690,4 +678,46 @@ class LanguageVi extends BaseLanguage {
   String get mustSelectStartDate => 'Phải chọn ngày bắt đầu';
   @override
   String get accept => 'Chấp nhận';
+  @override
+  String get onlineRecievedAmount => 'Số tiền trực tuyến nhận được';
+  @override
+  String get totalWithdrawn => 'Tổng số tiền rút tiền';
+  @override
+  String get manualRecieved => 'Mannual nhận được';
+  @override
+  String get lastLocation => 'Vị trí cuối cùng';
+  @override
+  String get latitude => 'Vĩ độ';
+  @override
+  String get longitude => 'Kinh độ';
+  @override
+  String get emailVerification => 'Email xác thực';
+  @override
+  String get getEmail => 'Nhận email';
+  @override
+  String get selectLocation => 'Chọn địa điểm';
+  @override
+  String get demoUserNote => 'Lưu ý: Tìm kiếm địa chỉ kéo địa chỉ được vô hiệu hóa cho người dùng demo';
+  @override
+  String get yourOrder => 'Đơn hàng của bạn';
+  @override
+  String get hasBeenAssignedTo => 'đã được giao cho';
+  @override
+  String get hasBeenTransferedTo => 'đã được chuyển sang';
+  @override
+  String get lastUpdatedAt => 'Cập nhật cuối cùng tại';
+  @override
+  String get transactionFailed => 'Giao dịch không thành công!! Thử lại.';
+  @override
+  String get orderPickupSuccessfully => 'Xin chúc mừng !! Đơn đặt hàng chọn thành công.';
+  @override
+  String get orderActiveSuccessfully => 'Xin chúc mừng !! Đặt hàng thành công.';
+  @override
+  String get orderDepartedSuccessfully => 'Xin chúc mừng !! Đơn đặt hàng đã được khởi hành thành công.';
+  @override
+  String get orderDeliveredSuccessfully => 'Xin chúc mừng !! Đơn đặt hàng đã được giao thành công.';
+  @override
+  String get addAmount => 'Trường số tiền trống. Xin vui lòng thêm số tiền';
+  @override
+  String get invalidUrl => 'URL không hợp lệ!. Vui lòng nhập URL hợp lệ';
 }

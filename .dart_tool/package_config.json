@@ -405,7 +405,7 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///home/meet03/snap/flutter/common/flutter/packages/flutter",
+      "rootUri": "file:///home/meet03/snap/flutter/common/flutter_3.19.1/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -441,7 +441,7 @@
     },
     {
       "name": "flutter_localizations",
-      "rootUri": "file:///home/meet03/snap/flutter/common/flutter/packages/flutter_localizations",
+      "rootUri": "file:///home/meet03/snap/flutter/common/flutter_3.19.1/packages/flutter_localizations",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -483,7 +483,7 @@
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///home/meet03/snap/flutter/common/flutter/packages/flutter_test",
+      "rootUri": "file:///home/meet03/snap/flutter/common/flutter_3.19.1/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -495,7 +495,7 @@
     },
     {
       "name": "flutter_web_plugins",
-      "rootUri": "file:///home/meet03/snap/flutter/common/flutter/packages/flutter_web_plugins",
+      "rootUri": "file:///home/meet03/snap/flutter/common/flutter_3.19.1/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -520,6 +520,12 @@
     {
       "name": "frontend_server_client",
       "rootUri": "file:///home/meet03/.pub-cache/hosted/pub.dev/frontend_server_client-3.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "geocode",
+      "rootUri": "file:///home/meet03/.pub-cache/hosted/pub.dev/geocode-1.0.3",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -980,6 +986,42 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "permission_handler",
+      "rootUri": "file:///home/meet03/.pub-cache/hosted/pub.dev/permission_handler-11.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "permission_handler_android",
+      "rootUri": "file:///home/meet03/.pub-cache/hosted/pub.dev/permission_handler_android-12.0.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "permission_handler_apple",
+      "rootUri": "file:///home/meet03/.pub-cache/hosted/pub.dev/permission_handler_apple-9.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
+      "name": "permission_handler_html",
+      "rootUri": "file:///home/meet03/.pub-cache/hosted/pub.dev/permission_handler_html-0.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "permission_handler_platform_interface",
+      "rootUri": "file:///home/meet03/.pub-cache/hosted/pub.dev/permission_handler_platform_interface-4.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "permission_handler_windows",
+      "rootUri": "file:///home/meet03/.pub-cache/hosted/pub.dev/permission_handler_windows-0.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "petitparser",
       "rootUri": "file:///home/meet03/.pub-cache/hosted/pub.dev/petitparser-6.0.2",
       "packageUri": "lib/",
@@ -1125,7 +1167,7 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///home/meet03/snap/flutter/common/flutter/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///home/meet03/snap/flutter/common/flutter_3.19.1/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -1376,7 +1418,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-03-05T04:24:49.962501Z",
+  "generated": "2024-03-14T11:58:55.593378Z",
   "generator": "pub",
   "generatorVersion": "3.3.0"
 }

@@ -182,8 +182,6 @@ class LanguagePt extends BaseLanguage {
   @override
   String get departed => 'Partiu';
   @override
-  String get orderPickupSuccessfully => 'Encomende a coleta com sucesso';
-  @override
   String get imagePickToCamera => 'Imagem da imagem para câmera';
   @override
   String get imagePicToGallery => 'Imagem da imagem para galeria';
@@ -468,12 +466,6 @@ class LanguagePt extends BaseLanguage {
   @override
   String get orderArrived => 'Ordem chegou';
   @override
-  String get orderActiveSuccessfully => 'Encomende ativo com sucesso';
-  @override
-  String get orderDepartedSuccessfully => 'A ordem partiu com sucesso';
-  @override
-  String get orderDeliveredSuccessfully => 'Ordem entregue com sucesso';
-  @override
   String get deleteAccount => 'Deletar conta';
   @override
   String get deleteAccountMsg1 => 'Tem certeza de que deseja excluir sua conta? Leia como a exclusão da conta afetará.';
@@ -531,8 +523,6 @@ class LanguagePt extends BaseLanguage {
   @override
   String get amount => 'Quantia';
   @override
-  String get addAmount => 'Adicione o valor';
-  @override
   String get credentialNotMatch => 'Essas credenciais não correspondem aos nossos registros';
   @override
   String get accountNumber => 'Número de conta';
@@ -558,8 +548,6 @@ class LanguagePt extends BaseLanguage {
   String get bankNotFound => 'OPPS, seus detalhes bancários não encontrados';
   @override
   String get internetIsConnected => 'Internet está conectada.';
-  @override
-  String get invalidUrl => 'URL inválida';
   @override
   String get balanceInsufficientCashPayment => 'O saldo é insuficiente, o pedido é criado com pagamento em dinheiro.';
   @override
@@ -691,4 +679,46 @@ class LanguagePt extends BaseLanguage {
   String get mustSelectStartDate => 'deve selecionar a data de início';
   @override
   String get accept => 'Aceitar';
+  @override
+  String get onlineRecievedAmount => 'Quantidade on -line recebeu';
+  @override
+  String get totalWithdrawn => 'Valor total de retirada';
+  @override
+  String get manualRecieved => 'Manual recebido';
+  @override
+  String get lastLocation => 'Última localização';
+  @override
+  String get latitude => 'Latitude';
+  @override
+  String get longitude => 'Longitude';
+  @override
+  String get emailVerification => 'verificação de e-mail';
+  @override
+  String get getEmail => 'Receba email';
+  @override
+  String get selectLocation => 'Selecione Localização';
+  @override
+  String get demoUserNote => 'NOTA: A pesquisa de lugar de endereço de arrasto é desativada para o usuário da demonstração';
+  @override
+  String get yourOrder => 'Seu pedido';
+  @override
+  String get hasBeenAssignedTo => 'foi atribuído a';
+  @override
+  String get hasBeenTransferedTo => 'foi transferido para';
+  @override
+  String get lastUpdatedAt => 'Última atualização em';
+  @override
+  String get transactionFailed => 'Falha na transação!! Tente novamente.';
+  @override
+  String get orderPickupSuccessfully => 'Parabéns !! Order PickedUp com sucesso.';
+  @override
+  String get orderActiveSuccessfully => 'Parabéns !! Order Actido com sucesso.';
+  @override
+  String get orderDepartedSuccessfully => 'Parabéns !! O pedido foi partido com sucesso.';
+  @override
+  String get orderDeliveredSuccessfully => 'Parabéns !! O pedido foi entregue com sucesso.';
+  @override
+  String get addAmount => 'O campo da quantidade está vazio. Por favor, adicione o valor';
+  @override
+  String get invalidUrl => 'URL inválido! .Porra o URL válido';
 }

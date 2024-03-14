@@ -34,13 +34,13 @@ class EditProfileScreenState extends State<EditProfileScreen> {
   String countryCode = defaultPhoneCode;
 
   TextEditingController emailController = TextEditingController();
-  TextEditingController usernameController = TextEditingController();
+  // TextEditingController usernameController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController contactNumberController = TextEditingController();
   TextEditingController addressController = TextEditingController();
 
   FocusNode emailFocus = FocusNode();
-  FocusNode usernameFocus = FocusNode();
+//  FocusNode usernameFocus = FocusNode();
   FocusNode nameFocus = FocusNode();
   FocusNode contactFocus = FocusNode();
   FocusNode addressFocus = FocusNode();
@@ -56,7 +56,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
   Future<void> init() async {
     String phoneNum = getStringAsync(USER_CONTACT_NUMBER);
     emailController.text = getStringAsync(USER_EMAIL);
-    usernameController.text = getStringAsync(USER_NAME);
+    // usernameController.text = getStringAsync(USER_NAME);
     nameController.text = getStringAsync(NAME);
     if (phoneNum.split(" ").length == 1) {
       contactNumberController.text = phoneNum.split(" ").last;
@@ -90,7 +90,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     await updateProfile(
       file: imageProfile != null ? File(imageProfile!.path.validate()) : null,
       name: nameController.text.validate(),
-      userName: usernameController.text.validate(),
+      userName: emailController.text.validate(),
       userEmail: emailController.text.validate(),
       address: addressController.text.validate(),
       contactNumber: '$countryCode ${contactNumberController.text.trim()}',
@@ -185,27 +185,27 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     controller: emailController,
                     textFieldType: TextFieldType.EMAIL,
                     focus: emailFocus,
-                    nextFocus: usernameFocus,
+                    nextFocus: nameFocus,
                     decoration: commonInputDecoration(),
                     onTap: () {
                       toast(language.notChangeEmail);
                     },
                   ),
                   16.height,
-                  Text(language.username, style: primaryTextStyle()),
-                  8.height,
-                  AppTextField(
-                    readOnly: true,
-                    controller: usernameController,
-                    textFieldType: TextFieldType.USERNAME,
-                    focus: usernameFocus,
-                    nextFocus: nameFocus,
-                    decoration: commonInputDecoration(),
-                    onTap: () {
-                      toast(language.notChangeUsername);
-                    },
-                  ),
-                  16.height,
+                  //  Text(language.username, style: primaryTextStyle()),
+                  //   8.height,
+                  // AppTextField(
+                  //   readOnly: true,
+                  //   controller: usernameController,
+                  //   textFieldType: TextFieldType.USERNAME,
+                  //   focus: usernameFocus,
+                  //   nextFocus: nameFocus,
+                  //   decoration: commonInputDecoration(),
+                  //   onTap: () {
+                  //     toast(language.notChangeUsername);
+                  //   },
+                  // ),
+                  // 16.height,
                   Text(language.name, style: primaryTextStyle()),
                   8.height,
                   AppTextField(

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_braintree/flutter_braintree.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -15,24 +16,23 @@ import 'package:flutterwave_standard/view/view_utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:mighty_delivery/main/utils/Images.dart';
-import '../../main/components/BodyCornerWidget.dart';
-import '../../main/components/CommonScaffoldComponent.dart';
-import '../../main/models/PaymentGatewayListModel.dart';
-import '../../main/network/RestApis.dart';
-import '../../main/utils/Colors.dart';
-import '../../main/utils/Common.dart';
-import '../../main/utils/Constants.dart';
-import '../../main/utils/Widgets.dart';
-import 'DashboardScreen.dart';
 import 'package:my_fatoorah/my_fatoorah.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:paytm/paytm.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 import '../../main.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/CityListModel.dart';
 import '../../main/models/CountryListModel.dart';
+import '../../main/models/PaymentGatewayListModel.dart';
 import '../../main/models/StripePayModel.dart';
+import '../../main/network/RestApis.dart';
+import '../../main/utils/Colors.dart';
+import '../../main/utils/Common.dart';
+import '../../main/utils/Constants.dart';
+import '../../main/utils/Widgets.dart';
+import 'DashboardScreen.dart';
 
 class PaymentScreen extends StatefulWidget {
   static String tag = '/PaymentScreen';
@@ -100,7 +100,7 @@ class PaymentScreenState extends State<PaymentScreen> {
       _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
       _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
     }
-    selectedPaymentType=paymentGatewayList.first.type;
+    selectedPaymentType = paymentGatewayList.first.type;
   }
 
   /// Get Payment Gateway Api Call
@@ -247,7 +247,7 @@ class PaymentScreenState extends State<PaymentScreen> {
       }
       print("${response.toJson()}");
     } else {
-      FlutterwaveViewUtils.showToast(context, 'Transaction Failed');
+      FlutterwaveViewUtils.showToast(context, language.transactionFailed);
     }
   }
 
@@ -340,7 +340,7 @@ class PaymentScreenState extends State<PaymentScreen> {
           savePaymentApiCall(paymentType: PAYMENT_TYPE_PAYSTACK, paymentStatus: PAYMENT_PAID, transactionDetail: req, txnId: response.reference);
         }
       } else {
-        toast('Payment Failed');
+        toast(language.transactionFailed);
       }
     } catch (e) {
       payStackShowMessage("Check console for error");
@@ -402,7 +402,7 @@ class PaymentScreenState extends State<PaymentScreen> {
               savePaymentApiCall(txnId: transactionDetails['transactionReference'], paymentType: PAYMENT_TYPE_PAYTABS, paymentStatus: 'paid');
             }
           } else {
-            toast("failed transaction");
+            toast(language.transactionFailed);
           }
           toast("successful transaction");
         } else if (event["status"] == "error") {
@@ -583,7 +583,7 @@ class PaymentScreenState extends State<PaymentScreen> {
         savePaymentApiCall(paymentType: PAYMENT_TYPE_MYFATOORAH, txnId: response.paymentId, paymentStatus: 'paid');
       }
     } else if (response.isError) {
-      toast('Payment Failed');
+      toast(language.transactionFailed);
     }
   }
 
@@ -640,10 +640,7 @@ class PaymentScreenState extends State<PaymentScreen> {
                                     decoration: boxDecorationWithRoundedCorners(
                                       backgroundColor: context.cardColor,
                                       borderRadius: BorderRadius.circular(defaultRadius),
-                                      border: Border.all(
-                                          color: mData.type == selectedPaymentType
-                                              ? colorPrimary
-                                              : borderColor),
+                                      border: Border.all(color: mData.type == selectedPaymentType ? colorPrimary : borderColor),
                                     ),
                                     child: Row(
                                       children: [
@@ -680,7 +677,7 @@ class PaymentScreenState extends State<PaymentScreen> {
                           } else if (selectedPaymentType == PAYMENT_TYPE_PAYTABS) {
                             payTabsPayment();
                           } else if (selectedPaymentType == PAYMENT_TYPE_MERCADOPAGO) {
-                          //  mercadoPagoPayment();
+                            //  mercadoPagoPayment();
                           } else if (selectedPaymentType == PAYMENT_TYPE_PAYTM) {
                             paytmPayment();
                           } else if (selectedPaymentType == PAYMENT_TYPE_MYFATOORAH) {

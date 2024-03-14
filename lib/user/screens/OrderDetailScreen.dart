@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
+import 'package:mighty_delivery/user/screens/userDetailsScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
@@ -118,9 +119,9 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     children: [
                                       orderData!.date != null
                                           ? Text(
-                                                  DateFormat('dd MMM yyyy').format(DateTime.parse(orderData!.date!).toLocal()) +
-                                                      " at " +
-                                                      DateFormat('hh:mm a').format(DateTime.parse(orderData!.date!).toLocal()),
+                                                  '${DateFormat('dd MMM yyyy').format(DateTime.parse(orderData!.date!).toLocal())} ' +
+                                                      ' ${language.at} ' +
+                                                      ' ${DateFormat('hh:mm a').format(DateTime.parse(orderData!.date!).toLocal())}',
                                                   style: primaryTextStyle(size: 14))
                                               .expand()
                                           : SizedBox(),
@@ -390,7 +391,12 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                         Row(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Image.network(userData!.profileImage.validate(), height: 60, width: 60, fit: BoxFit.cover, alignment: Alignment.center).cornerRadiusWithClipRRect(60),
+                                            GestureDetector(
+                                                onTap: () {
+                                                  UserDetailsScreen(userData: userData).launch(context);
+                                                },
+                                                child: Image.network(userData!.profileImage.validate(), height: 60, width: 60, fit: BoxFit.cover, alignment: Alignment.center)
+                                                    .cornerRadiusWithClipRRect(60)),
                                             8.width,
                                             Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,

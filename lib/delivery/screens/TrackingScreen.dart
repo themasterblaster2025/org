@@ -1,17 +1,19 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:maps_launcher/maps_launcher.dart';
+import 'package:nb_utils/nb_utils.dart';
+
+import '../../main.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/OrderListModel.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
-import 'package:nb_utils/nb_utils.dart';
-import '../../main.dart';
 import '../../main/utils/Images.dart';
 
 class TrackingScreen extends StatefulWidget {
@@ -191,20 +193,20 @@ class TrackingScreenState extends State<TrackingScreen> {
                                         },
                                       ),
                                       16.width,
-                                      AppButton(
-                                        padding: EdgeInsets.zero,
-                                        color: colorPrimary,
-                                        text: language.track,
-                                        textStyle: primaryTextStyle(color: Colors.white),
-                                        onTap: () async {
-                                          orderId = data.id;
-                                          orderLatLong = data.status == ORDER_ACCEPTED
-                                              ? LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble())
-                                              : LatLng(data.deliveryPoint!.latitude.toDouble(), data.deliveryPoint!.longitude.toDouble());
-                                          await setPolyLines(orderLat: orderLatLong);
-                                          setState(() {});
-                                        },
-                                      )
+                                      // AppButton(
+                                      //   padding: EdgeInsets.zero,
+                                      //   color: colorPrimary,
+                                      //   text: language.track,
+                                      //   textStyle: primaryTextStyle(color: Colors.white),
+                                      //   onTap: () async {
+                                      //     orderId = data.id;
+                                      //     orderLatLong = data.status == ORDER_ACCEPTED
+                                      //         ? LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble())
+                                      //         : LatLng(data.deliveryPoint!.latitude.toDouble(), data.deliveryPoint!.longitude.toDouble());
+                                      //     await setPolyLines(orderLat: orderLatLong);
+                                      //     setState(() {});
+                                      //   },
+                                      // )
                                     ],
                                   ),
                                 ],
