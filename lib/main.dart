@@ -104,7 +104,8 @@ class MyAppState extends State<MyApp> {
         log('connected');
       }
     });
-    _streamSubscription = await Geolocator.getPositionStream().listen(_onData, onError: _onError);
+
+    //  _streamSubscription = await Geolocator.getPositionStream().listen(_onData, onError: _onError);
   }
 
   Future<void> _onData(Position position) async {

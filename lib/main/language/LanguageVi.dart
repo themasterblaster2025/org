@@ -274,8 +274,6 @@ class LanguageVi extends BaseLanguage {
   @override
   String get confirmDelivery => 'Xác nhận giao hàng';
   @override
-  String get orderAssignConfirmation => 'Bạn có chắc là bạn muốn hoạt động đơn hàng này?';
-  @override
   String get orderPickupConfirmation => 'Bạn có chắc là bạn muốn nhận đơn đặt hàng này?';
   @override
   String get orderDepartedConfirmation => 'Bạn có chắc là bạn muốn khởi hành đơn đặt hàng này?';
@@ -720,4 +718,12 @@ class LanguageVi extends BaseLanguage {
   String get addAmount => 'Trường số tiền trống. Xin vui lòng thêm số tiền';
   @override
   String get invalidUrl => 'URL không hợp lệ!. Vui lòng nhập URL hợp lệ';
+  @override
+  String get orderCreated => 'Đã tạo đơn hàng';
+  @override
+  String get distance => 'Khoảng cách';
+  @override
+  String get duration => 'Khoảng thời gian';
+  @override
+  String get orderAssignConfirmation => 'Bạn có chắc chắn muốn chấp nhận đơn đặt hàng này không?';
 }

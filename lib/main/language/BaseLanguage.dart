@@ -273,9 +273,6 @@ abstract class BaseLanguage {
   String get courierWillDeliverAt;
 
   String get confirmDelivery;
-
-  String get orderAssignConfirmation;
-
   String get orderPickupConfirmation;
 
   String get orderDepartedConfirmation;
@@ -679,4 +676,8 @@ abstract class BaseLanguage {
   String get orderDeliveredSuccessfully;
   String get addAmount;
   String get invalidUrl;
+  String get orderCreated;
+  String get distance;
+  String get duration;
+  String get orderAssignConfirmation;
 }

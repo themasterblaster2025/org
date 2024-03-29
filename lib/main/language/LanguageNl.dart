@@ -274,8 +274,6 @@ class LanguageNl extends BaseLanguage {
   @override
   String get confirmDelivery => 'Bevestig bezorging';
   @override
-  String get orderAssignConfirmation => 'Weet u zeker dat u deze bestelling wilt activeren?';
-  @override
   String get orderPickupConfirmation => 'Weet je zeker dat je deze bestelling wilt ophalen?';
   @override
   String get orderDepartedConfirmation => 'Weet u zeker dat u deze bestelling wilt verlaten?';
@@ -722,4 +720,12 @@ class LanguageNl extends BaseLanguage {
   String get addAmount => 'Bedragsveld is leeg. Voeg het bedrag toe';
   @override
   String get invalidUrl => 'Ongeldige URL!. Voer de geldige URL in';
+  @override
+  String get orderCreated => 'Bestelling aangemaakt';
+  @override
+  String get distance => 'Afstand';
+  @override
+  String get duration => 'Duur';
+  @override
+  String get orderAssignConfirmation => 'Weet u zeker dat u deze bestelling wilt accepteren?';
 }

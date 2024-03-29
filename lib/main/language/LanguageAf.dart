@@ -274,8 +274,6 @@ class LanguageAf extends BaseLanguage {
   @override
   String get confirmDelivery => "Bevestig aflewering";
   @override
-  String get orderAssignConfirmation => "Is u seker dat u hierdie bestelling wil aktief?";
-  @override
   String get orderPickupConfirmation => "Is u seker dat u hierdie bestelling wil afhaal?";
   @override
   String get orderDepartedConfirmation => "Is u seker dat u hierdie bestelling wil verlaat?";
@@ -722,4 +720,12 @@ class LanguageAf extends BaseLanguage {
   String get addAmount => 'Bedragveld is leeg. Voeg die bedrag by';
   @override
   String get invalidUrl => 'Ongeldige URL! Voer asseblief die geldige URL in';
+  @override
+  String get orderCreated => 'Bestelling geskep';
+  @override
+  String get distance => 'Afstand';
+  @override
+  String get duration => 'Duur';
+  @override
+  String get orderAssignConfirmation => 'Is jy seker jy wil hierdie bestelling aanvaar?';
 }

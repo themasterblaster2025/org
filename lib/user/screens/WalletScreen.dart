@@ -90,8 +90,14 @@ class WalletScreenState extends State<WalletScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      onPopInvoked: (v) async {
+    // return PopScope(
+    //   onPopInvoked: (v) async {
+    //     appStore.availableBal = totalAmount;
+    //     finish(context, true);
+    //     return Future.value(false);
+    //   },
+    return WillPopScope(
+      onWillPop: () {
         appStore.availableBal = totalAmount;
         finish(context, true);
         return Future.value(false);
@@ -153,7 +159,6 @@ class WalletScreenState extends State<WalletScreen> {
                                     } else {
                                       toast(language.addAmount);
                                     }
-
                                   },
                                   width: context.width(),
                                 ),

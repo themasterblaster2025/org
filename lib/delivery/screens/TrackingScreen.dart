@@ -193,20 +193,20 @@ class TrackingScreenState extends State<TrackingScreen> {
                                         },
                                       ),
                                       16.width,
-                                      // AppButton(
-                                      //   padding: EdgeInsets.zero,
-                                      //   color: colorPrimary,
-                                      //   text: language.track,
-                                      //   textStyle: primaryTextStyle(color: Colors.white),
-                                      //   onTap: () async {
-                                      //     orderId = data.id;
-                                      //     orderLatLong = data.status == ORDER_ACCEPTED
-                                      //         ? LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble())
-                                      //         : LatLng(data.deliveryPoint!.latitude.toDouble(), data.deliveryPoint!.longitude.toDouble());
-                                      //     await setPolyLines(orderLat: orderLatLong);
-                                      //     setState(() {});
-                                      //   },
-                                      // )
+                                      AppButton(
+                                        padding: EdgeInsets.zero,
+                                        color: colorPrimary,
+                                        text: language.track,
+                                        textStyle: primaryTextStyle(color: Colors.white),
+                                        onTap: () async {
+                                          orderId = data.id;
+                                          orderLatLong = data.status == ORDER_ACCEPTED
+                                              ? LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble())
+                                              : LatLng(data.deliveryPoint!.latitude.toDouble(), data.deliveryPoint!.longitude.toDouble());
+                                          await setPolyLines(orderLat: orderLatLong);
+                                          setState(() {});
+                                        },
+                                      )
                                     ],
                                   ),
                                 ],

@@ -23,8 +23,8 @@ const defaultPhoneCode = '+91';
 //endregion
 
 //region country symnbol and code
-const currencySymbol = '₹';
-const currencyCode = 'INR';
+const CURRENCY_SYMBOL = '₹';
+const CURRENCY_CODE = 'INR';
 //endregion
 
 //region App description and links
@@ -239,3 +239,21 @@ const mStripeIdentifier = 'IN';
 const DISTANCE_UNIT_KM = 'km';
 const DISTANCE_UNIT_MILE = 'mile';
 const double MILES_PER_KM = 0.621371;
+const String CITY_NOT_FOUND_EXCEPTION = "City has been not found.";
+
+//store checker constants
+const PLAY_STORE = "Play Store";
+const GOOGLE_PACKAGE_INSTALLER = "Google Package installer";
+const RUSTORE = "RuStore";
+const LOCAL_SOURCE = "Local Source";
+const AMAZON_STORE = "Amazon Store";
+const HUAWEI_APP_GALLERY = "Huawei App Gallery";
+const SAMSUNG_GALAXY_STORE = "Samsung Galaxy Store";
+const SAMSUNG_SMART_SWITCH_MOBILE = "Samsung Smart Switch Mobile";
+const XIAOMI_GET_APPS = "Xiaomi Get Apps";
+const OPPO_APP_MARKET = "Oppo App Market";
+const VIVO_APP_STORE = "Vivo App Store";
+const OTHER_SOURCE = "Other Source";
+const APP_STORE = "App Store";
+const TEST_FLIGHT = "Test Flight";
+const UNKNOWN_SOURCE = "Unknown Source";

@@ -274,8 +274,6 @@ class LanguageHi extends BaseLanguage {
   @override
   String get confirmDelivery => 'डिलिवरी की पुष्टि';
   @override
-  String get orderAssignConfirmation => 'क्या आप सुनिश्चित हैं कि आप इस आदेश को सक्रिय करना चाहते हैं?';
-  @override
   String get orderPickupConfirmation => 'क्या आप सुनिश्चित हैं कि आप इस आदेश को चुनना चाहते हैं?';
   @override
   String get orderDepartedConfirmation => 'क्या आप सुनिश्चित हैं कि आप इस आदेश को छोड़ देना चाहते हैं?';
@@ -721,4 +719,12 @@ class LanguageHi extends BaseLanguage {
   String get addAmount => 'राशि फ़ील्ड खाली है। कृपया राशि जोड़ें';
   @override
   String get invalidUrl => 'अमान्य url! .Lease वैध URL दर्ज करें';
+  @override
+  String get orderCreated => 'आदेश बनाया गया';
+  @override
+  String get distance => 'दूरी';
+  @override
+  String get duration => 'अवधि';
+  @override
+  String get orderAssignConfirmation => 'क्या आप वाकई यह आदेश स्वीकार करना चाहते हैं?';
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:store_checker/store_checker.dart';
 
 import '../../delivery/screens/DeliveryDashBoard.dart';
 import '../../main.dart';
@@ -91,6 +93,7 @@ class LoginScreenState extends State<LoginScreen> {
             if (v.data!.userType != CLIENT && v.data!.userType != DELIVERY_MAN) {
               await logout(context, isFromLogin: true);
             } else {
+              appStore.setUserType(v.data!.userType.toString());
               if (getIntAsync(STATUS) == 1) {
                 updateUserStatus({
                   "id": getIntAsync(USER_ID),
@@ -119,15 +122,71 @@ class LoginScreenState extends State<LoginScreen> {
                 await logout(context, isDeleteAccount: true);
               }
             }
+            updateStoreCheckerData().then((source) async {
+              await getUserDetail(getIntAsync(USER_ID)).then((value) async {
+                if (value.app_source.isEmptyOrNull || value.app_source != source) {
+                  await updateUserStatus({"id": getIntAsync(USER_ID), "app_source": source}).then((data) {
+                    log("Version----------" + value.toJson().toString());
+                  });
+                } else {
+                  log(" app_source version already updated ---------${value.app_version}");
+                }
+              }).catchError((e) {
+                log(e);
+              });
+            });
           });
         }).catchError((e) {
           appStore.setLoading(false);
-          print("errror==========================${e.toString()} ");
           toast(e.toString());
         });
       } else {
         toast(language.acceptTermService);
       }
+    }
+  }
+
+  Future<String> updateStoreCheckerData() async {
+    Source installationSource;
+    try {
+      installationSource = await StoreChecker.getSource;
+      print("---------------------------installationSource---------${installationSource}");
+    } on PlatformException {
+      installationSource = Source.UNKNOWN;
+    }
+
+    // Set source text state
+    switch (installationSource) {
+      case Source.IS_INSTALLED_FROM_PLAY_STORE:
+        return PLAY_STORE;
+      case Source.IS_INSTALLED_FROM_PLAY_PACKAGE_INSTALLER:
+        return GOOGLE_PACKAGE_INSTALLER;
+      case Source.IS_INSTALLED_FROM_RU_STORE:
+        return RUSTORE;
+      case Source.IS_INSTALLED_FROM_LOCAL_SOURCE:
+        return LOCAL_SOURCE;
+      case Source.IS_INSTALLED_FROM_AMAZON_APP_STORE:
+        return AMAZON_STORE;
+      case Source.IS_INSTALLED_FROM_HUAWEI_APP_GALLERY:
+        return HUAWEI_APP_GALLERY;
+      case Source.IS_INSTALLED_FROM_SAMSUNG_GALAXY_STORE:
+        return SAMSUNG_GALAXY_STORE;
+      case Source.IS_INSTALLED_FROM_SAMSUNG_SMART_SWITCH_MOBILE:
+        return SAMSUNG_SMART_SWITCH_MOBILE;
+      case Source.IS_INSTALLED_FROM_XIAOMI_GET_APPS:
+        return XIAOMI_GET_APPS;
+      case Source.IS_INSTALLED_FROM_OPPO_APP_MARKET:
+        return OPPO_APP_MARKET;
+      case Source.IS_INSTALLED_FROM_VIVO_APP_STORE:
+        return VIVO_APP_STORE;
+      case Source.IS_INSTALLED_FROM_OTHER_SOURCE:
+        return OTHER_SOURCE;
+      case Source.IS_INSTALLED_FROM_APP_STORE:
+        return APP_STORE;
+      case Source.IS_INSTALLED_FROM_TEST_FLIGHT:
+        return TEST_FLIGHT;
+      case Source.UNKNOWN:
+        return UNKNOWN_SOURCE;
     }
   }
 
@@ -153,7 +212,11 @@ class LoginScreenState extends State<LoginScreen> {
       } else {
         UserCitySelectScreen().launch(context, isNewTask: true);
       }
-    }).catchError((error) {});
+    }).catchError((error) {
+      if (error.toString() == CITY_NOT_FOUND_EXCEPTION) {
+        UserCitySelectScreen().launch(getContext, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+      }
+    });
   }
 
   void googleSignIn() async {
@@ -402,13 +465,17 @@ class LoginScreenState extends State<LoginScreen> {
               actionsPadding: EdgeInsets.all(16),
               contentPadding: EdgeInsets.zero,
               shape: RoundedRectangleBorder(borderRadius: radius(defaultRadius)),
-              title: Text(language.selectUserType, style: boldTextStyle(size: 18)),
+              title: Padding(padding: EdgeInsets.only(bottom: 10), child: Text(language.selectUserType, style: boldTextStyle(size: 18))),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: userTypeList.map((item) {
                   return RadioListTile<String>(
                     value: item,
                     activeColor: colorPrimary,
+                    visualDensity: const VisualDensity(
+                      horizontal: VisualDensity.minimumDensity,
+                      vertical: VisualDensity.minimumDensity,
+                    ),
                     contentPadding: EdgeInsets.symmetric(horizontal: 16),
                     title: Text('${item == CLIENT ? language.lblUser : item == DELIVERY_MAN ? language.lblDeliveryBoy : ''}'),
                     groupValue: userType,

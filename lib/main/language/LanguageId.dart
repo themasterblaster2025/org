@@ -274,8 +274,6 @@ class LanguageId extends BaseLanguage {
   @override
   String get confirmDelivery => 'Konfirmasi pengiriman';
   @override
-  String get orderAssignConfirmation => 'Apakah Anda yakin ingin mengaktifkan pesanan ini?';
-  @override
   String get orderPickupConfirmation => 'Apakah Anda yakin ingin mengambil pesanan ini?';
   @override
   String get orderDepartedConfirmation => 'Apakah Anda yakin ingin meninggalkan pesanan ini?';
@@ -721,4 +719,12 @@ class LanguageId extends BaseLanguage {
   String get addAmount => 'Bidang Jumlah Kosong. Harap Tambahkan Jumlah';
   @override
   String get invalidUrl => 'URL tidak valid! .PLEASE MASUK URL yang valid';
+  @override
+  String get orderCreated => 'Pesanan dibuat';
+  @override
+  String get distance => 'Jarak';
+  @override
+  String get duration => 'Durasi';
+  @override
+  String get orderAssignConfirmation => 'Apakah Anda yakin ingin menerima pesanan ini?';
 }

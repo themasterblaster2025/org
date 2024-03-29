@@ -410,9 +410,6 @@ class LanguageEn extends BaseLanguage {
   String get confirmDelivery => "Confirm Delivery";
 
   @override
-  String get orderAssignConfirmation => "Are you sure you want to active this order?";
-
-  @override
   String get orderPickupConfirmation => "Are you sure you want to pick up this order?";
 
   @override
@@ -1038,7 +1035,7 @@ class LanguageEn extends BaseLanguage {
   @override
   String get orderPickupSuccessfully => 'Congrats!!Order pickedup Successfully.';
   @override
-  String get orderActiveSuccessfully => 'Congrats!!Order Actived Successfully.';
+  String get orderActiveSuccessfully => 'Congrats!!Order Activated Successfully.';
   @override
   String get orderDepartedSuccessfully => 'Congrats!!Order has been Departed Successfully.';
   @override
@@ -1047,4 +1044,12 @@ class LanguageEn extends BaseLanguage {
   String get addAmount => 'Amount field is empty.Please add amount';
   @override
   String get invalidUrl => 'Invalid Url!.Please enter valid Url';
+  @override
+  String get orderCreated => 'Order created';
+  @override
+  String get distance => 'Distance';
+  @override
+  String get duration => 'Duration';
+  @override
+  String get orderAssignConfirmation => 'Are you sure you want to accept this order?';
 }

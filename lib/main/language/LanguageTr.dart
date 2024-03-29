@@ -274,8 +274,6 @@ class LanguageTr extends BaseLanguage {
   @override
   String get confirmDelivery => "Teslimat onaylayın";
   @override
-  String get orderAssignConfirmation => "Bu siparişi aktive etmek istediğinizden emin misiniz?";
-  @override
   String get orderPickupConfirmation => "Bu siparişi almak istediğinizden emin misiniz?";
   @override
   String get orderDepartedConfirmation => "Bu siparişten ayrılmak istediğinizden emin misiniz?";
@@ -720,4 +718,12 @@ class LanguageTr extends BaseLanguage {
   String get addAmount => 'Tutar alanı boş. Lütfen Miktar Ekle';
   @override
   String get invalidUrl => 'Geçersiz URL!';
+  @override
+  String get orderCreated => 'Sipariş oluşturuldu';
+  @override
+  String get distance => 'Mesafe';
+  @override
+  String get duration => 'Süre';
+  @override
+  String get orderAssignConfirmation => 'Bu siparişi kabul etmek istediğinizden emin misiniz?';
 }

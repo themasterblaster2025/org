@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mighty_delivery/main/components/CommonScaffoldComponent.dart';
 import 'package:nb_utils/nb_utils.dart';
 
@@ -29,6 +30,7 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     return CommonScaffoldComponent(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -42,6 +44,7 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
             highlightColor: Colors.transparent,
           ).paddingRight(16),
         ],
+        systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Colors.transparent),
       ),
       body: Stack(
         children: [

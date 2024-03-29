@@ -1208,6 +1208,12 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "store_checker",
+      "rootUri": "file:///home/meet03/.pub-cache/hosted/pub.dev/store_checker-1.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "stream_channel",
       "rootUri": "file:///home/meet03/.pub-cache/hosted/pub.dev/stream_channel-2.1.2",
       "packageUri": "lib/",
@@ -1418,7 +1424,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-03-14T11:58:55.593378Z",
+  "generated": "2024-03-28T06:39:06.485927Z",
   "generator": "pub",
   "generatorVersion": "3.3.0"
 }

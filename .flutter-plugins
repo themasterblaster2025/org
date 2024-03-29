@@ -68,6 +68,7 @@ shared_preferences_linux=/home/meet03/.pub-cache/hosted/pub.dev/shared_preferenc
 shared_preferences_web=/home/meet03/.pub-cache/hosted/pub.dev/shared_preferences_web-2.2.2/
 shared_preferences_windows=/home/meet03/.pub-cache/hosted/pub.dev/shared_preferences_windows-2.3.2/
 sqflite=/home/meet03/.pub-cache/hosted/pub.dev/sqflite-2.3.2/
+store_checker=/home/meet03/.pub-cache/hosted/pub.dev/store_checker-1.4.0/
 stripe_android=/home/meet03/.pub-cache/hosted/pub.dev/stripe_android-10.0.0/
 stripe_ios=/home/meet03/.pub-cache/hosted/pub.dev/stripe_ios-10.0.0/
 the_apple_sign_in=/home/meet03/.pub-cache/hosted/pub.dev/the_apple_sign_in-1.1.1/

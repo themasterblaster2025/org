@@ -41,10 +41,10 @@ abstract class _AppStore with Store {
   bool isOtpVerifyOnPickupDelivery = true;
 
   @observable
-  String currencyCode = 'INR';
+  String currencyCode = CURRENCY_CODE;
 
   @observable
-  String currencySymbol = "₹";
+  String currencySymbol = CURRENCY_SYMBOL;
 
   @observable
   num availableBal = 0;
@@ -70,6 +70,8 @@ abstract class _AppStore with Store {
   String invoiceCompanyLogo = '';
   @observable
   String distanceUnit = '';
+  @observable
+  String userType = '';
 
   @action
   Future<void> setLoading(bool val) async {
@@ -183,5 +185,10 @@ abstract class _AppStore with Store {
   @action
   void setDistanceUnit(String val) {
     distanceUnit = val;
+  }
+
+  @action
+  void setUserType(String val) {
+    userType = val;
   }
 }

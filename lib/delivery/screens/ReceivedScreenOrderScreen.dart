@@ -218,7 +218,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                       controller: picUpController,
                       decoration: commonInputDecoration(),
                     ),
-                    16.height,
+                    8.height,
                     if (widget.orderData!.status == ORDER_DEPARTED)
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -233,7 +233,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                           ),
                         ],
                       ),
-                    16.height,
+                    8.height,
                     Text(language.userSignature, style: boldTextStyle()),
                     8.height,
                     widget.orderData!.pickupConfirmByClient == 1 || widget.orderData!.status == ORDER_DEPARTED

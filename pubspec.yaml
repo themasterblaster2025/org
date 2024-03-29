@@ -96,6 +96,9 @@ dependencies:
   google_sign_in: ^6.2.1
   the_apple_sign_in: ^1.1.1
 
+  #STORE _CHECKER
+  store_checker: ^1.4.0
+
   flutter_localizations:
     sdk: flutter
 

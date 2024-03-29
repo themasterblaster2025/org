@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import '../../main/components/theme_selection_dialog.dart';
-import '../../main/utils/Images.dart';
-import '../../user/screens/WalletScreen.dart';
+
 import '../../main.dart';
+import '../../main/components/theme_selection_dialog.dart';
 import '../../main/network/RestApis.dart';
+import '../../main/screens/AboutUsScreen.dart';
 import '../../main/screens/BankDetailScreen.dart';
 import '../../main/screens/ChangePasswordScreen.dart';
 import '../../main/screens/EditProfileScreen.dart';
 import '../../main/screens/LanguageScreen.dart';
-import '../../main/screens/ThemeScreen.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
+import '../../main/utils/Images.dart';
 import '../../user/screens/DraftOrderListScreen.dart';
-import 'package:nb_utils/nb_utils.dart';
-
-import '../../main/screens/AboutUsScreen.dart';
+import '../../user/screens/WalletScreen.dart';
 import '../screens/DeleteAccountScreen.dart';
 import '../screens/MyAddressListScreen.dart';
 
@@ -53,6 +52,13 @@ class AccountFragmentState extends State<AccountFragment> {
 
   Widget mTitle(String value) {
     return Text(value.toUpperCase(), style: boldTextStyle(size: 12, letterSpacing: 0.7, color: textSecondaryColorGlobal)).paddingOnly(left: 16, right: 16, top: 24, bottom: 4);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print("user status======================${appStore.userProfile}");
   }
 
   @override

@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:mighty_delivery/main/screens/EmailVerificationScreen.dart';
+import 'package:nb_utils/nb_utils.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+
 import '../../delivery/screens/DeliveryDashBoard.dart';
-import 'UserCitySelectScreen.dart';
+import '../../main.dart';
 import '../../main/models/CityListModel.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/screens/LoginScreen.dart';
 import '../../main/screens/WalkThroughScreen.dart';
 import '../../main/utils/Constants.dart';
 import '../../user/screens/DashboardScreen.dart';
-import 'package:nb_utils/nb_utils.dart';
-
-import '../../main.dart';
 import '../utils/Images.dart';
+import 'UserCitySelectScreen.dart';
 import 'VerificationScreen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -33,7 +34,7 @@ class SplashScreenState extends State<SplashScreen> {
       Duration(seconds: 1),
       () async {
         if (appStore.isLoggedIn && getIntAsync(USER_ID) != 0) {
-          await getUserDetail(getIntAsync(USER_ID)).then((value) {
+          await getUserDetail(getIntAsync(USER_ID)).then((value) async {
             if (value.deletedAt != null) {
               logout(context);
             } else {
@@ -43,6 +44,17 @@ class SplashScreenState extends State<SplashScreen> {
               } else if (value.otpVerifyAt.isEmptyOrNull) {
                 VerificationScreen().launch(context, isNewTask: true);
               } else {
+                //update app version
+                Future<PackageInfo> packageInfoFuture = PackageInfo.fromPlatform();
+                final packageInfo = await packageInfoFuture;
+                if (value.app_version.isEmptyOrNull || value.app_version != packageInfo.version) {
+                  await updateUserStatus({"id": getIntAsync(USER_ID), "app_version": packageInfo.version}).then((value) {
+                    log("Version----------" + value.toJson().toString());
+                  });
+                } else {
+                  log("version already updated ---------${value.app_version}");
+                }
+                //update source version
                 if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
                   if (getStringAsync(USER_TYPE) == CLIENT) {
                     DashboardScreen().launch(context, isNewTask: true);

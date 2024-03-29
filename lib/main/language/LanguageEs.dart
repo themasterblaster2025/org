@@ -274,8 +274,6 @@ class LanguageEs extends BaseLanguage {
   @override
   String get confirmDelivery => 'Confirmar el envío';
   @override
-  String get orderAssignConfirmation => '¿Estás seguro de que quieres actuar este pedido?';
-  @override
   String get orderPickupConfirmation => '¿Estás seguro de que quieres recoger este pedido?';
   @override
   String get orderDepartedConfirmation => '¿Estás seguro de que quieres salir de este pedido?';
@@ -721,4 +719,12 @@ class LanguageEs extends BaseLanguage {
   String get addAmount => 'El campo de la cantidad está vacío. Por favor, agregue la cantidad';
   @override
   String get invalidUrl => 'URL no válida!. Por favor ingrese una URL válida';
+  @override
+  String get orderCreated => 'Orden creada';
+  @override
+  String get distance => 'Distancia';
+  @override
+  String get duration => 'Duración';
+  @override
+  String get orderAssignConfirmation => '¿Estás seguro de que quieres aceptar este pedido?';
 }

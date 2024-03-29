@@ -2,19 +2,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:the_apple_sign_in/the_apple_sign_in.dart';
-import '../../main/screens/LoginScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 
 import '../../delivery/screens/DeliveryDashBoard.dart';
 import '../../main.dart';
+import '../../main/screens/LoginScreen.dart';
 import '../../user/screens/DashboardScreen.dart';
-import '../screens/EditProfileScreen.dart';
-import '../screens/UserCitySelectScreen.dart';
 import '../models/CityListModel.dart';
 import '../models/LoginResponse.dart';
 import '../network/RestApis.dart';
+import '../screens/EditProfileScreen.dart';
 import '../screens/EmailVerificationScreen.dart';
+import '../screens/UserCitySelectScreen.dart';
 import '../screens/VerificationScreen.dart';
 import '../utils/Common.dart';
 import '../utils/Constants.dart';
@@ -361,7 +361,11 @@ getCityDetailApiCall(int cityId) async {
     } else {
       UserCitySelectScreen().launch(getContext, isNewTask: true);
     }
-  }).catchError((error) {});
+  }).catchError((error) {
+    if (error.toString() == CITY_NOT_FOUND_EXCEPTION) {
+      UserCitySelectScreen().launch(getContext, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+    }
+  });
 }
 
 Future deleteUserFirebase() async {

@@ -208,6 +208,7 @@ class WithDrawScreenState extends State<WithDrawScreen> {
           child: commonButton(
             language.withdraw,
             () {
+              addMoneyController.clear();
               showDialog(
                 context: context,
                 builder: (context) {

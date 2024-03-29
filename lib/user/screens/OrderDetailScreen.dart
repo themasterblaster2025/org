@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
-import 'package:mighty_delivery/user/screens/userDetailsScreen.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
@@ -42,6 +41,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
   List<OrderHistory>? orderHistory;
   Payment? payment;
   List<ExtraChargeRequestModel> list = [];
+  double? totalDistance;
+  String? distance, duration;
 
   @override
   void initState() {
@@ -73,10 +74,33 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
       } else {
         userData = value.clientDetail;
       }
+      getDistanceApiCall();
       setState(() {});
     }).catchError((error) {
       toast(error.toString());
     }).whenComplete(() => appStore.setLoading(false));
+  }
+
+  getDistanceApiCall() async {
+    String? originLat = orderData!.pickupPoint!.latitude.validate();
+    String? originLong = orderData!.pickupPoint!.longitude.validate();
+    String? destinationLat = orderData!.deliveryPoint!.latitude.validate();
+    String? destinationLong = orderData!.deliveryPoint!.longitude.validate();
+    String origins = "${originLat},${originLong}";
+    String destinations = "${destinationLat},${destinationLong}";
+    await getDistanceBetweenLatLng(origins, destinations).then((value) {
+      duration = value.rows[0].elements[0].duration.text;
+      double distanceInKms = value.rows[0].elements[0].distance.text.toString().split(' ')[0].toDouble();
+      if (appStore.distanceUnit == DISTANCE_UNIT_MILE) {
+        totalDistance = (MILES_PER_KM * distanceInKms);
+        distance = totalDistance.toString() + DISTANCE_UNIT_MILE;
+      } else {
+        totalDistance = distanceInKms;
+        distance = totalDistance.toString() + DISTANCE_UNIT_KM;
+      }
+      setState(() {});
+      print("=============================${totalDistance}");
+    });
   }
 
   @override
@@ -142,6 +166,46 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                               if (orderData!.status != ORDER_CANCELLED) Text(printAmount(orderData!.totalAmount ?? 0), style: boldTextStyle()),
                                             ],
                                           ),
+                                          4.height,
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    language.distance,
+                                                    style: secondaryTextStyle(size: 14),
+                                                    overflow: TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                  ),
+                                                  4.width,
+                                                  Text(
+                                                    distance ?? "0",
+                                                    style: boldTextStyle(),
+                                                    overflow: TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                  ),
+                                                ],
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    language.duration,
+                                                    style: secondaryTextStyle(size: 14),
+                                                    overflow: TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                  ),
+                                                  4.width,
+                                                  Text(
+                                                    duration ?? "0",
+                                                    style: boldTextStyle(),
+                                                    overflow: TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ).visible(orderData!.pickupPoint != null && orderData!.deliveryPoint != null),
                                         ],
                                       ).expand(),
                                     ],
@@ -393,7 +457,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                           children: [
                                             GestureDetector(
                                                 onTap: () {
-                                                  UserDetailsScreen(userData: userData).launch(context);
+                                                  //  UserDetailsScreen(userData: userData).launch(context);
                                                 },
                                                 child: Image.network(userData!.profileImage.validate(), height: 60, width: 60, fit: BoxFit.cover, alignment: Alignment.center)
                                                     .cornerRadiusWithClipRRect(60)),

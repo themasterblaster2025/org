@@ -274,8 +274,6 @@ class LanguageDe extends BaseLanguage {
   @override
   String get confirmDelivery => 'Lieferung bestätigen';
   @override
-  String get orderAssignConfirmation => 'Sind Sie sicher, dass Sie diese Bestellung aktivieren möchten?';
-  @override
   String get orderPickupConfirmation => 'Sind Sie sicher, dass Sie diese Bestellung abholen möchten?';
   @override
   String get orderDepartedConfirmation => 'Sind Sie sicher, dass Sie diese Bestellung verlassen möchten?';
@@ -721,4 +719,12 @@ class LanguageDe extends BaseLanguage {
   String get addAmount => 'Das Feld des Betrags ist leer. Bitte addieren Sie den Betrag';
   @override
   String get invalidUrl => 'Ungültige URL! .Please Geben Sie eine gültige URL ein';
+  @override
+  String get orderCreated => 'Auftrag erstellt';
+  @override
+  String get distance => 'Distanz';
+  @override
+  String get duration => 'Dauer';
+  @override
+  String get orderAssignConfirmation => 'Sind Sie sicher, dass Sie diese Bestellung annehmen möchten?';
 }

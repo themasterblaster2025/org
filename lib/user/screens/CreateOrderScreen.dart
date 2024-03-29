@@ -25,6 +25,7 @@ import '../../main/models/PaymentModel.dart';
 import '../../main/models/PlaceIdDetailModel.dart';
 import '../../main/models/VehicleModel.dart';
 import '../../main/network/RestApis.dart';
+import '../../main/screens/UserCitySelectScreen.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
@@ -134,8 +135,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     extraChargesList();
     getVehicleList(cityID: cityData!.id);
     await getAppSetting().then((value) {
-      appStore.setCurrencyCode(value.currencyCode ?? currencyCode);
-      appStore.setCurrencySymbol(value.currency ?? currencySymbol);
+      appStore.setCurrencyCode(value.currencyCode ?? CURRENCY_CODE);
+      appStore.setCurrencySymbol(value.currency ?? CURRENCY_SYMBOL);
       appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
       appStore.isVehicleOrder = value.isVehicleInOrder ?? 0;
       setState(() {});
@@ -192,7 +193,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       cityData = value.data!;
       getVehicleApiCall();
       setState(() {});
-    }).catchError((error) {});
+    }).catchError((error) {
+      if (error.toString() == CITY_NOT_FOUND_EXCEPTION) {
+        UserCitySelectScreen().launch(getContext, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+      }
+    });
   }
 
   getParcelTypeListApiCall() async {

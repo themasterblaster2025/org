@@ -45,8 +45,8 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
     }
     await getAppSetting().then((value) {
       appStore.setOtpVerifyOnPickupDelivery(value.otpVerifyOnPickupDelivery == 1);
-      appStore.setCurrencyCode(value.currencyCode ?? currencyCode);
-      appStore.setCurrencySymbol(value.currency ?? currencySymbol);
+      appStore.setCurrencyCode(value.currencyCode ?? CURRENCY_CODE);
+      appStore.setCurrencySymbol(value.currency ?? CURRENCY_SYMBOL);
       appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
       appStore.isVehicleOrder = value.isVehicleInOrder ?? 0;
     }).catchError((error) {

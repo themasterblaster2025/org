@@ -274,8 +274,6 @@ class LanguageAr extends BaseLanguage {
   @override
   String get confirmDelivery => 'تأكيد التوصيل';
   @override
-  String get orderAssignConfirmation => 'هل أنت متأكد أنك تريد تنشيط هذا الطلب؟';
-  @override
   String get orderPickupConfirmation => 'هل أنت متأكد أنك تريد التقاط هذا الطلب؟';
   @override
   String get orderDepartedConfirmation => 'هل أنت متأكد أنك تريد أن تغادر هذا الطلب؟';
@@ -721,4 +719,12 @@ class LanguageAr extends BaseLanguage {
   String get addAmount => 'حقل المبلغ فارغ.';
   @override
   String get invalidUrl => 'عنوان URL غير صالح! .LEASE أدخل عنوان URL صالح';
+  @override
+  String get orderCreated => 'أجل خلق';
+  @override
+  String get distance => 'مسافة';
+  @override
+  String get duration => 'مدة';
+  @override
+  String get orderAssignConfirmation => 'هل أنت متأكد أنك تريد قبول هذا الطلب؟';
 }

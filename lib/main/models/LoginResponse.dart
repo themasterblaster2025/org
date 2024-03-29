@@ -5,13 +5,13 @@ class LoginResponse {
   String? isEmailVerification;
   var status;
 
-  LoginResponse({this.data, this.message,this.status,this.isEmailVerification});
+  LoginResponse({this.data, this.message, this.status, this.isEmailVerification});
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) {
     return LoginResponse(
       data: json['data'] != null ? UserData.fromJson(json['data']) : null,
       message: json['message'],
-      isEmailVerification : json['is_email_verification'],
+      isEmailVerification: json['is_email_verification'],
       status: json['status'],
     );
   }
@@ -57,6 +57,8 @@ class UserData {
   UserBankAccount? userBankAccount;
   String? otpVerifyAt;
   String? emailVerifiedAt;
+  String? app_version;
+  String? app_source;
 
   UserData(
       {this.apiToken,
@@ -85,7 +87,10 @@ class UserData {
       this.isVerifiedDeliveryMan,
       this.deletedAt,
       this.userBankAccount,
-      this.otpVerifyAt,this.emailVerifiedAt});
+      this.otpVerifyAt,
+      this.emailVerifiedAt,
+      this.app_version,
+      this.app_source});
 
   UserData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -116,7 +121,8 @@ class UserData {
     userBankAccount = json['user_bank_account'] != null ? new UserBankAccount.fromJson(json['user_bank_account']) : null;
     otpVerifyAt = json['otp_verify_at'];
     emailVerifiedAt = json['email_verified_at'];
-
+    app_version = json['app_version'];
+    app_source = json['app_source'];
   }
 
   Map<String, dynamic> toJson() {
@@ -145,6 +151,8 @@ class UserData {
     data['fcm_token'] = this.fcmToken;
     data['last_notification_seen'] = this.lastNotificationSeen;
     data['is_verified_delivery_man'] = this.isVerifiedDeliveryMan;
+    data['app_version'] = this.app_version;
+    data['app_source'] = this.app_source;
     data['deleted_at'] = this.deletedAt;
     if (this.userBankAccount != null) {
       data['user_bank_account'] = this.userBankAccount!.toJson();

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../delivery/screens/ReceivedScreenOrderScreen.dart';
-import '../../delivery/screens/TrackingScreen.dart';
 import '../../main.dart';
 import '../../main/models/OrderListModel.dart';
 import '../../main/network/RestApis.dart';
@@ -131,8 +129,8 @@ class CreateTabScreenState extends State<CreateTabScreen> {
             currentPage = 1;
             await getAppSetting().then((value) {
               appStore.setOtpVerifyOnPickupDelivery(value.otpVerifyOnPickupDelivery == 1);
-              appStore.setCurrencyCode(value.currencyCode ?? currencyCode);
-              appStore.setCurrencySymbol(value.currency ?? currencySymbol);
+              appStore.setCurrencyCode(value.currencyCode ?? CURRENCY_CODE);
+              appStore.setCurrencySymbol(value.currency ?? CURRENCY_SYMBOL);
               appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
               appStore.isVehicleOrder = value.isVehicleInOrder ?? 0;
             }).catchError((error) {
@@ -163,7 +161,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
           children: [
             Row(
               children: [
-                Text('${language.order}# ${data.id}', style: boldTextStyle(size: 16)).expand(),
+                Text('${language.order}# ${data.id}', style: boldTextStyle(size: 14)).expand(),
                 AppButton(
                   margin: EdgeInsets.only(right: 10),
                   elevation: 0,
@@ -190,7 +188,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                         elevation: 0,
                         text: buttonText(widget.orderStatus!),
                         padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                        textStyle: boldTextStyle(color: Colors.white),
+                        textStyle: boldTextStyle(color: Colors.white, size: 14),
                         color: colorPrimary,
                         onTap: () {
                           if (widget.orderStatus == ORDER_ACCEPTED) {
@@ -246,7 +244,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                             children: [
                               ImageIcon(AssetImage(ic_from), size: 24, color: colorPrimary),
                               12.width,
-                              Text('${data.pickupPoint!.address}', style: primaryTextStyle()).expand(),
+                              Text('${data.pickupPoint!.address}', style: primaryTextStyle(size: 14)).expand(),
                             ],
                           ),
                         ),
@@ -260,10 +258,16 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                   ],
                 ),
                 if (data.pickupDatetime == null && data.pickupPoint!.endTime != null && data.pickupPoint!.startTime != null)
-                  Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.endTime!).toLocal())}',
-                          style: secondaryTextStyle(size: 12, color: Colors.red))
-                      .paddingOnly(top: 4)
-                      .expand(),
+                  Row(
+                    children: [
+                      Text(
+                        '${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.endTime!).toLocal())}',
+                        style: secondaryTextStyle(size: 12, color: Colors.red),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ).expand(),
+                    ],
+                  ),
               ],
             ),
             16.height,
@@ -290,7 +294,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                         children: [
                           ImageIcon(AssetImage(ic_to), size: 24, color: colorPrimary),
                           12.width,
-                          Text('${data.deliveryPoint!.address}', style: primaryTextStyle(), textAlign: TextAlign.start).expand(),
+                          Text('${data.deliveryPoint!.address}', style: primaryTextStyle(size: 14), textAlign: TextAlign.start).expand(),
                         ],
                       ),
                     ).expand(),
@@ -305,7 +309,6 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                   Text('${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.endTime!).toLocal())}',
                           style: secondaryTextStyle(color: Colors.red, size: 12))
                       .paddingOnly(top: 4)
-                      .expand()
               ],
             ),
             Divider(height: 30, thickness: 1, color: context.dividerColor),
@@ -370,36 +373,40 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                       );
                     },
                   ),
-                ).paddingOnly(top: 12, right: 16).visible(data.status == ORDER_ACCEPTED),
-                Align(
-                    alignment: Alignment.topRight,
-                    child: AppButton(
-                      elevation: 0,
-                      color: Colors.transparent,
-                      padding: EdgeInsets.all(6),
-                      shapeBorder: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(defaultRadius),
-                        side: BorderSide(color: colorPrimary),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(language.trackOrder, style: primaryTextStyle(color: colorPrimary)),
-                          Icon(Icons.arrow_right, color: colorPrimary),
-                        ],
-                      ),
-                      onTap: () async {
-                        if (await checkPermission()) {
-                          TrackingScreen(
-                                  orderId: data.id,
-                                  order: orderData,
-                                  latLng: data.status == ORDER_ACCEPTED
-                                      ? LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble())
-                                      : LatLng(data.deliveryPoint!.latitude.toDouble(), data.deliveryPoint!.longitude.toDouble()))
-                              .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
-                        }
-                      },
-                    )).paddingOnly(top: 12).visible(data.status == ORDER_DEPARTED || data.status == ORDER_ACCEPTED),
+                )
+                    .paddingOnly(
+                      top: 10,
+                    )
+                    .visible(data.status == ORDER_ACCEPTED),
+                // Align(
+                //     alignment: Alignment.topRight,
+                //     child: AppButton(
+                //       elevation: 0,
+                //       color: Colors.transparent,
+                //       padding: EdgeInsets.all(6),
+                //       shapeBorder: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(defaultRadius),
+                //         side: BorderSide(color: colorPrimary),
+                //       ),
+                //       child: Row(
+                //         mainAxisSize: MainAxisSize.min,
+                //         children: [
+                //           Text(language.trackOrder, style: primaryTextStyle(color: colorPrimary)),
+                //           Icon(Icons.arrow_right, color: colorPrimary),
+                //         ],
+                //       ),
+                //       onTap: () async {
+                //         if (await checkPermission()) {
+                //           TrackingScreen(
+                //                   orderId: data.id,
+                //                   order: orderData,
+                //                   latLng: data.status == ORDER_ACCEPTED
+                //                       ? LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble())
+                //                       : LatLng(data.deliveryPoint!.latitude.toDouble(), data.deliveryPoint!.longitude.toDouble()))
+                //               .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+                //         }
+                //       },
+                //     )).paddingOnly(top: 12).visible((data.status == ORDER_DEPARTED || data.status == ORDER_ACCEPTED)),
               ],
             ),
           ],
