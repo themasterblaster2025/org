@@ -284,7 +284,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       "date": DateTime.now().toString(),
       "country_id": getIntAsync(COUNTRY_ID).toString(),
       "city_id": getIntAsync(CITY_ID).toString(),
-      if (appStore.isVehicleOrder != 0) "vehicle_id": selectedVehicle.toString(),
+      //   if (appStore.isVehicleOrder != 0) "vehicle_id": selectedVehicle.toString(),
+      if (!selectedVehicle.toString().isEmptyOrNull && selectedVehicle != 0 && appStore.isVehicleOrder != 0) "vehicle_id": selectedVehicle.toString(),
       "pickup_point": {
         "start_time": (!isDeliverNow && pickFromDateTime != null) ? pickFromDateTime.toString() : DateTime.now().toString(),
         "end_time": (!isDeliverNow && pickToDateTime != null) ? pickToDateTime.toString() : null,
