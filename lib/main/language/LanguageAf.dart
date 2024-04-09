@@ -728,4 +728,11 @@ class LanguageAf extends BaseLanguage {
   String get duration => 'Duur';
   @override
   String get orderAssignConfirmation => 'Is jy seker jy wil hierdie bestelling aanvaar?';
+  @override
+  String get mAppDescription =>
+      'Jy kan presies aflewer wanneer die gebruiker wil en kan die gebruiker se bestelling byna onmiddellik begin verwerk nadat jy dit ontvang het, of jy kan op \'n spesifieke dag en tyd aflewer.';
+  @override
+  String get deleteDraft => 'Vee konsepbestelling uit?';
+  @override
+  String get sureWantToDeleteDraft => 'Wil jy seker hierdie konsepbestelling uitvee?"';
 }

@@ -680,4 +680,7 @@ abstract class BaseLanguage {
   String get distance;
   String get duration;
   String get orderAssignConfirmation;
+  String get mAppDescription;
+  String get deleteDraft;
+  String get sureWantToDeleteDraft;
 }

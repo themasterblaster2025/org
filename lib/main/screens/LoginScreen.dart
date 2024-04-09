@@ -379,7 +379,9 @@ class LoginScreenState extends State<LoginScreen> {
                       Text(language.doNotHaveAccount, style: primaryTextStyle()),
                       4.width,
                       Text(language.signUp, style: boldTextStyle(color: colorPrimary)).onTap(() {
-                        RegisterScreen().launch(context, duration: Duration(milliseconds: 500), pageRouteAnimation: PageRouteAnimation.Slide);
+                        RegisterScreen(
+                          userType: CLIENT,
+                        ).launch(context, duration: Duration(milliseconds: 500), pageRouteAnimation: PageRouteAnimation.Slide);
                       }),
                     ],
                   ),

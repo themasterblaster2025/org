@@ -727,4 +727,11 @@ class LanguagePt extends BaseLanguage {
   String get duration => 'Duração';
   @override
   String get orderAssignConfirmation => 'Tem certeza de que deseja aceitar este pedido?';
+  @override
+  String get mAppDescription =>
+      'Você pode entregar exatamente quando o usuário desejar e começar a processar o pedido do usuário quase imediatamente após recebê-lo, ou pode entregar em um dia e horário específicos.';
+  @override
+  String get deleteDraft => 'Excluir rascunho de pedido?';
+  @override
+  String get sureWantToDeleteDraft => 'Tem certeza de que deseja excluir este rascunho de pedido?"';
 }

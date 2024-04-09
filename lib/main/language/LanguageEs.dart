@@ -727,4 +727,11 @@ class LanguageEs extends BaseLanguage {
   String get duration => 'Duración';
   @override
   String get orderAssignConfirmation => '¿Estás seguro de que quieres aceptar este pedido?';
+  @override
+  String get mAppDescription =>
+      'Puede entregar exactamente cuando el usuario quiera y comenzar a procesar el pedido del usuario casi inmediatamente después de recibirlo, o puede entregar en un día y hora específicos.';
+  @override
+  String get deleteDraft => '¿Eliminar el borrador del pedido?';
+  @override
+  String get sureWantToDeleteDraft => '¿Está seguro de que desea eliminar este borrador de orden?"';
 }

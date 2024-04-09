@@ -405,7 +405,7 @@
     },
     {
       "name": "flutter",
-      "rootUri": "file:///home/meet03/snap/flutter/common/flutter_3.19.1/packages/flutter",
+      "rootUri": "file:///home/meet03/snap/flutter/common/flutter/packages/flutter",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -441,7 +441,7 @@
     },
     {
       "name": "flutter_localizations",
-      "rootUri": "file:///home/meet03/snap/flutter/common/flutter_3.19.1/packages/flutter_localizations",
+      "rootUri": "file:///home/meet03/snap/flutter/common/flutter/packages/flutter_localizations",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -483,7 +483,7 @@
     },
     {
       "name": "flutter_test",
-      "rootUri": "file:///home/meet03/snap/flutter/common/flutter_3.19.1/packages/flutter_test",
+      "rootUri": "file:///home/meet03/snap/flutter/common/flutter/packages/flutter_test",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -495,7 +495,7 @@
     },
     {
       "name": "flutter_web_plugins",
-      "rootUri": "file:///home/meet03/snap/flutter/common/flutter_3.19.1/packages/flutter_web_plugins",
+      "rootUri": "file:///home/meet03/snap/flutter/common/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -1167,7 +1167,7 @@
     },
     {
       "name": "sky_engine",
-      "rootUri": "file:///home/meet03/snap/flutter/common/flutter_3.19.1/bin/cache/pkg/sky_engine",
+      "rootUri": "file:///home/meet03/snap/flutter/common/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -1424,7 +1424,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-03-28T06:39:06.485927Z",
+  "generated": "2024-04-04T11:43:46.513993Z",
   "generator": "pub",
   "generatorVersion": "3.3.0"
 }

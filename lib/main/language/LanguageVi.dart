@@ -726,4 +726,11 @@ class LanguageVi extends BaseLanguage {
   String get duration => 'Khoảng thời gian';
   @override
   String get orderAssignConfirmation => 'Bạn có chắc chắn muốn chấp nhận đơn đặt hàng này không?';
+  @override
+  String get mAppDescription =>
+      'Bạn có thể giao hàng chính xác khi người dùng muốn và có thể bắt đầu xử lý đơn hàng của người dùng gần như ngay lập tức sau khi bạn nhận được hoặc bạn có thể giao hàng vào một ngày và giờ cụ thể.';
+  @override
+  String get deleteDraft => 'Xóa đơn hàng nháp?';
+  @override
+  String get sureWantToDeleteDraft => 'Bạn có chắc chắn muốn xóa đơn hàng nháp này không?"';
 }

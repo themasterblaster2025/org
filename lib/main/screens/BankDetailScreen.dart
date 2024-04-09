@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:http/http.dart';
-import '../../main/components/BodyCornerWidget.dart';
-import '../../main/utils/Colors.dart';
 import 'package:nb_utils/nb_utils.dart';
+
 import '../../main.dart';
+import '../../main/utils/Colors.dart';
 import '../components/CommonScaffoldComponent.dart';
 import '../models/LoginResponse.dart';
 import '../network/NetworkUtils.dart';
 import '../network/RestApis.dart';
 import '../utils/Common.dart';
 import '../utils/Constants.dart';
-import '../utils/Widgets.dart';
 
 class BankDetailScreen extends StatefulWidget {
   final bool? isWallet;
@@ -120,6 +119,7 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
                       isValidationRequired: true,
                       controller: bankNameCon,
                       textFieldType: TextFieldType.NAME,
+                      errorThisFieldRequired: language.fieldRequiredMsg,
                       decoration: commonInputDecoration(hintText: language.bankName),
                     ),
                     16.height,
@@ -129,6 +129,7 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
                       isValidationRequired: true,
                       controller: accNumberCon,
                       textFieldType: TextFieldType.PHONE,
+                      errorThisFieldRequired: language.fieldRequiredMsg,
                       decoration: commonInputDecoration(hintText: language.accountNumber),
                     ),
                     16.height,
@@ -138,6 +139,7 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
                       isValidationRequired: true,
                       controller: nameCon,
                       textFieldType: TextFieldType.NAME,
+                      errorThisFieldRequired: language.fieldRequiredMsg,
                       decoration: commonInputDecoration(hintText: language.nameAsPerBank),
                     ),
                     16.height,
@@ -148,6 +150,7 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
                       controller: ifscCCon,
                       textFieldType: TextFieldType.NAME,
                       decoration: commonInputDecoration(hintText: language.ifscCode),
+                      errorThisFieldRequired: language.fieldRequiredMsg,
                     ),
                     30.height,
                   ],

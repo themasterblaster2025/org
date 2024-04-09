@@ -219,6 +219,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       appStore.setLoading(false);
       vehicleList.clear();
       vehicleList = value.data!;
+      print("===============vehicallist${vehicleList.toString()}");
       if (value.data!.isNotEmpty) selectedVehicle = value.data![0].id;
       setState(() {});
     }).catchError((error) {

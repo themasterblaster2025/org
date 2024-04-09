@@ -282,6 +282,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     focus: addressFocus,
                     textInputAction: TextInputAction.done,
                     decoration: commonInputDecoration(),
+                    errorThisFieldRequired: language.fieldRequiredMsg,
                   ),
                   16.height,
                 ],

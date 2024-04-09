@@ -1052,4 +1052,11 @@ class LanguageEn extends BaseLanguage {
   String get duration => 'Duration';
   @override
   String get orderAssignConfirmation => 'Are you sure you want to accept this order?';
+  @override
+  String get mAppDescription =>
+      'You can deliver exactly when the user wants and can start processing the user’s order almost immediately after you receive it, or you can deliver on a specific day and time.';
+  @override
+  String get deleteDraft => 'Delete draft order?';
+  @override
+  String get sureWantToDeleteDraft => 'Are you sure want to delete this draft order?"';
 }

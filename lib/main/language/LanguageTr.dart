@@ -726,4 +726,11 @@ class LanguageTr extends BaseLanguage {
   String get duration => 'Süre';
   @override
   String get orderAssignConfirmation => 'Bu siparişi kabul etmek istediğinizden emin misiniz?';
+  @override
+  String get mAppDescription =>
+      'Tam olarak kullanıcının istediği zamanda teslimat yapabilir ve kullanıcının siparişini aldıktan hemen sonra işlemeye başlayabilir veya belirli bir gün ve saatte teslimat yapabilirsiniz.';
+  @override
+  String get deleteDraft => 'Taslak sipariş silinsin mi?';
+  @override
+  String get sureWantToDeleteDraft => 'Bu taslak siparişi silmek istediğinizden emin misiniz?"';
 }

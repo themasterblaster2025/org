@@ -214,7 +214,7 @@ class CreateTabScreenState extends State<CreateTabScreen> {
                             );
                           }
                         },
-                      ).visible(widget.orderStatus != ORDER_DELIVERED)
+                      ).visible(widget.orderStatus != ORDER_DELIVERED).paddingOnly(right: appStore.selectedLanguage == "ar" ? 10 : 0)
                     : SizedBox()
               ],
             ),

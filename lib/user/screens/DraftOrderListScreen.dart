@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
-import 'package:mighty_delivery/main/utils/Widgets.dart';
+import 'package:nb_utils/nb_utils.dart';
+
+import '../../main.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/OrderListModel.dart';
 import '../../main/network/RestApis.dart';
@@ -10,8 +12,6 @@ import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../user/screens/CreateOrderScreen.dart';
-import 'package:nb_utils/nb_utils.dart';
-import '../../main.dart';
 
 class DraftOrderListScreen extends StatefulWidget {
   static String tag = '/DraftOrderListScreen';
@@ -95,14 +95,15 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            item.date != null ? Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(DateFormat('dd MMM yyyy').format(DateTime.parse(item.date!).toLocal()), style: secondaryTextStyle()),
-                                Text( DateFormat('hh:mm a').format(DateTime.parse(item.date!).toLocal()), style: secondaryTextStyle()),
-
-                              ],
-                            ): SizedBox(),
+                            item.date != null
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(DateFormat('dd MMM yyyy').format(DateTime.parse(item.date!).toLocal()), style: secondaryTextStyle()),
+                                      Text(DateFormat('hh:mm a').format(DateTime.parse(item.date!).toLocal()), style: secondaryTextStyle()),
+                                    ],
+                                  )
+                                : SizedBox(),
                             8.height,
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,7 +113,9 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
                                         children: [
                                           Container(
                                             decoration: boxDecorationWithRoundedCorners(
-                                                borderRadius: BorderRadius.circular(8), border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), backgroundColor: context.cardColor),
+                                                borderRadius: BorderRadius.circular(8),
+                                                border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                                                backgroundColor: context.cardColor),
                                             padding: EdgeInsets.all(8),
                                             child: Image.asset(parcelTypeIcon(item.parcelType.validate()), height: 24, width: 24, color: colorPrimary),
                                           ),
@@ -133,6 +136,10 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
                                                     showConfirmDialogCustom(
                                                       context,
                                                       dialogType: DialogType.DELETE,
+                                                      positiveText: language.delete,
+                                                      negativeText: language.cancel,
+                                                      title: language.deleteDraft,
+                                                      subTitle: language.sureWantToDeleteDraft,
                                                       onAccept: (p0) {
                                                         deleteOrderApiCall(item.id!.toInt());
                                                       },

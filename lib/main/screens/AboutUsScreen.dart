@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:nb_utils/nb_utils.dart';
+
 import '../../main.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Constants.dart';
-import 'package:nb_utils/nb_utils.dart';
 import '../utils/Common.dart';
 import '../utils/Widgets.dart';
 
@@ -27,9 +28,9 @@ class AboutUsScreenState extends State<AboutUsScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           16.height,
-          Text(mAppName, style: boldTextStyle(size: 20, letterSpacing: 0.5)),
+          Text(language.appName, style: boldTextStyle(size: 20, letterSpacing: 0.5)),
           8.height,
-          Text(mAppDescription, style: secondaryTextStyle(), textAlign: TextAlign.start),
+          Text(language.mAppDescription, style: secondaryTextStyle(), textAlign: TextAlign.start),
           30.height,
           Text(language.contactUs, style: primaryTextStyle(size: 14), textAlign: TextAlign.justify),
           4.height,

@@ -727,4 +727,11 @@ class LanguageHi extends BaseLanguage {
   String get duration => 'अवधि';
   @override
   String get orderAssignConfirmation => 'क्या आप वाकई यह आदेश स्वीकार करना चाहते हैं?';
+  @override
+  String get mAppDescription =>
+      'आप ठीक उसी समय डिलीवरी कर सकते हैं जब उपयोगकर्ता चाहता है और आप उपयोगकर्ता के ऑर्डर को प्राप्त करने के तुरंत बाद उस पर कार्रवाई शुरू कर सकते हैं, या आप किसी विशिष्ट दिन और समय पर डिलीवरी कर सकते हैं।';
+  @override
+  String get deleteDraft => 'ड्राफ़्ट ऑर्डर हटाएं?';
+  @override
+  String get sureWantToDeleteDraft => 'क्या आप वाकई इस ड्राफ्ट ऑर्डर को हटाना चाहते हैं?"';
 }

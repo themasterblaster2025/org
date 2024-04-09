@@ -728,4 +728,11 @@ class LanguageNl extends BaseLanguage {
   String get duration => 'Duur';
   @override
   String get orderAssignConfirmation => 'Weet u zeker dat u deze bestelling wilt accepteren?';
+  @override
+  String get mAppDescription =>
+      'U kunt precies leveren wanneer de gebruiker dat wil en vrijwel direct na ontvangst beginnen met het verwerken van de bestelling van de gebruiker, of u kunt op een specifieke dag en tijd leveren.';
+  @override
+  String get deleteDraft => 'Conceptbestelling verwijderen?';
+  @override
+  String get sureWantToDeleteDraft => 'Weet u zeker dat u deze conceptbestelling wilt verwijderen?"';
 }

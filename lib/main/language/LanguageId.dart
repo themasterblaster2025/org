@@ -727,4 +727,11 @@ class LanguageId extends BaseLanguage {
   String get duration => 'Durasi';
   @override
   String get orderAssignConfirmation => 'Apakah Anda yakin ingin menerima pesanan ini?';
+  @override
+  String get mAppDescription =>
+      'Anda dapat mengirimkan tepat pada saat yang diinginkan pengguna dan dapat mulai memproses pesanan pengguna segera setelah Anda menerimanya, atau Anda dapat mengirimkan pada hari dan waktu tertentu.';
+  @override
+  String get deleteDraft => 'Hapus pesanan draf?';
+  @override
+  String get sureWantToDeleteDraft => 'Apakah Anda yakin ingin menghapus draf pesanan ini?"';
 }

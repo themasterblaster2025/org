@@ -729,4 +729,11 @@ class LanguageFr extends BaseLanguage {
   String get duration => 'Durée';
   @override
   String get orderAssignConfirmation => 'Êtes-vous sûr de vouloir accepter cette commande ?';
+  @override
+  String get mAppDescription =>
+      'Vous pouvez livrer exactement quand l’utilisateur le souhaite et commencer à traiter sa commande presque immédiatement après l’avoir reçue, ou vous pouvez livrer à un jour et une heure spécifiques.';
+  @override
+  String get deleteDraft => 'Supprimer le brouillon de commande ?';
+  @override
+  String get sureWantToDeleteDraft => 'Etes-vous sûr de vouloir supprimer ce brouillon de commande ?"';
 }

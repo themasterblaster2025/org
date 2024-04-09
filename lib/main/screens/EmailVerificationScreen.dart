@@ -118,8 +118,16 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
                 title: language.logoutConfirmationMsg,
                 positiveText: language.yes,
                 negativeText: language.no,
-                onAccept: (c) {
-                  logout(context, isVerification: true);
+                onAccept: (c) async {
+                  appStore.setLoading(true);
+                  try {
+                    await logout(context, isVerification: true).then((value) async {
+                      appStore.setLoading(false);
+                    });
+                  } catch (e) {
+                    print("errrorrr====================${e.toString()}");
+                  }
+                  //    logout(context, isVerification: true);
                 },
               );
             },

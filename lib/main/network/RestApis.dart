@@ -153,6 +153,9 @@ Future<void> logout(BuildContext context, {bool isFromLogin = false, bool isDele
     } else {
       LoginScreen().launch(context, isNewTask: true);
     }
+    if (isVerification) {
+      LoginScreen().launch(context, isNewTask: true);
+    }
   }
 
   if (getStringAsync(USER_TYPE) == DELIVERY_MAN && !isVerification && positionStream != null) {
@@ -160,6 +163,9 @@ Future<void> logout(BuildContext context, {bool isFromLogin = false, bool isDele
   }
   if (isDeleteAccount) {
     clearData();
+  } else if (isVerification) {
+    clearData();
+    LoginScreen().launch(context, isNewTask: true);
   } else {
     await logoutApi().then((value) async {
       clearData();

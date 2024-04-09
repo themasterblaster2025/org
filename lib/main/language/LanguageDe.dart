@@ -727,4 +727,11 @@ class LanguageDe extends BaseLanguage {
   String get duration => 'Dauer';
   @override
   String get orderAssignConfirmation => 'Sind Sie sicher, dass Sie diese Bestellung annehmen möchten?';
+  @override
+  String get mAppDescription =>
+      'Sie können genau dann liefern, wenn der Benutzer es wünscht, und fast unmittelbar nach Erhalt mit der Bearbeitung der Bestellung des Benutzers beginnen, oder Sie können an einem bestimmten Tag und zu einer bestimmten Uhrzeit liefern.';
+  @override
+  String get deleteDraft => 'Bestellentwurf löschen?';
+  @override
+  String get sureWantToDeleteDraft => 'Möchten Sie diesen Bestellentwurf wirklich löschen?“';
 }

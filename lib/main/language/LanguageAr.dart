@@ -727,4 +727,10 @@ class LanguageAr extends BaseLanguage {
   String get duration => 'مدة';
   @override
   String get orderAssignConfirmation => 'هل أنت متأكد أنك تريد قبول هذا الطلب؟';
+  @override
+  String get mAppDescription => 'يمكنك التوصيل بالضبط عندما يريد المستخدم ويمكنك البدء في معالجة طلب المستخدم فورًا تقريبًا بعد استلامه، أو يمكنك التسليم في يوم ووقت محددين.';
+  @override
+  String get deleteDraft => 'هل تريد حذف مسودة الطلب؟';
+  @override
+  String get sureWantToDeleteDraft => 'هل أنت متأكد أنك تريد حذف مسودة الطلب هذه؟"';
 }
