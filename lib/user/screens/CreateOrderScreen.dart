@@ -294,7 +294,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         "latitude": isPickSavedAddress ? pickAddressData!.latitude.validate() : pickLat,
         "longitude": isPickSavedAddress ? pickAddressData!.longitude.validate() : pickLong,
         "description": pickDesCont.text,
-        "contact_number": isPickSavedAddress ? pickAddressData!.contactNumber.validate() : pickPhoneCont.text.trim(),
+        "contact_number": isPickSavedAddress ? pickAddressData!.contactNumber.validate() : '$pickupCountryCode${pickPhoneCont.text.trim()}',
       },
       "delivery_point": {
         "start_time": (!isDeliverNow && deliverFromDateTime != null) ? deliverFromDateTime.toString() : null,
@@ -303,7 +303,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         "latitude": isDeliverySavedAddress ? deliveryAddressData!.latitude.validate() : deliverLat,
         "longitude": isDeliverySavedAddress ? deliveryAddressData!.longitude.validate() : deliverLong,
         "description": deliverDesCont.text,
-        "contact_number": isDeliverySavedAddress ? deliveryAddressData!.contactNumber.validate() : '$deliverCountryCode ${deliverPhoneCont.text.trim()}',
+        "contact_number": isDeliverySavedAddress ? deliveryAddressData!.contactNumber.validate() : '$deliverCountryCode${deliverPhoneCont.text.trim()}',
       },
       "extra_charges": extraChargeList,
       "parcel_type": parcelTypeCont.text,
