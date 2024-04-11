@@ -61,12 +61,6 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
       totalAmount = value!.walletBalance!.totalAmount.toString();
       totalWithdrawn = value!.walletBalance!.totalWithdrawn.toString();
       manualReceived = value!.walletBalance!.manualReceived.toString();
-
-      value.data!.forEach((element) {
-        if (element.id == widget.userData?.id) {
-          print("==============================${element.data!.toJson()}");
-        }
-      });
       setState(() {});
     }).catchError((error) {
       appStore.setLoading(false);
@@ -77,7 +71,6 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
   getAddress() async {
     final currentAddress = await GeoCode().reverseGeocoding(latitude: widget.userData!.latitude.toDouble(), longitude: widget.userData!.longitude.toDouble());
     addressValue = "${currentAddress.streetNumber},${currentAddress.region},${currentAddress.postal},${currentAddress.countryName}";
-    print("address====================${addressValue}");
     setState(() {});
   }
 

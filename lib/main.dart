@@ -70,7 +70,6 @@ Future<void> initializeDefault() async {
   FirebaseApp app = await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  print('Initialized default app $app');
 }
 
 class MyApp extends StatefulWidget {
@@ -104,21 +103,8 @@ class MyAppState extends State<MyApp> {
         log('connected');
       }
     });
-
-    //  _streamSubscription = await Geolocator.getPositionStream().listen(_onData, onError: _onError);
   }
 
-  Future<void> _onData(Position position) async {
-    if (!await Geolocator.isLocationServiceEnabled()) {
-      print("on data-----------{$Geolocator.isLocationServiceEnabled()}");
-      await Geolocator.openLocationSettings().then((value) => false).catchError((e) => false);
-    }
-    print("location enabled");
-  }
-
-  Future<void> _onError(dynamic error) async {
-    await checkPermission();
-  }
 
   @override
   void setState(VoidCallback fn) {

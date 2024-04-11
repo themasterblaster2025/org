@@ -256,7 +256,6 @@ Future<VehicleListModel> getVehicleList({String? type, int? perPage, int? page, 
 
 /// get OrderList
 Future<OrderListModel> getOrderList({required int page, String? orderStatus, String? fromDate, String? toDate, String? excludeStatus}) async {
-  print("from date===========${fromDate} ==================toDate==========${toDate}");
   String endPoint = 'order-list?client_id=${getIntAsync(USER_ID)}&city_id=${getIntAsync(CITY_ID)}&page=$page';
 
   if (orderStatus.validate().isNotEmpty) {

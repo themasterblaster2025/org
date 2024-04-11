@@ -58,7 +58,6 @@ class AccountFragmentState extends State<AccountFragment> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("user status======================${appStore.userProfile}");
   }
 
   @override

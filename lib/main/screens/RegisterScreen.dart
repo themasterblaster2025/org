@@ -30,13 +30,11 @@ class RegisterScreenState extends State<RegisterScreen> {
   String countryCode = defaultPhoneCode;
 
   TextEditingController nameController = TextEditingController();
-  // TextEditingController userNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController passController = TextEditingController();
 
   FocusNode nameFocus = FocusNode();
-//  FocusNode userNameFocus = FocusNode();
   FocusNode emailFocus = FocusNode();
   FocusNode phoneFocus = FocusNode();
   FocusNode passFocus = FocusNode();
@@ -120,18 +118,6 @@ class RegisterScreenState extends State<RegisterScreen> {
                     errorThisFieldRequired: language.fieldRequiredMsg,
                   ),
                   16.height,
-                  // Text(language.username, style: primaryTextStyle()),
-                  // 8.height,
-                  // AppTextField(
-                  //   controller: userNameController,
-                  //   textFieldType: TextFieldType.USERNAME,
-                  //   focus: userNameFocus,
-                  //   nextFocus: emailFocus,
-                  //   decoration: commonInputDecoration(),
-                  //   errorThisFieldRequired: language.fieldRequiredMsg,
-                  //   errorInvalidUsername: language.usernameInvalid,
-                  // ),
-                  // 16.height,
                   Text(language.email, style: primaryTextStyle()),
                   8.height,
                   AppTextField(

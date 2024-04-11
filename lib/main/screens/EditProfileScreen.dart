@@ -192,20 +192,6 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     },
                   ),
                   16.height,
-                  //  Text(language.username, style: primaryTextStyle()),
-                  //   8.height,
-                  // AppTextField(
-                  //   readOnly: true,
-                  //   controller: usernameController,
-                  //   textFieldType: TextFieldType.USERNAME,
-                  //   focus: usernameFocus,
-                  //   nextFocus: nameFocus,
-                  //   decoration: commonInputDecoration(),
-                  //   onTap: () {
-                  //     toast(language.notChangeUsername);
-                  //   },
-                  // ),
-                  // 16.height,
                   Text(language.name, style: primaryTextStyle()),
                   8.height,
                   AppTextField(

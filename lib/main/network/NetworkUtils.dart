@@ -20,7 +20,6 @@ Map<String, String> buildHeaderTokens() {
   };
 
   if (appStore.isLoggedIn) {
-    print("user token==============${getStringAsync(USER_TOKEN)}");
     header.putIfAbsent(HttpHeaders.authorizationHeader, () => 'Bearer ${getStringAsync(USER_TOKEN)}');
   }
   log(jsonEncode(header));

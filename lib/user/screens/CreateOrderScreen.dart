@@ -182,9 +182,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     extraChargeList.add(ExtraChargeRequestModel(key: MIN_WEIGHT, value: cityData!.minWeight, valueType: ""));
     extraChargeList.add(ExtraChargeRequestModel(key: PER_DISTANCE_CHARGE, value: cityData!.perDistanceCharges, valueType: ""));
     extraChargeList.add(ExtraChargeRequestModel(key: PER_WEIGHT_CHARGE, value: cityData!.perWeightCharges, valueType: ""));
-    cityData!.extraCharges!.forEach((element) {
-      extraChargeList.add(ExtraChargeRequestModel(key: element.title!.toLowerCase().replaceAll(' ', "_"), value: element.charges, valueType: element.chargesType));
-    });
+
+    if (cityData!.extraCharges != null) {
+      cityData!.extraCharges!.forEach((element) {
+        extraChargeList.add(ExtraChargeRequestModel(key: element.title!.toLowerCase().replaceAll(' ', "_"), value: element.charges, valueType: element.chargesType));
+      });
+    }
   }
 
   getCityDetailApiCall(int cityId) async {
@@ -219,7 +222,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       appStore.setLoading(false);
       vehicleList.clear();
       vehicleList = value.data!;
-      print("===============vehicallist${vehicleList.toString()}");
       if (value.data!.isNotEmpty) selectedVehicle = value.data![0].id;
       setState(() {});
     }).catchError((error) {
@@ -229,12 +231,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   }
 
   getTotalAmount() async {
-    // totalDistance = calculateDistance(
-    //   isPickSavedAddress ? pickAddressData!.latitude.validate().toDouble() : pickLat.toDouble(),
-    //   isPickSavedAddress ? pickAddressData!.longitude.validate().toDouble() : pickLong.toDouble(),
-    //   isDeliverySavedAddress ? deliveryAddressData!.latitude.validate().toDouble() : deliverLat.toDouble(),
-    //   isDeliverySavedAddress ? deliveryAddressData!.longitude.validate().toDouble() : deliverLong.toDouble(),
-    // );
     String? originLat = isPickSavedAddress ? pickAddressData!.latitude.validate() : pickLat;
     String? originLong = isPickSavedAddress ? pickAddressData!.longitude.validate() : pickLong;
     String? destinationLat = isDeliverySavedAddress ? deliveryAddressData!.latitude.validate() : deliverLat;
@@ -268,9 +264,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       totalAmount = cityData!.fixedCharges! + weightCharge + distanceCharge;
 
       /// calculate extra charges
-      cityData!.extraCharges!.forEach((element) {
-        totalExtraCharge += countExtraCharge(totalAmount: totalAmount, charges: element.charges!, chargesType: element.chargesType!);
-      });
+      if (cityData!.extraCharges != null) {
+        cityData!.extraCharges!.forEach((element) {
+          totalExtraCharge += countExtraCharge(totalAmount: totalAmount, charges: element.charges!, chargesType: element.chargesType!);
+        });
+      }
 
       /// All Charges
       totalAmount = (totalAmount + totalExtraCharge).toStringAsFixed(digitAfterDecimal).toDouble();

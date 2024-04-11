@@ -49,10 +49,7 @@ class SplashScreenState extends State<SplashScreen> {
                 final packageInfo = await packageInfoFuture;
                 if (value.app_version.isEmptyOrNull || value.app_version != packageInfo.version) {
                   await updateUserStatus({"id": getIntAsync(USER_ID), "app_version": packageInfo.version}).then((value) {
-                    log("Version----------" + value.toJson().toString());
                   });
-                } else {
-                  log("version already updated ---------${value.app_version}");
                 }
                 //update source version
                 if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {

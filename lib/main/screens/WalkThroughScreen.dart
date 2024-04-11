@@ -76,10 +76,6 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
             right: 16,
             child: Column(
               children: [
-                // Text(pages[currentPage].title!, style: boldTextStyle(size: 24), textAlign: TextAlign.center).paddingOnly(left: 30, right: 30),
-                // 16.height,
-                // Text(pages[currentPage].subTitle!, textAlign: TextAlign.center, style: secondaryTextStyle(size: 16)).paddingOnly(left: 30, right: 30),
-                // 50.height,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

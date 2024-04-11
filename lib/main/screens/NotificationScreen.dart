@@ -27,18 +27,6 @@ class NotificationScreenState extends State<NotificationScreen> {
   void initState() {
     super.initState();
     init();
-    // scrollController.addListener(() {
-    //   if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
-    //     if (!mIsLastPage) {
-    //       appStore.setLoading(true);
-    //
-    //       currentPage++;
-    //       setState(() {});
-    //
-    //       init();
-    //     }
-    //   }
-    // });
     appStore.setLoading(true);
   }
 

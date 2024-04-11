@@ -99,7 +99,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
         distance = totalDistance.toString() + DISTANCE_UNIT_KM;
       }
       setState(() {});
-      print("=============================${totalDistance}");
     });
   }
 
@@ -283,7 +282,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                   4.height,
                                                   InkWell(
                                                     onTap: () {
-                                                      print("on tap called");
                                                       openMap(double.parse(orderData!.deliveryPoint!.longitude.validate()), double.parse(orderData!.deliveryPoint!.longitude.validate()));
                                                     },
                                                     child: Row(

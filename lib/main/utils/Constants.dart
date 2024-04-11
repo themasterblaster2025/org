@@ -8,7 +8,7 @@ const DOMAIN_URL = 'https://apps.meetmighty.com/mighty-local-delivery'; // Don't
 //endregion
 
 //region Google map key
-const googleMapAPIKey = 'AIzaSyD8uquj6ULaXHLvDqx6Tlm4LNH-zq9pwkE';
+const googleMapAPIKey = 'AIzaSyCDD0QOjZNS05ByZlnv-VcwH2id3WzS2Lw';
 //endregion
 
 //region onesignal keys

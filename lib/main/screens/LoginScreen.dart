@@ -126,10 +126,7 @@ class LoginScreenState extends State<LoginScreen> {
               await getUserDetail(getIntAsync(USER_ID)).then((value) async {
                 if (value.app_source.isEmptyOrNull || value.app_source != source) {
                   await updateUserStatus({"id": getIntAsync(USER_ID), "app_source": source}).then((data) {
-                    log("Version----------" + value.toJson().toString());
                   });
-                } else {
-                  log(" app_source version already updated ---------${value.app_version}");
                 }
               }).catchError((e) {
                 log(e);
@@ -150,7 +147,6 @@ class LoginScreenState extends State<LoginScreen> {
     Source installationSource;
     try {
       installationSource = await StoreChecker.getSource;
-      print("---------------------------installationSource---------${installationSource}");
     } on PlatformException {
       installationSource = Source.UNKNOWN;
     }

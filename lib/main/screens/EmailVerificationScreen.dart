@@ -103,13 +103,6 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
         appBarTitle: language.verification,
         showBack: false,
         action: [
-          // IconButton(
-          //   onPressed: () async {
-          //     appStore.setLoading(true);
-          //     await userDetailGet();
-          //   },
-          //   icon: Icon(Icons.refresh),
-          // ),
           IconButton(
             onPressed: () async {
               await showConfirmDialogCustom(
@@ -125,9 +118,8 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
                       appStore.setLoading(false);
                     });
                   } catch (e) {
-                    print("errrorrr====================${e.toString()}");
+                    print(e.toString());
                   }
-                  //    logout(context, isVerification: true);
                 },
               );
             },
@@ -142,8 +134,6 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
                     child: Column(
                       children: [
                         16.height,
-
-                        ///TODO ADD KEY
                         Text(language.emailVerification, style: boldTextStyle(size: 18)),
                         16.height,
                         RichText(
@@ -158,8 +148,6 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
                           ),
                         ),
                         16.height,
-
-                        ///TODO ADD KEY
                         commonButton(language.getEmail, () {
                           resendOtpEmailApiCall();
                           isEmailSend = true;
