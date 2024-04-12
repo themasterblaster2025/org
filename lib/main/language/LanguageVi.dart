@@ -733,4 +733,6 @@ class LanguageVi extends BaseLanguage {
   String get deleteDraft => 'Xóa đơn hàng nháp?';
   @override
   String get sureWantToDeleteDraft => 'Bạn có chắc chắn muốn xóa đơn hàng nháp này không?"';
+  @override
+  String get walletHistory => 'Lịch sử ví';
 }

@@ -733,4 +733,6 @@ class LanguageAr extends BaseLanguage {
   String get deleteDraft => 'هل تريد حذف مسودة الطلب؟';
   @override
   String get sureWantToDeleteDraft => 'هل أنت متأكد أنك تريد حذف مسودة الطلب هذه؟"';
+  @override
+  String get walletHistory => 'تاريخ المحفظة';
 }

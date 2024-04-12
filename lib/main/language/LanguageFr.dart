@@ -736,4 +736,6 @@ class LanguageFr extends BaseLanguage {
   String get deleteDraft => 'Supprimer le brouillon de commande ?';
   @override
   String get sureWantToDeleteDraft => 'Etes-vous sûr de vouloir supprimer ce brouillon de commande ?"';
+  @override
+  String get walletHistory => 'Historique du portefeuille';
 }

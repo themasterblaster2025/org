@@ -734,4 +734,6 @@ class LanguageHi extends BaseLanguage {
   String get deleteDraft => 'ड्राफ़्ट ऑर्डर हटाएं?';
   @override
   String get sureWantToDeleteDraft => 'क्या आप वाकई इस ड्राफ्ट ऑर्डर को हटाना चाहते हैं?"';
+  @override
+  String get walletHistory => 'बटुआ इतिहास';
 }

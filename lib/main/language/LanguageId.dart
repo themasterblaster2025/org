@@ -734,4 +734,6 @@ class LanguageId extends BaseLanguage {
   String get deleteDraft => 'Hapus pesanan draf?';
   @override
   String get sureWantToDeleteDraft => 'Apakah Anda yakin ingin menghapus draf pesanan ini?"';
+  @override
+  String get walletHistory => 'Sejarah Dompet';
 }

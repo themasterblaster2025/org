@@ -1059,4 +1059,6 @@ class LanguageEn extends BaseLanguage {
   String get deleteDraft => 'Delete draft order?';
   @override
   String get sureWantToDeleteDraft => 'Are you sure want to delete this draft order?"';
+  @override
+  String get walletHistory => 'Wallet History';
 }

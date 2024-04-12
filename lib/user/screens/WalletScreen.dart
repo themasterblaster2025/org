@@ -100,7 +100,7 @@ class WalletScreenState extends State<WalletScreen> {
         appBar: PreferredSize(
           preferredSize: Size(context.width(), 130),
           child: commonAppBarWidget(
-            language.earningHistory,
+            language.walletHistory,
             bottom: PreferredSize(
               preferredSize: Size(context.width(), 80),
               child: Container(

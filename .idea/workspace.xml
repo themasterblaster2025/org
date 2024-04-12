@@ -4,27 +4,25 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8691243f-0de7-470a-bacd-cbe44eceb665" name="Changes" comment="date &amp; num type error in wallet screen issue solved.">
+    <list default="true" id="8691243f-0de7-470a-bacd-cbe44eceb665" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/models/WalletListModel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/models/WalletListModel.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/network/NetworkUtils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/network/NetworkUtils.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/network/RestApis.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/network/RestApis.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/screens/EditProfileScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/screens/EditProfileScreen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/screens/EmailVerificationScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/screens/EmailVerificationScreen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/screens/LoginScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/screens/LoginScreen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/screens/NotificationScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/screens/NotificationScreen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/screens/RegisterScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/screens/RegisterScreen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/screens/SplashScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/screens/SplashScreen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/screens/WalkThroughScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/screens/WalkThroughScreen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main/language/BaseLanguage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/language/BaseLanguage.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main/language/LanguageAf.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/language/LanguageAf.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main/language/LanguageAr.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/language/LanguageAr.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main/language/LanguageDe.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/language/LanguageDe.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main/language/LanguageEn.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/language/LanguageEn.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main/language/LanguageEs.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/language/LanguageEs.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main/language/LanguageFr.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/language/LanguageFr.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main/language/LanguageHi.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/language/LanguageHi.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main/language/LanguageId.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/language/LanguageId.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main/language/LanguageNl.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/language/LanguageNl.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main/language/LanguagePt.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/language/LanguagePt.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main/language/LanguageTr.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/language/LanguageTr.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main/language/LanguageVi.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/language/LanguageVi.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/main/utils/Constants.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/utils/Constants.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/utils/firebase_options.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/utils/firebase_options.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/user/fragment/AccountFragment.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/fragment/AccountFragment.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/user/screens/CreateOrderScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/screens/CreateOrderScreen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/user/screens/OrderDetailScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/screens/OrderDetailScreen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/user/screens/WalletScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/screens/WalletScreen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/user/screens/userDetailsScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/screens/userDetailsScreen.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -175,7 +173,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712829021189</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="unused code removed. google api key changed.">
+      <option name="closed" value="true" />
+      <created>1712839480904</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1712839480904</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -209,7 +215,8 @@
     <MESSAGE value="vehical id not to send if its empty in create order" />
     <MESSAGE value="changes" />
     <MESSAGE value="date &amp; num type error in wallet screen issue solved." />
-    <option name="LAST_COMMIT_MESSAGE" value="date &amp; num type error in wallet screen issue solved." />
+    <MESSAGE value="unused code removed. google api key changed." />
+    <option name="LAST_COMMIT_MESSAGE" value="unused code removed. google api key changed." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

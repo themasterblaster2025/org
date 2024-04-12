@@ -734,4 +734,6 @@ class LanguageDe extends BaseLanguage {
   String get deleteDraft => 'Bestellentwurf löschen?';
   @override
   String get sureWantToDeleteDraft => 'Möchten Sie diesen Bestellentwurf wirklich löschen?“';
+  @override
+  String get walletHistory => 'Wallet-Verlauf';
 }

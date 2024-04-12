@@ -734,4 +734,6 @@ class LanguagePt extends BaseLanguage {
   String get deleteDraft => 'Excluir rascunho de pedido?';
   @override
   String get sureWantToDeleteDraft => 'Tem certeza de que deseja excluir este rascunho de pedido?"';
+  @override
+  String get walletHistory => 'Histórico da carteira';
 }

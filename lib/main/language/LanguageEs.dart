@@ -734,4 +734,6 @@ class LanguageEs extends BaseLanguage {
   String get deleteDraft => '¿Eliminar el borrador del pedido?';
   @override
   String get sureWantToDeleteDraft => '¿Está seguro de que desea eliminar este borrador de orden?"';
+  @override
+  String get walletHistory => 'Historial de billetera';
 }

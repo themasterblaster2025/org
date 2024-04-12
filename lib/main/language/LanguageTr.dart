@@ -733,4 +733,6 @@ class LanguageTr extends BaseLanguage {
   String get deleteDraft => 'Taslak sipariş silinsin mi?';
   @override
   String get sureWantToDeleteDraft => 'Bu taslak siparişi silmek istediğinizden emin misiniz?"';
+  @override
+  String get walletHistory => 'Cüzdan Geçmişi';
 }

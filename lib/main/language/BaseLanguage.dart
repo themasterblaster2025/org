@@ -683,4 +683,5 @@ abstract class BaseLanguage {
   String get mAppDescription;
   String get deleteDraft;
   String get sureWantToDeleteDraft;
+  String get walletHistory;
 }

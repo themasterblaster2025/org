@@ -735,4 +735,6 @@ class LanguageNl extends BaseLanguage {
   String get deleteDraft => 'Conceptbestelling verwijderen?';
   @override
   String get sureWantToDeleteDraft => 'Weet u zeker dat u deze conceptbestelling wilt verwijderen?"';
+  @override
+  String get walletHistory => 'Portemonneegeschiedenis';
 }

@@ -735,4 +735,6 @@ class LanguageAf extends BaseLanguage {
   String get deleteDraft => 'Vee konsepbestelling uit?';
   @override
   String get sureWantToDeleteDraft => 'Wil jy seker hierdie konsepbestelling uitvee?"';
+  @override
+  String get walletHistory => 'Beursie geskiedenis';
 }
