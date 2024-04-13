@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb, TargetPlatform;
 
+import 'Constants.dart';
+
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     switch (defaultTargetPlatform) {
@@ -12,11 +14,12 @@ class DefaultFirebaseOptions {
         );
     }
   }
+
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyD63jDs8zx_kV-bfwddX6th3bH1CMj-gEk',
-    appId: '1:12372904825:android:855f0fd5c9191baa22fda8',
-    messagingSenderId: '12372904825',
-    projectId: 'mightydelivery-10da9',
-    storageBucket: 'mightydelivery-10da9.appspot.com',
+    apiKey: FIREBASE_API_KEY,
+    appId: FIREBASE_APP_ID,
+    messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
+    projectId: FIREBASE_PROJECT_ID,
+    storageBucket: FIREBASE_STORAGE_BUCKET,
   );
 }

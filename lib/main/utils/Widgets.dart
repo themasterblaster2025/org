@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import '../../main.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+import '../../main.dart';
 import 'Colors.dart';
 
 Widget commonButton(String title, Function() onTap, {double? width, Color? color, Color? textColor}) {
@@ -53,15 +53,15 @@ Widget scheduleOptionWidget(BuildContext context, bool isSelected, String imageP
                 : appStore.isDarkMode
                     ? Colors.transparent
                     : borderColor),
-        backgroundColor:isSelected?colorPrimary: context.cardColor),
+        backgroundColor: isSelected ? colorPrimary : context.cardColor),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(title == language.schedule ? Feather.calendar : Feather.clock, size: 18,color: isSelected?Colors.white:context.iconColor),
+        Icon(title == language.schedule ? Feather.calendar : Feather.clock, size: 18, color: isSelected ? Colors.white : context.iconColor),
         // ImageIcon(AssetImage(imagePath), size: 20, color: isSelected ? colorPrimary : Colors.grey),
         8.width,
-        Text(title, style: boldTextStyle(color: isSelected?Colors.white:textPrimaryColorGlobal)),
+        Text(title, style: boldTextStyle(color: isSelected ? Colors.white : textPrimaryColorGlobal)),
       ],
     ),
   );

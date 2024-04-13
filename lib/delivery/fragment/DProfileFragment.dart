@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+
+import '../../main.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/components/theme_selection_dialog.dart';
-import '../../main/screens/BankDetailScreen.dart';
-import '../../main.dart';
 import '../../main/network/RestApis.dart';
+import '../../main/screens/AboutUsScreen.dart';
+import '../../main/screens/BankDetailScreen.dart';
+import '../../main/screens/ChangePasswordScreen.dart';
+import '../../main/screens/EditProfileScreen.dart';
 import '../../main/screens/LanguageScreen.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
-import 'package:nb_utils/nb_utils.dart';
-import '../../main/screens/AboutUsScreen.dart';
-import '../../main/screens/ChangePasswordScreen.dart';
-import '../../main/screens/EditProfileScreen.dart';
 import '../../main/utils/Images.dart';
 import '../../user/screens/DeleteAccountScreen.dart';
 import '../../user/screens/WalletScreen.dart';
@@ -85,10 +86,9 @@ class DProfileFragmentState extends State<DProfileFragment> {
                             decoration: boxDecorationWithRoundedCorners(boxShape: BoxShape.circle, border: Border.all(width: 2, color: colorPrimary)),
                             child: commonCachedNetworkImage(appStore.userProfile.validate(), height: 65, width: 65, fit: BoxFit.cover, alignment: Alignment.center).cornerRadiusWithClipRRect(50)),
                         Container(
-                          decoration: boxDecorationWithRoundedCorners(boxShape: BoxShape.circle, border: Border.all(width: 1, color: white), backgroundColor: colorPrimary),
-                          padding: EdgeInsets.all(4),
-                          child: Image.asset(ic_edit, color: white, height: 14, width: 14),
-                        )
+                            decoration: boxDecorationWithRoundedCorners(boxShape: BoxShape.circle, border: Border.all(width: 1, color: white), backgroundColor: colorPrimary),
+                            padding: EdgeInsets.all(4),
+                            child: Image.asset(ic_edit, color: white, height: 14, width: 14))
                       ],
                     ),
                     10.width,

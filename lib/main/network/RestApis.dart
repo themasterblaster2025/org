@@ -111,7 +111,7 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
 
     return loginResponse;
   }).catchError((e) {
-    print("errror${e.toString()}");
+    log(e.toString());
     throw e.toString();
   });
 }

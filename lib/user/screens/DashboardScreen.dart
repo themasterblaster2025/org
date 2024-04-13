@@ -3,21 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
-import '../../main/components/CommonScaffoldComponent.dart';
-import '../../user/screens/WalletScreen.dart';
+import 'package:nb_utils/nb_utils.dart';
+
 import '../../main.dart';
-import '../../main/screens/UserCitySelectScreen.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/CityListModel.dart';
 import '../../main/models/models.dart';
-import '../../main/network/RestApis.dart';
 import '../../main/screens/NotificationScreen.dart';
+import '../../main/screens/UserCitySelectScreen.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Constants.dart';
 import '../../user/components/FilterOrderComponent.dart';
 import '../../user/fragment/AccountFragment.dart';
 import '../../user/fragment/OrderFragment.dart';
 import '../../user/screens/CreateOrderScreen.dart';
-import 'package:nb_utils/nb_utils.dart';
+import '../../user/screens/WalletScreen.dart';
 
 class DashboardScreen extends StatefulWidget {
   static String tag = '/DashboardScreen';
@@ -30,6 +30,10 @@ class DashboardScreenState extends State<DashboardScreen> {
   List<BottomNavigationBarItemModel> bottomNavBarItems = [];
 
   int currentIndex = 0;
+  List widgetList = [
+    OrderFragment(),
+    AccountFragment(),
+  ];
 
   @override
   void initState() {
@@ -45,20 +49,6 @@ class DashboardScreenState extends State<DashboardScreen> {
     });
     LiveStream().on('UpdateTheme', (p0) {
       setState(() {});
-    });
-  }
-
-  getOrderListApiCall() async {
-    appStore.setLoading(true);
-    FilterAttributeModel filterData = FilterAttributeModel.fromJson(getJSONAsync(FILTER_DATA));
-    await getOrderList(orderStatus: filterData.orderStatus, fromDate: filterData.fromDate, toDate: filterData.toDate, page: 1).then((value) {
-      appStore.setLoading(false);
-      if (value.walletData != null) {
-        appStore.availableBal = value.walletData!.totalAmount;
-      }
-    }).catchError((e) {
-      appStore.setLoading(false);
-      log(e.toString());
     });
   }
 
@@ -79,8 +69,6 @@ class DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    getOrderListApiCall();
-
     return CommonScaffoldComponent(
       extendedBody: true,
       appBar: PreferredSize(
@@ -89,7 +77,7 @@ class DashboardScreenState extends State<DashboardScreen> {
             actions: [
               Container(
                 margin: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-                padding: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: boxDecorationWithRoundedCorners(borderRadius: radius(defaultRadius), backgroundColor: Colors.white24),
                 child: Row(
                   children: [
@@ -110,7 +98,7 @@ class DashboardScreenState extends State<DashboardScreen> {
               Stack(
                 clipBehavior: Clip.none,
                 children: [
-                  Align(alignment: AlignmentDirectional.center, child: Icon(Ionicons.md_notifications_outline,color: Colors.white)),
+                  Align(alignment: AlignmentDirectional.center, child: Icon(Ionicons.md_notifications_outline, color: Colors.white)),
                   if (appStore.allUnreadCount != 0)
                     Observer(builder: (context) {
                       return Positioned(
@@ -132,7 +120,7 @@ class DashboardScreenState extends State<DashboardScreen> {
               8.width,
               Stack(
                 children: [
-                  Align(alignment: AlignmentDirectional.center, child: Icon(Ionicons.md_options_outline,color: Colors.white)),
+                  Align(alignment: AlignmentDirectional.center, child: Icon(Ionicons.md_options_outline, color: Colors.white)),
                   Observer(builder: (context) {
                     return Positioned(
                       right: 8,
@@ -158,11 +146,9 @@ class DashboardScreenState extends State<DashboardScreen> {
             ],
             showBack: false),
       ),
-      body: [
-        OrderFragment(),
-        AccountFragment(),
-      ][currentIndex],
-      floatingActionButton: FloatingActionButton(shape: RoundedRectangleBorder(borderRadius: radius(40)),
+      body: widgetList[currentIndex],
+      floatingActionButton: FloatingActionButton(
+        shape: RoundedRectangleBorder(borderRadius: radius(40)),
         backgroundColor: appStore.availableBal >= 0 ? colorPrimary : textSecondaryColorGlobal,
         child: Icon(AntDesign.plus, color: Colors.white),
         onPressed: () {

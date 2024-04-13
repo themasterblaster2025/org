@@ -238,7 +238,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     String origins = "${originLat},${originLong}";
     String destinations = "${destinationLat},${destinationLong}";
     await getDistanceBetweenLatLng(origins, destinations).then((value) {
-      print(value.rows[0].elements[0].distance.text.toString().split(' ')[0].toDouble());
       double distanceInKms = value.rows[0].elements[0].distance.text.toString().split(' ')[0].toDouble();
       if (appStore.distanceUnit == DISTANCE_UNIT_MILE) {
         totalDistance = (MILES_PER_KM * distanceInKms);

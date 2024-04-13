@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:nb_utils/nb_utils.dart';
+
 import '../../main.dart';
-import '../../main/components/BodyCornerWidget.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Widgets.dart';
-import 'package:nb_utils/nb_utils.dart';
-
 import '../components/CommonScaffoldComponent.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -57,7 +56,8 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CommonScaffoldComponent(appBarTitle:language.forgotPassword ,
+    return CommonScaffoldComponent(
+      appBarTitle: language.forgotPassword,
       body: Stack(
         children: [
           Form(
@@ -70,12 +70,11 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   Text(language.email, style: primaryTextStyle()),
                   8.height,
                   AppTextField(
-                    controller: forgotEmailController,
-                    textFieldType: TextFieldType.EMAIL,
-                    decoration: commonInputDecoration(),
-                    errorThisFieldRequired: language.fieldRequiredMsg,
-                    errorInvalidEmail: language.emailInvalid,
-                  ),
+                      controller: forgotEmailController,
+                      textFieldType: TextFieldType.EMAIL,
+                      decoration: commonInputDecoration(),
+                      errorThisFieldRequired: language.fieldRequiredMsg,
+                      errorInvalidEmail: language.emailInvalid),
                 ],
               ),
             ),

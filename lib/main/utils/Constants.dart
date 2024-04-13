@@ -12,10 +12,18 @@ const DOMAIN_URL = 'https://apps.meetmighty.com/mighty-local-delivery'; // Don't
 const googleMapAPIKey = 'AIzaSyCDD0QOjZNS05ByZlnv-VcwH2id3WzS2Lw';
 //endregion
 
-//region onesignal keys
+// region onesignal keys
 const mOneSignalAppId = 'f2e9c538-d4ad-45d4-8c57-fd081c987fb6';
 const mOneSignalRestKey = 'NzcwNjExNzYtYTJjOS00NGNkLWE2ZTUtY2JmMDEyNTFhYTFm';
 const mOneSignalChannelId = 'e2422a99-3f76-4afa-a190-e80ab9370270';
+//endregion
+
+//region  firebase data  for firebase_options.dart
+const String FIREBASE_API_KEY = "AIzaSyD63jDs8zx_kV-bfwddX6th3bH1CMj-gEk";
+const String FIREBASE_APP_ID = "1:12372904825:android:855f0fd5c9191baa22fda8";
+const String FIREBASE_MESSAGING_SENDER_ID = "12372904825";
+const String FIREBASE_PROJECT_ID = "mightydelivery-10da9";
+const String FIREBASE_STORAGE_BUCKET = "mightydelivery-10da9.appspot.com";
 //endregion
 
 //region languages and phone code

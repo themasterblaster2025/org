@@ -71,7 +71,6 @@ class WithDrawScreenState extends State<WithDrawScreen> {
   }
 
   Future<void> withDrawRequest({int? userId, double? amount}) async {
-    print("amount==========${amount}");
     appStore.setLoading(true);
     Map req = {
       "user_id": appStore.uid,
@@ -213,63 +212,50 @@ class WithDrawScreenState extends State<WithDrawScreen> {
                 context: context,
                 builder: (context) {
                   return Dialog(
-                    insetPadding: EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(language.withdrawMoney, style: boldTextStyle(size: 18)),
-                        Divider(color: context.dividerColor),
-                        16.height,
-                        Text(language.amount, style: primaryTextStyle()),
-                        8.height,
-                        // AppTextField(
-                        //   controller: addMoneyController,
-                        //   textFieldType: TextFieldType.PHONE,
-                        //   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                        //   onChanged: (a) {
-                        //     log(a);
-                        //     if (a.toInt() >= totalAmount) {
-                        //       addMoneyController.text = totalAmount.toString();
-                        //     }
-                        //   },
-                        //   decoration: commonInputDecoration(),
-                        // ),
-                        TextFormField(
-                          controller: addMoneyController,
-                          keyboardType: TextInputType.numberWithOptions(decimal: true),
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
-                          ],
-                          onChanged: (a) {
-                            if (addMoneyController.text.toInt() >= totalAmount.toInt()) {
-                              if (a.toInt() >= totalAmount) {
-                                addMoneyController.text = double.parse(totalAmount.toString()).toStringAsFixed(2);
+                      insetPadding: EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(language.withdrawMoney, style: boldTextStyle(size: 18)),
+                          Divider(color: context.dividerColor),
+                          16.height,
+                          Text(language.amount, style: primaryTextStyle()),
+                          8.height,
+                          TextFormField(
+                            controller: addMoneyController,
+                            keyboardType: TextInputType.numberWithOptions(decimal: true),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
+                            ],
+                            onChanged: (a) {
+                              if (addMoneyController.text.toInt() >= totalAmount.toInt()) {
+                                if (a.toInt() >= totalAmount) {
+                                  addMoneyController.text = double.parse(totalAmount.toString()).toStringAsFixed(2);
+                                }
+                              } else {
+                                if (a.toInt() >= totalAmount) {
+                                  addMoneyController.text = double.parse(totalAmount.toString()).toStringAsFixed(2);
+                                }
                               }
-                            } else {
-                              if (a.toInt() >= totalAmount) {
-                                addMoneyController.text = double.parse(totalAmount.toString()).toStringAsFixed(2);
+                            },
+                            decoration: commonInputDecoration(),
+                          ),
+                          16.height,
+                          commonButton(
+                            language.withdraw,
+                            () async {
+                              if (addMoneyController.text.isNotEmpty) {
+                                await withDrawRequest(amount: double.parse(addMoneyController.text));
+                              } else {
+                                toast(language.addAmount);
                               }
-                            }
-                          },
-                          decoration: commonInputDecoration(),
-                        ),
-                        16.height,
-                        commonButton(
-                          language.withdraw,
-                          () async {
-                            if (addMoneyController.text.isNotEmpty) {
-                              await withDrawRequest(amount: double.parse(addMoneyController.text));
-                            } else {
-                              toast(language.addAmount);
-                            }
-                          },
-                          width: context.width(),
-                        ),
-                        16.height,
-                      ],
-                    ).paddingAll(16),
-                  );
+                            },
+                            width: context.width(),
+                          ),
+                          16.height,
+                        ],
+                      ).paddingAll(16));
                 },
               );
             },
