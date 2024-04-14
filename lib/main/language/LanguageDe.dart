@@ -736,4 +736,16 @@ class LanguageDe extends BaseLanguage {
   String get sureWantToDeleteDraft => 'Möchten Sie diesen Bestellentwurf wirklich löschen?“';
   @override
   String get walletHistory => 'Wallet-Verlauf';
+  @override
+  String get newOrderHasBeenCreated => 'Neue Bestellung wurde erstellt.';
+  @override
+  String get deliveryPersonArrivedMsg => 'Der Zusteller ist am Abholort angekommen und wartet auf den Kunden.';
+  @override
+  String get deliveryPersonPickedUpCourierMsg => 'Der Zusteller hat den Kurier vom Abholort abgeholt.';
+  @override
+  String get hasBeenOutForDelivery => 'ist zur Auslieferung ausgefallen.';
+  @override
+  String get paymentStatusPaisMsg => 'Zahlungsstatus ist bezahlt.';
+  @override
+  String get deliveredMsg => 'wurde erfolgreich zugestellt.';
 }

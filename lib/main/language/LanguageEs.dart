@@ -736,4 +736,16 @@ class LanguageEs extends BaseLanguage {
   String get sureWantToDeleteDraft => '¿Está seguro de que desea eliminar este borrador de orden?"';
   @override
   String get walletHistory => 'Historial de billetera';
+  @override
+  String get newOrderHasBeenCreated => 'Se ha creado un nuevo orden.';
+  @override
+  String get deliveryPersonArrivedMsg => 'El repartidor ha llegado al lugar de recogida y está esperando al cliente.';
+  @override
+  String get deliveryPersonPickedUpCourierMsg => 'El repartidor ha recogido al mensajero en el lugar de recogida.';
+  @override
+  String get hasBeenOutForDelivery => 'ha salido para la entrega.';
+  @override
+  String get paymentStatusPaisMsg => 'el estado del pago es pagado.';
+  @override
+  String get deliveredMsg => 'ha sido entregado exitosamente.';
 }

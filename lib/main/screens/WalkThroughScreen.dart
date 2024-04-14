@@ -42,7 +42,7 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
             },
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
-          ).paddingRight(16),
+          ).paddingOnly(bottom: 8, right: 16),
         ],
         systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Colors.transparent),
       ),

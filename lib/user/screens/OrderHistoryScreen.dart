@@ -52,7 +52,7 @@ class OrderHistoryScreenState extends State<OrderHistoryScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('${mData.historyType!.replaceAll("_", " ").capitalizeFirstLetter()}', style: boldTextStyle()),
+                      Text(orderStatus('${mData.historyType!}'), style: boldTextStyle()),
                       2.height,
                       Text(messageData(mData)),
                       2.height,
@@ -69,14 +69,22 @@ class OrderHistoryScreenState extends State<OrderHistoryScreen> {
   }
 
   messageData(OrderHistory orderData) {
-    if (getStringAsync(USER_TYPE) == CLIENT) {
-      if (orderData.historyType == ORDER_ASSIGNED) {
-        return '${language.yourOrder}#${orderData.orderId} ${language.hasBeenAssignedTo} ${orderData.historyData!.deliveryManName}.';
-      } else if (orderData.historyType == ORDER_TRANSFER) {
-        return '${language.yourOrder}#${orderData.orderId} ${language.hasBeenTransferedTo}${orderData.historyData!.deliveryManName}.';
-      } else {
-        return '${orderData.historyMessage}';
-      }
+    if (orderData.historyType == ORDER_ASSIGNED) {
+      return '${language.yourOrder} #${orderData.orderId} ${language.hasBeenAssignedTo} ${orderData.historyData!.deliveryManName}.';
+    } else if (orderData.historyType == ORDER_TRANSFER) {
+      return '${language.yourOrder} #${orderData.orderId} ${language.hasBeenTransferedTo} ${orderData.historyData!.deliveryManName}.';
+    } else if (orderData.historyType == ORDER_CREATED) {
+      return language.newOrderHasBeenCreated;
+    } else if (orderData.historyType == ORDER_PICKED_UP) {
+      return language.deliveryPersonArrivedMsg;
+    } else if (orderData.historyType == ORDER_CREATED) {
+      return language.deliveryPersonPickedUpCourierMsg;
+    } else if (orderData.historyType == ORDER_DEPARTED) {
+      return '${language.yourOrder} #${orderData.orderId}  ${language.hasBeenOutForDelivery}';
+    } else if (orderData.historyType == ORDER_PAYMENT) {
+      return '${language.yourOrder} #${orderData.orderId} ${language.paymentStatusPaisMsg}';
+    } else if (orderData.historyType == ORDER_DELIVERED) {
+      return '${language.yourOrder} #${orderData.orderId}  ${language.deliveredMsg}';
     } else {
       return '${orderData.historyMessage}';
     }

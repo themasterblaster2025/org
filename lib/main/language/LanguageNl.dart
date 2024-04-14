@@ -737,4 +737,17 @@ class LanguageNl extends BaseLanguage {
   String get sureWantToDeleteDraft => 'Weet u zeker dat u deze conceptbestelling wilt verwijderen?"';
   @override
   String get walletHistory => 'Portemonneegeschiedenis';
+
+  @override
+  String get newOrderHasBeenCreated => 'Er is een nieuwe bestelling aangemaakt.';
+  @override
+  String get deliveryPersonArrivedMsg => 'Bezorger is gearriveerd op de ophaallocatie en wacht op de klant.';
+  @override
+  String get deliveryPersonPickedUpCourierMsg => 'Bezorger heeft koerier opgehaald van de ophaallocatie.';
+  @override
+  String get hasBeenOutForDelivery => 'is uit geweest voor bezorging.';
+  @override
+  String get paymentStatusPaisMsg => 'betalingsstatus is betaald.';
+  @override
+  String get deliveredMsg => 'is succesvol afgeleverd.';
 }

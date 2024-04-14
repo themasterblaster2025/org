@@ -1061,4 +1061,16 @@ class LanguageEn extends BaseLanguage {
   String get sureWantToDeleteDraft => 'Are you sure want to delete this draft order?"';
   @override
   String get walletHistory => 'Wallet History';
+  @override
+  String get newOrderHasBeenCreated => 'New order has been created.';
+  @override
+  String get deliveryPersonArrivedMsg => 'Delivery person has been arrived at pick up location and waiting for client.';
+  @override
+  String get deliveryPersonPickedUpCourierMsg => 'Delivery person have picked up courier from pickup location.';
+  @override
+  String get hasBeenOutForDelivery => 'has been out for delivery.';
+  @override
+  String get paymentStatusPaisMsg => 'payment status is paid.';
+  @override
+  String get deliveredMsg => 'has been successfully delivered.';
 }

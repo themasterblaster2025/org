@@ -738,4 +738,17 @@ class LanguageFr extends BaseLanguage {
   String get sureWantToDeleteDraft => 'Etes-vous sûr de vouloir supprimer ce brouillon de commande ?"';
   @override
   String get walletHistory => 'Historique du portefeuille';
+  @override
+  String get newOrderHasBeenCreated => 'Une nouvelle commande a été créée.';
+  @override
+  String get deliveryPersonArrivedMsg => 'Le livreur est arrivé au lieu de prise en charge et attend le client.';
+  @override
+  String get deliveryPersonPickedUpCourierMsg => 'Le livreur a récupéré le courrier au lieu de ramassage.';
+  @override
+  String get hasBeenOutForDelivery => 'est sorti pour livraison.';
+  @override
+  String get paymentStatusPaisMsg => 'le statut de paiement est payé.';
+  @override
+  String get deliveredMsg => 'a été livré avec succès.';
+
 }

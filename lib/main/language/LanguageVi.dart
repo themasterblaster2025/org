@@ -735,4 +735,17 @@ class LanguageVi extends BaseLanguage {
   String get sureWantToDeleteDraft => 'Bạn có chắc chắn muốn xóa đơn hàng nháp này không?"';
   @override
   String get walletHistory => 'Lịch sử ví';
+  @override
+  String get newOrderHasBeenCreated => 'Trật tự mới đã được tạo.';
+  @override
+  String get deliveryPersonArrivedMsg => 'Người giao hàng đã có mặt tại địa điểm nhận hàng và chờ khách hàng.';
+  @override
+  String get deliveryPersonPickedUpCourierMsg => 'Người giao hàng đã nhận chuyển phát nhanh từ địa điểm đón.';
+  @override
+  String get hasBeenOutForDelivery => 'đã ra ngoài giao hàng.';
+  @override
+  String get paymentStatusPaisMsg => 'trạng thái thanh toán được thanh toán.';
+  @override
+  String get deliveredMsg => 'đã được giao thành công.';
+
 }

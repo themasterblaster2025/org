@@ -26,6 +26,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> with WidgetsBindingOb
   bool showPlacePickerInContainer = false;
   bool showGoogleMapInContainer = false;
   GlobalKey<_GoogleMapScreenState> placePickerKey = GlobalKey<_GoogleMapScreenState>();
+
   @override
   void initState() {
     super.initState();
@@ -99,11 +100,6 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> with WidgetsBindingOb
               //
             },
           ).expand(),
-          Container(
-            color: Colors.red.shade50,
-            padding: EdgeInsets.all(8),
-            child: Text(language.demoUserNote, style: secondaryTextStyle(color: Colors.red)),
-          ),
         ],
       ),
     );

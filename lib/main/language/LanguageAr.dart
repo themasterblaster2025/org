@@ -735,4 +735,16 @@ class LanguageAr extends BaseLanguage {
   String get sureWantToDeleteDraft => 'هل أنت متأكد أنك تريد حذف مسودة الطلب هذه؟"';
   @override
   String get walletHistory => 'تاريخ المحفظة';
+  @override
+  String get newOrderHasBeenCreated => 'تم إنشاء طلب جديد.';
+  @override
+  String get deliveryPersonArrivedMsg => 'وصل مندوب التوصيل إلى موقع الاستلام وينتظر العميل.';
+  @override
+  String get deliveryPersonPickedUpCourierMsg => 'قام موظف التوصيل باستلام البريد السريع من موقع الاستلام.';
+  @override
+  String get hasBeenOutForDelivery => 'لقد تم الخروج للتسليم.';
+  @override
+  String get paymentStatusPaisMsg => 'يتم دفع حالة الدفع.';
+  @override
+  String get deliveredMsg => 'تم تسليمها بنجاح.';
 }

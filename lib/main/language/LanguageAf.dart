@@ -737,4 +737,16 @@ class LanguageAf extends BaseLanguage {
   String get sureWantToDeleteDraft => 'Wil jy seker hierdie konsepbestelling uitvee?"';
   @override
   String get walletHistory => 'Beursie geskiedenis';
+  @override
+  String get newOrderHasBeenCreated => 'Nuwe bestelling is geskep.';
+  @override
+  String get deliveryPersonArrivedMsg => 'Afleweringspersoon is by afhaalplek aangekom en wag vir kliënt.';
+  @override
+  String get deliveryPersonPickedUpCourierMsg => 'Afleweringspersoon het koerier by afhaalplek afgehaal.';
+  @override
+  String get hasBeenOutForDelivery => 'is uit vir aflewering.';
+  @override
+  String get paymentStatusPaisMsg => 'betalingstatus betaal word.';
+  @override
+  String get deliveredMsg => 'is suksesvol afgelewer.';
 }

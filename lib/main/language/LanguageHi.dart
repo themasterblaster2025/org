@@ -736,4 +736,16 @@ class LanguageHi extends BaseLanguage {
   String get sureWantToDeleteDraft => 'क्या आप वाकई इस ड्राफ्ट ऑर्डर को हटाना चाहते हैं?"';
   @override
   String get walletHistory => 'बटुआ इतिहास';
+  @override
+  String get newOrderHasBeenCreated => 'नया आदेश बना दिया गया है.';
+  @override
+  String get deliveryPersonArrivedMsg => 'डिलीवरी व्यक्ति पिक-अप स्थान पर आ गया है और ग्राहक की प्रतीक्षा कर रहा है।';
+  @override
+  String get deliveryPersonPickedUpCourierMsg => 'डिलीवरी व्यक्ति ने पिकअप स्थान से कूरियर उठाया है।';
+  @override
+  String get hasBeenOutForDelivery => 'डिलीवरी के लिए बाहर गया है.';
+  @override
+  String get paymentStatusPaisMsg => 'भुगतान की स्थिति का भुगतान कर दिया गया है।';
+  @override
+  String get deliveredMsg => 'सफलतापूर्वक वितरित कर दिया गया है।';
 }

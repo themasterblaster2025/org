@@ -736,4 +736,17 @@ class LanguagePt extends BaseLanguage {
   String get sureWantToDeleteDraft => 'Tem certeza de que deseja excluir este rascunho de pedido?"';
   @override
   String get walletHistory => 'Histórico da carteira';
+
+  @override
+  String get newOrderHasBeenCreated => 'Um novo pedido foi criado.';
+  @override
+  String get deliveryPersonArrivedMsg => 'O entregador chegou ao local de retirada e aguarda o cliente.';
+  @override
+  String get deliveryPersonPickedUpCourierMsg => 'O entregador pegou o correio no local de coleta.';
+  @override
+  String get hasBeenOutForDelivery => 'já saiu para entrega.';
+  @override
+  String get paymentStatusPaisMsg => 'o status do pagamento é pago.';
+  @override
+  String get deliveredMsg => 'foi entregue com sucesso.';
 }

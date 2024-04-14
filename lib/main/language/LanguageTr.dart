@@ -735,4 +735,17 @@ class LanguageTr extends BaseLanguage {
   String get sureWantToDeleteDraft => 'Bu taslak siparişi silmek istediğinizden emin misiniz?"';
   @override
   String get walletHistory => 'Cüzdan Geçmişi';
+
+  @override
+  String get newOrderHasBeenCreated => 'Yeni sipariş oluşturuldu.';
+  @override
+  String get deliveryPersonArrivedMsg => 'Teslimat görevlisi teslim alma noktasına geldi ve müşteriyi bekliyor.';
+  @override
+  String get deliveryPersonPickedUpCourierMsg => 'Teslimat görevlisi kuryeyi alım noktasından teslim aldı.';
+  @override
+  String get hasBeenOutForDelivery => 'teslimat için yola çıktı.';
+  @override
+  String get paymentStatusPaisMsg => 'ödeme durumu ödenmiştir.';
+  @override
+  String get deliveredMsg => 'başarıyla teslim edildi.';
 }

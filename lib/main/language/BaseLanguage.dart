@@ -182,6 +182,7 @@ abstract class BaseLanguage {
   String get pickUp;
 
   String get departed;
+
   String get imagePickToCamera;
 
   String get imagePicToGallery;
@@ -273,6 +274,7 @@ abstract class BaseLanguage {
   String get courierWillDeliverAt;
 
   String get confirmDelivery;
+
   String get orderPickupConfirmation;
 
   String get orderDepartedConfirmation;
@@ -518,6 +520,7 @@ abstract class BaseLanguage {
   String get addMoney;
 
   String get amount;
+
   String get credentialNotMatch;
 
   String get accountNumber;
@@ -543,6 +546,7 @@ abstract class BaseLanguage {
   String get bankNotFound;
 
   String get internetIsConnected;
+
   String get balanceInsufficientCashPayment;
 
   String get ok;
@@ -636,52 +640,110 @@ abstract class BaseLanguage {
   String get confirmAccountDeletion;
 
   String get signWith;
+
   String get selectUserType;
+
   String get lblUser;
+
   String get lblDeliveryBoy;
+
   String get lblContinue;
+
   String get delete;
+
   String get lblMyAddresses;
+
   String get selectAddressSave;
+
   String get selectAddress;
+
   String get deleteLocation;
+
   String get sureWantToDeleteAddress;
+
   String get withdrawMoney;
+
   String get fromDateValidationMsg;
+
   String get errorMessage;
+
   String get errorSomethingWentWrong;
+
   String get errorThisFieldRequired;
+
   String get errorInternetNotAvailable;
+
   String get mustSelectStartDate;
+
   String get accept;
 
   String get onlineRecievedAmount;
+
   String get totalWithdrawn;
+
   String get manualRecieved;
+
   String get lastLocation;
+
   String get latitude;
+
   String get longitude;
+
   String get getEmail;
+
   String get emailVerification;
+
   String get selectLocation;
+
   String get demoUserNote;
+
   String get yourOrder;
+
   String get hasBeenAssignedTo;
+
   String get hasBeenTransferedTo;
+
   String get lastUpdatedAt;
+
   String get transactionFailed;
+
   String get orderPickupSuccessfully;
+
   String get orderActiveSuccessfully;
+
   String get orderDepartedSuccessfully;
+
   String get orderDeliveredSuccessfully;
+
   String get addAmount;
+
   String get invalidUrl;
+
   String get orderCreated;
+
   String get distance;
+
   String get duration;
+
   String get orderAssignConfirmation;
+
   String get mAppDescription;
+
   String get deleteDraft;
+
   String get sureWantToDeleteDraft;
+
   String get walletHistory;
+
+  String get newOrderHasBeenCreated;
+
+  String get deliveryPersonArrivedMsg;
+
+  String get deliveryPersonPickedUpCourierMsg;
+
+  String get hasBeenOutForDelivery;
+
+  String get paymentStatusPaisMsg;
+
+  String get deliveredMsg;
 }

@@ -736,4 +736,17 @@ class LanguageId extends BaseLanguage {
   String get sureWantToDeleteDraft => 'Apakah Anda yakin ingin menghapus draf pesanan ini?"';
   @override
   String get walletHistory => 'Sejarah Dompet';
+  @override
+  String get newOrderHasBeenCreated => 'Orde baru telah tercipta.';
+  @override
+  String get deliveryPersonArrivedMsg => 'Petugas pengantar telah tiba di lokasi penjemputan dan menunggu klien.';
+  @override
+  String get deliveryPersonPickedUpCourierMsg => 'Petugas pengiriman telah mengambil kurir dari lokasi penjemputan.';
+  @override
+  String get hasBeenOutForDelivery => 'telah keluar untuk pengiriman.';
+  @override
+  String get paymentStatusPaisMsg => 'status pembayaran dibayar.';
+  @override
+  String get deliveredMsg => 'telah berhasil disampaikan.';
+
 }
