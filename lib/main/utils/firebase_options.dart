@@ -8,6 +8,8 @@ class DefaultFirebaseOptions {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
+      case TargetPlatform.iOS:
+        return ios;
       default:
         throw UnsupportedError(
           'DefaultFirebaseOptions are not supported for this platform.',
@@ -21,5 +23,16 @@ class DefaultFirebaseOptions {
     messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
     projectId: FIREBASE_PROJECT_ID,
     storageBucket: FIREBASE_STORAGE_BUCKET,
+  );
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: FIREBASE_API_KEY,
+    appId: FIREBASE_APP_ID,
+    messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
+    projectId: FIREBASE_PROJECT_ID,
+    storageBucket: FIREBASE_STORAGE_BUCKET,
+    androidClientId: ANDROID_CLIENT_ID,
+    iosClientId: IOS_CLIENT_ID,
+    iosBundleId: IOS_BUNDLE_ID,
+
   );
 }

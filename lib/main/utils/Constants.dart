@@ -24,6 +24,11 @@ const String FIREBASE_APP_ID = "1:12372904825:android:855f0fd5c9191baa22fda8";
 const String FIREBASE_MESSAGING_SENDER_ID = "12372904825";
 const String FIREBASE_PROJECT_ID = "mightydelivery-10da9";
 const String FIREBASE_STORAGE_BUCKET = "mightydelivery-10da9.appspot.com";
+
+//for ios
+const String ANDROID_CLIENT_ID = 'YOUR ANDROID_CLIENT_ID';
+const String IOS_CLIENT_ID = 'YOUR IOS_CLIENT_ID';
+const String IOS_BUNDLE_ID = 'YOUR IOS_BUNDLE_ID';
 //endregion
 
 //region languages and phone code
@@ -43,7 +48,6 @@ const mPrivacyPolicy = 'https://meetmighty.com/codecanyon/document/mighty-delive
 const mTermAndCondition = 'https://meetmighty.com/codecanyon/document/mighty-delivery/';
 const mHelpAndSupport = 'https://support.meetmighty.com/';
 const mContactPref = 'hello@meetmighty.com';
-const mCodeCanyonURL = 'https://codecanyon.net/user/meetmighty/portfolio/';
 //endregion
 
 const mInvoiceCompanyName = 'Roberts Private Limited';
