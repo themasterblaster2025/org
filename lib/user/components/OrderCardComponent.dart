@@ -99,7 +99,7 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                         4.height,
                         GestureDetector(
                           onTap: () {
-                            openMap(double.parse(widget.item.pickupPoint!.longitude.validate()), double.parse(widget.item.pickupPoint!.longitude.validate()));
+                            openMap(double.parse(widget.item.pickupPoint!.longitude.validate()), double.parse(widget.item.pickupPoint!.latitude.validate()));
                           },
                           child: Row(
                             children: [
@@ -150,7 +150,7 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                             4.height,
                             GestureDetector(
                               onTap: () {
-                                openMap(double.parse(widget.item.deliveryPoint!.longitude.validate()), double.parse(widget.item.deliveryPoint!.longitude.validate()));
+                                openMap(double.parse(widget.item.deliveryPoint!.longitude.validate()), double.parse(widget.item.deliveryPoint!.latitude.validate()));
                               },
                               child: Row(
                                 children: [

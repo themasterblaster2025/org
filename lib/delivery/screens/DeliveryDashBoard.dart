@@ -362,7 +362,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            openMap(double.parse(data.pickupPoint!.longitude.validate()), double.parse(data.pickupPoint!.longitude.validate()));
+                            openMap(double.parse(data.pickupPoint!.longitude.validate()), double.parse(data.pickupPoint!.latitude.validate()));
                           },
                           child: Row(
                             children: [
@@ -409,7 +409,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        openMap(double.parse(data.deliveryPoint!.longitude.validate()), double.parse(data.deliveryPoint!.longitude.validate()));
+                        openMap(double.parse(data.deliveryPoint!.longitude.validate()), double.parse(data.deliveryPoint!.latitude.validate()));
                       },
                       child: Row(
                         children: [
