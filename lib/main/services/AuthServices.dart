@@ -93,6 +93,7 @@ class AuthServices {
             } else {
               Map request = {"email": userModel.email, "password": password};
               await logInApi(request).then((res) async {
+                await setValue(USER_TOKEN, res.data!.apiToken.validate());
                 await signInWithEmailPassword(context, email: email.validate(), password: password.validate()).then((value) {
                   updateUserStatus({
                     "id": getIntAsync(USER_ID),

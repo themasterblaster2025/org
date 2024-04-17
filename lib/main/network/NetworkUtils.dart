@@ -18,8 +18,7 @@ Map<String, String> buildHeaderTokens() {
     'Access-Control-Allow-Headers': '*',
     'Access-Control-Allow-Origin': '*',
   };
-
-  if (appStore.isLoggedIn) {
+  if (!getStringAsync(USER_TOKEN).isEmptyOrNull) {
     header.putIfAbsent(HttpHeaders.authorizationHeader, () => 'Bearer ${getStringAsync(USER_TOKEN)}');
   }
   log(jsonEncode(header));

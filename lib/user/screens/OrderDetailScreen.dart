@@ -453,12 +453,13 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                         Row(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            GestureDetector(
-                                                onTap: () {
-                                                  //  UserDetailsScreen(userData: userData).launch(context);
-                                                },
-                                                child: Image.network(userData!.profileImage.validate(), height: 60, width: 60, fit: BoxFit.cover, alignment: Alignment.center)
-                                                    .cornerRadiusWithClipRRect(60)),
+                                            Image.network(userData!.profileImage.validate(), height: 60, width: 60, fit: BoxFit.cover, alignment: Alignment.center)
+                                                .cornerRadiusWithClipRRect(60)
+                                                .visible(!userData!.profileImage.isEmptyOrNull),
+
+                                            commonCachedNetworkImage(ic_profile, height: 60, width: 60, fit: BoxFit.cover, alignment: Alignment.center)
+                                                .cornerRadiusWithClipRRect(60)
+                                                .visible(userData!.profileImage.isEmptyOrNull),
                                             8.width,
                                             Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,

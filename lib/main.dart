@@ -79,7 +79,7 @@ class MyApp extends StatefulWidget {
 
 class MyAppState extends State<MyApp> {
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
-  late StreamSubscription<Position> _streamSubscription;
+  // late StreamSubscription<Position> _streamSubscription;
   String message = 'empty';
 
   @override
@@ -104,7 +104,6 @@ class MyAppState extends State<MyApp> {
       }
     });
   }
-
 
   @override
   void setState(VoidCallback fn) {

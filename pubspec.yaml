@@ -95,6 +95,7 @@ dependencies:
   # SOCIAL LOGIN
   google_sign_in: ^6.2.1
   the_apple_sign_in: ^1.1.1
+  geocoding: ^2.2.0
 
   #STORE _CHECKER
   store_checker: ^1.4.0

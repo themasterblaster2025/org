@@ -63,6 +63,7 @@ class RegisterScreenState extends State<RegisterScreen> {
           "status": widget.userType == DELIVERY_MAN ? 1 : 0
         };
         await signUpApi(request).then((res) async {
+          await setValue(USER_TOKEN, res.data!.apiToken.validate());
           authService
               .signUpWithEmailPassword(getContext,
                   lName: res.data!.name,
