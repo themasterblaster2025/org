@@ -48,7 +48,7 @@ dependencies:
   flutterwave_standard: ^1.0.8
   paytm: ^3.0.1
   flutter_paystack: ^1.0.7
-  flutter_braintree: ^3.0.0
+  flutter_braintree: ^4.0.0
   flutter_paytabs_bridge: ^2.6.7
   my_fatoorah: ^3.3.0
 

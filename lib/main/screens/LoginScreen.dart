@@ -43,6 +43,7 @@ class LoginScreenState extends State<LoginScreen> {
 
   bool isAcceptedTc = false;
   String userType = CLIENT;
+  int? isDemoSelected;
 
   @override
   void initState() {
@@ -125,8 +126,7 @@ class LoginScreenState extends State<LoginScreen> {
             updateStoreCheckerData().then((source) async {
               await getUserDetail(getIntAsync(USER_ID)).then((value) async {
                 if (value.app_source.isEmptyOrNull || value.app_source != source) {
-                  await updateUserStatus({"id": getIntAsync(USER_ID), "app_source": source}).then((data) {
-                  });
+                  await updateUserStatus({"id": getIntAsync(USER_ID), "app_source": source}).then((data) {});
                 }
               }).catchError((e) {
                 log(e);
@@ -368,7 +368,42 @@ class LoginScreenState extends State<LoginScreen> {
                     },
                     width: context.width(),
                   ),
-                  30.height,
+                  16.height,
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      OutlinedButton(
+                        child: Text('Demo User', style: secondaryTextStyle(size: 16, color: isDemoSelected == 0 ? colorPrimary : textSecondaryColor)),
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(width: isDemoSelected == 0 ? 1 : 0.5, color: isDemoSelected == 0 ? colorPrimary : textSecondaryColor),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius)),
+                          elevation: 0,
+                        ),
+                        onPressed: () {
+                          isDemoSelected = 0;
+                          emailController.text = 'mark@gmail.com';
+                          passController.text = '123456';
+                          setState(() { });
+                        },
+                      ).expand(),
+                      16.width,
+                      OutlinedButton(
+                        child: Text('Demo Delivery Man', style: secondaryTextStyle(size: 16, color: isDemoSelected == 1 ? colorPrimary : textSecondaryColor)),
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide(width: isDemoSelected == 1 ? 1 : 0.5, color: isDemoSelected == 1 ? colorPrimary : textSecondaryColor),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius)),
+                          elevation: 0,
+                        ),
+                        onPressed: () {
+                          isDemoSelected = 1;
+                          emailController.text = 'jose@gmail.com';
+                          passController.text = '123456';
+                          setState(() { });
+                        },
+                      ).expand(),
+                    ],
+                  ),
+                  32.height,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
