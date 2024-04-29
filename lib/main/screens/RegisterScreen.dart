@@ -60,7 +60,7 @@ class RegisterScreenState extends State<RegisterScreen> {
           "email": emailController.text.trim(),
           "password": passController.text.trim(),
           "player_id": getStringAsync(PLAYER_ID).validate(),
-          "status": widget.userType == DELIVERY_MAN ? 1 : 0
+          if (widget.userType == DELIVERY_MAN) "status": 1
         };
         await signUpApi(request).then((res) async {
           await setValue(USER_TOKEN, res.data!.apiToken.validate());

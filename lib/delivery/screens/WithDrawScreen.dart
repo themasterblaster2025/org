@@ -230,7 +230,7 @@ class WithDrawScreenState extends State<WithDrawScreen> {
                             ],
                             onChanged: (a) {
                               if (addMoneyController.text.toInt() >= totalAmount.toInt()) {
-                                if (a.toInt() >= totalAmount) {
+                                if (a.toInt() > totalAmount) {
                                   addMoneyController.text = double.parse(totalAmount.toString()).toStringAsFixed(2);
                                 }
                               } else {
