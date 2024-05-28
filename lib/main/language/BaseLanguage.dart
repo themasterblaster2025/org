@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 abstract class BaseLanguage {
-  static BaseLanguage? of(BuildContext context) => Localizations.of<BaseLanguage>(context, BaseLanguage);
+  static BaseLanguage? of(BuildContext context) =>
+      Localizations.of<BaseLanguage>(context, BaseLanguage);
 
   String get appName;
 
@@ -669,7 +670,7 @@ abstract class BaseLanguage {
 
   String get errorSomethingWentWrong;
 
-  String get errorThisFieldRequired;
+  //String get errorThisFieldRequired;
 
   String get errorInternetNotAvailable;
 
@@ -746,4 +747,12 @@ abstract class BaseLanguage {
   String get paymentStatusPaisMsg;
 
   String get deliveredMsg;
+
+  String get demoDeliveryMan;
+
+  String get demoUser;
+
+  String get sourceLocation;
+
+  String get destinationLocation;
 }

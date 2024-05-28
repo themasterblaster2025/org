@@ -1,8 +1,10 @@
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:path/path.dart';
+
 import '../../main.dart';
 import '../models/ChatMessageModel.dart';
 import '../models/ContactModel.dart';
@@ -20,22 +22,33 @@ class ChatMessageService extends BaseService {
     userRef = fireStore.collection(USER_COLLECTION);
   }
 
-  Query chatMessagesWithPagination({String? currentUserId, required String receiverUserId}) {
-    return ref!.doc(currentUserId).collection(receiverUserId).orderBy("createdAt", descending: true);
+  Query chatMessagesWithPagination(
+      {String? currentUserId, required String receiverUserId}) {
+    return ref!
+        .doc(currentUserId)
+        .collection(receiverUserId)
+        .orderBy("createdAt", descending: true);
   }
 
   Future<DocumentReference> addMessage(ChatMessageModel data) async {
-    var doc = await ref!.doc(data.senderId).collection(data.receiverId!).add(data.toJson());
+    var doc = await ref!
+        .doc(data.senderId)
+        .collection(data.receiverId!)
+        .add(data.toJson());
     doc.update({'id': doc.id});
     return doc;
   }
 
-  Future<void> addMessageToDb(DocumentReference senderDoc, ChatMessageModel data, UserData sender, UserData? user, {File? image}) async {
+  Future<void> addMessageToDb(DocumentReference senderDoc,
+      ChatMessageModel data, UserData sender, UserData? user,
+      {File? image}) async {
     String imageUrl = '';
 
     if (image != null) {
       String fileName = basename(image.path);
-      Reference storageRef = _storage.ref().child("$CHAT_DATA_IMAGES/${getStringAsync(USER_ID)}/$fileName");
+      Reference storageRef = _storage
+          .ref()
+          .child("$CHAT_DATA_IMAGES/${getStringAsync(USER_ID)}/$fileName");
 
       UploadTask uploadTask = storageRef.putFile(image);
 
@@ -44,10 +57,10 @@ class ChatMessageService extends BaseService {
           imageUrl = value;
 
           fileList.removeWhere((element) => element.id == senderDoc.id);
-        }).catchError((e){
+        }).catchError((e) {
           log(e);
         });
-      }).catchError((e){
+      }).catchError((e) {
         log(e);
       });
     }
@@ -57,14 +70,18 @@ class ChatMessageService extends BaseService {
     userRef.doc(data.senderId).update({"lastMessageTime": data.createdAt});
     addToContacts(senderId: data.senderId, receiverId: data.receiverId);
 
-    DocumentReference receiverDoc = await ref!.doc(data.receiverId).collection(data.senderId!).add(data.toJson());
+    DocumentReference receiverDoc = await ref!
+        .doc(data.receiverId)
+        .collection(data.senderId!)
+        .add(data.toJson());
 
     updateChatDocument(receiverDoc, image: image, imageUrl: imageUrl);
 
     userRef.doc(data.receiverId).update({"lastMessageTime": data.createdAt});
   }
 
-  DocumentReference? updateChatDocument(DocumentReference data, {File? image, String? imageUrl}) {
+  DocumentReference? updateChatDocument(DocumentReference data,
+      {File? image, String? imageUrl}) {
     Map<String, dynamic> sendData = {'id': data.id};
 
     if (image != null) {
@@ -88,8 +105,10 @@ class ChatMessageService extends BaseService {
     await addToReceiverContacts(senderId, receiverId, currentTime);
   }
 
-  Future<void> addToSenderContacts(String? senderId, String? receiverId, currentTime) async {
-    DocumentSnapshot senderSnapshot = await getContactsDocument(of: senderId, forContact: receiverId).get();
+  Future<void> addToSenderContacts(
+      String? senderId, String? receiverId, currentTime) async {
+    DocumentSnapshot senderSnapshot =
+        await getContactsDocument(of: senderId, forContact: receiverId).get();
 
     if (!senderSnapshot.exists) {
       //does not exists
@@ -98,7 +117,8 @@ class ChatMessageService extends BaseService {
         addedOn: currentTime,
       );
 
-      await getContactsDocument(of: senderId, forContact: receiverId).set(receiverContact.toJson());
+      await getContactsDocument(of: senderId, forContact: receiverId)
+          .set(receiverContact.toJson());
     }
   }
 
@@ -107,7 +127,8 @@ class ChatMessageService extends BaseService {
     String? receiverId,
     currentTime,
   ) async {
-    DocumentSnapshot receiverSnapshot = await getContactsDocument(of: receiverId, forContact: senderId).get();
+    DocumentSnapshot receiverSnapshot =
+        await getContactsDocument(of: receiverId, forContact: senderId).get();
 
     if (!receiverSnapshot.exists) {
       //does not exists
@@ -115,7 +136,8 @@ class ChatMessageService extends BaseService {
         uid: senderId,
         addedOn: currentTime,
       );
-      await getContactsDocument(of: receiverId, forContact: senderId).set(senderContact.toJson());
+      await getContactsDocument(of: receiverId, forContact: senderId)
+          .set(senderContact.toJson());
     }
   }
 
@@ -128,16 +150,27 @@ class ChatMessageService extends BaseService {
   Stream<List<UserData>> getUserDetailsById({String? id, String? searchText}) {
     return userRef
         .where("uid", isEqualTo: id)
-        .where('caseSearch', arrayContains: searchText.validate().isEmpty ? null : searchText!.toLowerCase())
+        .where('caseSearch',
+            arrayContains: searchText.validate().isEmpty
+                ? null
+                : searchText!.toLowerCase())
         .snapshots()
-        .map((event) => event.docs.map((e) => UserData.fromJson(e.data() as Map<String, dynamic>)).toList());
+        .map((event) => event.docs
+            .map((e) => UserData.fromJson(e.data() as Map<String, dynamic>))
+            .toList());
   }
 
-  Stream<QuerySnapshot> fetchLastMessageBetween({required String senderId, required String receiverId}) {
-    return ref!.doc(senderId.toString()).collection(receiverId.toString()).orderBy("createdAt", descending: false).snapshots();
+  Stream<QuerySnapshot> fetchLastMessageBetween(
+      {required String senderId, required String receiverId}) {
+    return ref!
+        .doc(senderId.toString())
+        .collection(receiverId.toString())
+        .orderBy("createdAt", descending: false)
+        .snapshots();
   }
 
-  Future<void> clearAllMessages({String? senderId, required String receiverId}) async {
+  Future<void> clearAllMessages(
+      {String? senderId, required String receiverId}) async {
     final WriteBatch _batch = fireStore.batch();
 
     ref!.doc(senderId).collection(receiverId).get().then((value) {
@@ -149,22 +182,38 @@ class ChatMessageService extends BaseService {
     }).catchError(log);
   }
 
-  Future<void> deleteChat({String? senderId, required String receiverId}) async {
+  Future<void> deleteChat(
+      {String? senderId, required String receiverId}) async {
     ref!.doc(senderId).collection(receiverId).doc().delete();
-    userRef.doc(senderId).collection(CONTACT_COLLECTION).doc(receiverId).delete();
+    userRef
+        .doc(senderId)
+        .collection(CONTACT_COLLECTION)
+        .doc(receiverId)
+        .delete();
   }
 
-  Future<void> deleteSingleMessage({String? senderId, required String receiverId, String? documentId}) async {
+  Future<void> deleteSingleMessage(
+      {String? senderId,
+      required String receiverId,
+      String? documentId}) async {
     try {
       ref!.doc(senderId).collection(receiverId).doc(documentId).delete();
     } on Exception catch (e) {
       log(e);
-      throw language.somethingWentWrong;
+      throw language.errorSomethingWentWrong;
     }
   }
 
-  Future<void> setUnReadStatusToTrue({required String senderId, required String receiverId, String? documentId}) async {
-    ref!.doc(senderId).collection(receiverId).where('isMessageRead', isEqualTo: false).get().then((value) {
+  Future<void> setUnReadStatusToTrue(
+      {required String senderId,
+      required String receiverId,
+      String? documentId}) async {
+    ref!
+        .doc(senderId)
+        .collection(receiverId)
+        .where('isMessageRead', isEqualTo: false)
+        .get()
+        .then((value) {
       value.docs.forEach((element) {
         element.reference.update({
           'isMessageRead': true,
@@ -172,7 +221,12 @@ class ChatMessageService extends BaseService {
       });
     });
 
-    ref!.doc(receiverId).collection(senderId).where('isMessageRead', isEqualTo: false).get().then((value) {
+    ref!
+        .doc(receiverId)
+        .collection(senderId)
+        .where('isMessageRead', isEqualTo: false)
+        .get()
+        .then((value) {
       value.docs.forEach((element) {
         element.reference.update({
           'isMessageRead': true,
@@ -181,7 +235,8 @@ class ChatMessageService extends BaseService {
     });
   }
 
-  Stream<int> getUnReadCount({String? senderId, required String receiverId, String? documentId}) {
+  Stream<int> getUnReadCount(
+      {String? senderId, required String receiverId, String? documentId}) {
     return ref!
         .doc(senderId.toString())
         .collection(receiverId)

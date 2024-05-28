@@ -88,10 +88,14 @@ class LoginScreenState extends State<LoginScreen> {
           await setValue(USER_PASSWORD, passController.text);
         }
         await logInApi(req).then((v) async {
-          authService.signInWithEmailPassword(context, email: emailController.text, password: passController.text).then((value) async {
+          authService
+              .signInWithEmailPassword(context,
+                  email: emailController.text, password: passController.text)
+              .then((value) async {
             appStore.setLoading(false);
 
-            if (v.data!.userType != CLIENT && v.data!.userType != DELIVERY_MAN) {
+            if (v.data!.userType != CLIENT &&
+                v.data!.userType != DELIVERY_MAN) {
               await logout(context, isFromLogin: true);
             } else {
               appStore.setUserType(v.data!.userType.toString());
@@ -106,16 +110,23 @@ class LoginScreenState extends State<LoginScreen> {
                 log('v.data!.emailVerifiedAt ${v.data!.emailVerifiedAt}');
                 log('v.data!.otp ${v.data!.otpVerifyAt}');
 
-                if (v.isEmailVerification == '1' && v.data!.emailVerifiedAt.isEmptyOrNull)
-                  EmailVerificationScreen(isSignIn: true).launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+                if (v.isEmailVerification == '1' &&
+                    v.data!.emailVerifiedAt.isEmptyOrNull)
+                  EmailVerificationScreen(isSignIn: true).launch(context,
+                      isNewTask: true,
+                      pageRouteAnimation: PageRouteAnimation.Slide);
                 else if (v.data!.otpVerifyAt.isEmptyOrNull)
-                  VerificationScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+                  VerificationScreen().launch(context,
+                      isNewTask: true,
+                      pageRouteAnimation: PageRouteAnimation.Slide);
                 else {
                   if (v.data!.countryId != null && v.data!.cityId != null) {
                     await getCountryDetailApiCall(v.data!.countryId.validate());
                     getCityDetailApiCall(v.data!.cityId.validate());
                   } else {
-                    UserCitySelectScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+                    UserCitySelectScreen().launch(context,
+                        isNewTask: true,
+                        pageRouteAnimation: PageRouteAnimation.Slide);
                   }
                 }
               } else {
@@ -125,8 +136,11 @@ class LoginScreenState extends State<LoginScreen> {
             }
             updateStoreCheckerData().then((source) async {
               await getUserDetail(getIntAsync(USER_ID)).then((value) async {
-                if (value.app_source.isEmptyOrNull || value.app_source != source) {
-                  await updateUserStatus({"id": getIntAsync(USER_ID), "app_source": source}).then((data) {});
+                if (value.app_source.isEmptyOrNull ||
+                    value.app_source != source) {
+                  await updateUserStatus(
+                          {"id": getIntAsync(USER_ID), "app_source": source})
+                      .then((data) {});
                 }
               }).catchError((e) {
                 log(e);
@@ -195,7 +209,10 @@ class LoginScreenState extends State<LoginScreen> {
   getCityDetailApiCall(int cityId) async {
     await getCityDetail(cityId).then((value) async {
       await setValue(CITY_DATA, value.data!.toJson());
-      if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
+      if (CityModel.fromJson(getJSONAsync(CITY_DATA))
+          .name
+          .validate()
+          .isNotEmpty) {
         if (getBoolAsync(OTP_VERIFIED)) {
           if (getStringAsync(USER_TYPE) == CLIENT) {
             DashboardScreen().launch(context, isNewTask: true);
@@ -210,7 +227,8 @@ class LoginScreenState extends State<LoginScreen> {
       }
     }).catchError((error) {
       if (error.toString() == CITY_NOT_FOUND_EXCEPTION) {
-        UserCitySelectScreen().launch(getContext, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+        UserCitySelectScreen().launch(getContext,
+            isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
       }
     });
   }
@@ -244,7 +262,8 @@ class LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimaryLight,
+      backgroundColor:
+          appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimaryLight,
       appBar: commonAppBarWidget(language.signIn, showBack: false),
       body: Stack(
         children: [
@@ -289,9 +308,11 @@ class LoginScreenState extends State<LoginScreen> {
                             height: 20,
                             width: 20,
                             child: Checkbox(
-                              shape: RoundedRectangleBorder(borderRadius: radius(4)),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: radius(4)),
                               checkColor: Colors.white,
-                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
                               focusColor: colorPrimary,
                               activeColor: colorPrimary,
                               value: mIsCheck,
@@ -310,7 +331,9 @@ class LoginScreenState extends State<LoginScreen> {
                       ),
                       Align(
                         alignment: Alignment.topRight,
-                        child: Text(language.forgotPasswordQue, style: primaryTextStyle()).onTap(() {
+                        child: Text(language.forgotPasswordQue,
+                                style: primaryTextStyle())
+                            .onTap(() {
                           ForgotPasswordScreen().launch(context);
                         }),
                       ),
@@ -323,9 +346,11 @@ class LoginScreenState extends State<LoginScreen> {
                         height: 20,
                         width: 20,
                         child: Checkbox(
-                          shape: RoundedRectangleBorder(borderRadius: radius(4)),
+                          shape:
+                              RoundedRectangleBorder(borderRadius: radius(4)),
                           checkColor: Colors.white,
-                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
                           focusColor: colorPrimary,
                           activeColor: colorPrimary,
                           value: isAcceptedTc,
@@ -338,7 +363,9 @@ class LoginScreenState extends State<LoginScreen> {
                       10.width,
                       RichText(
                         text: TextSpan(children: [
-                          TextSpan(text: '${language.iAgreeToThe} ', style: secondaryTextStyle()),
+                          TextSpan(
+                              text: '${language.iAgreeToThe} ',
+                              style: secondaryTextStyle()),
                           TextSpan(
                             text: language.termOfService,
                             style: boldTextStyle(color: colorPrimary, size: 14),
@@ -373,32 +400,54 @@ class LoginScreenState extends State<LoginScreen> {
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       OutlinedButton(
-                        child: Text('Demo User', style: secondaryTextStyle(size: 16, color: isDemoSelected == 0 ? colorPrimary : textSecondaryColor)),
+                        child: Text(language.demoUser,
+                            style: secondaryTextStyle(
+                                size: 16,
+                                color: isDemoSelected == 0
+                                    ? colorPrimary
+                                    : textSecondaryColor)),
                         style: OutlinedButton.styleFrom(
-                          side: BorderSide(width: isDemoSelected == 0 ? 1 : 0.5, color: isDemoSelected == 0 ? colorPrimary : textSecondaryColor),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius)),
+                          side: BorderSide(
+                              width: isDemoSelected == 0 ? 1 : 0.5,
+                              color: isDemoSelected == 0
+                                  ? colorPrimary
+                                  : textSecondaryColor),
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(defaultRadius)),
                           elevation: 0,
                         ),
                         onPressed: () {
                           isDemoSelected = 0;
                           emailController.text = 'mark@gmail.com';
                           passController.text = '123456';
-                          setState(() { });
+                          setState(() {});
                         },
                       ).expand(),
                       16.width,
                       OutlinedButton(
-                        child: Text('Demo Delivery Man', style: secondaryTextStyle(size: 16, color: isDemoSelected == 1 ? colorPrimary : textSecondaryColor)),
+                        child: Text(language.demoDeliveryMan,
+                            style: secondaryTextStyle(
+                                size: 16,
+                                color: isDemoSelected == 1
+                                    ? colorPrimary
+                                    : textSecondaryColor)),
                         style: OutlinedButton.styleFrom(
-                          side: BorderSide(width: isDemoSelected == 1 ? 1 : 0.5, color: isDemoSelected == 1 ? colorPrimary : textSecondaryColor),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius)),
+                          side: BorderSide(
+                              width: isDemoSelected == 1 ? 1 : 0.5,
+                              color: isDemoSelected == 1
+                                  ? colorPrimary
+                                  : textSecondaryColor),
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(defaultRadius)),
                           elevation: 0,
                         ),
                         onPressed: () {
                           isDemoSelected = 1;
                           emailController.text = 'jose@gmail.com';
                           passController.text = '123456';
-                          setState(() { });
+                          setState(() {});
                         },
                       ).expand(),
                     ],
@@ -407,12 +456,17 @@ class LoginScreenState extends State<LoginScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(language.doNotHaveAccount, style: primaryTextStyle()),
+                      Text(language.doNotHaveAccount,
+                          style: primaryTextStyle()),
                       4.width,
-                      Text(language.signUp, style: boldTextStyle(color: colorPrimary)).onTap(() {
+                      Text(language.signUp,
+                              style: boldTextStyle(color: colorPrimary))
+                          .onTap(() {
                         RegisterScreen(
                           userType: CLIENT,
-                        ).launch(context, duration: Duration(milliseconds: 500), pageRouteAnimation: PageRouteAnimation.Slide);
+                        ).launch(context,
+                            duration: Duration(milliseconds: 500),
+                            pageRouteAnimation: PageRouteAnimation.Slide);
                       }),
                     ],
                   ),
@@ -437,7 +491,9 @@ class LoginScreenState extends State<LoginScreen> {
                         child: Image.asset(ic_google, height: 30, width: 30),
                         style: OutlinedButton.styleFrom(
                           padding: EdgeInsets.all(12),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(defaultRadius)),
                           elevation: 0,
                         ),
                         onPressed: () {
@@ -452,7 +508,9 @@ class LoginScreenState extends State<LoginScreen> {
                           child: Image.asset(ic_apple, height: 30, width: 30),
                           style: OutlinedButton.styleFrom(
                             padding: EdgeInsets.all(12),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(defaultRadius)),
                             elevation: 0,
                           ),
                           onPressed: () {
@@ -467,7 +525,8 @@ class LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-          Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
+          Observer(
+              builder: (context) => loaderWidget().visible(appStore.isLoading)),
         ],
       ),
       bottomNavigationBar: Container(
@@ -476,10 +535,13 @@ class LoginScreenState extends State<LoginScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("${language.becomeADeliveryBoy} ?", style: primaryTextStyle()),
+            Text("${language.becomeADeliveryBoy}", style: primaryTextStyle()),
             4.width,
-            Text(language.signUp, style: boldTextStyle(color: colorPrimary)).onTap(() {
-              RegisterScreen(userType: DELIVERY_MAN).launch(context, duration: Duration(milliseconds: 500), pageRouteAnimation: PageRouteAnimation.Slide);
+            Text(language.signUp, style: boldTextStyle(color: colorPrimary))
+                .onTap(() {
+              RegisterScreen(userType: DELIVERY_MAN).launch(context,
+                  duration: Duration(milliseconds: 500),
+                  pageRouteAnimation: PageRouteAnimation.Slide);
             }),
           ],
         ),
@@ -497,8 +559,12 @@ class LoginScreenState extends State<LoginScreen> {
             return AlertDialog(
               actionsPadding: EdgeInsets.all(16),
               contentPadding: EdgeInsets.zero,
-              shape: RoundedRectangleBorder(borderRadius: radius(defaultRadius)),
-              title: Padding(padding: EdgeInsets.only(bottom: 10), child: Text(language.selectUserType, style: boldTextStyle(size: 18))),
+              shape:
+                  RoundedRectangleBorder(borderRadius: radius(defaultRadius)),
+              title: Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: Text(language.selectUserType,
+                      style: boldTextStyle(size: 18))),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: userTypeList.map((item) {
@@ -510,7 +576,8 @@ class LoginScreenState extends State<LoginScreen> {
                       vertical: VisualDensity.minimumDensity,
                     ),
                     contentPadding: EdgeInsets.symmetric(horizontal: 16),
-                    title: Text('${item == CLIENT ? language.lblUser : item == DELIVERY_MAN ? language.lblDeliveryBoy : ''}'),
+                    title: Text(
+                        '${item == CLIENT ? language.lblUser : item == DELIVERY_MAN ? language.lblDeliveryBoy : ''}'),
                     groupValue: userType,
                     onChanged: (val) {
                       userType = val.validate();

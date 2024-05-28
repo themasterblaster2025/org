@@ -39,20 +39,28 @@ class SplashScreenState extends State<SplashScreen> {
               logout(context);
             } else {
               setValue(OTP_VERIFIED, value.otpVerifyAt != null);
-              if (!getBoolAsync(EMAIL_VERIFIED) && getStringAsync(IS_EMAIL_VERIFICATION) == '1') {
+              if (!getBoolAsync(EMAIL_VERIFIED) &&
+                  getStringAsync(IS_EMAIL_VERIFICATION) == '1') {
                 EmailVerificationScreen().launch(context, isNewTask: true);
               } else if (value.otpVerifyAt.isEmptyOrNull) {
                 VerificationScreen().launch(context, isNewTask: true);
               } else {
                 //update app version
-                Future<PackageInfo> packageInfoFuture = PackageInfo.fromPlatform();
+                Future<PackageInfo> packageInfoFuture =
+                    PackageInfo.fromPlatform();
                 final packageInfo = await packageInfoFuture;
-                if (value.app_version.isEmptyOrNull || value.app_version != packageInfo.version) {
-                  await updateUserStatus({"id": getIntAsync(USER_ID), "app_version": packageInfo.version}).then((value) {
-                  });
+                if (value.app_version.isEmptyOrNull ||
+                    value.app_version != packageInfo.version) {
+                  await updateUserStatus({
+                    "id": getIntAsync(USER_ID),
+                    "app_version": packageInfo.version
+                  }).then((value) {});
                 }
                 //update source version
-                if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
+                if (CityModel.fromJson(getJSONAsync(CITY_DATA))
+                    .name
+                    .validate()
+                    .isNotEmpty) {
                   if (getStringAsync(USER_TYPE) == CLIENT) {
                     DashboardScreen().launch(context, isNewTask: true);
                   } else {
@@ -90,9 +98,11 @@ class SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset(ic_logo, height: 80, width: 80, fit: BoxFit.fill).cornerRadiusWithClipRRect(defaultRadius),
+            Image.asset(ic_logo, height: 80, width: 80, fit: BoxFit.fill)
+                .cornerRadiusWithClipRRect(defaultRadius),
             16.height,
-            Text(mAppName, style: boldTextStyle(size: 20), textAlign: TextAlign.center),
+            Text(language.appName,
+                style: boldTextStyle(size: 20), textAlign: TextAlign.center),
           ],
         ),
       ),

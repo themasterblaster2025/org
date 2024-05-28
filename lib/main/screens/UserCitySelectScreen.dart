@@ -94,7 +94,11 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
 
   Future<void> updateCountryCityApiCall() async {
     appStore.setLoading(true);
-    await updateUserStatus({"id": getIntAsync(USER_ID), "country_id": selectedCountry, "city_id": selectedCity}).then((value) {
+    await updateUserStatus({
+      "id": getIntAsync(USER_ID),
+      "country_id": selectedCountry,
+      "city_id": selectedCity
+    }).then((value) {
       appStore.setLoading(false);
       if (widget.isBack) {
         finish(context);
@@ -142,19 +146,25 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                   padding: EdgeInsets.all(16),
                   children: [
                     16.height,
-                    Image.asset(ic_select_region, height: 180, fit: BoxFit.contain).center(),
+                    Image.asset(ic_select_region,
+                            height: 180, fit: BoxFit.contain)
+                        .center(),
                     30.height,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(flex: 1, child: Text(language.country, style: boldTextStyle())),
+                        Expanded(
+                            flex: 1,
+                            child:
+                                Text(language.country, style: boldTextStyle())),
                         16.width,
                         Expanded(
                           flex: 2,
                           child: DropdownButtonFormField<int>(
                             value: selectedCountry,
                             decoration: commonInputDecoration(),
-                            items: countryData.map<DropdownMenuItem<int>>((item) {
+                            items:
+                                countryData.map<DropdownMenuItem<int>>((item) {
                               return DropdownMenuItem(
                                 value: item.id,
                                 child: Text(item.name ?? ''),
@@ -169,7 +179,8 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                               setState(() {});
                             },
                             validator: (value) {
-                              if (selectedCountry == null) return language.errorThisFieldRequired;
+                              if (selectedCountry == null)
+                                return language.fieldRequiredMsg;
                               return null;
                             },
                           ),
@@ -179,14 +190,18 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                     16.height,
                     Row(
                       children: [
-                        Expanded(flex: 1, child: Text(language.city, style: boldTextStyle())),
+                        Expanded(
+                            flex: 1,
+                            child: Text(language.city, style: boldTextStyle())),
                         16.width,
                         Expanded(
                           flex: 2,
                           child: AppTextField(
                             controller: searchCityController,
                             textFieldType: TextFieldType.OTHER,
-                            decoration: commonInputDecoration(hintText: language.selectCity, suffixIcon: Icons.search),
+                            decoration: commonInputDecoration(
+                                hintText: language.selectCity,
+                                suffixIcon: Icons.search),
                             onChanged: (value) {
                               getCityApiCall(name: value);
                             },
@@ -217,10 +232,18 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(vertical: 12),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(mData.name!, style: selectedCity == mData.id ? boldTextStyle(color: colorPrimary) : primaryTextStyle()),
-                                      selectedCity == mData.id ? Icon(Icons.check_circle, color: colorPrimary) : SizedBox(),
+                                      Text(mData.name!,
+                                          style: selectedCity == mData.id
+                                              ? boldTextStyle(
+                                                  color: colorPrimary)
+                                              : primaryTextStyle()),
+                                      selectedCity == mData.id
+                                          ? Icon(Icons.check_circle,
+                                              color: colorPrimary)
+                                          : SizedBox(),
                                     ],
                                   ),
                                 ),

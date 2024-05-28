@@ -134,7 +134,8 @@ class LanguageEn extends BaseLanguage {
   String get paymentCollectFrom => "Payment Collect from";
 
   @override
-  String get saveDraftConfirmationMsg => "Are you sure you want to save as a draft?";
+  String get saveDraftConfirmationMsg =>
+      "Are you sure you want to save as a draft?";
 
   @override
   String get saveDraft => "Save Draft";
@@ -146,13 +147,16 @@ class LanguageEn extends BaseLanguage {
   String get previous => "Previous";
 
   @override
-  String get pickupCurrentValidationMsg => "Pickup Time must be after Current Time";
+  String get pickupCurrentValidationMsg =>
+      "Pickup Time must be after Current Time";
 
   @override
-  String get pickupDeliverValidationMsg => "Pickup Time must be before Deliver Time";
+  String get pickupDeliverValidationMsg =>
+      "Pickup Time must be before Deliver Time";
 
   @override
-  String get createOrderConfirmationMsg => "Are you sure you want to place order?";
+  String get createOrderConfirmationMsg =>
+      "Are you sure you want to place order?";
 
   @override
   String get draftOrder => "Draft Order";
@@ -215,7 +219,8 @@ class LanguageEn extends BaseLanguage {
   String get submit => "Submit";
 
   @override
-  String get userNotApproveMsg => "You profile is under review. Wait some time or contact to your administrator.";
+  String get userNotApproveMsg =>
+      "You profile is under review. Wait some time or contact to your administrator.";
 
   @override
   String get password => "Password";
@@ -347,13 +352,16 @@ class LanguageEn extends BaseLanguage {
   String get walkThrough3Title => "Confirm And Relax";
 
   @override
-  String get walkThrough1Subtitle => "It helps us to get package from your doorstep.";
+  String get walkThrough1Subtitle =>
+      "It helps us to get package from your doorstep.";
 
   @override
-  String get walkThrough2Subtitle => "So that we can deliver the package to the correct person quickly.";
+  String get walkThrough2Subtitle =>
+      "So that we can deliver the package to the correct person quickly.";
 
   @override
-  String get walkThrough3Subtitle => "We will deliver your package on time and in perfect condition.";
+  String get walkThrough3Subtitle =>
+      "We will deliver your package on time and in perfect condition.";
 
   @override
   String get order => "Order";
@@ -410,19 +418,24 @@ class LanguageEn extends BaseLanguage {
   String get confirmDelivery => "Confirm Delivery";
 
   @override
-  String get orderPickupConfirmation => "Are you sure you want to pick up this order?";
+  String get orderPickupConfirmation =>
+      "Are you sure you want to pick up this order?";
 
   @override
-  String get orderDepartedConfirmation => "Are you sure you want to departed this order?";
+  String get orderDepartedConfirmation =>
+      "Are you sure you want to departed this order?";
 
   @override
-  String get orderCreateConfirmation => "Are you sure you want to create this order?";
+  String get orderCreateConfirmation =>
+      "Are you sure you want to create this order?";
 
   @override
-  String get orderCompleteConfirmation => "Are you sure you want to complete this order?";
+  String get orderCompleteConfirmation =>
+      "Are you sure you want to complete this order?";
 
   @override
-  String get orderCancelConfirmation => "Are you sure you want to cancel this order?";
+  String get orderCancelConfirmation =>
+      "Are you sure you want to cancel this order?";
 
   @override
   String get rememberMe => "Remember Me";
@@ -509,7 +522,8 @@ class LanguageEn extends BaseLanguage {
   String get lastUpdateAt => "Last update at";
 
   @override
-  String get uploadFileConfirmationMsg => "Are you sure you want to upload this file?";
+  String get uploadFileConfirmationMsg =>
+      "Are you sure you want to upload this file?";
 
   @override
   String get verifyDocument => "Verify Document";
@@ -671,7 +685,8 @@ class LanguageEn extends BaseLanguage {
   String get invalidCourierPackage => "Invalid courier package";
 
   @override
-  String get courierPackageIsNotAsPerOrder => "Courier package is not as per order";
+  String get courierPackageIsNotAsPerOrder =>
+      "Courier package is not as per order";
 
   @override
   String get invalidOrder => "Invalid order";
@@ -689,7 +704,8 @@ class LanguageEn extends BaseLanguage {
   String get pleaseSelectValidAddress => 'Please select valid address';
 
   @override
-  String get selectedAddressValidation => 'Selected address should be at least 3 letter long';
+  String get selectedAddressValidation =>
+      'Selected address should be at least 3 letter long';
 
   @override
   String get orderArrived => "Order Arrived";
@@ -698,14 +714,16 @@ class LanguageEn extends BaseLanguage {
   String get deleteAccount => 'Delete Account';
 
   @override
-  String get deleteAccountMsg1 => 'Are you sure you want to delete your account? Please read how account deletion will affect.';
+  String get deleteAccountMsg1 =>
+      'Are you sure you want to delete your account? Please read how account deletion will affect.';
 
   @override
   String get deleteAccountMsg2 =>
       'Deleting your account removes personal information from our database. Your email becomes permanently reserved and same email cannot be re-used to register a new account.';
 
   @override
-  String get deleteAccountConfirmMsg => 'Are you sure you want to delete Account?';
+  String get deleteAccountConfirmMsg =>
+      'Are you sure you want to delete Account?';
 
   @override
   String get remark => 'Remark';
@@ -792,7 +810,8 @@ class LanguageEn extends BaseLanguage {
   String get ifscCode => "IFSC Code";
 
   @override
-  String get acceptTermService => "Please accept Terms of service & Privacy Policy";
+  String get acceptTermService =>
+      "Please accept Terms of service & Privacy Policy.";
 
   @override
   String get iAgreeToThe => "I agree to the";
@@ -807,7 +826,8 @@ class LanguageEn extends BaseLanguage {
   String get userNotFound => "User Not found";
 
   @override
-  String get balanceInsufficient => "Balance is insufficient,Please add amount in your wallet";
+  String get balanceInsufficient =>
+      "Balance is insufficient,Please add amount in your wallet";
 
   @override
   String get add => "Add";
@@ -817,8 +837,10 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get internetIsConnected => "Internet is connected.";
+
   @override
-  String get balanceInsufficientCashPayment => "Balance is insufficient,Order is created with Cash Payment.";
+  String get balanceInsufficientCashPayment =>
+      "Balance is insufficient,Order is created with Cash Payment.";
 
   @override
   String get ok => "OK";
@@ -842,13 +864,16 @@ class LanguageEn extends BaseLanguage {
   String get commission => "Commission";
 
   @override
-  String get cancelBeforePickMsg => 'The order was cancelled before pickup the parcel.So,only cancellation charge is cut.If payment is already done then amount is refund to wallet.';
+  String get cancelBeforePickMsg =>
+      'The order was cancelled before pickup the parcel.So,only cancellation charge is cut.If payment is already done then amount is refund to wallet.';
 
   @override
-  String get cancelAfterPickMsg => 'The order was cancelled after pickup the parcel.So,fully charge is cut.';
+  String get cancelAfterPickMsg =>
+      'The order was cancelled after pickup the parcel.So,fully charge is cut.';
 
   @override
-  String get cancelNote => 'NOTE: If you cancel the order before pickup the parcel then cancellation charge will be cut.Otherwise,full charge will be cut.';
+  String get cancelNote =>
+      'NOTE: If you cancel the order before pickup the parcel then cancellation charge will be cut.Otherwise,full charge will be cut.';
 
   @override
   String get earningHistory => "Earning History";
@@ -912,6 +937,7 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get verification => "Verification";
+
   @override
   String get ordersWalletMore => "Orders, Wallet and more";
 
@@ -929,6 +955,7 @@ class LanguageEn extends BaseLanguage {
 
   @override
   String get getOTP => "Get OTP";
+
   @override
   String get weSend => "We will send you an";
 
@@ -984,93 +1011,157 @@ class LanguageEn extends BaseLanguage {
   String get deleteLocation => "Delete Location?";
 
   @override
-  String get sureWantToDeleteAddress => "Are you sure want to delete this address?";
+  String get sureWantToDeleteAddress =>
+      "Are you sure want to delete this address?";
 
   @override
   String get withdrawMoney => 'Withdraw Money';
+
   @override
   String get fromDateValidationMsg => 'From Date is must';
+
   @override
   String get errorMessage => 'Please try again';
+
   @override
   String get errorSomethingWentWrong => 'Something Went Wrong';
+
   @override
   String get errorThisFieldRequired => 'This field is required';
+
   @override
   String get errorInternetNotAvailable => 'Your internet is not working';
+
   @override
   String get mustSelectStartDate => 'must select start date';
+
   @override
   String get accept => 'Accept';
+
   @override
   String get onlineRecievedAmount => 'Online Amount Received';
+
   @override
   String get totalWithdrawn => 'Total Withdraw Amount';
+
   @override
   String get manualRecieved => 'Mannual Received';
+
   @override
   String get lastLocation => 'Last Location';
+
   @override
   String get latitude => 'Latitude';
+
   @override
   String get longitude => 'Longitude';
+
   @override
   String get emailVerification => 'Email Verification';
+
   @override
   String get getEmail => 'Get Email';
+
   @override
   String get selectLocation => 'Select Location';
+
   @override
-  String get demoUserNote => 'NOTE: Drag-drop address place search is disable for demo user';
+  String get demoUserNote =>
+      'NOTE: Drag-drop address place search is disable for demo user';
+
   @override
   String get yourOrder => 'Your Order';
+
   @override
   String get hasBeenAssignedTo => 'has been assigned to';
+
   @override
   String get hasBeenTransferedTo => 'has been transferred to';
+
   @override
   String get lastUpdatedAt => 'Last update at';
+
   @override
   String get transactionFailed => 'Transaction Failed!! Try again.';
+
   @override
-  String get orderPickupSuccessfully => 'Congrats!!Order pickedup Successfully.';
+  String get orderPickupSuccessfully =>
+      'Congrats!!Order pickedup Successfully.';
+
   @override
-  String get orderActiveSuccessfully => 'Congrats!!Order Activated Successfully.';
+  String get orderActiveSuccessfully =>
+      'Congrats!!Order Activated Successfully.';
+
   @override
-  String get orderDepartedSuccessfully => 'Congrats!!Order has been Departed Successfully.';
+  String get orderDepartedSuccessfully =>
+      'Congrats!!Order has been Departed Successfully.';
+
   @override
-  String get orderDeliveredSuccessfully => 'Congrats!!Order has been Delivered Successfully.';
+  String get orderDeliveredSuccessfully =>
+      'Congrats!!Order has been Delivered Successfully.';
+
   @override
   String get addAmount => 'Amount field is empty.Please add amount';
+
   @override
   String get invalidUrl => 'Invalid Url!.Please enter valid Url';
+
   @override
   String get orderCreated => 'Order created';
+
   @override
   String get distance => 'Distance';
+
   @override
   String get duration => 'Duration';
+
   @override
-  String get orderAssignConfirmation => 'Are you sure you want to accept this order?';
+  String get orderAssignConfirmation =>
+      'Are you sure you want to accept this order?';
+
   @override
   String get mAppDescription =>
       'You can deliver exactly when the user wants and can start processing the user’s order almost immediately after you receive it, or you can deliver on a specific day and time.';
+
   @override
   String get deleteDraft => 'Delete draft order?';
+
   @override
-  String get sureWantToDeleteDraft => 'Are you sure want to delete this draft order?"';
+  String get sureWantToDeleteDraft =>
+      'Are you sure want to delete this draft order?"';
+
   @override
   String get walletHistory => 'Wallet History';
+
   @override
   String get newOrderHasBeenCreated => 'New order has been created.';
+
   @override
-  String get deliveryPersonArrivedMsg => 'Delivery person has been arrived at pick up location and waiting for client.';
+  String get deliveryPersonArrivedMsg =>
+      'Delivery person has been arrived at pick up location and waiting for client.';
+
   @override
-  String get deliveryPersonPickedUpCourierMsg => 'Delivery person have picked up courier from pickup location.';
+  String get deliveryPersonPickedUpCourierMsg =>
+      'Delivery person have picked up courier from pickup location.';
+
   @override
   String get hasBeenOutForDelivery => 'has been out for delivery.';
+
   @override
   String get paymentStatusPaisMsg => 'payment status is paid.';
+
   @override
   String get deliveredMsg => 'has been successfully delivered.';
+
+  @override
+  String get demoDeliveryMan => 'Demo Delivery Man';
+
+  @override
+  String get demoUser => "Demo User";
+
+  @override
+  String get destinationLocation => "Destination Location";
+
+  @override
+  String get sourceLocation => "Source Location";
 }

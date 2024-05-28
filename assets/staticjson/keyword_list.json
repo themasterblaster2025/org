@@ -1,0 +1,1162 @@
+[
+  {
+    "screenID": "1",
+    "ScreenName": "WalkThroughScreen",
+    "keyword_data": [
+      {
+        "screenId": "1",
+        "keyword_id": 1,
+        "keyword_name": "skip",
+        "keyword_value": "Skip"
+      },
+      {
+        "screenId": "1",
+        "keyword_id": 2,
+        "keyword_name": "getStarted",
+        "keyword_value": "Get Started"
+      },
+      {
+        "screenId": "1",
+        "keyword_id": 3,
+        "keyword_name": "walkThrough1Title",
+        "keyword_value": "Select Pickup Location"
+      },
+      {
+        "screenId": "1",
+        "keyword_id": 4,
+        "keyword_name": "walkThrough2Title",
+        "keyword_value": "Select Drop Location"
+      },
+      {
+        "screenId": "1",
+        "keyword_id": 5,
+        "keyword_name": "walkThrough3Title",
+        "keyword_value": "Confirm And Relax"
+      },
+      {
+        "screenId": "1",
+        "keyword_id": 6,
+        "keyword_name": "walkThrough1Subtitle",
+        "keyword_value": "It helps us to get package from your doorstep.."
+      },
+      {
+        "screenId": "1",
+        "keyword_id": 7,
+        "keyword_name": "walkThrough2Subtitle",
+        "keyword_value": "So that we can deliver the package to the correct person quickly."
+      },
+      {
+        "screenId": "1",
+        "keyword_id": 8,
+        "keyword_name": "walkThrough3Subtitle",
+        "keyword_value": "We will deliver your package on time and in perfect condition."
+      }
+    ]
+  },
+  {
+    "screenID": "2",
+    "ScreenName": "SplashScreen",
+    "keyword_data": [
+      {
+        "screenId": "2",
+        "keyword_id": 9,
+        "keyword_name": "appName",
+        "keyword_value": "Mighty Delivery"
+      }
+    ]
+  },
+  {
+    "screenID": "3",
+    "ScreenName": "LoginScreen",
+    "keyword_data": [
+      {
+        "screenId": "3",
+        "keyword_id": 10,
+        "keyword_name": "userNotApproveMsg",
+        "keyword_value": "You profile is under review. Wait some time or contact to your administrator."
+      },
+      {
+        "screenId": "3",
+        "keyword_id": 11,
+        "keyword_name": "acceptTermService",
+        "keyword_value": "Please accept Terms of service & Privacy Policy."
+      },
+      {
+        "screenId": "3",
+        "keyword_id": 12,
+        "keyword_name": "signIn",
+        "keyword_value": "Sign In"
+      },
+      {
+        "screenId": "3",
+        "keyword_id": 13,
+        "keyword_name": "email",
+        "keyword_value": "Email"
+      },
+      {
+        "screenId": "3",
+        "keyword_id": 14,
+        "keyword_name": "password",
+        "keyword_value": "Password"
+      },
+      {
+        "screenId": "3",
+        "keyword_id": 15,
+        "keyword_name": "rememberMe",
+        "keyword_value": "Remember Me"
+      },
+      {
+        "screenId": "3",
+        "keyword_id": 16,
+        "keyword_name": "forgotPasswordQue",
+        "keyword_value": "Forgot Password ?"
+      },
+      {
+        "screenId": "3",
+        "keyword_id": 17,
+        "keyword_name": "iAgreeToThe",
+        "keyword_value": "I agree to the"
+      },
+      {
+        "screenId": "3",
+        "keyword_id": 18,
+        "keyword_name": "termOfService",
+        "keyword_value": "Terms of Service"
+      },
+      {
+        "screenId": "3",
+        "keyword_id": 19,
+        "keyword_name": "privacyPolicy",
+        "keyword_value": "Privacy Policy"
+      },
+      {
+        "screenId": "3",
+        "keyword_id": 20,
+        "keyword_name": "demoUser",
+        "keyword_value": "Demo User"
+      },
+      {
+        "screenId": "3",
+        "keyword_id": 21,
+        "keyword_name": "demoDeliveryMan",
+        "keyword_value": "Demo Delivery Man"
+      },
+      {
+        "screenId": "3",
+        "keyword_id": 22,
+        "keyword_name": "doNotHaveAccount",
+        "keyword_value": "Don\\'t have an account?"
+      },
+      {
+        "screenId": "3",
+        "keyword_id": 23,
+        "keyword_name": "signWith",
+        "keyword_value": "or Sign in with"
+      },
+      {
+        "screenId": "3",
+        "keyword_id": 24,
+        "keyword_name": "becomeADeliveryBoy",
+        "keyword_value": "Become a delivery boy ?"
+      },
+      {
+        "screenId": "3",
+        "keyword_id": 25,
+        "keyword_name": "signUp",
+        "keyword_value": "Sign Up"
+      },
+      {
+        "screenId": "3",
+        "keyword_id": 26,
+        "keyword_name": "lblUser",
+        "keyword_value": "User"
+      },
+      {
+        "screenId": "3",
+        "keyword_id": 27,
+        "keyword_name": "selectUserType",
+        "keyword_value": "Select User Type"
+      },
+      {
+        "screenId": "3",
+        "keyword_id": 28,
+        "keyword_name": "lblDeliveryBoy",
+        "keyword_value": "Delivery Boy"
+      },
+      {
+        "screenId": "3",
+        "keyword_id": 29,
+        "keyword_name": "cancel",
+        "keyword_value": "Cancel"
+      },
+      {
+        "screenId": "3",
+        "keyword_id": 30,
+        "keyword_name": "lblContinue",
+        "keyword_value": "Continue"
+      }
+    ]
+  },
+  {
+    "screenID": "4",
+    "ScreenName": "ErrorMessages",
+    "keyword_data": [
+      {
+        "screenId": "4",
+        "keyword_id": 31,
+        "keyword_name": "fieldRequiredMsg",
+        "keyword_value": "This field is required"
+      },
+      {
+        "screenId": "4",
+        "keyword_id": 32,
+        "keyword_name": "emailInvalid",
+        "keyword_value": "Email is invalid"
+      },
+      {
+        "screenId": "4",
+        "keyword_id": 33,
+        "keyword_name": "passwordInvalid",
+        "keyword_value": "Minimum password length should be 6"
+      },
+      {
+        "screenId": "4",
+        "keyword_id": 74,
+        "keyword_name": "errorInternetNotAvailable",
+        "keyword_value": "Your internet is not working."
+      },
+      {
+        "screenId": "4",
+        "keyword_id": 57,
+        "keyword_name": "errorSomethingWentWrong",
+        "keyword_value": "Something Went Wrong."
+      },
+      {
+        "screenId": "4",
+        "keyword_id": 60,
+        "keyword_name": "credentialNotMatch",
+        "keyword_value": "These credential do not match our records."
+      }
+    ]
+  },
+  {
+    "screenID": "5",
+    "ScreenName": "RegisterScreen",
+    "keyword_data": [
+      {
+        "screenId": "5",
+        "keyword_id": 34,
+        "keyword_name": "name",
+        "keyword_value": "Name"
+      },
+      {
+        "screenId": "5",
+        "keyword_id": 35,
+        "keyword_name": "contactNumber",
+        "keyword_value": "Contact Number"
+      },
+      {
+        "screenId": "5",
+        "keyword_id": 36,
+        "keyword_name": "alreadyHaveAnAccount",
+        "keyword_value": "Already have an account?"
+      }
+    ]
+  },
+  {
+    "screenID": "6",
+    "ScreenName": "ForgotPasswordScreen",
+    "keyword_data": [
+      {
+        "screenId": 6,
+        "keyword_id": 37,
+        "keyword_name": "forgotPassword",
+        "keyword_value": "Forgot Password"
+      },
+      {
+        "screenId": 6,
+        "keyword_id": 38,
+        "keyword_name": "submit",
+        "keyword_value": "Submit"
+      },
+      {
+        "screenId": 6,
+        "keyword_id": 39,
+        "keyword_name": "demoMsg",
+        "keyword_value": "Tester role not allowed to perform this action"
+      }
+    ]
+  },
+  {
+    "screenID": "7",
+    "ScreenName": "AboutUsScreen",
+    "keyword_data": [
+      {
+        "screenId": 7,
+        "keyword_id": 40,
+        "keyword_name": "mAppDescription",
+        "keyword_value ": "You can deliver exactly when the user wants and can start processing the user’s order almost immediately after you receive it, or you can deliver on a specific day and time. "
+      },
+      {
+        "screenId": 7,
+        "keyword_id": 41,
+        "keyword_name": "contactUs",
+        "keyword_value ": "Contact Us"
+      },
+      {
+        "screenId": 7,
+        "keyword_id": 42,
+        "keyword_name": "aboutUs",
+        "keyword_value ": "About Us"
+      }
+    ]
+  },
+  {
+    "screenID": "8",
+    "ScreenName": "BankDetailScreen",
+    "keyword_data": [
+      {
+        "screenId": "8",
+        "keyword_id": "43",
+        "keyword_name": "bankDetails",
+        "keyword_value ": "Bank Details"
+      },
+      {
+        "screenId": "8",
+        "keyword_id": "44",
+        "keyword_name": "bankName",
+        "keyword_value ": "Bank Name"
+      },
+      {
+        "screenId": "8",
+        "keyword_id": "45",
+        "keyword_name": "accountNumber",
+        "keyword_value ": "Account Number"
+      },
+      {
+        "screenId": "8",
+        "keyword_id": "46",
+        "keyword_name": "nameAsPerBank",
+        "keyword_value ": "Name as Per Bank"
+      },
+      {
+        "screenId": "8",
+        "keyword_id": "47",
+        "keyword_name": "ifscCode",
+        "keyword_value ": "IFSC Code"
+      },
+      {
+        "screenId": "8",
+        "keyword_id": "48",
+        "keyword_name": "save",
+        "keyword_value ": "Save"
+      }
+    ]
+  },
+  {
+    "screenID": "9",
+    "ScreenName": "ChangePasswordScreen",
+    "keyword_data": [
+      {
+        "screenId": "9",
+        "keyword_id": "49",
+        "keyword_name": "changePassword",
+        "keyword_value ": "Change Password"
+      },
+      {
+        "screenId": "9",
+        "keyword_id": "50",
+        "keyword_name": "oldPassword",
+        "keyword_value ": "Old Password"
+      },
+      {
+        "screenId": "9",
+        "keyword_id": "51",
+        "keyword_name": "newPassword",
+        "keyword_value ": "New Password"
+      },
+      {
+        "screenId": "9",
+        "keyword_id": "52",
+        "keyword_name": "confirmPassword",
+        "keyword_value ": "Confirm Password"
+      },
+      {
+        "screenId": "9",
+        "keyword_id": "53",
+        "keyword_name": "passwordNotMatch",
+        "keyword_value ": "Password does not match"
+      },
+      {
+        "screenId": "9",
+        "keyword_id": "54",
+        "keyword_name": "saveChanges",
+        "keyword_value ": "Save Changes"
+      }
+    ]
+  },
+  {
+    "screenID": "10",
+    "ScreenName": "EditProfileScreen",
+    "keyword_data": [
+      {
+        "screenId": "10",
+        "keyword_id": "55",
+        "keyword_name": "editProfile",
+        "keyword_value ": "Edit Profile"
+      },
+      {
+        "screenId": "10",
+        "keyword_id": "56",
+        "keyword_name": "notChangeEmail",
+        "keyword_value ": "You cannot Change email id"
+      },
+      {
+        "screenId": "10",
+        "keyword_id": "58",
+        "keyword_name": "notChangeMobileNo",
+        "keyword_value ": "You cannot change Contact Number"
+      },
+      {
+        "screenId": "10",
+        "keyword_id": "59",
+        "keyword_name": "address",
+        "keyword_value ": "Address"
+      }
+    ]
+  },
+  {
+    "screenID": "11",
+    "ScreenName": "EmailVerificationScreen",
+    "keyword_data": [
+      {
+        "screenId": "11",
+        "keyword_id": "61",
+        "keyword_name": "logoutConfirmationMsg",
+        "keyword_value ": "Are you sure you want to logout ?"
+      },
+      {
+        "screenId": "11",
+        "keyword_id": "62",
+        "keyword_name": "yes",
+        "keyword_value ": "Yes "
+      },
+      {
+        "screenId": "11",
+        "keyword_id": "63",
+        "keyword_name": "no",
+        "keyword_value ": "No "
+      },
+      {
+        "screenId": "11",
+        "keyword_id": "64",
+        "keyword_name": "emailVerification",
+        "keyword_value ": "Email Verification"
+      },
+      {
+        "screenId": "11",
+        "keyword_id": "65",
+        "keyword_name": "weSend",
+        "keyword_value ": "We will send you an"
+      },
+      {
+        "screenId": "11",
+        "keyword_id": "66",
+        "keyword_name": "oneTimePassword",
+        "keyword_value ": "One Time Password"
+      },
+      {
+        "screenId": "11",
+        "keyword_id": "67",
+        "keyword_name": "on",
+        "keyword_value ": "on"
+      },
+      {
+        "screenId": "11",
+        "keyword_id": "68",
+        "keyword_name": "getEmail",
+        "keyword_value ": "Get Email"
+      },
+      {
+        "screenId": "11",
+        "keyword_id": "69",
+        "keyword_name": "confirmationCode",
+        "keyword_value ": "Enter Confirmation code"
+      },
+      {
+        "screenId": "11",
+        "keyword_id": "70",
+        "keyword_name": "confirmationCodeSent",
+        "keyword_value ": "Enter the confirmation code have sent to"
+      },
+      {
+        "screenId": "11",
+        "keyword_id": "71",
+        "keyword_name": "didNotReceiveTheCode",
+        "keyword_value ": "Didn\\'t receive the code?"
+      },
+      {
+        "screenId": "11",
+        "keyword_id": "72",
+        "keyword_name": "resend",
+        "keyword_value ": "RESEND"
+      }
+    ]
+  },
+  {
+    "screenID": "12",
+    "ScreenName": "LanguageScreen",
+    "keyword_data": [
+      {
+        "screenId": "12",
+        "keyword_id": "73",
+        "keyword_name": "language",
+        "keyword_value ": "Language"
+      }
+    ]
+  },
+  {
+    "screenID": "13",
+    "ScreenName": "NotificationScreen",
+    "keyword_data": [
+      {
+        "screenId": "13",
+        "keyword_id": "75",
+        "keyword_name": "notifications",
+        "keyword_value": "Notifications "
+      },
+      {
+        "screenId": "13",
+        "keyword_id": "76",
+        "keyword_name": "markAllRead",
+        "keyword_value": "Mark All as read"
+      }
+    ]
+  },
+  {
+    "screenID": "14",
+    "ScreenName": "ThemeScreen",
+    "keyword_data": [
+      {
+        "screenId": "14",
+        "keyword_id": "77",
+        "keyword_name": "light"
+      },
+      {
+        "screenId": "14",
+        "keyword_id": "78",
+        "keyword_name": "dark"
+      },
+      {
+        "screenId": "14",
+        "keyword_id": "79",
+        "keyword_name": "systemDefault"
+      },
+      {
+        "screenId": "14",
+        "keyword_id": "80",
+        "keyword_name": "theme"
+      }
+    ]
+  },
+  {
+    "screenID": "15",
+    "ScreenName": "UserCitySelectScreen",
+    "keyword_data": [
+      {
+        "screenId": "15",
+        "keyword_id": "81",
+        "keyword_name": "pleaseSelectCity",
+        "keyword_value": "Please select City "
+      },
+      {
+        "screenId": "15",
+        "keyword_id": "82",
+        "keyword_name": "selectRegion",
+        "keyword_value": "Select Region "
+      },
+      {
+        "screenId": "15",
+        "keyword_id": "83",
+        "keyword_name": "country",
+        "keyword_value": "Country "
+      },
+      {
+        "screenId": "15",
+        "keyword_id": "84",
+        "keyword_name": "city",
+        "keyword_value": "City "
+      },
+      {
+        "screenId": "15",
+        "keyword_id": "85",
+        "keyword_name": "selectCity",
+        "keyword_value": "Select City"
+      }
+    ]
+  },
+  {
+    "screenID": "16",
+    "ScreenName": "VerificationScreen",
+    "keyword_data": [
+      {
+        "screenId": "16",
+        "keyword_id": "86",
+        "keyword_name": "verification",
+        "keyword_value": "Verification "
+      },
+      {
+        "screenId": "16",
+        "keyword_id": "87",
+        "keyword_name": "phoneNumberVerification",
+        "keyword_value": "Phone Number Verification "
+      },
+      {
+        "screenId": "16",
+        "keyword_id": "88",
+        "keyword_name": "getOTP",
+        "keyword_value": "Get OTP "
+      },
+      {
+        "screenId": "16",
+        "keyword_id": "89",
+        "keyword_name": "invalidVerificationCode",
+        "keyword_value": "Invalid Verification Code"
+      }
+    ]
+  },
+  {
+    "screenID": "17",
+    "ScreenName": "ChatScreen",
+    "keyword_data": [
+      {
+        "screenId": "17",
+        "keyword_id": "90",
+        "keyword_name": "deleteMessage",
+        "keyword_value": "Delete message? "
+      },
+      {
+        "screenId": "17",
+        "keyword_id": "91",
+        "keyword_name": "writeAMessage",
+        "keyword_value": "Write a message..."
+      }
+    ]
+  },
+  {
+    "screenID": "18",
+    "ScreenName": "AddAddressScreen",
+    "keyword_data": [
+      {
+        "screenId": "18",
+        "keyword_id": "92",
+        "keyword_name": "addNewAddress",
+        "keyword_value": "Add New Address "
+      },
+      {
+        "screenId": "18",
+        "keyword_id": "93",
+        "keyword_name": "pleaseSelectValidAddress",
+        "keyword_value": "Please select valid address"
+      }
+    ]
+  },
+  {
+    "screenID": "19",
+    "ScreenName": "CreateOrderScreen",
+    "keyword_data": [
+      {
+        "screenId": "19",
+        "keyword_id": "94",
+        "keyword_name": "balanceInsufficient",
+        "keyword_value": "Balance is insufficient,Please add amount in your wallet "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "95",
+        "keyword_name": "deliveryNow",
+        "keyword_value": "Deliver Now "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "96",
+        "keyword_name": "schedule",
+        "keyword_value": "Schedule "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "97",
+        "keyword_name": "pickTime",
+        "keyword_value": "Pick Time "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "98",
+        "keyword_name": "date",
+        "keyword_value": "Date "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "99",
+        "keyword_name": "from",
+        "keyword_value": "From "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "100",
+        "keyword_name": "endTimeValidationMsg",
+        "keyword_value": "EndTime must be after StartTime "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "101",
+        "keyword_name": "to",
+        "keyword_value": "To "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "102",
+        "keyword_name": "deliverTime",
+        "keyword_value": "Deliver Time "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "103",
+        "keyword_name": "weight",
+        "keyword_value": "Weight "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "104",
+        "keyword_name": "numberOfParcels",
+        "keyword_value": "Number of Parcels "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "105",
+        "keyword_name": "selectVehicle",
+        "keyword_value": "Select Vehicle "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "106",
+        "keyword_name": "parcelType",
+        "keyword_value": "Parcel Type "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "107",
+        "keyword_name": "pickupInformation",
+        "keyword_value": "Pickup Information "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "108",
+        "keyword_name": "selectAddressSave",
+        "keyword_value": "Select Address From save "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "109",
+        "keyword_name": "selectAddress",
+        "keyword_value": "Select Address "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "110",
+        "keyword_name": "location",
+        "keyword_value": "Location "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "111",
+        "keyword_name": "description",
+        "keyword_value": "Description "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "112",
+        "keyword_name": "deliveryInformation",
+        "keyword_value": "Delivery Information"
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "113",
+        "keyword_name": "deliveryLocation",
+        "keyword_value": "Delivery Location "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "114",
+        "keyword_name": "deliveryContactNumber",
+        "keyword_value": "Delivery Contact Number "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "115",
+        "keyword_name": "deliveryDescription",
+        "keyword_value": "Delivery Description "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "116",
+        "keyword_name": "packageInformation",
+        "keyword_value": "Package Information "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "117",
+        "keyword_name": "parcelType",
+        "keyword_value": "Parcel Type "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "118",
+        "keyword_name": "pickupLocation",
+        "keyword_value": "Pickup Location "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "119",
+        "keyword_name": "deliveryLocation",
+        "keyword_value": "Delivery Location "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "120",
+        "keyword_name": "payment",
+        "keyword_value": "Payment "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "121",
+        "keyword_name": "paymentCollectFrom",
+        "keyword_value": "Payment Collect from "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "122",
+        "keyword_name": "saveDraftConfirmationMsg",
+        "keyword_value": "Are you sure you want to save as a draft? "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "123",
+        "keyword_name": "saveDraft",
+        "keyword_value": "Save Draft "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "124",
+        "keyword_name": "createOrder",
+        "keyword_value": "Create Order "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "125",
+        "keyword_name": "previous",
+        "keyword_value": "Previous "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "126",
+        "keyword_name": "next",
+        "keyword_value": "Next "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "127",
+        "keyword_name": "sourceLocation",
+        "keyword_value": "Source Location "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "128",
+        "keyword_name": "destinationLocation",
+        "keyword_value": "Destination Location "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "129",
+        "keyword_name": "pickupCurrentValidationMsg",
+        "keyword_value": "Pickup Time must be after Current Time "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "130",
+        "keyword_name": "pickupDeliverValidationMsg",
+        "keyword_value": "Pickup Time must be before Deliver Time "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "131",
+        "keyword_name": "createOrderConfirmationMsg",
+        "keyword_value": "Are you sure you want to place order? "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "132",
+        "keyword_name": "deliveryCharge",
+        "keyword_value": "Delivery Charge"
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "133",
+        "keyword_name": "distanceCharge",
+        "keyword_value": "Distance Charge "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "134",
+        "keyword_name": "weightCharge",
+        "keyword_value": "Weight Charge "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "135",
+        "keyword_name": "extraCharges",
+        "keyword_value": "Extra Charges "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "136",
+        "keyword_name": "total",
+        "keyword_value": "Total "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "137",
+        "keyword_name": "choosePickupAddress",
+        "keyword_value": "Choose pickup address "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "138",
+        "keyword_name": "chooseDeliveryAddress",
+        "keyword_value": "Choose delivery address "
+      },
+      {
+        "screenId": "19",
+        "keyword_id": "139",
+        "keyword_name": "showingAllAddress",
+        "keyword_value": "Showing all available addresses"
+      }
+    ]
+  },
+  {
+    "screenID": "20",
+    "ScreenName": "DashboardScreen",
+    "keyword_data": [
+      {
+        "screenId": "20",
+        "keyword_id": "140",
+        "keyword_name": "myOrders",
+        "keyword_value": "My Orders "
+      },
+      {
+        "screenId": "20",
+        "keyword_id": "141",
+        "keyword_name": "account",
+        "keyword_value": "Account "
+      },
+      {
+        "screenId": "20",
+        "keyword_id": "142",
+        "keyword_name": "hey",
+        "keyword_value": "Hey"
+      }
+    ]
+  },
+  {
+    "screenID": "21",
+    "ScreenName": "AccountFragment",
+    "keyword_data": [
+      {
+        "screenId": "21",
+        "keyword_id": "143",
+        "keyword_name": "ordersWalletMore",
+        "keyword_value": "Orders, Wallet and more "
+      },
+      {
+        "screenId": "21",
+        "keyword_id": "144",
+        "keyword_name": "drafts",
+        "keyword_value": "Drafts "
+      },
+      {
+        "screenId": "21",
+        "keyword_id": "145",
+        "keyword_name": "wallet",
+        "keyword_value": "Wallet "
+      },
+      {
+        "screenId": "21",
+        "keyword_id": "146",
+        "keyword_name": "lblMyAddresses",
+        "keyword_value": "My Addresses "
+      },
+      {
+        "screenId": "21",
+        "keyword_id": "147",
+        "keyword_name": "deleteAccount",
+        "keyword_value": "Delete Account "
+      },
+      {
+        "screenId": "21",
+        "keyword_id": "148",
+        "keyword_name": "general",
+        "keyword_value": "General "
+      },
+      {
+        "screenId": "21",
+        "keyword_id": "149",
+        "keyword_name": "termAndCondition",
+        "keyword_value": "Terms & Condition "
+      },
+      {
+        "screenId": "21",
+        "keyword_id": "150",
+        "keyword_name": "helpAndSupport",
+        "keyword_value": "Help & Support "
+      },
+      {
+        "screenId": "21",
+        "keyword_id": "151",
+        "keyword_name": "logout",
+        "keyword_value": "Logout "
+      },
+      {
+        "screenId": "21",
+        "keyword_id": "152",
+        "keyword_name": "version",
+        "keyword_value": "Version"
+      }
+    ]
+  },
+  {
+    "screenID": "22",
+    "ScreenName": "DeleteAccountScreen",
+    "keyword_data": [
+      {
+        "screenId": "22",
+        "keyword_id": "153",
+        "keyword_name": "confirmAccountDeletion",
+        "keyword_value": "Confirm account deletion "
+      },
+      {
+        "screenId": "22",
+        "keyword_id": "154",
+        "keyword_name": "deleteAccountMsg2",
+        "keyword_value": "Deleting your account removes personal information from our database. Your email becomes permanently reserved and same email cannot be re-used to register a new account. "
+      },
+      {
+        "screenId": "22",
+        "keyword_id": "155",
+        "keyword_name": "deleteAccountConfirmMsg",
+        "keyword_value": "Are you sure you want to delete Account?"
+      }
+    ]
+  },
+  {
+    "screenID": "23",
+    "ScreenName": "DraftOrderListScreen",
+    "keyword_data": [
+      {
+        "screenId": "23",
+        "keyword_id": "156",
+        "keyword_name": "draftOrder",
+        "keyword_value": "Draft Order "
+      },
+      {
+        "screenId": "23",
+        "keyword_id": "157",
+        "keyword_name": "delete",
+        "keyword_value": "Delete "
+      },
+      {
+        "screenId": "23",
+        "keyword_id": "158",
+        "keyword_name": "deleteDraft",
+        "keyword_value": "Delete draft order? "
+      },
+      {
+        "screenId": "23",
+        "keyword_id": "159",
+        "keyword_name": "sureWantToDeleteDraft",
+        "keyword_value": "Are you sure want to delete this draft order?"
+      }
+    ]
+  },
+  {
+    "screenID": "24",
+    "ScreenName": "GoogleMapScreen",
+    "keyword_data": [
+      {
+        "screenId": "24",
+        "keyword_id": "160",
+        "keyword_name": "selectLocation",
+        "keyword_value": "Select Location "
+      },
+      {
+        "screenId": "24",
+        "keyword_id": "161",
+        "keyword_name": "selectPickupLocation",
+        "keyword_value": "Select Pickup Location "
+      },
+      {
+        "screenId": "24",
+        "keyword_id": "162",
+        "keyword_name": "selectDeliveryLocation",
+        "keyword_value": "Select Delivery Location "
+      },
+      {
+        "screenId": "24",
+        "keyword_id": "163",
+        "keyword_name": "searchAddress",
+        "keyword_value": "Search Address "
+      },
+      {
+        "screenId": "24",
+        "keyword_id": "164",
+        "keyword_name": "pleaseWait",
+        "keyword_value": "Please wait... "
+      },
+      {
+        "screenId": "24",
+        "keyword_id": "165",
+        "keyword_name": "confirmPickupLocation",
+        "keyword_value": "Confirm Pickup Location "
+      },
+      {
+        "screenId": "24",
+        "keyword_id": "166",
+        "keyword_name": "confirmDeliveryLocation",
+        "keyword_value": "Confirm Delivery Location "
+      },
+      {
+        "screenId": "24",
+        "keyword_id": "167",
+        "keyword_name": "addressNotInArea",
+        "keyword_value": "Address not in area"
+      }
+    ]
+  },
+  {
+    "screenID": "25",
+    "ScreenName": "MyAddressListScreen",
+    "keyword_data": [
+      {
+        "screenId": "25",
+        "keyword_id": "168",
+        "keyword_name": "deleteLocation",
+        "keyword_value": "Delete Location? "
+      },
+      {
+        "screenId": "25",
+        "keyword_id": "169",
+        "keyword_name": "sureWantToDeleteAddress",
+        "keyword_value": "Are you sure want to delete this address?"
+      }
+    ]
+  }
+]
