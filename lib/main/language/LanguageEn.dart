@@ -1045,7 +1045,7 @@ class LanguageEn extends BaseLanguage {
   String get totalWithdrawn => 'Total Withdraw Amount';
 
   @override
-  String get manualRecieved => 'Mannual Received';
+  String get manualRecieved => 'Manual Received';
 
   @override
   String get lastLocation => 'Last Location';
