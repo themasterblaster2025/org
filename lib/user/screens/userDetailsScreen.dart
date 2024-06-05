@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:geocode/geocode.dart';
+import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/main/models/LoginResponse.dart';
-import 'package:nb_utils/nb_utils.dart';
 
+import '../../extensions/animatedList/animated_scroll_view.dart';
+import '../../extensions/decorations.dart';
+import '../../extensions/system_utils.dart';
+import '../../extensions/text_styles.dart';
 import '../../main.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/UserProfileDetailModel.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Colors.dart';
+import '../../main/utils/Constants.dart';
 
 class UserDetailsScreen extends StatefulWidget {
   UserData? userData;
+
   UserDetailsScreen({super.key, this.userData});
 
   @override
@@ -28,6 +37,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
   String? manualReceived;
   EarningDetail earningDetail = EarningDetail();
   String addressValue = "";
+
   @override
   void initState() {
     // TODO: implement initState

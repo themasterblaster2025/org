@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-import 'package:nb_utils/nb_utils.dart';
 
+import '../../extensions/colors.dart';
+import '../../extensions/shared_pref.dart';
+import '../../languageConfiguration/AppLocalizations.dart';
+import '../../languageConfiguration/BaseLanguage.dart';
+import '../../languageConfiguration/LanguageDataConstant.dart';
 import '../../main.dart';
-import '../../main/language/AppLocalizations.dart';
-import '../../main/language/BaseLanguage.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Constants.dart';
 
@@ -122,11 +124,10 @@ abstract class _AppStore with Store {
 
   @action
   Future<void> setLanguage(String aCode, {BuildContext? context}) async {
-    selectedLanguageDataModel = getSelectedLanguageModel(defaultLanguage: defaultLanguage);
-    selectedLanguage = getSelectedLanguageModel(defaultLanguage: defaultLanguage)!.languageCode!;
-
+    setDefaultLocate();
+    selectedLanguage = aCode;
     if (context != null) language = BaseLanguage.of(context)!;
-    language = await AppLocalizations().load(Locale(selectedLanguage));
+    language = (await AppLocalizations().load(Locale(selectedLanguage)));
   }
 
   @action

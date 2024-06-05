@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
+import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
-import 'package:nb_utils/nb_utils.dart';
 
+import '../../extensions/app_button.dart';
+import '../../extensions/common.dart';
+import '../../extensions/decorations.dart';
+import '../../extensions/text_styles.dart';
 import '../../main.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
@@ -40,7 +47,7 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 widget.item.date != null
-                    ? Text(DateFormat('dd MMM yyyy').format(DateTime.parse(widget.item.date!).toLocal()) + " at " + DateFormat('hh:mm a').format(DateTime.parse(widget.item.date!).toLocal()),
+                    ? Text(DateFormat('dd MMM yyyy').format(DateTime.parse(widget.item.date!).toLocal()) + language.at + DateFormat('hh:mm a').format(DateTime.parse(widget.item.date!).toLocal()),
                             style: primaryTextStyle(size: 14))
                         .expand()
                     : SizedBox(),

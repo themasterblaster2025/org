@@ -15,12 +15,21 @@ import 'package:flutterwave_standard/flutterwave.dart';
 import 'package:flutterwave_standard/view/view_utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import 'package:mighty_delivery/languageConfiguration/LanguageDefaultJson.dart';
 import 'package:mighty_delivery/main/utils/Images.dart';
 import 'package:my_fatoorah/my_fatoorah.dart';
-import 'package:nb_utils/nb_utils.dart';
 import 'package:paytm/paytm.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
+import '../../extensions/common.dart';
+import '../../extensions/decorations.dart';
+import '../../extensions/shared_pref.dart';
+import '../../extensions/system_utils.dart';
+import '../../extensions/text_styles.dart';
 import '../../main.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/CityListModel.dart';
@@ -196,7 +205,8 @@ class PaymentScreenState extends State<PaymentScreen> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    Fluttertoast.showToast(msg: "SUCCESS: " + response.paymentId!, toastLength: Toast.LENGTH_SHORT);
+    //  Fluttertoast.showToast(msg: "SUCCESS: " + response.paymentId!, toastLength: Toast.LENGTH_SHORT);
+    toast("SUCCESS: ${response.paymentId}");
     Map<String, dynamic> req = {
       'order_id': response.orderId ?? widget.orderId.toString(),
       'txn_id': response.paymentId,
@@ -210,11 +220,17 @@ class PaymentScreenState extends State<PaymentScreen> {
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    Fluttertoast.showToast(msg: "ERROR: " + response.code.toString() + " - " + response.message!, toastLength: Toast.LENGTH_SHORT);
+    // Fluttertoast.showToast(
+    //     msg: "ERROR: " + response.code.toString() + " - " + response.message!,
+    //     toastLength: Toast.LENGTH_SHORT);
+    toast("ERROR : ${response.code.toString() + " - " + response.message!}");
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
-    Fluttertoast.showToast(msg: "EXTERNAL_WALLET: " + response.walletName!, toastLength: Toast.LENGTH_SHORT);
+    // Fluttertoast.showToast(
+    //     msg: "EXTERNAL_WALLET: " + response.walletName!,
+    //     toastLength: Toast.LENGTH_SHORT);
+    toast("EXTERNAL_WALLET: ${response.walletName!}");
   }
 
   /// FlutterWave Payment
@@ -564,7 +580,7 @@ class PaymentScreenState extends State<PaymentScreen> {
               successUrl: 'https://pub.dev/packages/get',
               errorUrl: 'https://www.google.com/',
               invoiceAmount: widget.totalAmount.toDouble(),
-              language: defaultLanguage == 'ar' ? ApiLanguage.Arabic : ApiLanguage.English,
+              language: defaultLanguageCode == 'ar' ? ApiLanguage.Arabic : ApiLanguage.English,
               token: myFatoorahToken!,
             )
           : MyfatoorahRequest.live(
@@ -572,7 +588,7 @@ class PaymentScreenState extends State<PaymentScreen> {
               successUrl: 'https://pub.dev/packages/get',
               errorUrl: 'https://www.google.com/',
               invoiceAmount: widget.totalAmount.toDouble(),
-              language: defaultLanguage == 'ar' ? ApiLanguage.Arabic : ApiLanguage.English,
+              language: defaultLanguageCode == 'ar' ? ApiLanguage.Arabic : ApiLanguage.English,
               token: myFatoorahToken!,
             ),
     );

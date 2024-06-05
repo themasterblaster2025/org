@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../../extensions/animatedList/animated_configurations.dart';
+import '../../extensions/animatedList/animated_scroll_view.dart';
+import '../../extensions/colors.dart';
+import '../../extensions/confirmation_dialog.dart';
+import '../../extensions/decorations.dart';
+import '../../extensions/shared_pref.dart';
+import '../../extensions/text_styles.dart';
+import '../../extensions/widgets.dart';
 import '../../main.dart';
 import '../../main/components/theme_selection_dialog.dart';
 import '../../main/network/RestApis.dart';
@@ -149,7 +160,7 @@ class AccountFragmentState extends State<AccountFragment> {
               ).onTap(() async {
                 await showConfirmDialogCustom(
                   context,
-                  primaryColor: colorPrimary,
+                  primaryColor: Colors.red,
                   title: language.logoutConfirmationMsg,
                   positiveText: language.yes,
                   negativeText: language.no,

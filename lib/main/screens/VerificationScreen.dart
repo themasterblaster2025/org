@@ -1,16 +1,24 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/main/components/CommonScaffoldComponent.dart';
 import 'package:mighty_delivery/main/services/AuthServices.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
-import 'package:nb_utils/nb_utils.dart';
-import 'package:otp_text_field/style.dart';
-import '../../delivery/screens/DeliveryDashBoard.dart';
 import 'package:otp_text_field/otp_field.dart' as otp;
 import 'package:otp_text_field/otp_field_style.dart' as o;
+import 'package:otp_text_field/style.dart';
 
+import '../../delivery/screens/DeliveryDashBoard.dart';
+import '../../extensions/common.dart';
+import '../../extensions/confirmation_dialog.dart';
+import '../../extensions/shared_pref.dart';
+import '../../extensions/system_utils.dart';
+import '../../extensions/text_styles.dart';
 import '../../main.dart';
 import '../models/CityListModel.dart';
 import '../network/RestApis.dart';
@@ -53,7 +61,7 @@ class VerificationScreenState extends State<VerificationScreen> {
               },
             );
           },
-          icon: Icon(Icons.logout,color: Colors.white),
+          icon: Icon(Icons.logout, color: Colors.white),
         ),
       ],
       body: Stack(

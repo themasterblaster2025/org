@@ -4,8 +4,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 
+import '../../extensions/common.dart';
+import '../../extensions/shared_pref.dart';
+import '../../extensions/system_utils.dart';
+import '../../languageConfiguration/ServerLanguageResponse.dart';
 import '../../main.dart';
 import '../../main/models/ChangePasswordResponse.dart';
 import '../../main/models/CityDetailModel.dart';
@@ -96,7 +102,7 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
     }).catchError((e) {
       log(e.toString());
       if (e.toString() == "User not found") {
-        toast('user Not Found');
+        toast(language.userNotFound);
       }
     });
     await setValue(IS_VERIFIED_DELIVERY_MAN, loginResponse.data!.isVerifiedDeliveryMan == 1);
@@ -498,4 +504,9 @@ Future<LDBaseResponse> resendOtpEmail() async {
 
 Future<DirectionsResponse> getDistanceBetweenLatLng(String origins, String destinations) async {
   return DirectionsResponse.fromJson(await handleResponse(await buildHttpResponse('distance-matrix-api?origins=$origins&destinations=$destinations', method: HttpMethod.GET)));
+}
+
+//Language Data
+Future<ServerLanguageResponse> getLanguageList(versionNo) async {
+  return ServerLanguageResponse.fromJson(await handleResponse(await buildHttpResponse('language-table-list?version_no=$versionNo', method: HttpMethod.GET)).then((value) => value));
 }

@@ -2,8 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
+import 'package:mighty_delivery/main.dart';
 
+import '../../extensions/shared_pref.dart';
+import '../../extensions/system_utils.dart';
 import '../utils/Constants.dart';
 import '../utils/Images.dart';
 
@@ -44,7 +48,7 @@ class NotificationService {
 
     if (res.statusCode.isSuccessful()) {
     } else {
-      throw errorSomethingWentWrong;
+      throw language.errorSomethingWentWrong;
     }
   }
 }

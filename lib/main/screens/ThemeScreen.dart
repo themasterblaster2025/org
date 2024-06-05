@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
-import '../../main/components/BodyCornerWidget.dart';
+
+import '../../extensions/LiveStream.dart';
+import '../../extensions/shared_pref.dart';
+import '../../extensions/system_utils.dart';
+import '../../extensions/text_styles.dart';
+import '../../main.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Constants.dart';
-import 'package:nb_utils/nb_utils.dart';
-
-import '../../main.dart';
 
 class ThemeScreen extends StatefulWidget {
-
   @override
   _ThemeScreenState createState() => _ThemeScreenState();
 }
@@ -31,44 +35,46 @@ class _ThemeScreenState extends State<ThemeScreen> {
     if (mounted) super.setState(fn);
   }
 
-  String _getName(ThemeModes themeModes) {
-    switch (themeModes) {
-      case ThemeModes.Light:
-        return language.light;
-      case ThemeModes.Dark:
-        return language.dark;
-      case ThemeModes.SystemDefault:
-        return language.systemDefault;
-    }
-  }
-
-  Widget _getIcons(BuildContext context, ThemeModes themeModes) {
-    switch (themeModes) {
-      case ThemeModes.Light:
-        return Icon(LineIcons.sun, color: context.iconColor);
-      case ThemeModes.Dark:
-        return Icon(LineIcons.moon, color: context.iconColor);
-      case ThemeModes.SystemDefault:
-        return Icon(LineIcons.sun, color: context.iconColor);
-    }
-  }
+  // String _getName(AppThemeMode themeModes) {
+  //   switch (themeModes) {
+  //     case themeModes.themeModeLight:
+  //       return language.light;
+  //     case ThemeModes.Dark:
+  //       return language.dark;
+  //     case ThemeModes.SystemDefault:
+  //       return language.systemDefault;
+  //   }
+  // }
+  //
+  // Widget _getIcons(BuildContext context, ThemeModes themeModes) {
+  //   switch (themeModes) {
+  //     case ThemeModes.Light:
+  //       return Icon(LineIcons.sun, color: context.iconColor);
+  //     case ThemeModes.Dark:
+  //       return Icon(LineIcons.moon, color: context.iconColor);
+  //     case ThemeModes.SystemDefault:
+  //       return Icon(LineIcons.sun, color: context.iconColor);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
+    List<String?> themeModeList = [language.light, language.dark, language.systemDefault];
+    List<Icon> icons = [Icon(Icons.light_mode_outlined, color: context.iconColor), Icon(Icons.dark_mode_outlined, color: context.iconColor), Icon(Icons.light_mode_outlined, color: context.iconColor)];
     return Scaffold(
       appBar: commonAppBarWidget(language.theme),
       body: ListView(
         children: List.generate(
-          ThemeModes.values.length,
+          themeModeList.length,
           (index) {
             return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16,vertical: 12),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Row(
                 children: [
-                  _getIcons(context, ThemeModes.values[index]),
+                  icons[index],
                   16.width,
-                  Text('${_getName(ThemeModes.values[index])}', style: boldTextStyle()).expand(),
-                  if(index==currentIndex) Icon(Icons.check_circle,color: colorPrimary),
+                  Text(themeModeList[index]!, style: boldTextStyle()).expand(),
+                  if (index == currentIndex) Icon(Icons.check_circle, color: colorPrimary),
                 ],
               ),
             ).onTap(() async {

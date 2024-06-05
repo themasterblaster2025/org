@@ -1,10 +1,16 @@
 //region App name
+import 'package:flutter/material.dart';
+import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+
+import '../../extensions/colors.dart';
+import '../../extensions/common.dart';
+
 const mAppName = 'Mighty Delivery';
 //endregion
 
 //region Baseurl
 //Note: Domain url is where you uploaded your laravel code
-const DOMAIN_URL = 'https://apps.meetmighty.com/mighty-local-delivery'; // Don't add slash at the end of the url
+const DOMAIN_URL = 'https://meetmighty.com/mobile/delivery-admin'; // Don't add slash at the end of the url
 // Don't add slash at the end of the url
 //endregion
 
@@ -32,7 +38,7 @@ const String IOS_BUNDLE_ID = 'YOUR IOS_BUNDLE_ID';
 //endregion
 
 //region languages and phone code
-const defaultLanguage = "en";
+//const defaultLanguageCode = "en";
 const defaultPhoneCode = '+91';
 //endregion
 
@@ -53,7 +59,42 @@ const mContactPref = 'hello@meetmighty.com';
 const mInvoiceCompanyName = 'Roberts Private Limited';
 const mInvoiceAddress = 'Sarah Street 9, Beijing, Ahmedabad';
 const mInvoiceContactNumber = '+91 9845345665';
-
+double defaultRadius = 10;
+const THEME_MODE_INDEX = 'theme_mode_index';
+double tabletBreakpointGlobal = 600.0;
+double desktopBreakpointGlobal = 720.0;
+double? defaultInkWellRadius;
+Color? defaultInkWellSplashColor;
+Color? defaultInkWellHoverColor;
+Color? defaultInkWellHighlightColor;
+Color textPrimaryColorGlobal = textPrimaryColor;
+Color textSecondaryColorGlobal = textSecondaryColor;
+double defaultAppButtonElevation = 4.0;
+double defaultAppBarElevation = 1.0;
+int passwordLengthGlobal = 6;
+PageRouteAnimation? pageRouteAnimationGlobal;
+bool enableAppButtonScaleAnimationGlobal = true;
+int? appButtonScaleAnimationDurationGlobal;
+Duration pageRouteTransitionDurationGlobal = 400.milliseconds;
+int defaultElevation = 4;
+var customDialogHeight = 140.0;
+var customDialogWidth = 220.0;
+double defaultAppButtonRadius = 10.0;
+double defaultBlurRadius = 4.0;
+double defaultSpreadRadius = 0.5;
+Color defaultLoaderBgColorGlobal = Colors.white;
+Color? defaultLoaderAccentColorGlobal;
+bool forceEnableDebug = false;
+double textBoldSizeGlobal = 16;
+double textPrimarySizeGlobal = 16;
+double textSecondarySizeGlobal = 14;
+String? fontFamilyBoldGlobal;
+String? fontFamilyPrimaryGlobal;
+String? fontFamilySecondaryGlobal;
+FontWeight fontWeightBoldGlobal = FontWeight.bold;
+FontWeight fontWeightPrimaryGlobal = FontWeight.normal;
+FontWeight fontWeightSecondaryGlobal = FontWeight.normal;
+ShapeBorder? defaultDialogShape;
 //region contact num lenghth
 const minContactLength = 10;
 const maxContactLength = 14;
@@ -185,13 +226,19 @@ const stripeURL = 'https://api.stripe.com/v1/payment_intents';
 
 //region appTheme
 class AppThemeMode {
-  final int themeModeLight = 1;
-  final int themeModeDark = 2;
-  final int themeModeSystem = 0;
+  final int themeModeLight = 0;
+  final int themeModeDark = 1;
+  final int themeModeSystem = 2;
 }
+
+/* Theme Mode Type */
+const ThemeModeLight = 0;
+const ThemeModeDark = 1;
+const ThemeModeSystem = 2;
 
 AppThemeMode appThemeMode = AppThemeMode();
 //endregion
+/* Theme Mode Type */
 
 //region FireBase Collection Name
 const MESSAGES_COLLECTION = "messages";
@@ -270,3 +317,4 @@ const OTHER_SOURCE = "Other Source";
 const APP_STORE = "App Store";
 const TEST_FLIGHT = "Test Flight";
 const UNKNOWN_SOURCE = "Unknown Source";
+String? countryCode = "IN";

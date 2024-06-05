@@ -4,17 +4,25 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:http/http.dart';
-import '../../main/components/BodyCornerWidget.dart';
+import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+
+import '../../extensions/common.dart';
+import '../../extensions/confirmation_dialog.dart';
+import '../../extensions/decorations.dart';
+import '../../extensions/shared_pref.dart';
+import '../../extensions/system_utils.dart';
+import '../../extensions/text_styles.dart';
+import '../../main.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/DeliveryDocumentListModel.dart';
 import '../../main/models/DocumentListModel.dart';
+import '../../main/network/NetworkUtils.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
-import 'package:nb_utils/nb_utils.dart';
-
-import '../../main.dart';
-import '../../main/network/NetworkUtils.dart';
 import '../../main/utils/Constants.dart';
 
 class VerifyDeliveryPersonScreen extends StatefulWidget {
@@ -294,7 +302,7 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
                       );
                     },
                     separatorBuilder: (context, index) {
-                      return Divider(height: 30,color: context.dividerColor);
+                      return Divider(height: 30, color: context.dividerColor);
                     },
                   ),
                 ],

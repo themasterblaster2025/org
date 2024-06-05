@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import '../../main/utils/Colors.dart';
-import '../../main/utils/Constants.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import 'package:mighty_delivery/main/utils/Common.dart';
+
+import '../../extensions/LiveStream.dart';
+import '../../extensions/animatedList/animated_scroll_view.dart';
+import '../../extensions/decorations.dart';
+import '../../extensions/shared_pref.dart';
+import '../../extensions/system_utils.dart';
+import '../../extensions/text_styles.dart';
+import '../../languageConfiguration/LanguageDataConstant.dart';
+import '../../languageConfiguration/LanguageDefaultJson.dart';
+import '../../languageConfiguration/ServerLanguageResponse.dart';
 import '../../main.dart';
+import '../../main/utils/Colors.dart';
 import '../components/CommonScaffoldComponent.dart';
 
 class LanguageScreen extends StatefulWidget {
@@ -27,27 +39,31 @@ class LanguageScreenState extends State<LanguageScreen> {
       appBarTitle: language.language,
       body: AnimatedScrollView(
         padding: EdgeInsets.all(8),
-        children: List.generate(localeLanguageList.length, (index) {
-          LanguageDataModel data = localeLanguageList[index];
+        children: List.generate(defaultServerLanguageData!.length, (index) {
+          LanguageJsonData data = defaultServerLanguageData![index];
           return Container(
             margin: EdgeInsets.all(8),
             decoration: boxDecorationWithRoundedCorners(
                 backgroundColor: Colors.transparent,
-                border: Border.all(color: getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguage) == data.languageCode ? colorPrimary : dividerColor)),
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                border: Border.all(color: getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguageCode) == data.languageCode ? colorPrimary : dividerColor)),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: Row(
               children: [
-                Image.asset(data.flag.validate(), width: 34, height: 34).cornerRadiusWithClipRRect(4),
+                commonCachedNetworkImage(data.languageImage.validate(), width: 34, height: 34).cornerRadiusWithClipRRect(4),
+                //Image.asset(data.languageName.validate(), width: 34, height: 34).cornerRadiusWithClipRRect(4),
                 8.width,
-                Text('${data.name.validate()}', style: primaryTextStyle()).expand(),
-                getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguage) == data.languageCode
+                Text('${data.languageName.validate()}', style: primaryTextStyle()).expand(),
+                getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguageCode) == data.languageCode
                     ? Icon(Ionicons.radio_button_on, size: 20, color: colorPrimary)
                     : Icon(Ionicons.radio_button_off_sharp, size: 20, color: dividerColor),
               ],
             ),
           ).onTap(() async {
             await setValue(SELECTED_LANGUAGE_CODE, data.languageCode);
-            selectedLanguageDataModel = data;
+            setValue(SELECTED_LANGUAGE_CODE, data.languageCode);
+            setValue(SELECTED_LANGUAGE_COUNTRY_CODE, data.countryCode);
+            selectedServerLanguageData = data;
+            setValue(IS_SELECTED_LANGUAGE_CHANGE, true);
             appStore.setLanguage(data.languageCode!, context: context);
             setState(() {});
             LiveStream().emit('UpdateLanguage');

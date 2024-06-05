@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:nb_utils/nb_utils.dart';
+
+import '../../extensions/system_utils.dart';
 
 abstract class BaseService {
   CollectionReference? ref;

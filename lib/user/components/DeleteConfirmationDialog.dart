@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 
+import '../../extensions/decorations.dart';
+import '../../extensions/system_utils.dart';
+import '../../extensions/text_styles.dart';
 import '../../main.dart';
+import '../../main/utils/Constants.dart';
 import '../../main/utils/Widgets.dart';
 
 class DeleteConfirmationDialog extends StatelessWidget {

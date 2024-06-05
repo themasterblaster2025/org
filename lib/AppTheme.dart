@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../main/utils/Colors.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'extensions/colors.dart';
+import 'extensions/decorations.dart';
 
 class AppTheme {
   //
@@ -16,7 +18,7 @@ class AppTheme {
     iconTheme: IconThemeData(color: Colors.black),
     dialogBackgroundColor: Colors.white,
     unselectedWidgetColor: Colors.grey,
-    dividerColor: viewLineColor,
+    dividerColor: dividerColor,
     cardColor: Colors.white,
     tabBarTheme: TabBarTheme(labelColor: Colors.black),
     appBarTheme: AppBarTheme(

@@ -2,8 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/list_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/num_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 
+import '../../extensions/LiveStream.dart';
+import '../../extensions/animatedList/animated_scroll_view.dart';
+import '../../extensions/app_button.dart';
+import '../../extensions/common.dart';
+import '../../extensions/decorations.dart';
+import '../../extensions/shared_pref.dart';
+import '../../extensions/text_styles.dart';
+import '../../extensions/widgets.dart';
 import '../../main.dart';
 import '../../main/Chat/ChatScreen.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
@@ -171,36 +184,16 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                             children: [
                                               Row(
                                                 children: [
-                                                  Text(
-                                                    language.distance,
-                                                    style: secondaryTextStyle(size: 14),
-                                                    overflow: TextOverflow.ellipsis,
-                                                    maxLines: 1,
-                                                  ),
+                                                  Text(language.distance, style: secondaryTextStyle(size: 14), overflow: TextOverflow.ellipsis, maxLines: 1),
                                                   4.width,
-                                                  Text(
-                                                    distance ?? "0",
-                                                    style: boldTextStyle(),
-                                                    overflow: TextOverflow.ellipsis,
-                                                    maxLines: 1,
-                                                  ),
+                                                  Text(distance ?? "0", style: boldTextStyle(), overflow: TextOverflow.ellipsis, maxLines: 1),
                                                 ],
                                               ),
                                               Row(
                                                 children: [
-                                                  Text(
-                                                    language.duration,
-                                                    style: secondaryTextStyle(size: 14),
-                                                    overflow: TextOverflow.ellipsis,
-                                                    maxLines: 1,
-                                                  ),
+                                                  Text(language.duration, style: secondaryTextStyle(size: 14), overflow: TextOverflow.ellipsis, maxLines: 1),
                                                   4.width,
-                                                  Text(
-                                                    duration ?? "0",
-                                                    style: boldTextStyle(),
-                                                    overflow: TextOverflow.ellipsis,
-                                                    maxLines: 1,
-                                                  ),
+                                                  Text(duration ?? "0", style: boldTextStyle(), overflow: TextOverflow.ellipsis, maxLines: 1),
                                                 ],
                                               ),
                                             ],

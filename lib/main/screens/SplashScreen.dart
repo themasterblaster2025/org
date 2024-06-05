@@ -1,9 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/main/screens/EmailVerificationScreen.dart';
-import 'package:nb_utils/nb_utils.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../delivery/screens/DeliveryDashBoard.dart';
+import '../../extensions/shared_pref.dart';
+import '../../extensions/system_utils.dart';
+import '../../extensions/text_styles.dart';
+import '../../languageConfiguration/LanguageDataConstant.dart';
+import '../../languageConfiguration/ServerLanguageResponse.dart';
 import '../../main.dart';
 import '../../main/models/CityListModel.dart';
 import '../../main/network/RestApis.dart';
@@ -30,6 +40,58 @@ class SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> init() async {
+    String versionNo = await getStringAsync(CURRENT_LAN_VERSION, defaultValue: LanguageVersion);
+    await getLanguageList(versionNo).then((value) {
+      print("value===========${value.data!.length}");
+      appStore.setLoading(false);
+      if (value.status == true) {
+        setValue(CURRENT_LAN_VERSION, value.currentVersionNo.toString());
+        if (value.data!.length > 0) {
+          defaultServerLanguageData = value.data;
+          performLanguageOperation(defaultServerLanguageData);
+          setValue(LanguageJsonDataRes, value.toJson());
+          // Check if default language set from server
+          bool isSetLanguage = getBoolAsync(IS_SELECTED_LANGUAGE_CHANGE, defaultValue: false);
+          if (!isSetLanguage) {
+            for (int i = 0; i < value.data!.length; i++) {
+              if (value.data![i].isDefaultLanguage == 1) {
+                setValue(SELECTED_LANGUAGE_CODE, value.data![i].languageCode);
+                setValue(SELECTED_LANGUAGE_COUNTRY_CODE, value.data![i].countryCode);
+                appStore.setLanguage(value.data![i].languageCode!, context: context);
+                break;
+              }
+            }
+          }
+        } else {
+          defaultServerLanguageData = [];
+          selectedServerLanguageData = null;
+          setValue(LanguageJsonDataRes, "");
+        }
+      } else {
+        String getJsonData = getStringAsync(LanguageJsonDataRes, defaultValue: "");
+        if (getJsonData.isNotEmpty) {
+          ServerLanguageResponse languageSettings = ServerLanguageResponse.fromJson(json.decode(getJsonData.trim()));
+          if (languageSettings.data!.length > 0) {
+            defaultServerLanguageData = languageSettings.data;
+            performLanguageOperation(defaultServerLanguageData);
+          }
+        }
+      }
+    }).catchError((error) {
+      appStore.setLoading(false);
+      log(error);
+    });
+
+    //default language eng
+    // String getJsonData = getStringAsync(LanguageJsonDataRes, defaultValue: "");
+    // if (getJsonData.isNotEmpty) {
+    //   ServerLanguageResponse languageSettings = ServerLanguageResponse.fromJson(json.decode(getJsonData.trim()));
+    //   print("============${languageSettings.data!.length}");
+    //   if (languageSettings.data!.length > 0) {
+    //     defaultServerLanguageData = languageSettings.data;
+    //     performLanguageOperation(defaultServerLanguageData);
+    //   }
+    // }
     Future.delayed(
       Duration(seconds: 1),
       () async {
@@ -39,28 +101,19 @@ class SplashScreenState extends State<SplashScreen> {
               logout(context);
             } else {
               setValue(OTP_VERIFIED, value.otpVerifyAt != null);
-              if (!getBoolAsync(EMAIL_VERIFIED) &&
-                  getStringAsync(IS_EMAIL_VERIFICATION) == '1') {
+              if (!getBoolAsync(EMAIL_VERIFIED) && getStringAsync(IS_EMAIL_VERIFICATION) == '1') {
                 EmailVerificationScreen().launch(context, isNewTask: true);
               } else if (value.otpVerifyAt.isEmptyOrNull) {
                 VerificationScreen().launch(context, isNewTask: true);
               } else {
                 //update app version
-                Future<PackageInfo> packageInfoFuture =
-                    PackageInfo.fromPlatform();
+                Future<PackageInfo> packageInfoFuture = PackageInfo.fromPlatform();
                 final packageInfo = await packageInfoFuture;
-                if (value.app_version.isEmptyOrNull ||
-                    value.app_version != packageInfo.version) {
-                  await updateUserStatus({
-                    "id": getIntAsync(USER_ID),
-                    "app_version": packageInfo.version
-                  }).then((value) {});
+                if (value.app_version.isEmptyOrNull || value.app_version != packageInfo.version) {
+                  await updateUserStatus({"id": getIntAsync(USER_ID), "app_version": packageInfo.version}).then((value) {});
                 }
                 //update source version
-                if (CityModel.fromJson(getJSONAsync(CITY_DATA))
-                    .name
-                    .validate()
-                    .isNotEmpty) {
+                if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
                   if (getStringAsync(USER_TYPE) == CLIENT) {
                     DashboardScreen().launch(context, isNewTask: true);
                   } else {
@@ -98,11 +151,9 @@ class SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset(ic_logo, height: 80, width: 80, fit: BoxFit.fill)
-                .cornerRadiusWithClipRRect(defaultRadius),
+            Image.asset(ic_logo, height: 80, width: 80, fit: BoxFit.fill).cornerRadiusWithClipRRect(defaultRadius),
             16.height,
-            Text(language.appName,
-                style: boldTextStyle(size: 20), textAlign: TextAlign.center),
+            Text(language.appName, style: boldTextStyle(size: 20), textAlign: TextAlign.center),
           ],
         ),
       ),

@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../../extensions/LiveStream.dart';
+import '../../extensions/animatedList/animated_scroll_view.dart';
+import '../../extensions/colors.dart';
+import '../../extensions/confirmation_dialog.dart';
+import '../../extensions/decorations.dart';
+import '../../extensions/shared_pref.dart';
+import '../../extensions/text_styles.dart';
+import '../../extensions/widgets.dart';
 import '../../main.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/components/theme_selection_dialog.dart';
@@ -59,7 +70,7 @@ class DProfileFragmentState extends State<DProfileFragment> {
             title: Text(title, style: primaryTextStyle()),
             trailing: suffixIcon != null ? Icon(suffixIcon, color: Colors.green) : Icon(Icons.navigate_next, color: appStore.isDarkMode ? Colors.white : Colors.grey),
             onTap: onTap),
-        if (isLast) Divider(height: 0, color: context.dividerColor)
+        if (isLast) Divider(height: 0, color: dividerColor)
       ],
     );
   }

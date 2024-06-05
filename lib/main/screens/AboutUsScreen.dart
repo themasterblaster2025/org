@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 
+import '../../extensions/text_styles.dart';
 import '../../main.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Constants.dart';
@@ -42,7 +44,7 @@ class AboutUsScreenState extends State<AboutUsScreen> {
           ),
         ],
       ).center().paddingAll(16),
-      bottomNavigationBar: Text(mCopyright, style: secondaryTextStyle(size: 12), textAlign: TextAlign.center).paddingAll(10),
+      bottomNavigationBar: Text(language.copyRight, style: secondaryTextStyle(size: 12), textAlign: TextAlign.center).paddingAll(10),
     );
   }
 }

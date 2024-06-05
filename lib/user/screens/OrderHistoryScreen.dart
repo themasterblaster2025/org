@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
+import '../../extensions/text_styles.dart';
 import '../../main.dart';
 import '../../main/models/OrderDetailModel.dart';
 import '../../main/utils/Colors.dart';

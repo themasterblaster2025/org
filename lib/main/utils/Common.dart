@@ -1,18 +1,23 @@
 import 'dart:core';
-import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../extensions/common.dart';
+import '../../extensions/extension_util/device_extensions.dart';
+import '../../extensions/shared_pref.dart';
+import '../../extensions/system_utils.dart';
+import '../../extensions/text_styles.dart';
+import '../../extensions/widgets.dart';
 import '../../main.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Constants.dart';
@@ -85,9 +90,9 @@ Widget placeHolderWidget({double? height, double? width, BoxFit? fit, AlignmentG
   return Image.asset('assets/placeholder.jpg', height: height, width: width, fit: fit ?? BoxFit.cover, alignment: alignment ?? Alignment.center).cornerRadiusWithClipRRect(radius ?? defaultRadius);
 }
 
-String parseHtmlString(String? htmlString) {
-  return parse(parse(htmlString).body!.text).documentElement!.text;
-}
+// String parseHtmlString(String? htmlString) {
+//   return parse(parse(htmlString).body!.text).documentElement!.text;
+// }
 
 Color statusColor(String status) {
   Color color = colorPrimary;
@@ -153,11 +158,13 @@ String printDate(String date) {
   return DateFormat('dd MMM yyyy').format(DateTime.parse(date).toLocal()) + " at " + DateFormat('hh:mm a').format(DateTime.parse(date).toLocal());
 }
 
-double calculateDistance(lat1, lon1, lat2, lon2) {
-  var p = 0.017453292519943295;
-  var a = 0.5 - cos((lat2 - lat1) * p) / 2 + cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
-  return (12742 * asin(sqrt(a))).toStringAsFixed(digitAfterDecimal).toDouble();
-}
+// double calculateDistance(lat1, lon1, lat2, lon2) {
+//   var p = 0.017453292519943295;
+//   var a = 0.5 -
+//       cos((lat2 - lat1) * p) / 2 +
+//       cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
+//   return (12742 * asin(sqrt(a))).toStringAsFixed(digitAfterDecimal).toDouble();
+// }
 
 Widget loaderWidget() {
   return Center(child: Lottie.asset('assets/loader.json', width: 50, height: 70));
@@ -209,26 +216,26 @@ String transactionType(String type) {
   return '';
 }
 
-Future<bool> checkPermission() async {
-  // Request app level location permission
-  LocationPermission locationPermission = await Geolocator.requestPermission();
-
-  if (locationPermission == LocationPermission.whileInUse || locationPermission == LocationPermission.always) {
-    // Check system level location permission
-    if (!await Geolocator.isLocationServiceEnabled()) {
-      return await Geolocator.openLocationSettings().then((value) => false).catchError((e) => false);
-    } else {
-      return true;
-    }
-  } else {
-    toast(language.allowLocationPermission);
-
-    // Open system level location permission
-    await Geolocator.openAppSettings();
-
-    return false;
-  }
-}
+// Future<bool> checkPermission() async {
+//   // Request app level location permission
+//   LocationPermission locationPermission = await Geolocator.requestPermission();
+//
+//   if (locationPermission == LocationPermission.whileInUse || locationPermission == LocationPermission.always) {
+//     // Check system level location permission
+//     if (!await Geolocator.isLocationServiceEnabled()) {
+//       return await Geolocator.openLocationSettings().then((value) => false).catchError((e) => false);
+//     } else {
+//       return true;
+//     }
+//   } else {
+//     toast(language.allowLocationPermission);
+//
+//     // Open system level location permission
+//     await Geolocator.openAppSettings();
+//
+//     return false;
+//   }
+// }
 
 oneSignalSettings() async {
   if (isMobile) {
@@ -517,6 +524,6 @@ Future<void> openMap(double latitude, double longitude) async {
   if (await canLaunchUrl(Uri.parse(googleUrl))) {
     await launchUrl(Uri.parse(googleUrl));
   } else {
-    throw 'Could not open the map.';
+    throw language.mapLoadingError;
   }
 }

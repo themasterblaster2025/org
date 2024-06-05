@@ -27,7 +27,7 @@ dependencies:
   flutter_mobx: ^2.2.0
 
   # Base
-  nb_utils: ^6.1.2
+ # nb_utils: ^6.1.2
   google_fonts: ^6.1.0
   animated_bottom_navigation_bar: ^1.3.3
   animated_notch_bottom_bar: ^1.0.1
@@ -88,7 +88,8 @@ dependencies:
   path_provider: ^2.1.2
   open_file: ^3.3.2
   printing: ^5.12.0
-
+  #Database
+  shared_preferences: ^2.2.2
   # READ MORE LESS
   readmore: ^2.2.0
 
@@ -126,4 +127,5 @@ flutter:
     - assets/icons/
     - assets/flag/
     - assets/icon/
+    - assets/staticjson/
 
