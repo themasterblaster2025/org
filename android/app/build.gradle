@@ -15,6 +15,14 @@ if (localPropertiesFile.exists()) {
 
 
 android {
+   /* signingConfigs {
+        release {
+            storeFile file('/home/meet09/Downloads/local_delivery.jks')
+            storePassword 'local_delivery'
+            keyAlias 'local_delivery'
+            keyPassword 'local_delivery'
+        }
+    }*/
     compileSdkVersion 34
 
     compileOptions {

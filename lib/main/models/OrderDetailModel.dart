@@ -1,16 +1,27 @@
+import 'dart:convert';
+
 import 'package:mighty_delivery/main/models/LoginResponse.dart';
 
 import 'OrderListModel.dart';
+import 'ProductListModel.dart';
 
 class OrderDetailModel {
   OrderData? data;
   Payment? payment;
   List<OrderHistory>? orderHistory;
+  List<OrderItem>? orderItem;
+  OrderRating? orderRating;
 
   UserData? clientDetail;
   UserData? deliveryManDetail;
 
-  OrderDetailModel({this.data, this.orderHistory, this.clientDetail, this.deliveryManDetail});
+  OrderDetailModel(
+      {this.data,
+      this.orderHistory,
+      this.clientDetail,
+      this.deliveryManDetail,
+      this.orderItem,
+      this.orderRating});
 
   OrderDetailModel.fromJson(Map<String, dynamic> json) {
     data = json['data'] != null ? new OrderData.fromJson(json['data']) : null;
@@ -21,8 +32,19 @@ class OrderDetailModel {
         orderHistory!.add(new OrderHistory.fromJson(v));
       });
     }
-    clientDetail = json['client_detail'] != null ? new UserData.fromJson(json['client_detail']) : null;
-    deliveryManDetail = json['delivery_man_detail'] != null ? new UserData.fromJson(json['delivery_man_detail']) : null;
+    if (json['order_item'] != null) {
+      orderItem = <OrderItem>[];
+      json['order_item'].forEach((v) {
+        orderItem!.add(new OrderItem.fromJson(v));
+      });
+    }
+    clientDetail =
+        json['client_detail'] != null ? new UserData.fromJson(json['client_detail']) : null;
+    deliveryManDetail = json['delivery_man_detail'] != null
+        ? new UserData.fromJson(json['delivery_man_detail'])
+        : null;
+    orderRating =
+        json["order_rating"] == null ? null : OrderRating.fromJson(json["order_rating"]);
   }
 
   Map<String, dynamic> toJson() {
@@ -36,11 +58,17 @@ class OrderDetailModel {
     if (this.orderHistory != null) {
       data['order_history'] = this.orderHistory!.map((v) => v.toJson()).toList();
     }
+    if (this.orderItem != null) {
+      data['order_item'] = this.orderItem!.map((v) => v.toJson()).toList();
+    }
     if (this.clientDetail != null) {
       data['client_detail'] = this.clientDetail!.toJson();
     }
     if (this.deliveryManDetail != null) {
       data['delivery_man_detail'] = this.deliveryManDetail!.toJson();
+    }
+    if (this.orderRating != null) {
+      data["order_rating"] = orderRating?.toJson();
     }
     return data;
   }
@@ -146,7 +174,16 @@ class OrderHistory {
   String? updatedAt;
   String? deletedAt;
 
-  OrderHistory({this.id, this.orderId, this.datetime, this.historyType, this.historyMessage, this.historyData, this.createdAt, this.updatedAt, this.deletedAt});
+  OrderHistory(
+      {this.id,
+      this.orderId,
+      this.datetime,
+      this.historyType,
+      this.historyMessage,
+      this.historyData,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt});
 
   OrderHistory.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -154,7 +191,8 @@ class OrderHistory {
     datetime = json['datetime'];
     historyType = json['history_type'];
     historyMessage = json['history_message'];
-    historyData = json['history_data'] != null ? new HistoryData.fromJson(json['history_data']) : null;
+    historyData =
+        json['history_data'] != null ? new HistoryData.fromJson(json['history_data']) : null;
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
@@ -206,4 +244,102 @@ class HistoryData {
     data['payment_status'] = this.paymentStatus;
     return data;
   }
+}
+
+OrderItem orderItemfromJson(String str) => OrderItem.fromJson(json.decode(str));
+
+String orderItemtoJson(OrderItem data) => json.encode(data.toJson());
+
+class OrderItem {
+  int? id;
+  int? orderId;
+  int? productId;
+  int? amount;
+  int? totalAmount;
+  int? quantity;
+  List<ProductData>? productData;
+
+  OrderItem({
+    this.id,
+    this.orderId,
+    this.productId,
+    this.amount,
+    this.totalAmount,
+    this.quantity,
+    this.productData,
+  });
+
+  factory OrderItem.fromJson(Map<String, dynamic> json) => OrderItem(
+        id: json["id"],
+        orderId: json["order_id"],
+        productId: json["product_id"],
+        amount: json["amount"],
+        totalAmount: json["total_amount"],
+        quantity: json["quantity"],
+        productData: json["product_data"] == null
+            ? []
+            : List<ProductData>.from(
+                json["product_data"]!.map((x) => ProductData.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "order_id": orderId,
+        "product_id": productId,
+        "amount": amount,
+        "total_amount": totalAmount,
+        "quantity": quantity,
+        "product_data":
+            productData == null ? [] : List<dynamic>.from(productData!.map((x) => x.toJson())),
+      };
+}
+
+OrderRating orderRatingfromJson(String str) => OrderRating.fromJson(json.decode(str));
+
+String orderRatingtoJson(OrderRating data) => json.encode(data.toJson());
+
+
+
+class OrderRating {
+  int? id;
+  int? storeDetailId;
+  int? userId;
+  int? orderId;
+  num? rating;
+  String? review;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+
+  OrderRating({
+    this.id,
+    this.storeDetailId,
+    this.userId,
+    this.orderId,
+    this.rating,
+    this.review,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  factory OrderRating.fromJson(Map<String, dynamic> json) => OrderRating(
+        id: json["id"],
+        storeDetailId: json["store_detail_id"],
+        userId: json["user_id"],
+        orderId: json["order_id"],
+        rating: json["rating"],
+        review: json["review"],
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "store_detail_id": storeDetailId,
+        "user_id": userId,
+        "order_id": orderId,
+        "rating": rating,
+        "review": review,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+      };
 }

@@ -17,7 +17,7 @@ import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../components/OrderCardComponent.dart';
 
-class OrderFragment extends StatefulWidget {
+class  OrderFragment extends StatefulWidget {
   static String tag = '/OrderFragment';
 
   @override

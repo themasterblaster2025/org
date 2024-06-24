@@ -129,7 +129,7 @@ class AccountFragmentState extends State<AccountFragment> {
               mTitle(language.account),
               accountSettingItemWidget(ic_change_password, language.changePassword, () {
                 ChangePasswordScreen().launch(context);
-              }),
+              }).visible(getStringAsync(LOGIN_TYPE) != LoginTypeGoogle),
               accountSettingItemWidget(ic_languages, language.language, () {
                 LanguageScreen().launch(context);
               }),

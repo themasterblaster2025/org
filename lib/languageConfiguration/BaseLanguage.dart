@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'LanguageDataConstant.dart';
 
 class BaseLanguage {
-  static BaseLanguage? of(BuildContext context) => Localizations.of<BaseLanguage>(context, BaseLanguage);
+  static BaseLanguage? of(BuildContext context) =>
+      Localizations.of<BaseLanguage>(context, BaseLanguage);
 
   String get skip => getContentValueFromKey(1);
 
@@ -716,4 +717,28 @@ class BaseLanguage {
   String get subTotal => getContentValueFromKey(301);
 
   String get paid => getContentValueFromKey(316);
+
+  String get searchStores => getContentValueFromKey(357);
+
+  String get nearest => getContentValueFromKey(358);
+
+  String get rightNowStoreNotAvailable => getContentValueFromKey(359);
+
+  String get products => getContentValueFromKey(360);
+
+  String get itemsAdded => getContentValueFromKey(361);
+
+  String get items => getContentValueFromKey(362);
+
+  String get item => getContentValueFromKey(363);
+
+  String get added => getContentValueFromKey(364);
+
+  String get categoryFilter => getContentValueFromKey(365);
+
+  String get apply => getContentValueFromKey(366);
+
+  String get orderItems => getContentValueFromKey(367);
+
+  String get productAmount => getContentValueFromKey(368);
 }

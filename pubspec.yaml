@@ -100,6 +100,7 @@ dependencies:
 
   #STORE _CHECKER
   store_checker: ^1.4.0
+  flutter_rating_bar: ^4.0.1
 
   flutter_localizations:
     sdk: flutter

@@ -318,3 +318,8 @@ const APP_STORE = "App Store";
 const TEST_FLIGHT = "Test Flight";
 const UNKNOWN_SOURCE = "Unknown Source";
 String? countryCode = "IN";
+
+
+const CURRENT_LATITUDE = 'CURRENT_LATITUDE';
+const CURRENT_LONGITUDE = 'CURRENT_LONGITUDE';
+const CURRENT_CITY = 'CURRENT_CITY';

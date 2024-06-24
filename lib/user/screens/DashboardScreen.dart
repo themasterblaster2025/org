@@ -7,6 +7,7 @@ import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
+import 'package:mighty_delivery/user/screens/StoreListScreen.dart';
 
 import '../../extensions/LiveStream.dart';
 import '../../extensions/colors.dart';
@@ -84,6 +85,10 @@ class DashboardScreenState extends State<DashboardScreen> {
         preferredSize: Size(context.width(), 60),
         child: commonAppBarWidget(getTitle(),
             actions: [
+              Icon(Ionicons.md_menu, color: Colors.white).onTap((){
+                StoreListScreen().launch(context);
+              }),
+              4.width,
               Container(
                 margin: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -103,6 +108,7 @@ class DashboardScreenState extends State<DashboardScreen> {
                   ).launch(context);
                 }, highlightColor: Colors.transparent, hoverColor: Colors.transparent, splashColor: Colors.transparent),
               ),
+              4.width,
               4.width,
               Stack(
                 clipBehavior: Clip.none,
@@ -180,6 +186,7 @@ class DashboardScreenState extends State<DashboardScreen> {
         inactiveColor: Colors.grey,
         onTap: (index) => setState(() => currentIndex = index),
       ),
+
     );
   }
 }

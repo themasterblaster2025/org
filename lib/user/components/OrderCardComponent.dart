@@ -34,11 +34,15 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        OrderDetailScreen(orderId: widget.item.id.validate()).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
+        OrderDetailScreen(orderId: widget.item.id.validate()).launch(context,
+            pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 16),
-        decoration: boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(defaultRadius), border: Border.all(color: colorPrimary.withOpacity(0.3)), backgroundColor: Colors.transparent),
+        decoration: boxDecorationWithRoundedCorners(
+            borderRadius: BorderRadius.circular(defaultRadius),
+            border: Border.all(color: colorPrimary.withOpacity(0.3)),
+            backgroundColor: Colors.transparent),
         padding: EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,14 +51,23 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 widget.item.date != null
-                    ? Text(DateFormat('dd MMM yyyy').format(DateTime.parse(widget.item.date!).toLocal()) + language.at + DateFormat('hh:mm a').format(DateTime.parse(widget.item.date!).toLocal()),
+                    ? Text(
+                            DateFormat('dd MMM yyyy')
+                                    .format(DateTime.parse(widget.item.date!).toLocal()) +
+                                language.at +
+                                DateFormat('hh:mm a')
+                                    .format(DateTime.parse(widget.item.date!).toLocal()),
                             style: primaryTextStyle(size: 14))
                         .expand()
                     : SizedBox(),
                 Container(
-                  decoration: BoxDecoration(color: statusColor(widget.item.status.validate()).withOpacity(0.08), borderRadius: BorderRadius.circular(6)),
+                  decoration: BoxDecoration(
+                      color: statusColor(widget.item.status.validate()).withOpacity(0.08),
+                      borderRadius: BorderRadius.circular(6)),
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                  child: Text(orderStatus(widget.item.status!), style: primaryTextStyle(size: 14, color: statusColor(widget.item.status.validate()))),
+                  child: Text(orderStatus(widget.item.status!),
+                      style: primaryTextStyle(
+                          size: 14, color: statusColor(widget.item.status.validate()))),
                 ),
               ],
             ),
@@ -64,20 +77,27 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
               children: [
                 Container(
                   decoration: boxDecorationWithRoundedCorners(
-                      borderRadius: BorderRadius.circular(8), border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1), backgroundColor: context.cardColor),
+                      borderRadius: BorderRadius.circular(8),
+                      border:
+                          Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                      backgroundColor: context.cardColor),
                   padding: EdgeInsets.all(8),
-                  child: Image.asset(parcelTypeIcon(widget.item.parcelType.validate()), height: 24, width: 24, color: colorPrimary),
+                  child: Image.asset(parcelTypeIcon(widget.item.parcelType.validate()),
+                      height: 24, width: 24, color: colorPrimary),
                 ),
                 8.width,
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(widget.item.parcelType.validate(), style: boldTextStyle(), maxLines: 1, overflow: TextOverflow.ellipsis),
+                    Text(widget.item.parcelType.validate(),
+                        style: boldTextStyle(), maxLines: 1, overflow: TextOverflow.ellipsis),
                     4.height,
                     Row(
                       children: [
                         Text('# ${widget.item.id}', style: boldTextStyle(size: 14)).expand(),
-                        if (widget.item.status != ORDER_CANCELLED) Text(printAmount(widget.item.totalAmount ?? 0), style: boldTextStyle()),
+                        if (widget.item.status != ORDER_CANCELLED)
+                          Text(printAmount(widget.item.totalAmount ?? 0),
+                              style: boldTextStyle()),
                       ],
                     ),
                   ],
@@ -100,27 +120,34 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                             children: [
                               Text(language.picked, style: secondaryTextStyle(size: 12)),
                               4.height,
-                              Text('${language.at} ${printDate(widget.item.pickupDatetime!)}', style: secondaryTextStyle(size: 12)),
+                              Text('${language.at} ${printDate(widget.item.pickupDatetime!)}',
+                                  style: secondaryTextStyle(size: 12)),
                             ],
                           ),
                         4.height,
                         GestureDetector(
                           onTap: () {
-                            openMap(double.parse(widget.item.pickupPoint!.latitude.validate()), double.parse(widget.item.pickupPoint!.longitude.validate()));
+                            openMap(double.parse(widget.item.pickupPoint!.latitude.validate()),
+                                double.parse(widget.item.pickupPoint!.longitude.validate()));
                           },
                           child: Row(
                             children: [
                               ImageIcon(AssetImage(ic_from), size: 24, color: colorPrimary),
                               12.width,
-                              Text('${widget.item.pickupPoint!.address}', style: primaryTextStyle()).expand(),
+                              Text('${widget.item.pickupPoint!.address}',
+                                      style: primaryTextStyle())
+                                  .expand(),
                             ],
                           ),
                         ),
-                        if (widget.item.pickupDatetime == null && widget.item.pickupPoint!.endTime != null && widget.item.pickupPoint!.startTime != null)
+                        if (widget.item.pickupDatetime == null &&
+                            widget.item.pickupPoint!.endTime != null &&
+                            widget.item.pickupPoint!.startTime != null)
                           Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(widget.item.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(widget.item.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(widget.item.pickupPoint!.endTime!).toLocal())}',
                                   style: secondaryTextStyle(size: 12, color: Colors.red))
                               .paddingOnly(top: 4)
                               .paddingOnly(top: 4),
+
                       ],
                     ).expand(),
                     12.width,
@@ -149,27 +176,39 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(language.delivered, style: secondaryTextStyle(size: 12)),
+                                  Text(language.delivered,
+                                      style: secondaryTextStyle(size: 12)),
                                   4.height,
-                                  Text('${language.at} ${printDate(widget.item.deliveryDatetime!)}', style: secondaryTextStyle(size: 12)),
+                                  Text(
+                                      '${language.at} ${printDate(widget.item.deliveryDatetime!)}',
+                                      style: secondaryTextStyle(size: 12)),
                                 ],
                               ),
                             4.height,
                             GestureDetector(
                               onTap: () {
-                                openMap(double.parse(widget.item.deliveryPoint!.latitude.validate()), double.parse(widget.item.deliveryPoint!.longitude.validate()));
+                                openMap(
+                                    double.parse(
+                                        widget.item.deliveryPoint!.latitude.validate()),
+                                    double.parse(
+                                        widget.item.deliveryPoint!.longitude.validate()));
                               },
                               child: Row(
                                 children: [
                                   ImageIcon(AssetImage(ic_to), size: 24, color: colorPrimary),
                                   12.width,
-                                  Text('${widget.item.deliveryPoint!.address}', style: primaryTextStyle(), textAlign: TextAlign.start).expand(),
+                                  Text('${widget.item.deliveryPoint!.address}',
+                                          style: primaryTextStyle(),
+                                          textAlign: TextAlign.start)
+                                      .expand(),
                                 ],
                               ),
                             ),
                           ],
                         ),
-                        if (widget.item.deliveryDatetime == null && widget.item.deliveryPoint!.endTime != null && widget.item.deliveryPoint!.startTime != null)
+                        if (widget.item.deliveryDatetime == null &&
+                            widget.item.deliveryPoint!.endTime != null &&
+                            widget.item.deliveryPoint!.startTime != null)
                           Text('${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(widget.item.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(widget.item.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(widget.item.deliveryPoint!.endTime!).toLocal())}',
                                   style: secondaryTextStyle(color: Colors.red, size: 12))
                               .paddingOnly(top: 4)
@@ -184,7 +223,9 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                 ),
               ],
             ),
-            if (widget.item.status != ORDER_CANCELLED || (widget.item.status == ORDER_DEPARTED || widget.item.status == ORDER_ACCEPTED)) 16.height,
+            if (widget.item.status != ORDER_CANCELLED ||
+                (widget.item.status == ORDER_DEPARTED || widget.item.status == ORDER_ACCEPTED))
+              16.height,
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -196,7 +237,8 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                       children: [
                         Text(language.invoice, style: secondaryTextStyle(color: Colors.white)),
                         4.width,
-                        Icon(Ionicons.md_download_outline, color: Colors.white, size: 18).paddingBottom(4),
+                        Icon(Ionicons.md_download_outline, color: Colors.white, size: 18)
+                            .paddingBottom(4),
                       ],
                     ).onTap(() {
                       generateInvoiceCall(widget.item);
@@ -221,7 +263,9 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                   onTap: () {
                     OrderTrackingScreen(orderData: widget.item).launch(context);
                   },
-                ).visible((widget.item.status == ORDER_DEPARTED || widget.item.status == ORDER_ACCEPTED) && appStore.userType != DELIVERY_MAN),
+                ).visible((widget.item.status == ORDER_DEPARTED ||
+                        widget.item.status == ORDER_ACCEPTED) &&
+                    appStore.userType != DELIVERY_MAN),
               ],
             ),
           ],

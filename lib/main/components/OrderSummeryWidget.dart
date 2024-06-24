@@ -18,6 +18,7 @@ class OrderSummeryWidget extends StatefulWidget {
   static String tag = '/OrderSummeryWidget';
 
   final List<ExtraChargeRequestModel> extraChargesList;
+  final num? productAmount;
   final num totalDistance;
   final num totalWeight;
   final num distanceCharge;
@@ -28,6 +29,7 @@ class OrderSummeryWidget extends StatefulWidget {
   final bool? isDetail;
 
   OrderSummeryWidget({
+    this.productAmount,
     required this.extraChargesList,
     required this.totalDistance,
     required this.totalWeight,
@@ -92,6 +94,15 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("productAmount", style: primaryTextStyle()), // todo
+              // Text(language.productAmount, style: primaryTextStyle()),
+              16.width,
+              Text('${printAmount(widget.productAmount.validate())}', style: primaryTextStyle()),
+            ],
+          ).paddingBottom(8).visible(widget.productAmount.validate() != 0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:html/parser.dart';
+import 'package:mighty_delivery/extensions/shared_pref.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import '../extensions/extension_util/context_extensions.dart';
 import '../extensions/extension_util/device_extensions.dart';
@@ -485,5 +487,20 @@ Future<bool> checkPermission() async {
     await Geolocator.openAppSettings();
 
     return false;
+  }
+}
+
+
+Future<void> getCurrentLocationData({Function()? onUpdate}) async {
+  if (await checkPermission()) {
+    Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high).then((value) async {
+      List<Placemark> placeMarks = await placemarkFromCoordinates(value.latitude, value.longitude);
+      setValue(CURRENT_LATITUDE, value.latitude);
+      setValue(CURRENT_LONGITUDE, value.longitude);
+      setValue(CURRENT_CITY, placeMarks[0].locality);
+      onUpdate?.call();
+    }).catchError((e) {
+      //
+    });
   }
 }
