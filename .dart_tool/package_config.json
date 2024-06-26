@@ -506,6 +506,12 @@
       "languageVersion": "3.2"
     },
     {
+      "name": "flutter_widget_from_html_core",
+      "rootUri": "file:///home/meet09/.pub-cache/hosted/pub.dev/flutter_widget_from_html_core-0.15.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
       "name": "fluttertoast",
       "rootUri": "file:///home/meet09/.pub-cache/hosted/pub.dev/fluttertoast-8.2.4",
       "packageUri": "lib/",
@@ -528,6 +534,18 @@
       "rootUri": "file:///home/meet09/.pub-cache/hosted/pub.dev/frontend_server_client-3.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "fwfh_cached_network_image",
+      "rootUri": "file:///home/meet09/.pub-cache/hosted/pub.dev/fwfh_cached_network_image-0.14.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "fwfh_webview",
+      "rootUri": "file:///home/meet09/.pub-cache/hosted/pub.dev/fwfh_webview-0.15.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
     },
     {
       "name": "geocode",
@@ -1418,6 +1436,30 @@
       "languageVersion": "3.2"
     },
     {
+      "name": "webview_flutter",
+      "rootUri": "file:///home/meet09/.pub-cache/hosted/pub.dev/webview_flutter-4.8.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "webview_flutter_android",
+      "rootUri": "file:///home/meet09/.pub-cache/hosted/pub.dev/webview_flutter_android-3.16.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "webview_flutter_platform_interface",
+      "rootUri": "file:///home/meet09/.pub-cache/hosted/pub.dev/webview_flutter_platform_interface-2.10.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "webview_flutter_wkwebview",
+      "rootUri": "file:///home/meet09/.pub-cache/hosted/pub.dev/webview_flutter_wkwebview-3.13.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
       "name": "win32",
       "rootUri": "file:///home/meet09/.pub-cache/hosted/pub.dev/win32-5.2.0",
       "packageUri": "lib/",
@@ -1448,7 +1490,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-06-21T05:50:23.453859Z",
+  "generated": "2024-06-26T05:12:53.035965Z",
   "generator": "pub",
   "generatorVersion": "3.3.4"
 }

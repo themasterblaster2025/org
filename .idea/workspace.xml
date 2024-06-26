@@ -5,48 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8691243f-0de7-470a-bacd-cbe44eceb665" name="Changes" comment="title wallet screen bug">
-      <change afterPath="$PROJECT_DIR$/lib/main/models/CategoryModel.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/main/models/CommonResponseModel.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/main/models/OrderItemModel.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/main/models/ProductListModel.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/main/models/RatingListModel.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/main/models/StoreListModel.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/main/models/WorkHoursListModel.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/user/components/FilterCategoryComponent.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/user/components/ProductItemComponent.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/user/components/StoreItemComponent.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/user/screens/ProductListScreen.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/user/screens/RateReviewScreen.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/user/screens/StoreDetailScreen.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/user/screens/StoreListScreen.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/main/components/HtmlWidgtet.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/user/screens/FavouriteStoreScreen.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/user/screens/ProductDetailScreen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.dart_tool/package_config_subset" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config_subset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.dart_tool/version" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/version" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/android/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/staticjson/keyword_list.json" beforeDir="false" afterPath="$PROJECT_DIR$/assets/staticjson/keyword_list.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/extensions/common.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/extensions/common.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/languageConfiguration/BaseLanguage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/languageConfiguration/BaseLanguage.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/extensions/confirmation_dialog.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/extensions/confirmation_dialog.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/main/components/OrderSummeryWidget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/components/OrderSummeryWidget.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/main/models/OrderDetailModel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/models/OrderDetailModel.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/models/OrderListModel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/models/OrderListModel.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main/models/RatingListModel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/models/RatingListModel.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main/models/WorkHoursListModel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/models/WorkHoursListModel.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/main/network/RestApis.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/network/RestApis.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/utils/Constants.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/utils/Constants.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/user/components/OrderCardComponent.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/components/OrderCardComponent.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/user/components/ProductItemComponent.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/components/ProductItemComponent.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/user/components/StoreItemComponent.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/components/StoreItemComponent.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/user/fragment/AccountFragment.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/fragment/AccountFragment.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/user/fragment/OrderFragment.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/fragment/OrderFragment.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/user/screens/CreateOrderScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/screens/CreateOrderScreen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/user/screens/DashboardScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/screens/DashboardScreen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/user/screens/OrderDetailScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/screens/OrderDetailScreen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/linux/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/linux/flutter/generated_plugin_registrant.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/linux/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/linux/flutter/generated_plugins.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/user/screens/RateReviewScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/screens/RateReviewScreen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/user/screens/StoreDetailScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/screens/StoreDetailScreen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/user/screens/StoreListScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/screens/StoreListScreen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
@@ -82,6 +62,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
 }</component>
@@ -95,29 +78,29 @@
     <option name="openDirectoriesWithSingleClick" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Flutter.main.dart.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;com.google.services.firebase.aqiPopupShown&quot;: &quot;true&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;add__store__module&quot;,
-    &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/meet09/StudioProjects/delivery_userapp/lib/user/screens/OrderDetailScreen.dart&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.Dart&quot;,
-    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Flutter.main.dart.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "com.google.services.firebase.aqiPopupShown": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "add__store__module",
+    "io.flutter.reload.alreadyRun": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/meet09/StudioProjects/mightyfitness_flutter/lib/components/HtmlWidget.dart",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "editing.templates",
+    "show.migrate.to.gradle.popup": "false"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/lib/main/models" />
@@ -230,7 +213,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712916757150</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="title wallet screen bug">
+      <option name="closed" value="true" />
+      <created>1719211988532</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1719211988532</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

@@ -1,7 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:intl/intl.dart';
 import 'package:mighty_delivery/extensions/common.dart';
 import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
@@ -17,6 +19,7 @@ import '../../main.dart';
 import '../../main/components/BodyCornerWidget.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/StoreListModel.dart';
+import '../../main/models/WorkHoursListModel.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Images.dart';
@@ -40,6 +43,8 @@ class StoreListScreenState extends State<StoreListScreen> {
   bool isLastPage = false;
 
   bool isNearest = false;
+  List<WorkHoursData> workingHoursList = [];
+  String currentDay = DateFormat('EEEE').format(DateTime.now());
 
   @override
   void initState() {
@@ -63,7 +68,7 @@ class StoreListScreenState extends State<StoreListScreen> {
             title: searchController.text.isNotEmpty ? searchController.text : null,
             isNearby: isNearest)
         .then((value) {
-      appStore.setLoading(false);
+      // appStore.setLoading(false);
       totalPage = value.pagination!.totalPages.validate(value: 1);
       page = value.pagination!.currentPage.validate(value: 1);
       totalItem = value.pagination!.totalItems.validate();
@@ -72,9 +77,26 @@ class StoreListScreenState extends State<StoreListScreen> {
         storeList.clear();
       }
       storeList.addAll(value.data!);
+      storeList.forEach((element) async {
+        await getWorkingHours(element.id.validate());
+      });
+      appStore.setLoading(false);
       setState(() {});
     }).catchError((e) {
       isLastPage = true;
+      appStore.setLoading(false);
+      toast(e.toString(), print: true);
+    });
+  }
+
+  Future<void> getWorkingHours(int storeId) async {
+    await getWorkingHoursList(storeDetailId: storeId).then((value) {
+      value.data.validate().forEach((element) {
+        if (element.day == currentDay && element.storeDetailId == storeId)
+          workingHoursList.add(element);
+        setState(() { });
+      });
+    }).catchError((e) {
       appStore.setLoading(false);
       toast(e.toString(), print: true);
     });
@@ -88,7 +110,7 @@ class StoreListScreenState extends State<StoreListScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
-      appBarTitle: "Stores",//todo
+      appBarTitle: "Stores", //todo
       body: Observer(builder: (context) {
         return Stack(
           children: [
@@ -100,7 +122,7 @@ class StoreListScreenState extends State<StoreListScreen> {
                       controller: searchController,
                       decoration: commonInputDecoration(
                         // hintText: language.searchStores,
-                        hintText: "search stores",// todo
+                        hintText: "search stores", // todo
                         prefixIcon: Icon(Icons.search),
                         suffixIcon: searchController.text.isNotEmpty ? Icons.clear : null,
                         suffixOnTap: () {
@@ -138,7 +160,7 @@ class StoreListScreenState extends State<StoreListScreen> {
                 ).paddingAll(16),
                 storeList.isNotEmpty
                     ?
-                /*GridView.builder(
+                    /*GridView.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           childAspectRatio: 0.65,
@@ -155,12 +177,20 @@ class StoreListScreenState extends State<StoreListScreen> {
                         },
                         itemCount: storeList.length,
                       ).expand()*/
-                    ListView.builder(itemBuilder: (context, index) {
-                        StoreData item = storeList[index];
-                        return StoreItemComponent(store: item);
-                      },
-                      controller: scrollController,
-                      itemCount: storeList.length,).expand()
+                    ListView.builder(
+                        itemBuilder: (context, index) {
+                          StoreData item = storeList[index];
+                          if (workingHoursList.validate().length ==
+                              storeList.validate().length)
+                            return StoreItemComponent(
+                              store: item,
+                              workHours: workingHoursList[index],
+                            );
+                          return null;
+                        },
+                        controller: scrollController,
+                        itemCount: storeList.length,
+                      ).expand()
                     : !appStore.isLoading
                         ? emptyWidget()
                         : SizedBox(),

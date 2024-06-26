@@ -153,8 +153,8 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
                             ],
                           ).paddingSymmetric(horizontal: 10),
                           10.height,
-                          Divider(height: 10,color: dividerColor,),
-                          Row(
+                         Divider(height: 10,color: dividerColor,),
+                          /*  Row(
                             children: [
                               Icon(Icons.rate_review,size: 16,),
                               8.width,
@@ -193,7 +193,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
                           Divider(
                             height: 10,
                             color: dividerColor,
-                          ),
+                          ),*/
                           10.height,
 
                         ],
@@ -236,9 +236,9 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
           style: boldTextStyle(size: 15),
         ).visible(day.storeOpenClose.validate() == 1),
         Text(
-          "Closed",
+          "Closed",// todo
           style: boldTextStyle(size: 15),
-        ).visible(day.storeOpenClose.validate() == 0), // todo
+        ).visible(day.storeOpenClose.validate() == 0),
       ],
     ).paddingSymmetric(horizontal: 10);
   }

@@ -4,6 +4,7 @@ import 'package:mighty_delivery/extensions/extension_util/context_extensions.dar
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import 'package:mighty_delivery/user/screens/FavouriteStoreScreen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../extensions/animatedList/animated_configurations.dart';
@@ -44,7 +45,8 @@ class AccountFragmentState extends State<AccountFragment> {
     if (mounted) super.setState(fn);
   }
 
-  Widget accountSettingItemWidget(String? img, String title, Function() onTap, {bool isLast = false, IconData? suffixIcon}) {
+  Widget accountSettingItemWidget(String? img, String title, Function() onTap,
+      {bool isLast = false, IconData? suffixIcon}) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -52,9 +54,13 @@ class AccountFragmentState extends State<AccountFragment> {
             contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 2),
             minLeadingWidth: 14,
             dense: true,
-            leading: Image.asset(img.validate(), height: 18, fit: BoxFit.fill, width: 18, color: textPrimaryColorGlobal),
+            leading: Image.asset(img.validate(),
+                height: 18, fit: BoxFit.fill, width: 18, color: textPrimaryColorGlobal),
             title: Text(title, style: primaryTextStyle()),
-            trailing: suffixIcon != null ? Icon(suffixIcon, color: Colors.green) : Icon(Icons.navigate_next, color: appStore.isDarkMode ? Colors.white : Colors.grey),
+            trailing: suffixIcon != null
+                ? Icon(suffixIcon, color: Colors.green)
+                : Icon(Icons.navigate_next,
+                    color: appStore.isDarkMode ? Colors.white : Colors.grey),
             onTap: onTap),
         if (isLast) Divider(height: 0, color: context.dividerColor)
       ],
@@ -62,7 +68,10 @@ class AccountFragmentState extends State<AccountFragment> {
   }
 
   Widget mTitle(String value) {
-    return Text(value.toUpperCase(), style: boldTextStyle(size: 12, letterSpacing: 0.7, color: textSecondaryColorGlobal)).paddingOnly(left: 16, right: 16, top: 24, bottom: 4);
+    return Text(value.toUpperCase(),
+            style:
+                boldTextStyle(size: 12, letterSpacing: 0.7, color: textSecondaryColorGlobal))
+        .paddingOnly(left: 16, right: 16, top: 24, bottom: 4);
   }
 
   @override
@@ -87,10 +96,20 @@ class AccountFragmentState extends State<AccountFragment> {
                     alignment: Alignment.bottomRight,
                     children: [
                       Container(
-                          decoration: boxDecorationWithRoundedCorners(boxShape: BoxShape.circle, border: Border.all(width: 2, color: colorPrimary)),
-                          child: commonCachedNetworkImage(appStore.userProfile.validate(), height: 65, width: 65, fit: BoxFit.cover, alignment: Alignment.center).cornerRadiusWithClipRRect(50)),
+                          decoration: boxDecorationWithRoundedCorners(
+                              boxShape: BoxShape.circle,
+                              border: Border.all(width: 2, color: colorPrimary)),
+                          child: commonCachedNetworkImage(appStore.userProfile.validate(),
+                                  height: 65,
+                                  width: 65,
+                                  fit: BoxFit.cover,
+                                  alignment: Alignment.center)
+                              .cornerRadiusWithClipRRect(50)),
                       Container(
-                        decoration: boxDecorationWithRoundedCorners(boxShape: BoxShape.circle, border: Border.all(width: 1, color: white), backgroundColor: colorPrimary),
+                        decoration: boxDecorationWithRoundedCorners(
+                            boxShape: BoxShape.circle,
+                            border: Border.all(width: 1, color: white),
+                            backgroundColor: colorPrimary),
                         padding: EdgeInsets.all(4),
                         child: Image.asset(ic_edit, color: white, height: 14, width: 14),
                       )
@@ -123,8 +142,15 @@ class AccountFragmentState extends State<AccountFragment> {
                   BankDetailScreen().launch(context);
                 },
               ),
-              accountSettingItemWidget(ic_bank_detail, language.lblMyAddresses, () {
-                MyAddressListScreen().launch(context);
+              accountSettingItemWidget(
+                ic_bank_detail,
+                language.lblMyAddresses,
+                () {
+                  MyAddressListScreen().launch(context);
+                },
+              ),
+              accountSettingItemWidget(ic_bank_detail, "Favourite Stores", () { // todo
+                FavouriteStoreScreen().launch(context);
               }, isLast: true),
               mTitle(language.account),
               accountSettingItemWidget(ic_change_password, language.changePassword, () {
@@ -134,7 +160,10 @@ class AccountFragmentState extends State<AccountFragment> {
                 LanguageScreen().launch(context);
               }),
               accountSettingItemWidget(ic_dark_mode, language.theme, () async {
-                await showInDialog(context, shape: RoundedRectangleBorder(borderRadius: radius()), builder: (_) => ThemeSelectionDialog(), contentPadding: EdgeInsets.zero);
+                await showInDialog(context,
+                    shape: RoundedRectangleBorder(borderRadius: radius()),
+                    builder: (_) => ThemeSelectionDialog(),
+                    contentPadding: EdgeInsets.zero);
               }),
               accountSettingItemWidget(ic_delete_account, language.deleteAccount, () async {
                 DeleteAccountScreen().launch(context);
@@ -153,10 +182,14 @@ class AccountFragmentState extends State<AccountFragment> {
                 AboutUsScreen().launch(context);
               }, isLast: false),
               Container(
-                decoration: boxDecorationWithRoundedCorners(border: Border.all(color: colorPrimary, width: 1), backgroundColor: Colors.transparent),
+                decoration: boxDecorationWithRoundedCorners(
+                    border: Border.all(color: colorPrimary, width: 1),
+                    backgroundColor: Colors.transparent),
                 padding: EdgeInsets.all(16),
                 width: context.width(),
-                child: Text(language.logout, style: boldTextStyle(size: 18, color: colorPrimary), textAlign: TextAlign.center),
+                child: Text(language.logout,
+                    style: boldTextStyle(size: 18, color: colorPrimary),
+                    textAlign: TextAlign.center),
               ).onTap(() async {
                 await showConfirmDialogCustom(
                   context,
@@ -173,7 +206,9 @@ class AccountFragmentState extends State<AccountFragment> {
                 future: PackageInfo.fromPlatform(),
                 builder: (_, snap) {
                   if (snap.hasData) {
-                    return Text('${language.version} ${snap.data!.version.validate()}', style: secondaryTextStyle()).center();
+                    return Text('${language.version} ${snap.data!.version.validate()}',
+                            style: secondaryTextStyle())
+                        .center();
                   }
                   return SizedBox();
                 },

@@ -665,8 +665,12 @@ Future<CategoryModel> getCategorySubcategoryList({int? page, int? storeDetailId}
 }
 
 Future<WorkHoursListModel> getWorkingHoursList({int? page, int? storeDetailId}) async {
+  String endpoint = 'workhourmanage-list';
+  if(storeDetailId != null){
+    endpoint += '?store_detail_id=$storeDetailId';
+  }
   return WorkHoursListModel.fromJson(await handleResponse(
-      await buildHttpResponse('workhourmanage-list?store_detail_id=$storeDetailId', method: HttpMethod.GET)));
+      await buildHttpResponse(endpoint, method: HttpMethod.GET)));
 }
 
 Future<CommonResponseModel> saveRateReview(Map req) async {
@@ -677,4 +681,8 @@ Future<CommonResponseModel> saveRateReview(Map req) async {
 
 Future<LDBaseResponse> saveFavouriteStore(Map req) async {
   return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('userFavouriteStore-save', method: HttpMethod.POST, request: req)));
+}
+
+Future<StoreListModel> getFavouriteStore() async {
+  return StoreListModel.fromJson(await handleResponse(await buildHttpResponse('userFavouriteStore-list', method: HttpMethod.GET, )));
 }

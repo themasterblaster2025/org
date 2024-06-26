@@ -31,13 +31,11 @@ class WorkHoursListModel {
   }
 }
 
-WorkHoursData workHoursDataFromJson(String str) => WorkHoursData.fromJson(json.decode(str));
-
-String workHoursDataToJson(WorkHoursData data) => json.encode(data.toJson());
 
 class WorkHoursData {
   int? id;
   int? storeManagerId;
+  int? storeDetailId;
   String? storeManagerName;
   String? day;
   int? storeOpenClose;
@@ -49,6 +47,7 @@ class WorkHoursData {
   WorkHoursData({
     this.id,
     this.storeManagerId,
+    this.storeDetailId,
     this.storeManagerName,
     this.day,
     this.storeOpenClose,
@@ -61,6 +60,7 @@ class WorkHoursData {
   factory WorkHoursData.fromJson(Map<String, dynamic> json) => WorkHoursData(
         id: json["id"],
         storeManagerId: json["store_manager_id"],
+        storeDetailId: json["store_detail_id"],
         storeManagerName: json["store_manager_name"],
         day: json["day"],
         storeOpenClose: json["store-open/close"],
@@ -73,6 +73,7 @@ class WorkHoursData {
   Map<String, dynamic> toJson() => {
         "id": id,
         "store_manager_id": storeManagerId,
+        "store_detail_id": storeDetailId,
         "store_manager_name": storeManagerName,
         "day": day,
         "store-open/close": storeOpenClose,

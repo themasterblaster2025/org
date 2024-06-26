@@ -17,7 +17,15 @@ import 'loader_widget.dart';
 enum DialogType { CONFIRMATION, ACCEPT, DELETE, UPDATE, ADD, RETRY }
 
 /// Enum for Dialog Animation
-enum DialogAnimation { DEFAULT, ROTATE, SLIDE_TOP_BOTTOM, SLIDE_BOTTOM_TOP, SLIDE_LEFT_RIGHT, SLIDE_RIGHT_LEFT, SCALE }
+enum DialogAnimation {
+  DEFAULT,
+  ROTATE,
+  SLIDE_TOP_BOTTOM,
+  SLIDE_BOTTOM_TOP,
+  SLIDE_LEFT_RIGHT,
+  SLIDE_RIGHT_LEFT,
+  SCALE
+}
 
 /// dialog primary color
 Color getDialogPrimaryColor(BuildContext context, DialogType dialogType, Color? primaryColor) {
@@ -149,7 +157,8 @@ Widget? getCenteredImage(
           color: getDialogPrimaryColor(context, dialogType, primaryColor).withOpacity(0.2),
           shape: BoxShape.circle,
         ),
-        child: Icon(Icons.close, color: getDialogPrimaryColor(context, dialogType, primaryColor), size: 40),
+        child: Icon(Icons.close,
+            color: getDialogPrimaryColor(context, dialogType, primaryColor), size: 40),
         padding: EdgeInsets.all(16),
       );
       break;
@@ -273,7 +282,9 @@ Widget buildTitleWidget(
             primaryColor,
             shape: shape,
             child: Loader(
-              value: loadingProgress.expectedTotalBytes != null ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes! : null,
+              value: loadingProgress.expectedTotalBytes != null
+                  ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                  : null,
             ),
           );
         },
@@ -297,6 +308,7 @@ Future<bool?> showConfirmDialogCustom(
   required Function(BuildContext) onAccept,
   String? title,
   String? subTitle,
+  String? note,
   String? positiveText,
   String? negativeText,
   String? centerImage,
@@ -346,7 +358,8 @@ Future<bool?> showConfirmDialogCustom(
             width ?? customDialogWidth,
             centerImage,
             shape,
-          ).cornerRadiusWithClipRRectOnly(topLeft: defaultRadius.toInt(), topRight: defaultRadius.toInt()),
+          ).cornerRadiusWithClipRRectOnly(
+              topLeft: defaultRadius.toInt(), topRight: defaultRadius.toInt()),
           content: Container(
             width: width ?? customDialogWidth,
             color: Colors.transparent,
@@ -365,6 +378,15 @@ Future<bool?> showConfirmDialogCustom(
                   style: secondaryTextStyle(size: 16),
                   textAlign: TextAlign.center,
                 ).visible(subTitle.validate().isNotEmpty),
+                8.height.visible(note.validate().isNotEmpty),
+                Text(
+                  note.validate(),
+                  style: secondaryTextStyle(
+                    size: 13,
+                    color: Colors.red,
+                  ),
+                  textAlign: TextAlign.center,
+                ).visible(note.validate().isNotEmpty),
                 16.height,
                 Row(
                   children: [
@@ -386,7 +408,8 @@ Future<bool?> showConfirmDialogCustom(
                           6.width,
                           Text(
                             negativeText ?? 'Cancel',
-                            style: boldTextStyle(color: negativeTextColor ?? textPrimaryColorGlobal),
+                            style: boldTextStyle(
+                                color: negativeTextColor ?? textPrimaryColorGlobal),
                           ),
                         ],
                       ).fit(),

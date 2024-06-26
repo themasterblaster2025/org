@@ -1,8 +1,4 @@
 import 'dart:convert';
-RatingLiModel ratingLiModelfromJson(String str) => RatingLiModel.fromJson(json.decode(str));
-
-String ratingLiModeltoJson(RatingLiModel data) => json.encode(data.toJson());
-
 class RatingLiModel {
   List<Rating>? rating;
 

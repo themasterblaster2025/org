@@ -246,16 +246,13 @@ class HistoryData {
   }
 }
 
-OrderItem orderItemfromJson(String str) => OrderItem.fromJson(json.decode(str));
-
-String orderItemtoJson(OrderItem data) => json.encode(data.toJson());
 
 class OrderItem {
   int? id;
   int? orderId;
   int? productId;
   int? amount;
-  int? totalAmount;
+  num? totalAmount;
   int? quantity;
   List<ProductData>? productData;
 
@@ -293,10 +290,6 @@ class OrderItem {
             productData == null ? [] : List<dynamic>.from(productData!.map((x) => x.toJson())),
       };
 }
-
-OrderRating orderRatingfromJson(String str) => OrderRating.fromJson(json.decode(str));
-
-String orderRatingtoJson(OrderRating data) => json.encode(data.toJson());
 
 
 

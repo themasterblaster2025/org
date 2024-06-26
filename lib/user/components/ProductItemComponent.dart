@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:fwfh_webview/fwfh_webview.dart';
 import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/num_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/main/models/ProductListModel.dart';
+import 'package:mighty_delivery/user/screens/ProductDetailScreen.dart';
 import 'package:mighty_delivery/user/screens/ProductListScreen.dart';
 
 import '../../extensions/decorations.dart';
@@ -59,7 +62,7 @@ class ProductItemComponentState extends State<ProductItemComponent> {
         hoverColor: Colors.white,
         onTap: () async {
           if (!widget.isView) {
-            await showModalBottomSheet(
+            /* await showModalBottomSheet(
               context: context,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
@@ -107,10 +110,11 @@ class ProductItemComponentState extends State<ProductItemComponent> {
                           style: boldTextStyle(color: colorPrimary),
                         ),
                         8.height,
-                        Text(
-                          widget.product.description.validate(),
-                          style: primaryTextStyle(),
-                        ),
+                        HtmlWidget(widget.product.description.validate(),),
+                       */ /* HtmlWidget(
+                          '<html><iframe style="width:100%" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allow="autoplay; fullscreen" allowfullscreen="allowfullscreen"></iframe></html>',
+                          factoryBuilder: () => MyWidgetFactory(),
+                        ),*/ /*
                       ],
                     ),
                     Positioned(
@@ -128,7 +132,10 @@ class ProductItemComponentState extends State<ProductItemComponent> {
                   ],
                 );
               },
-            );
+            );*/
+            ProductDetailScreen(
+              product: widget.product,
+            ).launch(context);
           }
         },
         child: Row(
@@ -271,6 +278,6 @@ class ProductItemComponentState extends State<ProductItemComponent> {
       ),
     );
   }
-
-
 }
+
+class MyWidgetFactory extends WidgetFactory with WebViewFactory {}

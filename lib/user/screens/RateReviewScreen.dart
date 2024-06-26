@@ -136,6 +136,7 @@ class _RateReviewScreenState extends State<RateReviewScreen> {
                       textFieldType: TextFieldType.MULTILINE,
                       decoration: commonInputDecoration(hintText: "Excellent..."),
                       // todo
+
                       validator: (value) {
                         if (value!.isEmpty) return language.fieldRequiredMsg;
                       },
@@ -146,27 +147,21 @@ class _RateReviewScreenState extends State<RateReviewScreen> {
               Row(
                 children: [
                   outlineButton("May be later", () {
-                    // todo
-
                     finish(context);
                   }, color: colorPrimary)
                       .paddingRight(isRTL ? 4 : 16)
                       .paddingLeft(isRTL ? 16 : 0)
                       .expand(),
-                  commonButton("submit", () {
+                  commonButton("submit", () async {
                     if (_formKey.currentState!.validate()) {
-                      setState(() {
-                        saveRateReviewApi(
-                          widget.storId,
-                          widget.orderId,
-                          widget.ratingId != null ? widget.ratingId : null,
-                        );
-                        reviewController.clear();
-                        setState(() {
-                          _rating = 0;
-                        });
-                        finish(context);
-                      });
+                      await saveRateReviewApi(
+                        widget.storId,
+                        widget.orderId,
+                        widget.ratingId != null ? widget.ratingId : null,
+                      );
+                      reviewController.clear();
+                      _rating = 0;
+                      finish(context);
                     }
                   }).expand()
                 ],

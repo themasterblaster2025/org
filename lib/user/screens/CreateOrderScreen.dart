@@ -1722,6 +1722,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   showConfirmDialogCustom(
                     context,
                     title: language.createOrderConfirmationMsg,
+                    note: "Note: Please avoid sending prohibited items.", // todo
                     positiveText: language.yes,
                     primaryColor: colorPrimary,
                     negativeText: language.no,

@@ -60,6 +60,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
   List<ExtraChargeRequestModel> list = [];
   double? totalDistance;
   String? distance, duration;
+  num productAmount = 0;
 
   @override
   void initState() {
@@ -80,6 +81,11 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
       orderData = value.data!;
       orderHistory = value.orderHistory!;
       orderItems = value.orderItem.validate();
+      if (orderItems.validate().isNotEmpty) {
+        orderItems!.forEach((element) {
+          productAmount += element.totalAmount.validate();
+        });
+      }
       payment = value.payment ?? Payment();
 
       rating = value.orderRating ?? null;
@@ -464,8 +470,11 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      16.height,
-                                      Divider(height:10, color: dividerColor,),
+                                      8.height,
+                                      Divider(
+                                        height: 18,
+                                        color: dividerColor,
+                                      ),
                                       Text(language.orderItems, style: boldTextStyle()),
                                       8.height,
                                       ListView.separated(
@@ -543,7 +552,10 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                   8.height,
                                   if (orderData!.status == ORDER_DELIVERED &&
                                       orderItems.validate().isNotEmpty) ...[
-                                        Divider(height:10, color: dividerColor,),
+                                    Divider(
+                                      height: 10,
+                                      color: dividerColor,
+                                    ),
                                     AppButton(
                                       elevation: 0,
                                       height: 30,
@@ -557,8 +569,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Text("Rate Store", //  todo
-                                              style:
-                                                  primaryTextStyle(color: colorPrimary)),
+                                              style: primaryTextStyle(color: colorPrimary)),
                                           Icon(Icons.arrow_right, color: colorPrimary),
                                         ],
                                       ),
@@ -568,14 +579,19 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                               .first.productData!.first.storeDetailId
                                               .validate(),
                                           orderId: (orderData?.id).validate(),
-                                        ).launch(context);
+                                        ).launch(context).then((value) => init());
                                       },
                                     ).visible(
                                         getStringAsync(USER_TYPE) == CLIENT && rating == null),
+                                    if(rating != null)
                                     Row(
                                       children: [
-                                        Text(getStringAsync(USER_TYPE) == CLIENT ? "Your Rating to Store :" : "Rate To Store :", //  todo
-                                            style: boldTextStyle(),),
+                                        Text(
+                                          getStringAsync(USER_TYPE) == CLIENT
+                                              ? "Your Rating to Store :"
+                                              : "Rate To Store :", //  todo
+                                          style: boldTextStyle(),
+                                        ),
                                         Spacer(),
                                         RatingBarIndicator(
                                           rating: rating!.rating.validate().toDouble(),
@@ -593,18 +609,17 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                   .first.productData!.first.storeDetailId
                                                   .validate(),
                                               orderId: (orderData?.id).validate(),
-                                              ratingId:  rating!.id.validate(),
-                                            ).launch(context);
+                                              ratingId: rating!.id.validate(),
+                                            ).launch(context).then((value) => init());
                                           }
                                         }),
                                         8.width,
-                                        Text(
-                                            "(${rating!.rating.validate()})",
+                                        Text("(${rating!.rating.validate()})",
                                             style: boldTextStyle(
-                                                size: 14,)),
-
+                                              size: 14,
+                                            )),
                                       ],
-                                    ).visible(rating != null),
+                                    ),
                                   ],
                                 ],
                               ),
@@ -844,6 +859,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                             16.height,
                             (orderData!.extraCharges.runtimeType == List<dynamic>)
                                 ? OrderSummeryWidget(
+                                    productAmount: productAmount,
                                     extraChargesList: list,
                                     totalDistance: orderData!.totalDistance,
                                     totalWeight: orderData!.totalWeight.validate(),
@@ -857,6 +873,17 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                 : Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
+                                      if (orderItems.validate().isNotEmpty)
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("productAmount", // todo
+                                                style: primaryTextStyle()),
+                                            16.width,
+                                            Text('${printAmount(productAmount)}',
+                                                style: primaryTextStyle()),
+                                          ],
+                                        ),
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [

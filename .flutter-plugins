@@ -81,3 +81,6 @@ url_launcher_linux=/home/meet09/.pub-cache/hosted/pub.dev/url_launcher_linux-3.1
 url_launcher_macos=/home/meet09/.pub-cache/hosted/pub.dev/url_launcher_macos-3.1.0/
 url_launcher_web=/home/meet09/.pub-cache/hosted/pub.dev/url_launcher_web-2.2.3/
 url_launcher_windows=/home/meet09/.pub-cache/hosted/pub.dev/url_launcher_windows-3.1.1/
+webview_flutter=/home/meet09/.pub-cache/hosted/pub.dev/webview_flutter-4.8.0/
+webview_flutter_android=/home/meet09/.pub-cache/hosted/pub.dev/webview_flutter_android-3.16.3/
+webview_flutter_wkwebview=/home/meet09/.pub-cache/hosted/pub.dev/webview_flutter_wkwebview-3.13.1/
