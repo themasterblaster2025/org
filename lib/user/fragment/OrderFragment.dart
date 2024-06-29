@@ -1,12 +1,20 @@
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import 'package:mighty_delivery/extensions/text_styles.dart';
+import 'package:mighty_delivery/main/utils/Colors.dart';
 
 import '../../extensions/LiveStream.dart';
 import '../../extensions/animatedList/animated_configurations.dart';
 import '../../extensions/animatedList/animated_list_view.dart';
+import '../../extensions/app_button.dart';
 import '../../extensions/common.dart';
+import '../../extensions/decorations.dart';
 import '../../extensions/shared_pref.dart';
 import '../../extensions/system_utils.dart';
 import '../../main.dart';
@@ -16,8 +24,9 @@ import '../../main/network/RestApis.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../components/OrderCardComponent.dart';
+import '../screens/StoreListScreen.dart';
 
-class  OrderFragment extends StatefulWidget {
+class OrderFragment extends StatefulWidget {
   static String tag = '/OrderFragment';
 
   @override
@@ -29,6 +38,20 @@ class OrderFragmentState extends State<OrderFragment> {
   int page = 1;
   int totalPage = 1;
   bool isLastPage = false;
+  List storeList = [
+    {
+      "name": "type1",
+    },
+    {
+      "name": "type2",
+    },
+    {
+      "name": "type11",
+    },
+    {
+      "name": "type21",
+    }
+  ];
 
   @override
   void initState() {
@@ -60,10 +83,22 @@ class OrderFragmentState extends State<OrderFragment> {
     });
     await getInvoiceSetting().then((value) {
       if (value.invoiceData != null && value.invoiceData!.isNotEmpty) {
-        appStore.setInvoiceCompanyName(value.invoiceData!.firstWhere((element) => element.key == 'company_name').value.validate());
-        appStore.setInvoiceContactNumber(value.invoiceData!.firstWhere((element) => element.key == 'company_contact_number').value.validate());
-        appStore.setCompanyAddress(value.invoiceData!.firstWhere((element) => element.key == 'company_address').value.validate());
-        appStore.setInvoiceCompanyLogo(value.invoiceData!.firstWhere((element) => element.key == 'company_logo').value.validate());
+        appStore.setInvoiceCompanyName(value.invoiceData!
+            .firstWhere((element) => element.key == 'company_name')
+            .value
+            .validate());
+        appStore.setInvoiceContactNumber(value.invoiceData!
+            .firstWhere((element) => element.key == 'company_contact_number')
+            .value
+            .validate());
+        appStore.setCompanyAddress(value.invoiceData!
+            .firstWhere((element) => element.key == 'company_address')
+            .value
+            .validate());
+        appStore.setInvoiceCompanyLogo(value.invoiceData!
+            .firstWhere((element) => element.key == 'company_logo')
+            .value
+            .validate());
       }
     }).catchError((error) {
       toast(error.toString());
@@ -77,7 +112,13 @@ class OrderFragmentState extends State<OrderFragment> {
 
     FilterAttributeModel filterData = FilterAttributeModel.fromJson(getJSONAsync(FILTER_DATA));
 
-    await getOrderList(page: page, orderStatus: filterData.orderStatus, fromDate: filterData.fromDate, toDate: filterData.toDate, excludeStatus: ORDER_DRAFT).then((value) {
+    await getOrderList(
+            page: page,
+            orderStatus: filterData.orderStatus,
+            fromDate: filterData.fromDate,
+            toDate: filterData.toDate,
+            excludeStatus: ORDER_DRAFT)
+        .then((value) {
       appStore.setAllUnreadCount(value.allUnreadCount.validate());
       totalPage = value.pagination!.totalPages.validate(value: 1);
       page = value.pagination!.currentPage.validate(value: 1);
@@ -109,36 +150,137 @@ class OrderFragmentState extends State<OrderFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedListView(
-      itemCount: orderList.length,
-      shrinkWrap: true,
-      physics: BouncingScrollPhysics(),
-      listAnimationType: ListAnimationType.Slide,
-      padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 60),
-      flipConfiguration: FlipConfiguration(duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn),
-      fadeInConfiguration: FadeInConfiguration(duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn),
-      onNextPage: () {
-        if (page < totalPage) {
-          page++;
-          setState(() {});
-          getOrderData();
-        }
-      },
-      emptyWidget: Stack(
-        children: [
-          loaderWidget().visible(appStore.isLoading),
-          emptyWidget().visible(!appStore.isLoading),
+    return ListView(
+      children: [
+        if (storeList.isNotEmpty) ...[
+          10.height,
+          Row(
+            children: [
+              Text(
+                "What can we get you?", //todo
+                style: boldTextStyle(size: 16, color: colorPrimary),
+              ),
+              Spacer(),
+              Icon(
+                Icons.navigate_next,
+                color: colorPrimary,
+              ).onTap(() {
+                StoreListScreen().launch(context);
+              }),
+            ],
+          ).paddingSymmetric(horizontal: 10),
+       /*   Container(
+            height: context.height() * 0.2,
+            child: ListView.builder(
+              padding: EdgeInsets.all(14),
+              scrollDirection: Axis.horizontal,
+              itemCount: storeList.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  width: context.width() * 0.4,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: commonCachedNetworkImage(
+                          appStore.userProfile.validate(),
+                        ),
+                      ),
+                      4.height,
+                      Text(
+                        "Store Type",
+                        style: boldTextStyle(size: 14),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),*/
+          8.height,
+          CarouselSlider(
+            options: CarouselOptions(
+              // autoPlay: true,
+              aspectRatio: 2.2,
+              viewportFraction: 0.35,
+
+              disableCenter: true,
+              enlargeCenterPage: true,
+            ),
+            items: storeList.map((e) {
+              final item = e;
+              return InkWell(
+                onTap: () {},
+                child: Column(
+                  children: [
+                    commonCachedNetworkImage(
+                      appStore.userProfile.validate(),
+                    ),
+                    4.height,
+                    Text(
+                      e["name"],
+                      style: boldTextStyle(size: 14),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+          Divider(
+            height: 6,
+            color: dividerColor,
+          ),
+          10.height,
+          Container(
+            margin: EdgeInsets.only(left: 10, right: 10),
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "My Orders", // todo
+                  style: secondaryTextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
-      ),
-      onSwipeRefresh: () async {
-        page = 1;
-        getOrderData();
-        return Future.value(true);
-      },
-      itemBuilder: (context, i) {
-        OrderData item = orderList[i];
-        return item.status != ORDER_DRAFT ? OrderCardComponent(item: item) : SizedBox();
-      },
+        AnimatedListView(
+          itemCount: orderList.length,
+          shrinkWrap: true,
+          physics: BouncingScrollPhysics(),
+          listAnimationType: ListAnimationType.Slide,
+          padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 60),
+          flipConfiguration:
+              FlipConfiguration(duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn),
+          fadeInConfiguration:
+              FadeInConfiguration(duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn),
+          onNextPage: () {
+            if (page < totalPage) {
+              page++;
+              setState(() {});
+              getOrderData();
+            }
+          },
+          emptyWidget: Stack(
+            children: [
+              loaderWidget().visible(appStore.isLoading),
+              emptyWidget().visible(!appStore.isLoading),
+            ],
+          ),
+          onSwipeRefresh: () async {
+            page = 1;
+            getOrderData();
+            return Future.value(true);
+          },
+          itemBuilder: (context, i) {
+            OrderData item = orderList[i];
+            return item.status != ORDER_DRAFT ? OrderCardComponent(item: item) : SizedBox();
+          },
+        ),
+      ],
     );
   }
 }

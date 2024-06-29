@@ -9,6 +9,7 @@ import 'package:mighty_delivery/main/screens/EmailVerificationScreen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../delivery/screens/DeliveryDashBoard.dart';
+import '../../delivery/screens/VerifyDeliveryPersonScreen.dart';
 import '../../extensions/shared_pref.dart';
 import '../../extensions/system_utils.dart';
 import '../../extensions/text_styles.dart';
@@ -40,7 +41,8 @@ class SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> init() async {
-    String versionNo = await getStringAsync(CURRENT_LAN_VERSION, defaultValue: LanguageVersion);
+    String versionNo =
+        await getStringAsync(CURRENT_LAN_VERSION, defaultValue: LanguageVersion);
     await getLanguageList(versionNo).then((value) {
       print("value===========${value.data!.length}");
       appStore.setLoading(false);
@@ -70,7 +72,8 @@ class SplashScreenState extends State<SplashScreen> {
       } else {
         String getJsonData = getStringAsync(LanguageJsonDataRes, defaultValue: "");
         if (getJsonData.isNotEmpty) {
-          ServerLanguageResponse languageSettings = ServerLanguageResponse.fromJson(json.decode(getJsonData.trim()));
+          ServerLanguageResponse languageSettings =
+              ServerLanguageResponse.fromJson(json.decode(getJsonData.trim()));
           if (languageSettings.data!.length > 0) {
             defaultServerLanguageData = languageSettings.data;
             performLanguageOperation(defaultServerLanguageData);
@@ -97,11 +100,15 @@ class SplashScreenState extends State<SplashScreen> {
       () async {
         if (appStore.isLoggedIn && getIntAsync(USER_ID) != 0) {
           await getUserDetail(getIntAsync(USER_ID)).then((value) async {
+            setValue(IS_VERIFIED_DELIVERY_MAN, (value.isVerifiedDeliveryMan.validate() == 1));
+
             if (value.deletedAt != null) {
               logout(context);
             } else {
               setValue(OTP_VERIFIED, value.otpVerifyAt != null);
-              if (!getBoolAsync(EMAIL_VERIFIED) && getStringAsync(IS_EMAIL_VERIFICATION) == '1') {
+              print("email verified or not ${getBoolAsync(IS_EMAIL_VERIFICATION).runtimeType}");
+              if (!getBoolAsync(EMAIL_VERIFIED) &&
+                  (getBoolAsync(IS_EMAIL_VERIFICATION) == false)) {
                 EmailVerificationScreen().launch(context, isNewTask: true);
               } else if (value.otpVerifyAt.isEmptyOrNull) {
                 VerificationScreen().launch(context, isNewTask: true);
@@ -109,11 +116,20 @@ class SplashScreenState extends State<SplashScreen> {
                 //update app version
                 Future<PackageInfo> packageInfoFuture = PackageInfo.fromPlatform();
                 final packageInfo = await packageInfoFuture;
-                if (value.app_version.isEmptyOrNull || value.app_version != packageInfo.version) {
-                  await updateUserStatus({"id": getIntAsync(USER_ID), "app_version": packageInfo.version}).then((value) {});
+                if (value.app_version.isEmptyOrNull ||
+                    value.app_version != packageInfo.version) {
+                  await updateUserStatus(
+                          {"id": getIntAsync(USER_ID), "app_version": packageInfo.version})
+                      .then((value) {});
                 }
                 //update source version
-                if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
+                if (!getBoolAsync(IS_VERIFIED_DELIVERY_MAN) &&
+                    getStringAsync(USER_TYPE) != CLIENT) {
+                  VerifyDeliveryPersonScreen().launch(context);
+                } else if (CityModel.fromJson(getJSONAsync(CITY_DATA))
+                    .name
+                    .validate()
+                    .isNotEmpty) {
                   if (getStringAsync(USER_TYPE) == CLIENT) {
                     DashboardScreen().launch(context, isNewTask: true);
                   } else {
@@ -147,16 +163,40 @@ class SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: context.scaffoldBackgroundColor,
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset(ic_logo, height: 80, width: 80, fit: BoxFit.fill).cornerRadiusWithClipRRect(defaultRadius),
-            16.height,
-            Text(language.appName, style: boldTextStyle(size: 20), textAlign: TextAlign.center),
+      body: FutureBuilder<PackageInfo>(
+        future: PackageInfo.fromPlatform(),
+        builder: (_, snap) {
+          if (snap.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          else if (snap.hasData) {
+            return Center(
+              child: Column(
+                // mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Spacer(),
+                  40.height,
+                  Image.asset(ic_logo, height: 80, width: 80, fit: BoxFit.fill)
+                      .cornerRadiusWithClipRRect(defaultRadius),
+                  16.height,
+                  Text(language.appName,
+                      style: boldTextStyle(size: 20), textAlign: TextAlign.center).expand(),
+                  Text('v ${snap.data!.version.validate()}', style: secondaryTextStyle(size: 12)),
+                  16.height,
+                ],
+              ),
+            );
+          } else {
+            return SizedBox();
+          }
+        },
+      ),
+      /* Text(language.appName, style: boldTextStyle(size: 10), textAlign: TextAlign.center),
+            16.height,*/ /*
           ],
         ),
-      ),
+      ),*/
     );
   }
 }

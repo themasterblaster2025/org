@@ -1,11 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/list_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/num_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
@@ -117,7 +115,7 @@ class StoreItemComponentState extends State<StoreItemComponent> {
         decoration: appStore.isDarkMode
             ? boxDecorationWithRoundedCorners(
                 borderRadius: BorderRadius.circular(defaultRadius),
-                backgroundColor: context.cardColor)
+                )
             : boxDecorationRoundedWithShadow(defaultRadius.toInt(),
                 shadowColor: Colors.grey.withOpacity(0.19)),
         child: Column(
@@ -170,7 +168,7 @@ class StoreItemComponentState extends State<StoreItemComponent> {
                               padding: EdgeInsets.all(3),
                               child: widget.store.isFavourite.validate() == 1
                                   ? Icon(Icons.favorite, size: 18, color: Colors.red)
-                                  : Icon(Icons.favorite_border, size: 18),
+                                  : Icon(Icons.favorite_border, size: 18, color: Colors.black ,),
                               decoration:
                                   BoxDecoration(shape: BoxShape.circle, color: Colors.white),
                             ),

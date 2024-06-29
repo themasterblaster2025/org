@@ -108,6 +108,8 @@ dependencies:
   fwfh_webview: ^0.15.1
   fwfh_cached_network_image: ^0.14.3
 
+  carousel_slider: ^4.2.1
+
   flutter_localizations:
     sdk: flutter
 

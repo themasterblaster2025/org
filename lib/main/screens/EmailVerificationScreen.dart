@@ -67,7 +67,7 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
       setValue(EMAIL_VERIFIED, true);
       toast(value.message.toString());
       if (widget.isSignUp == true) {
-        toast(language.userNotApproveMsg);
+        // toast(language.userNotApproveMsg);
         LoginScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
       } else {
         if (!getBoolAsync(OTP_VERIFIED)) {

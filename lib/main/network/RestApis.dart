@@ -4,11 +4,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
+import 'package:mighty_delivery/extensions/extension_util/bool_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/main/models/CategoryModel.dart';
-import 'package:mighty_delivery/main/models/CommonResponseModel.dart';
 import 'package:mighty_delivery/main/models/WorkHoursListModel.dart';
 
 import '../../extensions/common.dart';
@@ -165,7 +165,7 @@ Future<void> logout(BuildContext context,
     appStore.setFiltering(false);
     appStore.setUserProfile('');
     if (isFromLogin) {
-      toast(language.credentialNotMatch);
+      // toast(language.credentialNotMatch); comment this because show popup before logout
     } else {
       LoginScreen().launch(context, isNewTask: true);
     }
@@ -445,6 +445,7 @@ Future<LDBaseResponse> deleteDeliveryDoc(int id) async {
 Future<AppSettingModel> getAppSetting() async {
   return AppSettingModel.fromJson(
       await handleResponse(await buildHttpResponse('get-appsetting', method: HttpMethod.GET)));
+
 }
 
 /// Cancel AutoAssign order
@@ -673,8 +674,8 @@ Future<WorkHoursListModel> getWorkingHoursList({int? page, int? storeDetailId}) 
       await buildHttpResponse(endpoint, method: HttpMethod.GET)));
 }
 
-Future<CommonResponseModel> saveRateReview(Map req) async {
-  return CommonResponseModel.fromJson(await handleResponse(
+Future<LDBaseResponse> saveRateReview(Map req) async {
+  return LDBaseResponse.fromJson(await handleResponse(
       await buildHttpResponse('rating-save', request: req, method: HttpMethod.POST)));
 }
 

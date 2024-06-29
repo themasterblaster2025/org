@@ -85,10 +85,6 @@ class DashboardScreenState extends State<DashboardScreen> {
         preferredSize: Size(context.width(), 60),
         child: commonAppBarWidget(getTitle(),
             actions: [
-              Icon(Ionicons.md_menu, color: Colors.white).onTap((){
-                StoreListScreen().launch(context);
-              }),
-              4.width,
               Container(
                 margin: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),

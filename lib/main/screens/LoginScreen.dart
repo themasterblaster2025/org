@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mighty_delivery/extensions/extension_util/bool_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
@@ -9,9 +10,11 @@ import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart
 import 'package:store_checker/store_checker.dart';
 
 import '../../delivery/screens/DeliveryDashBoard.dart';
+import '../../delivery/screens/VerifyDeliveryPersonScreen.dart';
 import '../../extensions/app_text_field.dart';
 import '../../extensions/colors.dart';
 import '../../extensions/common.dart';
+import '../../extensions/confirmation_dialog.dart';
 import '../../extensions/decorations.dart';
 import '../../extensions/extension_util/device_extensions.dart';
 import '../../extensions/shared_pref.dart';
@@ -105,9 +108,18 @@ class LoginScreenState extends State<LoginScreen> {
               .then((value) async {
             appStore.setLoading(false);
 
-            if (v.data!.userType != CLIENT &&
-                v.data!.userType != DELIVERY_MAN) {
-              await logout(context, isFromLogin: true);
+            if (v.data!.userType != CLIENT && v.data!.userType != DELIVERY_MAN) {
+              showConfirmDialogCustom(
+                context,
+                title: "Are you sure you want to logout??",
+                // todo message
+                positiveText: language.yes,
+                primaryColor: colorPrimary,
+                showCancelButton: false,
+                onAccept: (v) async {
+                  await logout(context, isFromLogin: true);
+                },
+              );
             } else {
               appStore.setUserType(v.data!.userType.toString());
               if (getIntAsync(STATUS) == 1) {
@@ -121,23 +133,21 @@ class LoginScreenState extends State<LoginScreen> {
                 log('v.data!.emailVerifiedAt ${v.data!.emailVerifiedAt}');
                 log('v.data!.otp ${v.data!.otpVerifyAt}');
 
-                if (v.isEmailVerification == '1' &&
-                    v.data!.emailVerifiedAt.isEmptyOrNull)
+                if (v.isEmailVerification.validate() == false && v.data!.emailVerifiedAt.isEmptyOrNull)
                   EmailVerificationScreen(isSignIn: true).launch(context,
-                      isNewTask: true,
-                      pageRouteAnimation: PageRouteAnimation.Slide);
+                      isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
                 else if (v.data!.otpVerifyAt.isEmptyOrNull)
                   VerificationScreen().launch(context,
-                      isNewTask: true,
-                      pageRouteAnimation: PageRouteAnimation.Slide);
-                else {
+                      isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+                else if (v.data!.isVerifiedDeliveryMan.validate() == 0 && getStringAsync(USER_TYPE) == DELIVERY_MAN)  {
+                  VerifyDeliveryPersonScreen().launch(context);
+                } else {
                   if (v.data!.countryId != null && v.data!.cityId != null) {
                     await getCountryDetailApiCall(v.data!.countryId.validate());
                     getCityDetailApiCall(v.data!.cityId.validate());
                   } else {
                     UserCitySelectScreen().launch(context,
-                        isNewTask: true,
-                        pageRouteAnimation: PageRouteAnimation.Slide);
+                        isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
                   }
                 }
               } else {
@@ -147,10 +157,8 @@ class LoginScreenState extends State<LoginScreen> {
             }
             updateStoreCheckerData().then((source) async {
               await getUserDetail(getIntAsync(USER_ID)).then((value) async {
-                if (value.app_source.isEmptyOrNull ||
-                    value.app_source != source) {
-                  await updateUserStatus(
-                          {"id": getIntAsync(USER_ID), "app_source": source})
+                if (value.app_source.isEmptyOrNull || value.app_source != source) {
+                  await updateUserStatus({"id": getIntAsync(USER_ID), "app_source": source})
                       .then((data) {});
                 }
               }).catchError((e) {
@@ -220,10 +228,7 @@ class LoginScreenState extends State<LoginScreen> {
   getCityDetailApiCall(int cityId) async {
     await getCityDetail(cityId).then((value) async {
       await setValue(CITY_DATA, value.data!.toJson());
-      if (CityModel.fromJson(getJSONAsync(CITY_DATA))
-          .name
-          .validate()
-          .isNotEmpty) {
+      if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
         if (getBoolAsync(OTP_VERIFIED)) {
           if (getStringAsync(USER_TYPE) == CLIENT) {
             DashboardScreen().launch(context, isNewTask: true);
@@ -238,8 +243,8 @@ class LoginScreenState extends State<LoginScreen> {
       }
     }).catchError((error) {
       if (error.toString() == CITY_NOT_FOUND_EXCEPTION) {
-        UserCitySelectScreen().launch(getContext,
-            isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+        UserCitySelectScreen()
+            .launch(getContext, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
       }
     });
   }
@@ -273,8 +278,7 @@ class LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimaryLight,
+      backgroundColor: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimaryLight,
       appBar: commonAppBarWidget(language.signIn, showBack: false),
       body: Stack(
         children: [
@@ -319,11 +323,9 @@ class LoginScreenState extends State<LoginScreen> {
                             height: 20,
                             width: 20,
                             child: Checkbox(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: radius(4)),
+                              shape: RoundedRectangleBorder(borderRadius: radius(4)),
                               checkColor: Colors.white,
-                              materialTapTargetSize:
-                                  MaterialTapTargetSize.shrinkWrap,
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               focusColor: colorPrimary,
                               activeColor: colorPrimary,
                               value: mIsCheck,
@@ -342,8 +344,7 @@ class LoginScreenState extends State<LoginScreen> {
                       ),
                       Align(
                         alignment: Alignment.topRight,
-                        child: Text(language.forgotPasswordQue,
-                                style: primaryTextStyle())
+                        child: Text(language.forgotPasswordQue, style: primaryTextStyle())
                             .onTap(() {
                           ForgotPasswordScreen().launch(context);
                         }),
@@ -357,11 +358,9 @@ class LoginScreenState extends State<LoginScreen> {
                         height: 20,
                         width: 20,
                         child: Checkbox(
-                          shape:
-                              RoundedRectangleBorder(borderRadius: radius(4)),
+                          shape: RoundedRectangleBorder(borderRadius: radius(4)),
                           checkColor: Colors.white,
-                          materialTapTargetSize:
-                              MaterialTapTargetSize.shrinkWrap,
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           focusColor: colorPrimary,
                           activeColor: colorPrimary,
                           value: isAcceptedTc,
@@ -375,8 +374,7 @@ class LoginScreenState extends State<LoginScreen> {
                       RichText(
                         text: TextSpan(children: [
                           TextSpan(
-                              text: '${language.iAgreeToThe} ',
-                              style: secondaryTextStyle()),
+                              text: '${language.iAgreeToThe} ', style: secondaryTextStyle()),
                           TextSpan(
                             text: language.termOfService,
                             style: boldTextStyle(color: colorPrimary, size: 14),
@@ -414,18 +412,14 @@ class LoginScreenState extends State<LoginScreen> {
                         child: Text(language.demoUser,
                             style: secondaryTextStyle(
                                 size: 16,
-                                color: isDemoSelected == 0
-                                    ? colorPrimary
-                                    : textSecondaryColor)),
+                                color:
+                                    isDemoSelected == 0 ? colorPrimary : textSecondaryColor)),
                         style: OutlinedButton.styleFrom(
                           side: BorderSide(
                               width: isDemoSelected == 0 ? 1 : 0.5,
-                              color: isDemoSelected == 0
-                                  ? colorPrimary
-                                  : textSecondaryColor),
+                              color: isDemoSelected == 0 ? colorPrimary : textSecondaryColor),
                           shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(defaultRadius)),
+                              borderRadius: BorderRadius.circular(defaultRadius)),
                           elevation: 0,
                         ),
                         onPressed: () {
@@ -440,18 +434,14 @@ class LoginScreenState extends State<LoginScreen> {
                         child: Text(language.demoDeliveryMan,
                             style: secondaryTextStyle(
                                 size: 16,
-                                color: isDemoSelected == 1
-                                    ? colorPrimary
-                                    : textSecondaryColor)),
+                                color:
+                                    isDemoSelected == 1 ? colorPrimary : textSecondaryColor)),
                         style: OutlinedButton.styleFrom(
                           side: BorderSide(
                               width: isDemoSelected == 1 ? 1 : 0.5,
-                              color: isDemoSelected == 1
-                                  ? colorPrimary
-                                  : textSecondaryColor),
+                              color: isDemoSelected == 1 ? colorPrimary : textSecondaryColor),
                           shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(defaultRadius)),
+                              borderRadius: BorderRadius.circular(defaultRadius)),
                           elevation: 0,
                         ),
                         onPressed: () {
@@ -467,11 +457,9 @@ class LoginScreenState extends State<LoginScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(language.doNotHaveAccount,
-                          style: primaryTextStyle()),
+                      Text(language.doNotHaveAccount, style: primaryTextStyle()),
                       4.width,
-                      Text(language.signUp,
-                              style: boldTextStyle(color: colorPrimary))
+                      Text(language.signUp, style: boldTextStyle(color: colorPrimary))
                           .onTap(() {
                         RegisterScreen(
                           userType: CLIENT,
@@ -503,8 +491,7 @@ class LoginScreenState extends State<LoginScreen> {
                         style: OutlinedButton.styleFrom(
                           padding: EdgeInsets.all(12),
                           shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(defaultRadius)),
+                              borderRadius: BorderRadius.circular(defaultRadius)),
                           elevation: 0,
                         ),
                         onPressed: () {
@@ -520,8 +507,7 @@ class LoginScreenState extends State<LoginScreen> {
                           style: OutlinedButton.styleFrom(
                             padding: EdgeInsets.all(12),
                             shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(defaultRadius)),
+                                borderRadius: BorderRadius.circular(defaultRadius)),
                             elevation: 0,
                           ),
                           onPressed: () {
@@ -536,8 +522,7 @@ class LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-          Observer(
-              builder: (context) => loaderWidget().visible(appStore.isLoading)),
+          Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
         ],
       ),
       bottomNavigationBar: Container(
@@ -548,8 +533,7 @@ class LoginScreenState extends State<LoginScreen> {
           children: [
             Text("${language.becomeADeliveryBoy}", style: primaryTextStyle()),
             4.width,
-            Text(language.signUp, style: boldTextStyle(color: colorPrimary))
-                .onTap(() {
+            Text(language.signUp, style: boldTextStyle(color: colorPrimary)).onTap(() {
               RegisterScreen(userType: DELIVERY_MAN).launch(context,
                   duration: Duration(milliseconds: 500),
                   pageRouteAnimation: PageRouteAnimation.Slide);
@@ -570,12 +554,10 @@ class LoginScreenState extends State<LoginScreen> {
             return AlertDialog(
               actionsPadding: EdgeInsets.all(16),
               contentPadding: EdgeInsets.zero,
-              shape:
-                  RoundedRectangleBorder(borderRadius: radius(defaultRadius)),
+              shape: RoundedRectangleBorder(borderRadius: radius(defaultRadius)),
               title: Padding(
                   padding: EdgeInsets.only(bottom: 10),
-                  child: Text(language.selectUserType,
-                      style: boldTextStyle(size: 18))),
+                  child: Text(language.selectUserType, style: boldTextStyle(size: 18))),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: userTypeList.map((item) {

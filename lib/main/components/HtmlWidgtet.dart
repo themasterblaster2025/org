@@ -3,9 +3,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:fwfh_cached_network_image/fwfh_cached_network_image.dart';
+import 'package:fwfh_webview/fwfh_webview.dart';
 
 class HtmlWidgetComponent extends StatelessWidget {
-  final String postContent;
+  late final String postContent;
   final Color? color;
 
   HtmlWidgetComponent({required this.postContent, this.color});
@@ -29,14 +30,15 @@ class HtmlWidgetComponent extends StatelessWidget {
             width: width,
           );
         }
-        return null;
 
       },
+        // factoryBuilder: () => MyWidgetFactoryVideo(),
     );
   }
 }
 
 class MyWidgetFactory extends WidgetFactory with CachedNetworkImageFactory {}
+class MyWidgetFactoryVideo extends WidgetFactory with WebViewFactory {}
 
 
 // iframe for video

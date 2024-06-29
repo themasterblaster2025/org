@@ -5,6 +5,7 @@ import 'package:mighty_delivery/extensions/common.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/list_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import 'package:mighty_delivery/main/components/CommonScaffoldComponent.dart';
 import 'package:mighty_delivery/main/models/StoreListModel.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
 
@@ -90,47 +91,39 @@ class FavouriteStoreScreenState extends State<FavouriteStoreScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Favourite Store"), // todo
-        titleTextStyle: primaryTextStyle(color: Colors.white, size: 20),
-        iconTheme: IconThemeData(
-          color: Colors.white,
-        ),
-      ),
-      body: BodyCornerWidget(
-        child: Observer(builder: (context) {
-          return Stack(
-            children: [
-              storeList.isNotEmpty
-                  ? ListView.builder(
-                      itemCount: storeList.length,
-                      shrinkWrap: true,
-                      controller: scrollController,
-                      padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
-                      itemBuilder: (context, index) {
-                        print("index ${storeList.validate().length} ${workingHoursList.validate().length}");
-                        StoreData item = storeList[index];
-                        if (workingHoursList.validate().length == storeList.validate().length)
-                          return StoreItemComponent(
-                              store: item,
-                              workHours: workingHoursList[index],
-                              onUpdate: () {
-                                page = 1;
-                                init();
-                              }
-                           );
-                        return null;
-                      },
-                    )
-                  : !appStore.isLoading
-                      ? emptyWidget()
-                      : SizedBox(),
-              loaderWidget().center().visible(appStore.isLoading),
-            ],
-          );
-        }),
-      ),
+    return CommonScaffoldComponent(
+      appBarTitle: "Favourite Store", // todo
+      body: Observer(builder: (context) {
+        return Stack(
+          children: [
+            storeList.isNotEmpty
+                ? ListView.builder(
+                    itemCount: storeList.length,
+                    shrinkWrap: true,
+                    controller: scrollController,
+                    padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+                    itemBuilder: (context, index) {
+                      print("index ${storeList.validate().length} ${workingHoursList.validate().length}");
+                      StoreData item = storeList[index];
+                      if (workingHoursList.validate().length == storeList.validate().length)
+                        return StoreItemComponent(
+                            store: item,
+                            workHours: workingHoursList[index],
+                            onUpdate: () {
+                              page = 1;
+                              init();
+                            }
+                         );
+                      return null;
+                    },
+                  )
+                : !appStore.isLoading
+                    ? emptyWidget()
+                    : SizedBox(),
+            loaderWidget().center().visible(appStore.isLoading),
+          ],
+        );
+      }),
     );
   }
 }

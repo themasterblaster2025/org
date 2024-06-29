@@ -21,6 +21,8 @@ class AppSettingModel {
   String? currencyCode;
   String? currencyPosition;
   int? isVehicleInOrder;
+  int? isVerifiedDeliveryMan;
+
 
   AppSettingModel({
     this.createdAt,
@@ -45,6 +47,7 @@ class AppSettingModel {
     this.currencyCode,
     this.currencyPosition,
     this.isVehicleInOrder,
+    this.isVerifiedDeliveryMan,
   });
 
   factory AppSettingModel.fromJson(Map<String, dynamic> json) {
@@ -71,6 +74,8 @@ class AppSettingModel {
       currencyCode: json['currency_code'],
       currencyPosition: json['currency_position'],
       isVehicleInOrder: json['is_vehicle_in_order'],
+      isVerifiedDeliveryMan : json['is_verified_delivery_man'],
+
     );
   }
 
@@ -120,6 +125,8 @@ class AppSettingModel {
     data['currency_code'] = this.currencyCode;
     data['currency_position'] = this.currencyPosition;
     data['is_vehicle_in_order'] = this.isVehicleInOrder;
+    data['is_verified_delivery_man'] = this.isVerifiedDeliveryMan;
+
     return data;
   }
 }

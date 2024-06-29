@@ -143,7 +143,7 @@ class AccountFragmentState extends State<AccountFragment> {
                 },
               ),
               accountSettingItemWidget(
-                ic_bank_detail,
+                ic_address,
                 language.lblMyAddresses,
                 () {
                   MyAddressListScreen().launch(context);

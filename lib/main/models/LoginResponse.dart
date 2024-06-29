@@ -2,16 +2,20 @@ class LoginResponse {
   UserData? data;
   String? message;
 
-  String? isEmailVerification;
+  bool? isEmailVerification;
+  bool? isMobileVerification;
+  bool? isDocumentVerification;
   var status;
 
-  LoginResponse({this.data, this.message, this.status, this.isEmailVerification});
+  LoginResponse({this.data, this.message, this.status, this.isEmailVerification, this.isDocumentVerification, this.isMobileVerification});
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) {
     return LoginResponse(
       data: json['data'] != null ? UserData.fromJson(json['data']) : null,
       message: json['message'],
       isEmailVerification: json['is_email_verification'],
+      isDocumentVerification: json['is_document_verification'],
+      isMobileVerification: json['is_mobile_verification'],
       status: json['status'],
     );
   }
@@ -22,6 +26,8 @@ class LoginResponse {
       data['data'] = this.data!.toJson();
     }
     data['is_email_verification'] = this.isEmailVerification;
+    data['is_mobile_verification'] = this.isMobileVerification;
+    data['is_document_verification'] = this.isDocumentVerification;
     data['message'] = this.message;
     data['status'] = this.status;
     return data;

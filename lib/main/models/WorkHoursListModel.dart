@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:mighty_delivery/main/models/PaginationModel.dart';
 
 class WorkHoursListModel {
@@ -59,9 +57,9 @@ class WorkHoursData {
 
   factory WorkHoursData.fromJson(Map<String, dynamic> json) => WorkHoursData(
         id: json["id"],
-        storeManagerId: json["store_manager_id"],
+        storeManagerId: json["storeowner_id"],
         storeDetailId: json["store_detail_id"],
-        storeManagerName: json["store_manager_name"],
+        storeManagerName: json["storeowner_name"],
         day: json["day"],
         storeOpenClose: json["store-open/close"],
         startTime: json["start_time"],
@@ -72,9 +70,9 @@ class WorkHoursData {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "store_manager_id": storeManagerId,
+        "storeowner_id": storeManagerId,
         "store_detail_id": storeDetailId,
-        "store_manager_name": storeManagerName,
+        "storeowner_name": storeManagerName,
         "day": day,
         "store-open/close": storeOpenClose,
         "start_time": startTime,

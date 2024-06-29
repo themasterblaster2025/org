@@ -322,6 +322,7 @@ Future<bool?> showConfirmDialogCustom(
   double? height,
   double? width,
   bool cancelable = true,
+  bool showCancelButton = true,
   Color? barrierColor,
   DialogType dialogType = DialogType.CONFIRMATION,
   DialogAnimation dialogAnimation = DialogAnimation.DEFAULT,
@@ -418,8 +419,8 @@ Future<bool?> showConfirmDialogCustom(
 
                         onCancel?.call(_);
                       },
-                    ).expand(),
-                    16.width,
+                    ).expand().visible(showCancelButton),
+                    16.width.visible(showCancelButton),
                     AppButton(
                       elevation: 0,
                       color: getDialogPrimaryColor(_, dialogType, primaryColor),

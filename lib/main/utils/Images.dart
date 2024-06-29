@@ -5,6 +5,7 @@ const ic_to = "assets/ic_to.png";
 const ic_select_region = 'assets/ic_select_region.png';
 
 const ic_google_map = 'assets/icons/ic_google_map.png';
+const ic_address= 'assets/icons/ic_address.png';
 const ic_edit = 'assets/icon/ic_edit.png';
 const ic_earning = 'assets/icon/ic_earning.png';
 const ic_wallet = 'assets/icon/ic_wallet.png';

@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:mighty_delivery/main/models/PaginationModel.dart';
 import 'package:mighty_delivery/main/models/RatingListModel.dart';
@@ -80,8 +79,8 @@ class StoreData {
 
   factory StoreData.fromJson(Map<String, dynamic> json) => StoreData(
     id: json["id"],
-    storeManagerId: json["store_manager_id"],
-    storeManagerName: json["store_manager_name"],
+    storeManagerId: json["storeowner_id"],
+    storeManagerName: json["storeowner_name"],
     storeName: json["store_name"],
     contactNumber: json["contact_number"],
     countryId: json["country_id"],
@@ -103,8 +102,8 @@ class StoreData {
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "store_manager_id": storeManagerId,
-    "store_manager_name": storeManagerName,
+    "storeowner_id": storeManagerId,
+    "storeowner_name": storeManagerName,
     "store_name": storeName,
     "contact_number": contactNumber,
     "country_id": countryId,

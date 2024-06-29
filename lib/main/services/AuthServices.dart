@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:mighty_delivery/extensions/extension_util/bool_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
@@ -48,6 +49,7 @@ class AuthServices {
             userCredential = value.user!;
           });
         } on FirebaseException catch (error) {
+          print("on FirebaseException catch (error)");
           toast(getMessageFromErrorCode(error));
         }
       } else {
@@ -84,7 +86,7 @@ class AuthServices {
           await userService.addDocumentWithCustomId(user.uid, userModel.toJson()).then((value) async {
             if (userModel.userType == DELIVERY_MAN) {
               appStore.setLoading(false);
-              if (userData.isEmailVerification == '1' && userData.data!.emailVerifiedAt.isEmptyOrNull) {
+              if (userData.isEmailVerification.validate() == false&& userData.data!.emailVerifiedAt.isEmptyOrNull) {
                 appStore.setLogin(true);
                 setValue(USER_EMAIL, userData.data!.email.validate());
                 appStore.setUserEmail(userData.data!.email.validate());
@@ -108,7 +110,7 @@ class AuthServices {
                     log("value...." + value.toString());
                   });
                   appStore.setLoading(false);
-                  if (res.isEmailVerification == '1' && res.data!.emailVerifiedAt.isEmptyOrNull)
+                  if (res.isEmailVerification.validate() == false && res.data!.emailVerifiedAt.isEmptyOrNull)
                     EmailVerificationScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
                   else if (res.data!.otpVerifyAt.isEmptyOrNull)
                     VerificationScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);

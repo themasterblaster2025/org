@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../extensions/common.dart';
-import '../main.dart';
 
 DateTime? _currentBackPressTime;
 

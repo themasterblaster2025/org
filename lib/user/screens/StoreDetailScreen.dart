@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
@@ -80,7 +81,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
                         ).cornerRadiusWithClipRRect(4).paddingSymmetric(horizontal: 6),
                       ),
                       10.height,
-                      Column(
+                      ListView(
                         children: [
                           Row(
                             children: [
