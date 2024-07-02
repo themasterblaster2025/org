@@ -7,6 +7,7 @@ import 'package:mighty_delivery/extensions/extension_util/context_extensions.dar
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import 'package:mighty_delivery/main/screens/VerificationListScreen.dart';
 import 'package:store_checker/store_checker.dart';
 
 import '../../delivery/screens/DeliveryDashBoard.dart';
@@ -132,23 +133,17 @@ class LoginScreenState extends State<LoginScreen> {
                 log("Email verify at :${v.isEmailVerification}");
                 log('v.data!.emailVerifiedAt ${v.data!.emailVerifiedAt}');
                 log('v.data!.otp ${v.data!.otpVerifyAt}');
-
-                if (v.isEmailVerification.validate() == false && v.data!.emailVerifiedAt.isEmptyOrNull)
-                  EmailVerificationScreen(isSignIn: true).launch(context,
-                      isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
-                else if (v.data!.otpVerifyAt.isEmptyOrNull)
-                  VerificationScreen().launch(context,
-                      isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
-                else if (v.data!.isVerifiedDeliveryMan.validate() == 0 && getStringAsync(USER_TYPE) == DELIVERY_MAN)  {
-                  VerifyDeliveryPersonScreen().launch(context);
+                if (v.data!.emailVerifiedAt.isEmptyOrNull ||
+                    v.data!.otpVerifyAt.isEmptyOrNull ||
+                    (v.data!.isVerifiedDeliveryMan.validate() == 0 &&
+                        getStringAsync(USER_TYPE) == DELIVERY_MAN)) {
+                  VerificationListScreen(isSignIn: true,).launch(context);
+                }
+                else if (v.data!.countryId != null && v.data!.cityId != null) {
+                  await getCountryDetailApiCall(v.data!.countryId.validate());
+                  getCityDetailApiCall(v.data!.cityId.validate());
                 } else {
-                  if (v.data!.countryId != null && v.data!.cityId != null) {
-                    await getCountryDetailApiCall(v.data!.countryId.validate());
-                    getCityDetailApiCall(v.data!.cityId.validate());
-                  } else {
-                    UserCitySelectScreen().launch(context,
-                        isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
-                  }
+                  UserCitySelectScreen().launch(context, isNewTask: true);
                 }
               } else {
                 toast(language.userNotApproveMsg);

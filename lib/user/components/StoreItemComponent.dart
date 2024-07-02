@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
+import 'package:mighty_delivery/extensions/extension_util/bool_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/num_extensions.dart';
@@ -23,10 +24,9 @@ import '../screens/ProductListScreen.dart';
 
 class StoreItemComponent extends StatefulWidget {
   final StoreData store;
-  final WorkHoursData? workHours;
   final Function()? onUpdate;
 
-  StoreItemComponent({required this.store, this.workHours, this.onUpdate});
+  StoreItemComponent({required this.store, this.onUpdate});
 
   @override
   StoreItemComponentState createState() => StoreItemComponentState();
@@ -85,27 +85,31 @@ class StoreItemComponentState extends State<StoreItemComponent> {
 
   @override
   Widget build(BuildContext context) {
-    String start = widget.workHours!.startTime.validate();
-    String end = widget.workHours!.endTime.validate();
-    // print("=== list ${end.split(":").toString()}");
-    TimeOfDay startTime = TimeOfDay(
-        hour: start.split(":").first.toInt(),
-        minute: (start.split(":")[1]).substring(0, 1).toInt());
-    TimeOfDay endTime = TimeOfDay(
-        hour: end.split(":").first.toInt(),
-        minute: (end.split(":")[1]).substring(0, 2).toInt());
-    int startTimeSecond = (startTime.hour * 60 + startTime.minute) * 60;
-    int endTimeSecond = (endTime.hour * 60 + endTime.minute) * 60;
+    String start = widget.store.workingHours!.start.validate();
+    String end = widget.store.workingHours!.end.validate();
+
+    List<String> hourMinute = start.split(' ')[0].split(':');
+    int startHour = int.parse(hourMinute[0]);
+    int startMin = int.parse(hourMinute[1]);
+    String startPart = start.split(' ')[1];
+
+    int startTimeSecond =
+        (startHour * 60 + startMin) * 60 + ((startPart == "am") ? 0 : (12 * 60 * 60));
+    int endHour = end.split(":").first.toInt();
+    int endMin = (end.split(":")[1]).substring(0, 1).toInt();
+    String endPart = end.split(":")[1].substring(3, 5);
+    int endTimeSecond =
+        (endHour * 60 + endMin) * 60 + ((endPart == "am") ? 0 : (12 * 60 * 60));
     int currentTimeSecond = (DateTime.now().hour * 60 + DateTime.now().minute) * 60;
-    print("starttime $startTimeSecond endtime $endTimeSecond currenttime $currentTimeSecond");
+
     return InkWell(
       borderRadius: radius(16),
       hoverColor: Colors.white,
       onTap: () {
         if (getIntAsync(CITY_ID) == widget.store.cityId.validate()) {
-          // if (currentTimeSecond > startTimeSecond && currentTimeSecond < endTimeSecond) { // todo
+          if (currentTimeSecond > startTimeSecond && currentTimeSecond < endTimeSecond && widget.store.workingHours!.isOpen.validate()) { // todo
           ProductListScreen(store: widget.store).launch(context);
-          // }
+          }
         } else {
           toast("rightNowStoreNotAvailable"); // todo
           // toast(language.rightNowStoreNotAvailable);
@@ -115,29 +119,29 @@ class StoreItemComponentState extends State<StoreItemComponent> {
         decoration: appStore.isDarkMode
             ? boxDecorationWithRoundedCorners(
                 borderRadius: BorderRadius.circular(defaultRadius),
-                )
+              )
             : boxDecorationRoundedWithShadow(defaultRadius.toInt(),
                 shadowColor: Colors.grey.withOpacity(0.19)),
         child: Column(
           children: [
             if (currentTimeSecond < startTimeSecond ||
                 currentTimeSecond > endTimeSecond ||
-                (endTimeSecond - currentTimeSecond) < 3600) ...[
+                !widget.store.workingHours!.isOpen.validate()) ...[
               Container(
                 margin: EdgeInsets.all(4),
                 padding: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-                // decoration: boxDecorationRoundedWithShadow(16, backgroundColor: Colors.red),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(Icons.timelapse, color: Colors.red, size: 14),
                     4.width,
                     Text(
-                        currentTimeSecond < startTimeSecond
-                            ? 'Open in ${getTime(startTimeSecond - currentTimeSecond)} min' // todo
-                            : currentTimeSecond > endTimeSecond
-                                ? "closeForToday"
-                                : 'Close after ${getTime(endTimeSecond - currentTimeSecond)} min',
+                        widget.store.workingHours!.isOpen.validate()
+                            ? (currentTimeSecond < startTimeSecond
+                                ? 'Open in ${getTime(startTimeSecond - currentTimeSecond)} min' // todo
+                                : "closeForToday")
+                            : "closeForToday",
+
                         // todo
                         style: boldTextStyle(color: Colors.red, size: 14)),
                   ],
@@ -168,7 +172,11 @@ class StoreItemComponentState extends State<StoreItemComponent> {
                               padding: EdgeInsets.all(3),
                               child: widget.store.isFavourite.validate() == 1
                                   ? Icon(Icons.favorite, size: 18, color: Colors.red)
-                                  : Icon(Icons.favorite_border, size: 18, color: Colors.black ,),
+                                  : Icon(
+                                      Icons.favorite_border,
+                                      size: 18,
+                                      color: Colors.black,
+                                    ),
                               decoration:
                                   BoxDecoration(shape: BoxShape.circle, color: Colors.white),
                             ),
@@ -199,7 +207,7 @@ class StoreItemComponentState extends State<StoreItemComponent> {
             ).paddingAll(10),
           ],
         ),
-      ).paddingOnly(left: 8, right: 8,top: 6),
+      ).paddingOnly(left: 8, right: 8, top: 6),
     );
   }
 
@@ -231,4 +239,3 @@ class StoreItemComponentState extends State<StoreItemComponent> {
     ).paddingTop(6);
   }
 }
-

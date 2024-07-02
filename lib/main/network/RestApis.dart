@@ -231,6 +231,14 @@ Future<UserData> getUserDetail(int id) async {
       .then((value) => value['data']));
 }
 
+
+Future<LoginResponse> getUserDetailWithVerification(int id) async {
+  return LoginResponse.fromJson(await handleResponse(
+      await buildHttpResponse('user-detail?id=$id', method: HttpMethod.GET))
+      .then((value) => value));
+}
+
+
 /// Create Order Api
 Future<LDBaseResponse> createOrder(Map request) async {
   return LDBaseResponse.fromJson(await handleResponse(

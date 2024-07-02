@@ -22,6 +22,7 @@ class AppSettingModel {
   String? currencyPosition;
   int? isVehicleInOrder;
   int? isVerifiedDeliveryMan;
+  List<StoreManage>? storeManage;
 
 
   AppSettingModel({
@@ -48,6 +49,7 @@ class AppSettingModel {
     this.currencyPosition,
     this.isVehicleInOrder,
     this.isVerifiedDeliveryMan,
+    this.storeManage,
   });
 
   factory AppSettingModel.fromJson(Map<String, dynamic> json) {
@@ -75,6 +77,7 @@ class AppSettingModel {
       currencyPosition: json['currency_position'],
       isVehicleInOrder: json['is_vehicle_in_order'],
       isVerifiedDeliveryMan : json['is_verified_delivery_man'],
+      storeManage: json["store_manage"] == null ? [] : List<StoreManage>.from(json["store_manage"]!.map((x) => StoreManage.fromJson(x))),
 
     );
   }
@@ -126,6 +129,7 @@ class AppSettingModel {
     data['currency_position'] = this.currencyPosition;
     data['is_vehicle_in_order'] = this.isVehicleInOrder;
     data['is_verified_delivery_man'] = this.isVerifiedDeliveryMan;
+    data["store_manage"] = this.storeManage == null ? [] : List<dynamic>.from(storeManage!.map((x) => x.toJson()));
 
     return data;
   }
@@ -226,4 +230,33 @@ class Notifications {
     data['IS_FIREBASE_NOTIFICATION'] = this.isFirebaseNotification;
     return data;
   }
+}
+
+
+class StoreManage {
+  int? id;
+  int? storeOwnerId;
+  String? name;
+  String? image;
+
+  StoreManage({
+    this.id,
+    this.storeOwnerId,
+    this.name,
+    this.image,
+  });
+
+  factory StoreManage.fromJson(Map<String, dynamic> json) => StoreManage(
+    id: json["id"],
+    storeOwnerId: json["storeowner_id"],
+    name: json["name"],
+    image: json["image"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "storeowner_id": storeOwnerId,
+    "name": name,
+    "image": image,
+  };
 }

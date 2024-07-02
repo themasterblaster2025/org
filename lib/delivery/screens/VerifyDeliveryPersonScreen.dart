@@ -62,7 +62,7 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
   /// get Document list
   Future<void> getDocListApiCall() async {
     appStore.setLoading(true);
-   await getDocumentList().then((res) {
+    await getDocumentList().then((res) {
       documents.addAll(res.data!);
       remainingDocuments.addAll(res.data!);
       setState(() {});
@@ -80,14 +80,15 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
       deliveryPersonDocuments.addAll(res.data!);
       deliveryPersonDocuments.forEach((element) {
         uploadedDocList!.add(element.documentId!);
-      /*  remainingDocuments.forEach((doc) {
+        /*  remainingDocuments.forEach((doc) {
           if (doc.id == element.documentId) {
             remainingDocuments.remove(doc);
             setState(() { });
           }
         });*/
         remainingDocuments.removeWhere((doc) => element.documentId == doc.id);
-        setState(() { });
+        selectedDoc = remainingDocuments.validate().isNotEmpty ? remainingDocuments[0] : null;
+        setState(() {});
         print("remaining doc list ${remainingDocuments.length}");
         updateDocId = element.id;
         log(uploadedDocList);
@@ -214,7 +215,8 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
             SingleChildScrollView(
               padding: EdgeInsets.all(16),
               child: Column(
-                children: [ //todo message
+                children: [
+                  //todo message
                   Row(
                     children: [
                       if (remainingDocuments.isNotEmpty)
@@ -232,10 +234,10 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
                               return DropdownMenuItem<DocumentData>(
                                 value: e,
                                 child: Text(
-                                    e.name! + '${e.isRequired == 1 ? '*' : ''}',
-                                    style: primaryTextStyle(),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
+                                  e.name! + '${e.isRequired == 1 ? '*' : ''}',
+                                  style: primaryTextStyle(),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               );
                             }).toList(),
@@ -262,8 +264,8 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
                                   style: secondaryTextStyle(color: Colors.white)),
                             ],
                           ),
-                        ).onTap(() {
-                          getMultipleFile(docId);
+                        ).onTap(() async {
+                          await getMultipleFile(docId);
                           selectedDoc = remainingDocuments[0];
                         }).visible(!uploadedDocList!.contains(docId)),
                     ],

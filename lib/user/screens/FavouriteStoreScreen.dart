@@ -30,7 +30,6 @@ class FavouriteStoreScreenState extends State<FavouriteStoreScreen> {
   int totalPage = 1;
   int totalItem = 0;
   bool isLastPage = false;
-  List<WorkHoursData> workingHoursList = [];
   String currentDay = DateFormat('EEEE').format(DateTime.now());
 
   @override
@@ -59,9 +58,17 @@ class FavouriteStoreScreenState extends State<FavouriteStoreScreen> {
       if (page == 1) {
         storeList.clear();
       }
-      storeList.addAll(value.data!);
+
+      for (StoreData data in value.data!) {
+        if (data.workingHours == null) {
+          data.workingHours =
+              WorkingHours(start: "12:00 am", end: "12:00 pm", isOpen: false, day: "");
+        }
+        storeList.add(data);
+      }
+      // storeList.addAll(value.data!);
       storeList.forEach((element) async {
-        await getWorkingHours(element.id.validate());
+        await getWorkingHours(element);
       });
       setState(() {});
     }).catchError((e) {
@@ -71,11 +78,17 @@ class FavouriteStoreScreenState extends State<FavouriteStoreScreen> {
     });
   }
 
-  Future<void> getWorkingHours(int storeId) async {
-    await getWorkingHoursList(storeDetailId: storeId).then((value) {
+  Future<void> getWorkingHours(StoreData store) async {
+    await getWorkingHoursList(storeDetailId: store.id).then((value) {
       value.data.validate().forEach((element) {
-        if (element.day == currentDay && element.storeDetailId == storeId)
-          workingHoursList.add(element);
+        if (element.day == currentDay && element.storeDetailId == store.id) {
+          store.workingHours = WorkingHours(
+            start: element.startTime,
+            end: element.endTime,
+            isOpen: element.storeOpenClose.validate() == 1,
+            day: element.day,
+          );
+        }
         setState(() {});
       });
     }).catchError((e) {
@@ -103,18 +116,13 @@ class FavouriteStoreScreenState extends State<FavouriteStoreScreen> {
                     controller: scrollController,
                     padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
                     itemBuilder: (context, index) {
-                      print("index ${storeList.validate().length} ${workingHoursList.validate().length}");
                       StoreData item = storeList[index];
-                      if (workingHoursList.validate().length == storeList.validate().length)
                         return StoreItemComponent(
                             store: item,
-                            workHours: workingHoursList[index],
                             onUpdate: () {
                               page = 1;
                               init();
-                            }
-                         );
-                      return null;
+                            });
                     },
                   )
                 : !appStore.isLoading

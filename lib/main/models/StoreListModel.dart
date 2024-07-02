@@ -1,4 +1,3 @@
-
 import 'package:mighty_delivery/main/models/PaginationModel.dart';
 import 'package:mighty_delivery/main/models/RatingListModel.dart';
 
@@ -9,9 +8,8 @@ class StoreListModel {
   StoreListModel({this.pagination, this.data});
 
   StoreListModel.fromJson(Map<String, dynamic> json) {
-    pagination = json['pagination'] != null
-        ? new PaginationModel.fromJson(json['pagination'])
-        : null;
+    pagination =
+        json['pagination'] != null ? new PaginationModel.fromJson(json['pagination']) : null;
     if (json['data'] != null) {
       data = <StoreData>[];
       json['data'].forEach((v) {
@@ -53,6 +51,7 @@ class StoreData {
   List<dynamic>? productData;
   List<Rating>? rating;
   num? averageRating;
+  WorkingHours? workingHours;
 
   StoreData({
     this.id,
@@ -75,62 +74,69 @@ class StoreData {
     this.productData,
     this.rating,
     this.averageRating,
+    this.workingHours,
   });
 
   factory StoreData.fromJson(Map<String, dynamic> json) => StoreData(
-    id: json["id"],
-    storeManagerId: json["storeowner_id"],
-    storeManagerName: json["storeowner_name"],
-    storeName: json["store_name"],
-    contactNumber: json["contact_number"],
-    countryId: json["country_id"],
-    countryName: json["country_name"],
-    cityId: json["city_id"],
-    cityName: json["city_name"],
-    address: json["address"],
-    latitude: json["latitude"],
-    longitude: json["longitude"],
-    description: json["description"],
-    storeImage: json["store_image"],
-    isFavourite: json["is_favourite"],
-    averageRating: json["average_rating"],
-    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-    productData: json["product_data"] == null ? [] : List<dynamic>.from(json["product_data"]!.map((x) => x)),
-     rating: json["rating"] == null ? [] : List<Rating>.from(json["rating"]!.map((x) => Rating.fromJson(x))),
-  );
+        id: json["id"],
+        storeManagerId: json["storeowner_id"],
+        storeManagerName: json["storeowner_name"],
+        storeName: json["store_name"],
+        contactNumber: json["contact_number"],
+        countryId: json["country_id"],
+        countryName: json["country_name"],
+        cityId: json["city_id"],
+        cityName: json["city_name"],
+        address: json["address"],
+        latitude: json["latitude"],
+        longitude: json["longitude"],
+        description: json["description"],
+        storeImage: json["store_image"],
+        isFavourite: json["is_favourite"],
+        averageRating: json["average_rating"],
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+        productData: json["product_data"] == null
+            ? []
+            : List<dynamic>.from(json["product_data"]!.map((x) => x)),
+        rating: json["rating"] == null
+            ? []
+            : List<Rating>.from(json["rating"]!.map((x) => Rating.fromJson(x))),
+        workingHours:
+            json["workingHours"] == null ? null : WorkingHours.fromJson(json["workingHours"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "storeowner_id": storeManagerId,
-    "storeowner_name": storeManagerName,
-    "store_name": storeName,
-    "contact_number": contactNumber,
-    "country_id": countryId,
-    "country_name": countryName,
-    "city_id": cityId,
-    "city_name": cityName,
-    "address": address,
-    "latitude": latitude,
-    "longitude": longitude,
-    "description": description,
-    "store_image": storeImage,
-    "is_favourite": isFavourite,
-    "average_rating": averageRating,
-    "created_at": createdAt?.toIso8601String(),
-    "updated_at": updatedAt?.toIso8601String(),
-    "product_data": productData == null ? [] : List<dynamic>.from(productData!.map((x) => x)),
-    "rating": rating == null ? [] : List<Rating>.from(rating!.map((x) => x.toJson())),
-  };
+        "id": id,
+        "storeowner_id": storeManagerId,
+        "storeowner_name": storeManagerName,
+        "store_name": storeName,
+        "contact_number": contactNumber,
+        "country_id": countryId,
+        "country_name": countryName,
+        "city_id": cityId,
+        "city_name": cityName,
+        "address": address,
+        "latitude": latitude,
+        "longitude": longitude,
+        "description": description,
+        "store_image": storeImage,
+        "is_favourite": isFavourite,
+        "average_rating": averageRating,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+        "product_data":
+            productData == null ? [] : List<dynamic>.from(productData!.map((x) => x)),
+        "rating": rating == null ? [] : List<Rating>.from(rating!.map((x) => x.toJson())),
+        "workingHours": workingHours == null ? null : workingHours!.toJson(),
+      };
 }
-
-
 
 class WorkingHours {
   String? day;
   String? end;
   String? start;
-  String? isOpen;
+  bool? isOpen;
 
   WorkingHours({this.day, this.end, this.start, this.isOpen});
 

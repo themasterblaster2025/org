@@ -6,6 +6,7 @@ import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/main/screens/EmailVerificationScreen.dart';
+import 'package:mighty_delivery/main/screens/VerificationListScreen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../delivery/screens/DeliveryDashBoard.dart';
@@ -106,8 +107,36 @@ class SplashScreenState extends State<SplashScreen> {
               logout(context);
             } else {
               setValue(OTP_VERIFIED, value.otpVerifyAt != null);
-              print("email verified or not ${getBoolAsync(IS_EMAIL_VERIFICATION).runtimeType}");
-              if (!getBoolAsync(EMAIL_VERIFIED) &&
+
+              //update app version
+              Future<PackageInfo> packageInfoFuture = PackageInfo.fromPlatform();
+              final packageInfo = await packageInfoFuture;
+              if (value.app_version.isEmptyOrNull ||
+                  value.app_version != packageInfo.version) {
+                await updateUserStatus(
+                        {"id": getIntAsync(USER_ID), "app_version": packageInfo.version})
+                    .then((value) {});
+              }
+
+              if ((!getBoolAsync(EMAIL_VERIFIED) &&  getBoolAsync(IS_EMAIL_VERIFICATION) == false) ||
+                  value.otpVerifyAt.isEmptyOrNull ||
+                  !getBoolAsync(IS_VERIFIED_DELIVERY_MAN) &&
+                      getStringAsync(USER_TYPE) == DELIVERY_MAN) {
+                VerificationListScreen().launch(context);
+              } else if (CityModel.fromJson(getJSONAsync(CITY_DATA))
+                  .name
+                  .validate()
+                  .isNotEmpty) {
+                if (getStringAsync(USER_TYPE) == CLIENT) {
+                  DashboardScreen().launch(context, isNewTask: true);
+                } else {
+                  DeliveryDashBoard().launch(context, isNewTask: true);
+                }
+              } else {
+                UserCitySelectScreen().launch(context, isNewTask: true);
+              }
+
+              /*  if (!getBoolAsync(EMAIL_VERIFIED) &&
                   (getBoolAsync(IS_EMAIL_VERIFICATION) == false)) {
                 EmailVerificationScreen().launch(context, isNewTask: true);
               } else if (value.otpVerifyAt.isEmptyOrNull) {
@@ -121,24 +150,13 @@ class SplashScreenState extends State<SplashScreen> {
                   await updateUserStatus(
                           {"id": getIntAsync(USER_ID), "app_version": packageInfo.version})
                       .then((value) {});
-                }
-                //update source version
+                }*/
+              /*  //update source version
                 if (!getBoolAsync(IS_VERIFIED_DELIVERY_MAN) &&
                     getStringAsync(USER_TYPE) != CLIENT) {
                   VerifyDeliveryPersonScreen().launch(context);
-                } else if (CityModel.fromJson(getJSONAsync(CITY_DATA))
-                    .name
-                    .validate()
-                    .isNotEmpty) {
-                  if (getStringAsync(USER_TYPE) == CLIENT) {
-                    DashboardScreen().launch(context, isNewTask: true);
-                  } else {
-                    DeliveryDashBoard().launch(context, isNewTask: true);
-                  }
-                } else {
-                  UserCitySelectScreen().launch(context, isNewTask: true);
-                }
-              }
+                } */
+              // }
             }
           }).catchError((e) {
             log(e);
@@ -168,8 +186,7 @@ class SplashScreenState extends State<SplashScreen> {
         builder: (_, snap) {
           if (snap.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
-          }
-          else if (snap.hasData) {
+          } else if (snap.hasData) {
             return Center(
               child: Column(
                 // mainAxisSize: MainAxisSize.min,
@@ -181,8 +198,10 @@ class SplashScreenState extends State<SplashScreen> {
                       .cornerRadiusWithClipRRect(defaultRadius),
                   16.height,
                   Text(language.appName,
-                      style: boldTextStyle(size: 20), textAlign: TextAlign.center).expand(),
-                  Text('v ${snap.data!.version.validate()}', style: secondaryTextStyle(size: 12)),
+                          style: boldTextStyle(size: 20), textAlign: TextAlign.center)
+                      .expand(),
+                  Text('v ${snap.data!.version.validate()}',
+                      style: secondaryTextStyle(size: 12)),
                   16.height,
                 ],
               ),

@@ -6,6 +6,7 @@ import 'package:mighty_delivery/extensions/extension_util/bool_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import 'package:mighty_delivery/main/screens/VerificationListScreen.dart';
 import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 
 import '../../delivery/screens/DeliveryDashBoard.dart';
@@ -39,13 +40,19 @@ class AuthServices {
   Future<User?> createAuthUser(String? email, String? password) async {
     User? userCredential;
     try {
-      await _auth.createUserWithEmailAndPassword(email: email!, password: password!).then((value) {
+      await _auth
+          .createUserWithEmailAndPassword(email: email!, password: password!)
+          .then((value) {
         userCredential = value.user!;
       });
     } on FirebaseException catch (error) {
-      if (error.code == "ERROR_EMAIL_ALREADY_IN_USE" || error.code == "account-exists-with-different-credential" || error.code == "email-already-in-use") {
+      if (error.code == "ERROR_EMAIL_ALREADY_IN_USE" ||
+          error.code == "account-exists-with-different-credential" ||
+          error.code == "email-already-in-use") {
         try {
-          await _auth.signInWithEmailAndPassword(email: email!, password: password!).then((value) {
+          await _auth
+              .signInWithEmailAndPassword(email: email!, password: password!)
+              .then((value) {
             userCredential = value.user!;
           });
         } on FirebaseException catch (error) {
@@ -60,7 +67,16 @@ class AuthServices {
   }
 
   Future<void> signUpWithEmailPassword(context,
-      {String? name, String? email, String? password, LoginResponse? userData, String? mobileNumber, String? lName, String? userName, bool? isOTP, String? userType, bool isAddUser = false}) async {
+      {String? name,
+      String? email,
+      String? password,
+      LoginResponse? userData,
+      String? mobileNumber,
+      String? lName,
+      String? userName,
+      bool? isOTP,
+      String? userType,
+      bool isAddUser = false}) async {
     try {
       createAuthUser(email, password).then((user) async {
         if (user != null) {
@@ -83,46 +99,38 @@ class AuthServices {
           userModel.createdAt = Timestamp.now().toDate().toString();
           userModel.updatedAt = Timestamp.now().toDate().toString();
           userModel.playerId = getStringAsync(PLAYER_ID);
-          await userService.addDocumentWithCustomId(user.uid, userModel.toJson()).then((value) async {
-            if (userModel.userType == DELIVERY_MAN) {
-              appStore.setLoading(false);
-              if (userData.isEmailVerification.validate() == false&& userData.data!.emailVerifiedAt.isEmptyOrNull) {
-                appStore.setLogin(true);
-                setValue(USER_EMAIL, userData.data!.email.validate());
-                appStore.setUserEmail(userData.data!.email.validate());
-                setValue(USER_PASSWORD, password);
-                await setValue(USER_TOKEN, userData.data!.apiToken.validate());
-
-                EmailVerificationScreen(isSignUp: true).launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
-              } else {
-                appStore.setLogin(false);
-                LoginScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
-              }
-            } else {
-              Map request = {"email": userModel.email, "password": password};
-              await logInApi(request).then((res) async {
-                await setValue(USER_TOKEN, res.data!.apiToken.validate());
-                await signInWithEmailPassword(context, email: email.validate(), password: password.validate()).then((value) {
-                  updateUserStatus({
-                    "id": getIntAsync(USER_ID),
-                    "uid": getStringAsync(UID),
-                  }).then((value) {
-                    log("value...." + value.toString());
-                  });
-                  appStore.setLoading(false);
-                  if (res.isEmailVerification.validate() == false && res.data!.emailVerifiedAt.isEmptyOrNull)
-                    EmailVerificationScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
-                  else if (res.data!.otpVerifyAt.isEmptyOrNull)
-                    VerificationScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
-                  else
-                    UserCitySelectScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+          await userService
+              .addDocumentWithCustomId(user.uid, userModel.toJson())
+              .then((value) async {
+            Map request = {"email": userModel.email, "password": password};
+            await logInApi(request).then((res) async {
+              await setValue(USER_TOKEN, res.data!.apiToken.validate());
+              await signInWithEmailPassword(context,
+                      email: email.validate(), password: password.validate())
+                  .then((value) {
+                updateUserStatus({
+                  "id": getIntAsync(USER_ID),
+                  "uid": getStringAsync(UID),
+                }).then((value) {
+                  log("value...." + value.toString());
                 });
-              }).catchError((e) {
                 appStore.setLoading(false);
-                log(e.toString());
-                toast(e.toString());
+                if (res.data!.emailVerifiedAt.isEmptyOrNull ||
+                    res.data!.otpVerifyAt.isEmptyOrNull ||
+                    (res.data!.isVerifiedDeliveryMan.validate() == 0 &&
+                        getStringAsync(USER_TYPE) == DELIVERY_MAN)) {
+                  VerificationListScreen().launch(context);
+                } else {
+                  UserCitySelectScreen().launch(context,
+                      isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+                }
               });
-            }
+            }).catchError((e) {
+              appStore.setLoading(false);
+              log(e.toString());
+              toast(e.toString());
+            });
+            // }
           }).catchError((e) {
             appStore.setLoading(false);
             toast(e.toString());
@@ -140,8 +148,11 @@ class AuthServices {
     }
   }
 
-  Future<void> signInWithEmailPassword(context, {required String email, required String password}) async {
-    await _auth.signInWithEmailAndPassword(email: email, password: password).then((value) async {
+  Future<void> signInWithEmailPassword(context,
+      {required String email, required String password}) async {
+    await _auth
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((value) async {
       appStore.setLoading(true);
       final User user = value.user!;
       UserData userModel = await userService.getUser(email: user.email);
@@ -157,7 +168,8 @@ class AuthServices {
     });
   }
 
-  Future<void> loginFromFirebaseUser(User currentUser, {LoginResponse? loginDetail, String? fullName, String? fName, String? lName}) async {
+  Future<void> loginFromFirebaseUser(User currentUser,
+      {LoginResponse? loginDetail, String? fullName, String? fName, String? lName}) async {
     UserData userModel = UserData();
 
     if (await userService.isUserExist(loginDetail!.data!.email)) {
@@ -200,7 +212,9 @@ class AuthServices {
 
       log(userModel.toJson());
 
-      await userService.addDocumentWithCustomId(currentUser.uid, userModel.toJson()).then((value) {
+      await userService
+          .addDocumentWithCustomId(currentUser.uid, userModel.toJson())
+          .then((value) {
         //
       }).catchError((e) {
         throw e;
@@ -208,12 +222,15 @@ class AuthServices {
     }
   }
 
-  Future<void> loginFromFirebase(User currentUser, String loginType, String? accessToken, {String userType = CLIENT}) async {
+  Future<void> loginFromFirebase(User currentUser, String loginType, String? accessToken,
+      {String userType = CLIENT}) async {
     String firstName = '';
     String lastName = '';
     if (loginType == LoginTypeGoogle) {
-      if (currentUser.displayName.validate().split(' ').length >= 1) firstName = currentUser.displayName.splitBefore(' ');
-      if (currentUser.displayName.validate().split(' ').length >= 2) lastName = currentUser.displayName.splitAfter(' ');
+      if (currentUser.displayName.validate().split(' ').length >= 1)
+        firstName = currentUser.displayName.splitBefore(' ');
+      if (currentUser.displayName.validate().split(' ').length >= 2)
+        lastName = currentUser.displayName.splitAfter(' ');
     } else {
       firstName = getStringAsync('appleGivenName').validate();
       lastName = getStringAsync('appleFamilyName').validate();
@@ -226,7 +243,8 @@ class AuthServices {
       "login_type": loginType,
       "user_type": userType,
       "accessToken": accessToken,
-      if (!currentUser.phoneNumber.isEmptyOrNull) 'contact_number': currentUser.phoneNumber.validate(),
+      if (!currentUser.phoneNumber.isEmptyOrNull)
+        'contact_number': currentUser.phoneNumber.validate(),
     };
 
     await logInApi(req, isSocialLogin: true).then((value) async {
@@ -251,7 +269,9 @@ class AuthServices {
       userModel.createdAt = Timestamp.now().toDate().toString();
       userModel.updatedAt = Timestamp.now().toDate().toString();
       userModel.playerId = getStringAsync(PLAYER_ID);
-      await userService.addDocumentWithCustomId(currentUser.uid, userModel.toJson()).then((v) async {
+      await userService
+          .addDocumentWithCustomId(currentUser.uid, userModel.toJson())
+          .then((v) async {
         await setValue(USER_PROFILE_PHOTO, currentUser.photoURL.toString());
         if (value.data!.contactNumber.isEmptyOrNull) {
           EditProfileScreen(isGoogle: true).launch(getContext, isNewTask: true);
@@ -260,10 +280,13 @@ class AuthServices {
             await getCountryDetailApiCall(value.data!.countryId.validate());
             getCityDetailApiCall(value.data!.cityId.validate());
           } else {
-            UserCitySelectScreen().launch(getContext, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+            UserCitySelectScreen().launch(getContext,
+                isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
           }
-          if (value.data!.uid.isEmptyOrNull) await updateUid(getStringAsync(UID)).catchError((error) {});
-          if (value.data!.playerId.isEmptyOrNull) await updatePlayerId().catchError((error) {});
+          if (value.data!.uid.isEmptyOrNull)
+            await updateUid(getStringAsync(UID)).catchError((error) {});
+          if (value.data!.playerId.isEmptyOrNull)
+            await updatePlayerId().catchError((error) {});
         }
       }).catchError((e) {
         appStore.setLoading(false);
@@ -281,7 +304,8 @@ class AuthServices {
 
     if (googleSignInAccount != null) {
       //Authentication
-      final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
+      final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
 
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
@@ -300,7 +324,8 @@ class AuthServices {
 
       googleSignIn.signOut();
 
-      await loginFromFirebase(user, LoginTypeGoogle, googleSignInAuthentication.accessToken, userType: userType);
+      await loginFromFirebase(user, LoginTypeGoogle, googleSignInAuthentication.accessToken,
+          userType: userType);
     } else {
       throw language.errorSomethingWentWrong;
     }
@@ -329,7 +354,9 @@ class AuthServices {
             await saveAppleData(result);
           }
 
-          await loginFromFirebase(user, LoginTypeApple, String.fromCharCodes(appleIdCredential.authorizationCode!), userType: userType.validate());
+          await loginFromFirebase(
+              user, LoginTypeApple, String.fromCharCodes(appleIdCredential.authorizationCode!),
+              userType: userType.validate());
           break;
         case AuthorizationStatus.error:
           throw ("${language.signInFailed} ${result.error!.localizedDescription}");
@@ -372,7 +399,8 @@ getCityDetailApiCall(int cityId) async {
     }
   }).catchError((error) {
     if (error.toString() == CITY_NOT_FOUND_EXCEPTION) {
-      UserCitySelectScreen().launch(getContext, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+      UserCitySelectScreen()
+          .launch(getContext, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
     }
   });
 }
@@ -384,7 +412,8 @@ Future deleteUserFirebase() async {
   }
 }
 
-sendOtp(BuildContext context, {required String phoneNumber, required Function(String) onUpdate}) async {
+sendOtp(BuildContext context,
+    {required String phoneNumber, required Function(String) onUpdate}) async {
   appStore.setLoading(true);
   try {
     await FirebaseAuth.instance.verifyPhoneNumber(

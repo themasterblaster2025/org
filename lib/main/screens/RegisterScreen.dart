@@ -73,6 +73,7 @@ class RegisterScreenState extends State<RegisterScreen> {
         };
         await signUpApi(request).then((res) async {
           await setValue(USER_TOKEN, res.data!.apiToken.validate());
+          await setValue(USER_ID, res.data!.id.validate()); // after register call user-detail so
           authService
               .signUpWithEmailPassword(getContext,
                   lName: res.data!.name,

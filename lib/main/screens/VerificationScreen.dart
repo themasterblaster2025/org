@@ -46,7 +46,7 @@ class VerificationScreenState extends State<VerificationScreen> {
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
       appBarTitle: language.verification,
-      showBack: false,
+   /*   showBack: false,
       action: [
         IconButton(
           onPressed: () async {
@@ -63,7 +63,7 @@ class VerificationScreenState extends State<VerificationScreen> {
           },
           icon: Icon(Icons.logout, color: Colors.white),
         ),
-      ],
+      ],*/
       body: Stack(
         children: [
           isOtpSend == false
@@ -146,7 +146,8 @@ class VerificationScreenState extends State<VerificationScreen> {
                           appStore.setLoading(false);
                           updateUserStatus({"id": getIntAsync(USER_ID), "otp_verify_at": DateTime.now().toString()}).then((value) {
                             setValue(OTP_VERIFIED, true);
-                            if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
+                            finish(context);
+                           /* if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
                               if (getStringAsync(USER_TYPE) == CLIENT) {
                                 DashboardScreen().launch(context, isNewTask: true);
                               } else {
@@ -154,7 +155,7 @@ class VerificationScreenState extends State<VerificationScreen> {
                               }
                             } else {
                               UserCitySelectScreen().launch(context, isNewTask: true);
-                            }
+                            }*/
                           });
                         }).catchError((error) {
                           appStore.setLoading(false);

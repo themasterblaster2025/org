@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/list_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/extensions/text_styles.dart';
+import 'package:mighty_delivery/main/models/AppSettingModel.dart';
+import 'package:mighty_delivery/main/screens/VerificationListScreen.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 
 import '../../extensions/LiveStream.dart';
@@ -39,7 +42,7 @@ class OrderFragmentState extends State<OrderFragment> {
   int totalPage = 1;
   bool isLastPage = false;
   List storeList = [
-    {
+   /* {
       "name": "type1",
     },
     {
@@ -50,7 +53,7 @@ class OrderFragmentState extends State<OrderFragment> {
     },
     {
       "name": "type21",
-    }
+    }*/
   ];
 
   @override
@@ -78,6 +81,10 @@ class OrderFragmentState extends State<OrderFragment> {
       appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
       appStore.isVehicleOrder = value.isVehicleInOrder ?? 0;
       appStore.setDistanceUnit(value.distanceUnit ?? DISTANCE_UNIT_KM);
+      if(value.storeManage!.validate().isNotEmpty){
+        storeList = value.storeManage.validate();
+        // storeList.add(value.storeManage.validate());
+      }
     }).catchError((error) {
       log(error.toString());
     });
@@ -206,10 +213,13 @@ class OrderFragmentState extends State<OrderFragment> {
               disableCenter: true,
               enlargeCenterPage: true,
             ),
-            items: storeList.map((e) {
-              final item = e;
+            items:
+            storeList.map((e) {
+              StoreManage item = e;
               return InkWell(
-                onTap: () {},
+                onTap: () {
+                  StoreListScreen(type: "re",).launch(context); // todo
+                },
                 child: Column(
                   children: [
                     commonCachedNetworkImage(
@@ -217,7 +227,7 @@ class OrderFragmentState extends State<OrderFragment> {
                     ),
                     4.height,
                     Text(
-                      e["name"],
+                      item.name.validate(),
                       style: boldTextStyle(size: 14),
                     ),
                   ],

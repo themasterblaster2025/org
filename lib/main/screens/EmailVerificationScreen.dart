@@ -4,6 +4,7 @@ import 'package:mighty_delivery/extensions/extension_util/bool_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import 'package:mighty_delivery/extensions/system_utils.dart';
 import 'package:mighty_delivery/main/components/CommonScaffoldComponent.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
 import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
@@ -66,16 +67,7 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
     await verifyOtpEmail({"code": pin}).then((value) async {
       setValue(EMAIL_VERIFIED, true);
       toast(value.message.toString());
-      if (widget.isSignUp == true) {
-        // toast(language.userNotApproveMsg);
-        LoginScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
-      } else {
-        if (!getBoolAsync(OTP_VERIFIED)) {
-          VerificationScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
-        } else {
-          UserCitySelectScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
-        }
-      }
+      finish(context);
       appStore.setLoading(false);
     }).catchError((e) {
       otpController.clear();
@@ -107,7 +99,7 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
         });
       },
       child: CommonScaffoldComponent(
-        appBarTitle: language.verification,
+        /*appBarTitle: language.verification,
         showBack: false,
         action: [
           IconButton(
@@ -132,7 +124,7 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
             },
             icon: Icon(Icons.logout, color: Colors.white),
           ),
-        ],
+        ],*/
         body: Stack(
           children: [
             widget.isSignIn == true && isEmailSend == false
