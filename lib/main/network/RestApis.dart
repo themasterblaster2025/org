@@ -100,7 +100,7 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
     await setValue(CITY_ID, loginResponse.data!.cityId.validate());
     await setValue(OTP_VERIFIED, loginResponse.data!.otpVerifyAt != null);
     await setValue(EMAIL_VERIFIED, loginResponse.data!.emailVerifiedAt != null);
-    setValue(IS_EMAIL_VERIFICATION, loginResponse.isEmailVerification.validate());
+    setValue(IS_EMAIL_VERIFICATION, loginResponse.data!.isEmailVerification.validate());
 
     appStore.setUserProfile(loginResponse.data!.profileImage.validate());
     await userService.getUser(email: loginResponse.data!.email.validate()).then((value) async {
@@ -230,14 +230,6 @@ Future<UserData> getUserDetail(int id) async {
           await buildHttpResponse('user-detail?id=$id', method: HttpMethod.GET))
       .then((value) => value['data']));
 }
-
-
-Future<LoginResponse> getUserDetailWithVerification(int id) async {
-  return LoginResponse.fromJson(await handleResponse(
-      await buildHttpResponse('user-detail?id=$id', method: HttpMethod.GET))
-      .then((value) => value));
-}
-
 
 /// Create Order Api
 Future<LDBaseResponse> createOrder(Map request) async {
@@ -453,7 +445,6 @@ Future<LDBaseResponse> deleteDeliveryDoc(int id) async {
 Future<AppSettingModel> getAppSetting() async {
   return AppSettingModel.fromJson(
       await handleResponse(await buildHttpResponse('get-appsetting', method: HttpMethod.GET)));
-
 }
 
 /// Cancel AutoAssign order
@@ -675,11 +666,11 @@ Future<CategoryModel> getCategorySubcategoryList({int? page, int? storeDetailId}
 
 Future<WorkHoursListModel> getWorkingHoursList({int? page, int? storeDetailId}) async {
   String endpoint = 'workhourmanage-list';
-  if(storeDetailId != null){
+  if (storeDetailId != null) {
     endpoint += '?store_detail_id=$storeDetailId';
   }
-  return WorkHoursListModel.fromJson(await handleResponse(
-      await buildHttpResponse(endpoint, method: HttpMethod.GET)));
+  return WorkHoursListModel.fromJson(
+      await handleResponse(await buildHttpResponse(endpoint, method: HttpMethod.GET)));
 }
 
 Future<LDBaseResponse> saveRateReview(Map req) async {
@@ -687,11 +678,16 @@ Future<LDBaseResponse> saveRateReview(Map req) async {
       await buildHttpResponse('rating-save', request: req, method: HttpMethod.POST)));
 }
 
-
 Future<LDBaseResponse> saveFavouriteStore(Map req) async {
-  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse('userFavouriteStore-save', method: HttpMethod.POST, request: req)));
+  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse(
+      'userFavouriteStore-save',
+      method: HttpMethod.POST,
+      request: req)));
 }
 
 Future<StoreListModel> getFavouriteStore() async {
-  return StoreListModel.fromJson(await handleResponse(await buildHttpResponse('userFavouriteStore-list', method: HttpMethod.GET, )));
+  return StoreListModel.fromJson(await handleResponse(await buildHttpResponse(
+    'userFavouriteStore-list',
+    method: HttpMethod.GET,
+  )));
 }

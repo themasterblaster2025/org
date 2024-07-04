@@ -2,20 +2,18 @@ class LoginResponse {
   UserData? data;
   String? message;
 
-  bool? isEmailVerification;
-  bool? isMobileVerification;
-  bool? isDocumentVerification;
   var status;
 
-  LoginResponse({this.data, this.message, this.status, this.isEmailVerification, this.isDocumentVerification, this.isMobileVerification});
+  LoginResponse({
+    this.data,
+    this.message,
+    this.status,
+  });
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) {
     return LoginResponse(
       data: json['data'] != null ? UserData.fromJson(json['data']) : null,
       message: json['message'],
-      isEmailVerification: json['is_email_verification'],
-      isDocumentVerification: json['is_document_verification'],
-      isMobileVerification: json['is_mobile_verification'],
       status: json['status'],
     );
   }
@@ -25,9 +23,6 @@ class LoginResponse {
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
-    data['is_email_verification'] = this.isEmailVerification;
-    data['is_mobile_verification'] = this.isMobileVerification;
-    data['is_document_verification'] = this.isDocumentVerification;
     data['message'] = this.message;
     data['status'] = this.status;
     return data;
@@ -65,38 +60,45 @@ class UserData {
   String? emailVerifiedAt;
   String? app_version;
   String? app_source;
+  bool? isEmailVerification;
+  bool? isMobileVerification;
+  bool? isDocumentVerification;
 
-  UserData(
-      {this.apiToken,
-      this.id,
-      this.name,
-      this.email,
-      this.username,
-      this.status,
-      this.userType,
-      this.countryId,
-      this.countryName,
-      this.cityId,
-      this.cityName,
-      this.address,
-      this.contactNumber,
-      this.createdAt,
-      this.updatedAt,
-      this.profileImage,
-      this.loginType,
-      this.latitude,
-      this.longitude,
-      this.uid,
-      this.playerId,
-      this.fcmToken,
-      this.lastNotificationSeen,
-      this.isVerifiedDeliveryMan,
-      this.deletedAt,
-      this.userBankAccount,
-      this.otpVerifyAt,
-      this.emailVerifiedAt,
-      this.app_version,
-      this.app_source});
+  UserData({
+    this.apiToken,
+    this.id,
+    this.name,
+    this.email,
+    this.username,
+    this.status,
+    this.userType,
+    this.countryId,
+    this.countryName,
+    this.cityId,
+    this.cityName,
+    this.address,
+    this.contactNumber,
+    this.createdAt,
+    this.updatedAt,
+    this.profileImage,
+    this.loginType,
+    this.latitude,
+    this.longitude,
+    this.uid,
+    this.playerId,
+    this.fcmToken,
+    this.lastNotificationSeen,
+    this.isVerifiedDeliveryMan,
+    this.deletedAt,
+    this.userBankAccount,
+    this.otpVerifyAt,
+    this.emailVerifiedAt,
+    this.app_version,
+    this.app_source,
+    this.isEmailVerification,
+    this.isDocumentVerification,
+    this.isMobileVerification,
+  });
 
   UserData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -124,11 +126,17 @@ class UserData {
     lastNotificationSeen = json['last_notification_seen'];
     isVerifiedDeliveryMan = json['is_verified_delivery_man'];
     deletedAt = json['deleted_at'];
-    userBankAccount = json['user_bank_account'] != null ? new UserBankAccount.fromJson(json['user_bank_account']) : null;
+    userBankAccount = json['user_bank_account'] != null
+        ? new UserBankAccount.fromJson(json['user_bank_account'])
+        : null;
     otpVerifyAt = json['otp_verify_at'];
     emailVerifiedAt = json['email_verified_at'];
     app_version = json['app_version'];
     app_source = json['app_source'];
+
+    isEmailVerification = json['is_email_verification'];
+    isDocumentVerification = json['is_document_verification'];
+    isMobileVerification = json['is_mobile_verification'];
   }
 
   Map<String, dynamic> toJson() {
@@ -166,6 +174,10 @@ class UserData {
     data['otp_verify_at'] = this.otpVerifyAt;
     data['email_verified_at'] = this.emailVerifiedAt;
 
+    data['is_email_verification'] = this.isEmailVerification;
+    data['is_mobile_verification'] = this.isMobileVerification;
+    data['is_document_verification'] = this.isDocumentVerification;
+
     return data;
   }
 }
@@ -181,7 +193,16 @@ class UserBankAccount {
   String? updatedAt;
   String? deletedAt;
 
-  UserBankAccount({this.id, this.userId, this.bankName, this.bankCode, this.accountHolderName, this.accountNumber, this.createdAt, this.updatedAt, this.deletedAt});
+  UserBankAccount(
+      {this.id,
+      this.userId,
+      this.bankName,
+      this.bankCode,
+      this.accountHolderName,
+      this.accountNumber,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt});
 
   UserBankAccount.fromJson(Map<String, dynamic> json) {
     id = json['id'];

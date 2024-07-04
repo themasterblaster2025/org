@@ -42,7 +42,7 @@ class OrderFragmentState extends State<OrderFragment> {
   int totalPage = 1;
   bool isLastPage = false;
   List storeList = [
-   /* {
+    /* {
       "name": "type1",
     },
     {
@@ -81,8 +81,8 @@ class OrderFragmentState extends State<OrderFragment> {
       appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
       appStore.isVehicleOrder = value.isVehicleInOrder ?? 0;
       appStore.setDistanceUnit(value.distanceUnit ?? DISTANCE_UNIT_KM);
-      if(value.storeManage!.validate().isNotEmpty){
-        storeList = value.storeManage.validate();
+      if (value.storeType!.validate().isNotEmpty) {
+        storeList = value.storeType.validate();
         // storeList.add(value.storeManage.validate());
       }
     }).catchError((error) {
@@ -158,6 +158,7 @@ class OrderFragmentState extends State<OrderFragment> {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      // shrinkWrap: true,
       children: [
         if (storeList.isNotEmpty) ...[
           10.height,
@@ -176,55 +177,30 @@ class OrderFragmentState extends State<OrderFragment> {
               }),
             ],
           ).paddingSymmetric(horizontal: 10),
-       /*   Container(
-            height: context.height() * 0.2,
-            child: ListView.builder(
-              padding: EdgeInsets.all(14),
-              scrollDirection: Axis.horizontal,
-              itemCount: storeList.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  width: context.width() * 0.4,
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: commonCachedNetworkImage(
-                          appStore.userProfile.validate(),
-                        ),
-                      ),
-                      4.height,
-                      Text(
-                        "Store Type",
-                        style: boldTextStyle(size: 14),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),*/
           8.height,
           CarouselSlider(
             options: CarouselOptions(
               // autoPlay: true,
               aspectRatio: 2.2,
-              viewportFraction: 0.35,
+              viewportFraction: 0.43,
 
               disableCenter: true,
               enlargeCenterPage: true,
             ),
-            items:
-            storeList.map((e) {
-              StoreManage item = e;
+            items: storeList.map((e) {
+              StoreType item = e;
               return InkWell(
                 onTap: () {
-                  StoreListScreen(type: "re",).launch(context); // todo
+                  StoreListScreen(type: item.id.validate()).launch(context);
                 },
                 child: Column(
                   children: [
                     commonCachedNetworkImage(
-                      appStore.userProfile.validate(),
-                    ),
+                      // appStore.userProfile.validate(),
+                      item.image.validate(),
+                      height: context.height() * 0.18,
+                      fit: BoxFit.cover,
+                    ).cornerRadiusWithClipRRect(5),
                     4.height,
                     Text(
                       item.name.validate(),
@@ -239,24 +215,43 @@ class OrderFragmentState extends State<OrderFragment> {
             height: 6,
             color: dividerColor,
           ),
-          10.height,
-          Container(
-            margin: EdgeInsets.only(left: 10, right: 10),
-            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+        ],
+        Row(
+          children: [
+            Text(
+              "My Orders", //todo
+              style: boldTextStyle(size: 16, color: colorPrimary),
+            ),
+            Spacer(),
+            Row(
               children: [
+                  Icon(
+                    Icons.navigate_before,
+                    color: colorPrimary,
+                    size: 26,
+                  ).visible(page != 1).onTap(() {
+                      page--;
+                      orderList.clear();
+                      setState(() {});
+                      getOrderData();
+                  }),
                 Text(
-                  "My Orders", // todo
-                  style: secondaryTextStyle(
-                    color: Colors.white,
-                  ),
+                  "Page $page of $totalPage",
+                  style: boldTextStyle(size: 15, color: colorPrimary),
                 ),
+                  Icon(
+                    Icons.navigate_next,
+                    color: colorPrimary,
+                  ).visible(page != totalPage).onTap(() {
+                      page++;
+                      orderList.clear();
+                      setState(() {});
+                      getOrderData();
+                  }),
               ],
             ),
-          ),
-        ],
+          ],
+        ).paddingSymmetric(horizontal: 10),
         AnimatedListView(
           itemCount: orderList.length,
           shrinkWrap: true,

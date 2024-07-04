@@ -1052,6 +1052,11 @@
         "keyword_id": 368,
         "keyword_name": "productAmount",
         "keyword_value": "Product amount"
+      },{
+        "screenId": "19",
+        "keyword_id": 375,
+        "keyword_name": "pleaseAvoidSendingProhibitedItems",
+        "keyword_value": "Note: Please avoid sending prohibited items."
       }
     ]
   },
@@ -1526,6 +1531,24 @@
         "keyword_id": 327,
         "keyword_name": "myFatoorah",
         "keyword_value": "My Fatoorah"
+      },
+      {
+        "screenId": "27",
+        "keyword_id": 372,
+        "keyword_name": "rateStore",
+        "keyword_value": "Rate Store "
+      },
+      {
+        "screenId": "27",
+        "keyword_id": 373,
+        "keyword_name": "rateToStore",
+        "keyword_value": "Rate To Store :"
+      },
+      {
+        "screenId": "27",
+        "keyword_id": 374,
+        "keyword_name": "yourRatingToStore",
+        "keyword_value": "Your Rating to Store :"
       }
     ]
   },
@@ -2405,42 +2428,66 @@
       },
       {
         "screenId": "40",
+        "keyword_id": 369,
+        "keyword_name": "stores",
+        "keyword_value": "Stores"
+      },
+      {
+        "screenId": "40",
+        "keyword_id": 370,
+        "keyword_name": "closed",
+        "keyword_value": "Closed"
+      },
+      {
+        "screenId": "40",
+        "keyword_id": 371,
+        "keyword_name": "favouriteStore",
+        "keyword_value": "Favourite Store"
+      }
+    ]
+  },
+  {
+    "screenID": "41",
+    "ScreenName": "ProductListScreen",
+    "keyword_data": [
+      {
+        "screenId": "41",
         "keyword_id": 360,
         "keyword_name": "products",
         "keyword_value": "Products"
       },
       {
-        "screenId": "40",
+        "screenId": "41",
         "keyword_id": 361,
         "keyword_name": "itemsAdded",
         "keyword_value": "Items added"
       },
       {
-        "screenId": "40",
+        "screenId": "41",
         "keyword_id": 362,
         "keyword_name": "items",
         "keyword_value": "ITEMS"
       },
       {
-        "screenId": "40",
+        "screenId": "41",
         "keyword_id": 363,
         "keyword_name": "item",
         "keyword_value": "ITEM"
       },
       {
-        "screenId": "40",
+        "screenId": "41",
         "keyword_id": 364,
         "keyword_name": "added",
         "keyword_value": "ADDED"
       },
       {
-        "screenId": "40",
+        "screenId": "41",
         "keyword_id": 365,
         "keyword_name": "categoryFilter",
         "keyword_value": "Category Filter"
       },
       {
-        "screenId": "40",
+        "screenId": "41",
         "keyword_id": 366,
         "keyword_name": "apply",
         "keyword_value": "Apply"
@@ -2448,4 +2495,3 @@
     ]
   }
 ]
-

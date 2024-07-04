@@ -109,7 +109,12 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
 
   void initLocationStream() async {
     positionStream?.cancel();
-    positionStream = Geolocator.getPositionStream().listen((Position event) async {
+
+    LocationSettings locationSettings = LocationSettings(
+      accuracy: LocationAccuracy.best,
+      distanceFilter: 100,
+    );
+    positionStream = Geolocator.getPositionStream(locationSettings: locationSettings).listen((Position event) async {
       List<Placemark> placeMarks = await placemarkFromCoordinates(
         event.latitude,
         event.longitude,

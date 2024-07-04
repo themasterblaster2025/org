@@ -1,6 +1,8 @@
 import 'package:mighty_delivery/main/models/PaginationModel.dart';
 import 'package:mighty_delivery/main/models/RatingListModel.dart';
 
+import 'AppSettingModel.dart';
+
 class StoreListModel {
   PaginationModel? pagination;
   List<StoreData>? data;
@@ -52,6 +54,7 @@ class StoreData {
   List<Rating>? rating;
   num? averageRating;
   WorkingHours? workingHours;
+  List<StoreType>? storeType;
 
   StoreData({
     this.id,
@@ -75,6 +78,7 @@ class StoreData {
     this.rating,
     this.averageRating,
     this.workingHours,
+    this.storeType,
   });
 
   factory StoreData.fromJson(Map<String, dynamic> json) => StoreData(
@@ -104,6 +108,7 @@ class StoreData {
             : List<Rating>.from(json["rating"]!.map((x) => Rating.fromJson(x))),
         workingHours:
             json["workingHours"] == null ? null : WorkingHours.fromJson(json["workingHours"]),
+        storeType: json["store_type"] == null ? [] : List<StoreType>.from(json["store_type"]!.map((x)=>StoreType.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -129,6 +134,7 @@ class StoreData {
             productData == null ? [] : List<dynamic>.from(productData!.map((x) => x)),
         "rating": rating == null ? [] : List<Rating>.from(rating!.map((x) => x.toJson())),
         "workingHours": workingHours == null ? null : workingHours!.toJson(),
+        "store_type": storeType == null ? [] : List<StoreType>.from(storeType!.map((x) => x.toJson())),
       };
 }
 

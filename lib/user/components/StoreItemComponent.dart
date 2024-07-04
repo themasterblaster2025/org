@@ -92,9 +92,9 @@ class StoreItemComponentState extends State<StoreItemComponent> {
     int startHour = int.parse(hourMinute[0]);
     int startMin = int.parse(hourMinute[1]);
     String startPart = start.split(' ')[1];
-
     int startTimeSecond =
         (startHour * 60 + startMin) * 60 + ((startPart == "am") ? 0 : (12 * 60 * 60));
+
     int endHour = end.split(":").first.toInt();
     int endMin = (end.split(":")[1]).substring(0, 1).toInt();
     String endPart = end.split(":")[1].substring(3, 5);

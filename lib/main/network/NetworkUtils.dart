@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:developer' as lg;
 
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -58,6 +59,12 @@ Future<Response> buildHttpResponse(String endPoint, {HttpMethod method = HttpMet
       }
 
       log('Response ($method): ${url.toString()} ${response.statusCode} ${response.body}');
+      dynamic responseLog = json.decode(response.body);
+      if (responseLog is Map) {
+        var encoder = const JsonEncoder.withIndent("    ");
+        lg.log("\n${encoder.convert(responseLog)}",name: "$method ${url.toString()} ${response.statusCode}");
+      }
+      // todo
 
       return response;
     } catch (e) {

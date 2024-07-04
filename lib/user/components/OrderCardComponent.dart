@@ -223,13 +223,11 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                 ),
               ],
             ),
-            if (widget.item.status != ORDER_CANCELLED ||
-                (widget.item.status == ORDER_DEPARTED || widget.item.status == ORDER_ACCEPTED))
-              16.height,
+            if (widget.item.status != ORDER_CANCELLED || (widget.item.status == ORDER_DEPARTED || widget.item.status == ORDER_ACCEPTED)) 16.height,
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if (widget.item.status != ORDER_CANCELLED)
+                if (widget.item.status == ORDER_DELIVERED)
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                     decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary),

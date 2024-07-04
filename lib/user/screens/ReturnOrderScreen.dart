@@ -83,10 +83,14 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
     if (formKey.currentState!.validate()) {
       Duration difference = Duration();
       if (!isDeliverNow) {
-        DateTime pickFromDateTime = pickDate!.add(Duration(hours: pickFromTime!.hour, minutes: pickFromTime!.minute));
-        DateTime pickToDateTime = pickDate!.add(Duration(hours: pickToTime!.hour, minutes: pickToTime!.minute));
-        DateTime deliverFromDateTime = deliverDate!.add(Duration(hours: deliverFromTime!.hour, minutes: deliverFromTime!.minute));
-        DateTime deliverToDateTime = deliverDate!.add(Duration(hours: deliverToTime!.hour, minutes: deliverToTime!.minute));
+        DateTime pickFromDateTime =
+            pickDate!.add(Duration(hours: pickFromTime!.hour, minutes: pickFromTime!.minute));
+        DateTime pickToDateTime =
+            pickDate!.add(Duration(hours: pickToTime!.hour, minutes: pickToTime!.minute));
+        DateTime deliverFromDateTime = deliverDate!
+            .add(Duration(hours: deliverFromTime!.hour, minutes: deliverFromTime!.minute));
+        DateTime deliverToDateTime = deliverDate!
+            .add(Duration(hours: deliverToTime!.hour, minutes: deliverToTime!.minute));
         widget.orderData.deliveryPoint!.startTime = pickFromDateTime.toString();
         widget.orderData.deliveryPoint!.endTime = pickToDateTime.toString();
         widget.orderData.pickupPoint!.startTime = deliverFromDateTime.toString();
@@ -117,7 +121,10 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
         "fixed_charges": widget.orderData.fixedCharges!,
         "parent_order_id": widget.orderData.id!,
         "total_amount": widget.orderData.totalAmount ?? 0,
-        "reason": reason!.validate().trim() != language.other.trim() ? reason : reasonController.text
+        "reason": reason!.validate().trim() != language.other.trim()
+            ? reason
+            : reasonController.text,
+        "is_return": 1,
       };
       appStore.setLoading(true);
       await createOrder(req).then((value) async {
@@ -125,18 +132,29 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
         toast(value.message);
         finish(context);
         if (isSelected == 2) {
-          PaymentScreen(orderId: value.orderId.validate(), totalAmount: widget.orderData.totalAmount ?? 0).launch(context);
+          PaymentScreen(
+                  orderId: value.orderId.validate(),
+                  totalAmount: widget.orderData.totalAmount ?? 0)
+              .launch(context);
         } else if (isSelected == 3) {
           log("-----" + appStore.availableBal.toString());
 
           if (appStore.availableBal > (widget.orderData.totalAmount ?? 0)) {
-            savePaymentApiCall(paymentType: PAYMENT_TYPE_WALLET, paymentStatus: PAYMENT_PAID, totalAmount: widget.orderData.totalAmount.toString(), orderID: value.orderId.toString());
+            savePaymentApiCall(
+                paymentType: PAYMENT_TYPE_WALLET,
+                paymentStatus: PAYMENT_PAID,
+                totalAmount: widget.orderData.totalAmount.toString(),
+                orderID: value.orderId.toString());
           } else {
             toast(language.balanceInsufficient);
             bool? res = await WalletScreen().launch(context);
             if (res == true) {
               if (appStore.availableBal > (widget.orderData.totalAmount ?? 0)) {
-                savePaymentApiCall(paymentType: PAYMENT_TYPE_WALLET, paymentStatus: PAYMENT_PAID, totalAmount: widget.orderData.totalAmount.toString(), orderID: value.orderId.toString());
+                savePaymentApiCall(
+                    paymentType: PAYMENT_TYPE_WALLET,
+                    paymentStatus: PAYMENT_PAID,
+                    totalAmount: widget.orderData.totalAmount.toString(),
+                    orderID: value.orderId.toString());
               } else {
                 cashConfirmDialog();
               }
@@ -155,7 +173,13 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
   }
 
   /// Save Payment
-  Future<void> savePaymentApiCall({String? paymentType, String? totalAmount, String? orderID, String? txnId, String? paymentStatus = PAYMENT_PENDING, Map? transactionDetail}) async {
+  Future<void> savePaymentApiCall(
+      {String? paymentType,
+      String? totalAmount,
+      String? orderID,
+      String? txnId,
+      String? paymentStatus = PAYMENT_PENDING,
+      Map? transactionDetail}) async {
     Map req = {
       "id": "",
       "order_id": orderID,
@@ -195,12 +219,16 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                 children: [
                   Row(
                     children: [
-                      scheduleOptionWidget(context, isDeliverNow, ic_clock, language.deliveryNow).onTap(() {
+                      scheduleOptionWidget(
+                              context, isDeliverNow, ic_clock, language.deliveryNow)
+                          .onTap(() {
                         isDeliverNow = true;
                         setState(() {});
                       }).expand(),
                       16.width,
-                      scheduleOptionWidget(context, !isDeliverNow, ic_schedule, language.schedule).onTap(() {
+                      scheduleOptionWidget(
+                              context, !isDeliverNow, ic_schedule, language.schedule)
+                          .onTap(() {
                         isDeliverNow = false;
                         setState(() {});
                       }).expand(),
@@ -215,7 +243,8 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                       Container(
                         padding: EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                          border: Border.all(
+                              color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
                           borderRadius: BorderRadius.circular(defaultRadius),
                         ),
                         child: Column(
@@ -232,7 +261,8 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                                 if (value!.isEmpty) return language.fieldRequiredMsg;
                                 return null;
                               },
-                              decoration: commonInputDecoration(suffixIcon: Icons.calendar_today),
+                              decoration:
+                                  commonInputDecoration(suffixIcon: Icons.calendar_today),
                             ),
                             16.height,
                             Row(
@@ -242,14 +272,17 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                                 DateTimePicker(
                                   type: DateTimePickerType.time,
                                   onChanged: (value) {
-                                    pickFromTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
+                                    pickFromTime = TimeOfDay.fromDateTime(
+                                        DateFormat('hh:mm').parse(value));
                                     setState(() {});
                                   },
                                   validator: (value) {
-                                    if (value.validate().isEmpty) return language.fieldRequiredMsg;
+                                    if (value.validate().isEmpty)
+                                      return language.fieldRequiredMsg;
                                     return null;
                                   },
-                                  decoration: commonInputDecoration(suffixIcon: Icons.access_time),
+                                  decoration:
+                                      commonInputDecoration(suffixIcon: Icons.access_time),
                                 ).expand(flex: 2),
                               ],
                             ),
@@ -261,13 +294,17 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                                 DateTimePicker(
                                   type: DateTimePickerType.time,
                                   onChanged: (value) {
-                                    pickToTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
+                                    pickToTime = TimeOfDay.fromDateTime(
+                                        DateFormat('hh:mm').parse(value));
                                     setState(() {});
                                   },
                                   validator: (value) {
-                                    if (value.validate().isEmpty) return language.fieldRequiredMsg;
-                                    double fromTimeInHour = pickFromTime!.hour + pickFromTime!.minute / 60;
-                                    double toTimeInHour = pickToTime!.hour + pickToTime!.minute / 60;
+                                    if (value.validate().isEmpty)
+                                      return language.fieldRequiredMsg;
+                                    double fromTimeInHour =
+                                        pickFromTime!.hour + pickFromTime!.minute / 60;
+                                    double toTimeInHour =
+                                        pickToTime!.hour + pickToTime!.minute / 60;
                                     double difference = toTimeInHour - fromTimeInHour;
                                     print(difference);
                                     if (difference <= 0) {
@@ -275,7 +312,8 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                                     }
                                     return null;
                                   },
-                                  decoration: commonInputDecoration(suffixIcon: Icons.access_time),
+                                  decoration:
+                                      commonInputDecoration(suffixIcon: Icons.access_time),
                                 ).expand(flex: 2),
                               ],
                             )
@@ -288,7 +326,8 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                       Container(
                         padding: EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                          border: Border.all(
+                              color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
                           borderRadius: BorderRadius.circular(defaultRadius),
                         ),
                         child: Column(
@@ -305,7 +344,8 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                                 if (value!.isEmpty) return language.fieldRequiredMsg;
                                 return null;
                               },
-                              decoration: commonInputDecoration(suffixIcon: Icons.calendar_today),
+                              decoration:
+                                  commonInputDecoration(suffixIcon: Icons.calendar_today),
                             ),
                             16.height,
                             Row(
@@ -315,14 +355,17 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                                 DateTimePicker(
                                   type: DateTimePickerType.time,
                                   onChanged: (value) {
-                                    deliverFromTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
+                                    deliverFromTime = TimeOfDay.fromDateTime(
+                                        DateFormat('hh:mm').parse(value));
                                     setState(() {});
                                   },
                                   validator: (value) {
-                                    if (value.validate().isEmpty) return language.fieldRequiredMsg;
+                                    if (value.validate().isEmpty)
+                                      return language.fieldRequiredMsg;
                                     return null;
                                   },
-                                  decoration: commonInputDecoration(suffixIcon: Icons.access_time),
+                                  decoration:
+                                      commonInputDecoration(suffixIcon: Icons.access_time),
                                 ).expand(flex: 2),
                               ],
                             ),
@@ -334,20 +377,24 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                                 DateTimePicker(
                                   type: DateTimePickerType.time,
                                   onChanged: (value) {
-                                    deliverToTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
+                                    deliverToTime = TimeOfDay.fromDateTime(
+                                        DateFormat('hh:mm').parse(value));
                                     setState(() {});
                                   },
                                   validator: (value) {
                                     if (value!.isEmpty) return language.fieldRequiredMsg;
-                                    double fromTimeInHour = deliverFromTime!.hour + deliverFromTime!.minute / 60;
-                                    double toTimeInHour = deliverToTime!.hour + deliverToTime!.minute / 60;
+                                    double fromTimeInHour =
+                                        deliverFromTime!.hour + deliverFromTime!.minute / 60;
+                                    double toTimeInHour =
+                                        deliverToTime!.hour + deliverToTime!.minute / 60;
                                     double difference = toTimeInHour - fromTimeInHour;
                                     if (difference < 0) {
                                       return language.endTimeValidationMsg;
                                     }
                                     return null;
                                   },
-                                  decoration: commonInputDecoration(suffixIcon: Icons.access_time),
+                                  decoration:
+                                      commonInputDecoration(suffixIcon: Icons.access_time),
                                 ).expand(flex: 2),
                               ],
                             )
@@ -377,7 +424,9 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            ImageIcon(AssetImage(mData.image.validate()), size: 20, color: isSelected == mData.index ? colorPrimary : Colors.grey),
+                            ImageIcon(AssetImage(mData.image.validate()),
+                                size: 20,
+                                color: isSelected == mData.index ? colorPrimary : Colors.grey),
                             16.width,
                             Text(mData.title!, style: boldTextStyle()).expand(),
                           ],
@@ -398,8 +447,14 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                         value: paymentCollectFrom,
                         decoration: commonInputDecoration(),
                         items: [
-                          DropdownMenuItem(value: PAYMENT_ON_PICKUP, child: Text(language.pickupLocation, style: primaryTextStyle(), maxLines: 1)),
-                          DropdownMenuItem(value: PAYMENT_ON_DELIVERY, child: Text(language.deliveryLocation, style: primaryTextStyle(), maxLines: 1)),
+                          DropdownMenuItem(
+                              value: PAYMENT_ON_PICKUP,
+                              child: Text(language.pickupLocation,
+                                  style: primaryTextStyle(), maxLines: 1)),
+                          DropdownMenuItem(
+                              value: PAYMENT_ON_DELIVERY,
+                              child: Text(language.deliveryLocation,
+                                  style: primaryTextStyle(), maxLines: 1)),
                         ],
                         onChanged: (value) {
                           paymentCollectFrom = value!;
@@ -448,7 +503,8 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                     children: [
                       Text(language.total, style: boldTextStyle()),
                       16.width,
-                      Text('${printAmount(widget.orderData.totalAmount ?? 0)}', style: boldTextStyle(size: 20)),
+                      Text('${printAmount(widget.orderData.totalAmount ?? 0)}',
+                          style: boldTextStyle(size: 20)),
                     ],
                   ),
                 ],

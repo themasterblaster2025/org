@@ -27,7 +27,7 @@ import '../components/StoreItemComponent.dart';
 
 class StoreListScreen extends StatefulWidget {
   static String tag = '/StoreListScreen';
-  final String? type;
+  final int? type;
 
   StoreListScreen({this.type});
 
@@ -83,8 +83,15 @@ class StoreListScreenState extends State<StoreListScreen> {
           data.workingHours =
               WorkingHours(start: "12:00 am", end: "12:00 pm", isOpen: false, day: "");
         }
-        if (widget.type.validate().isNotEmpty) {
-
+        if (widget.type.validate() != 0) {
+          data.storeType.validate().forEach((element) {
+            if (element.id.validate() == widget.type) {
+              storeList.add(data);
+            }
+          });
+          /* if (data.storeType!.id.validate() == widget.type) {
+            storeList.add(data);
+          }*/
         } else {
           storeList.add(data);
         }
@@ -180,7 +187,7 @@ class StoreListScreenState extends State<StoreListScreen> {
                       },
                     ),
                   ],
-                ).paddingAll(16).visible(widget.type.validate().isEmpty),
+                ).paddingAll(16).visible(widget.type.validate() == 0),
                 storeList.isNotEmpty
                     ? ListView.builder(
                         itemBuilder: (context, index) {

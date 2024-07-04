@@ -130,7 +130,7 @@ class LoginScreenState extends State<LoginScreen> {
                 }).then((value) {
                   log("value...." + value.toString());
                 });
-                log("Email verify at :${v.isEmailVerification}");
+                log("Email verify at :${v.data!.isEmailVerification}");
                 log('v.data!.emailVerifiedAt ${v.data!.emailVerifiedAt}');
                 log('v.data!.otp ${v.data!.otpVerifyAt}');
                 if (v.data!.emailVerifiedAt.isEmptyOrNull ||

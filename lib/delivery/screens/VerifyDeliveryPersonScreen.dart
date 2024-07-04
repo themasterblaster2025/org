@@ -89,7 +89,6 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
         remainingDocuments.removeWhere((doc) => element.documentId == doc.id);
         selectedDoc = remainingDocuments.validate().isNotEmpty ? remainingDocuments[0] : null;
         setState(() {});
-        print("remaining doc list ${remainingDocuments.length}");
         updateDocId = element.id;
         log(uploadedDocList);
       });
@@ -206,7 +205,6 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
 
   @override
   Widget build(BuildContext context) {
-    print("remaininglist ===> ${remainingDocuments.length}");
     return CommonScaffoldComponent(
       appBarTitle: language.verifyDocument,
       body: Observer(

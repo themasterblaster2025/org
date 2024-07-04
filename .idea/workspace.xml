@@ -4,23 +4,26 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8691243f-0de7-470a-bacd-cbe44eceb665" name="Changes" comment="versinName, email otp document proper flow">
-      <change afterPath="$PROJECT_DIR$/lib/main/screens/VerificationListScreen.dart" afterDir="false" />
+    <list default="true" id="8691243f-0de7-470a-bacd-cbe44eceb665" name="Changes" comment="one screen for manage emailOtp,mobileOtp, documentVerification">
+      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/staticjson/keyword_list.json" beforeDir="false" afterPath="$PROJECT_DIR$/assets/staticjson/keyword_list.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/delivery/screens/DeliveryDashBoard.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/delivery/screens/DeliveryDashBoard.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/delivery/screens/VerifyDeliveryPersonScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/delivery/screens/VerifyDeliveryPersonScreen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/main/models/AppSettingModel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/models/AppSettingModel.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main/models/LoginResponse.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/models/LoginResponse.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/main/models/StoreListModel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/models/StoreListModel.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main/network/NetworkUtils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/network/NetworkUtils.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/main/network/RestApis.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/network/RestApis.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/screens/EmailVerificationScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/screens/EmailVerificationScreen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/main/screens/LoginScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/screens/LoginScreen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/screens/RegisterScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/screens/RegisterScreen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/screens/SplashScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/screens/SplashScreen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/screens/VerificationScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/screens/VerificationScreen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/services/AuthServices.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/services/AuthServices.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main/screens/VerificationListScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/screens/VerificationListScreen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main/utils/Constants.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/utils/Constants.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/user/components/OrderCardComponent.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/components/OrderCardComponent.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/user/components/StoreItemComponent.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/components/StoreItemComponent.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/user/fragment/OrderFragment.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/fragment/OrderFragment.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/user/screens/FavouriteStoreScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/screens/FavouriteStoreScreen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/user/screens/RateReviewScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/screens/RateReviewScreen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/user/screens/ReturnOrderScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/screens/ReturnOrderScreen.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/user/screens/StoreListScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/screens/StoreListScreen.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -86,7 +89,7 @@
     &quot;git-widget-placeholder&quot;: &quot;add__store__module&quot;,
     &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/meet09/StudioProjects/delivery_userapp&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/meet09/ashika/eservice-master/lib/src/network/api_client.dart&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
@@ -230,7 +233,15 @@
       <option name="project" value="LOCAL" />
       <updated>1719647319424</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="one screen for manage emailOtp,mobileOtp, documentVerification">
+      <option name="closed" value="true" />
+      <created>1719918362172</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1719918362172</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -267,7 +278,8 @@
     <MESSAGE value="unused code removed. google api key changed." />
     <MESSAGE value="title wallet screen bug" />
     <MESSAGE value="versinName, email otp document proper flow" />
-    <option name="LAST_COMMIT_MESSAGE" value="versinName, email otp document proper flow" />
+    <MESSAGE value="one screen for manage emailOtp,mobileOtp, documentVerification" />
+    <option name="LAST_COMMIT_MESSAGE" value="one screen for manage emailOtp,mobileOtp, documentVerification" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -275,5 +287,10 @@
         <breakpoint type="dart-exception" />
       </default-breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="FlutterRunConfigurationType">
+        <watch expression="isvehi" language="Dart" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

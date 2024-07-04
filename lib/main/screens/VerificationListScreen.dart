@@ -36,7 +36,7 @@ class VerificationListScreen extends StatefulWidget {
 }
 
 class _VerificationListScreenState extends State<VerificationListScreen> {
-  LoginResponse? data;
+  UserData? data;
   List<VerificationStep> verificationSteps = [];
 
   @override
@@ -52,11 +52,11 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
 
   Future<void> getUserData() async {
     appStore.setLoading(true);
-    await getUserDetailWithVerification(getIntAsync(USER_ID)).then((value) async {
+    await getUserDetail(getIntAsync(USER_ID)).then((value) async {
       data = value;
       verificationSteps.clear();
       if (!data!.isEmailVerification.validate()) {
-        VerificationStatus status = data!.data!.emailVerifiedAt.isEmptyOrNull
+        VerificationStatus status = data!.emailVerifiedAt.isEmptyOrNull
             ? VerificationStatus.pending
             : VerificationStatus.completed;
         verificationSteps.add(
@@ -66,7 +66,7 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
               image: Icons.email,
               description: 'Verify your email address.',
               // todo
-              status: data!.data!.emailVerifiedAt.isEmptyOrNull
+              status: data!.emailVerifiedAt.isEmptyOrNull
                   ? VerificationStatus.pending
                   : VerificationStatus.completed,
               fun: () {
@@ -83,7 +83,7 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
       }
 
       if (!data!.isMobileVerification.validate()) {
-        VerificationStatus status = data!.data!.otpVerifyAt.isEmptyOrNull
+        VerificationStatus status = data!.otpVerifyAt.isEmptyOrNull
             ? VerificationStatus.pending
             : VerificationStatus.completed;
         verificationSteps.add(
@@ -93,7 +93,7 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
               description: 'Verify your mobile number.',
               // todo
               image: Icons.phone,
-              status: data!.data!.otpVerifyAt.isEmptyOrNull
+              status: data!.otpVerifyAt.isEmptyOrNull
                   ? VerificationStatus.pending
                   : VerificationStatus.completed,
               fun: () {
@@ -107,8 +107,8 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
         // setState(() {});
       }
       if (!data!.isDocumentVerification.validate() &&
-          data?.data?.userType.validate() == DELIVERY_MAN) {
-        VerificationStatus status = data!.data!.isVerifiedDeliveryMan.validate() == 0
+          data?.userType.validate() == DELIVERY_MAN) {
+        VerificationStatus status = data!.isVerifiedDeliveryMan.validate() == 0
             ? VerificationStatus.pending
             : VerificationStatus.completed;
         verificationSteps.add(
@@ -118,7 +118,7 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
               description: 'Upload your documents for verification.',
               // todo
               image: Icons.newspaper_rounded,
-              status: data!.data!.isVerifiedDeliveryMan.validate() == 0
+              status: data!.isVerifiedDeliveryMan.validate() == 0
                   ? VerificationStatus.pending
                   : VerificationStatus.completed,
               fun: () {
@@ -240,9 +240,9 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
   }
 
   Future<void> goToDashboard() async {
-    if (data!.data!.countryId != null && data!.data!.cityId != null) {
-      await getCountryDetailApiCall(data!.data!.countryId.validate());
-      getCityDetailApiCall(data!.data!.cityId.validate(), context);
+    if (data!.countryId != null && data!.cityId != null) {
+      await getCountryDetailApiCall(data!.countryId.validate());
+      getCityDetailApiCall(data!.cityId.validate(), context);
     } else {
       if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
         if (getStringAsync(USER_TYPE) == CLIENT) {
