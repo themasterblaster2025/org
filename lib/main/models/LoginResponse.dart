@@ -189,6 +189,10 @@ class UserBankAccount {
   String? bankCode;
   String? accountHolderName;
   String? accountNumber;
+  String? bankAddress;
+  String? routingNumber;
+  String? bankIban;
+  String? bankSwift;
   String? createdAt;
   String? updatedAt;
   String? deletedAt;
@@ -200,6 +204,10 @@ class UserBankAccount {
       this.bankCode,
       this.accountHolderName,
       this.accountNumber,
+      this.bankAddress,
+      this.bankIban,
+      this.bankSwift,
+      this.routingNumber,
       this.createdAt,
       this.updatedAt,
       this.deletedAt});
@@ -211,6 +219,10 @@ class UserBankAccount {
     bankCode = json['bank_code'];
     accountHolderName = json['account_holder_name'];
     accountNumber = json['account_number'];
+    bankAddress = json['bank_address'];
+    routingNumber = json['routing_number'];
+    bankIban = json['bank_iban'];
+    bankSwift = json['bank_swift'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
@@ -224,6 +236,10 @@ class UserBankAccount {
     data['bank_code'] = this.bankCode;
     data['account_holder_name'] = this.accountHolderName;
     data['account_number'] = this.accountNumber;
+    data['bank_address'] = this.bankAddress;
+    data['routing_number'] = this.routingNumber;
+    data['bank_iban'] = this.bankIban;
+    data['bank_swift'] = this.bankSwift;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['deleted_at'] = this.deletedAt;

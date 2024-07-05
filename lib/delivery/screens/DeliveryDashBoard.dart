@@ -6,6 +6,7 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'package:mighty_delivery/delivery/fragment/DHomeFragment.dart';
 import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
@@ -40,6 +41,7 @@ import '../../user/screens/OrderDetailScreen.dart';
 import 'ReceivedScreenOrderScreen.dart';
 
 class DeliveryDashBoard extends StatefulWidget {
+  @override
   @override
   DeliveryDashBoardState createState() => DeliveryDashBoardState();
 }
@@ -442,7 +444,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                                     orderData: data,
                                     orderStatus: statusList[selectedStatusIndex]);
                                 appStore.setLoading(false);
-                                finish(context);
+                                // finish(context);
                               },
                             );
                           }
@@ -619,7 +621,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                             toast(language.orderArrived);
                           });
                           appStore.setLoading(false);
-                          finish(context);
+                          // finish(context);
                           getOrderListApiCall();
                         },
                       );

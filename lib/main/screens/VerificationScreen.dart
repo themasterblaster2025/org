@@ -147,15 +147,6 @@ class VerificationScreenState extends State<VerificationScreen> {
                           updateUserStatus({"id": getIntAsync(USER_ID), "otp_verify_at": DateTime.now().toString()}).then((value) {
                             setValue(OTP_VERIFIED, true);
                             finish(context);
-                           /* if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
-                              if (getStringAsync(USER_TYPE) == CLIENT) {
-                                DashboardScreen().launch(context, isNewTask: true);
-                              } else {
-                                DeliveryDashBoard().launch(context, isNewTask: true);
-                              }
-                            } else {
-                              UserCitySelectScreen().launch(context, isNewTask: true);
-                            }*/
                           });
                         }).catchError((error) {
                           appStore.setLoading(false);

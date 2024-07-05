@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 
+import '../../delivery/fragment/DHomeFragment.dart';
 import '../../delivery/screens/DeliveryDashBoard.dart';
 import '../../extensions/LiveStream.dart';
 import '../../extensions/animatedList/animated_list_view.dart';
@@ -118,7 +119,8 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
           if (getStringAsync(USER_TYPE) == CLIENT) {
             DashboardScreen().launch(context, isNewTask: true);
           } else {
-            DeliveryDashBoard().launch(context, isNewTask: true);
+            // DeliveryDashBoard().launch(context, isNewTask: true);
+            DHomeFragment().launch(context, isNewTask: true);
           }
         } else
           VerificationScreen().launch(context, isNewTask: true);

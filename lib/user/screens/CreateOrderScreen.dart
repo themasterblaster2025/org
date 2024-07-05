@@ -1393,7 +1393,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 Column(
                   children: [
                     16.height,
-                    Text("orderItems", style: boldTextStyle()), // todo
+                    Text(language.orderItems, style: boldTextStyle()), // todo
                     // Text(language.orderItems, style: boldTextStyle()),
                     8.height,
                     ListView.builder(

@@ -10,6 +10,7 @@ import 'package:mighty_delivery/main/models/LoginResponse.dart';
 import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 
+import '../../delivery/fragment/DHomeFragment.dart';
 import '../../delivery/screens/DeliveryDashBoard.dart';
 import '../../extensions/app_button.dart';
 import '../../extensions/common.dart';
@@ -248,7 +249,8 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
         if (getStringAsync(USER_TYPE) == CLIENT) {
           DashboardScreen().launch(context, isNewTask: true);
         } else {
-          DeliveryDashBoard().launch(context, isNewTask: true);
+          // DeliveryDashBoard().launch(context, isNewTask: true);
+          DHomeFragment().launch(context, isNewTask: true);
         }
       } else {
         UserCitySelectScreen().launch(context, isNewTask: true);
@@ -344,7 +346,8 @@ getCityDetailApiCall(int cityId, BuildContext context) async {
       if (getStringAsync(USER_TYPE) == CLIENT) {
         DashboardScreen().launch(context, isNewTask: true);
       } else {
-        DeliveryDashBoard().launch(context, isNewTask: true);
+        // DeliveryDashBoard().launch(context, isNewTask: true);
+        DHomeFragment().launch(context, isNewTask: true);
       }
     } else {
       UserCitySelectScreen().launch(context, isNewTask: true);

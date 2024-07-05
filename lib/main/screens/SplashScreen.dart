@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:mighty_delivery/delivery/fragment/DHomeFragment.dart';
 import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
@@ -86,7 +87,7 @@ class SplashScreenState extends State<SplashScreen> {
       log(error);
     });
 
-    //default language eng
+    // default language eng
     // String getJsonData = getStringAsync(LanguageJsonDataRes, defaultValue: "");
     // if (getJsonData.isNotEmpty) {
     //   ServerLanguageResponse languageSettings = ServerLanguageResponse.fromJson(json.decode(getJsonData.trim()));
@@ -130,33 +131,12 @@ class SplashScreenState extends State<SplashScreen> {
                 if (getStringAsync(USER_TYPE) == CLIENT) {
                   DashboardScreen().launch(context, isNewTask: true);
                 } else {
-                  DeliveryDashBoard().launch(context, isNewTask: true);
+                  // DeliveryDashBoard().launch(context, isNewTask: true);
+                  DHomeFragment().launch(context, isNewTask: true);
                 }
               } else {
                 UserCitySelectScreen().launch(context, isNewTask: true);
               }
-
-              /*  if (!getBoolAsync(EMAIL_VERIFIED) &&
-                  (getBoolAsync(IS_EMAIL_VERIFICATION) == false)) {
-                EmailVerificationScreen().launch(context, isNewTask: true);
-              } else if (value.otpVerifyAt.isEmptyOrNull) {
-                VerificationScreen().launch(context, isNewTask: true);
-              } else {
-                //update app version
-                Future<PackageInfo> packageInfoFuture = PackageInfo.fromPlatform();
-                final packageInfo = await packageInfoFuture;
-                if (value.app_version.isEmptyOrNull ||
-                    value.app_version != packageInfo.version) {
-                  await updateUserStatus(
-                          {"id": getIntAsync(USER_ID), "app_version": packageInfo.version})
-                      .then((value) {});
-                }*/
-              /*  //update source version
-                if (!getBoolAsync(IS_VERIFIED_DELIVERY_MAN) &&
-                    getStringAsync(USER_TYPE) != CLIENT) {
-                  VerifyDeliveryPersonScreen().launch(context);
-                } */
-              // }
             }
           }).catchError((e) {
             log(e);

@@ -9,6 +9,7 @@ import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart
 import 'package:mighty_delivery/main/screens/VerificationListScreen.dart';
 import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 
+import '../../delivery/fragment/DHomeFragment.dart';
 import '../../delivery/screens/DeliveryDashBoard.dart';
 import '../../extensions/common.dart';
 import '../../extensions/extension_util/device_extensions.dart';
@@ -389,7 +390,8 @@ getCityDetailApiCall(int cityId) async {
         if (getStringAsync(USER_TYPE) == CLIENT) {
           DashboardScreen().launch(getContext, isNewTask: true);
         } else {
-          DeliveryDashBoard().launch(getContext, isNewTask: true);
+          // DeliveryDashBoard().launch(getContext, isNewTask: true);
+          DHomeFragment().launch(getContext, isNewTask: true);
         }
       } else {
         VerificationScreen().launch(getContext, isNewTask: true);

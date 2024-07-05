@@ -124,7 +124,6 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
         "reason": reason!.validate().trim() != language.other.trim()
             ? reason
             : reasonController.text,
-        "is_return": 1,
       };
       appStore.setLoading(true);
       await createOrder(req).then((value) async {

@@ -10,6 +10,7 @@ import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart
 import 'package:mighty_delivery/main/screens/VerificationListScreen.dart';
 import 'package:store_checker/store_checker.dart';
 
+import '../../delivery/fragment/DHomeFragment.dart';
 import '../../delivery/screens/DeliveryDashBoard.dart';
 import '../../delivery/screens/VerifyDeliveryPersonScreen.dart';
 import '../../extensions/app_text_field.dart';
@@ -228,7 +229,8 @@ class LoginScreenState extends State<LoginScreen> {
           if (getStringAsync(USER_TYPE) == CLIENT) {
             DashboardScreen().launch(context, isNewTask: true);
           } else {
-            DeliveryDashBoard().launch(context, isNewTask: true);
+            // DeliveryDashBoard().launch(context, isNewTask: true);
+            DHomeFragment().launch(context, isNewTask: true);
           }
         } else {
           VerificationScreen().launch(context, isNewTask: true);

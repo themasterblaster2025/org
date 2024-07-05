@@ -36,6 +36,10 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
   TextEditingController accNumberCon = TextEditingController();
   TextEditingController nameCon = TextEditingController();
   TextEditingController ifscCCon = TextEditingController();
+  TextEditingController bankAddressCon = TextEditingController();
+  TextEditingController routingNumberCon = TextEditingController();
+  TextEditingController bankSwiftCon = TextEditingController();
+  TextEditingController bankIbanCon = TextEditingController();
 
   @override
   void initState() {
@@ -56,6 +60,10 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
         accNumberCon.text = value.userBankAccount!.accountNumber.validate();
         nameCon.text = value.userBankAccount!.accountHolderName.validate();
         ifscCCon.text = value.userBankAccount!.bankCode.validate();
+        bankAddressCon.text = value.userBankAccount!.bankAddress.validate();
+        routingNumberCon.text = value.userBankAccount!.routingNumber.validate();
+        bankSwiftCon.text = value.userBankAccount!.bankSwift.validate();
+        bankIbanCon.text = value.userBankAccount!.bankIban.validate();
         setState(() {});
       }
     }).then((value) {
@@ -78,6 +86,10 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
       multiPartRequest.fields['user_bank_account[account_number]'] = accNumberCon.text.trim();
       multiPartRequest.fields['user_bank_account[account_holder_name]'] = nameCon.text.trim();
       multiPartRequest.fields['user_bank_account[bank_code]'] = ifscCCon.text.trim();
+      multiPartRequest.fields['user_bank_account[bank_address]'] = bankAddressCon.text.trim();
+      multiPartRequest.fields['user_bank_account[routing_number]'] = routingNumberCon.text.trim();
+      multiPartRequest.fields['user_bank_account[bank_iban]'] = bankIbanCon.text.trim();
+      multiPartRequest.fields['user_bank_account[bank_swift]'] = bankSwiftCon.text.trim();
       multiPartRequest.headers.addAll(buildHeaderTokens());
       sendMultiPartRequest(
         multiPartRequest,
@@ -151,14 +163,54 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
                       decoration: commonInputDecoration(hintText: language.nameAsPerBank),
                     ),
                     16.height,
-                    Text(language.ifscCode, style: primaryTextStyle()),
+                    Text("Bank Address", style: primaryTextStyle()), // todo
                     8.height,
                     AppTextField(
                       isValidationRequired: true,
+                      controller: bankAddressCon,
+                      textFieldType: TextFieldType.NAME,
+                      errorThisFieldRequired: language.fieldRequiredMsg,
+                      decoration: commonInputDecoration(hintText:"Bank Address"), // todo
+                    ),
+                    16.height,
+                    Text(language.ifscCode, style: primaryTextStyle()),
+                    8.height,
+                    AppTextField(
+                      isValidationRequired: false,
                       controller: ifscCCon,
                       textFieldType: TextFieldType.NAME,
                       decoration: commonInputDecoration(hintText: language.ifscCode),
                       errorThisFieldRequired: language.fieldRequiredMsg,
+                    ),
+                    16.height,
+                    Text("Routing Number", style: primaryTextStyle()), // todo
+                    8.height,
+                    AppTextField(
+                      isValidationRequired: false,
+                      controller: routingNumberCon,
+                      textFieldType: TextFieldType.NAME,
+                      errorThisFieldRequired: language.fieldRequiredMsg,
+                      decoration: commonInputDecoration(hintText:"Routing Number"), // todo
+                    ),
+                    16.height,
+                    Text("Bank IBAN", style: primaryTextStyle()), // todo
+                    8.height,
+                    AppTextField(
+                      isValidationRequired: false,
+                      controller: bankIbanCon,
+                      textFieldType: TextFieldType.NAME,
+                      errorThisFieldRequired: language.fieldRequiredMsg,
+                      decoration: commonInputDecoration(hintText:"Bank IBAN"), // todo
+                    ),
+                    16.height,
+                    Text("Bank Swift", style: primaryTextStyle()), // todo
+                    8.height,
+                    AppTextField(
+                      isValidationRequired: false,
+                      controller: bankSwiftCon,
+                      textFieldType: TextFieldType.NAME,
+                      errorThisFieldRequired: language.fieldRequiredMsg,
+                      decoration: commonInputDecoration(hintText:"Bank Swift"), // todo
                     ),
                     30.height,
                   ],

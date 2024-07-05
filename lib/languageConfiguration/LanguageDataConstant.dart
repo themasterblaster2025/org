@@ -104,6 +104,7 @@ String getContentValueFromKey(int keywordId) {
       }
     }
   } else {
+    print("not get lan data");
     for (int index = 0; index < defaultLanguageDataKeys.length; index++) {
       if (defaultLanguageDataKeys[index].keywordId == keywordId) {
         defaultKeyValue = defaultLanguageDataKeys[index].keywordValue!;

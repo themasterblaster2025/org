@@ -455,7 +455,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
       await savePayment(req).then((value) async {
         await saveDelivery().then((value) async {
           appStore.setLoading(false);
-          finish(context, true);
+          // finish(context, true);
         }).catchError((error) {
           appStore.setLoading(false);
           log(error);

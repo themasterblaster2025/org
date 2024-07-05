@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:developer' as lg;
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -9,6 +10,7 @@ import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/main/models/CategoryModel.dart';
+import 'package:mighty_delivery/main/models/DashboardCountModel.dart';
 import 'package:mighty_delivery/main/models/WorkHoursListModel.dart';
 
 import '../../extensions/common.dart';
@@ -212,12 +214,20 @@ Future sendMultiPartRequest(MultipartRequest multiPartRequest,
     {Function(dynamic)? onSuccess, Function(dynamic)? onError}) async {
   multiPartRequest.headers.addAll(buildHeaderTokens());
 
-  await multiPartRequest.send().then((res) {
+  await multiPartRequest.send().then((res) async {
     log(res.statusCode);
-    res.stream.transform(utf8.decoder).listen((value) {
+    await  res.stream.transform(utf8.decoder).listen((value) {
+      log("new listen");
       log(value);
       onSuccess?.call(jsonDecode(value));
     });
+
+ /*   StringBuffer buffer = StringBuffer();
+    await for (String chunk in res.stream.transform(utf8.decoder)) {
+      buffer.write(chunk);
+    }
+    final str = jsonDecode(buffer.toString());
+    onSuccess?.call(str);*/
   }).catchError((error) {
     onError?.call(error.toString());
   });
@@ -489,7 +499,14 @@ Future<LDBaseResponse> saveWallet(Map request) async {
 
 /// Update Bank Info
 Future updateBankDetail(
-    {String? bankName, String? bankCode, String? accountName, String? accountNumber}) async {
+    {String? bankName,
+    String? bankCode,
+    String? accountName,
+    String? accountNumber,
+    String? bankAddress,
+    String? routingNumber,
+    String? bankIban,
+    String? bankSwift}) async {
   MultipartRequest multiPartRequest = await getMultiPartRequest('update-profile');
   multiPartRequest.fields['id'] = getIntAsync(USER_ID).toString();
   multiPartRequest.fields['email'] = getStringAsync(USER_EMAIL).validate();
@@ -499,6 +516,10 @@ Future updateBankDetail(
   multiPartRequest.fields['user_bank_account[bank_code]'] = bankCode.validate();
   multiPartRequest.fields['user_bank_account[account_holder_name]'] = accountName.validate();
   multiPartRequest.fields['user_bank_account[account_number]'] = accountNumber.validate();
+  multiPartRequest.fields['user_bank_account[bank_address]'] = bankAddress.validate();
+  multiPartRequest.fields['user_bank_account[routing_number]'] = routingNumber.validate();
+  multiPartRequest.fields['user_bank_account[bank_iban]'] = bankIban.validate();
+  multiPartRequest.fields['user_bank_account[bank_swift]'] = bankSwift.validate();
 
   await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
     if (data != null) {
@@ -690,4 +711,14 @@ Future<StoreListModel> getFavouriteStore() async {
     'userFavouriteStore-list',
     method: HttpMethod.GET,
   )));
+}
+
+/// Get DeliveryMan Dashboard count List
+Future<DashboardCount> getDashboardCount({String? startDate, String? endDate}) async {
+  String endpoint = 'deliveryman-dashboard-data';
+  if (startDate != null && endDate != null) {
+    endpoint += '?from_date=$startDate&end_date=$endDate';
+  }
+  return DashboardCount.fromJson(
+      await handleResponse(await buildHttpResponse(endpoint, method: HttpMethod.GET)));
 }
