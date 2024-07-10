@@ -140,7 +140,7 @@ class StoreListScreenState extends State<StoreListScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
-      appBarTitle: "Stores", //todo
+      appBarTitle: language.stores,
       body: Observer(builder: (context) {
         return Stack(
           children: [
@@ -152,7 +152,7 @@ class StoreListScreenState extends State<StoreListScreen> {
                       controller: searchController,
                       decoration: commonInputDecoration(
                         // hintText: language.searchStores,
-                        hintText: "search stores", // todo
+                        hintText: language.searchStores,
                         prefixIcon: Icon(Icons.search),
                         suffixIcon: searchController.text.isNotEmpty ? Icons.clear : null,
                         suffixOnTap: () {
@@ -172,7 +172,7 @@ class StoreListScreenState extends State<StoreListScreen> {
                       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: radius(defaultRadius)),
                       // label: Text(language.nearest,
-                      label: Text("nearest", // todo
+                      label: Text(language.nearest,
                           style: primaryTextStyle(color: isNearest ? Colors.white : null)),
                       checkmarkColor: isNearest ? Colors.white : null,
                       selected: isNearest,

@@ -105,7 +105,7 @@ class FavouriteStoreScreenState extends State<FavouriteStoreScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
-      appBarTitle: "Favourite Store", // todo
+      appBarTitle: language.favouriteStore,
       body: Observer(builder: (context) {
         return Stack(
           children: [
@@ -117,12 +117,12 @@ class FavouriteStoreScreenState extends State<FavouriteStoreScreen> {
                     padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
                     itemBuilder: (context, index) {
                       StoreData item = storeList[index];
-                        return StoreItemComponent(
-                            store: item,
-                            onUpdate: () {
-                              page = 1;
-                              init();
-                            });
+                      return StoreItemComponent(
+                          store: item,
+                          onUpdate: () {
+                            page = 1;
+                            init();
+                          });
                     },
                   )
                 : !appStore.isLoading

@@ -62,11 +62,9 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
             : VerificationStatus.completed;
         verificationSteps.add(
           VerificationStep(
-              title: 'Email OTP',
-              // todo
+              title: language.emailOtp,
               image: Icons.email,
-              description: 'Verify your email address.',
-              // todo
+              description: language.veirfyYourEmailAddress,
               status: data!.emailVerifiedAt.isEmptyOrNull
                   ? VerificationStatus.pending
                   : VerificationStatus.completed,
@@ -89,10 +87,8 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
             : VerificationStatus.completed;
         verificationSteps.add(
           VerificationStep(
-              title: 'Mobile OTP',
-              // todo
-              description: 'Verify your mobile number.',
-              // todo
+              title: language.mobileOtp,
+              description: language.verifyYourMobileNumber,
               image: Icons.phone,
               status: data!.otpVerifyAt.isEmptyOrNull
                   ? VerificationStatus.pending
@@ -114,10 +110,8 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
             : VerificationStatus.completed;
         verificationSteps.add(
           VerificationStep(
-              title: 'Document Verification',
-              // todo
-              description: 'Upload your documents for verification.',
-              // todo
+              title: language.documentVerification,
+              description: language.uploadYourDocument,
               image: Icons.newspaper_rounded,
               status: data!.isVerifiedDeliveryMan.validate() == 0
                   ? VerificationStatus.pending
@@ -145,7 +139,7 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
-      appBarTitle: "Verification You must do", // todo
+      appBarTitle: language.verificationYouMustDo,
       showBack: false,
       action: [
         IconButton(
@@ -218,7 +212,7 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
                 ).onTap(() async {
                   if (verificationSteps
                       .any((element) => element.status == VerificationStatus.pending)) {
-                    toast("You must verify above all"); // todo
+                    toast(language.youMustVerifyAboveAll);
                   } else {
                     goToDashboard();
                   }
@@ -265,7 +259,7 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text("Verified", //  todo
+                Text(language.verified,
                     style: primaryTextStyle(
                       color: Colors.green.shade600,
                     )),
@@ -285,8 +279,7 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text("Verify", //  todo
-                    style: primaryTextStyle(color: Colors.red)),
+                Text(language.verify, style: primaryTextStyle(color: Colors.red)),
                 Icon(Icons.arrow_right, color: Colors.red),
               ],
             ),

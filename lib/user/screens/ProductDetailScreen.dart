@@ -4,6 +4,7 @@ import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/num_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/components/HtmlWidgtet.dart';
 import 'package:mighty_delivery/main/models/ProductListModel.dart';
 
@@ -46,8 +47,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           6.height,
           Divider(height: 10,color: dividerColor,),
           10.height,
-          Text(
-           "Description", // todo
+          Text( language.description,
             style: boldTextStyle(size: 18),
           ),
           8.height,

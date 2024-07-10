@@ -152,8 +152,7 @@ class OrderFragmentState extends State<OrderFragment> {
           10.height,
           Row(
             children: [
-              Text(
-                "What can we get you?", //todo
+              Text( language.whatCanWeGetYou,
                 style: boldTextStyle(size: 16, color: colorPrimary),
               ),
               Spacer(),
@@ -206,8 +205,7 @@ class OrderFragmentState extends State<OrderFragment> {
         ],
         Row(
           children: [
-            Text(
-              "My Orders", //todo
+            Text( language.myOrders,
               style: boldTextStyle(size: 16, color: colorPrimary),
             ),
             Spacer(),

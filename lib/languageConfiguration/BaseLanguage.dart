@@ -815,4 +815,8 @@ class BaseLanguage {
   String get isPaymentCollected => getContentValueFromKey(404);
 
   String get request => getContentValueFromKey(405);
+
+  String get addReview => getContentValueFromKey(406);
+
+  String get yourExperience => getContentValueFromKey(407);
 }

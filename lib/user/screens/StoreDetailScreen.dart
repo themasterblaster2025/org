@@ -237,7 +237,7 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
           style: boldTextStyle(size: 15),
         ).visible(day.storeOpenClose.validate() == 1),
         Text(
-          "Closed",// todo
+          language.closed,
           style: boldTextStyle(size: 15),
         ).visible(day.storeOpenClose.validate() == 0),
       ],

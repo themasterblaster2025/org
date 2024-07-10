@@ -13,25 +13,25 @@
         "screenId": "1",
         "keyword_id": 2,
         "keyword_name": "getStarted",
-        "keyword_value": "Get Started"
+        "keyword_value": "Get started"
       },
       {
         "screenId": "1",
         "keyword_id": 3,
         "keyword_name": "walkThrough1Title",
-        "keyword_value": "Select Pickup Location"
+        "keyword_value": "Select pickup location"
       },
       {
         "screenId": "1",
         "keyword_id": 4,
         "keyword_name": "walkThrough2Title",
-        "keyword_value": "Select Drop Location"
+        "keyword_value": "Select drop location"
       },
       {
         "screenId": "1",
         "keyword_id": 5,
         "keyword_name": "walkThrough3Title",
-        "keyword_value": "Confirm And Relax"
+        "keyword_value": "Confirm and relax"
       },
       {
         "screenId": "1",
@@ -103,13 +103,13 @@
         "screenId": "3",
         "keyword_id": 15,
         "keyword_name": "rememberMe",
-        "keyword_value": "Remember Me"
+        "keyword_value": "Remember me"
       },
       {
         "screenId": "3",
         "keyword_id": 16,
         "keyword_name": "forgotPasswordQue",
-        "keyword_value": "Forgot Password ?"
+        "keyword_value": "Forgot password ?"
       },
       {
         "screenId": "3",
@@ -121,13 +121,13 @@
         "screenId": "3",
         "keyword_id": 18,
         "keyword_name": "termOfService",
-        "keyword_value": "Terms of Service"
+        "keyword_value": "Terms of service"
       },
       {
         "screenId": "3",
         "keyword_id": 19,
         "keyword_name": "privacyPolicy",
-        "keyword_value": "Privacy Policy"
+        "keyword_value": "Privacy policy"
       },
       {
         "screenId": "3",
@@ -175,13 +175,13 @@
         "screenId": "3",
         "keyword_id": 27,
         "keyword_name": "selectUserType",
-        "keyword_value": "Select User Type"
+        "keyword_value": "Select user type"
       },
       {
         "screenId": "3",
         "keyword_id": 28,
         "keyword_name": "lblDeliveryBoy",
-        "keyword_value": "Delivery Boy"
+        "keyword_value": "Delivery boy"
       },
       {
         "screenId": "3",
@@ -229,7 +229,7 @@
         "screenId": "4",
         "keyword_id": 57,
         "keyword_name": "errorSomethingWentWrong",
-        "keyword_value": "Something Went Wrong."
+        "keyword_value": "Something went wrong."
       },
       {
         "screenId": "4",
@@ -253,7 +253,7 @@
         "screenId": "4",
         "keyword_id": 281,
         "keyword_name": "codeSent",
-        "keyword_value": "Code Sent "
+        "keyword_value": "Code sent "
       },
       {
         "screenId": "4",
@@ -265,7 +265,7 @@
         "screenId": "4",
         "keyword_id": 283,
         "keyword_name": "userNotFound",
-        "keyword_value": "User Not found"
+        "keyword_value": "User not found"
       },
       {
         "screenId": "4",
@@ -277,7 +277,7 @@
         "screenId": "4",
         "keyword_id": 352,
         "keyword_name": "invalidUrl",
-        "keyword_value": "Invalid Url!.Please enter valid Url"
+        "keyword_value": "Invalid url!.Please enter valid url"
       },
       {
         "screenId": "4",
@@ -289,7 +289,7 @@
         "screenId": "4",
         "keyword_id": 356,
         "keyword_name": "appleSignInNotAvailableError",
-        "keyword_value": "Apple SignIn is not available for your device"
+        "keyword_value": "Apple signIn is not available for your device"
       },
       {
         "screenId": "4",
@@ -313,7 +313,7 @@
         "screenId": "5",
         "keyword_id": 35,
         "keyword_name": "contactNumber",
-        "keyword_value": "Contact Number"
+        "keyword_value": "Contact number"
       },
       {
         "screenId": "5",
@@ -337,7 +337,7 @@
         "screenId": "6",
         "keyword_id": 37,
         "keyword_name": "forgotPassword",
-        "keyword_value": "Forgot Password"
+        "keyword_value": "Forgot password"
       },
       {
         "screenId": "6",
@@ -367,13 +367,13 @@
         "screenId": "7",
         "keyword_id": 41,
         "keyword_name": "contactUs",
-        "keyword_value": "Contact Us"
+        "keyword_value": "Contact us"
       },
       {
         "screenId": "7",
         "keyword_id": 42,
         "keyword_name": "aboutUs",
-        "keyword_value": "About Us"
+        "keyword_value": "About us"
       },
       {
         "screenId": "7",
@@ -391,31 +391,31 @@
         "screenId": "8",
         "keyword_id": 43,
         "keyword_name": "bankDetails",
-        "keyword_value": "Bank Details"
+        "keyword_value": "Bank details"
       },
       {
         "screenId": "8",
         "keyword_id": 44,
         "keyword_name": "bankName",
-        "keyword_value": "Bank Name"
+        "keyword_value": "Bank name"
       },
       {
         "screenId": "8",
         "keyword_id": 45,
         "keyword_name": "accountNumber",
-        "keyword_value": "Account Number"
+        "keyword_value": "Account number"
       },
       {
         "screenId": "8",
         "keyword_id": 46,
         "keyword_name": "nameAsPerBank",
-        "keyword_value": "Name as Per Bank"
+        "keyword_value": "Name as per bank"
       },
       {
         "screenId": "8",
         "keyword_id": 47,
         "keyword_name": "ifscCode",
-        "keyword_value": "IFSC Code"
+        "keyword_value": "IFSC code"
       },
       {
         "screenId": "8",
@@ -427,13 +427,13 @@
         "screenId": "8",
         "keyword_id": 390,
         "keyword_name": "bankAddress",
-        "keyword_value": "Bank Address"
+        "keyword_value": "Bank address"
       },
       {
         "screenId": "8",
         "keyword_id": 391,
         "keyword_name": "routingNumber",
-        "keyword_value": "Routing Number"
+        "keyword_value": "Routing number"
       },
       {
         "screenId": "8",
@@ -445,7 +445,7 @@
         "screenId": "8",
         "keyword_id": 393,
         "keyword_name": "bankSwift",
-        "keyword_value": "Bank Swift"
+        "keyword_value": "Bank swift"
       }
     ]
   },
@@ -457,25 +457,25 @@
         "screenId": "9",
         "keyword_id": 49,
         "keyword_name": "changePassword",
-        "keyword_value": "Change Password"
+        "keyword_value": "Change password"
       },
       {
         "screenId": "9",
         "keyword_id": 50,
         "keyword_name": "oldPassword",
-        "keyword_value": "Old Password"
+        "keyword_value": "Old password"
       },
       {
         "screenId": "9",
         "keyword_id": 51,
         "keyword_name": "newPassword",
-        "keyword_value": "New Password"
+        "keyword_value": "New password"
       },
       {
         "screenId": "9",
         "keyword_id": 52,
         "keyword_name": "confirmPassword",
-        "keyword_value": "Confirm Password"
+        "keyword_value": "Confirm password"
       },
       {
         "screenId": "9",
@@ -487,7 +487,7 @@
         "screenId": "9",
         "keyword_id": 54,
         "keyword_name": "saveChanges",
-        "keyword_value": "Save Changes"
+        "keyword_value": "Save changes"
       }
     ]
   },
@@ -499,19 +499,19 @@
         "screenId": "10",
         "keyword_id": 55,
         "keyword_name": "editProfile",
-        "keyword_value": "Edit Profile"
+        "keyword_value": "Edit profile"
       },
       {
         "screenId": "10",
         "keyword_id": 56,
         "keyword_name": "notChangeEmail",
-        "keyword_value": "You cannot Change email id"
+        "keyword_value": "You cannot change email id"
       },
       {
         "screenId": "10",
         "keyword_id": 58,
         "keyword_name": "notChangeMobileNo",
-        "keyword_value": "You cannot change Contact Number"
+        "keyword_value": "You cannot change contact number"
       },
       {
         "screenId": "10",
@@ -547,7 +547,7 @@
         "screenId": "11",
         "keyword_id": 64,
         "keyword_name": "emailVerification",
-        "keyword_value": "Email Verification"
+        "keyword_value": "Email verification"
       },
       {
         "screenId": "11",
@@ -571,13 +571,13 @@
         "screenId": "11",
         "keyword_id": 68,
         "keyword_name": "getEmail",
-        "keyword_value": "Get Email"
+        "keyword_value": "Get email"
       },
       {
         "screenId": "11",
         "keyword_id": 69,
         "keyword_name": "confirmationCode",
-        "keyword_value": "Enter Confirmation code"
+        "keyword_value": "Enter confirmation code"
       },
       {
         "screenId": "11",
@@ -625,7 +625,7 @@
         "screenId": "13",
         "keyword_id": 76,
         "keyword_name": "markAllRead",
-        "keyword_value": "Mark All as read"
+        "keyword_value": "Mark all as read"
       }
     ]
   },
@@ -649,7 +649,7 @@
         "screenId": "14",
         "keyword_id": 79,
         "keyword_name": "systemDefault",
-        "keyword_value": "System Default"
+        "keyword_value": "System default"
       },
       {
         "screenId": "14",
@@ -667,13 +667,13 @@
         "screenId": "15",
         "keyword_id": 81,
         "keyword_name": "pleaseSelectCity",
-        "keyword_value": "Please select City"
+        "keyword_value": "Please select city"
       },
       {
         "screenId": "15",
         "keyword_id": 82,
         "keyword_name": "selectRegion",
-        "keyword_value": "Select Region"
+        "keyword_value": "Select region"
       },
       {
         "screenId": "15",
@@ -691,7 +691,7 @@
         "screenId": "15",
         "keyword_id": 85,
         "keyword_name": "selectCity",
-        "keyword_value": "Select City"
+        "keyword_value": "Select city"
       }
     ]
   },
@@ -709,7 +709,7 @@
         "screenId": "16",
         "keyword_id": 87,
         "keyword_name": "phoneNumberVerification",
-        "keyword_value": "Phone Number Verification"
+        "keyword_value": "Phone number verification"
       },
       {
         "screenId": "16",
@@ -721,7 +721,7 @@
         "screenId": "16",
         "keyword_id": 89,
         "keyword_name": "invalidVerificationCode",
-        "keyword_value": "Invalid Verification Code"
+        "keyword_value": "Invalid verification code"
       }
     ]
   },
@@ -751,7 +751,7 @@
         "screenId": "18",
         "keyword_id": 92,
         "keyword_name": "addNewAddress",
-        "keyword_value": "Add New Address"
+        "keyword_value": "Add new address"
       },
       {
         "screenId": "18",
@@ -775,7 +775,7 @@
         "screenId": "19",
         "keyword_id": 95,
         "keyword_name": "deliveryNow",
-        "keyword_value": "Deliver Now"
+        "keyword_value": "Deliver now"
       },
       {
         "screenId": "19",
@@ -787,7 +787,7 @@
         "screenId": "19",
         "keyword_id": 97,
         "keyword_name": "pickTime",
-        "keyword_value": "Pick Time"
+        "keyword_value": "Pick time"
       },
       {
         "screenId": "19",
@@ -817,7 +817,7 @@
         "screenId": "19",
         "keyword_id": 102,
         "keyword_name": "deliverTime",
-        "keyword_value": "Deliver Time"
+        "keyword_value": "Deliver time"
       },
       {
         "screenId": "19",
@@ -829,37 +829,37 @@
         "screenId": "19",
         "keyword_id": 104,
         "keyword_name": "numberOfParcels",
-        "keyword_value": "Number of Parcels"
+        "keyword_value": "Number of parcels"
       },
       {
         "screenId": "19",
         "keyword_id": 105,
         "keyword_name": "selectVehicle",
-        "keyword_value": "Select Vehicle"
+        "keyword_value": "Select vehicle"
       },
       {
         "screenId": "19",
         "keyword_id": 106,
         "keyword_name": "parcelType",
-        "keyword_value": "Parcel Type"
+        "keyword_value": "Parcel type"
       },
       {
         "screenId": "19",
         "keyword_id": 107,
         "keyword_name": "pickupInformation",
-        "keyword_value": "Pickup Information"
+        "keyword_value": "Pickup information"
       },
       {
         "screenId": "19",
         "keyword_id": 108,
         "keyword_name": "selectAddressSave",
-        "keyword_value": "Select Address From save"
+        "keyword_value": "Select address from save"
       },
       {
         "screenId": "19",
         "keyword_id": 109,
         "keyword_name": "selectAddress",
-        "keyword_value": "Select Address"
+        "keyword_value": "Select address"
       },
       {
         "screenId": "19",
@@ -877,37 +877,37 @@
         "screenId": "19",
         "keyword_id": 112,
         "keyword_name": "deliveryInformation",
-        "keyword_value": "Delivery Information"
+        "keyword_value": "Delivery information"
       },
       {
         "screenId": "19",
         "keyword_id": 113,
         "keyword_name": "deliveryLocation",
-        "keyword_value": "Delivery Location"
+        "keyword_value": "Delivery location"
       },
       {
         "screenId": "19",
         "keyword_id": 114,
         "keyword_name": "deliveryContactNumber",
-        "keyword_value": "Delivery Contact Number"
+        "keyword_value": "Delivery contact number"
       },
       {
         "screenId": "19",
         "keyword_id": 115,
         "keyword_name": "deliveryDescription",
-        "keyword_value": "Delivery Description"
+        "keyword_value": "Delivery description"
       },
       {
         "screenId": "19",
         "keyword_id": 116,
         "keyword_name": "packageInformation",
-        "keyword_value": "Package Information"
+        "keyword_value": "Package information"
       },
       {
         "screenId": "19",
         "keyword_id": 118,
         "keyword_name": "pickupLocation",
-        "keyword_value": "Pickup Location"
+        "keyword_value": "Pickup location"
       },
       {
         "screenId": "19",
@@ -919,7 +919,7 @@
         "screenId": "19",
         "keyword_id": 121,
         "keyword_name": "paymentCollectFrom",
-        "keyword_value": "Payment Collect from"
+        "keyword_value": "Payment collect from"
       },
       {
         "screenId": "19",
@@ -931,13 +931,13 @@
         "screenId": "19",
         "keyword_id": 123,
         "keyword_name": "saveDraft",
-        "keyword_value": "Save Draft"
+        "keyword_value": "Save draft"
       },
       {
         "screenId": "19",
         "keyword_id": 124,
         "keyword_name": "createOrder",
-        "keyword_value": "Create Order"
+        "keyword_value": "Create order"
       },
       {
         "screenId": "19",
@@ -955,25 +955,25 @@
         "screenId": "19",
         "keyword_id": 127,
         "keyword_name": "sourceLocation",
-        "keyword_value": "Source Location"
+        "keyword_value": "Source location"
       },
       {
         "screenId": "19",
         "keyword_id": 128,
         "keyword_name": "destinationLocation",
-        "keyword_value": "Destination Location"
+        "keyword_value": "Destination location"
       },
       {
         "screenId": "19",
         "keyword_id": 129,
         "keyword_name": "pickupCurrentValidationMsg",
-        "keyword_value": "Pickup Time must be after Current Time"
+        "keyword_value": "Pickup time must be after current time"
       },
       {
         "screenId": "19",
         "keyword_id": 130,
         "keyword_name": "pickupDeliverValidationMsg",
-        "keyword_value": "Pickup Time must be before Deliver Time"
+        "keyword_value": "Pickup time must be before deliver time"
       },
       {
         "screenId": "19",
@@ -985,25 +985,25 @@
         "screenId": "19",
         "keyword_id": 132,
         "keyword_name": "deliveryCharge",
-        "keyword_value": "Delivery Charge"
+        "keyword_value": "Delivery charge"
       },
       {
         "screenId": "19",
         "keyword_id": 133,
         "keyword_name": "distanceCharge",
-        "keyword_value": "Distance Charge"
+        "keyword_value": "Distance charge"
       },
       {
         "screenId": "19",
         "keyword_id": 134,
         "keyword_name": "weightCharge",
-        "keyword_value": "Weight Charge"
+        "keyword_value": "Weight charge"
       },
       {
         "screenId": "19",
         "keyword_id": 135,
         "keyword_name": "extraCharges",
-        "keyword_value": "Extra Charges"
+        "keyword_value": "Extra charges"
       },
       {
         "screenId": "19",
@@ -1057,7 +1057,7 @@
         "screenId": "19",
         "keyword_id": 340,
         "keyword_name": "balanceInsufficientCashPayment",
-        "keyword_value": "Balance is insufficient,Order is created with Cash Payment."
+        "keyword_value": "Balance is insufficient,Order is created with cash payment."
       },
       {
         "screenId": "19",
@@ -1069,7 +1069,7 @@
         "screenId": "19",
         "keyword_id": 367,
         "keyword_name": "orderItems",
-        "keyword_value": "Order Items"
+        "keyword_value": "Order items"
       },
       {
         "screenId": "19",
@@ -1093,7 +1093,7 @@
         "screenId": "20",
         "keyword_id": 140,
         "keyword_name": "myOrders",
-        "keyword_value": "My Orders"
+        "keyword_value": "My orders"
       },
       {
         "screenId": "20",
@@ -1135,13 +1135,13 @@
         "screenId": "20",
         "keyword_id": 290,
         "keyword_name": "toDateValidationMsg",
-        "keyword_value": "To Date must be after From Date "
+        "keyword_value": "To date must be after from date "
       },
       {
         "screenId": "20",
         "keyword_id": 291,
         "keyword_name": "applyFilter",
-        "keyword_value": "Apply Filter"
+        "keyword_value": "Apply filter"
       },
       {
         "screenId": "20",
@@ -1159,7 +1159,7 @@
         "screenId": "21",
         "keyword_id": 143,
         "keyword_name": "ordersWalletMore",
-        "keyword_value": "Orders, Wallet and more"
+        "keyword_value": "Orders, wallet and more"
       },
       {
         "screenId": "21",
@@ -1177,13 +1177,13 @@
         "screenId": "21",
         "keyword_id": 146,
         "keyword_name": "lblMyAddresses",
-        "keyword_value": "My Addresses"
+        "keyword_value": "My addresses"
       },
       {
         "screenId": "21",
         "keyword_id": 147,
         "keyword_name": "deleteAccount",
-        "keyword_value": "Delete Account"
+        "keyword_value": "Delete account"
       },
       {
         "screenId": "21",
@@ -1219,7 +1219,7 @@
         "screenId": "21",
         "keyword_id": 119,
         "keyword_name": "verifyDocument",
-        "keyword_value": "Verify Document"
+        "keyword_value": "Verify document"
       }
     ]
   },
@@ -1243,7 +1243,7 @@
         "screenId": "22",
         "keyword_id": 155,
         "keyword_name": "deleteAccountConfirmMsg",
-        "keyword_value": "Are you sure you want to delete Account?"
+        "keyword_value": "Are you sure you want to delete account?"
       }
     ]
   },
@@ -1255,7 +1255,7 @@
         "screenId": "23",
         "keyword_id": 156,
         "keyword_name": "draftOrder",
-        "keyword_value": "Draft Order"
+        "keyword_value": "Draft order"
       },
       {
         "screenId": "23",
@@ -1285,25 +1285,25 @@
         "screenId": "24",
         "keyword_id": 160,
         "keyword_name": "selectLocation",
-        "keyword_value": "Select Location"
+        "keyword_value": "Select location"
       },
       {
         "screenId": "24",
         "keyword_id": 161,
         "keyword_name": "selectPickupLocation",
-        "keyword_value": "Select Pickup Location"
+        "keyword_value": "Select pickup location"
       },
       {
         "screenId": "24",
         "keyword_id": 162,
         "keyword_name": "selectDeliveryLocation",
-        "keyword_value": "Select Delivery Location"
+        "keyword_value": "Select delivery location"
       },
       {
         "screenId": "24",
         "keyword_id": 163,
         "keyword_name": "searchAddress",
-        "keyword_value": "Search Address"
+        "keyword_value": "Search address"
       },
       {
         "screenId": "24",
@@ -1315,13 +1315,13 @@
         "screenId": "24",
         "keyword_id": 165,
         "keyword_name": "confirmPickupLocation",
-        "keyword_value": "Confirm Pickup Location"
+        "keyword_value": "Confirm pickup location"
       },
       {
         "screenId": "24",
         "keyword_id": 166,
         "keyword_name": "confirmDeliveryLocation",
-        "keyword_value": "Confirm Delivery Location"
+        "keyword_value": "Confirm delivery location"
       },
       {
         "screenId": "24",
@@ -1339,7 +1339,7 @@
         "screenId": "25",
         "keyword_id": 168,
         "keyword_name": "deleteLocation",
-        "keyword_value": "Delete Location?"
+        "keyword_value": "Delete location?"
       },
       {
         "screenId": "25",
@@ -1399,37 +1399,37 @@
         "screenId": "27",
         "keyword_id": 177,
         "keyword_name": "courierWillDeliverAt",
-        "keyword_value": "Courier will Deliver at"
+        "keyword_value": "Courier will deliver at"
       },
       {
         "screenId": "27",
         "keyword_id": 178,
         "keyword_name": "viewHistory",
-        "keyword_value": "View History"
+        "keyword_value": "View history"
       },
       {
         "screenId": "27",
         "keyword_id": 179,
         "keyword_name": "parcelDetails",
-        "keyword_value": "Parcel Details"
+        "keyword_value": "Parcel details"
       },
       {
         "screenId": "27",
         "keyword_id": 180,
         "keyword_name": "paymentDetails",
-        "keyword_value": "Payment Details"
+        "keyword_value": "Payment details"
       },
       {
         "screenId": "27",
         "keyword_id": 181,
         "keyword_name": "paymentType",
-        "keyword_value": "Payment Type"
+        "keyword_value": "Payment type"
       },
       {
         "screenId": "27",
         "keyword_id": 182,
         "keyword_name": "paymentStatus",
-        "keyword_value": "Payment Status"
+        "keyword_value": "Payment status"
       },
       {
         "screenId": "27",
@@ -1441,19 +1441,19 @@
         "screenId": "27",
         "keyword_id": 184,
         "keyword_name": "vehicleName",
-        "keyword_value": "Vehicle Name"
+        "keyword_value": "Vehicle name"
       },
       {
         "screenId": "27",
         "keyword_id": 185,
         "keyword_name": "aboutDeliveryMan",
-        "keyword_value": "About Delivery man"
+        "keyword_value": "About delivery man"
       },
       {
         "screenId": "27",
         "keyword_id": 186,
         "keyword_name": "aboutUser",
-        "keyword_value": "About User"
+        "keyword_value": "About user"
       },
       {
         "screenId": "27",
@@ -1483,7 +1483,7 @@
         "screenId": "27",
         "keyword_id": 191,
         "keyword_name": "cancelOrder",
-        "keyword_value": "Cancel Order"
+        "keyword_value": "Cancel order"
       },
       {
         "screenId": "27",
@@ -1495,7 +1495,7 @@
         "screenId": "27",
         "keyword_id": 193,
         "keyword_name": "returnOrder",
-        "keyword_value": "Return Order"
+        "keyword_value": "Return order"
       },
       {
         "screenId": "27",
@@ -1567,19 +1567,31 @@
         "screenId": "27",
         "keyword_id": 372,
         "keyword_name": "rateStore",
-        "keyword_value": "Rate Store "
+        "keyword_value": "Rate store "
       },
       {
         "screenId": "27",
         "keyword_id": 373,
         "keyword_name": "rateToStore",
-        "keyword_value": "Rate To Store :"
+        "keyword_value": "Rate to store :"
       },
       {
         "screenId": "27",
         "keyword_id": 374,
         "keyword_name": "yourRatingToStore",
-        "keyword_value": "Your Rating to Store :"
+        "keyword_value": "Your rating to store :"
+      },
+      {
+        "screenId": "27",
+        "keyword_id": 406,
+        "keyword_name": "addReview",
+        "keyword_value": "Add review"
+      },
+      {
+        "screenId": "27",
+        "keyword_id": 407,
+        "keyword_name": "yourExperience",
+        "keyword_value": "How was your Delivery experience with Us"
       }
     ]
   },
@@ -1591,13 +1603,13 @@
         "screenId": "26",
         "keyword_id": 194,
         "keyword_name": "orderHistory",
-        "keyword_value": "Order History"
+        "keyword_value": "Order history"
       },
       {
         "screenId": "26",
         "keyword_id": 195,
         "keyword_name": "yourOrder",
-        "keyword_value": "Your Order"
+        "keyword_value": "Your order"
       },
       {
         "screenId": "26",
@@ -1663,7 +1675,7 @@
         "screenId": "28",
         "keyword_id": 205,
         "keyword_name": "trackOrder",
-        "keyword_value": "Track Order"
+        "keyword_value": "Track order"
       },
       {
         "screenId": "28",
@@ -1681,7 +1693,7 @@
         "screenId": "29",
         "keyword_id": 206,
         "keyword_name": "transactionFailed",
-        "keyword_value": "Transaction Failed!! Try again."
+        "keyword_value": "Transaction failed!! Try again."
       },
       {
         "screenId": "29",
@@ -1699,13 +1711,13 @@
         "screenId": "29",
         "keyword_id": 209,
         "keyword_name": "paymentMethod",
-        "keyword_value": "Payment Methods"
+        "keyword_value": "Payment methods"
       },
       {
         "screenId": "29",
         "keyword_id": 210,
         "keyword_name": "payNow",
-        "keyword_value": "Pay Now"
+        "keyword_value": "Pay now"
       }
     ]
   },
@@ -1753,31 +1765,31 @@
         "screenId": "31",
         "keyword_id": 216,
         "keyword_name": "earningHistory",
-        "keyword_value": "Earning History"
+        "keyword_value": "Earning history"
       },
       {
         "screenId": "31",
         "keyword_id": 217,
         "keyword_name": "availableBalance",
-        "keyword_value": "Available Balance"
+        "keyword_value": "Available balance"
       },
       {
         "screenId": "31",
         "keyword_id": 218,
         "keyword_name": "manualRecieved",
-        "keyword_value": "Manual Received"
+        "keyword_value": "Manual received"
       },
       {
         "screenId": "31",
         "keyword_id": 219,
         "keyword_name": "totalWithdrawn",
-        "keyword_value": "Total Withdraw Amount"
+        "keyword_value": "Total withdraw amount"
       },
       {
         "screenId": "31",
         "keyword_id": 220,
         "keyword_name": "lastLocation",
-        "keyword_value": "Last Location"
+        "keyword_value": "Last location"
       },
       {
         "screenId": "31",
@@ -1801,13 +1813,13 @@
         "screenId": "32",
         "keyword_id": 223,
         "keyword_name": "walletHistory",
-        "keyword_value": "Wallet History"
+        "keyword_value": "Wallet history"
       },
       {
         "screenId": "32",
         "keyword_id": 224,
         "keyword_name": "addMoney",
-        "keyword_value": "Add Money"
+        "keyword_value": "Add money"
       },
       {
         "screenId": "32",
@@ -1843,13 +1855,13 @@
         "screenId": "32",
         "keyword_id": 229,
         "keyword_name": "bankNotFound",
-        "keyword_value": "opps,your Bank detail not found"
+        "keyword_value": "Opps,your bank detail not found"
       },
       {
         "screenId": "32",
         "keyword_id": 342,
         "keyword_name": "orderFee",
-        "keyword_value": "Order Fee"
+        "keyword_value": "Order fee"
       },
       {
         "screenId": "32",
@@ -1861,13 +1873,13 @@
         "screenId": "32",
         "keyword_id": 344,
         "keyword_name": "orderCancelCharge",
-        "keyword_value": "Order Cancel Charge"
+        "keyword_value": "Order cancel charge"
       },
       {
         "screenId": "32",
         "keyword_id": 345,
         "keyword_name": "orderCancelRefund",
-        "keyword_value": "Order Cancel Refund"
+        "keyword_value": "Order cancel refund"
       },
       {
         "screenId": "32",
@@ -1903,7 +1915,7 @@
         "screenId": "33",
         "keyword_id": 232,
         "keyword_name": "notifyUser",
-        "keyword_value": "Notify User "
+        "keyword_value": "Notify user "
       },
       {
         "screenId": "33",
@@ -1915,19 +1927,19 @@
         "screenId": "33",
         "keyword_id": 234,
         "keyword_name": "orderArrived",
-        "keyword_value": "Order Arrived "
+        "keyword_value": "Order arrived "
       },
       {
         "screenId": "33",
         "keyword_id": 235,
         "keyword_name": "orderActiveSuccessfully",
-        "keyword_value": "Congrats!!Order Activated Successfully. "
+        "keyword_value": "Congrats!!Order activated successfully. "
       },
       {
         "screenId": "33",
         "keyword_id": 236,
         "keyword_name": "orderDepartedSuccessfully",
-        "keyword_value": "Congrats!!Order has been Departed Successfully. "
+        "keyword_value": "Congrats!!Order has been departed successfully. "
       },
       {
         "screenId": "33",
@@ -1951,7 +1963,7 @@
         "screenId": "33",
         "keyword_id": 240,
         "keyword_name": "confirmDelivery",
-        "keyword_value": "Confirm Delivery"
+        "keyword_value": "Confirm delivery"
       },
       {
         "screenId": "33",
@@ -2023,13 +2035,13 @@
         "screenId": "34",
         "keyword_id": 242,
         "keyword_name": "adminCommission",
-        "keyword_value": "Admin Commission "
+        "keyword_value": "Admin commission "
       },
       {
         "screenId": "34",
         "keyword_id": 243,
         "keyword_name": "orderId",
-        "keyword_value": "Order Id"
+        "keyword_value": "Order id"
       },
       {
         "screenId": "34",
@@ -2065,37 +2077,37 @@
         "screenId": "35",
         "keyword_id": 244,
         "keyword_name": "orderDeliveredSuccessfully",
-        "keyword_value": "Congrats!!Order has been Delivered Successfully. "
+        "keyword_value": "Congrats!!Order has been delivered successfully. "
       },
       {
         "screenId": "35",
         "keyword_id": 245,
         "keyword_name": "orderPickupSuccessfully",
-        "keyword_value": "Congrats!!Order pickedup Successfully. "
+        "keyword_value": "Congrats!!Order pickedup successfully. "
       },
       {
         "screenId": "35",
         "keyword_id": 246,
         "keyword_name": "imagePickToCamera",
-        "keyword_value": "Image Pic to Camera "
+        "keyword_value": "Image pic to camera "
       },
       {
         "screenId": "35",
         "keyword_id": 247,
         "keyword_name": "imagePicToGallery",
-        "keyword_value": "Image Pic to Gallery "
+        "keyword_value": "Image pic to gallery "
       },
       {
         "screenId": "35",
         "keyword_id": 248,
         "keyword_name": "orderDeliver",
-        "keyword_value": "Order Deliver "
+        "keyword_value": "Order deliver "
       },
       {
         "screenId": "35",
         "keyword_id": 249,
         "keyword_name": "orderPickup",
-        "keyword_value": "Order Pickup "
+        "keyword_value": "Order pickup "
       },
       {
         "screenId": "35",
@@ -2131,7 +2143,7 @@
         "screenId": "35",
         "keyword_id": 255,
         "keyword_name": "userSignature",
-        "keyword_value": "User's Signature"
+        "keyword_value": "User's signature"
       },
       {
         "screenId": "35",
@@ -2143,13 +2155,13 @@
         "screenId": "35",
         "keyword_id": 257,
         "keyword_name": "deliveryTimeSignature",
-        "keyword_value": "Delivery time Signature"
+        "keyword_value": "Delivery time signature"
       },
       {
         "screenId": "35",
         "keyword_id": 259,
         "keyword_name": "confirmPickup",
-        "keyword_value": "Confirm Pickup"
+        "keyword_value": "Confirm pickup"
       },
       {
         "screenId": "35",
@@ -2161,13 +2173,13 @@
         "screenId": "35",
         "keyword_id": 261,
         "keyword_name": "selectDeliveryTimeMsg",
-        "keyword_value": "Please Select delivery Time"
+        "keyword_value": "Please select delivery time"
       },
       {
         "screenId": "35",
         "keyword_id": 262,
         "keyword_name": "otpVerification",
-        "keyword_value": "OTP Verification"
+        "keyword_value": "OTP verification"
       },
       {
         "screenId": "35",
@@ -2287,7 +2299,7 @@
         "screenId": "36",
         "keyword_id": 265,
         "keyword_name": "yourLocation",
-        "keyword_value": "Your Location"
+        "keyword_value": "Your location"
       },
       {
         "screenId": "36",
@@ -2299,7 +2311,7 @@
         "screenId": "36",
         "keyword_id": 267,
         "keyword_name": "trackingOrder",
-        "keyword_value": "Tracking Order"
+        "keyword_value": "Tracking order"
       }
     ]
   },
@@ -2335,13 +2347,13 @@
         "screenId": "37",
         "keyword_id": 272,
         "keyword_name": "selectDocument",
-        "keyword_value": "Select Document"
+        "keyword_value": "Select document"
       },
       {
         "screenId": "37",
         "keyword_id": 273,
         "keyword_name": "addDocument",
-        "keyword_value": "Add Document"
+        "keyword_value": "Add document"
       }
     ]
   },
@@ -2365,13 +2377,13 @@
         "screenId": "38",
         "keyword_id": 277,
         "keyword_name": "withdrawHistory",
-        "keyword_value": "Withdraw History"
+        "keyword_value": "Withdraw history"
       },
       {
         "screenId": "38",
         "keyword_id": 278,
         "keyword_name": "withdrawMoney",
-        "keyword_value": "Withdraw Money"
+        "keyword_value": "Withdraw money"
       }
     ]
   },
@@ -2389,31 +2401,31 @@
         "screenId": "39",
         "keyword_id": 293,
         "keyword_name": "customerName",
-        "keyword_value": "Customer Name:"
+        "keyword_value": "Customer name:"
       },
       {
         "screenId": "39",
         "keyword_id": 294,
         "keyword_name": "deliveredTo",
-        "keyword_value": "Delivered To:"
+        "keyword_value": "Delivered to:"
       },
       {
         "screenId": "39",
         "keyword_id": 295,
         "keyword_name": "invoiceNo",
-        "keyword_value": "Invoice No:"
+        "keyword_value": "Invoice no:"
       },
       {
         "screenId": "39",
         "keyword_id": 296,
         "keyword_name": "invoiceDate",
-        "keyword_value": "Invoice Date:"
+        "keyword_value": "Invoice date:"
       },
       {
         "screenId": "39",
         "keyword_id": 297,
         "keyword_name": "orderedDate",
-        "keyword_value": "Ordered Date:"
+        "keyword_value": "Ordered date:"
       },
       {
         "screenId": "39",
@@ -2437,7 +2449,7 @@
         "screenId": "39",
         "keyword_id": 301,
         "keyword_name": "subTotal",
-        "keyword_value": "Sub Total"
+        "keyword_value": "Sub total"
       },
       {
         "screenId": "39",
@@ -2455,7 +2467,7 @@
         "screenId": "40",
         "keyword_id": 357,
         "keyword_name": "searchStores",
-        "keyword_value": "Search Stores"
+        "keyword_value": "Search stores"
       },
       {
         "screenId": "40",
@@ -2485,7 +2497,7 @@
         "screenId": "40",
         "keyword_id": 371,
         "keyword_name": "favouriteStore",
-        "keyword_value": "Favourite Store"
+        "keyword_value": "Favourite store"
       },
       {
         "screenId": "40",
@@ -2539,7 +2551,7 @@
         "screenId": "41",
         "keyword_id": 365,
         "keyword_name": "categoryFilter",
-        "keyword_value": "Category Filter"
+        "keyword_value": "Category filter"
       },
       {
         "screenId": "41",
@@ -2587,7 +2599,7 @@
         "screenId": "42",
         "keyword_id": 384,
         "keyword_name": "documentVerification",
-        "keyword_value": "Document Verification"
+        "keyword_value": "Document verification"
       },
       {
         "screenId": "42",
@@ -2647,43 +2659,43 @@
         "screenId": "43",
         "keyword_id": 397,
         "keyword_name": "todayOrder",
-        "keyword_value": "Today Order"
+        "keyword_value": "Today order"
       },
       {
         "screenId": "43",
         "keyword_id": 398,
         "keyword_name": "remainingOrder",
-        "keyword_value": "Remaining Order"
+        "keyword_value": "Remaining order"
       },
       {
         "screenId": "43",
         "keyword_id": 399,
         "keyword_name": "completedOrder",
-        "keyword_value": "Completed Order"
+        "keyword_value": "Completed order"
       },
       {
         "screenId": "43",
         "keyword_id": 400,
         "keyword_name": "inProgressOrder",
-        "keyword_value": "InProgress Order"
+        "keyword_value": "InProgress order"
       },
       {
         "screenId": "43",
         "keyword_id": 401,
         "keyword_name": "walletBalance",
-        "keyword_value": "Wallet Balance"
+        "keyword_value": "Wallet balance"
       },
       {
         "screenId": "43",
         "keyword_id": 402,
         "keyword_name": "pendingWithdReq",
-        "keyword_value": "Pending Withdrawal Request"
+        "keyword_value": "Pending withdrawal request"
       },
       {
         "screenId": "43",
         "keyword_id": 403,
         "keyword_name": "completedWithReq",
-        "keyword_value": "Completed Withdrawal Request"
+        "keyword_value": "Completed withdrawal request"
       }
     ]
   }

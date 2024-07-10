@@ -205,7 +205,7 @@ class ProductListScreenState extends State<ProductListScreen> {
                                   Text(widget.store.storeName.validate(),
                                       style: boldTextStyle(size: 16)),
                                   4.height,
-                                  Text('$totalItem products', // todo
+                                  Text('$totalItem ${language.products}',
                                   // Text('$totalItem ${language.products}',
                                       style: secondaryTextStyle()),
                                 ],
@@ -283,7 +283,7 @@ class ProductListScreenState extends State<ProductListScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("itemsAdded", style: boldTextStyle()), // todo
+                                Text(language.itemsAdded, style: boldTextStyle()),
                                 // Text(language.itemsAdded, style: boldTextStyle()),
                                 InkWell(
                                     child: Icon(Icons.close),
@@ -321,8 +321,7 @@ class ProductListScreenState extends State<ProductListScreen> {
                   children: [
                     Icon(Icons.local_grocery_store_outlined),
                     8.width,
-                    Text('$totalCount ${totalCount > 1 ? "items" : "item"} added', style: primaryTextStyle()), // todo
-                    // Text('$totalCount ${totalCount > 1 ? language.items : language.item} ${language.added}', style: primaryTextStyle()),
+                    Text('$totalCount ${totalCount > 1 ? language.items : language.item} ${language.added}', style: primaryTextStyle()),
                     Icon(showBottom ? Icons.arrow_drop_down : Icons.arrow_drop_up),
                     Spacer(),
                     AppButton(

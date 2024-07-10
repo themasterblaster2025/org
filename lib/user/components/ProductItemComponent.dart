@@ -205,8 +205,7 @@ class ProductItemComponentState extends State<ProductItemComponent> {
                             print(error);
                           });
                         },
-                        child: Text(
-                          "Go to Store", // todo
+                        child: Text( language.goToStore,
                           style: boldTextStyle(size: 14, color: colorPrimary),
                         ),
                       )

@@ -55,8 +55,9 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   TextEditingController deliveryDateController = TextEditingController();
   TextEditingController reasonController = TextEditingController();
 
-  String? pickUpTime ;
-  String? deliveryTime ;
+  String? pickUpTime;
+
+  String? deliveryTime;
 
   XFile? imageProfile;
   int val = 0;
@@ -77,16 +78,23 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   Future<void> init() async {
     mIsUpdate = widget.orderData != null;
     if (mIsUpdate) {
-      pickUpTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.orderData!.pickupDatetime.validate().isEmpty ? DateTime.now().toString() : widget.orderData!.pickupDatetime.validate()));
-      picUpController.text =
-          DateFormat('yyyy-MM-dd').format(DateTime.parse(widget.orderData!.pickupDatetime.validate().isEmpty ? DateTime.now().toString() : widget.orderData!.pickupDatetime.validate()));
+      pickUpTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(
+          widget.orderData!.pickupDatetime.validate().isEmpty
+              ? DateTime.now().toString()
+              : widget.orderData!.pickupDatetime.validate()));
+      picUpController.text = DateFormat('yyyy-MM-dd').format(DateTime.parse(
+          widget.orderData!.pickupDatetime.validate().isEmpty
+              ? DateTime.now().toString()
+              : widget.orderData!.pickupDatetime.validate()));
       reasonController.text = widget.orderData!.reason.validate();
       reason = widget.orderData!.reason.validate();
       log(picUpController);
     }
 
-    if (widget.orderData!.status == ORDER_DEPARTED) deliveryDateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    if (widget.orderData!.status == ORDER_DEPARTED) deliveryTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+    if (widget.orderData!.status == ORDER_DEPARTED)
+      deliveryDateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    if (widget.orderData!.status == ORDER_DEPARTED)
+      deliveryTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
   }
 
   Future<File> saveSignature(ScreenshotController screenshotController) async {
@@ -110,10 +118,13 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
       picUpSignature: imageSignature,
       reason: reasonController.text,
       deliverySignature: deliverySignature,
-      orderStatus: widget.orderData!.status == ORDER_DEPARTED ? ORDER_DELIVERED : ORDER_PICKED_UP,
+      orderStatus:
+          widget.orderData!.status == ORDER_DEPARTED ? ORDER_DELIVERED : ORDER_PICKED_UP,
     ).then((value) {
       appStore.setLoading(false);
-      toast(widget.orderData!.status == ORDER_DEPARTED ? language.orderDeliveredSuccessfully : language.orderPickupSuccessfully);
+      toast(widget.orderData!.status == ORDER_DEPARTED
+          ? language.orderDeliveredSuccessfully
+          : language.orderPickupSuccessfully);
       finish(context, true);
     }).catchError((error) {
       appStore.setLoading(false);
@@ -160,9 +171,11 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
 
   Future<void> getImage() async {
     if (val == 1) {
-      imageProfile = await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 100);
+      imageProfile =
+          await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 100);
     } else {
-      imageProfile = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 100);
+      imageProfile =
+          await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 100);
     }
     setState(() {});
   }
@@ -176,7 +189,9 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
       appBar: commonAppBarWidget(
-        widget.orderData!.status == ORDER_DEPARTED ? language.orderDeliver : language.orderPickup,
+        widget.orderData!.status == ORDER_DEPARTED
+            ? language.orderDeliver
+            : language.orderPickup,
         backWidget: IconButton(
           onPressed: () {
             finish(context, false);
@@ -218,15 +233,18 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                                 Text(language.info, style: boldTextStyle()),
                                 4.height,
                                 widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY
-                                    ? Text(language.paymentCollectFromDelivery, style: secondaryTextStyle())
-                                    : Text(language.paymentCollectFromPickup, style: secondaryTextStyle()),
+                                    ? Text(language.paymentCollectFromDelivery,
+                                        style: secondaryTextStyle())
+                                    : Text(language.paymentCollectFromPickup,
+                                        style: secondaryTextStyle()),
                               ],
                             ).paddingAll(8),
                           ],
                         ),
                       ),
                     16.height,
-                    Text('${language.order} ${language.pickupDatetime}', style: boldTextStyle()),
+                    Text('${language.order} ${language.pickupDatetime}',
+                        style: boldTextStyle()),
                     8.height,
                     AppTextField(
                       readOnly: true,
@@ -252,12 +270,16 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                     8.height,
                     Text(language.userSignature, style: boldTextStyle()),
                     8.height,
-                    widget.orderData!.pickupConfirmByClient == 1 || widget.orderData!.status == ORDER_DEPARTED
-                        ? commonCachedNetworkImage(widget.orderData!.pickupTimeSignature, fit: BoxFit.cover, height: 150, width: context.width())
+                    widget.orderData!.pickupConfirmByClient == 1 ||
+                            widget.orderData!.status == ORDER_DEPARTED
+                        ? commonCachedNetworkImage(widget.orderData!.pickupTimeSignature,
+                            fit: BoxFit.cover, height: 150, width: context.width())
                         : Container(
                             height: 150,
                             width: context.width(),
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(defaultRadius), color: Colors.grey.withOpacity(0.15)),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(defaultRadius),
+                                color: Colors.grey.withOpacity(0.15)),
                             child: Screenshot(
                               controller: pickupScreenshotController,
                               child: SfSignaturePad(
@@ -276,7 +298,10 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                           children: [
                             8.width,
                             TextButton(
-                              child: Text(language.clear, style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
+                              child: Text(language.clear,
+                                  style: boldTextStyle(
+                                      color: colorPrimary,
+                                      decoration: TextDecoration.underline)),
                               onPressed: () async {
                                 signaturePicUPPadKey.currentState!.clear();
                               },
@@ -284,13 +309,18 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                           ],
                         ),
                       ),
-                    Text(language.deliveryTimeSignature, style: boldTextStyle()).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
-                    8.height.visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
+                    Text(language.deliveryTimeSignature, style: boldTextStyle()).visible(
+                        widget.orderData!.status == ORDER_DEPARTED ||
+                            widget.orderData!.status == ORDER_DELIVERED),
+                    8.height.visible(widget.orderData!.status == ORDER_DEPARTED ||
+                        widget.orderData!.status == ORDER_DELIVERED),
                     if (widget.orderData!.status == ORDER_DEPARTED)
                       Container(
                         height: 150,
                         width: context.width(),
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(defaultRadius), color: Colors.grey.withOpacity(0.15)),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(defaultRadius),
+                            color: Colors.grey.withOpacity(0.15)),
                         child: Screenshot(
                           controller: deliveryScreenshotController,
                           child: SfSignaturePad(
@@ -300,7 +330,8 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                             strokeColor: colorPrimary,
                           ),
                         ),
-                      ).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
+                      ).visible(widget.orderData!.status == ORDER_DEPARTED ||
+                          widget.orderData!.status == ORDER_DELIVERED),
                     if (widget.orderData!.status == ORDER_DEPARTED)
                       Align(
                         alignment: Alignment.bottomRight,
@@ -309,22 +340,29 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                           children: [
                             8.width,
                             TextButton(
-                              child: Text(language.clear, style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
+                              child: Text(language.clear,
+                                  style: boldTextStyle(
+                                      color: colorPrimary,
+                                      decoration: TextDecoration.underline)),
                               onPressed: () async {
                                 signatureDeliveryPadKey.currentState!.clear();
                               },
                             ),
                           ],
                         ),
-                      ).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
+                      ).visible(widget.orderData!.status == ORDER_DEPARTED ||
+                          widget.orderData!.status == ORDER_DELIVERED),
                     CheckboxListTile(
                       dense: true,
                       contentPadding: EdgeInsets.zero,
                       value: mIsCheck,
                       activeColor: colorPrimary,
                       checkColor: Colors.white,
-                      title: Text(widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY ? language.paymentCollectFrom : "Is the payment collected?" // todo
-                          "", style: primaryTextStyle()),
+                      title: Text(
+                          widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY
+                              ? language.paymentCollectFrom
+                              : language.isPaymentCollected,
+                          style: primaryTextStyle()),
                       onChanged: (val) {
                         mIsCheck = val!;
                         setState(() {});
@@ -335,25 +373,36 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                       children: [
                         AppButton(
                           width: context.width(),
-                          text: widget.orderData!.status == ORDER_DEPARTED ? language.confirmDelivery : language.confirmPickup,
+                          text: widget.orderData!.status == ORDER_DEPARTED
+                              ? language.confirmDelivery
+                              : language.confirmPickup,
                           textStyle: primaryTextStyle(color: white),
                           color: colorPrimary,
                           onTap: () async {
-                            if (!mIsCheck && widget.orderData!.paymentId == null && widget.isShowPayment) {
+                            if (!mIsCheck &&
+                                widget.orderData!.paymentId == null &&
+                                widget.isShowPayment) {
                               return toast(language.pleaseConfirmPayment);
                             } else {
                               appStore.isOtpVerifyOnPickupDelivery
                                   ? sendOtp(
                                       context,
                                       phoneNumber: widget.orderData!.status == ORDER_DEPARTED
-                                          ? widget.orderData!.deliveryPoint!.contactNumber.validate()
-                                          : widget.orderData!.pickupPoint!.contactNumber.validate(),
+                                          ? widget.orderData!.deliveryPoint!.contactNumber
+                                              .validate()
+                                          : widget.orderData!.pickupPoint!.contactNumber
+                                              .validate(),
                                       onUpdate: (verificationId) async {
                                         await showInDialog(context,
                                             builder: (context) => OTPDialog(
-                                                phoneNumber: widget.orderData!.status == ORDER_DEPARTED
-                                                    ? widget.orderData!.deliveryPoint!.contactNumber.validate()
-                                                    : widget.orderData!.pickupPoint!.contactNumber.validate(),
+                                                phoneNumber:
+                                                    widget.orderData!.status == ORDER_DEPARTED
+                                                        ? widget.orderData!.deliveryPoint!
+                                                            .contactNumber
+                                                            .validate()
+                                                        : widget.orderData!.pickupPoint!
+                                                            .contactNumber
+                                                            .validate(),
                                                 onUpdate: () {
                                                   saveOrderData();
                                                 },
@@ -365,8 +414,11 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                             }
                           },
                         ).expand(),
-                        if (widget.orderData!.status == ORDER_ACCEPTED && widget.orderData!.status == ORDER_ARRIVED) 16.width,
-                        if (widget.orderData!.status == ORDER_ACCEPTED && widget.orderData!.status == ORDER_ARRIVED)
+                        if (widget.orderData!.status == ORDER_ACCEPTED &&
+                            widget.orderData!.status == ORDER_ARRIVED)
+                          16.width,
+                        if (widget.orderData!.status == ORDER_ACCEPTED &&
+                            widget.orderData!.status == ORDER_ARRIVED)
                           AppButton(
                             width: context.width(),
                             text: language.cancelOrder,
@@ -410,7 +462,8 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
       }
     }
 
-    if (widget.orderData!.status == ORDER_ACCEPTED || widget.orderData!.status == ORDER_ARRIVED) {
+    if (widget.orderData!.status == ORDER_ACCEPTED ||
+        widget.orderData!.status == ORDER_ARRIVED) {
       if (imageSignature == null) {
         imageSignature = await saveSignature(pickupScreenshotController);
         log(imageSignature!.path);
@@ -423,11 +476,16 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
       }
     }
 
-    if (widget.orderData!.paymentId == null && widget.orderData!.paymentCollectFrom == PAYMENT_ON_PICKUP && (widget.orderData!.status == ORDER_ACCEPTED || widget.orderData!.status == ORDER_ARRIVED)) {
+    if (widget.orderData!.paymentId == null &&
+        widget.orderData!.paymentCollectFrom == PAYMENT_ON_PICKUP &&
+        (widget.orderData!.status == ORDER_ACCEPTED ||
+            widget.orderData!.status == ORDER_ARRIVED)) {
       appStore.setLoading(true);
       await paymentConfirmDialog(widget.orderData!);
       appStore.setLoading(false);
-    } else if (widget.orderData!.paymentId == null && widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY && widget.orderData!.status == ORDER_DEPARTED) {
+    } else if (widget.orderData!.paymentId == null &&
+        widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY &&
+        widget.orderData!.status == ORDER_DEPARTED) {
       appStore.setLoading(true);
       await paymentConfirmDialog(widget.orderData!);
       appStore.setLoading(false);
@@ -448,7 +506,11 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
 
   Future<void> paymentConfirmDialog(OrderData orderData) {
     return showConfirmDialogCustom(context,
-        primaryColor: colorPrimary, dialogType: DialogType.CONFIRMATION, title: orderTitle(orderData.status!), positiveText: language.yes, negativeText: language.cancel, onAccept: (c) async {
+        primaryColor: colorPrimary,
+        dialogType: DialogType.CONFIRMATION,
+        title: orderTitle(orderData.status!),
+        positiveText: language.yes,
+        negativeText: language.cancel, onAccept: (c) async {
       appStore.setLoading(true);
       Map req = {
         'order_id': orderData.id,

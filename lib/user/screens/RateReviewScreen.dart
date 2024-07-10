@@ -40,7 +40,6 @@ class _RateReviewScreenState extends State<RateReviewScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     init();
   }
@@ -103,7 +102,7 @@ class _RateReviewScreenState extends State<RateReviewScreen> {
               ),
               10.height,
               Text(
-                'How was your Delivery experience with Us', // todo
+                language.yourExperience,
                 style: boldTextStyle(size: 18),
               ),
               18.height,
@@ -127,15 +126,13 @@ class _RateReviewScreenState extends State<RateReviewScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Add Review', // todo
-                      style: boldTextStyle(size: 16)),
+                  Text(language.addReview, style: boldTextStyle(size: 16)),
                   14.height,
                   AppTextField(
                       controller: reviewController,
                       textInputAction: TextInputAction.next,
                       textFieldType: TextFieldType.MULTILINE,
-                      decoration: commonInputDecoration(hintText: "Excellent..."), // todo
-
+                      decoration: commonInputDecoration(hintText: "Excellent..."),
                       validator: (value) {
                         if (value!.isEmpty) return language.fieldRequiredMsg;
                       },

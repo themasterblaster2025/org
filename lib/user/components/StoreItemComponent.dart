@@ -107,52 +107,25 @@ class StoreItemComponentState extends State<StoreItemComponent> {
       hoverColor: Colors.white,
       onTap: () {
         if (getIntAsync(CITY_ID) == widget.store.cityId.validate()) {
-          if (currentTimeSecond > startTimeSecond && currentTimeSecond < endTimeSecond && widget.store.workingHours!.isOpen.validate()) { // todo
-          ProductListScreen(store: widget.store).launch(context);
+          if (currentTimeSecond > startTimeSecond &&
+              currentTimeSecond < endTimeSecond &&
+              widget.store.workingHours!.isOpen.validate()) {
+            ProductListScreen(store: widget.store).launch(context);
           }
         } else {
-          toast("rightNowStoreNotAvailable"); // todo
-          // toast(language.rightNowStoreNotAvailable);
+          toast(language.rightNowStoreNotAvailable);
         }
       },
-      child: Container(
-        decoration: appStore.isDarkMode
-            ? boxDecorationWithRoundedCorners(
-                borderRadius: BorderRadius.circular(defaultRadius),
-              )
-            : boxDecorationRoundedWithShadow(defaultRadius.toInt(),
-                shadowColor: Colors.grey.withOpacity(0.19)),
-        child: Column(
-          children: [
-            if (currentTimeSecond < startTimeSecond ||
-                currentTimeSecond > endTimeSecond ||
-                !widget.store.workingHours!.isOpen.validate()) ...[
-              Container(
-                margin: EdgeInsets.all(4),
-                padding: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.timelapse, color: Colors.red, size: 14),
-                    4.width,
-                    Text(
-                        widget.store.workingHours!.isOpen.validate()
-                            ? (currentTimeSecond < startTimeSecond
-                                ? 'Open in ${getTime(startTimeSecond - currentTimeSecond)} min' // todo
-                                : "closeForToday")
-                            : "closeForToday",
-
-                        // todo
-                        style: boldTextStyle(color: Colors.red, size: 14)),
-                  ],
-                ),
-              ),
-              Divider(
-                height: 10,
-                color: dividerColor,
-              ),
-            ],
-            Row(
+      child: Stack(
+        children: [
+          Container(
+            decoration: appStore.isDarkMode
+                ? boxDecorationWithRoundedCorners(
+                    borderRadius: BorderRadius.circular(defaultRadius),
+                  )
+                : boxDecorationRoundedWithShadow(defaultRadius.toInt(),
+                    shadowColor: Colors.grey.withOpacity(0.19)),
+            child: Row(
               children: [
                 Column(
                   children: [
@@ -201,13 +174,56 @@ class StoreItemComponentState extends State<StoreItemComponent> {
                     commonWidget(Icons.phone, widget.store.contactNumber.validate()),
                     8.height,
                     commonWidget(Icons.location_on_rounded, widget.store.address.validate()),
+                    if (currentTimeSecond < startTimeSecond) ...[
+                      8.height,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.timelapse,
+                            size: 15,
+                            color: Colors.green.shade600,
+                          ),
+                          8.width,
+                          Text("${language.openIn} ${getTime(startTimeSecond - currentTimeSecond)} ${language.min}",
+                              style: boldTextStyle(
+                                size: 13,
+                                color: Colors.green.shade600,
+                              )).expand(),
+                        ],
+                      )
+                    ],
                   ],
                 ).expand(),
               ],
             ).paddingAll(10),
-          ],
-        ),
-      ).paddingOnly(left: 8, right: 8, top: 6),
+          ).paddingOnly(left: 8, right: 8, top: 18),
+          if (currentTimeSecond > endTimeSecond ||
+              !widget.store.workingHours!.isOpen.validate())
+            Positioned(
+              top: 8,
+              right: 20,
+              child: Container(
+                decoration: boxDecorationWithShadow(
+                  borderRadius: BorderRadius.circular(30),
+                  spreadRadius: 1,
+                  blurRadius: 1,
+                  backgroundColor: Colors.red,
+                ),
+                padding: EdgeInsets.all(3),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.timelapse, color: Colors.white, size: 14),
+                    4.width,
+                    Text(language.closed,
+                        style: secondaryTextStyle(color: Colors.white, size: 14)),
+                  ],
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 

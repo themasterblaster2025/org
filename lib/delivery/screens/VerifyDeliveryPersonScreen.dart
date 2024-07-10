@@ -214,7 +214,6 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
               padding: EdgeInsets.all(16),
               child: Column(
                 children: [
-                  //todo message
                   Row(
                     children: [
                       if (remainingDocuments.isNotEmpty)

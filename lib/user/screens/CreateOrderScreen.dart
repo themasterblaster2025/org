@@ -1405,7 +1405,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 Column(
                   children: [
                     16.height,
-                    Text(language.orderItems, style: boldTextStyle()), // todo
+                    Text(language.orderItems, style: boldTextStyle()),
                     // Text(language.orderItems, style: boldTextStyle()),
                     8.height,
                     ListView.builder(
@@ -1734,8 +1734,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   showConfirmDialogCustom(
                     context,
                     title: language.createOrderConfirmationMsg,
-                    note: "Note: Please avoid sending prohibited items.",
-                    // todo
+                    note: language.pleaseAvoidSendingProhibitedItems,
                     positiveText: language.yes,
                     primaryColor: colorPrimary,
                     negativeText: language.no,

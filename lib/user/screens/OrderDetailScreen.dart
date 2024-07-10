@@ -568,7 +568,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          Text("Rate Store", //  todo
+                                          Text(language.rateStore,
                                               style: primaryTextStyle(color: colorPrimary)),
                                           Icon(Icons.arrow_right, color: colorPrimary),
                                         ],
@@ -588,8 +588,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                         children: [
                                           Text(
                                             getStringAsync(USER_TYPE) == CLIENT
-                                                ? "Your Rating to Store :"
-                                                : "Rate To Store :", //  todo
+                                                ? language.yourRatingToStore
+                                                : language.rateToStore, 
                                             style: boldTextStyle(),
                                           ),
                                           Spacer(),
@@ -880,7 +880,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text("productAmount", // todo
+                                            Text(language.productAmount,
                                                 style: primaryTextStyle()),
                                             16.width,
                                             Text('${printAmount(productAmount)}',

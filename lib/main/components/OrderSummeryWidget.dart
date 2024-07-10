@@ -99,7 +99,7 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("productAmount", style: secondaryTextStyle()), // todo
+              Text(language.productAmount, style: secondaryTextStyle()),
               // Text(language.productAmount, style: primaryTextStyle()),
               16.width,
               Text('${printAmount(widget.productAmount.validate())}', style: boldTextStyle(size: 14)),

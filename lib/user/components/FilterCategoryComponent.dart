@@ -93,7 +93,7 @@ class FilterCategoryComponentState extends State<FilterCategoryComponent> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("categoryFilter", style: boldTextStyle(size: 18)), // todo
+                    Text(language.categoryFilter, style: boldTextStyle(size: 18)),
                     // Text(language.categoryFilter, style: boldTextStyle(size: 18)),
                     Icon(Icons.close).onTap(() {
                       finish(context);
@@ -176,7 +176,7 @@ class FilterCategoryComponentState extends State<FilterCategoryComponent> {
                             elevation: 0,
                             backgroundColor: colorPrimary,
                           ),
-                          child: Text("apply", style: boldTextStyle(color: Colors.white)),// todo
+                          child: Text(language.apply, style: boldTextStyle(color: Colors.white)),
                           // child: Text(language.apply, style: boldTextStyle(color: Colors.white)),
                           onPressed: () {
                             Navigator.pop(context);

@@ -149,7 +149,7 @@ class AccountFragmentState extends State<AccountFragment> {
                   MyAddressListScreen().launch(context);
                 },
               ),
-              accountSettingItemWidget(ic_bank_detail, "Favourite Stores", () { // todo
+              accountSettingItemWidget(ic_bank_detail, language.favouriteStore, () {
                 FavouriteStoreScreen().launch(context);
               }, isLast: true),
               mTitle(language.account),

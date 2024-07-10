@@ -48,14 +48,14 @@ class _DHomeFragmentState extends State<DHomeFragment> {
   ScrollController scrollController = ScrollController();
   UserBankAccount? userBankAccount;
   List items = [
-    "Today Order",
-    "Remaining Order",
-    "Completed Order",
-    "InProgress Order",
+    language.todayOrder,
+    language.remainingOrder,
+    language.completedOrder,
+    language.inProgressOrder,
     language.commission,
-    "Wallet Balance",
-    "Pending Withdrawal Request",
-    "Completed Withdrawal Request",
+    language.walletBalance,
+    language.pendingWithdReq,
+    language.completedWithReq,
   ];
 
   String getCount(int index) {
@@ -222,8 +222,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                   decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary),
                   child: Row(
                     children: [
-                      Text("View all orders", style: boldTextStyle(color: Colors.white)),
-                      // todo
+                      Text(language.viewAllOrders, style: boldTextStyle(color: Colors.white)),
                       Spacer(),
                       Icon(Icons.navigate_next_outlined, color: Colors.white, size: 25),
                     ],
@@ -235,7 +234,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                 Row(
                   children: [
                     Text(
-                      "Filter below count", // todo
+                      language.filterBelowCount,
                       style: boldTextStyle(size: 16, color: colorPrimary),
                     ),
                     Spacer(),

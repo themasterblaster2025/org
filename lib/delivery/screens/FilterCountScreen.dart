@@ -169,7 +169,7 @@ class _FilterCountScreenState extends State<FilterCountScreen> {
                   } else {
                     if (pickFromTimeController.text.isEmpty ||
                         pickToTimeController.text.isEmpty) {
-                      toast("Must select date"); // todo
+                      toast(language.mustSelectDate);
                     }
                     else{
                       finish(context, [startDate, endDate]);
