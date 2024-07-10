@@ -19,6 +19,7 @@ class OrderSummeryWidget extends StatefulWidget {
 
   final List<ExtraChargeRequestModel> extraChargesList;
   final num? productAmount;
+  final num? vehiclePrice;
   final num totalDistance;
   final num totalWeight;
   final num distanceCharge;
@@ -30,6 +31,7 @@ class OrderSummeryWidget extends StatefulWidget {
 
   OrderSummeryWidget({
     this.productAmount,
+    this.vehiclePrice,
     required this.extraChargesList,
     required this.totalDistance,
     required this.totalWeight,
@@ -103,6 +105,14 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
               Text('${printAmount(widget.productAmount.validate())}', style: boldTextStyle(size: 14)),
             ],
           ).paddingBottom(8).visible(widget.productAmount.validate() != 0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("${language.vehicle} ${language.price}", style: secondaryTextStyle()),
+              16.width,
+              Text('${printAmount(widget.vehiclePrice.validate())}', style: boldTextStyle(size: 14)),
+            ],
+          ).paddingBottom(8).visible(widget.vehiclePrice.validate() != 0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

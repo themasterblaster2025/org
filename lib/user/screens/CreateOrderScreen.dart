@@ -13,6 +13,7 @@ import 'package:mighty_delivery/extensions/extension_util/bool_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/list_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/num_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 
@@ -345,9 +346,16 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         });
       }
 
+      /// vehicle charge
+      if (selectedVehicle != null && appStore.isVehicleOrder != 0) {
+        VehicleData vehicle = vehicleList.firstWhere((element) => element.id == selectedVehicle);
+        totalAmount += vehicle.price.validate();
+      }
+
       /// All Charges
-      totalAmount =
-          (totalAmount + totalExtraCharge + productAmount).toStringAsFixed(digitAfterDecimal).toDouble();
+      totalAmount = (totalAmount + totalExtraCharge + productAmount)
+          .toStringAsFixed(digitAfterDecimal)
+          .toDouble();
     });
   }
 
@@ -420,7 +428,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     // log("req----" + jsonDecode(req.toString()));
     final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
     pattern.allMatches(req.toString()).forEach((match) => print(match.group(0)));
-    orderItemsList.forEach((element) {print("==>${element.toJson().toString()}");});
+    orderItemsList.forEach((element) {
+      print("==>${element.toJson().toString()}");
+    });
     await createOrder(req).then((value) async {
       appStore.setLoading(false);
       toast(value.message);
@@ -1050,9 +1060,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           builder: (context) {
                             return PickAddressBottomSheet(
                               onPick: (address) {
-                                pickAddressCont.text = address.placeAddress ?? "";
+                                pickAddressCont.text = address.address ?? "";
                                 pickLat = address.latitude.toString();
                                 pickLong = address.longitude.toString();
+                                pickPhoneCont.text = address.contactNumber.validate().substring(4);
                                 setState(() {});
                               },
                             );
@@ -1234,9 +1245,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         builder: (context) {
                           return PickAddressBottomSheet(
                             onPick: (address) {
-                              deliverAddressCont.text = address.placeAddress ?? "";
+                              deliverAddressCont.text = address.address ?? "";
                               deliverLat = address.latitude.toString();
                               deliverLong = address.longitude.toString();
+                              deliverPhoneCont.text = address.contactNumber.validate().substring(4);
                               setState(() {});
                             },
                             isPickup: false,
@@ -1411,7 +1423,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               ],
             ),
           ),
-
           16.height,
           addressComponent(
               title: language.pickupLocation,
@@ -1434,7 +1445,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   : '$deliverCountryCode ${deliverPhoneCont.text.trim()}'),
           16.height,
           OrderSummeryWidget(
-            productAmount: productAmount,
+              productAmount: productAmount,
+              vehiclePrice: (selectedVehicle != null && appStore.isVehicleOrder != 0) ? vehicleList.firstWhere((element) => element.id == selectedVehicle).price : 0,
               extraChargesList: extraChargeList,
               totalDistance: totalDistance,
               totalWeight: weightController.text.toDouble(),
@@ -1722,7 +1734,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   showConfirmDialogCustom(
                     context,
                     title: language.createOrderConfirmationMsg,
-                    note: "Note: Please avoid sending prohibited items.", // todo
+                    note: "Note: Please avoid sending prohibited items.",
+                    // todo
                     positiveText: language.yes,
                     primaryColor: colorPrimary,
                     negativeText: language.no,

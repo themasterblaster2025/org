@@ -36,6 +36,7 @@ class VehicleData {
   String? size;
   String? capacity;
   List<String>? cityIds;
+  num? price;
   Map<String, dynamic>? cityText;
   int? status;
   String? description;
@@ -51,6 +52,7 @@ class VehicleData {
     this.size,
     this.capacity,
     this.cityIds,
+    this.price,
     this.cityText,
     this.status,
     this.description,
@@ -68,6 +70,7 @@ class VehicleData {
     capacity = json['capacity'];
     cityIds = json['city_ids'] != null ? new List<String>.from(json['city_ids']) : null;
     cityText = json['city_text'];
+    price = json['price'];
     status = json['status'];
     description = json['description'];
     vehicleImage = json['vehicle_image'];
@@ -84,6 +87,7 @@ class VehicleData {
     data['size'] = this.size;
     data['capacity'] = this.capacity;
     data['city_ids'] = this.cityIds;
+    data['price'] = this.price;
     data['city_text'] = this.cityText;
     data['status'] = this.status;
     data['description'] = this.description;

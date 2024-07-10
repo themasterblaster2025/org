@@ -583,43 +583,43 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                       },
                                     ).visible(
                                         getStringAsync(USER_TYPE) == CLIENT && rating == null),
-                                    if(rating != null)
-                                    Row(
-                                      children: [
-                                        Text(
-                                          getStringAsync(USER_TYPE) == CLIENT
-                                              ? "Your Rating to Store :"
-                                              : "Rate To Store :", //  todo
-                                          style: boldTextStyle(),
-                                        ),
-                                        Spacer(),
-                                        RatingBarIndicator(
-                                          rating: rating!.rating.validate().toDouble(),
-                                          itemBuilder: (context, index) => Icon(
-                                            Icons.star,
-                                            color: Colors.orange,
+                                    if (rating != null)
+                                      Row(
+                                        children: [
+                                          Text(
+                                            getStringAsync(USER_TYPE) == CLIENT
+                                                ? "Your Rating to Store :"
+                                                : "Rate To Store :", //  todo
+                                            style: boldTextStyle(),
                                           ),
-                                          itemCount: 5,
-                                          itemSize: 20.0,
-                                          direction: Axis.horizontal,
-                                        ).onTap(() {
-                                          if (getStringAsync(USER_TYPE) == CLIENT) {
-                                            RateReviewScreen(
-                                              storId: orderItems!
-                                                  .first.productData!.first.storeDetailId
-                                                  .validate(),
-                                              orderId: (orderData?.id).validate(),
-                                              ratingId: rating!.id.validate(),
-                                            ).launch(context).then((value) => init());
-                                          }
-                                        }),
-                                        8.width,
-                                        Text("(${rating!.rating.validate()})",
-                                            style: boldTextStyle(
-                                              size: 14,
-                                            )),
-                                      ],
-                                    ),
+                                          Spacer(),
+                                          RatingBarIndicator(
+                                            rating: rating!.rating.validate().toDouble(),
+                                            itemBuilder: (context, index) => Icon(
+                                              Icons.star,
+                                              color: Colors.orange,
+                                            ),
+                                            itemCount: 5,
+                                            itemSize: 20.0,
+                                            direction: Axis.horizontal,
+                                          ).onTap(() {
+                                            if (getStringAsync(USER_TYPE) == CLIENT) {
+                                              RateReviewScreen(
+                                                storId: orderItems!
+                                                    .first.productData!.first.storeDetailId
+                                                    .validate(),
+                                                orderId: (orderData?.id).validate(),
+                                                ratingId: rating!.id.validate(),
+                                              ).launch(context).then((value) => init());
+                                            }
+                                          }),
+                                          8.width,
+                                          Text("(${rating!.rating.validate()})",
+                                              style: boldTextStyle(
+                                                size: 14,
+                                              )),
+                                        ],
+                                      ),
                                   ],
                                 ],
                               ),
@@ -860,6 +860,9 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                             (orderData!.extraCharges.runtimeType == List<dynamic>)
                                 ? OrderSummeryWidget(
                                     productAmount: productAmount,
+                                    vehiclePrice: orderData!.vehicleData != null
+                                        ? orderData!.vehicleData!.price.validate()
+                                        : 0,
                                     extraChargesList: list,
                                     totalDistance: orderData!.totalDistance,
                                     totalWeight: orderData!.totalWeight.validate(),
@@ -881,6 +884,18 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                 style: primaryTextStyle()),
                                             16.width,
                                             Text('${printAmount(productAmount)}',
+                                                style: primaryTextStyle()),
+                                          ],
+                                        ),
+                                      if (orderData!.vehicleData != null)
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("${language.vehicle} ${language.price}",
+                                                style: primaryTextStyle()),
+                                            16.width,
+                                            Text(
+                                                '${printAmount(orderData!.vehicleData!.price)}',
                                                 style: primaryTextStyle()),
                                           ],
                                         ),
