@@ -55,6 +55,9 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   TextEditingController deliveryDateController = TextEditingController();
   TextEditingController reasonController = TextEditingController();
 
+  String? pickUpTime ;
+  String? deliveryTime ;
+
   XFile? imageProfile;
   int val = 0;
 
@@ -74,14 +77,16 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   Future<void> init() async {
     mIsUpdate = widget.orderData != null;
     if (mIsUpdate) {
+      pickUpTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.orderData!.pickupDatetime.validate().isEmpty ? DateTime.now().toString() : widget.orderData!.pickupDatetime.validate()));
       picUpController.text =
-          DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.orderData!.pickupDatetime.validate().isEmpty ? DateTime.now().toString() : widget.orderData!.pickupDatetime.validate()));
+          DateFormat('yyyy-MM-dd').format(DateTime.parse(widget.orderData!.pickupDatetime.validate().isEmpty ? DateTime.now().toString() : widget.orderData!.pickupDatetime.validate()));
       reasonController.text = widget.orderData!.reason.validate();
       reason = widget.orderData!.reason.validate();
       log(picUpController);
     }
 
-    if (widget.orderData!.status == ORDER_DEPARTED) deliveryDateController.text = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+    if (widget.orderData!.status == ORDER_DEPARTED) deliveryDateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    if (widget.orderData!.status == ORDER_DEPARTED) deliveryTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
   }
 
   Future<File> saveSignature(ScreenshotController screenshotController) async {
@@ -98,8 +103,8 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
     appStore.setLoading(true);
     await updateOrder(
       orderId: widget.orderData!.id,
-      pickupDatetime: picUpController.text,
-      deliveryDatetime: deliveryDateController.text,
+      pickupDatetime: pickUpTime,
+      deliveryDatetime: deliveryTime,
       clientName: (deliverySignature != null || imageSignature != null) ? '1' : '0',
       deliveryman: deliverySignature != null ? '1' : '0',
       picUpSignature: imageSignature,
@@ -318,7 +323,8 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                       value: mIsCheck,
                       activeColor: colorPrimary,
                       checkColor: Colors.white,
-                      title: Text(widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY ? language.paymentCollectFrom : language.paymentCollectFromPickup, style: primaryTextStyle()),
+                      title: Text(widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY ? language.paymentCollectFrom : "Is the payment collected?" // todo
+                          "", style: primaryTextStyle()),
                       onChanged: (val) {
                         mIsCheck = val!;
                         setState(() {});
@@ -447,7 +453,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
       Map req = {
         'order_id': orderData.id,
         'client_id': orderData.clientId,
-        'datetime': picUpController.text,
+        'datetime': pickUpTime,
         'total_amount': orderData.totalAmount,
         'payment_type': PAYMENT_TYPE_CASH,
         'payment_status': PAYMENT_PAID,

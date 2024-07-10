@@ -741,4 +741,78 @@ class BaseLanguage {
   String get orderItems => getContentValueFromKey(367);
 
   String get productAmount => getContentValueFromKey(368);
+
+  String get stores => getContentValueFromKey(369);
+
+  String get closed => getContentValueFromKey(370);
+
+  String get favouriteStore => getContentValueFromKey(371);
+
+  String get rateStore => getContentValueFromKey(372);
+
+  String get rateToStore => getContentValueFromKey(373);
+
+  String get yourRatingToStore => getContentValueFromKey(374);
+
+  String get pleaseAvoidSendingProhibitedItems => getContentValueFromKey(375);
+
+  String get whatCanWeGetYou => getContentValueFromKey(376);
+
+  String get openIn => getContentValueFromKey(377);
+
+  String get min => getContentValueFromKey(378);
+
+  String get goToStore => getContentValueFromKey(379);
+
+  String get verify => getContentValueFromKey(380);
+
+  String get verified => getContentValueFromKey(381);
+
+  String get youMustVerifyAboveAll => getContentValueFromKey(382);
+
+  String get verificationYouMustDo => getContentValueFromKey(383);
+
+  String get documentVerification => getContentValueFromKey(384);
+
+  String get uploadYourDocument => getContentValueFromKey(385);
+
+  String get mobileOtp => getContentValueFromKey(386);
+
+  String get verifyYourMobileNumber => getContentValueFromKey(387);
+
+  String get emailOtp => getContentValueFromKey(388);
+
+  String get veirfyYourEmailAddress => getContentValueFromKey(389);
+
+  String get bankAddress => getContentValueFromKey(390);
+
+  String get routingNumber => getContentValueFromKey(391);
+
+  String get bankIban => getContentValueFromKey(392);
+
+  String get bankSwift => getContentValueFromKey(393);
+
+  String get mustSelectDate => getContentValueFromKey(394);
+
+  String get filterBelowCount => getContentValueFromKey(395);
+
+  String get viewAllOrders => getContentValueFromKey(396);
+
+  String get todayOrder => getContentValueFromKey(397);
+
+  String get remainingOrder => getContentValueFromKey(398);
+
+  String get completedOrder => getContentValueFromKey(399);
+
+  String get inProgressOrder => getContentValueFromKey(400);
+
+  String get walletBalance => getContentValueFromKey(401);
+
+  String get pendingWithdReq => getContentValueFromKey(402);
+
+  String get completedWithReq => getContentValueFromKey(403);
+
+  String get isPaymentCollected => getContentValueFromKey(404);
+
+  String get request => getContentValueFromKey(405);
 }

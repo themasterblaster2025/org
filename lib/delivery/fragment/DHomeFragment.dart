@@ -9,6 +9,7 @@ import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/main/models/DashboardCountModel.dart';
+import 'package:mighty_delivery/user/screens/WalletScreen.dart';
 
 import '../../extensions/LiveStream.dart';
 import '../../extensions/colors.dart';
@@ -19,7 +20,9 @@ import '../../extensions/widgets.dart';
 import '../../main.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/CityListModel.dart';
+import '../../main/models/LoginResponse.dart';
 import '../../main/network/RestApis.dart';
+import '../../main/screens/BankDetailScreen.dart';
 import '../../main/screens/UserCitySelectScreen.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
@@ -31,6 +34,7 @@ import '../../delivery/fragment/DProfileFragment.dart';
 import '../../extensions/common.dart';
 import '../../main/screens/NotificationScreen.dart';
 import '../screens/DeliveryDashBoard.dart';
+import '../screens/WithDrawScreen.dart';
 
 class DHomeFragment extends StatefulWidget {
   @override
@@ -42,40 +46,69 @@ class _DHomeFragmentState extends State<DHomeFragment> {
   DashboardCount? countData;
 
   ScrollController scrollController = ScrollController();
+  UserBankAccount? userBankAccount;
   List items = [
     "Today Order",
     "Remaining Order",
     "Completed Order",
     "InProgress Order",
-    "Commission",
+    language.commission,
     "Wallet Balance",
     "Pending Withdrawal Request",
     "Completed Withdrawal Request",
   ];
 
-  int getCount(int index) {
+  String getCount(int index) {
     switch (index) {
       case 0:
-        return (countData?.todayOrder).validate();
+        return (countData?.todayOrder).toString().validate();
       case 1:
-        return (countData?.pendingOrder).validate();
+        return (countData?.pendingOrder).toString().validate();
       case 2:
-        return (countData?.completeOrder).validate();
+        return (countData?.completeOrder).toString().validate();
       case 3:
-        return (countData?.inprogressOrder).validate();
+        return (countData?.inprogressOrder).toString().validate();
       case 4:
-        return (countData?.commission).validate();
+        return (countData?.commission).toString().validate();
       case 5:
-        return (countData?.walletBalance).validate();
+        return printAmount((countData?.walletBalance).validate());
       case 6:
-        return (countData?.pendingWithdrawRequest).validate();
+        return (countData?.pendingWithdrawRequest).toString().validate();
       case 7:
-        return (countData?.completeWithdrawRequest).validate();
+        return (countData?.completeWithdrawRequest).toString().validate();
       default:
-        return 0;
+        return "0";
     }
   }
 
+  Future<void> goToCountScreen(int index) async {
+    if (index == 0 || index == 1) {
+      DeliveryDashBoard().launch(context).then((value) => setState(() {}));
+    } else if (index == 2) {
+      DeliveryDashBoard(
+        selectedIndex: 5,
+      ).launch(context).then((value) => setState(() {}));
+    } else if (index == 3) {
+      DeliveryDashBoard(
+        selectedIndex: 1,
+      ).launch(context).then((value) => setState(() {}));
+    } else if (index == 4) {
+    } else if (index == 5) {
+      WalletScreen().launch(context);
+    } else {
+      if (countData?.walletBalance.validate() != 0) {
+        await getBankDetail();
+        if (userBankAccount != null)
+          WithDrawScreen(
+            onTap: () {},
+          ).launch(context);
+        else {
+          toast(language.bankNotFound);
+          BankDetailScreen(isWallet: true).launch(context);
+        }
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -91,13 +124,23 @@ class _DHomeFragmentState extends State<DHomeFragment> {
 
   Future<void> getDashboardCountDataApi({String? startDate, String? endDate}) async {
     appStore.setLoading(true);
-    await getDashboardCount(startDate: startDate,endDate: endDate).then((value) {
+    await getDashboardCount(startDate: startDate, endDate: endDate).then((value) {
       appStore.setLoading(false);
       countData = value;
       setState(() {});
     }).catchError((error) {
       appStore.setLoading(false);
       log(error.toString());
+    });
+  }
+
+  getBankDetail() async {
+    appStore.setLoading(true);
+    await getUserDetail(getIntAsync(USER_ID)).then((value) {
+      appStore.setLoading(false);
+      userBankAccount = value.userBankAccount;
+    }).then((value) {
+      log(value.toString());
     });
   }
 
@@ -179,12 +222,13 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                   decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary),
                   child: Row(
                     children: [
-                      Text("View all orders", style: boldTextStyle(color: Colors.white)), // todo
+                      Text("View all orders", style: boldTextStyle(color: Colors.white)),
+                      // todo
                       Spacer(),
                       Icon(Icons.navigate_next_outlined, color: Colors.white, size: 25),
                     ],
                   ).onTap(() {
-                    DeliveryDashBoard().launch(context);
+                    DeliveryDashBoard().launch(context).then((value) => setState(() {}));
                   }),
                 ),
                 18.height,
@@ -200,13 +244,14 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                       color: colorPrimary,
                     ).onTap(() async {
                       await showInDialog(context,
-                          shape: RoundedRectangleBorder(borderRadius: radius()),
-                          builder: (_) => FilterCountScreen(),
-                          contentPadding: EdgeInsets.zero).then((value) {
-                            String startDate =  DateFormat('yyyy-MM-dd').format(value[0]);
-                            String endDate =  DateFormat('yyyy-MM-dd').format(value[1]);
-                            getDashboardCountDataApi(startDate: startDate,endDate: endDate);
-                          });
+                              shape: RoundedRectangleBorder(borderRadius: radius()),
+                              builder: (_) => FilterCountScreen(),
+                              contentPadding: EdgeInsets.zero)
+                          .then((value) {
+                        String startDate = DateFormat('yyyy-MM-dd').format(value[0]);
+                        String endDate = DateFormat('yyyy-MM-dd').format(value[1]);
+                        getDashboardCountDataApi(startDate: startDate, endDate: endDate);
+                      });
                     }),
                   ],
                 ).paddingSymmetric(horizontal: 10),
@@ -227,29 +272,36 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                 GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    childAspectRatio: 1.75,
+                    childAspectRatio: 1.45,
                     mainAxisSpacing: 4,
                     crossAxisSpacing: 4,
                   ),
                   cacheExtent: 2.0,
                   shrinkWrap: false,
                   controller: scrollController,
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 50),
+                  padding: EdgeInsets.fromLTRB(7, 5, 7, 5),
                   itemBuilder: (context, index) {
-                    return countWidget(text: items[index], value: getCount(index));
+                    return countWidget(text: items[index], value: getCount(index)).onTap(() {
+                      goToCountScreen(index);
+                    });
                   },
                   itemCount: items.length,
                 ).expand()
               ],
             ),
           ),
-          Observer(builder: (context) => Positioned.fill(child: loaderWidget().visible(appStore.isLoading))),
+          Observer(
+              builder: (context) =>
+                  Positioned.fill(child: loaderWidget().visible(appStore.isLoading))),
         ],
       ),
     );
   }
 
-  Widget countWidget({required String text, required num value, bool isAmount = false}) {
+  Widget countWidget({
+    required String text,
+    required String value,
+  }) {
     return Container(
       decoration: appStore.isDarkMode
           ? boxDecorationWithRoundedCorners(
@@ -261,7 +313,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(isAmount ? '${printAmount(value)}' : '$value', style: boldTextStyle(size: 30)),
+          Text('$value', style: boldTextStyle(size: 27)),
           4.height,
           Text(
             text,

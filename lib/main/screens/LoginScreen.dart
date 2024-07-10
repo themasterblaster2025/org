@@ -113,8 +113,7 @@ class LoginScreenState extends State<LoginScreen> {
             if (v.data!.userType != CLIENT && v.data!.userType != DELIVERY_MAN) {
               showConfirmDialogCustom(
                 context,
-                title: "Are you sure you want to logout??",
-                // todo message
+                title: language.logoutConfirmationMsg,
                 positiveText: language.yes,
                 primaryColor: colorPrimary,
                 showCancelButton: false,

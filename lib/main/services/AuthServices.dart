@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mighty_delivery/extensions/extension_util/bool_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/main/screens/VerificationListScreen.dart';
+import 'package:store_checker/store_checker.dart' as src;
+import 'package:store_checker/store_checker.dart';
 import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 
 import '../../delivery/fragment/DHomeFragment.dart';
@@ -116,6 +119,16 @@ class AuthServices {
                   log("value...." + value.toString());
                 });
                 appStore.setLoading(false);
+                updateStoreCheckerData().then((source) async {
+                  await getUserDetail(getIntAsync(USER_ID)).then((value) async {
+                    if (value.app_source.isEmptyOrNull || value.app_source != source) {
+                      await updateUserStatus({"id": getIntAsync(USER_ID), "app_source": source})
+                          .then((data) {});
+                    }
+                  }).catchError((e) {
+                    log(e);
+                  });
+                });
                 if (res.data!.emailVerifiedAt.isEmptyOrNull ||
                     res.data!.otpVerifyAt.isEmptyOrNull ||
                     (res.data!.isVerifiedDeliveryMan.validate() == 0 &&
@@ -447,5 +460,48 @@ sendOtp(BuildContext context,
   } on FirebaseException catch (error) {
     appStore.setLoading(false);
     toast(error.message);
+  }
+}
+
+Future<String> updateStoreCheckerData() async {
+  src.Source installationSource;
+  try {
+    installationSource = await StoreChecker.getSource;
+  } on PlatformException {
+    installationSource = src.Source.UNKNOWN;
+  }
+
+  // Set source text state
+  switch (installationSource) {
+    case src.Source.IS_INSTALLED_FROM_PLAY_STORE:
+      return PLAY_STORE;
+    case src.Source.IS_INSTALLED_FROM_PLAY_PACKAGE_INSTALLER:
+      return GOOGLE_PACKAGE_INSTALLER;
+    case src.Source.IS_INSTALLED_FROM_RU_STORE:
+      return RUSTORE;
+    case src.Source.IS_INSTALLED_FROM_LOCAL_SOURCE:
+      return LOCAL_SOURCE;
+    case src.Source.IS_INSTALLED_FROM_AMAZON_APP_STORE:
+      return AMAZON_STORE;
+    case src.Source.IS_INSTALLED_FROM_HUAWEI_APP_GALLERY:
+      return HUAWEI_APP_GALLERY;
+    case src.Source.IS_INSTALLED_FROM_SAMSUNG_GALAXY_STORE:
+      return SAMSUNG_GALAXY_STORE;
+    case src.Source.IS_INSTALLED_FROM_SAMSUNG_SMART_SWITCH_MOBILE:
+      return SAMSUNG_SMART_SWITCH_MOBILE;
+    case src.Source.IS_INSTALLED_FROM_XIAOMI_GET_APPS:
+      return XIAOMI_GET_APPS;
+    case src.Source.IS_INSTALLED_FROM_OPPO_APP_MARKET:
+      return OPPO_APP_MARKET;
+    case src.Source.IS_INSTALLED_FROM_VIVO_APP_STORE:
+      return VIVO_APP_STORE;
+    case src.Source.IS_INSTALLED_FROM_OTHER_SOURCE:
+      return OTHER_SOURCE;
+    case src.Source.IS_INSTALLED_FROM_APP_STORE:
+      return APP_STORE;
+    case src.Source.IS_INSTALLED_FROM_TEST_FLIGHT:
+      return TEST_FLIGHT;
+    case src.Source.UNKNOWN:
+      return UNKNOWN_SOURCE;
   }
 }

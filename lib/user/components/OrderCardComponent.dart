@@ -54,7 +54,7 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                     ? Text(
                             DateFormat('dd MMM yyyy')
                                     .format(DateTime.parse(widget.item.date!).toLocal()) +
-                                language.at +
+                                " ${language.at.toLowerCase()} " +
                                 DateFormat('hh:mm a')
                                     .format(DateTime.parse(widget.item.date!).toLocal()),
                             style: primaryTextStyle(size: 14))
@@ -120,15 +120,23 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                             children: [
                               Text(language.picked, style: secondaryTextStyle(size: 12)),
                               4.height,
-                              Text('${language.at} ${printDate(widget.item.pickupDatetime!)}',
+                              Text(
+                                  '${language.at} ${printDateWithoutAt(widget.item.pickupDatetime!)}',
                                   style: secondaryTextStyle(size: 12)),
                             ],
                           ),
                         4.height,
                         GestureDetector(
                           onTap: () {
-                            openMap(double.parse(widget.item.pickupPoint!.latitude.validate()),
-                                double.parse(widget.item.pickupPoint!.longitude.validate()));
+                            if (widget.item.status != ORDER_DELIVERED) {
+                              openMap(
+                                  double.parse(widget.item.pickupPoint!.latitude.validate()),
+                                  double.parse(widget.item.pickupPoint!.longitude.validate()));
+                            }
+                            else{
+                              OrderDetailScreen(orderId: widget.item.id.validate()).launch(context,
+                                  pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
+                            }
                           },
                           child: Row(
                             children: [
@@ -147,7 +155,6 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                                   style: secondaryTextStyle(size: 12, color: Colors.red))
                               .paddingOnly(top: 4)
                               .paddingOnly(top: 4),
-
                       ],
                     ).expand(),
                     12.width,
@@ -180,18 +187,24 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                                       style: secondaryTextStyle(size: 12)),
                                   4.height,
                                   Text(
-                                      '${language.at} ${printDate(widget.item.deliveryDatetime!)}',
+                                      '${language.at} ${printDateWithoutAt(widget.item.deliveryDatetime!)}',
                                       style: secondaryTextStyle(size: 12)),
                                 ],
                               ),
                             4.height,
                             GestureDetector(
                               onTap: () {
-                                openMap(
-                                    double.parse(
-                                        widget.item.deliveryPoint!.latitude.validate()),
-                                    double.parse(
-                                        widget.item.deliveryPoint!.longitude.validate()));
+                                if (widget.item.status != ORDER_DELIVERED) {
+                                  openMap(
+                                      double.parse(
+                                          widget.item.deliveryPoint!.latitude.validate()),
+                                      double.parse(
+                                          widget.item.deliveryPoint!.longitude.validate()));
+                                }
+                                else{
+                                  OrderDetailScreen(orderId: widget.item.id.validate()).launch(context,
+                                      pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
+                                }
                               },
                               child: Row(
                                 children: [
@@ -223,7 +236,9 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                 ),
               ],
             ),
-            if (widget.item.status != ORDER_CANCELLED || (widget.item.status == ORDER_DEPARTED || widget.item.status == ORDER_ACCEPTED)) 16.height,
+            if (widget.item.status != ORDER_CANCELLED ||
+                (widget.item.status == ORDER_DEPARTED || widget.item.status == ORDER_ACCEPTED))
+              16.height,
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -261,8 +276,7 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                   onTap: () {
                     OrderTrackingScreen(orderData: widget.item).launch(context);
                   },
-                ).visible((widget.item.status == ORDER_DEPARTED ||
-                        widget.item.status == ORDER_ACCEPTED) &&
+                ).visible((widget.item.status == ORDER_DEPARTED) &&
                     appStore.userType != DELIVERY_MAN),
               ],
             ),

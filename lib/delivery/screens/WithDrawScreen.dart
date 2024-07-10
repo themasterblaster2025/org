@@ -211,7 +211,7 @@ class WithDrawScreenState extends State<WithDrawScreen> {
         child: Padding(
           padding: EdgeInsets.all(16),
           child: commonButton(
-            language.withdraw,
+            "${language.create} ${language.withdraw} ${language.request}",
             () {
               addMoneyController.clear();
               showDialog(

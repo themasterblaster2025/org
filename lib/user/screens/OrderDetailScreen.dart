@@ -172,7 +172,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                       orderData!.date != null
                                           ? Text(
                                                   '${DateFormat('dd MMM yyyy').format(DateTime.parse(orderData!.date!).toLocal())} ' +
-                                                      ' ${language.at} ' +
+                                                      ' ${language.at.toLowerCase()} ' +
                                                       ' ${DateFormat('hh:mm a').format(DateTime.parse(orderData!.date!).toLocal())}',
                                                   style: primaryTextStyle(size: 14))
                                               .expand()
@@ -256,7 +256,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                         style: secondaryTextStyle(size: 12)),
                                                     4.height,
                                                     Text(
-                                                        '${language.at} ${printDate(orderData!.pickupDatetime!)}',
+                                                        '${language.at} ${printDateWithoutAt(orderData!.pickupDatetime!)}',
                                                         style: secondaryTextStyle(size: 12)),
                                                   ],
                                                 ),
@@ -327,7 +327,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                                 secondaryTextStyle(size: 12)),
                                                         4.height,
                                                         Text(
-                                                            '${language.at} ${printDate(orderData!.deliveryDatetime!)}',
+                                                            '${language.at} ${printDateWithoutAt(orderData!.deliveryDatetime!)}',
                                                             style:
                                                                 secondaryTextStyle(size: 12)),
                                                       ],

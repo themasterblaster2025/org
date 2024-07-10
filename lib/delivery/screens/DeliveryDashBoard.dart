@@ -41,6 +41,10 @@ import '../../user/screens/OrderDetailScreen.dart';
 import 'ReceivedScreenOrderScreen.dart';
 
 class DeliveryDashBoard extends StatefulWidget {
+  final int selectedIndex;
+
+  DeliveryDashBoard({this.selectedIndex = 0});
+
   @override
   @override
   DeliveryDashBoardState createState() => DeliveryDashBoardState();
@@ -78,6 +82,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
     LiveStream().on('UpdateTheme', (p0) {
       setState(() {});
     });
+    selectedStatusIndex = widget.selectedIndex;
     await getAppSetting().then((value) {
       appStore.setOtpVerifyOnPickupDelivery(value.otpVerifyOnPickupDelivery == 1);
       appStore.setCurrencyCode(value.currencyCode ?? CURRENCY_CODE);
@@ -101,6 +106,10 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
         }
       }
     });
+    if (selectedStatusIndex == 5) {
+      scrollController1.animateTo(4 * 100,
+          duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
+    }
     await getOrderListApiCall();
     afterBuildCreated(() => appStore.setLoading(true));
   }
@@ -116,7 +125,8 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
       accuracy: LocationAccuracy.best,
       distanceFilter: 100,
     );
-    positionStream = Geolocator.getPositionStream(locationSettings: locationSettings).listen((Position event) async {
+    positionStream = Geolocator.getPositionStream(locationSettings: locationSettings)
+        .listen((Position event) async {
       List<Placemark> placeMarks = await placemarkFromCoordinates(
         event.latitude,
         event.longitude,
@@ -476,8 +486,14 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                       children: [
                         GestureDetector(
                           onTap: () {
-                            openMap(double.parse(data.pickupPoint!.latitude.validate()),
-                                double.parse(data.pickupPoint!.longitude.validate()));
+                            if (statusList[selectedStatusIndex] != ORDER_DELIVERED) {
+                              openMap(double.parse(data.pickupPoint!.latitude.validate()),
+                                  double.parse(data.pickupPoint!.longitude.validate()));
+                            } else {
+                              OrderDetailScreen(orderId: data.id!).launch(context,
+                                  pageRouteAnimation: PageRouteAnimation.SlideBottomTop,
+                                  duration: 400.milliseconds);
+                            }
                           },
                           child: Row(
                             children: [
@@ -531,8 +547,14 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                   children: [
                     GestureDetector(
                       onTap: () {
-                        openMap(double.parse(data.deliveryPoint!.latitude.validate()),
-                            double.parse(data.deliveryPoint!.longitude.validate()));
+                        if (statusList[selectedStatusIndex] != ORDER_DELIVERED) {
+                          openMap(double.parse(data.deliveryPoint!.latitude.validate()),
+                              double.parse(data.deliveryPoint!.longitude.validate()));
+                        } else {
+                          OrderDetailScreen(orderId: data.id!).launch(context,
+                              pageRouteAnimation: PageRouteAnimation.SlideBottomTop,
+                              duration: 400.milliseconds);
+                        }
                       },
                       child: Row(
                         children: [

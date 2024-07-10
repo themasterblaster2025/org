@@ -211,7 +211,7 @@ class WalletScreenState extends State<WalletScreen> {
         ),
         bottomNavigationBar: totalAmount != 0
             ? commonButton(
-                language.withdraw,
+                language.withdrawHistory,
                 () {
                   if (userBankAccount != null)
                     WithDrawScreen(

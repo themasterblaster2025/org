@@ -42,18 +42,6 @@ class OrderFragmentState extends State<OrderFragment> {
   int totalPage = 1;
   bool isLastPage = false;
   List storeList = [
-    /* {
-      "name": "type1",
-    },
-    {
-      "name": "type2",
-    },
-    {
-      "name": "type11",
-    },
-    {
-      "name": "type21",
-    }*/
   ];
 
   @override
