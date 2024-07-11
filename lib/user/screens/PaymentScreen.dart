@@ -681,7 +681,8 @@ class PaymentScreenState extends State<PaymentScreen> {
                         alignment: Alignment.bottomCenter,
                         child: commonButton(language.payNow, () {
                           if (selectedPaymentType == PAYMENT_TYPE_STRIPE) {
-                            stripePay();
+                            // stripePay();
+                            payStackPayment(context);
                           } else if (selectedPaymentType == PAYMENT_TYPE_RAZORPAY) {
                             razorPayPayment();
                           } else if (selectedPaymentType == PAYMENT_TYPE_PAYSTACK) {

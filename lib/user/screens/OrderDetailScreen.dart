@@ -891,7 +891,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text("${language.vehicle} ${language.price}",
+                                            Text("${language.vehicle} ${language.price.toLowerCase()}",
                                                 style: primaryTextStyle()),
                                             16.width,
                                             Text(

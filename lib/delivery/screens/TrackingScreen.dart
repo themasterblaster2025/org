@@ -110,9 +110,12 @@ class TrackingScreenState extends State<TrackingScreen> {
     _polylines.clear();
     polylineCoordinates.clear();
     var result = await polylinePoints.getRouteBetweenCoordinates(
-      googleMapAPIKey,
-      PointLatLng(sourceLocation!.latitude, sourceLocation!.longitude),
-      PointLatLng(orderLat.latitude, orderLat.longitude),
+      googleApiKey: googleMapAPIKey,
+      request: PolylineRequest(
+        origin: PointLatLng(sourceLocation!.latitude, sourceLocation!.longitude),
+        destination: PointLatLng(orderLat.latitude, orderLat.longitude),
+        mode: TravelMode.driving,
+      ),
     );
     if (result.points.isNotEmpty) {
       result.points.forEach((element) {

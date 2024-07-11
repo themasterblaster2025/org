@@ -53,25 +53,23 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
 
   Future<void> init() async {
     polylinePoints = PolylinePoints();
-    timer = Timer.periodic(
-        Duration(seconds: 5), (Timer t) => getDeliveryBoyDetails());
+    timer = Timer.periodic(Duration(seconds: 5), (Timer t) => getDeliveryBoyDetails());
   }
 
   getDeliveryBoyDetails() {
     getUserDetail(widget.orderData.deliveryManId.validate()).then((value) {
       deliveryBoyData = value;
-      sourceLocation = LatLng(deliveryBoyData!.latitude.toDouble(),
-          deliveryBoyData!.longitude.toDouble());
+      sourceLocation =
+          LatLng(deliveryBoyData!.latitude.toDouble(), deliveryBoyData!.longitude.toDouble());
       MarkerId id = MarkerId("DeliveryBoy");
       markers.remove(id);
       deliveryBoyMarker = Marker(
         markerId: id,
-        position: LatLng(deliveryBoyData!.latitude.toDouble(),
-            deliveryBoyData!.longitude.toDouble()),
+        position: LatLng(
+            deliveryBoyData!.latitude.toDouble(), deliveryBoyData!.longitude.toDouble()),
         infoWindow: InfoWindow(
             title: '${deliveryBoyData!.name.validate()}',
-            snippet:
-                '${language.lastUpdatedAt} ${dateParse(deliveryBoyData!.updatedAt!)}'),
+            snippet: '${language.lastUpdatedAt} ${dateParse(deliveryBoyData!.updatedAt!)}'),
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
       );
       markers.add(deliveryBoyMarker);
@@ -91,8 +89,8 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
         ),
       );
       setPolyLines(
-          deliveryLatLng: LatLng(deliveryBoyData!.latitude.toDouble(),
-              deliveryBoyData!.longitude.toDouble()));
+          deliveryLatLng: LatLng(
+              deliveryBoyData!.latitude.toDouble(), deliveryBoyData!.longitude.toDouble()));
       setState(() {});
     }).catchError((error) {
       print(error);
@@ -103,14 +101,16 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
     _polylines.clear();
     polylineCoordinates.clear();
     var result = await polylinePoints.getRouteBetweenCoordinates(
-      googleMapAPIKey,
-      PointLatLng(deliveryLatLng.latitude, deliveryLatLng.longitude),
-      widget.orderData.status == ORDER_ACCEPTED
-          ? PointLatLng(widget.orderData.pickupPoint!.latitude.toDouble(),
-              widget.orderData.pickupPoint!.longitude.toDouble())
-          : PointLatLng(widget.orderData.deliveryPoint!.latitude.toDouble(),
-              widget.orderData.deliveryPoint!.longitude.toDouble()),
-    );
+        googleApiKey: googleMapAPIKey,
+        request: PolylineRequest(
+          origin: PointLatLng(deliveryLatLng.latitude, deliveryLatLng.longitude),
+          destination: widget.orderData.status == ORDER_ACCEPTED
+              ? PointLatLng(widget.orderData.pickupPoint!.latitude.toDouble(),
+                  widget.orderData.pickupPoint!.longitude.toDouble())
+              : PointLatLng(widget.orderData.deliveryPoint!.latitude.toDouble(),
+                  widget.orderData.deliveryPoint!.longitude.toDouble()),
+          mode: TravelMode.driving,
+        ));
     if (result.points.isNotEmpty) {
       result.points.forEach((element) {
         polylineCoordinates.add(LatLng(element.latitude, element.longitude));

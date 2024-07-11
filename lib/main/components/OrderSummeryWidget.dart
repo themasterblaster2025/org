@@ -108,7 +108,7 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("${language.vehicle} ${language.price}", style: secondaryTextStyle()),
+              Text("${language.vehicle} ${language.price.toLowerCase()}", style: secondaryTextStyle()),
               16.width,
               Text('${printAmount(widget.vehiclePrice.validate())}', style: boldTextStyle(size: 14)),
             ],

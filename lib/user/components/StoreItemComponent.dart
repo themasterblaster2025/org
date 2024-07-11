@@ -198,7 +198,7 @@ class StoreItemComponentState extends State<StoreItemComponent> {
               ],
             ).paddingAll(10),
           ).paddingOnly(left: 8, right: 8, top: 18),
-          if (currentTimeSecond > endTimeSecond ||
+          if ((currentTimeSecond > endTimeSecond && !(currentTimeSecond < startTimeSecond))||
               !widget.store.workingHours!.isOpen.validate())
             Positioned(
               top: 8,
@@ -210,7 +210,7 @@ class StoreItemComponentState extends State<StoreItemComponent> {
                   blurRadius: 1,
                   backgroundColor: Colors.red,
                 ),
-                padding: EdgeInsets.all(3),
+                padding: EdgeInsets.symmetric(vertical: 3, horizontal: 8),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

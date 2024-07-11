@@ -348,7 +348,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
       /// vehicle charge
       if (selectedVehicle != null && appStore.isVehicleOrder != 0) {
-        VehicleData vehicle = vehicleList.firstWhere((element) => element.id == selectedVehicle);
+        VehicleData vehicle =
+            vehicleList.firstWhere((element) => element.id == selectedVehicle);
         totalAmount += vehicle.price.validate();
       }
 
@@ -573,18 +574,21 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   setPolylines() async {
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      googleMapAPIKey,
-      PointLatLng(
-          isPickSavedAddress ? pickAddressData!.latitude.toDouble() : pickLat.toDouble(),
-          isPickSavedAddress ? pickAddressData!.longitude.toDouble() : pickLong.toDouble()),
-      PointLatLng(
-          isDeliverySavedAddress
-              ? deliveryAddressData!.latitude.toDouble()
-              : deliverLat.toDouble(),
-          isDeliverySavedAddress
-              ? deliveryAddressData!.longitude.toDouble()
-              : deliverLong.toDouble()),
-    );
+        googleApiKey: googleMapAPIKey,
+        request: PolylineRequest(
+            origin: PointLatLng(
+                isPickSavedAddress ? pickAddressData!.latitude.toDouble() : pickLat.toDouble(),
+                isPickSavedAddress
+                    ? pickAddressData!.longitude.toDouble()
+                    : pickLong.toDouble()),
+            destination: PointLatLng(
+                isDeliverySavedAddress
+                    ? deliveryAddressData!.latitude.toDouble()
+                    : deliverLat.toDouble(),
+                isDeliverySavedAddress
+                    ? deliveryAddressData!.longitude.toDouble()
+                    : deliverLong.toDouble()),
+            mode: TravelMode.driving));
     if (result.points.isNotEmpty) {
       result.points.forEach((PointLatLng point) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
@@ -907,7 +911,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           commonCachedNetworkImage(item.vehicleImage.validate(),
                               height: 40, width: 40),
                           SizedBox(width: 16),
-                          Text("${item.title.validate()}  (${printAmount(item.price.validate())})", style: primaryTextStyle()),
+                          Text(
+                              "${item.title.validate()}  (${printAmount(item.price.validate())})",
+                              style: primaryTextStyle()),
                         ],
                       ),
                     );
@@ -1063,7 +1069,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                                 pickAddressCont.text = address.address ?? "";
                                 pickLat = address.latitude.toString();
                                 pickLong = address.longitude.toString();
-                                pickPhoneCont.text = address.contactNumber.validate().substring(4);
+                                pickPhoneCont.text =
+                                    address.contactNumber.validate().substring(4);
                                 setState(() {});
                               },
                             );
@@ -1248,7 +1255,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                               deliverAddressCont.text = address.address ?? "";
                               deliverLat = address.latitude.toString();
                               deliverLong = address.longitude.toString();
-                              deliverPhoneCont.text = address.contactNumber.validate().substring(4);
+                              deliverPhoneCont.text =
+                                  address.contactNumber.validate().substring(4);
                               setState(() {});
                             },
                             isPickup: false,
@@ -1446,7 +1454,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           16.height,
           OrderSummeryWidget(
               productAmount: productAmount,
-              vehiclePrice: (selectedVehicle != null && appStore.isVehicleOrder != 0) ? vehicleList.firstWhere((element) => element.id == selectedVehicle).price : 0,
+              vehiclePrice: (selectedVehicle != null && appStore.isVehicleOrder != 0)
+                  ? vehicleList.firstWhere((element) => element.id == selectedVehicle).price
+                  : 0,
               extraChargesList: extraChargeList,
               totalDistance: totalDistance,
               totalWeight: weightController.text.toDouble(),

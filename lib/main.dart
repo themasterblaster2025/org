@@ -95,7 +95,7 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
-  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
 
   // late StreamSubscription<Position> _streamSubscription;
   String message = 'empty';
@@ -108,7 +108,7 @@ class MyAppState extends State<MyApp> {
 
   void init() async {
     _connectivitySubscription = Connectivity().onConnectivityChanged.listen((e) {
-      if (e == ConnectivityResult.none) {
+      if (e.contains(ConnectivityResult.none)) {
         log('not connected');
         isCurrentlyOnNoInternet = true;
         push(NoInternetScreen());
