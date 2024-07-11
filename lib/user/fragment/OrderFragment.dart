@@ -41,8 +41,7 @@ class OrderFragmentState extends State<OrderFragment> {
   int page = 1;
   int totalPage = 1;
   bool isLastPage = false;
-  List storeList = [
-  ];
+  List storeList = [];
 
   @override
   void initState() {
@@ -71,6 +70,7 @@ class OrderFragmentState extends State<OrderFragment> {
       appStore.setDistanceUnit(value.distanceUnit ?? DISTANCE_UNIT_KM);
       if (value.storeType!.validate().isNotEmpty) {
         storeList = value.storeType.validate();
+        setState(() {});
         // storeList.add(value.storeManage.validate());
       }
     }).catchError((error) {
@@ -152,7 +152,8 @@ class OrderFragmentState extends State<OrderFragment> {
           10.height,
           Row(
             children: [
-              Text( language.whatCanWeGetYou,
+              Text(
+                language.whatCanWeGetYou,
                 style: boldTextStyle(size: 16, color: colorPrimary),
               ),
               Spacer(),
@@ -205,35 +206,36 @@ class OrderFragmentState extends State<OrderFragment> {
         ],
         Row(
           children: [
-            Text( language.myOrders,
+            Text(
+              language.myOrders,
               style: boldTextStyle(size: 16, color: colorPrimary),
             ),
             Spacer(),
             Row(
               children: [
-                  Icon(
-                    Icons.navigate_before,
-                    color: colorPrimary,
-                    size: 26,
-                  ).visible(page != 1).onTap(() {
-                      page--;
-                      orderList.clear();
-                      setState(() {});
-                      getOrderData();
-                  }),
+                Icon(
+                  Icons.navigate_before,
+                  color: colorPrimary,
+                  size: 26,
+                ).visible(page != 1).onTap(() {
+                  page--;
+                  orderList.clear();
+                  setState(() {});
+                  getOrderData();
+                }),
                 Text(
                   "Page $page of $totalPage",
                   style: boldTextStyle(size: 15, color: colorPrimary),
                 ),
-                  Icon(
-                    Icons.navigate_next,
-                    color: colorPrimary,
-                  ).visible(page != totalPage).onTap(() {
-                      page++;
-                      orderList.clear();
-                      setState(() {});
-                      getOrderData();
-                  }),
+                Icon(
+                  Icons.navigate_next,
+                  color: colorPrimary,
+                ).visible(page != totalPage).onTap(() {
+                  page++;
+                  orderList.clear();
+                  setState(() {});
+                  getOrderData();
+                }),
               ],
             ),
           ],

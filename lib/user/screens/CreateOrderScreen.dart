@@ -907,7 +907,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           commonCachedNetworkImage(item.vehicleImage.validate(),
                               height: 40, width: 40),
                           SizedBox(width: 16),
-                          Text(item.title.validate(), style: primaryTextStyle()),
+                          Text("${item.title.validate()}  (${printAmount(item.price.validate())})", style: primaryTextStyle()),
                         ],
                       ),
                     );
