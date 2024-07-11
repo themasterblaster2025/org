@@ -48,7 +48,8 @@ dependencies:
   flutterwave_standard: ^1.0.8
   paytm: ^3.0.1
   flutter_paystack:
-    path: package/flutter_paystack-98d93d32df9a368a923bffd375e7b9479c85f85f
+    git:
+      url: https://github.com/appmeetmighty/flutter_paystack/
   flutter_braintree: ^4.0.0
   flutter_paytabs_bridge: ^2.6.7
   my_fatoorah: ^3.3.0

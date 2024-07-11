@@ -331,7 +331,6 @@ class PaymentScreenState extends State<PaymentScreen> {
     Charge charge = Charge()
       ..amount = (widget.totalAmount * 100).toInt() // In base currency
       ..email = getStringAsync(USER_EMAIL);
-
     charge.reference = _getReference();
 
     try {
