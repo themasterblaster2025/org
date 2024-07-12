@@ -121,6 +121,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
         "fixed_charges": widget.orderData.fixedCharges!,
         "parent_order_id": widget.orderData.id!,
         "total_amount": widget.orderData.totalAmount ?? 0,
+        "vehicle_id": widget.orderData.vehicleId.validate(),
         "reason": reason!.validate().trim() != language.other.trim()
             ? reason
             : reasonController.text,

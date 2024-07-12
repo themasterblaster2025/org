@@ -89,12 +89,12 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> with WidgetsBindingOb
                   longitude: selectedPlace!.geometry!.location.lng,
                   placeAddress: selectedPlace!.formattedAddress,
                 );
-                List<PlaceAddressModel> list = (getStringListAsync(RECENT_ADDRESS_LIST) ?? []).map((e) => PlaceAddressModel.fromJson(jsonDecode(e))).toList();
+                /*List<PlaceAddressModel> list = (getStringListAsync(RECENT_ADDRESS_LIST) ?? []).map((e) => PlaceAddressModel.fromJson(jsonDecode(e))).toList();
                 bool isExist = list.any((element) => element.placeId == selectedPlace!.placeId);
                 if (!isExist) {
                   list.add(selectedModel);
                   setValue(RECENT_ADDRESS_LIST, list.map((element) => jsonEncode(element)).toList());
-                }
+                }*/
                 finish(context, selectedModel);
               });
             },

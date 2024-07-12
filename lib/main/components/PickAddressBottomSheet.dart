@@ -37,8 +37,6 @@ class PickAddressBottomSheet extends StatefulWidget {
 }
 
 class PickAddressBottomSheetState extends State<PickAddressBottomSheet> {
-  List<AddressData> addressList = [];
-
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
@@ -47,27 +45,17 @@ class PickAddressBottomSheetState extends State<PickAddressBottomSheet> {
   @override
   void initState() {
     super.initState();
-    getAddressListApi();
-  }
-
-  Future<void> getAddressListApi() async {
-    appStore.setLoading(true);
-    await getAddressList().then((value) {
-      addressList.clear();
-      addressList.addAll(value.data.validate());
-      appStore.setLoading(false);
-      setState(() {});
-    }).catchError((e) {
-      appStore.setLoading(false);
-      toast(e.toString(), print: true);
-    });
   }
 
   deleteUserAddressApiCall(int id) async {
     appStore.setLoading(true);
     await deleteUserAddress(id).then((value) {
+      appStore.setLoading(false);
+      List<String> list = getStringListAsync(RECENT_ADDRESS_LIST) ?? [];
+      list.removeWhere((element) => AddressData.fromJson(jsonDecode(element)).id == id);
+      setValue(RECENT_ADDRESS_LIST, list);
+      setState(() {});
       toast(value.message.toString());
-      getAddressListApi();
     }).catchError((error) {
       appStore.setLoading(false);
       toast(error.toString());
@@ -112,20 +100,20 @@ class PickAddressBottomSheetState extends State<PickAddressBottomSheet> {
                 finish(context);
               }
             }*/
-            MyAddressListScreen().launch(context).then((value) => getAddressListApi());
+            MyAddressListScreen().launch(context).then((value) => setState(() {}));
           }).paddingAll(16),
           Divider(color: context.dividerColor),
           Stack(
             children: [
               ListView.separated(
-                // itemCount: (getStringListAsync(RECENT_ADDRESS_LIST) ?? []).length,
-                itemCount: addressList.length,
+                itemCount: (getStringListAsync(RECENT_ADDRESS_LIST) ?? []).length,
+                // itemCount: addressList.length,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
-                  // int len = (getStringListAsync(RECENT_ADDRESS_LIST) ?? []).length;
-                  // PlaceAddressModel mData = PlaceAddressModel.fromJson(
-                  //     jsonDecode(getStringListAsync(RECENT_ADDRESS_LIST)![len - index - 1]));
-                  AddressData mData = addressList[index];
+                  int len = (getStringListAsync(RECENT_ADDRESS_LIST) ?? []).length;
+                  AddressData mData = AddressData.fromJson(
+                      jsonDecode(getStringListAsync(RECENT_ADDRESS_LIST)![len - index - 1]));
+                  // AddressData mData = addressList[index];
                   return Row(
                     children: [
                       Icon(Icons.location_on_outlined),
@@ -134,13 +122,7 @@ class PickAddressBottomSheetState extends State<PickAddressBottomSheet> {
                           .expand(),
                       10.width,
                       Icon(Icons.highlight_remove_outlined, color: Colors.red).onTap(() {
-                        /*  List<String> list = getStringListAsync(RECENT_ADDRESS_LIST) ?? [];
-                        list.removeWhere((element) =>
-                            PlaceAddressModel.fromJson(jsonDecode(element)).placeId ==
-                            mData.placeId);
-                        setValue(RECENT_ADDRESS_LIST, list);*/
                         deleteUserAddressApiCall(mData.id.validate());
-                        setState(() {});
                       })
                     ],
                   ).onTap(() async {
@@ -152,9 +134,7 @@ class PickAddressBottomSheetState extends State<PickAddressBottomSheet> {
                   return Divider(color: context.dividerColor);
                 },
               ),
-              Observer(
-                  builder: (context) =>
-                      loaderWidget().visible(appStore.isLoading)),
+              Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
             ],
           ).expand(),
         ],

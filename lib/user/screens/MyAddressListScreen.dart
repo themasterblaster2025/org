@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -7,6 +9,7 @@ import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import '../../extensions/common.dart';
 import '../../extensions/decorations.dart';
+import '../../extensions/shared_pref.dart';
 import '../../extensions/text_styles.dart';
 import '../../main.dart';
 import '../../main/components/BodyCornerWidget.dart';
@@ -38,7 +41,8 @@ class MyAddressListScreenState extends State<MyAddressListScreen> {
     appStore.setLoading(true);
     init();
     scrollController.addListener(() {
-      if (scrollController.position.pixels == scrollController.position.maxScrollExtent && !appStore.isLoading) {
+      if (scrollController.position.pixels == scrollController.position.maxScrollExtent &&
+          !appStore.isLoading) {
         if (page < totalPage) {
           page++;
           appStore.setLoading(true);
@@ -58,6 +62,13 @@ class MyAddressListScreenState extends State<MyAddressListScreen> {
         addressList.clear();
       }
       addressList.addAll(value.data!);
+
+      List<AddressData> list = [];
+      addressList.forEach((e) {
+        list.add(e);
+      });
+      setValue(RECENT_ADDRESS_LIST, list.map((element) => jsonEncode(element)).toList());
+
       setState(() {});
     }).catchError((e) {
       isLastPage = true;
@@ -100,7 +111,8 @@ class MyAddressListScreenState extends State<MyAddressListScreen> {
                       AddressData item = addressList[index];
                       return InkWell(
                         onTap: () async {
-                          bool? res = await AddAddressScreen(addressData: item).launch(context);
+                          bool? res =
+                              await AddAddressScreen(addressData: item).launch(context);
                           if (res != null) {
                             page = 1;
                             init();
@@ -110,7 +122,9 @@ class MyAddressListScreenState extends State<MyAddressListScreen> {
                           margin: EdgeInsets.only(bottom: 16),
                           padding: EdgeInsets.all(8),
                           decoration: boxDecorationWithRoundedCorners(
-                              borderRadius: BorderRadius.circular(defaultRadius), border: Border.all(color: colorPrimary.withOpacity(0.4)), backgroundColor: Colors.transparent),
+                              borderRadius: BorderRadius.circular(defaultRadius),
+                              border: Border.all(color: colorPrimary.withOpacity(0.4)),
+                              backgroundColor: Colors.transparent),
                           child: Row(
                             children: [
                               Column(
@@ -118,7 +132,8 @@ class MyAddressListScreenState extends State<MyAddressListScreen> {
                                 children: [
                                   Text(item.address.validate(), style: primaryTextStyle()),
                                   8.height,
-                                  Text(item.contactNumber.validate(), style: secondaryTextStyle()),
+                                  Text(item.contactNumber.validate(),
+                                      style: secondaryTextStyle()),
                                 ],
                               ).expand(),
                               8.width,

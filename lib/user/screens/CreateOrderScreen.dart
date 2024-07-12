@@ -16,6 +16,7 @@ import 'package:mighty_delivery/extensions/extension_util/list_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/num_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../../extensions/app_text_field.dart';
 import '../../extensions/common.dart';
@@ -534,7 +535,15 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   }
 
   Future<void> getAddressListApi() async {
-    await getAddressList().then((value) {
+    addressList = (getStringListAsync(RECENT_ADDRESS_LIST) ?? [])
+        .map((e) => AddressData.fromJson(jsonDecode(e)))
+        .toList();
+    if (addressList.isNotEmpty) {
+      pickAddressData = addressList.first;
+      deliveryAddressData = addressList.first;
+    }
+    setState(() {});
+    /* await getAddressList().then((value) {
       appStore.setLoading(false);
       addressList.addAll(value.data.validate());
       if (addressList.isNotEmpty) {
@@ -545,7 +554,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     }).catchError((e) {
       appStore.setLoading(false);
       toast(e.toString(), print: true);
-    });
+    });*/
   }
 
   @override
@@ -1075,7 +1084,16 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                               },
                             );
                           },
-                        );
+                        ).then((value) {
+                          addressList = (getStringListAsync(RECENT_ADDRESS_LIST) ?? [])
+                              .map((e) => AddressData.fromJson(jsonDecode(e)))
+                              .toList();
+                          if (addressList.isNotEmpty) {
+                            pickAddressData = addressList.first;
+                            deliveryAddressData = addressList.first;
+                          }
+                          setState(() {});
+                        });
                       }
                     },
                   ),
@@ -1262,7 +1280,16 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                             isPickup: false,
                           );
                         },
-                      );
+                      ).then((value){
+                        addressList = (getStringListAsync(RECENT_ADDRESS_LIST) ?? [])
+                            .map((e) => AddressData.fromJson(jsonDecode(e)))
+                            .toList();
+                        if (addressList.isNotEmpty) {
+                          pickAddressData = addressList.first;
+                          deliveryAddressData = addressList.first;
+                        }
+                        setState(() {});
+                      });
                     },
                   ),
                   16.height,
@@ -1584,6 +1611,19 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     );
   }
 
+  Widget progressIndicator() {
+    return CircularPercentIndicator(
+      radius: 20.0,
+      lineWidth: 2.0,
+      percent: ((selectedTabIndex + 1) / 5) > 1 ? 1 : (selectedTabIndex + 1) / 5,
+      animation: true,
+      center: Text((selectedTabIndex + 1).toInt().toString() + " /5",
+          style: boldTextStyle(size: 11, color: Colors.white)),
+      backgroundColor: Colors.white.withOpacity(0.25),
+      progressColor: Colors.white,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -1619,7 +1659,15 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         }
       },
       child: CommonScaffoldComponent(
-        appBarTitle: language.createOrder,
+        // appBarTitle: language.createOrder,
+        appBar: commonAppBarWidget(language.createOrder, actions: [
+          Row(
+            children: [
+              progressIndicator(),
+              10.width,
+            ],
+          )
+        ]),
         body: Stack(
           children: [
             SingleChildScrollView(
@@ -1629,7 +1677,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
+                    /*   Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(5, (index) {
                         return Container(
@@ -1656,7 +1704,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         );
                       }).toList(),
                     ),
-                    30.height,
+                    30.height,*/
                     if (selectedTabIndex == 0) createOrderWidget1(),
                     if (selectedTabIndex == 1) createOrderWidget2(),
                     if (selectedTabIndex == 2) createOrderWidget3(),
