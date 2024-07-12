@@ -717,7 +717,7 @@ Future<StoreListModel> getFavouriteStore() async {
 Future<DashboardCount> getDashboardCount({String? startDate, String? endDate}) async {
   String endpoint = 'deliveryman-dashboard-data';
   if (startDate != null && endDate != null) {
-    endpoint += '?from_date=$startDate&end_date=$endDate';
+    endpoint += '?from_date=$startDate&to_date=$endDate';
   }
   return DashboardCount.fromJson(
       await handleResponse(await buildHttpResponse(endpoint, method: HttpMethod.GET)));
