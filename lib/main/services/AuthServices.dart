@@ -131,7 +131,7 @@ class AuthServices {
                 });
                 if (res.data!.emailVerifiedAt.isEmptyOrNull ||
                     res.data!.otpVerifyAt.isEmptyOrNull ||
-                    (res.data!.isVerifiedDeliveryMan.validate() == 0 &&
+                    (res.data!.documentVerifiedAt.isEmptyOrNull &&
                         getStringAsync(USER_TYPE) == DELIVERY_MAN)) {
                   VerificationListScreen().launch(context);
                 } else {

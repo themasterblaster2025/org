@@ -135,11 +135,12 @@ class LoginScreenState extends State<LoginScreen> {
                 log('v.data!.otp ${v.data!.otpVerifyAt}');
                 if (v.data!.emailVerifiedAt.isEmptyOrNull ||
                     v.data!.otpVerifyAt.isEmptyOrNull ||
-                    (v.data!.isVerifiedDeliveryMan.validate() == 0 &&
+                    (v.data!.documentVerifiedAt.isEmptyOrNull &&
                         getStringAsync(USER_TYPE) == DELIVERY_MAN)) {
-                  VerificationListScreen(isSignIn: true,).launch(context);
-                }
-                else if (v.data!.countryId != null && v.data!.cityId != null) {
+                  VerificationListScreen(
+                    isSignIn: true,
+                  ).launch(context);
+                } else if (v.data!.countryId != null && v.data!.cityId != null) {
                   await getCountryDetailApiCall(v.data!.countryId.validate());
                   getCityDetailApiCall(v.data!.cityId.validate());
                 } else {

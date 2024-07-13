@@ -89,7 +89,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
       appStore.setCurrencySymbol(value.currency ?? CURRENCY_SYMBOL);
       appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
       appStore.isVehicleOrder = value.isVehicleInOrder ?? 0;
-      setValue(IS_VERIFIED_DELIVERY_MAN, (value.isVerifiedDeliveryMan.validate() == 1));
+      // setValue(IS_VERIFIED_DELIVERY_MAN, (value.isVerifiedDeliveryMan.validate() == 1));
     }).catchError((error) {
       log(error.toString());
     });

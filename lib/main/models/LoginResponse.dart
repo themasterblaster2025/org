@@ -53,11 +53,12 @@ class UserData {
   String? playerId;
   String? fcmToken;
   String? lastNotificationSeen;
-  int? isVerifiedDeliveryMan;
+  // int? isVerifiedDeliveryMan;
   String? deletedAt;
   UserBankAccount? userBankAccount;
   String? otpVerifyAt;
   String? emailVerifiedAt;
+  String? documentVerifiedAt;
   String? app_version;
   String? app_source;
   bool? isEmailVerification;
@@ -88,11 +89,12 @@ class UserData {
     this.playerId,
     this.fcmToken,
     this.lastNotificationSeen,
-    this.isVerifiedDeliveryMan,
+    // this.isVerifiedDeliveryMan,
     this.deletedAt,
     this.userBankAccount,
     this.otpVerifyAt,
     this.emailVerifiedAt,
+    this.documentVerifiedAt,
     this.app_version,
     this.app_source,
     this.isEmailVerification,
@@ -124,13 +126,14 @@ class UserData {
     playerId = json['player_id'];
     fcmToken = json['fcm_token'];
     lastNotificationSeen = json['last_notification_seen'];
-    isVerifiedDeliveryMan = json['is_verified_delivery_man'];
+    // isVerifiedDeliveryMan = json['is_verified_delivery_man'];
     deletedAt = json['deleted_at'];
     userBankAccount = json['user_bank_account'] != null
         ? new UserBankAccount.fromJson(json['user_bank_account'])
         : null;
     otpVerifyAt = json['otp_verify_at'];
     emailVerifiedAt = json['email_verified_at'];
+    documentVerifiedAt = json['document_verified_at'];
     app_version = json['app_version'];
     app_source = json['app_source'];
 
@@ -164,7 +167,7 @@ class UserData {
     data['player_id'] = this.playerId;
     data['fcm_token'] = this.fcmToken;
     data['last_notification_seen'] = this.lastNotificationSeen;
-    data['is_verified_delivery_man'] = this.isVerifiedDeliveryMan;
+    // data['is_verified_delivery_man'] = this.isVerifiedDeliveryMan;
     data['app_version'] = this.app_version;
     data['app_source'] = this.app_source;
     data['deleted_at'] = this.deletedAt;
@@ -173,6 +176,7 @@ class UserData {
     }
     data['otp_verify_at'] = this.otpVerifyAt;
     data['email_verified_at'] = this.emailVerifiedAt;
+    data['document_verified_at'] = this.documentVerifiedAt;
 
     data['is_email_verification'] = this.isEmailVerification;
     data['is_mobile_verification'] = this.isMobileVerification;

@@ -92,14 +92,12 @@ class StoreItemComponentState extends State<StoreItemComponent> {
     int startHour = int.parse(hourMinute[0]);
     int startMin = int.parse(hourMinute[1]);
     String startPart = start.split(' ')[1];
-    int startTimeSecond =
-        (startHour * 60 + startMin) * 60 + ((startPart == "am") ? 0 : (12 * 60 * 60));
+    int startTimeSecond = (startHour * 60 + startMin) * 60 + ((startPart == "am") ? 0 : (12 * 60 * 60));
 
     int endHour = end.split(":").first.toInt();
     int endMin = (end.split(":")[1]).substring(0, 1).toInt();
     String endPart = end.split(":")[1].substring(3, 5);
-    int endTimeSecond =
-        (endHour * 60 + endMin) * 60 + ((endPart == "am") ? 0 : (12 * 60 * 60));
+    int endTimeSecond = (endHour * 60 + endMin) * 60 + ((endPart == "am") ? 0 : (12 * 60 * 60));
     int currentTimeSecond = (DateTime.now().hour * 60 + DateTime.now().minute) * 60;
 
     return InkWell(
@@ -123,8 +121,7 @@ class StoreItemComponentState extends State<StoreItemComponent> {
                 ? boxDecorationWithRoundedCorners(
                     borderRadius: BorderRadius.circular(defaultRadius),
                   )
-                : boxDecorationRoundedWithShadow(defaultRadius.toInt(),
-                    shadowColor: Colors.grey.withOpacity(0.19)),
+                : boxDecorationRoundedWithShadow(defaultRadius.toInt(), shadowColor: Colors.grey.withOpacity(0.19)),
             child: Row(
               children: [
                 Column(
@@ -150,8 +147,7 @@ class StoreItemComponentState extends State<StoreItemComponent> {
                                       size: 18,
                                       color: Colors.black,
                                     ),
-                              decoration:
-                                  BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                              decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white),
                             ),
                           ),
                         ),
@@ -174,7 +170,7 @@ class StoreItemComponentState extends State<StoreItemComponent> {
                     commonWidget(Icons.phone, widget.store.contactNumber.validate()),
                     8.height,
                     commonWidget(Icons.location_on_rounded, widget.store.address.validate()),
-                    if (currentTimeSecond < startTimeSecond) ...[
+                    if (currentTimeSecond < startTimeSecond && widget.store.workingHours!.isOpen.validate()) ...[
                       8.height,
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -198,11 +194,12 @@ class StoreItemComponentState extends State<StoreItemComponent> {
               ],
             ).paddingAll(10),
           ).paddingOnly(left: 8, right: 8, top: 18),
-          if ((currentTimeSecond > endTimeSecond && !(currentTimeSecond < startTimeSecond))||
+          if ((currentTimeSecond > endTimeSecond && !(currentTimeSecond < startTimeSecond)) ||
               !widget.store.workingHours!.isOpen.validate())
             Positioned(
               top: 8,
-              right: 20,
+              right: isRTL ? null : 20,
+              left: isRTL ? 20 : null,
               child: Container(
                 decoration: boxDecorationWithShadow(
                   borderRadius: BorderRadius.circular(30),
@@ -216,8 +213,7 @@ class StoreItemComponentState extends State<StoreItemComponent> {
                   children: [
                     Icon(Icons.timelapse, color: Colors.white, size: 14),
                     4.width,
-                    Text(language.closed,
-                        style: secondaryTextStyle(color: Colors.white, size: 14)),
+                    Text(language.closed, style: secondaryTextStyle(color: Colors.white, size: 14)),
                   ],
                 ),
               ),

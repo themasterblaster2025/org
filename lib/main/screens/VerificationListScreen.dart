@@ -105,7 +105,7 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
       }
       if (!data!.isDocumentVerification.validate() &&
           data?.userType.validate() == DELIVERY_MAN) {
-        VerificationStatus status = data!.isVerifiedDeliveryMan.validate() == 0
+        VerificationStatus status = data!.documentVerifiedAt.isEmptyOrNull
             ? VerificationStatus.pending
             : VerificationStatus.completed;
         verificationSteps.add(
@@ -113,7 +113,7 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
               title: language.documentVerification,
               description: language.uploadYourDocument,
               image: Icons.newspaper_rounded,
-              status: data!.isVerifiedDeliveryMan.validate() == 0
+              status: data!.documentVerifiedAt.isEmptyOrNull
                   ? VerificationStatus.pending
                   : VerificationStatus.completed,
               fun: () {
@@ -185,9 +185,15 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
                     return Card(
                       child: ListTile(
                         leading: Icon(step.image),
-                        title: Text(step.title),
-                        subtitle: Text(step.description),
-                        trailing: getActionButton(step.status, step.fun),
+                        title: Text(step.title,style: boldTextStyle(),),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(step.description),
+                            getActionButton(step.status, step.fun)
+                          ],
+                        ),
+                        // trailing: getActionButton(step.status, step.fun),
                       ),
                     );
                   },

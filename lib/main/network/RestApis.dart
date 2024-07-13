@@ -114,7 +114,7 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
         toast(language.userNotFound);
       }
     });
-    await setValue(IS_VERIFIED_DELIVERY_MAN, loginResponse.data!.isVerifiedDeliveryMan == 1);
+    await setValue(IS_VERIFIED_DELIVERY_MAN, !loginResponse.data!.documentVerifiedAt.isEmptyOrNull);
     await appStore.setUserEmail(loginResponse.data!.email.validate());
     if (getIntAsync(STATUS) == 1) {
       await appStore.setLogin(true);

@@ -102,7 +102,7 @@ class SplashScreenState extends State<SplashScreen> {
       () async {
         if (appStore.isLoggedIn && getIntAsync(USER_ID) != 0) {
           await getUserDetail(getIntAsync(USER_ID)).then((value) async {
-            setValue(IS_VERIFIED_DELIVERY_MAN, (value.isVerifiedDeliveryMan.validate() == 1));
+            setValue(IS_VERIFIED_DELIVERY_MAN, !value.documentVerifiedAt.isEmptyOrNull);
 
             if (value.deletedAt != null) {
               logout(context);
@@ -119,7 +119,8 @@ class SplashScreenState extends State<SplashScreen> {
                     .then((value) {});
               }
 
-              if ((!getBoolAsync(EMAIL_VERIFIED) &&  getBoolAsync(IS_EMAIL_VERIFICATION) == false) ||
+              if ((!getBoolAsync(EMAIL_VERIFIED) &&
+                      getBoolAsync(IS_EMAIL_VERIFICATION) == false) ||
                   value.otpVerifyAt.isEmptyOrNull ||
                   !getBoolAsync(IS_VERIFIED_DELIVERY_MAN) &&
                       getStringAsync(USER_TYPE) == DELIVERY_MAN) {
