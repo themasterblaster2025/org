@@ -6,8 +6,10 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/list_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import 'package:mighty_delivery/main/models/OrderDetailModel.dart';
 import 'package:mighty_delivery/main/utils/Images.dart';
 
 import '../../extensions/LiveStream.dart';
@@ -34,8 +36,9 @@ import 'WalletScreen.dart';
 class ReturnOrderScreen extends StatefulWidget {
   static String tag = '/ReturnOrderScreen';
   final OrderData orderData;
+  final List<OrderItem>? orderItems;
 
-  ReturnOrderScreen(this.orderData);
+  ReturnOrderScreen(this.orderData, {this.orderItems});
 
   @override
   ReturnOrderScreenState createState() => ReturnOrderScreenState();
@@ -62,6 +65,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
   @override
   void initState() {
     super.initState();
+    print("widget.orderItems ${widget.orderItems.validate().length}");
     init();
   }
 
@@ -125,6 +129,10 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
         "reason": reason!.validate().trim() != language.other.trim()
             ? reason
             : reasonController.text,
+        if(widget.orderItems.validate().isNotEmpty)
+          "store_detail_id": widget.orderItems!.first.productData!.first.storeDetailId.validate(),
+        if(widget.orderItems.validate().isNotEmpty)
+          "order_item": widget.orderItems,
       };
       appStore.setLoading(true);
       await createOrder(req).then((value) async {

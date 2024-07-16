@@ -169,18 +169,19 @@ class AccountFragmentState extends State<AccountFragment> {
                 DeleteAccountScreen().launch(context);
               }, isLast: true),
               mTitle(language.general),
-              accountSettingItemWidget(ic_document, language.privacyPolicy, () {
+              /*accountSettingItemWidget(ic_document, language.privacyPolicy, () {
                 commonLaunchUrl(mPrivacyPolicy);
-              }),
+              }),*/
               accountSettingItemWidget(ic_information, language.helpAndSupport, () {
                 commonLaunchUrl(mHelpAndSupport);
               }),
-              accountSettingItemWidget(ic_document, language.termAndCondition, () {
+             /* accountSettingItemWidget(ic_document, language.termAndCondition, () {
                 commonLaunchUrl(mTermAndCondition);
-              }),
+              }),*/
               accountSettingItemWidget(ic_information, language.aboutUs, () {
                 AboutUsScreen().launch(context);
               }, isLast: false),
+              mTitle("PAGES"), // todo
               Container(
                 decoration: boxDecorationWithRoundedCorners(
                     border: Border.all(color: colorPrimary, width: 1),

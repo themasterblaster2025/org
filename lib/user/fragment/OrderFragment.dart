@@ -184,10 +184,10 @@ class OrderFragmentState extends State<OrderFragment> {
                 child: Column(
                   children: [
                     commonCachedNetworkImage(
-                      // appStore.userProfile.validate(),
                       item.image.validate(),
                       height: context.height() * 0.18,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fill,
+                      width: context.width(),
                     ).cornerRadiusWithClipRRect(5),
                     4.height,
                     Text(

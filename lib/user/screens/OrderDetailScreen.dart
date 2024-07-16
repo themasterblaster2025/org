@@ -952,7 +952,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                             Align(
                               alignment: Alignment.bottomCenter,
                               child: commonButton(language.returnOrder, () {
-                                ReturnOrderScreen(orderData!).launch(context);
+                                ReturnOrderScreen(orderData!,orderItems: orderItems,).launch(context);
                               }, width: context.width()),
                             ).visible(orderData!.status == ORDER_DELIVERED &&
                                 !orderData!.returnOrderId! &&
