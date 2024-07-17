@@ -475,7 +475,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                     children: [
                       Text(language.picked, style: secondaryTextStyle(size: 12)),
                       4.height,
-                      Text('${language.at} ${printDate(data.pickupDatetime!)}',
+                      Text('${language.at} ${printDateWithoutAt("${data.pickupDatetime!}Z")}',
                           style: secondaryTextStyle(size: 12)),
                     ],
                   ),
@@ -538,7 +538,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                     children: [
                       Text(language.delivered, style: secondaryTextStyle(size: 12)),
                       4.height,
-                      Text('${language.at} ${printDate(data.deliveryDatetime!)}',
+                      Text('${language.at} ${printDateWithoutAt("${data.deliveryDatetime!}Z")}',
                           style: secondaryTextStyle(size: 12)),
                     ],
                   ),

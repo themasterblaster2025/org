@@ -379,7 +379,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             ? pickFromDateTime.toString()
             : DateTime.now().toString(),
         "end_time":
-            (!isDeliverNow && pickToDateTime != null) ? pickToDateTime.toString() : null,
+            (!isDeliverNow && pickToDateTime != null) ? pickToDateTime!.toUtc().toString() : null,
         "address":
             isPickSavedAddress ? pickAddressData!.address.validate() : pickAddressCont.text,
         "latitude": isPickSavedAddress ? pickAddressData!.latitude.validate() : pickLat,

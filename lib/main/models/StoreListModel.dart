@@ -1,5 +1,6 @@
 import 'package:mighty_delivery/main/models/PaginationModel.dart';
 import 'package:mighty_delivery/main/models/RatingListModel.dart';
+import 'package:mighty_delivery/main/models/WorkHoursListModel.dart';
 
 import 'AppSettingModel.dart';
 
@@ -53,8 +54,8 @@ class StoreData {
   List<dynamic>? productData;
   List<Rating>? rating;
   num? averageRating;
-  WorkingHours? workingHours;
   List<StoreType>? storeType;
+  List<WorkHoursData>? workHours;
 
   StoreData({
     this.id,
@@ -77,8 +78,8 @@ class StoreData {
     this.productData,
     this.rating,
     this.averageRating,
-    this.workingHours,
     this.storeType,
+    this.workHours
   });
 
   factory StoreData.fromJson(Map<String, dynamic> json) => StoreData(
@@ -106,9 +107,8 @@ class StoreData {
         rating: json["rating"] == null
             ? []
             : List<Rating>.from(json["rating"]!.map((x) => Rating.fromJson(x))),
-        workingHours:
-            json["workingHours"] == null ? null : WorkingHours.fromJson(json["workingHours"]),
         storeType: json["store_type"] == null ? [] : List<StoreType>.from(json["store_type"]!.map((x)=>StoreType.fromJson(x))),
+        workHours: json["work_hours"] == null ? [] : List<WorkHoursData>.from(json["work_hours"]!.map((x)=>WorkHoursData.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -133,32 +133,8 @@ class StoreData {
         "product_data":
             productData == null ? [] : List<dynamic>.from(productData!.map((x) => x)),
         "rating": rating == null ? [] : List<Rating>.from(rating!.map((x) => x.toJson())),
-        "workingHours": workingHours == null ? null : workingHours!.toJson(),
         "store_type": storeType == null ? [] : List<StoreType>.from(storeType!.map((x) => x.toJson())),
+        "work_hours": workHours == null ? [] : List<WorkHoursData>.from(workHours!.map((x) => x.toJson())),
       };
 }
 
-class WorkingHours {
-  String? day;
-  String? end;
-  String? start;
-  bool? isOpen;
-
-  WorkingHours({this.day, this.end, this.start, this.isOpen});
-
-  WorkingHours.fromJson(Map<String, dynamic> json) {
-    day = json['day'];
-    end = json['end'];
-    start = json['start'];
-    isOpen = json['is_open'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['day'] = this.day;
-    data['end'] = this.end;
-    data['start'] = this.start;
-    data['is_open'] = this.isOpen;
-    return data;
-  }
-}

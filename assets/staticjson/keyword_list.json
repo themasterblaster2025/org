@@ -1489,7 +1489,7 @@
         "screenId": "27",
         "keyword_id": 192,
         "keyword_name": "cancelNote",
-        "keyword_value": "NOTE: If you cancel the order before pickup the parcel then cancellation charge will be cut.Otherwise,full charge will be cut."
+        "keyword_value": "NOTE: If you cancel the order before pickup the parcel then cancellation charge will be cut. Otherwise, full charge will be cut."
       },
       {
         "screenId": "27",

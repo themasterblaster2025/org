@@ -1,48 +1,109 @@
+import 'dart:developer';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
-import 'package:fwfh_cached_network_image/fwfh_cached_network_image.dart';
-import 'package:fwfh_webview/fwfh_webview.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import 'package:mighty_delivery/main/utils/Common.dart';
 
-class HtmlWidgetComponent extends StatelessWidget {
-  late final String postContent;
+import '../../extensions/colors.dart';
+import '../../extensions/shared_pref.dart';
+import '../../extensions/widgets.dart';
+import '../utils/Constants.dart';
+import 'PdfViewWidget.dart';
+import 'VimeoEmbedWidget.dart';
+import 'YouTubeEmbededWidget.dart';
+
+class HtmlWidget extends StatelessWidget {
+  final String? postContent;
   final Color? color;
 
-  HtmlWidgetComponent({required this.postContent, this.color});
+  HtmlWidget({this.postContent, this.color});
 
   @override
   Widget build(BuildContext context) {
-    return HtmlWidget(
-      postContent,
-      customWidgetBuilder: (tag) {
-        if (tag.localName == 'img' && tag.attributes.containsKey('src')) {
-
-          double? height = tag.attributes['height'] != null ? double.tryParse(tag.attributes['height']!) : null;
-          double? width = tag.attributes['width'] != null ? double.tryParse(tag.attributes['width']!) : null;
-
-          print("image url : ${tag.attributes['src']}");
-          return CachedNetworkImage(
-            imageUrl: tag.attributes['src']!,
-            placeholder: (context, url) => CircularProgressIndicator(),
-            errorWidget: (context, url, error) => Icon(Icons.error),
-            height: height,
-            width: width,
-          );
+    return Html(
+      data: postContent!,
+      onLinkTap: (s, _, __, ___) async {
+        if (s!.split('/').last.contains('.pdf')) {
+          PdfViewWidget(pdfUrl: s).launch(context);
+        } else {
+          commonLaunchUrl(s, forceWebView: false);
         }
-
       },
-        // factoryBuilder: () => MyWidgetFactoryVideo(),
+      onImageTap: (s, _, __, ___) {
+        openPhotoViewer(context, Image.network(s!).image);
+      },
+      style: {
+        "table": Style(backgroundColor: color ?? transparentColor),
+        "tr": Style(border: Border(bottom: BorderSide(color: Colors.black45.withOpacity(0.5)))),
+        "th": Style(padding: EdgeInsets.all(6), backgroundColor: Colors.black45.withOpacity(0.5)),
+        "td": Style(padding: EdgeInsets.all(6), alignment: Alignment.center),
+        'embed': Style(color: color ?? transparentColor, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble())),
+        'strong': Style(color: color ?? textPrimaryColorGlobal, fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble())),
+        'a': Style(color: color ?? Colors.blue, fontWeight: FontWeight.bold, fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble())),
+        'div': Style(color: color ?? textPrimaryColorGlobal, fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble())),
+        'figure': Style(color: color ?? textPrimaryColorGlobal, fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble()), padding: EdgeInsets.zero, margin: EdgeInsets.zero),
+        'h1': Style(color: color ?? textPrimaryColorGlobal, fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble())),
+        'h2': Style(color: color ?? textPrimaryColorGlobal, fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble())),
+        'h3': Style(color: color ?? textPrimaryColorGlobal, fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble())),
+        'h4': Style(color: color ?? textPrimaryColorGlobal, fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble())),
+        'h5': Style(color: color ?? textPrimaryColorGlobal, fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble())),
+        'h6': Style(color: color ?? textPrimaryColorGlobal, fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble())),
+        'ol': Style(color: color ?? textPrimaryColorGlobal, fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble())),
+        'ul': Style(color: color ?? textPrimaryColorGlobal, fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble())),
+        'strike': Style(color: color ?? textPrimaryColorGlobal, fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble())),
+        'u': Style(color: color ?? textPrimaryColorGlobal, fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble())),
+        'b': Style(color: color ?? textPrimaryColorGlobal, fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble())),
+        'i': Style(color: color ?? textPrimaryColorGlobal, fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble())),
+        'hr': Style(color: color ?? textPrimaryColorGlobal, fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble())),
+        'header': Style(color: color ?? textPrimaryColorGlobal, fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble())),
+        'code': Style(color: color ?? textPrimaryColorGlobal, fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble())),
+        'data': Style(color: color ?? textPrimaryColorGlobal, fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble())),
+        'body': Style(color: color ?? textPrimaryColorGlobal, fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble())),
+        'big': Style(color: color ?? textPrimaryColorGlobal, fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble())),
+        'blockquote': Style(color: color ?? textPrimaryColorGlobal, fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble())),
+        'audio': Style(color: color ?? textPrimaryColorGlobal, fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble())),
+        'img': Style(width: context.width(), padding: EdgeInsets.only(bottom: 8), fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble())),
+        'li': Style(
+          color: color ?? textPrimaryColorGlobal,
+          fontSize: FontSize(getIntAsync(FONT_SIZE_PREF, defaultValue: 16).toDouble()),
+          listStyleType: ListStyleType.DISC,
+          listStylePosition: ListStylePosition.OUTSIDE,
+        ),
+      },
+      customRender: {
+        "embed": (RenderContext renderContext, Widget child) {
+          var videoLink = renderContext.parser.htmlData.text.splitBetween('<embed>', '</embed');
+          if (videoLink.contains('youtu.be')) {
+            return YouTubeEmbedWidget(videoLink.replaceAll('<br>', '').toYouTubeId());
+          } else if (videoLink.contains('vimeo')) {
+            return VimeoEmbedWidget(videoLink.replaceAll('<br>', ''));
+          } else {
+            return child;
+          }
+        },
+        "figure": (RenderContext renderContext, Widget child) {
+          log("=======================");
+          log(renderContext.tree.element!.innerHtml);
+          if (renderContext.tree.element!.innerHtml.contains('youtu.be')) {
+            log("${renderContext.tree.element!.innerHtml.splitBetween('<div class="wp-block-embed__wrapper">', "</div>")}");
+            return YouTubeEmbedWidget(renderContext.tree.element!.innerHtml.splitBetween('<div class="wp-block-embed__wrapper">', "</div>").replaceAll('<br>', '').toYouTubeId());
+          } else if (renderContext.tree.element!.innerHtml.contains('vimeo')) {
+            return VimeoEmbedWidget(renderContext.tree.element!.innerHtml.splitBetween('<div class="wp-block-embed__wrapper">', "</div>").replaceAll('<br>', '').splitAfter('com/'));
+          } else if (renderContext.tree.element!.innerHtml.contains('audio')) {
+            return Container(
+                width: context.width(),
+                child: Html(
+                  data: renderContext.tree.element!.innerHtml,
+                ).center());
+            // return AudioPostWidget(postString: renderContext.tree.element!.innerHtml);
+          } else {
+            return child;
+          }
+        },
+      },
     );
   }
 }
-
-class MyWidgetFactory extends WidgetFactory with CachedNetworkImageFactory {}
-class MyWidgetFactoryVideo extends WidgetFactory with WebViewFactory {}
-
-
-// iframe for video
-/* HtmlWidget(
-                          '<html><iframe style="width:100%" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allow="autoplay; fullscreen" allowfullscreen="allowfullscreen"></iframe></html>',
-                          factoryBuilder: () => MyWidgetFactory(),
-                        ),*/

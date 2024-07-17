@@ -119,7 +119,20 @@ class _DHomeFragmentState extends State<DHomeFragment> {
     LiveStream().on('UpdateTheme', (p0) {
       setState(() {});
     });
+    init();
     getDashboardCountDataApi();
+  }
+
+  Future<void> init() async {
+    await getAppSetting().then((value) {
+      appStore.setCurrencyCode(value.currencyCode ?? CURRENCY_CODE);
+      appStore.setCurrencySymbol(value.currency ?? CURRENCY_SYMBOL);
+      appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
+      setState(() {
+      });
+    }).catchError((error) {
+      log(error.toString());
+    });
   }
 
   Future<void> getDashboardCountDataApi({String? startDate, String? endDate}) async {

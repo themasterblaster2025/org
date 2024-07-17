@@ -247,7 +247,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                     Text(language.picked, style: secondaryTextStyle(size: 12)),
                                                     4.height,
                                                     Text(
-                                                        '${language.at} ${printDateWithoutAt(orderData!.pickupDatetime!)}',
+                                                        '${language.at} ${printDateWithoutAt("${orderData!.pickupDatetime!}Z")}',
                                                         style: secondaryTextStyle(size: 12)),
                                                   ],
                                                 ),
@@ -305,7 +305,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                         Text(language.delivered, style: secondaryTextStyle(size: 12)),
                                                         4.height,
                                                         Text(
-                                                            '${language.at} ${printDateWithoutAt(orderData!.deliveryDatetime!)}',
+                                                            '${language.at} ${printDateWithoutAt("${orderData!.deliveryDatetime!}Z")}',
                                                             style: secondaryTextStyle(size: 12)),
                                                       ],
                                                     ),

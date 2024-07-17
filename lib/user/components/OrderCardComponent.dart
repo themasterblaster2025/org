@@ -121,7 +121,7 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                               Text(language.picked, style: secondaryTextStyle(size: 12)),
                               4.height,
                               Text(
-                                  '${language.at} ${printDateWithoutAt(widget.item.pickupDatetime!)}',
+                                  '${language.at} ${printDateWithoutAt("${widget.item.pickupDatetime!}Z")}',
                                   style: secondaryTextStyle(size: 12)),
                             ],
                           ),
@@ -187,7 +187,7 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                                       style: secondaryTextStyle(size: 12)),
                                   4.height,
                                   Text(
-                                      '${language.at} ${printDateWithoutAt(widget.item.deliveryDatetime!)}',
+                                      '${language.at} ${printDateWithoutAt("${widget.item.deliveryDatetime!}Z")}',
                                       style: secondaryTextStyle(size: 12)),
                                 ],
                               ),

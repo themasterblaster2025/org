@@ -103,7 +103,7 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
         );
         // setState(() {});
       }
-      if (!data!.isDocumentVerification.validate() &&
+      if (data!.documentVerifiedAt.isEmptyOrNull &&
           data?.userType.validate() == DELIVERY_MAN) {
         VerificationStatus status = data!.documentVerifiedAt.isEmptyOrNull
             ? VerificationStatus.pending

@@ -401,7 +401,7 @@ class LoginScreenState extends State<LoginScreen> {
                     },
                     width: context.width(),
                   ),
-                  16.height,
+                 /* 16.height,
                   Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
@@ -449,7 +449,7 @@ class LoginScreenState extends State<LoginScreen> {
                         },
                       ).expand(),
                     ],
-                  ),
+                  ),*/
                   32.height,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

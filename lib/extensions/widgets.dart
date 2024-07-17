@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
 
 import '../extensions/extension_util/int_extensions.dart';
 import '../extensions/extension_util/string_extensions.dart';
@@ -42,8 +43,7 @@ Future<bool?> showConfirmDialog<bool>(
           },
           child: Text(
             positiveText.validate(),
-            style: primaryTextStyle(
-                color: buttonColor ?? Theme.of(_).primaryColor),
+            style: primaryTextStyle(color: buttonColor ?? Theme.of(_).primaryColor),
           ),
         ),
       ],
@@ -93,8 +93,7 @@ Future<T?> showInDialog<T>(
           shape: shape ?? defaultDialogShape,
           title: title,
           titleTextStyle: titleTextStyle,
-          contentPadding:
-              contentPadding ?? EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 24.0),
+          contentPadding: contentPadding ?? EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 24.0),
           //scrollable: scrollable,
           backgroundColor: backgroundColor,
           elevation: elevation ?? defaultElevation.toDouble(),
@@ -134,8 +133,7 @@ Widget snapWidgetHelper<T>(
 
 /// Returns true is snapshot is loading
 bool isSnapshotLoading(AsyncSnapshot snap, {bool checkHasData = false}) {
-  return snap.connectionState == ConnectionState.active ||
-      snap.connectionState == ConnectionState.waiting;
+  return snap.connectionState == ConnectionState.active || snap.connectionState == ConnectionState.waiting;
 }
 
 // /// html widget
@@ -153,17 +151,17 @@ bool isSnapshotLoading(AsyncSnapshot snap, {bool checkHasData = false}) {
 //   );
 // }
 
-// void openPhotoViewer(BuildContext context, ImageProvider imageProvider) {
-//   Scaffold(
-//     body: Stack(
-//       children: <Widget>[
-//         PhotoView(
-//           imageProvider: imageProvider,
-//           minScale: PhotoViewComputedScale.contained,
-//           maxScale: 1.0,
-//         ),
-//         Positioned(top: 35, left: 16, child: BackButton(color: Colors.white)),
-//       ],
-//     ),
-//   ).launch(context);
-// }
+void openPhotoViewer(BuildContext context, ImageProvider imageProvider) {
+  Scaffold(
+    body: Stack(
+      children: <Widget>[
+        PhotoView(
+          imageProvider: imageProvider,
+          minScale: PhotoViewComputedScale.contained,
+          maxScale: 1.0,
+        ),
+        Positioned(top: 35, left: 16, child: BackButton(color: Colors.white)),
+      ],
+    ),
+  ).launch(context);
+}

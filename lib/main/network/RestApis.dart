@@ -50,8 +50,7 @@ import 'NetworkUtils.dart';
 
 //region Auth
 Future<LoginResponse> signUpApi(Map request) async {
-  Response response =
-      await buildHttpResponse('register', request: request, method: HttpMethod.POST);
+  Response response = await buildHttpResponse('register', request: request, method: HttpMethod.POST);
 
   if (!response.statusCode.isSuccessful()) {
     if (response.body.isJson()) {
@@ -74,8 +73,8 @@ Future<LoginResponse> signUpApi(Map request) async {
 }
 
 Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async {
-  Response response = await buildHttpResponse(isSocialLogin ? 'social-login' : 'login',
-      request: request, method: HttpMethod.POST);
+  Response response =
+      await buildHttpResponse(isSocialLogin ? 'social-login' : 'login', request: request, method: HttpMethod.POST);
   if (!response.statusCode.isSuccessful()) {
     if (response.body.isJson()) {
       var json = jsonDecode(response.body);
@@ -132,9 +131,7 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
 }
 
 Future<void> logout(BuildContext context,
-    {bool isFromLogin = false,
-    bool isDeleteAccount = false,
-    bool isVerification = false}) async {
+    {bool isFromLogin = false, bool isDeleteAccount = false, bool isVerification = false}) async {
   clearData() async {
     await removeKey(USER_ID);
     await removeKey(NAME);
@@ -195,13 +192,13 @@ Future<void> logout(BuildContext context,
 }
 
 Future<ChangePasswordResponseModel> changePassword(Map req) async {
-  return ChangePasswordResponseModel.fromJson(await handleResponse(
-      await buildHttpResponse('change-password', request: req, method: HttpMethod.POST)));
+  return ChangePasswordResponseModel.fromJson(
+      await handleResponse(await buildHttpResponse('change-password', request: req, method: HttpMethod.POST)));
 }
 
 Future<ChangePasswordResponseModel> forgotPassword(Map req) async {
-  return ChangePasswordResponseModel.fromJson(await handleResponse(
-      await buildHttpResponse('forget-password', request: req, method: HttpMethod.POST)));
+  return ChangePasswordResponseModel.fromJson(
+      await handleResponse(await buildHttpResponse('forget-password', request: req, method: HttpMethod.POST)));
 }
 
 Future<MultipartRequest> getMultiPartRequest(String endPoint, {String? baseUrl}) async {
@@ -216,13 +213,13 @@ Future sendMultiPartRequest(MultipartRequest multiPartRequest,
 
   await multiPartRequest.send().then((res) async {
     log(res.statusCode);
-    await  res.stream.transform(utf8.decoder).listen((value) {
+    await res.stream.transform(utf8.decoder).listen((value) {
       log("new listen");
       log(value);
       onSuccess?.call(jsonDecode(value));
     });
 
- /*   StringBuffer buffer = StringBuffer();
+    /*   StringBuffer buffer = StringBuffer();
     await for (String chunk in res.stream.transform(utf8.decoder)) {
       buffer.write(chunk);
     }
@@ -236,42 +233,40 @@ Future sendMultiPartRequest(MultipartRequest multiPartRequest,
 /// Profile Update
 
 Future<UserData> getUserDetail(int id) async {
-  return UserData.fromJson(await handleResponse(
-          await buildHttpResponse('user-detail?id=$id', method: HttpMethod.GET))
+  return UserData.fromJson(await handleResponse(await buildHttpResponse('user-detail?id=$id', method: HttpMethod.GET))
       .then((value) => value['data']));
 }
 
 /// Create Order Api
 Future<LDBaseResponse> createOrder(Map request) async {
-  return LDBaseResponse.fromJson(await handleResponse(
-      await buildHttpResponse('order-save', request: request, method: HttpMethod.POST)));
+  return LDBaseResponse.fromJson(
+      await handleResponse(await buildHttpResponse('order-save', request: request, method: HttpMethod.POST)));
 }
 
 Future<LDBaseResponse> deleteOrder(int id) async {
-  return LDBaseResponse.fromJson(await handleResponse(
-      await buildHttpResponse('order-delete/$id', method: HttpMethod.POST)));
+  return LDBaseResponse.fromJson(
+      await handleResponse(await buildHttpResponse('order-delete/$id', method: HttpMethod.POST)));
 }
 
 Future<OrderDetailModel> getOrderDetails(int id) async {
-  return OrderDetailModel.fromJson(await handleResponse(
-      await buildHttpResponse('order-detail?id=$id', method: HttpMethod.GET)));
+  return OrderDetailModel.fromJson(
+      await handleResponse(await buildHttpResponse('order-detail?id=$id', method: HttpMethod.GET)));
 }
 
 /// ParcelType Api
 Future<ParcelTypeListModel> getParcelTypeList({int? page}) async {
-  return ParcelTypeListModel.fromJson(await handleResponse(await buildHttpResponse(
-      'staticdata-list?type=parcel_type&per_page=-1',
-      method: HttpMethod.GET)));
+  return ParcelTypeListModel.fromJson(await handleResponse(
+      await buildHttpResponse('staticdata-list?type=parcel_type&per_page=-1', method: HttpMethod.GET)));
 }
 
 Future<CountryListModel> getCountryList() async {
-  return CountryListModel.fromJson(await handleResponse(
-      await buildHttpResponse('country-list?per_page=-1', method: HttpMethod.GET)));
+  return CountryListModel.fromJson(
+      await handleResponse(await buildHttpResponse('country-list?per_page=-1', method: HttpMethod.GET)));
 }
 
 Future<CountryDetailModel> getCountryDetail(int id) async {
-  return CountryDetailModel.fromJson(await handleResponse(
-      await buildHttpResponse('country-detail?id=$id', method: HttpMethod.GET)));
+  return CountryDetailModel.fromJson(
+      await handleResponse(await buildHttpResponse('country-detail?id=$id', method: HttpMethod.GET)));
 }
 
 Future<CityListModel> getCityList({required int countryId, String? name}) async {
@@ -283,8 +278,8 @@ Future<CityListModel> getCityList({required int countryId, String? name}) async 
 }
 
 Future<CityDetailModel> getCityDetail(int id) async {
-  return CityDetailModel.fromJson(await handleResponse(
-      await buildHttpResponse('city-detail?id=$id', method: HttpMethod.GET)));
+  return CityDetailModel.fromJson(
+      await handleResponse(await buildHttpResponse('city-detail?id=$id', method: HttpMethod.GET)));
 }
 
 ///Vehicle
@@ -297,24 +292,18 @@ Future<VehicleListModel> getVehicleList(
     int? totalItem,
     int? totalPage = 10}) async {
   if (cityID != null) {
-    return VehicleListModel.fromJson(await handleResponse(await buildHttpResponse(
-        'vehicle-list?city_id=$cityID&per_page=-1&status=1',
-        method: HttpMethod.GET)));
-  } else {
     return VehicleListModel.fromJson(await handleResponse(
-        await buildHttpResponse('vehicle-list?per_page=-1', method: HttpMethod.GET)));
+        await buildHttpResponse('vehicle-list?city_id=$cityID&per_page=-1&status=1', method: HttpMethod.GET)));
+  } else {
+    return VehicleListModel.fromJson(
+        await handleResponse(await buildHttpResponse('vehicle-list?per_page=-1', method: HttpMethod.GET)));
   }
 }
 
 /// get OrderList
 Future<OrderListModel> getOrderList(
-    {required int page,
-    String? orderStatus,
-    String? fromDate,
-    String? toDate,
-    String? excludeStatus}) async {
-  String endPoint =
-      'order-list?client_id=${getIntAsync(USER_ID)}&city_id=${getIntAsync(CITY_ID)}&page=$page';
+    {required int page, String? orderStatus, String? fromDate, String? toDate, String? excludeStatus}) async {
+  String endPoint = 'order-list?client_id=${getIntAsync(USER_ID)}&city_id=${getIntAsync(CITY_ID)}&page=$page';
 
   if (orderStatus.validate().isNotEmpty) {
     endPoint += '&status=$orderStatus';
@@ -329,8 +318,7 @@ Future<OrderListModel> getOrderList(
         '&from_date=${DateFormat('yyyy-MM-dd').format(DateTime.parse(fromDate.validate()))}&to_date=${DateFormat('yyyy-MM-dd').format(DateTime.parse(toDate.validate()))}';
   }
 
-  return OrderListModel.fromJson(
-      await handleResponse(await buildHttpResponse(endPoint, method: HttpMethod.GET)));
+  return OrderListModel.fromJson(await handleResponse(await buildHttpResponse(endPoint, method: HttpMethod.GET)));
 }
 
 /// get deliveryBoy orderList
@@ -371,23 +359,32 @@ Future updateOrder({
   File? picUpSignature,
   File? deliverySignature,
 }) async {
+  // String? newPickUpTime = "";
+  // if (pickupDatetime != null) {
+  //   print("pickupTime updateorder ${pickupDatetime}");
+  //   DateTime pickupTime = DateTime.parse(pickupDatetime);
+  //   newPickUpTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(pickupTime.toUtc());
+  //   print("pickupTime ${newPickUpTime}");
+  // }
+  // String? newDeliverytime = "";
+  // print("step 1 ${deliveryDatetime}");
+  // if (!deliveryDatetime.isEmptyOrNull) {
+  //   DateTime deliveryTime = DateTime.parse(deliveryDatetime!);
+  //   newDeliverytime = DateFormat('yyyy-MM-dd HH:mm:ss').format(deliveryTime.toUtc());
+  // }
   MultipartRequest multiPartRequest = await getMultiPartRequest('order-update/$orderId');
   if (pickupDatetime != null) multiPartRequest.fields['pickup_datetime'] = pickupDatetime;
-  if (deliveryDatetime != null)
-    multiPartRequest.fields['delivery_datetime'] = deliveryDatetime;
+  if (deliveryDatetime != null) multiPartRequest.fields['delivery_datetime'] = deliveryDatetime;
   if (clientName != null) multiPartRequest.fields['pickup_confirm_by_client'] = clientName;
-  if (deliveryman != null)
-    multiPartRequest.fields['pickup_confirm_by_delivery_man'] = deliveryman;
+  if (deliveryman != null) multiPartRequest.fields['pickup_confirm_by_delivery_man'] = deliveryman;
   if (reason != null) multiPartRequest.fields['reason'] = reason;
   if (orderStatus != null) multiPartRequest.fields['status'] = orderStatus;
 
   if (picUpSignature != null)
-    multiPartRequest.files
-        .add(await MultipartFile.fromPath('pickup_time_signature', picUpSignature.path));
+    multiPartRequest.files.add(await MultipartFile.fromPath('pickup_time_signature', picUpSignature.path));
   if (deliverySignature != null)
-    multiPartRequest.files
-        .add(await MultipartFile.fromPath('delivery_time_signature', deliverySignature.path));
-
+    multiPartRequest.files.add(await MultipartFile.fromPath('delivery_time_signature', deliverySignature.path));
+  print("==> ${multiPartRequest.toString()}");
   await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
     if (data != null) {
       //
@@ -398,57 +395,51 @@ Future updateOrder({
 }
 
 Future<PaymentGatewayListModel> getPaymentGatewayList() async {
-  return PaymentGatewayListModel.fromJson(await handleResponse(
-      await buildHttpResponse('paymentgateway-list?status=1', method: HttpMethod.GET)));
+  return PaymentGatewayListModel.fromJson(
+      await handleResponse(await buildHttpResponse('paymentgateway-list?status=1', method: HttpMethod.GET)));
 }
 
 Future<LDBaseResponse> savePayment(Map request) async {
-  return LDBaseResponse.fromJson(await handleResponse(
-      await buildHttpResponse('payment-save', request: request, method: HttpMethod.POST)));
+  return LDBaseResponse.fromJson(
+      await handleResponse(await buildHttpResponse('payment-save', request: request, method: HttpMethod.POST)));
 }
 
 Future<WithDrawListModel> getWithDrawList({int? page}) async {
-  return WithDrawListModel.fromJson(await handleResponse(
-      await buildHttpResponse('withdrawrequest-list?page=$page', method: HttpMethod.GET)));
+  return WithDrawListModel.fromJson(
+      await handleResponse(await buildHttpResponse('withdrawrequest-list?page=$page', method: HttpMethod.GET)));
 }
 
 Future<LDBaseResponse> saveWithDrawRequest(Map request) async {
-  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse(
-      'save-withdrawrequest',
-      method: HttpMethod.POST,
-      request: request)));
+  return LDBaseResponse.fromJson(
+      await handleResponse(await buildHttpResponse('save-withdrawrequest', method: HttpMethod.POST, request: request)));
 }
 
 /// Get Notification List
 Future<NotificationListModel> getNotification({required int page, Map? request}) async {
   if (request != null) {
-    return NotificationListModel.fromJson(await handleResponse(await buildHttpResponse(
-        'notification-list?limit=20&page=$page',
-        request: request,
-        method: HttpMethod.POST)));
+    return NotificationListModel.fromJson(await handleResponse(
+        await buildHttpResponse('notification-list?limit=20&page=$page', request: request, method: HttpMethod.POST)));
   } else {
-    return NotificationListModel.fromJson(await handleResponse(await buildHttpResponse(
-        'notification-list?limit=20&page=$page',
-        method: HttpMethod.POST)));
+    return NotificationListModel.fromJson(await handleResponse(
+        await buildHttpResponse('notification-list?limit=20&page=$page', method: HttpMethod.POST)));
   }
 }
 
 /// Get Document List
 Future<DocumentListModel> getDocumentList({int? page}) async {
-  return DocumentListModel.fromJson(await handleResponse(
-      await buildHttpResponse('document-list?status=1&per_page=-1', method: HttpMethod.GET)));
+  return DocumentListModel.fromJson(
+      await handleResponse(await buildHttpResponse('document-list?status=1&per_page=-1', method: HttpMethod.GET)));
 }
 
 /// Get Delivery Document List
 Future<DeliveryDocumentListModel> getDeliveryPersonDocumentList({int? page}) async {
-  return DeliveryDocumentListModel.fromJson(await handleResponse(await buildHttpResponse(
-      'delivery-man-document-list?per_page=-1',
-      method: HttpMethod.GET)));
+  return DeliveryDocumentListModel.fromJson(
+      await handleResponse(await buildHttpResponse('delivery-man-document-list?per_page=-1', method: HttpMethod.GET)));
 }
 
 Future<LDBaseResponse> deleteDeliveryDoc(int id) async {
-  return LDBaseResponse.fromJson(await handleResponse(
-      await buildHttpResponse('delivery-man-document-delete/$id', method: HttpMethod.POST)));
+  return LDBaseResponse.fromJson(
+      await handleResponse(await buildHttpResponse('delivery-man-document-delete/$id', method: HttpMethod.POST)));
 }
 
 /// App Setting
@@ -459,10 +450,8 @@ Future<AppSettingModel> getAppSetting() async {
 
 /// Cancel AutoAssign order
 Future<LDBaseResponse> cancelAutoAssignOrder(Map request) async {
-  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse(
-      'order-auto-assign',
-      request: request,
-      method: HttpMethod.POST)));
+  return LDBaseResponse.fromJson(
+      await handleResponse(await buildHttpResponse('order-auto-assign', request: request, method: HttpMethod.POST)));
 }
 
 Future<AutoCompletePlacesListModel> placeAutoCompleteApi(
@@ -473,28 +462,28 @@ Future<AutoCompletePlacesListModel> placeAutoCompleteApi(
 }
 
 Future<PlaceIdDetailModel> getPlaceDetail({String placeId = ''}) async {
-  return PlaceIdDetailModel.fromJson(await handleResponse(
-      await buildHttpResponse('place-detail-api?placeid=$placeId', method: HttpMethod.GET)));
+  return PlaceIdDetailModel.fromJson(
+      await handleResponse(await buildHttpResponse('place-detail-api?placeid=$placeId', method: HttpMethod.GET)));
 }
 
 Future<LDBaseResponse> deleteUser(Map req) async {
-  return LDBaseResponse.fromJson(await handleResponse(
-      await buildHttpResponse('delete-user', request: req, method: HttpMethod.POST)));
+  return LDBaseResponse.fromJson(
+      await handleResponse(await buildHttpResponse('delete-user', request: req, method: HttpMethod.POST)));
 }
 
 Future<LDBaseResponse> userAction(Map request) async {
-  return LDBaseResponse.fromJson(await handleResponse(
-      await buildHttpResponse('user-action', request: request, method: HttpMethod.POST)));
+  return LDBaseResponse.fromJson(
+      await handleResponse(await buildHttpResponse('user-action', request: request, method: HttpMethod.POST)));
 }
 
 Future<WalletListModel> getWalletList({required int page}) async {
-  return WalletListModel.fromJson(await handleResponse(
-      await buildHttpResponse('wallet-list?page=$page', method: HttpMethod.GET)));
+  return WalletListModel.fromJson(
+      await handleResponse(await buildHttpResponse('wallet-list?page=$page', method: HttpMethod.GET)));
 }
 
 Future<LDBaseResponse> saveWallet(Map request) async {
-  return LDBaseResponse.fromJson(await handleResponse(
-      await buildHttpResponse('save-wallet', method: HttpMethod.POST, request: request)));
+  return LDBaseResponse.fromJson(
+      await handleResponse(await buildHttpResponse('save-wallet', method: HttpMethod.POST, request: request)));
 }
 
 /// Update Bank Info
@@ -531,8 +520,8 @@ Future updateBankDetail(
 }
 
 Future<LDBaseResponse> logoutApi() async {
-  return LDBaseResponse.fromJson(await handleResponse(
-      await buildHttpResponse('logout?clear=player_id', method: HttpMethod.GET)));
+  return LDBaseResponse.fromJson(
+      await handleResponse(await buildHttpResponse('logout?clear=player_id', method: HttpMethod.GET)));
 }
 
 Future<EarningList> getPaymentList({required int page}) async {
@@ -542,9 +531,8 @@ Future<EarningList> getPaymentList({required int page}) async {
 }
 
 Future<UserProfileDetailModel> getUserProfile() async {
-  return UserProfileDetailModel.fromJson(await handleResponse(await buildHttpResponse(
-      'user-profile-detail?id=${getIntAsync(USER_ID)}',
-      method: HttpMethod.GET)));
+  return UserProfileDetailModel.fromJson(await handleResponse(
+      await buildHttpResponse('user-profile-detail?id=${getIntAsync(USER_ID)}', method: HttpMethod.GET)));
 }
 
 Future<InvoiceSettingModel> getInvoiceSetting() async {
@@ -553,8 +541,8 @@ Future<InvoiceSettingModel> getInvoiceSetting() async {
 }
 
 Future<LDBaseResponse> updateUserStatus(Map req) async {
-  return LDBaseResponse.fromJson(await handleResponse(
-      await buildHttpResponse('update-user-status', request: req, method: HttpMethod.POST)));
+  return LDBaseResponse.fromJson(
+      await handleResponse(await buildHttpResponse('update-user-status', request: req, method: HttpMethod.POST)));
 }
 
 Future updateUid(String? uid) async {
@@ -598,27 +586,26 @@ Future<AddressListModel> getAddressList({int? page}) async {
 }
 
 Future<LDBaseResponse> saveUserAddress(Map req) async {
-  return LDBaseResponse.fromJson(await handleResponse(
-      await buildHttpResponse('useraddress-save', method: HttpMethod.POST, request: req)));
+  return LDBaseResponse.fromJson(
+      await handleResponse(await buildHttpResponse('useraddress-save', method: HttpMethod.POST, request: req)));
 }
 
 Future<LDBaseResponse> deleteUserAddress(int id) async {
-  return LDBaseResponse.fromJson(await handleResponse(
-      await buildHttpResponse('useraddress-delete/$id', method: HttpMethod.POST)));
+  return LDBaseResponse.fromJson(
+      await handleResponse(await buildHttpResponse('useraddress-delete/$id', method: HttpMethod.POST)));
 }
 
 Future<LDBaseResponse> verifyOtpEmail(Map req) async {
-  return LDBaseResponse.fromJson(await handleResponse(
-      await buildHttpResponse('verify-otp-for-email', request: req, method: HttpMethod.POST)));
+  return LDBaseResponse.fromJson(
+      await handleResponse(await buildHttpResponse('verify-otp-for-email', request: req, method: HttpMethod.POST)));
 }
 
 Future<LDBaseResponse> resendOtpEmail() async {
-  return LDBaseResponse.fromJson(await handleResponse(
-      await buildHttpResponse('resend-otp-for-email', method: HttpMethod.POST)));
+  return LDBaseResponse.fromJson(
+      await handleResponse(await buildHttpResponse('resend-otp-for-email', method: HttpMethod.POST)));
 }
 
-Future<DirectionsResponse> getDistanceBetweenLatLng(
-    String origins, String destinations) async {
+Future<DirectionsResponse> getDistanceBetweenLatLng(String origins, String destinations) async {
   return DirectionsResponse.fromJson(await handleResponse(await buildHttpResponse(
       'distance-matrix-api?origins=$origins&destinations=$destinations',
       method: HttpMethod.GET)));
@@ -626,20 +613,18 @@ Future<DirectionsResponse> getDistanceBetweenLatLng(
 
 //Language Data
 Future<ServerLanguageResponse> getLanguageList(versionNo) async {
-  return ServerLanguageResponse.fromJson(await handleResponse(await buildHttpResponse(
-          'language-table-list?version_no=$versionNo',
-          method: HttpMethod.GET))
-      .then((value) => value));
+  return ServerLanguageResponse.fromJson(
+      await handleResponse(await buildHttpResponse('language-table-list?version_no=$versionNo', method: HttpMethod.GET))
+          .then((value) => value));
 }
 
 // get store list
 Future<StoreListModel> getStoreList(
     {required int page, String? storeType, String? title, bool isNearby = false}) async {
-  String endPoint =
-      'store-list?page=$page&city_id=${getIntAsync(CITY_ID)}&country_id=${getIntAsync(COUNTRY_ID)}';
+  String endPoint = 'store-list?page=$page&city_id=${getIntAsync(CITY_ID)}&country_id=${getIntAsync(COUNTRY_ID)}';
   if (isNearby) {
-    endPoint = endPoint +
-        '&latitude=${getDoubleAsync(CURRENT_LATITUDE)}&longitude=${getDoubleAsync(CURRENT_LONGITUDE)}';
+    endPoint =
+        endPoint + '&latitude=${getDoubleAsync(CURRENT_LATITUDE)}&longitude=${getDoubleAsync(CURRENT_LONGITUDE)}';
   }
   if (storeType != null) {
     endPoint = endPoint + '&store_type=$storeType';
@@ -647,42 +632,37 @@ Future<StoreListModel> getStoreList(
   if (title != null) {
     endPoint = endPoint + '&title=$title';
   }
-  return StoreListModel.fromJson(
-      await handleResponse(await buildHttpResponse(endPoint, method: HttpMethod.GET)));
+  return StoreListModel.fromJson(await handleResponse(await buildHttpResponse(endPoint, method: HttpMethod.GET)));
 }
 
 // get Product list
-Future<ProductListModel> getProductList(
-    {int? storeDetailId, int? page, String? title, bool isNearest = false}) async {
+Future<ProductListModel> getProductList({int? storeDetailId, int? page, String? title, bool isNearest = false}) async {
   String endPoint = 'product-list?page=$page';
   if (storeDetailId != null) {
     endPoint = endPoint + "&store_detail_id=$storeDetailId";
   }
   if (title != null) {
     if (isNearest) {
-      endPoint = endPoint +
-          '&latitude=${getDoubleAsync(CURRENT_LATITUDE)}&longitude=${getDoubleAsync(CURRENT_LONGITUDE)}';
+      endPoint =
+          endPoint + '&latitude=${getDoubleAsync(CURRENT_LATITUDE)}&longitude=${getDoubleAsync(CURRENT_LONGITUDE)}';
     }
     if (getIntAsync(CITY_ID) != 0) {
       endPoint = endPoint + "&city_id=${getIntAsync(CITY_ID)}";
     }
     endPoint = endPoint + "&title=$title";
   }
-  return ProductListModel.fromJson(
-      await handleResponse(await buildHttpResponse(endPoint, method: HttpMethod.GET)));
+  return ProductListModel.fromJson(await handleResponse(await buildHttpResponse(endPoint, method: HttpMethod.GET)));
 }
 
 // get store details from storeId
 Future<StoreData> getStoreDetail(int id) async {
-  return StoreData.fromJson(await handleResponse(
-          await buildHttpResponse('store-detail?id=$id', method: HttpMethod.GET))
+  return StoreData.fromJson(await handleResponse(await buildHttpResponse('store-detail?id=$id', method: HttpMethod.GET))
       .then((value) => value['data']));
 }
 
 Future<CategoryModel> getCategorySubcategoryList({int? page, int? storeDetailId}) async {
-  return CategoryModel.fromJson(await handleResponse(await buildHttpResponse(
-      'category-list?page=$page&store_id=$storeDetailId',
-      method: HttpMethod.GET)));
+  return CategoryModel.fromJson(await handleResponse(
+      await buildHttpResponse('category-list?page=$page&store_id=$storeDetailId', method: HttpMethod.GET)));
 }
 
 Future<WorkHoursListModel> getWorkingHoursList({int? page, int? storeDetailId}) async {
@@ -690,20 +670,17 @@ Future<WorkHoursListModel> getWorkingHoursList({int? page, int? storeDetailId}) 
   if (storeDetailId != null) {
     endpoint += '?store_detail_id=$storeDetailId';
   }
-  return WorkHoursListModel.fromJson(
-      await handleResponse(await buildHttpResponse(endpoint, method: HttpMethod.GET)));
+  return WorkHoursListModel.fromJson(await handleResponse(await buildHttpResponse(endpoint, method: HttpMethod.GET)));
 }
 
 Future<LDBaseResponse> saveRateReview(Map req) async {
-  return LDBaseResponse.fromJson(await handleResponse(
-      await buildHttpResponse('rating-save', request: req, method: HttpMethod.POST)));
+  return LDBaseResponse.fromJson(
+      await handleResponse(await buildHttpResponse('rating-save', request: req, method: HttpMethod.POST)));
 }
 
 Future<LDBaseResponse> saveFavouriteStore(Map req) async {
-  return LDBaseResponse.fromJson(await handleResponse(await buildHttpResponse(
-      'userFavouriteStore-save',
-      method: HttpMethod.POST,
-      request: req)));
+  return LDBaseResponse.fromJson(
+      await handleResponse(await buildHttpResponse('userFavouriteStore-save', method: HttpMethod.POST, request: req)));
 }
 
 Future<StoreListModel> getFavouriteStore() async {
@@ -719,6 +696,5 @@ Future<DashboardCount> getDashboardCount({String? startDate, String? endDate}) a
   if (startDate != null && endDate != null) {
     endpoint += '?from_date=$startDate&to_date=$endDate';
   }
-  return DashboardCount.fromJson(
-      await handleResponse(await buildHttpResponse(endpoint, method: HttpMethod.GET)));
+  return DashboardCount.fromJson(await handleResponse(await buildHttpResponse(endpoint, method: HttpMethod.GET)));
 }

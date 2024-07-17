@@ -85,8 +85,10 @@ class StoreItemComponentState extends State<StoreItemComponent> {
 
   @override
   Widget build(BuildContext context) {
-    String start = widget.store.workingHours!.start.validate();
-    String end = widget.store.workingHours!.end.validate();
+    // String start = widget.store.workingHours!.start.validate();
+    String start = widget.store.workHours!.firstWhere((element) => element.day == currentDay).startTime.validate();
+    // String end = widget.store.workingHours!.end.validate();
+    String end = widget.store.workHours!.firstWhere((element) => element.day == currentDay).endTime.validate();
 
     List<String> hourMinute = start.split(' ')[0].split(':');
     int startHour = int.parse(hourMinute[0]);
@@ -170,7 +172,7 @@ class StoreItemComponentState extends State<StoreItemComponent> {
                     commonWidget(Icons.phone, widget.store.contactNumber.validate()),
                     8.height,
                     commonWidget(Icons.location_on_rounded, widget.store.address.validate()),
-                    if (currentTimeSecond < startTimeSecond && widget.store.workingHours!.isOpen.validate()) ...[
+                    if (currentTimeSecond < startTimeSecond && widget.store.workHours!.isOpen.validate()) ...[
                       8.height,
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,

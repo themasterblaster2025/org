@@ -51,7 +51,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             style: boldTextStyle(size: 18),
           ),
           8.height,
-          HtmlWidgetComponent(postContent: widget.product.description.validate(),),
+          HtmlWidget(postContent: widget.product.description.validate(),)
         ],
       ),
     );

@@ -78,7 +78,7 @@ class StoreListScreenState extends State<StoreListScreen> {
         storeList.clear();
       }
 
-      for (StoreData data in value.data!) {
+      /*for (StoreData data in value.data!) {
         if (data.workingHours == null) {
           data.workingHours =
               WorkingHours(start: "12:00 am", end: "12:00 pm", isOpen: false, day: "");
@@ -89,19 +89,19 @@ class StoreListScreenState extends State<StoreListScreen> {
               storeList.add(data);
             }
           });
-          /* if (data.storeType!.id.validate() == widget.type) {
+          *//* if (data.storeType!.id.validate() == widget.type) {
             storeList.add(data);
-          }*/
+          }*//*
         } else {
           storeList.add(data);
         }
       }
-      appStore.setLoading(false);
+      appStore.setLoading(false);*/
 
-      // storeList.addAll(value.data!);
-      storeList.forEach((element) async {
+      storeList.addAll(value.data!);
+      /*storeList.forEach((element) async {
         await getWorkingHours(element);
-      });
+      });*/
       setState(() {});
     }).catchError((e) {
       isLastPage = true;
@@ -113,7 +113,7 @@ class StoreListScreenState extends State<StoreListScreen> {
   Future<void> getWorkingHours(StoreData store) async {
     appStore.setLoading(true);
 
-    await getWorkingHoursList(storeDetailId: store.id.validate()).then((value) {
+   /* await getWorkingHoursList(storeDetailId: store.id.validate()).then((value) {
       value.data.validate().forEach((element) {
         if (element.day == currentDay && element.storeDetailId == store.id) {
           store.workingHours = WorkingHours(
@@ -129,7 +129,7 @@ class StoreListScreenState extends State<StoreListScreen> {
     }).catchError((e) {
       appStore.setLoading(false);
       toast(e.toString(), print: true);
-    });
+    });*/
   }
 
   @override
@@ -188,8 +188,7 @@ class StoreListScreenState extends State<StoreListScreen> {
                     ),
                   ],
                 ).paddingAll(16).visible(widget.type.validate() == 0),
-                storeList.isNotEmpty
-                    ? ListView.builder(
+                ListView.builder(
                         itemBuilder: (context, index) {
                           StoreData item = storeList[index];
                           return StoreItemComponent(
@@ -199,9 +198,7 @@ class StoreListScreenState extends State<StoreListScreen> {
                         controller: scrollController,
                         itemCount: storeList.length,
                       ).expand()
-                    : !appStore.isLoading
-                        ? emptyWidget()
-                        : SizedBox(),
+                  ,
               ],
             ),
             loaderWidget().center().visible(appStore.isLoading),
