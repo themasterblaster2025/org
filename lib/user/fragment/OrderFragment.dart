@@ -145,7 +145,7 @@ class OrderFragmentState extends State<OrderFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return /*ListView(
       // shrinkWrap: true,
       children: [
         if (storeList.isNotEmpty) ...[
@@ -239,7 +239,7 @@ class OrderFragmentState extends State<OrderFragment> {
               ],
             ),
           ],
-        ).paddingSymmetric(horizontal: 10),
+        ).paddingSymmetric(horizontal: 10),*/
         AnimatedListView(
           itemCount: orderList.length,
           shrinkWrap: true,
@@ -272,8 +272,8 @@ class OrderFragmentState extends State<OrderFragment> {
             OrderData item = orderList[i];
             return item.status != ORDER_DRAFT ? OrderCardComponent(item: item) : SizedBox();
           },
-        ),
-      ],
+     /*   ),
+      ],*/
     );
   }
 }

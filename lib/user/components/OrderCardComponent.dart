@@ -255,6 +255,7 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                       ],
                     ).onTap(() {
                       generateInvoiceCall(widget.item);
+
                     }),
                   ),
                 AppButton(

@@ -166,10 +166,11 @@ class AccountFragmentState extends State<AccountFragment> {
                     () {
                       MyAddressListScreen().launch(context);
                     },
+                    isLast: true,
                   ),
-                  accountSettingItemWidget(ic_bank_detail, language.favouriteStore, () {
+                  /*accountSettingItemWidget(ic_bank_detail, language.favouriteStore, () {
                     FavouriteStoreScreen().launch(context);
-                  }, isLast: true),
+                  }, isLast: true),*/
                   mTitle(language.account),
                   accountSettingItemWidget(ic_change_password, language.changePassword, () {
                     ChangePasswordScreen().launch(context);
