@@ -30,7 +30,13 @@ import '../services/AuthServices.dart';
 import 'Images.dart';
 import 'Widgets.dart';
 
-InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, Function()? suffixOnTap, Widget? dateTime, Widget? prefixIcon, bool? isFill = true}) {
+InputDecoration commonInputDecoration(
+    {String? hintText,
+    IconData? suffixIcon,
+    Function()? suffixOnTap,
+    Widget? dateTime,
+    Widget? prefixIcon,
+    bool? isFill = true}) {
   return InputDecoration(
     errorMaxLines: 3,
     contentPadding: EdgeInsets.all(16),
@@ -46,10 +52,15 @@ InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, F
         : suffixIcon != null
             ? Icon(suffixIcon, color: colorPrimary, size: 22).onTap(suffixOnTap)
             : null,
-    enabledBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.solid, color: colorPrimaryLight), borderRadius: BorderRadius.circular(defaultRadius)),
-    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
-    errorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(defaultRadius)),
-    focusedErrorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(defaultRadius)),
+    enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(style: BorderStyle.solid, color: colorPrimaryLight),
+        borderRadius: BorderRadius.circular(defaultRadius)),
+    focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
+    errorBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(defaultRadius)),
+    focusedErrorBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(defaultRadius)),
   );
 }
 
@@ -82,12 +93,15 @@ Widget commonCachedNetworkImage(
       },
     );
   } else {
-    return Image.asset(url!, height: height, width: width, fit: fit, alignment: alignment ?? Alignment.center).cornerRadiusWithClipRRect(radius ?? defaultRadius);
+    return Image.asset(url!, height: height, width: width, fit: fit, alignment: alignment ?? Alignment.center)
+        .cornerRadiusWithClipRRect(radius ?? defaultRadius);
   }
 }
 
 Widget placeHolderWidget({double? height, double? width, BoxFit? fit, AlignmentGeometry? alignment, double? radius}) {
-  return Image.asset('assets/placeholder.jpg', height: height, width: width, fit: fit ?? BoxFit.cover, alignment: alignment ?? Alignment.center).cornerRadiusWithClipRRect(radius ?? defaultRadius);
+  return Image.asset('assets/placeholder.jpg',
+          height: height, width: width, fit: fit ?? BoxFit.cover, alignment: alignment ?? Alignment.center)
+      .cornerRadiusWithClipRRect(radius ?? defaultRadius);
 }
 
 // String parseHtmlString(String? htmlString) {
@@ -155,10 +169,15 @@ String parcelTypeIcon(String? parcelType) {
 }
 
 String printDate(String date) {
-  return DateFormat('dd MMM yyyy').format(DateTime.parse(date).toLocal()) + " at " + DateFormat('hh:mm a').format(DateTime.parse(date).toLocal());
+  return DateFormat('dd MMM yyyy').format(DateTime.parse(date).toLocal()) +
+      " at " +
+      DateFormat('hh:mm a').format(DateTime.parse(date).toLocal());
 }
+
 String printDateWithoutAt(String date) {
-  return DateFormat('dd MMM yyyy').format(DateTime.parse(date).toLocal()) + " " + DateFormat('hh:mm a').format(DateTime.parse(date).toLocal());
+  return DateFormat('dd MMM yyyy').format(DateTime.parse(date).toLocal()) +
+      " " +
+      DateFormat('hh:mm a').format(DateTime.parse(date).toLocal());
 }
 
 // double calculateDistance(lat1, lon1, lat2, lon2) {
@@ -198,6 +217,27 @@ String orderStatus(String orderStatus) {
     return language.cancelled;
   }
   return language.assigned;
+}
+
+String countName(String count) {
+  if (count == TODAY_ORDER) {
+    return language.todayOrder;
+  } else if (count == REMAINING_ORDER) {
+    return language.remainingOrder;
+  } else if (count == COMPLETED_ORDER) {
+    return language.completedOrder;
+  } else if (count == INPROGRESS_ORDER) {
+    return language.inProgressOrder;
+  } else if (count == TOTAL_EARNING) {
+    return language.commission;
+  } else if (count == WALLET_BALANCE) {
+    return language.walletBalance;
+  } else if (count == PENDING_WITHDRAW_REQUEST) {
+    return language.pendingWithdReq;
+  } else if (count == COMPLETED_WITHDRAW_REQUEST) {
+    return language.completedWithReq;
+  }
+  return "";
 }
 
 String transactionType(String type) {
@@ -284,7 +324,8 @@ Future<void> saveOneSignalPlayerId() async {
     print(OneSignal.User.pushSubscription.token);
     print(state.current.jsonRepresentation());
 
-    if (OneSignal.User.pushSubscription.id.validate().isNotEmpty) await setValue(PLAYER_ID, OneSignal.User.pushSubscription.id.validate());
+    if (OneSignal.User.pushSubscription.id.validate().isNotEmpty)
+      await setValue(PLAYER_ID, OneSignal.User.pushSubscription.id.validate());
   });
 }
 

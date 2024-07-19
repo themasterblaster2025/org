@@ -340,7 +340,7 @@ class LoginScreenState extends State<LoginScreen> {
                       ),
                       Align(
                         alignment: Alignment.topRight,
-                        child: Text(language.forgotPasswordQue, style: primaryTextStyle())
+                        child: Text(language.forgotPasswordQue, style: primaryTextStyle(color: colorPrimary))
                             .onTap(() {
                           ForgotPasswordScreen().launch(context);
                         }),

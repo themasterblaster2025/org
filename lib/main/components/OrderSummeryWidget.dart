@@ -29,19 +29,18 @@ class OrderSummeryWidget extends StatefulWidget {
   final Payment? payment;
   final bool? isDetail;
 
-  OrderSummeryWidget({
-    this.productAmount,
-    this.vehiclePrice,
-    required this.extraChargesList,
-    required this.totalDistance,
-    required this.totalWeight,
-    required this.distanceCharge,
-    required this.weightCharge,
-    required this.totalAmount,
-    this.status,
-    this.payment,
-    this.isDetail=false
-  });
+  OrderSummeryWidget(
+      {this.productAmount,
+      this.vehiclePrice,
+      required this.extraChargesList,
+      required this.totalDistance,
+      required this.totalWeight,
+      required this.distanceCharge,
+      required this.weightCharge,
+      required this.totalAmount,
+      this.status,
+      this.payment,
+      this.isDetail = false});
 
   @override
   OrderSummeryWidgetState createState() => OrderSummeryWidgetState();
@@ -87,10 +86,11 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: context.width(),padding: EdgeInsets.all( 16),
+      width: context.width(),
+      padding: EdgeInsets.all(16),
       decoration: boxDecorationWithRoundedCorners(
         borderRadius: BorderRadius.circular(defaultRadius),
-        border: Border.all(color:  colorPrimary.withOpacity(0.2)),
+        border: Border.all(color: colorPrimary.withOpacity(0.2)),
         backgroundColor: Colors.transparent,
       ),
       child: Column(
@@ -131,7 +131,8 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text('(${(widget.totalDistance - minDistance).toStringAsFixed(digitAfterDecimal)}', style: secondaryTextStyle()),
+                      Text('(${(widget.totalDistance - minDistance).toStringAsFixed(digitAfterDecimal)}',
+                          style: secondaryTextStyle()),
                       Icon(Icons.close, color: Colors.grey, size: 12),
                       Text('$perDistanceCharges)', style: secondaryTextStyle()),
                     ],
@@ -186,9 +187,13 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
                     children: [
                       Text(mData.key!.replaceAll("_", " ").capitalizeFirstLetter(), style: secondaryTextStyle()),
                       4.width,
-                      Text('(${mData.valueType == CHARGE_TYPE_PERCENTAGE ? '${mData.value}%' : '${printAmount(mData.value.validate())}'})', style: secondaryTextStyle()).expand(),
+                      Text('(${mData.valueType == CHARGE_TYPE_PERCENTAGE ? '${mData.value}%' : '${printAmount(mData.value.validate())}'})',
+                              style: secondaryTextStyle())
+                          .expand(),
                       16.width,
-                      Text('${printAmount(countExtraCharge(totalAmount: (fixedCharges + widget.weightCharge + widget.distanceCharge), chargesType: mData.valueType!, charges: mData.value!))}', style: boldTextStyle(size: 14)),
+                      Text(
+                          '${printAmount(countExtraCharge(totalAmount: (fixedCharges + widget.weightCharge + widget.distanceCharge), chargesType: mData.valueType!, charges: mData.value!))}',
+                          style: boldTextStyle(size: 14)),
                     ],
                   ),
                 );
@@ -199,37 +204,48 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(language.total, style: boldTextStyle(size: 18,color: Colors.green, decoration: (widget.status.validate() == ORDER_CANCELLED && widget.payment != null && widget.payment!.deliveryManFee == 0)
-                  ? TextDecoration.lineThrough
-                  : null)),
-              Text('${printAmount(widget.totalAmount.validate())}', style: boldTextStyle(size: 18,color: Colors.green,decoration: (widget.status.validate() == ORDER_CANCELLED && widget.payment != null && widget.payment!.deliveryManFee == 0)
-                  ? TextDecoration.lineThrough
-                  : null)),
-            /*  (widget.status.validate() == ORDER_CANCELLED && widget.payment != null && widget.payment!.deliveryManFee == 0)
-                  ? Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('${printAmount(widget.totalAmount.validate())}', style: secondaryTextStyle(size: 16,decoration: TextDecoration.lineThrough)),
-                        8.width,
-                        Text('${printAmount(widget.payment!.cancelCharges.validate())}', style: boldTextStyle(size: 18,color: Colors.green)),
-                      ],
-                    )
-                  : Text('${printAmount(widget.totalAmount.validate())}', style: boldTextStyle(size: 18,color: Colors.green)),*/
+              Text(language.total,
+                  style: boldTextStyle(
+                      size: 18,
+                      color: Colors.green,
+                      decoration: (widget.status.validate() == ORDER_CANCELLED &&
+                              widget.payment != null &&
+                              widget.payment!.deliveryManFee == 0)
+                          ? TextDecoration.lineThrough
+                          : null)),
+              Text('${printAmount(widget.totalAmount.validate())}',
+                  style: boldTextStyle(
+                      size: 18,
+                      color: Colors.green,
+                      decoration: (widget.status.validate() == ORDER_CANCELLED &&
+                              widget.payment != null &&
+                              widget.payment!.deliveryManFee == 0)
+                          ? TextDecoration.lineThrough
+                          : null)),
             ],
           ),
-          if(widget.status.validate() == ORDER_CANCELLED && widget.payment != null && widget.payment!.deliveryManFee == 0)...[
-          5.height,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(language.orderCancelCharge, style: boldTextStyle(size: 18,color: Colors.green, )),
-              Text('${printAmount(widget.payment!.cancelCharges.validate())}', style: boldTextStyle(size: 18,color: Colors.green,)),
-            ],
-          ),
-    ],
+          if (widget.status.validate() == ORDER_CANCELLED &&
+              widget.payment != null &&
+              widget.payment!.deliveryManFee == 0) ...[
+            5.height,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(language.orderCancelCharge,
+                    style: boldTextStyle(
+                      size: 18,
+                      color: Colors.red,
+                    )),
+                Text('${printAmount(widget.payment!.cancelCharges.validate())}',
+                    style: boldTextStyle(
+                      size: 18,
+                      color: Colors.red,
+                    )),
+              ],
+            ),
+          ],
         ],
       ),
     );
   }
-
 }

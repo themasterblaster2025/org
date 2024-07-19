@@ -49,8 +49,9 @@ const CURRENCY_CODE = 'INR';
 //endregion
 
 //region App description and links
-const mAppDescription = 'You can deliver exactly when the user wants and can start processing the user’s order almost immediately after you receive it, or you can deliver on a specific day and time.';
-const mCopyright = '© 2023 MeetMighty IT Solutions';
+const mAppDescription =
+    'You can deliver exactly when the user wants and can start processing the user’s order almost immediately after you receive it, or you can deliver on a specific day and time.';
+const mCopyright = '© 2024 MeetMighty IT Solutions';
 const mPrivacyPolicy = "$DOMAIN_URL/privacypolicy";
 const mTermAndCondition = "$DOMAIN_URL/termofservice";
 const mHelpAndSupport = 'https://support.meetmighty.com/';
@@ -213,6 +214,17 @@ const ORDER_PAYMENT = 'payment_status_message';
 const ORDER_FAIL = 'failed';
 //endregion
 
+// region CountName
+const TODAY_ORDER = 'todayOrder';
+const REMAINING_ORDER = 'remainingOrder';
+const COMPLETED_ORDER = 'completedOrder';
+const INPROGRESS_ORDER = 'inProgressOrder';
+const TOTAL_EARNING = 'commission';
+const WALLET_BALANCE = 'walletBalance';
+const PENDING_WITHDRAW_REQUEST = 'pendingWithdReq';
+const COMPLETED_WITHDRAW_REQUEST = 'completedWithReq';
+//endregion
+
 //region transaction keys
 const TRANSACTION_ORDER_FEE = "order_fee";
 const TRANSACTION_TOPUP = "topup";
@@ -319,7 +331,6 @@ const APP_STORE = "App Store";
 const TEST_FLIGHT = "Test Flight";
 const UNKNOWN_SOURCE = "Unknown Source";
 String? countryCode = "IN";
-
 
 const CURRENT_LATITUDE = 'CURRENT_LATITUDE';
 const CURRENT_LONGITUDE = 'CURRENT_LONGITUDE';

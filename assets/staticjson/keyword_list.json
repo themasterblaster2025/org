@@ -379,7 +379,7 @@
         "screenId": "7",
         "keyword_id": 354,
         "keyword_name": "copyRight",
-        "keyword_value": "© 2023 MeetMighty IT Solutions"
+        "keyword_value": "© 2024 MeetMighty IT Solutions"
       }
     ]
   },
@@ -463,7 +463,7 @@
         "screenId": "9",
         "keyword_id": 50,
         "keyword_name": "oldPassword",
-        "keyword_value": "Old password"
+        "keyword_value": "Current password"
       },
       {
         "screenId": "9",
@@ -1897,7 +1897,7 @@
         "screenId": "32",
         "keyword_id": 347,
         "keyword_name": "commission",
-        "keyword_value": "Commission"
+        "keyword_value": "Total earning"
       }
     ]
   },
@@ -2024,6 +2024,12 @@
         "keyword_id": 353,
         "keyword_name": "orderAssignConfirmation",
         "keyword_value": "Are you sure you want to accept this order?"
+      },
+      {
+        "screenId": "33",
+        "keyword_id": 410,
+        "keyword_name": "reject",
+        "keyword_value": "Reject"
       }
     ]
   },

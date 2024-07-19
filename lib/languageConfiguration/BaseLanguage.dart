@@ -822,4 +822,5 @@ class BaseLanguage {
   String get pages => getContentValueFromKey(408);
 
   String get collectedAmount => getContentValueFromKey(409);
+  String get reject =>  getContentValueFromKey(410);
 }

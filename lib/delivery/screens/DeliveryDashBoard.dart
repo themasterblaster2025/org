@@ -405,7 +405,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                 AppButton(
                   margin: EdgeInsets.only(right: 10),
                   elevation: 0,
-                  text: language.cancel,
+                  text: language.reject,
                   padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                   textStyle: boldTextStyle(color: Colors.red),
                   color: Colors.red.withOpacity(0.2),
@@ -607,7 +607,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                             ? Text(printDate(data.date ?? ''), style: secondaryTextStyle())
                                 .expand()
                             : SizedBox(),
-                        Text('${printAmount(data.totalAmount)}', style: boldTextStyle()),
+                        Text('${printAmount(data.totalAmount ?? 0)}', style: boldTextStyle()),
                       ],
                     ),
                   ],

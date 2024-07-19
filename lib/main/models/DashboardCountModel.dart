@@ -3,7 +3,7 @@ class DashboardCount {
   int? pendingOrder;
   int? inprogressOrder;
   int? completeOrder;
-  int? commission;
+  num? commission;
   int? walletBalance;
   int? pendingWithdrawRequest;
   int? completeWithdrawRequest;

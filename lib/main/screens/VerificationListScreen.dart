@@ -188,7 +188,7 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
                   },
                 ).expand(),
                 // Spacer(),
-                Container(
+                /*Container(
                   margin: EdgeInsets.only(left: 10, right: 10),
                   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary),
@@ -210,7 +210,7 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
                   } else {
                     goToDashboard();
                   }
-                })
+                })*/
               ],
             ),
           ),

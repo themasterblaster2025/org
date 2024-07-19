@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:mighty_delivery/delivery/screens/FilterCountScreen.dart';
 import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/num_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/main/models/DashboardCountModel.dart';
@@ -48,14 +49,14 @@ class _DHomeFragmentState extends State<DHomeFragment> {
   ScrollController scrollController = ScrollController();
   UserBankAccount? userBankAccount;
   List items = [
-    language.todayOrder,
-    language.remainingOrder,
-    language.completedOrder,
-    language.inProgressOrder,
-    language.commission,
-    language.walletBalance,
-    language.pendingWithdReq,
-    language.completedWithReq,
+    TODAY_ORDER,
+    REMAINING_ORDER,
+    COMPLETED_ORDER,
+    INPROGRESS_ORDER,
+    TOTAL_EARNING,
+    WALLET_BALANCE,
+    PENDING_WITHDRAW_REQUEST,
+    COMPLETED_WITHDRAW_REQUEST,
   ];
 
   List<Color> colorList = [
@@ -81,7 +82,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
       case 3:
         return (countData?.inprogressOrder).toString().validate();
       case 4:
-        return (countData?.commission).toString().validate();
+        return printAmount((countData?.commission).validate());
       case 5:
         return printAmount((countData?.walletBalance).validate());
       case 6:
@@ -319,19 +320,18 @@ class _DHomeFragmentState extends State<DHomeFragment> {
     // Color color =
     return Container(
       decoration: appStore.isDarkMode
-          ? boxDecorationWithRoundedCorners(
-              borderRadius: BorderRadius.circular(defaultRadius), backgroundColor: color)
+          ? boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(defaultRadius), backgroundColor: color)
           : boxDecorationRoundedWithShadow(defaultRadius.toInt(), backgroundColor: color),
       padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('$value', style: boldTextStyle(size: 27)),
+          Text('$value', style: boldTextStyle(size: 27, color: textPrimaryColor)),
           4.height,
           Text(
-            text,
-            style: primaryTextStyle(size: 13),
+            countName(text),
+            style: primaryTextStyle(size: 13, color: textPrimaryColor),
             textAlign: TextAlign.center,
           ),
         ],
