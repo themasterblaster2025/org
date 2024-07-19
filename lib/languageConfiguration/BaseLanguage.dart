@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'LanguageDataConstant.dart';
 
 class BaseLanguage {
-  static BaseLanguage? of(BuildContext context) =>
-      Localizations.of<BaseLanguage>(context, BaseLanguage);
+  static BaseLanguage? of(BuildContext context) => Localizations.of<BaseLanguage>(context, BaseLanguage);
 
   String get skip => getContentValueFromKey(1);
 
@@ -819,4 +818,8 @@ class BaseLanguage {
   String get addReview => getContentValueFromKey(406);
 
   String get yourExperience => getContentValueFromKey(407);
+
+  String get pages => getContentValueFromKey(408);
+
+  String get collectedAmount => getContentValueFromKey(409);
 }

@@ -26,6 +26,7 @@ class HtmlWidget extends StatelessWidget {
     return Html(
       data: postContent!,
       onLinkTap: (s, _, __, ___) async {
+        print("===> ${s.toString()}");
         if (s!.split('/').last.contains('.pdf')) {
           PdfViewWidget(pdfUrl: s).launch(context);
         } else {

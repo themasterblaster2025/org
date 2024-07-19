@@ -1220,6 +1220,12 @@
         "keyword_id": 119,
         "keyword_name": "verifyDocument",
         "keyword_value": "Verify document"
+      },
+      {
+        "screenId": "21",
+        "keyword_id": 408,
+        "keyword_name": "pages",
+        "keyword_value": "PAGES"
       }
     ]
   },
@@ -2288,6 +2294,12 @@
         "keyword_id": 404,
         "keyword_name": "isPaymentCollected",
         "keyword_value": "Is the payment collected?"
+      },
+      {
+        "screenId": "35",
+        "keyword_id": 409,
+        "keyword_name": "collectedAmount",
+        "keyword_value": "Collected amount"
       }
     ]
   },

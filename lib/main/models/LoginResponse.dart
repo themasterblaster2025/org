@@ -61,9 +61,6 @@ class UserData {
   String? documentVerifiedAt;
   String? app_version;
   String? app_source;
-  bool? isEmailVerification;
-  bool? isMobileVerification;
-  bool? isDocumentVerification;
 
   UserData({
     this.apiToken,
@@ -97,9 +94,6 @@ class UserData {
     this.documentVerifiedAt,
     this.app_version,
     this.app_source,
-    this.isEmailVerification,
-    this.isDocumentVerification,
-    this.isMobileVerification,
   });
 
   UserData.fromJson(Map<String, dynamic> json) {
@@ -137,9 +131,6 @@ class UserData {
     app_version = json['app_version'];
     app_source = json['app_source'];
 
-    isEmailVerification = json['is_email_verification'];
-    isDocumentVerification = json['is_document_verification'];
-    isMobileVerification = json['is_mobile_verification'];
   }
 
   Map<String, dynamic> toJson() {
@@ -178,9 +169,6 @@ class UserData {
     data['email_verified_at'] = this.emailVerifiedAt;
     data['document_verified_at'] = this.documentVerifiedAt;
 
-    data['is_email_verification'] = this.isEmailVerification;
-    data['is_mobile_verification'] = this.isMobileVerification;
-    data['is_document_verification'] = this.isDocumentVerification;
 
     return data;
   }

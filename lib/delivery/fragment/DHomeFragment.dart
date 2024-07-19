@@ -58,6 +58,18 @@ class _DHomeFragmentState extends State<DHomeFragment> {
     language.completedWithReq,
   ];
 
+  List<Color> colorList = [
+    Color(0xFFF6D7D3),
+    Color(0xFFE5D7D7),
+    Color(0xFFE5D1EA),
+    Color(0xFFD0E5F6),
+    Color(0xFFD9F6D0),
+    Color(0xFFF6D3E8),
+    Color(0xFFFFDFDA),
+    Color(0xFFD9D9F6),
+    Color(0xFFE4D2E9),
+  ];
+
   String getCount(int index) {
     switch (index) {
       case 0:
@@ -128,8 +140,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
       appStore.setCurrencyCode(value.currencyCode ?? CURRENCY_CODE);
       appStore.setCurrencySymbol(value.currency ?? CURRENCY_SYMBOL);
       appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
-      setState(() {
-      });
+      setState(() {});
     }).catchError((error) {
       log(error.toString());
     });
@@ -167,13 +178,12 @@ class _DHomeFragmentState extends State<DHomeFragment> {
           Container(
             margin: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: boxDecorationWithRoundedCorners(
-                borderRadius: radius(defaultRadius), backgroundColor: Colors.white24),
+            decoration:
+                boxDecorationWithRoundedCorners(borderRadius: radius(defaultRadius), backgroundColor: Colors.white24),
             child: Row(children: [
               Icon(Ionicons.ios_location_outline, color: Colors.white, size: 18),
               8.width,
-              Text(CityModel.fromJson(getJSONAsync(CITY_DATA)).name!.validate(),
-                  style: primaryTextStyle(color: white)),
+              Text(CityModel.fromJson(getJSONAsync(CITY_DATA)).name!.validate(), style: primaryTextStyle(color: white)),
             ]).onTap(() {
               UserCitySelectScreen(
                 isBack: true,
@@ -182,10 +192,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                   setState(() {});
                 },
               ).launch(context);
-            },
-                highlightColor: Colors.transparent,
-                hoverColor: Colors.transparent,
-                splashColor: Colors.transparent),
+            }, highlightColor: Colors.transparent, hoverColor: Colors.transparent, splashColor: Colors.transparent),
           ),
           Stack(
             clipBehavior: Clip.none,
@@ -202,11 +209,8 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                       width: 20,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
-                      child: Text(
-                          '${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}',
-                          style: primaryTextStyle(
-                              size: appStore.allUnreadCount < 99 ? 12 : 8,
-                              color: Colors.white))),
+                      child: Text('${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}',
+                          style: primaryTextStyle(size: appStore.allUnreadCount < 99 ? 12 : 8, color: Colors.white))),
                 ).visible(appStore.allUnreadCount != 0);
               }),
             ],
@@ -216,8 +220,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
           IconButton(
             padding: EdgeInsets.only(right: 8),
             onPressed: () async {
-              DProfileFragment()
-                  .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+              DProfileFragment().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
             },
             icon: Icon(Ionicons.settings_outline, color: Colors.white),
           ),
@@ -229,21 +232,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Column(
               children: [
-                8.height,
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary),
-                  child: Row(
-                    children: [
-                      Text(language.viewAllOrders, style: boldTextStyle(color: Colors.white)),
-                      Spacer(),
-                      Icon(Icons.navigate_next_outlined, color: Colors.white, size: 25),
-                    ],
-                  ).onTap(() {
-                    DeliveryDashBoard().launch(context).then((value) => setState(() {}));
-                  }),
-                ),
-                18.height,
+                12.height,
                 Row(
                   children: [
                     Text(
@@ -293,18 +282,30 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                   controller: scrollController,
                   padding: EdgeInsets.fromLTRB(7, 5, 7, 5),
                   itemBuilder: (context, index) {
-                    return countWidget(text: items[index], value: getCount(index)).onTap(() {
+                    return countWidget(text: items[index], value: getCount(index), color: colorList[index]).onTap(() {
                       goToCountScreen(index);
                     });
                   },
                   itemCount: items.length,
-                ).expand()
+                ).expand(),
+                8.height,
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(language.viewAllOrders, style: boldTextStyle(color: Colors.white)),
+                    ],
+                  ).onTap(() {
+                    DeliveryDashBoard().launch(context).then((value) => setState(() {}));
+                  }),
+                ),
+                10.height,
               ],
             ),
           ),
-          Observer(
-              builder: (context) =>
-                  Positioned.fill(child: loaderWidget().visible(appStore.isLoading))),
+          Observer(builder: (context) => Positioned.fill(child: loaderWidget().visible(appStore.isLoading))),
         ],
       ),
     );
@@ -313,13 +314,14 @@ class _DHomeFragmentState extends State<DHomeFragment> {
   Widget countWidget({
     required String text,
     required String value,
+    required Color color,
   }) {
+    // Color color =
     return Container(
       decoration: appStore.isDarkMode
           ? boxDecorationWithRoundedCorners(
-              borderRadius: BorderRadius.circular(defaultRadius),
-              backgroundColor: context.cardColor)
-          : boxDecorationRoundedWithShadow(defaultRadius.toInt()),
+              borderRadius: BorderRadius.circular(defaultRadius), backgroundColor: color)
+          : boxDecorationRoundedWithShadow(defaultRadius.toInt(), backgroundColor: color),
       padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -329,7 +331,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
           4.height,
           Text(
             text,
-            style: primaryTextStyle(size: 10),
+            style: primaryTextStyle(size: 13),
             textAlign: TextAlign.center,
           ),
         ],

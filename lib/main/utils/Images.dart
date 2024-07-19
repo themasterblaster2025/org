@@ -10,6 +10,7 @@ const ic_edit = 'assets/icon/ic_edit.png';
 const ic_earning = 'assets/icon/ic_earning.png';
 const ic_wallet = 'assets/icon/ic_wallet.png';
 const ic_bank_detail = 'assets/icon/ic_bank_detail.png';
+const ic_pages = 'assets/icon/ic_pages.jpg';
 const ic_verification = 'assets/icon/ic_verification.png';
 const ic_change_password = 'assets/icon/ic_change_password.png';
 const ic_languages = 'assets/icon/ic_languages.png';

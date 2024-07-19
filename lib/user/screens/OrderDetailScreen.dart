@@ -143,7 +143,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
-      appBarTitle: '${orderData != null ? orderData!.status!.replaceAll("_", " ").capitalizeFirstLetter() : ''}',
+      appBarTitle: '${orderData != null ? orderStatus(orderData!.status.validate()) : ''}',
       body: Stack(
         children: [
           orderData != null
@@ -837,7 +837,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                             ),
                                           ],
                                         ),
-                                      Align(
+                                      /*Align(
                                         alignment: Alignment.bottomRight,
                                         child: Column(
                                           children: [
@@ -849,7 +849,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                         ),
                                       ).visible((orderData!.distanceCharge.validate() != 0 ||
                                               orderData!.weightCharge.validate() != 0) &&
-                                          orderData!.extraCharges.keys.length != 0),
+                                          orderData!.extraCharges.keys.length != 0),*/
                                       Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
@@ -928,6 +928,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                         return CancelOrderDialog(
                                             orderId: orderData!.id.validate(),
                                             onUpdate: () {
+                                              list.clear();
                                               orderDetailApiCall();
                                               LiveStream().emit('UpdateOrderData');
                                             });
@@ -955,7 +956,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                 ReturnOrderScreen(orderData!,orderItems: orderItems,).launch(context);
                               }, width: context.width()),
                             ).visible(orderData!.status == ORDER_DELIVERED &&
-                                !orderData!.returnOrderId! &&
+                                !orderData!.returnOrderId! && orderData!.parentOrderId == null &&
                                 getStringAsync(USER_TYPE) == CLIENT),
                           ],
                         ),

@@ -83,23 +83,34 @@ class StoreItemComponentState extends State<StoreItemComponent> {
     return time;
   }
 
+  int convertToSeconds(int hours, int min, String period) {
+    int hoursIn24Format = hours;
+    if (period == 'pm' && hours != 12) {
+      hoursIn24Format += 12;
+    } else if (period == 'am' && hours == 12) {
+      hoursIn24Format = 0;
+    }
+    int totalSeconds = hoursIn24Format * 3600 + min * 60;
+
+    return totalSeconds;
+  }
+
   @override
   Widget build(BuildContext context) {
-    // String start = widget.store.workingHours!.start.validate();
     String start = widget.store.workHours!.firstWhere((element) => element.day == currentDay).startTime.validate();
-    // String end = widget.store.workingHours!.end.validate();
     String end = widget.store.workHours!.firstWhere((element) => element.day == currentDay).endTime.validate();
+    int isOpen = widget.store.workHours!.firstWhere((element) => element.day == currentDay).storeOpenClose.validate();
 
     List<String> hourMinute = start.split(' ')[0].split(':');
     int startHour = int.parse(hourMinute[0]);
     int startMin = int.parse(hourMinute[1]);
     String startPart = start.split(' ')[1];
-    int startTimeSecond = (startHour * 60 + startMin) * 60 + ((startPart == "am") ? 0 : (12 * 60 * 60));
+    int startTimeSecond = convertToSeconds(startHour, startMin, startPart);
 
     int endHour = end.split(":").first.toInt();
     int endMin = (end.split(":")[1]).substring(0, 1).toInt();
     String endPart = end.split(":")[1].substring(3, 5);
-    int endTimeSecond = (endHour * 60 + endMin) * 60 + ((endPart == "am") ? 0 : (12 * 60 * 60));
+    int endTimeSecond = convertToSeconds(endHour, endMin, endPart);
     int currentTimeSecond = (DateTime.now().hour * 60 + DateTime.now().minute) * 60;
 
     return InkWell(
@@ -107,9 +118,7 @@ class StoreItemComponentState extends State<StoreItemComponent> {
       hoverColor: Colors.white,
       onTap: () {
         if (getIntAsync(CITY_ID) == widget.store.cityId.validate()) {
-          if (currentTimeSecond > startTimeSecond &&
-              currentTimeSecond < endTimeSecond &&
-              widget.store.workingHours!.isOpen.validate()) {
+          if (currentTimeSecond > startTimeSecond && currentTimeSecond < endTimeSecond && isOpen == 1) {
             ProductListScreen(store: widget.store).launch(context);
           }
         } else {
@@ -172,7 +181,7 @@ class StoreItemComponentState extends State<StoreItemComponent> {
                     commonWidget(Icons.phone, widget.store.contactNumber.validate()),
                     8.height,
                     commonWidget(Icons.location_on_rounded, widget.store.address.validate()),
-                    if (currentTimeSecond < startTimeSecond && widget.store.workHours!.isOpen.validate()) ...[
+                    if (currentTimeSecond < startTimeSecond && isOpen == 1) ...[
                       8.height,
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -196,8 +205,7 @@ class StoreItemComponentState extends State<StoreItemComponent> {
               ],
             ).paddingAll(10),
           ).paddingOnly(left: 8, right: 8, top: 18),
-          if ((currentTimeSecond > endTimeSecond && !(currentTimeSecond < startTimeSecond)) ||
-              !widget.store.workingHours!.isOpen.validate())
+          if ((currentTimeSecond > endTimeSecond && !(currentTimeSecond < startTimeSecond)) || isOpen == 0)
             Positioned(
               top: 8,
               right: isRTL ? null : 20,

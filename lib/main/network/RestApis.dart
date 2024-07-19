@@ -11,6 +11,7 @@ import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/main/models/CategoryModel.dart';
 import 'package:mighty_delivery/main/models/DashboardCountModel.dart';
+import 'package:mighty_delivery/main/models/PageListModel.dart';
 import 'package:mighty_delivery/main/models/WorkHoursListModel.dart';
 
 import '../../extensions/common.dart';
@@ -101,7 +102,6 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
     await setValue(CITY_ID, loginResponse.data!.cityId.validate());
     await setValue(OTP_VERIFIED, loginResponse.data!.otpVerifyAt != null);
     await setValue(EMAIL_VERIFIED, loginResponse.data!.emailVerifiedAt != null);
-    setValue(IS_EMAIL_VERIFICATION, loginResponse.data!.isEmailVerification.validate());
 
     appStore.setUserProfile(loginResponse.data!.profileImage.validate());
     await userService.getUser(email: loginResponse.data!.email.validate()).then((value) async {
@@ -359,19 +359,6 @@ Future updateOrder({
   File? picUpSignature,
   File? deliverySignature,
 }) async {
-  // String? newPickUpTime = "";
-  // if (pickupDatetime != null) {
-  //   print("pickupTime updateorder ${pickupDatetime}");
-  //   DateTime pickupTime = DateTime.parse(pickupDatetime);
-  //   newPickUpTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(pickupTime.toUtc());
-  //   print("pickupTime ${newPickUpTime}");
-  // }
-  // String? newDeliverytime = "";
-  // print("step 1 ${deliveryDatetime}");
-  // if (!deliveryDatetime.isEmptyOrNull) {
-  //   DateTime deliveryTime = DateTime.parse(deliveryDatetime!);
-  //   newDeliverytime = DateFormat('yyyy-MM-dd HH:mm:ss').format(deliveryTime.toUtc());
-  // }
   MultipartRequest multiPartRequest = await getMultiPartRequest('order-update/$orderId');
   if (pickupDatetime != null) multiPartRequest.fields['pickup_datetime'] = pickupDatetime;
   if (deliveryDatetime != null) multiPartRequest.fields['delivery_datetime'] = deliveryDatetime;
@@ -665,6 +652,7 @@ Future<CategoryModel> getCategorySubcategoryList({int? page, int? storeDetailId}
       await buildHttpResponse('category-list?page=$page&store_id=$storeDetailId', method: HttpMethod.GET)));
 }
 
+// todo not used
 Future<WorkHoursListModel> getWorkingHoursList({int? page, int? storeDetailId}) async {
   String endpoint = 'workhourmanage-list';
   if (storeDetailId != null) {
@@ -697,4 +685,11 @@ Future<DashboardCount> getDashboardCount({String? startDate, String? endDate}) a
     endpoint += '?from_date=$startDate&to_date=$endDate';
   }
   return DashboardCount.fromJson(await handleResponse(await buildHttpResponse(endpoint, method: HttpMethod.GET)));
+}
+
+Future<PageListModel> getPagesList() async {
+  return PageListModel.fromJson(await handleResponse(await buildHttpResponse(
+    'pages-list',
+    method: HttpMethod.GET,
+  )));
 }

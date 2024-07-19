@@ -216,7 +216,7 @@ String transactionType(String type) {
   } else if (type == TRANSACTION_WITHDRAW) {
     return language.withdraw;
   }
-  return '';
+  return type;
 }
 
 // Future<bool> checkPermission() async {

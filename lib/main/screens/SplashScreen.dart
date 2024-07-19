@@ -43,8 +43,7 @@ class SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> init() async {
-    String versionNo =
-        await getStringAsync(CURRENT_LAN_VERSION, defaultValue: LanguageVersion);
+    String versionNo = await getStringAsync(CURRENT_LAN_VERSION, defaultValue: LanguageVersion);
     await getLanguageList(versionNo).then((value) {
       print("value===========${value.data!.length}");
       appStore.setLoading(false);
@@ -74,8 +73,7 @@ class SplashScreenState extends State<SplashScreen> {
       } else {
         String getJsonData = getStringAsync(LanguageJsonDataRes, defaultValue: "");
         if (getJsonData.isNotEmpty) {
-          ServerLanguageResponse languageSettings =
-              ServerLanguageResponse.fromJson(json.decode(getJsonData.trim()));
+          ServerLanguageResponse languageSettings = ServerLanguageResponse.fromJson(json.decode(getJsonData.trim()));
           if (languageSettings.data!.length > 0) {
             defaultServerLanguageData = languageSettings.data;
             performLanguageOperation(defaultServerLanguageData);
@@ -112,23 +110,16 @@ class SplashScreenState extends State<SplashScreen> {
               //update app version
               Future<PackageInfo> packageInfoFuture = PackageInfo.fromPlatform();
               final packageInfo = await packageInfoFuture;
-              if (value.app_version.isEmptyOrNull ||
-                  value.app_version != packageInfo.version) {
-                await updateUserStatus(
-                        {"id": getIntAsync(USER_ID), "app_version": packageInfo.version})
+              if (value.app_version.isEmptyOrNull || value.app_version != packageInfo.version) {
+                await updateUserStatus({"id": getIntAsync(USER_ID), "app_version": packageInfo.version})
                     .then((value) {});
               }
 
-              if ((!getBoolAsync(EMAIL_VERIFIED) &&
-                      getBoolAsync(IS_EMAIL_VERIFICATION) == false) ||
+              if (value.emailVerifiedAt.isEmptyOrNull ||
                   value.otpVerifyAt.isEmptyOrNull ||
-                  !getBoolAsync(IS_VERIFIED_DELIVERY_MAN) &&
-                      getStringAsync(USER_TYPE) == DELIVERY_MAN) {
+                  (value.documentVerifiedAt.isEmptyOrNull && getStringAsync(USER_TYPE) == DELIVERY_MAN)) {
                 VerificationListScreen().launch(context);
-              } else if (CityModel.fromJson(getJSONAsync(CITY_DATA))
-                  .name
-                  .validate()
-                  .isNotEmpty) {
+              } else if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
                 if (getStringAsync(USER_TYPE) == CLIENT) {
                   DashboardScreen().launch(context, isNewTask: true);
                 } else {
@@ -178,11 +169,8 @@ class SplashScreenState extends State<SplashScreen> {
                   Image.asset(ic_logo, height: 80, width: 80, fit: BoxFit.fill)
                       .cornerRadiusWithClipRRect(defaultRadius),
                   16.height,
-                  Text(language.appName,
-                          style: boldTextStyle(size: 20), textAlign: TextAlign.center)
-                      .expand(),
-                  Text('v ${snap.data!.version.validate()}',
-                      style: secondaryTextStyle(size: 12)),
+                  Text(language.appName, style: boldTextStyle(size: 20), textAlign: TextAlign.center).expand(),
+                  Text('v ${snap.data!.version.validate()}', style: secondaryTextStyle(size: 12)),
                   16.height,
                 ],
               ),

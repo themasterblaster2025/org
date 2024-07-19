@@ -120,10 +120,11 @@ class PickAddressBottomSheetState extends State<PickAddressBottomSheet> {
                       10.width,
                       Text('${mData.address}', style: primaryTextStyle(), maxLines: 2)
                           .expand(),
-                      10.width,
+                     /* 10.width,
+                     // comment this because when there is one address in list and delete it at time of deliveryAddressSelection then go back then there is issue
                       Icon(Icons.highlight_remove_outlined, color: Colors.red).onTap(() {
                         deleteUserAddressApiCall(mData.id.validate());
-                      })
+                      })*/
                     ],
                   ).onTap(() async {
                     widget.onPick.call(mData);

@@ -53,8 +53,7 @@ class StoreListScreenState extends State<StoreListScreen> {
     super.initState();
     init();
     scrollController.addListener(() {
-      if (scrollController.position.pixels == scrollController.position.maxScrollExtent &&
-          !appStore.isLoading) {
+      if (scrollController.position.pixels == scrollController.position.maxScrollExtent && !appStore.isLoading) {
         if (page < totalPage) {
           page++;
           init();
@@ -66,10 +65,9 @@ class StoreListScreenState extends State<StoreListScreen> {
   void init() async {
     appStore.setLoading(true);
     await getStoreList(
-            page: page,
-            title: searchController.text.isNotEmpty ? searchController.text : null,
-            isNearby: isNearest)
+            page: page, title: searchController.text.isNotEmpty ? searchController.text : null, isNearby: isNearest)
         .then((value) {
+      appStore.setLoading(false);
       totalPage = value.pagination!.totalPages.validate(value: 1);
       page = value.pagination!.currentPage.validate(value: 1);
       totalItem = value.pagination!.totalItems.validate();
@@ -78,58 +76,13 @@ class StoreListScreenState extends State<StoreListScreen> {
         storeList.clear();
       }
 
-      /*for (StoreData data in value.data!) {
-        if (data.workingHours == null) {
-          data.workingHours =
-              WorkingHours(start: "12:00 am", end: "12:00 pm", isOpen: false, day: "");
-        }
-        if (widget.type.validate() != 0) {
-          data.storeType.validate().forEach((element) {
-            if (element.id.validate() == widget.type) {
-              storeList.add(data);
-            }
-          });
-          *//* if (data.storeType!.id.validate() == widget.type) {
-            storeList.add(data);
-          }*//*
-        } else {
-          storeList.add(data);
-        }
-      }
-      appStore.setLoading(false);*/
-
       storeList.addAll(value.data!);
-      /*storeList.forEach((element) async {
-        await getWorkingHours(element);
-      });*/
       setState(() {});
     }).catchError((e) {
       isLastPage = true;
       appStore.setLoading(false);
       toast(e.toString(), print: true);
     });
-  }
-
-  Future<void> getWorkingHours(StoreData store) async {
-    appStore.setLoading(true);
-
-   /* await getWorkingHoursList(storeDetailId: store.id.validate()).then((value) {
-      value.data.validate().forEach((element) {
-        if (element.day == currentDay && element.storeDetailId == store.id) {
-          store.workingHours = WorkingHours(
-            start: element.startTime,
-            end: element.endTime,
-            isOpen: (element.storeOpenClose.validate() == 1 ? true : false),
-            day: element.day,
-          );
-        }
-        appStore.setLoading(false);
-        setState(() {});
-      });
-    }).catchError((e) {
-      appStore.setLoading(false);
-      toast(e.toString(), print: true);
-    });*/
   }
 
   @override
@@ -172,8 +125,7 @@ class StoreListScreenState extends State<StoreListScreen> {
                       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
                       shape: RoundedRectangleBorder(borderRadius: radius(defaultRadius)),
                       // label: Text(language.nearest,
-                      label: Text(language.nearest,
-                          style: primaryTextStyle(color: isNearest ? Colors.white : null)),
+                      label: Text(language.nearest, style: primaryTextStyle(color: isNearest ? Colors.white : null)),
                       checkmarkColor: isNearest ? Colors.white : null,
                       selected: isNearest,
                       selectedColor: colorPrimary,
@@ -189,16 +141,15 @@ class StoreListScreenState extends State<StoreListScreen> {
                   ],
                 ).paddingAll(16).visible(widget.type.validate() == 0),
                 ListView.builder(
-                        itemBuilder: (context, index) {
-                          StoreData item = storeList[index];
-                          return StoreItemComponent(
-                            store: item,
-                          );
-                        },
-                        controller: scrollController,
-                        itemCount: storeList.length,
-                      ).expand()
-                  ,
+                  itemBuilder: (context, index) {
+                    StoreData item = storeList[index];
+                    return StoreItemComponent(
+                      store: item,
+                    );
+                  },
+                  controller: scrollController,
+                  itemCount: storeList.length,
+                ).expand(),
               ],
             ),
             loaderWidget().center().visible(appStore.isLoading),

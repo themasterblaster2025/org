@@ -152,8 +152,7 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text('(${widget.totalWeight - minWeight}', style: secondaryTextStyle()),
-                      Icon(Icons.close, color: Colors.grey, size: 12),
+                      Text('(${widget.totalWeight - minWeight} x ', style: secondaryTextStyle()),
                       Text('$perWeightCharges)', style: secondaryTextStyle()),
                     ],
                   ).expand(),
@@ -163,7 +162,7 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
               ),
             ],
           ).visible(widget.weightCharge != 0),
-          Align(
+          /*Align(
             alignment: Alignment.bottomRight,
             child: Column(
               children: [
@@ -171,7 +170,7 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
                 Text('${printAmount((fixedCharges + widget.distanceCharge + widget.weightCharge).toStringAsFixed(digitAfterDecimal).toDouble())}', style:boldTextStyle(size: 14)),
               ],
             ),
-          ).visible((widget.weightCharge != 0 || widget.distanceCharge != 0) && extraList.length != 0),
+          ).visible((widget.weightCharge != 0 || widget.distanceCharge != 0) && extraList.length != 0),*/
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -200,8 +199,13 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(language.total, style: boldTextStyle(size: 18,color: Colors.green)),
-              (widget.status.validate() == ORDER_CANCELLED && widget.payment != null && widget.payment!.deliveryManFee == 0)
+              Text(language.total, style: boldTextStyle(size: 18,color: Colors.green, decoration: (widget.status.validate() == ORDER_CANCELLED && widget.payment != null && widget.payment!.deliveryManFee == 0)
+                  ? TextDecoration.lineThrough
+                  : null)),
+              Text('${printAmount(widget.totalAmount.validate())}', style: boldTextStyle(size: 18,color: Colors.green,decoration: (widget.status.validate() == ORDER_CANCELLED && widget.payment != null && widget.payment!.deliveryManFee == 0)
+                  ? TextDecoration.lineThrough
+                  : null)),
+            /*  (widget.status.validate() == ORDER_CANCELLED && widget.payment != null && widget.payment!.deliveryManFee == 0)
                   ? Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -210,9 +214,19 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
                         Text('${printAmount(widget.payment!.cancelCharges.validate())}', style: boldTextStyle(size: 18,color: Colors.green)),
                       ],
                     )
-                  : Text('${printAmount(widget.totalAmount.validate())}', style: boldTextStyle(size: 18,color: Colors.green)),
+                  : Text('${printAmount(widget.totalAmount.validate())}', style: boldTextStyle(size: 18,color: Colors.green)),*/
             ],
           ),
+          if(widget.status.validate() == ORDER_CANCELLED && widget.payment != null && widget.payment!.deliveryManFee == 0)...[
+          5.height,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(language.orderCancelCharge, style: boldTextStyle(size: 18,color: Colors.green, )),
+              Text('${printAmount(widget.payment!.cancelCharges.validate())}', style: boldTextStyle(size: 18,color: Colors.green,)),
+            ],
+          ),
+    ],
         ],
       ),
     );

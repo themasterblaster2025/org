@@ -279,13 +279,6 @@ class PaymentScreenState extends State<PaymentScreen> {
     request.bodyFields = {
       'amount': '${(widget.totalAmount * 100).toInt()}',
       'currency': "${appStore.currencyCode}",
-      // 'description' : 'On Demand Local Delivery System', // todo
-      // 'name':"Jenny Rosen" ,
-      //  "address[line1]":"510 Townsend St" ,
-      // "address[postal_code]":'98140' ,
-      // "address[city]":"San Francisco" ,
-      // "address[state]":'CA' ,
-      // "address[country]":'US',
     };
 
     log(request.bodyFields);

@@ -56,43 +56,35 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
     await getUserDetail(getIntAsync(USER_ID)).then((value) async {
       data = value;
       verificationSteps.clear();
-      if (!data!.isEmailVerification.validate()) {
-        VerificationStatus status = data!.emailVerifiedAt.isEmptyOrNull
-            ? VerificationStatus.pending
-            : VerificationStatus.completed;
+      if (data!.emailVerifiedAt.isEmptyOrNull) {
+        VerificationStatus status =
+            data!.emailVerifiedAt.isEmptyOrNull ? VerificationStatus.pending : VerificationStatus.completed;
         verificationSteps.add(
           VerificationStep(
               title: language.emailOtp,
               image: Icons.email,
               description: language.veirfyYourEmailAddress,
-              status: data!.emailVerifiedAt.isEmptyOrNull
-                  ? VerificationStatus.pending
-                  : VerificationStatus.completed,
+              status: data!.emailVerifiedAt.isEmptyOrNull ? VerificationStatus.pending : VerificationStatus.completed,
               fun: () {
                 if (status == VerificationStatus.pending) {
                   EmailVerificationScreen(
                     isSignIn: widget.isSignIn,
-                  )
-                      .launch(context, pageRouteAnimation: PageRouteAnimation.Slide)
-                      .then((value) => getUserData());
+                  ).launch(context, pageRouteAnimation: PageRouteAnimation.Slide).then((value) => getUserData());
                 }
               }),
         );
         // setState(() {});
       }
 
-      if (!data!.isMobileVerification.validate()) {
-        VerificationStatus status = data!.otpVerifyAt.isEmptyOrNull
-            ? VerificationStatus.pending
-            : VerificationStatus.completed;
+      if (data!.otpVerifyAt.isEmptyOrNull) {
+        VerificationStatus status =
+            data!.otpVerifyAt.isEmptyOrNull ? VerificationStatus.pending : VerificationStatus.completed;
         verificationSteps.add(
           VerificationStep(
               title: language.mobileOtp,
               description: language.verifyYourMobileNumber,
               image: Icons.phone,
-              status: data!.otpVerifyAt.isEmptyOrNull
-                  ? VerificationStatus.pending
-                  : VerificationStatus.completed,
+              status: data!.otpVerifyAt.isEmptyOrNull ? VerificationStatus.pending : VerificationStatus.completed,
               fun: () {
                 if (status == VerificationStatus.pending) {
                   VerificationScreen()
@@ -103,19 +95,16 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
         );
         // setState(() {});
       }
-      if (data!.documentVerifiedAt.isEmptyOrNull &&
-          data?.userType.validate() == DELIVERY_MAN) {
-        VerificationStatus status = data!.documentVerifiedAt.isEmptyOrNull
-            ? VerificationStatus.pending
-            : VerificationStatus.completed;
+      if (data!.documentVerifiedAt.isEmptyOrNull && data?.userType.validate() == DELIVERY_MAN) {
+        VerificationStatus status =
+            data!.documentVerifiedAt.isEmptyOrNull ? VerificationStatus.pending : VerificationStatus.completed;
         verificationSteps.add(
           VerificationStep(
               title: language.documentVerification,
               description: language.uploadYourDocument,
               image: Icons.newspaper_rounded,
-              status: data!.documentVerifiedAt.isEmptyOrNull
-                  ? VerificationStatus.pending
-                  : VerificationStatus.completed,
+              status:
+                  data!.documentVerifiedAt.isEmptyOrNull ? VerificationStatus.pending : VerificationStatus.completed,
               fun: () {
                 if (status == VerificationStatus.pending) {
                   VerifyDeliveryPersonScreen()
@@ -124,12 +113,12 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
                 }
               }),
         );
-        // setState(() {});
       }
-
       appStore.setLoading(false);
-
       setState(() {});
+      if (!verificationSteps.any((element) => element.status == VerificationStatus.pending)) {
+        goToDashboard();
+      }
     }).catchError((e) {
       appStore.setLoading(false);
       toast(e.toString());
@@ -185,13 +174,13 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
                     return Card(
                       child: ListTile(
                         leading: Icon(step.image),
-                        title: Text(step.title,style: boldTextStyle(),),
+                        title: Text(
+                          step.title,
+                          style: boldTextStyle(),
+                        ),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(step.description),
-                            getActionButton(step.status, step.fun)
-                          ],
+                          children: [Text(step.description), getActionButton(step.status, step.fun)],
                         ),
                         // trailing: getActionButton(step.status, step.fun),
                       ),
@@ -216,8 +205,7 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
                     ],
                   ),
                 ).onTap(() async {
-                  if (verificationSteps
-                      .any((element) => element.status == VerificationStatus.pending)) {
+                  if (verificationSteps.any((element) => element.status == VerificationStatus.pending)) {
                     toast(language.youMustVerifyAboveAll);
                   } else {
                     goToDashboard();
@@ -227,16 +215,15 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
             ),
           ),
           Observer(
-              builder: (context) => Visibility(
-                  visible: appStore.isLoading, child: Positioned.fill(child: loaderWidget()))),
+              builder: (context) =>
+                  Visibility(visible: appStore.isLoading, child: Positioned.fill(child: loaderWidget()))),
         ],
       ),
     );
   }
 
   double calculateProgress() {
-    final completedSteps =
-        verificationSteps.where((step) => step.status == VerificationStatus.completed).length;
+    final completedSteps = verificationSteps.where((step) => step.status == VerificationStatus.completed).length;
     return completedSteps / verificationSteps.length;
   }
 
@@ -249,7 +236,6 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
         if (getStringAsync(USER_TYPE) == CLIENT) {
           DashboardScreen().launch(context, isNewTask: true);
         } else {
-          // DeliveryDashBoard().launch(context, isNewTask: true);
           DHomeFragment().launch(context, isNewTask: true);
         }
       } else {
@@ -310,11 +296,7 @@ class VerificationStep {
   Function fun;
 
   VerificationStep(
-      {required this.title,
-      required this.image,
-      required this.description,
-      required this.status,
-      required this.fun});
+      {required this.title, required this.image, required this.description, required this.status, required this.fun});
 }
 
 Widget commonAppButton(Widget child, Function() fn, {Color? borderColor}) {
@@ -333,13 +315,19 @@ Widget commonAppButton(Widget child, Function() fn, {Color? borderColor}) {
 }
 
 getCountryDetailApiCall(int countryId) async {
+  appStore.setLoading(true);
   await getCountryDetail(countryId).then((value) {
+    appStore.setLoading(false);
     setValue(COUNTRY_DATA, value.data!.toJson());
-  }).catchError((error) {});
+  }).catchError((error) {
+    appStore.setLoading(false);
+  });
 }
 
 getCityDetailApiCall(int cityId, BuildContext context) async {
+  appStore.setLoading(true);
   await getCityDetail(cityId).then((value) async {
+    appStore.setLoading(false);
     await setValue(CITY_DATA, value.data!.toJson());
     if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
       if (getStringAsync(USER_TYPE) == CLIENT) {
@@ -352,9 +340,9 @@ getCityDetailApiCall(int cityId, BuildContext context) async {
       UserCitySelectScreen().launch(context, isNewTask: true);
     }
   }).catchError((error) {
+    appStore.setLoading(false);
     if (error.toString() == CITY_NOT_FOUND_EXCEPTION) {
-      UserCitySelectScreen()
-          .launch(getContext, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+      UserCitySelectScreen().launch(getContext, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
     }
   });
 }

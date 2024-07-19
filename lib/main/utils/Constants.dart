@@ -51,8 +51,8 @@ const CURRENCY_CODE = 'INR';
 //region App description and links
 const mAppDescription = 'You can deliver exactly when the user wants and can start processing the user’s order almost immediately after you receive it, or you can deliver on a specific day and time.';
 const mCopyright = '© 2023 MeetMighty IT Solutions';
-const mPrivacyPolicy = 'https://meetmighty.com/codecanyon/document/mighty-delivery/';
-const mTermAndCondition = 'https://meetmighty.com/codecanyon/document/mighty-delivery/';
+const mPrivacyPolicy = "$DOMAIN_URL/privacypolicy";
+const mTermAndCondition = "$DOMAIN_URL/termofservice";
 const mHelpAndSupport = 'https://support.meetmighty.com/';
 const mContactPref = 'hello@meetmighty.com';
 //endregion

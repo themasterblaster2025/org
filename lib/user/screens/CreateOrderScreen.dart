@@ -173,11 +173,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         print(error);
       });
       widget.orderItems.validate().forEach((element) {
-        orderItemsList.add(OrderItemModel(
-            orderId: "",
-            productId: element.id,
-            quantity: element.count,
-            amount: element.price));
+        orderItemsList
+            .add(OrderItemModel(orderId: "", productId: element.id, quantity: element.count, amount: element.price));
         productAmount = productAmount + ((element.count) * (element.price ?? 0));
         setState(() {});
       });
@@ -193,23 +190,18 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     });
 
     if (widget.orderData != null) {
-      if (widget.orderData!.totalWeight != 0)
-        weightController.text = widget.orderData!.totalWeight!.toString();
-      if (widget.orderData!.totalParcel != null)
-        totalParcelController.text = widget.orderData!.totalParcel!.toString();
+      if (widget.orderData!.totalWeight != 0) weightController.text = widget.orderData!.totalWeight!.toString();
+      if (widget.orderData!.totalParcel != null) totalParcelController.text = widget.orderData!.totalParcel!.toString();
       parcelTypeCont.text = widget.orderData!.parcelType.validate();
 
       pickAddressCont.text = widget.orderData!.pickupPoint!.address.validate();
       pickLat = widget.orderData!.pickupPoint!.latitude.validate();
       pickLong = widget.orderData!.pickupPoint!.longitude.validate();
       if (widget.orderData!.pickupPoint!.contactNumber.validate().split(" ").length == 1) {
-        pickPhoneCont.text =
-            widget.orderData!.pickupPoint!.contactNumber.validate().split(" ").last;
+        pickPhoneCont.text = widget.orderData!.pickupPoint!.contactNumber.validate().split(" ").last;
       } else {
-        pickupCountryCode =
-            widget.orderData!.pickupPoint!.contactNumber.validate().split(" ").first;
-        pickPhoneCont.text =
-            widget.orderData!.pickupPoint!.contactNumber.validate().split(" ").last;
+        pickupCountryCode = widget.orderData!.pickupPoint!.contactNumber.validate().split(" ").first;
+        pickPhoneCont.text = widget.orderData!.pickupPoint!.contactNumber.validate().split(" ").last;
       }
       pickDesCont.text = widget.orderData!.pickupPoint!.description.validate();
 
@@ -217,33 +209,26 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       deliverLat = widget.orderData!.deliveryPoint!.latitude.validate();
       deliverLong = widget.orderData!.deliveryPoint!.longitude.validate();
       if (widget.orderData!.deliveryPoint!.contactNumber.validate().split(" ").length == 1) {
-        deliverPhoneCont.text =
-            widget.orderData!.deliveryPoint!.contactNumber.validate().split(" ").last;
+        deliverPhoneCont.text = widget.orderData!.deliveryPoint!.contactNumber.validate().split(" ").last;
       } else {
-        deliverCountryCode =
-            widget.orderData!.deliveryPoint!.contactNumber.validate().split(" ").first;
-        deliverPhoneCont.text =
-            widget.orderData!.deliveryPoint!.contactNumber.validate().split(" ").last;
+        deliverCountryCode = widget.orderData!.deliveryPoint!.contactNumber.validate().split(" ").first;
+        deliverPhoneCont.text = widget.orderData!.deliveryPoint!.contactNumber.validate().split(" ").last;
       }
       deliverDesCont.text = widget.orderData!.deliveryPoint!.description.validate();
 
-      paymentCollectFrom =
-          widget.orderData!.paymentCollectFrom.validate(value: PAYMENT_ON_PICKUP);
+      paymentCollectFrom = widget.orderData!.paymentCollectFrom.validate(value: PAYMENT_ON_PICKUP);
     }
   }
 
   extraChargesList() {
     extraChargeList.clear();
-    extraChargeList.add(ExtraChargeRequestModel(
-        key: FIXED_CHARGES, value: cityData!.fixedCharges, valueType: ""));
-    extraChargeList.add(ExtraChargeRequestModel(
-        key: MIN_DISTANCE, value: cityData!.minDistance, valueType: ""));
-    extraChargeList.add(
-        ExtraChargeRequestModel(key: MIN_WEIGHT, value: cityData!.minWeight, valueType: ""));
-    extraChargeList.add(ExtraChargeRequestModel(
-        key: PER_DISTANCE_CHARGE, value: cityData!.perDistanceCharges, valueType: ""));
-    extraChargeList.add(ExtraChargeRequestModel(
-        key: PER_WEIGHT_CHARGE, value: cityData!.perWeightCharges, valueType: ""));
+    extraChargeList.add(ExtraChargeRequestModel(key: FIXED_CHARGES, value: cityData!.fixedCharges, valueType: ""));
+    extraChargeList.add(ExtraChargeRequestModel(key: MIN_DISTANCE, value: cityData!.minDistance, valueType: ""));
+    extraChargeList.add(ExtraChargeRequestModel(key: MIN_WEIGHT, value: cityData!.minWeight, valueType: ""));
+    extraChargeList
+        .add(ExtraChargeRequestModel(key: PER_DISTANCE_CHARGE, value: cityData!.perDistanceCharges, valueType: ""));
+    extraChargeList
+        .add(ExtraChargeRequestModel(key: PER_WEIGHT_CHARGE, value: cityData!.perWeightCharges, valueType: ""));
 
     if (cityData!.extraCharges != null) {
       cityData!.extraCharges!.forEach((element) {
@@ -263,8 +248,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       setState(() {});
     }).catchError((error) {
       if (error.toString() == CITY_NOT_FOUND_EXCEPTION) {
-        UserCitySelectScreen()
-            .launch(getContext, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+        UserCitySelectScreen().launch(getContext, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
       }
     });
   }
@@ -299,15 +283,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   getTotalAmount() async {
     String? originLat = isPickSavedAddress ? pickAddressData!.latitude.validate() : pickLat;
     String? originLong = isPickSavedAddress ? pickAddressData!.longitude.validate() : pickLong;
-    String? destinationLat =
-        isDeliverySavedAddress ? deliveryAddressData!.latitude.validate() : deliverLat;
-    String? destinationLong =
-        isDeliverySavedAddress ? deliveryAddressData!.longitude.validate() : deliverLong;
+    String? destinationLat = isDeliverySavedAddress ? deliveryAddressData!.latitude.validate() : deliverLat;
+    String? destinationLong = isDeliverySavedAddress ? deliveryAddressData!.longitude.validate() : deliverLong;
     String origins = "${originLat},${originLong}";
     String destinations = "${destinationLat},${destinationLong}";
     await getDistanceBetweenLatLng(origins, destinations).then((value) {
-      double distanceInKms =
-          value.rows[0].elements[0].distance.text.toString().split(' ')[0].toDouble();
+      double distanceInKms = value.rows[0].elements[0].distance.text.toString().split(' ')[0].toDouble();
       if (appStore.distanceUnit == DISTANCE_UNIT_MILE) {
         totalDistance = (MILES_PER_KM * distanceInKms);
       } else {
@@ -320,18 +301,16 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
       /// calculate weight Charge
       if (weightController.text.toDouble() > cityData!.minWeight!) {
-        weightCharge = ((weightController.text.toDouble() - cityData!.minWeight!) *
-                cityData!.perWeightCharges!)
+        weightCharge = ((weightController.text.toDouble() - cityData!.minWeight!) * cityData!.perWeightCharges!)
             .toStringAsFixed(digitAfterDecimal)
             .toDouble();
       }
 
       /// calculate distance Charge
       if (totalDistance > cityData!.minDistance!) {
-        distanceCharge =
-            ((totalDistance - cityData!.minDistance!) * cityData!.perDistanceCharges!)
-                .toStringAsFixed(digitAfterDecimal)
-                .toDouble();
+        distanceCharge = ((totalDistance - cityData!.minDistance!) * cityData!.perDistanceCharges!)
+            .toStringAsFixed(digitAfterDecimal)
+            .toDouble();
       }
 
       /// total amount
@@ -340,24 +319,19 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       /// calculate extra charges
       if (cityData!.extraCharges != null) {
         cityData!.extraCharges!.forEach((element) {
-          totalExtraCharge += countExtraCharge(
-              totalAmount: totalAmount,
-              charges: element.charges!,
-              chargesType: element.chargesType!);
+          totalExtraCharge +=
+              countExtraCharge(totalAmount: totalAmount, charges: element.charges!, chargesType: element.chargesType!);
         });
       }
 
       /// vehicle charge
       if (selectedVehicle != null && appStore.isVehicleOrder != 0) {
-        VehicleData vehicle =
-            vehicleList.firstWhere((element) => element.id == selectedVehicle);
+        VehicleData vehicle = vehicleList.firstWhere((element) => element.id == selectedVehicle);
         totalAmount += vehicle.price.validate();
       }
 
       /// All Charges
-      totalAmount = (totalAmount + totalExtraCharge + productAmount)
-          .toStringAsFixed(digitAfterDecimal)
-          .toDouble();
+      totalAmount = (totalAmount + totalExtraCharge + productAmount).toStringAsFixed(digitAfterDecimal).toDouble();
     });
   }
 
@@ -370,18 +344,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       "country_id": getIntAsync(COUNTRY_ID).toString(),
       "city_id": getIntAsync(CITY_ID).toString(),
       //   if (appStore.isVehicleOrder != 0) "vehicle_id": selectedVehicle.toString(),
-      if (!selectedVehicle.toString().isEmptyOrNull &&
-          selectedVehicle != 0 &&
-          appStore.isVehicleOrder != 0)
+      if (!selectedVehicle.toString().isEmptyOrNull && selectedVehicle != 0 && appStore.isVehicleOrder != 0)
         "vehicle_id": selectedVehicle.toString(),
       "pickup_point": {
-        "start_time": (!isDeliverNow && pickFromDateTime != null)
-            ? pickFromDateTime.toString()
-            : DateTime.now().toString(),
-        "end_time":
-            (!isDeliverNow && pickToDateTime != null) ? pickToDateTime!.toUtc().toString() : null,
-        "address":
-            isPickSavedAddress ? pickAddressData!.address.validate() : pickAddressCont.text,
+        "start_time":
+            (!isDeliverNow && pickFromDateTime != null) ? pickFromDateTime.toString() : DateTime.now().toString(),
+        "end_time": (!isDeliverNow && pickToDateTime != null) ? pickToDateTime!.toUtc().toString() : null,
+        "address": isPickSavedAddress ? pickAddressData!.address.validate() : pickAddressCont.text,
         "latitude": isPickSavedAddress ? pickAddressData!.latitude.validate() : pickLat,
         "longitude": isPickSavedAddress ? pickAddressData!.longitude.validate() : pickLong,
         "description": pickDesCont.text,
@@ -390,18 +359,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             : '$pickupCountryCode${pickPhoneCont.text.trim()}',
       },
       "delivery_point": {
-        "start_time": (!isDeliverNow && deliverFromDateTime != null)
-            ? deliverFromDateTime.toString()
-            : null,
-        "end_time":
-            (!isDeliverNow && deliverToDateTime != null) ? deliverToDateTime.toString() : null,
-        "address": isDeliverySavedAddress
-            ? deliveryAddressData!.address.validate()
-            : deliverAddressCont.text,
-        "latitude":
-            isDeliverySavedAddress ? deliveryAddressData!.latitude.validate() : deliverLat,
-        "longitude":
-            isDeliverySavedAddress ? deliveryAddressData!.longitude.validate() : deliverLong,
+        "start_time": (!isDeliverNow && deliverFromDateTime != null) ? deliverFromDateTime.toString() : null,
+        "end_time": (!isDeliverNow && deliverToDateTime != null) ? deliverToDateTime.toString() : null,
+        "address": isDeliverySavedAddress ? deliveryAddressData!.address.validate() : deliverAddressCont.text,
+        "latitude": isDeliverySavedAddress ? deliveryAddressData!.latitude.validate() : deliverLat,
+        "longitude": isDeliverySavedAddress ? deliveryAddressData!.longitude.validate() : deliverLong,
         "description": deliverDesCont.text,
         "contact_number": isDeliverySavedAddress
             ? deliveryAddressData!.contactNumber.validate()
@@ -411,8 +373,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       "parcel_type": parcelTypeCont.text,
       "total_weight": weightController.text.toDouble(),
       "total_distance": totalDistance.toStringAsFixed(digitAfterDecimal).validate(),
-      "payment_collect_from":
-          widget.orderItems.validate().isEmpty ? paymentCollectFrom : PAYMENT_ON_DELIVERY,
+      "payment_collect_from": widget.orderItems.validate().isEmpty ? paymentCollectFrom : PAYMENT_ON_DELIVERY,
       "status": orderStatus,
       "payment_type": "",
       "payment_status": "",
@@ -438,8 +399,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       toast(value.message);
       finish(context);
       if (isSelected == 2) {
-        PaymentScreen(orderId: value.orderId.validate(), totalAmount: totalAmount)
-            .launch(context);
+        PaymentScreen(orderId: value.orderId.validate(), totalAmount: totalAmount).launch(context);
       } else if (isSelected == 3) {
         log("-----" + appStore.availableBal.toString());
         if (appStore.availableBal > totalAmount) {
@@ -514,8 +474,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     await placeAutoCompleteApi(
             searchText: text,
             language: appStore.selectedLanguage,
-            countryCode:
-                CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate(value: 'IN'))
+            countryCode: CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate(value: 'IN'))
         .then((value) {
       list = value.predictions ?? [];
     }).catchError((e) {
@@ -535,26 +494,32 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   }
 
   Future<void> getAddressListApi() async {
-    addressList = (getStringListAsync(RECENT_ADDRESS_LIST) ?? [])
+    /* addressList = (getStringListAsync(RECENT_ADDRESS_LIST) ?? [])
         .map((e) => AddressData.fromJson(jsonDecode(e)))
         .toList();
     if (addressList.isNotEmpty) {
       pickAddressData = addressList.first;
       deliveryAddressData = addressList.first;
     }
-    setState(() {});
-    /* await getAddressList().then((value) {
+    setState(() {});*/
+    appStore.setLoading(true);
+    await getAddressList().then((value) {
       appStore.setLoading(false);
       addressList.addAll(value.data.validate());
       if (addressList.isNotEmpty) {
         pickAddressData = addressList.first;
         deliveryAddressData = addressList.first;
       }
+      List<AddressData> list = [];
+      addressList.forEach((e) {
+        list.add(e);
+      });
+      setValue(RECENT_ADDRESS_LIST, list.map((element) => jsonEncode(element)).toList());
       setState(() {});
     }).catchError((e) {
       appStore.setLoading(false);
       toast(e.toString(), print: true);
-    });*/
+    });
   }
 
   @override
@@ -577,28 +542,22 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       });
     });
     googleMapController?.animateCamera(CameraUpdate.newLatLngBounds(
-        LatLngBounds(southwest: LatLng(minLat, minLong), northeast: LatLng(maxLat, maxLong)),
-        20));
+        LatLngBounds(southwest: LatLng(minLat, minLong), northeast: LatLng(maxLat, maxLong)), 20));
   }
 
   setPolylines() async {
+    print("setPolyline");
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
         googleApiKey: googleMapAPIKey,
         request: PolylineRequest(
-            origin: PointLatLng(
-                isPickSavedAddress ? pickAddressData!.latitude.toDouble() : pickLat.toDouble(),
-                isPickSavedAddress
-                    ? pickAddressData!.longitude.toDouble()
-                    : pickLong.toDouble()),
+            origin: PointLatLng(isPickSavedAddress ? pickAddressData!.latitude.toDouble() : pickLat.toDouble(),
+                isPickSavedAddress ? pickAddressData!.longitude.toDouble() : pickLong.toDouble()),
             destination: PointLatLng(
-                isDeliverySavedAddress
-                    ? deliveryAddressData!.latitude.toDouble()
-                    : deliverLat.toDouble(),
-                isDeliverySavedAddress
-                    ? deliveryAddressData!.longitude.toDouble()
-                    : deliverLong.toDouble()),
+                isDeliverySavedAddress ? deliveryAddressData!.latitude.toDouble() : deliverLat.toDouble(),
+                isDeliverySavedAddress ? deliveryAddressData!.longitude.toDouble() : deliverLong.toDouble()),
             mode: TravelMode.driving));
     if (result.points.isNotEmpty) {
+      polylineCoordinates.clear();
       result.points.forEach((PointLatLng point) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       });
@@ -622,14 +581,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         children: [
           Row(
             children: [
-              scheduleOptionWidget(context, isDeliverNow, ic_clock, language.deliveryNow)
-                  .onTap(() {
+              scheduleOptionWidget(context, isDeliverNow, ic_clock, language.deliveryNow).onTap(() {
                 isDeliverNow = true;
                 setState(() {});
               }).expand(),
               16.width,
-              scheduleOptionWidget(context, !isDeliverNow, ic_schedule, language.schedule)
-                  .onTap(() {
+              scheduleOptionWidget(context, !isDeliverNow, ic_schedule, language.schedule).onTap(() {
                 isDeliverNow = false;
                 setState(() {});
               }).expand(),
@@ -644,8 +601,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               Container(
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                    border:
-                        Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                    border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
                     borderRadius: BorderRadius.circular(defaultRadius)),
                 child: Column(
                   children: [
@@ -664,8 +620,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         if (value!.isEmpty) return language.fieldRequiredMsg;
                         return null;
                       },
-                      decoration: commonInputDecoration(
-                          suffixIcon: Icons.calendar_today, hintText: language.date),
+                      decoration: commonInputDecoration(suffixIcon: Icons.calendar_today, hintText: language.date),
                     ),
                     16.height,
                     Row(
@@ -674,30 +629,26 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           controller: pickFromTimeController,
                           type: DateTimePickerType.time,
                           onChanged: (value) {
-                            pickFromTime =
-                                TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
+                            pickFromTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
                             setState(() {});
                           },
                           validator: (value) {
                             if (value.validate().isEmpty) return language.fieldRequiredMsg;
                             return null;
                           },
-                          decoration: commonInputDecoration(
-                              suffixIcon: Icons.access_time, hintText: language.from),
+                          decoration: commonInputDecoration(suffixIcon: Icons.access_time, hintText: language.from),
                         ).expand(),
                         16.width,
                         DateTimePicker(
                           controller: pickToTimeController,
                           type: DateTimePickerType.time,
                           onChanged: (value) {
-                            pickToTime =
-                                TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
+                            pickToTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
                             setState(() {});
                           },
                           validator: (value) {
                             if (value.validate().isEmpty) return language.fieldRequiredMsg;
-                            double fromTimeInHour =
-                                pickFromTime!.hour + pickFromTime!.minute / 60;
+                            double fromTimeInHour = pickFromTime!.hour + pickFromTime!.minute / 60;
                             double toTimeInHour = pickToTime!.hour + pickToTime!.minute / 60;
                             double difference = toTimeInHour - fromTimeInHour;
                             if (difference <= 0) {
@@ -705,8 +656,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                             }
                             return null;
                           },
-                          decoration: commonInputDecoration(
-                              suffixIcon: Icons.access_time, hintText: language.to),
+                          decoration: commonInputDecoration(suffixIcon: Icons.access_time, hintText: language.to),
                         ).expand()
                       ],
                     ),
@@ -738,8 +688,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         if (value!.isEmpty) return language.fieldRequiredMsg;
                         return null;
                       },
-                      decoration: commonInputDecoration(
-                          suffixIcon: Icons.calendar_today, hintText: language.date),
+                      decoration: commonInputDecoration(suffixIcon: Icons.calendar_today, hintText: language.date),
                     ),
                     16.height,
                     Row(
@@ -748,40 +697,34 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           controller: deliverFromTimeController,
                           type: DateTimePickerType.time,
                           onChanged: (value) {
-                            deliverFromTime =
-                                TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
+                            deliverFromTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
                             setState(() {});
                           },
                           validator: (value) {
                             if (value.validate().isEmpty) return language.fieldRequiredMsg;
                             return null;
                           },
-                          decoration: commonInputDecoration(
-                              suffixIcon: Icons.access_time, hintText: language.from),
+                          decoration: commonInputDecoration(suffixIcon: Icons.access_time, hintText: language.from),
                         ).expand(),
                         16.width,
                         DateTimePicker(
                           controller: deliverToTimeController,
                           type: DateTimePickerType.time,
                           onChanged: (value) {
-                            deliverToTime =
-                                TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
+                            deliverToTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
                             setState(() {});
                           },
                           validator: (value) {
                             if (value!.isEmpty) return language.fieldRequiredMsg;
-                            double fromTimeInHour =
-                                deliverFromTime!.hour + deliverFromTime!.minute / 60;
-                            double toTimeInHour =
-                                deliverToTime!.hour + deliverToTime!.minute / 60;
+                            double fromTimeInHour = deliverFromTime!.hour + deliverFromTime!.minute / 60;
+                            double toTimeInHour = deliverToTime!.hour + deliverToTime!.minute / 60;
                             double difference = toTimeInHour - fromTimeInHour;
                             if (difference < 0) {
                               return language.endTimeValidationMsg;
                             }
                             return null;
                           },
-                          decoration: commonInputDecoration(
-                              suffixIcon: Icons.access_time, hintText: language.to),
+                          decoration: commonInputDecoration(suffixIcon: Icons.access_time, hintText: language.to),
                         ).expand()
                       ],
                     ),
@@ -799,20 +742,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               Text(language.weight, style: primaryTextStyle()).expand(),
               Container(
                 decoration: BoxDecoration(
-                    border:
-                        Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                    border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
                     borderRadius: BorderRadius.circular(defaultRadius)),
                 child: IntrinsicHeight(
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.remove,
-                              color: appStore.isDarkMode ? Colors.white : Colors.grey)
+                      Icon(Icons.remove, color: appStore.isDarkMode ? Colors.white : Colors.grey)
                           .paddingAll(12)
                           .onTap(() {
                         if (weightController.text.toDouble() > 1) {
-                          weightController.text =
-                              (weightController.text.toDouble() - 1).toString();
+                          weightController.text = (weightController.text.toDouble() - 1).toString();
                         }
                       }),
                       VerticalDivider(thickness: 1, color: context.dividerColor),
@@ -825,18 +765,14 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           textFieldType: TextFieldType.PHONE,
                           decoration: InputDecoration(
                             counterText: '',
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: colorPrimary)),
+                            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: colorPrimary)),
                             border: InputBorder.none,
                           ),
                         ),
                       ),
                       VerticalDivider(thickness: 1, color: context.dividerColor),
-                      Icon(Icons.add, color: appStore.isDarkMode ? Colors.white : Colors.grey)
-                          .paddingAll(12)
-                          .onTap(() {
-                        weightController.text =
-                            (weightController.text.toDouble() + 1).toString();
+                      Icon(Icons.add, color: appStore.isDarkMode ? Colors.white : Colors.grey).paddingAll(12).onTap(() {
+                        weightController.text = (weightController.text.toDouble() + 1).toString();
                       }),
                     ],
                   ),
@@ -852,20 +788,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               Text(language.numberOfParcels, style: primaryTextStyle()).expand(),
               Container(
                 decoration: BoxDecoration(
-                    border:
-                        Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                    border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
                     borderRadius: BorderRadius.circular(defaultRadius)),
                 child: IntrinsicHeight(
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.remove,
-                              color: appStore.isDarkMode ? Colors.white : Colors.grey)
+                      Icon(Icons.remove, color: appStore.isDarkMode ? Colors.white : Colors.grey)
                           .paddingAll(12)
                           .onTap(() {
                         if (totalParcelController.text.toInt() > 1) {
-                          totalParcelController.text =
-                              (totalParcelController.text.toInt() - 1).toString();
+                          totalParcelController.text = (totalParcelController.text.toInt() - 1).toString();
                         }
                       }),
                       VerticalDivider(thickness: 1, color: context.dividerColor),
@@ -878,18 +811,14 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           textFieldType: TextFieldType.PHONE,
                           decoration: InputDecoration(
                             counterText: '',
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: colorPrimary)),
+                            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: colorPrimary)),
                             border: InputBorder.none,
                           ),
                         ),
                       ),
                       VerticalDivider(thickness: 1, color: context.dividerColor),
-                      Icon(Icons.add, color: appStore.isDarkMode ? Colors.white : Colors.grey)
-                          .paddingAll(12)
-                          .onTap(() {
-                        totalParcelController.text =
-                            (totalParcelController.text.toInt() + 1).toString();
+                      Icon(Icons.add, color: appStore.isDarkMode ? Colors.white : Colors.grey).paddingAll(12).onTap(() {
+                        totalParcelController.text = (totalParcelController.text.toInt() + 1).toString();
                       }),
                     ],
                   ),
@@ -917,11 +846,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       value: item.id,
                       child: Row(
                         children: [
-                          commonCachedNetworkImage(item.vehicleImage.validate(),
-                              height: 40, width: 40),
+                          commonCachedNetworkImage(item.vehicleImage.validate(), height: 40, width: 40),
                           SizedBox(width: 16),
-                          Text(
-                              "${item.title.validate()}  (${printAmount(item.price.validate())})",
+                          Text("${item.title.validate()}  (${printAmount(item.price.validate())})",
                               style: primaryTextStyle()),
                         ],
                       ),
@@ -1001,8 +928,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         isPickSavedAddress
             ? Container(
                 decoration: boxDecorationWithRoundedCorners(
-                    borderRadius: BorderRadius.circular(defaultRadius),
-                    backgroundColor: Colors.grey.withOpacity(0.15)),
+                    borderRadius: BorderRadius.circular(defaultRadius), backgroundColor: Colors.grey.withOpacity(0.15)),
                 //   height: 90,
                 padding: EdgeInsets.all(12),
                 child: DropdownButton<AddressData>(
@@ -1021,8 +947,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         children: [
                           Text(e.address.validate(), style: primaryTextStyle(), maxLines: 2),
                           8.height,
-                          Text(e.contactNumber.validate(),
-                              style: secondaryTextStyle(), maxLines: 1),
+                          Text(e.contactNumber.validate(), style: secondaryTextStyle(), maxLines: 1),
                         ],
                       ),
                     );
@@ -1034,8 +959,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         children: [
                           Text(e.address.validate(), style: primaryTextStyle(), maxLines: 2),
                           8.height,
-                          Text(e.contactNumber.validate(),
-                              style: secondaryTextStyle(), maxLines: 1),
+                          Text(e.contactNumber.validate(), style: secondaryTextStyle(), maxLines: 1),
                         ],
                       );
                     }).toList();
@@ -1061,16 +985,14 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
                     validator: (value) {
                       if (value!.isEmpty) return language.fieldRequiredMsg;
-                      if (pickLat == null || pickLong == null)
-                        return language.pleaseSelectValidAddress;
+                      if (pickLat == null || pickLong == null) return language.pleaseSelectValidAddress;
                       return null;
                     },
                     onTap: () {
                       if (widget.orderItems.validate().isEmpty) {
                         showModalBottomSheet(
                           shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+                              borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
                           context: context,
                           builder: (context) {
                             return PickAddressBottomSheet(
@@ -1078,8 +1000,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                                 pickAddressCont.text = address.address ?? "";
                                 pickLat = address.latitude.toString();
                                 pickLong = address.longitude.toString();
-                                pickPhoneCont.text =
-                                    address.contactNumber.validate().substring(4);
+                                pickPhoneCont.text = address.contactNumber.validate().substring(4);
                                 setState(() {});
                               },
                             );
@@ -1116,8 +1037,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                                   CountryCodePicker(
                                     initialSelection: pickupCountryCode,
                                     showCountryOnly: false,
-                                    dialogSize:
-                                        Size(context.width() - 60, context.height() * 0.6),
+                                    dialogSize: Size(context.width() - 60, context.height() * 0.6),
                                     showFlag: true,
                                     showFlagDialog: true,
                                     showOnlyCountryWhenClosed: false,
@@ -1129,10 +1049,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                                     searchDecoration: InputDecoration(
                                       iconColor: Theme.of(context).dividerColor,
                                       enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Theme.of(context).dividerColor)),
-                                      focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(color: colorPrimary)),
+                                          borderSide: BorderSide(color: Theme.of(context).dividerColor)),
+                                      focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: colorPrimary)),
                                     ),
                                     searchStyle: primaryTextStyle(),
                                     onInit: (c) {
@@ -1198,8 +1116,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         isDeliverySavedAddress
             ? Container(
                 decoration: boxDecorationWithRoundedCorners(
-                    borderRadius: BorderRadius.circular(defaultRadius),
-                    backgroundColor: Colors.grey.withOpacity(0.15)),
+                    borderRadius: BorderRadius.circular(defaultRadius), backgroundColor: Colors.grey.withOpacity(0.15)),
                 // height: 90,
                 padding: EdgeInsets.all(12),
                 child: DropdownButton<AddressData>(
@@ -1218,8 +1135,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         children: [
                           Text(e.address.validate(), style: primaryTextStyle(), maxLines: 2),
                           8.height,
-                          Text(e.contactNumber.validate(),
-                              style: secondaryTextStyle(), maxLines: 1),
+                          Text(e.contactNumber.validate(), style: secondaryTextStyle(), maxLines: 1),
                         ],
                       ),
                     );
@@ -1231,8 +1147,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         children: [
                           Text(e.address.validate(), style: primaryTextStyle(), maxLines: 2),
                           8.height,
-                          Text(e.contactNumber.validate(),
-                              style: secondaryTextStyle(), maxLines: 1),
+                          Text(e.contactNumber.validate(), style: secondaryTextStyle(), maxLines: 1),
                         ],
                       );
                     }).toList();
@@ -1257,15 +1172,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
                     validator: (value) {
                       if (value!.isEmpty) return language.fieldRequiredMsg;
-                      if (deliverLat == null || deliverLong == null)
-                        return language.pleaseSelectValidAddress;
+                      if (deliverLat == null || deliverLong == null) return language.pleaseSelectValidAddress;
                       return null;
                     },
                     onTap: () {
                       showModalBottomSheet(
                         shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+                            borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
                         context: context,
                         builder: (context) {
                           return PickAddressBottomSheet(
@@ -1273,14 +1186,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                               deliverAddressCont.text = address.address ?? "";
                               deliverLat = address.latitude.toString();
                               deliverLong = address.longitude.toString();
-                              deliverPhoneCont.text =
-                                  address.contactNumber.validate().substring(4);
+                              deliverPhoneCont.text = address.contactNumber.validate().substring(4);
                               setState(() {});
                             },
                             isPickup: false,
                           );
                         },
-                      ).then((value){
+                      ).then((value) {
                         addressList = (getStringListAsync(RECENT_ADDRESS_LIST) ?? [])
                             .map((e) => AddressData.fromJson(jsonDecode(e)))
                             .toList();
@@ -1321,11 +1233,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                               dialogTextStyle: primaryTextStyle(),
                               searchDecoration: InputDecoration(
                                 iconColor: Theme.of(context).dividerColor,
-                                enabledBorder: UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Theme.of(context).dividerColor)),
-                                focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: colorPrimary)),
+                                enabledBorder:
+                                    UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
+                                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: colorPrimary)),
                               ),
                               searchStyle: primaryTextStyle(),
                               onInit: (c) {
@@ -1389,13 +1299,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       cameraTargetBounds: CameraTargetBounds.unbounded,
                       initialCameraPosition: CameraPosition(
                           // bearing: 192.8334901395799,
-                          target: LatLng(
-                              isPickSavedAddress
-                                  ? pickAddressData!.latitude.toDouble()
-                                  : pickLat.toDouble(),
-                              isPickSavedAddress
-                                  ? pickAddressData!.longitude.toDouble()
-                                  : pickLong.toDouble()),
+                          target: LatLng(isPickSavedAddress ? pickAddressData!.latitude.toDouble() : pickLat.toDouble(),
+                              isPickSavedAddress ? pickAddressData!.longitude.toDouble() : pickLong.toDouble()),
                           zoom: 12),
                       onMapCreated: onMapCreated,
                       tiltGesturesEnabled: true,
@@ -1432,11 +1337,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 8.height,
                 rowWidget(
                     title: language.weight,
-                    value:
-                        '${weightController.text} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weightType}'),
+                    value: '${weightController.text} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weightType}'),
                 8.height,
-                rowWidget(
-                    title: language.numberOfParcels, value: '${totalParcelController.text}'),
+                rowWidget(title: language.numberOfParcels, value: '${totalParcelController.text}'),
                 Column(
                   children: [
                     16.height,
@@ -1461,9 +1364,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           16.height,
           addressComponent(
               title: language.pickupLocation,
-              address: isPickSavedAddress
-                  ? pickAddressData!.address.validate()
-                  : pickAddressCont.text,
+              address: isPickSavedAddress ? pickAddressData!.address.validate() : pickAddressCont.text,
               phoneNumber: isPickSavedAddress
                   ? pickAddressData!.contactNumber.validate()
                   : (widget.orderItems.validate().isNotEmpty
@@ -1472,9 +1373,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           16.height,
           addressComponent(
               title: language.deliveryLocation,
-              address: isDeliverySavedAddress
-                  ? deliveryAddressData!.address.validate()
-                  : deliverAddressCont.text,
+              address: isDeliverySavedAddress ? deliveryAddressData!.address.validate() : deliverAddressCont.text,
               phoneNumber: isDeliverySavedAddress
                   ? deliveryAddressData!.contactNumber.validate()
                   : '$deliverCountryCode ${deliverPhoneCont.text.trim()}'),
@@ -1502,8 +1401,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 padding: EdgeInsets.all(8),
                 alignment: Alignment.center,
                 decoration: boxDecorationWithRoundedCorners(
-                    border: Border.all(
-                        color: isSelected == mData.index ? colorPrimary : borderColor),
+                    border: Border.all(color: isSelected == mData.index ? colorPrimary : borderColor),
                     backgroundColor: Colors.transparent),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -1511,14 +1409,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ImageIcon(AssetImage(mData.image.validate()),
-                        size: 20,
-                        color: isSelected == mData.index ? colorPrimary : dividerColor),
+                        size: 20, color: isSelected == mData.index ? colorPrimary : dividerColor),
                     8.width,
                     Text(mData.title!,
                         style: primaryTextStyle(
-                            color: isSelected == mData.index
-                                ? colorPrimary
-                                : textSecondaryColorGlobal)),
+                            color: isSelected == mData.index ? colorPrimary : textSecondaryColorGlobal)),
                   ],
                 ),
               ).onTap(() {
@@ -1541,12 +1436,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 items: [
                   DropdownMenuItem(
                       value: PAYMENT_ON_PICKUP,
-                      child: Text(language.pickupLocation,
-                          style: primaryTextStyle(), maxLines: 1)),
+                      child: Text(language.pickupLocation, style: primaryTextStyle(), maxLines: 1)),
                   DropdownMenuItem(
                       value: PAYMENT_ON_DELIVERY,
-                      child: Text(language.deliveryLocation,
-                          style: primaryTextStyle(), maxLines: 1)),
+                      child: Text(language.deliveryLocation, style: primaryTextStyle(), maxLines: 1)),
                 ],
                 onChanged: (value) {
                   paymentCollectFrom = value!;
@@ -1567,17 +1460,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         Text(title, style: secondaryTextStyle()),
         16.width,
         Text(value,
-                style: boldTextStyle(size: 14),
-                maxLines: 3,
-                textAlign: TextAlign.end,
-                overflow: TextOverflow.ellipsis)
+                style: boldTextStyle(size: 14), maxLines: 3, textAlign: TextAlign.end, overflow: TextOverflow.ellipsis)
             .expand(),
       ],
     );
   }
 
-  Widget addressComponent(
-      {required String title, required String address, required String phoneNumber}) {
+  Widget addressComponent({required String title, required String address, required String phoneNumber}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1600,8 +1489,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 children: [
                   Icon(Icons.call, size: 14),
                   8.width,
-                  Text(phoneNumber, style: secondaryTextStyle())
-                      .visible(phoneNumber.isNotEmpty),
+                  Text(phoneNumber, style: secondaryTextStyle()).visible(phoneNumber.isNotEmpty),
                 ],
               ),
             ],
@@ -1617,8 +1505,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       lineWidth: 2.0,
       percent: ((selectedTabIndex + 1) / 5) > 1 ? 1 : (selectedTabIndex + 1) / 5,
       animation: true,
-      center: Text((selectedTabIndex + 1).toInt().toString() + " /5",
-          style: boldTextStyle(size: 11, color: Colors.white)),
+      center:
+          Text((selectedTabIndex + 1).toInt().toString() + " /5", style: boldTextStyle(size: 11, color: Colors.white)),
       backgroundColor: Colors.white.withOpacity(0.25),
       progressColor: Colors.white,
     );
@@ -1732,8 +1620,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     .paddingRight(isRTL ? 4 : 16)
                     .paddingLeft(isRTL ? 16 : 0)
                     .expand(),
-              commonButton(selectedTabIndex != 4 ? language.next : language.createOrder,
-                  () async {
+              commonButton(selectedTabIndex != 4 ? language.next : language.createOrder, () async {
                 FocusScope.of(context).requestFocus(new FocusNode());
                 log('------selected tab index${selectedTabIndex}');
                 if (selectedTabIndex == 2) {
@@ -1767,21 +1654,18 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     Duration difference = Duration();
                     Duration differenceCurrentTime = Duration();
                     if (!isDeliverNow) {
-                      pickFromDateTime = pickDate!.add(
-                          Duration(hours: pickFromTime!.hour, minutes: pickFromTime!.minute));
-                      pickToDateTime = pickDate!
-                          .add(Duration(hours: pickToTime!.hour, minutes: pickToTime!.minute));
-                      deliverFromDateTime = deliverDate!.add(Duration(
-                          hours: deliverFromTime!.hour, minutes: deliverFromTime!.minute));
-                      deliverToDateTime = deliverDate!.add(Duration(
-                          hours: deliverToTime!.hour, minutes: deliverToTime!.minute));
+                      pickFromDateTime =
+                          pickDate!.add(Duration(hours: pickFromTime!.hour, minutes: pickFromTime!.minute));
+                      pickToDateTime = pickDate!.add(Duration(hours: pickToTime!.hour, minutes: pickToTime!.minute));
+                      deliverFromDateTime =
+                          deliverDate!.add(Duration(hours: deliverFromTime!.hour, minutes: deliverFromTime!.minute));
+                      deliverToDateTime =
+                          deliverDate!.add(Duration(hours: deliverToTime!.hour, minutes: deliverToTime!.minute));
                       difference = pickFromDateTime!.difference(deliverFromDateTime!);
                       differenceCurrentTime = DateTime.now().difference(pickFromDateTime!);
                     }
-                    if (differenceCurrentTime.inMinutes > 0)
-                      return toast(language.pickupCurrentValidationMsg);
-                    if (difference.inMinutes > 0)
-                      return toast(language.pickupDeliverValidationMsg);
+                    if (differenceCurrentTime.inMinutes > 0) return toast(language.pickupCurrentValidationMsg);
+                    if (difference.inMinutes > 0) return toast(language.pickupDeliverValidationMsg);
                     selectedTabIndex++;
                     if (selectedTabIndex == 4) {
                       await getTotalAmount();
