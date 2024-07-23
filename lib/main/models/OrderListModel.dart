@@ -129,6 +129,7 @@ class OrderData {
   int? vehicleId;
   VehicleData? vehicleData;
   String? vehicleImage;
+  String? invoice;
 
   OrderData(
       {this.id,
@@ -171,7 +172,8 @@ class OrderData {
       this.cancelledDeliverManIds,
       this.vehicleId,
       this.vehicleData,
-      this.vehicleImage});
+      this.vehicleImage,
+      this.invoice});
 
   OrderData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -221,6 +223,7 @@ class OrderData {
         ? new VehicleData.fromJson(json['vehicle_data'])
         : null;
     vehicleImage = json['vehicle_image'];
+    invoice = json['invoice'];
   }
 
   Map<String, dynamic> toJson() {
@@ -272,6 +275,7 @@ class OrderData {
       data['vehicle_data'] = this.vehicleData!.toJson();
     }
     data['vehicle_image'] = this.vehicleImage;
+    data['invoice'] = this.invoice;
     return data;
   }
 }

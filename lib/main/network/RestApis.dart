@@ -182,8 +182,10 @@ Future<void> logout(BuildContext context,
     clearData();
     LoginScreen().launch(context, isNewTask: true);
   } else {
+    appStore.setLoading(true);
     await logoutApi().then((value) async {
       clearData();
+      appStore.setLoading(false);
     }).catchError((e) {
       appStore.setLoading(false);
       throw e.toString();

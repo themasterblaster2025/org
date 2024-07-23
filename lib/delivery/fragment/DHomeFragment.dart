@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
+import 'package:mighty_delivery/delivery/screens/EarningHistoryScreen.dart';
 import 'package:mighty_delivery/delivery/screens/FilterCountScreen.dart';
 import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
@@ -106,6 +107,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
         selectedIndex: 1,
       ).launch(context).then((value) => setState(() {}));
     } else if (index == 4) {
+      EarningHistoryScreen().launch(context);
     } else if (index == 5) {
       WalletScreen().launch(context);
     } else {
@@ -145,6 +147,10 @@ class _DHomeFragmentState extends State<DHomeFragment> {
     }).catchError((error) {
       log(error.toString());
     });
+  }
+  @override
+  void setState(fn) {
+    if (mounted) super.setState(fn);
   }
 
   Future<void> getDashboardCountDataApi({String? startDate, String? endDate}) async {

@@ -1,11 +1,23 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+// import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:internet_file/internet_file.dart';
 import 'package:intl/intl.dart';
 import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import 'package:mighty_delivery/main/components/CommonScaffoldComponent.dart';
 import 'package:mighty_delivery/main/models/OrderListModel.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdfx/pdfx.dart';
+import 'package:pdfx/pdfx.dart' as pdf;
+import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../extensions/app_button.dart';
 import '../../extensions/common.dart';
@@ -16,9 +28,11 @@ import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Images.dart';
+import '../../main/utils/Widgets.dart';
 import '../screens/OrderDetailScreen.dart';
 import '../screens/OrderTrackingScreen.dart';
 import 'GenerateInvoice.dart';
+import 'package:http/http.dart' as http;
 
 class OrderCardComponent extends StatefulWidget {
   final OrderData item;
@@ -34,8 +48,8 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        OrderDetailScreen(orderId: widget.item.id.validate()).launch(context,
-            pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
+        OrderDetailScreen(orderId: widget.item.id.validate())
+            .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 16),
@@ -52,11 +66,9 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
               children: [
                 widget.item.date != null
                     ? Text(
-                            DateFormat('dd MMM yyyy')
-                                    .format(DateTime.parse(widget.item.date!).toLocal()) +
+                            DateFormat('dd MMM yyyy').format(DateTime.parse(widget.item.date!).toLocal()) +
                                 " ${language.at.toLowerCase()} " +
-                                DateFormat('hh:mm a')
-                                    .format(DateTime.parse(widget.item.date!).toLocal()),
+                                DateFormat('hh:mm a').format(DateTime.parse(widget.item.date!).toLocal()),
                             style: primaryTextStyle(size: 14))
                         .expand()
                     : SizedBox(),
@@ -66,8 +78,7 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                       borderRadius: BorderRadius.circular(6)),
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                   child: Text(orderStatus(widget.item.status!),
-                      style: primaryTextStyle(
-                          size: 14, color: statusColor(widget.item.status.validate()))),
+                      style: primaryTextStyle(size: 14, color: statusColor(widget.item.status.validate()))),
                 ),
               ],
             ),
@@ -78,8 +89,7 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                 Container(
                   decoration: boxDecorationWithRoundedCorners(
                       borderRadius: BorderRadius.circular(8),
-                      border:
-                          Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                      border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
                       backgroundColor: context.cardColor),
                   padding: EdgeInsets.all(8),
                   child: Image.asset(parcelTypeIcon(widget.item.parcelType.validate()),
@@ -96,8 +106,7 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                       children: [
                         Text('# ${widget.item.id}', style: boldTextStyle(size: 14)).expand(),
                         if (widget.item.status != ORDER_CANCELLED)
-                          Text(printAmount(widget.item.totalAmount ?? 0),
-                              style: boldTextStyle()),
+                          Text(printAmount(widget.item.totalAmount ?? 0), style: boldTextStyle()),
                       ],
                     ),
                   ],
@@ -120,8 +129,7 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                             children: [
                               Text(language.picked, style: secondaryTextStyle(size: 12)),
                               4.height,
-                              Text(
-                                  '${language.at} ${printDateWithoutAt("${widget.item.pickupDatetime!}Z")}',
+                              Text('${language.at} ${printDateWithoutAt("${widget.item.pickupDatetime!}Z")}',
                                   style: secondaryTextStyle(size: 12)),
                             ],
                           ),
@@ -129,11 +137,9 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                         GestureDetector(
                           onTap: () {
                             if (widget.item.status != ORDER_DELIVERED) {
-                              openMap(
-                                  double.parse(widget.item.pickupPoint!.latitude.validate()),
+                              openMap(double.parse(widget.item.pickupPoint!.latitude.validate()),
                                   double.parse(widget.item.pickupPoint!.longitude.validate()));
-                            }
-                            else{
+                            } else {
                               OrderDetailScreen(orderId: widget.item.id.validate()).launch(context,
                                   pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
                             }
@@ -142,9 +148,7 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                             children: [
                               ImageIcon(AssetImage(ic_from), size: 24, color: colorPrimary),
                               12.width,
-                              Text('${widget.item.pickupPoint!.address}',
-                                      style: primaryTextStyle())
-                                  .expand(),
+                              Text('${widget.item.pickupPoint!.address}', style: primaryTextStyle()).expand(),
                             ],
                           ),
                         ),
@@ -183,11 +187,9 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(language.delivered,
-                                      style: secondaryTextStyle(size: 12)),
+                                  Text(language.delivered, style: secondaryTextStyle(size: 12)),
                                   4.height,
-                                  Text(
-                                      '${language.at} ${printDateWithoutAt("${widget.item.deliveryDatetime!}Z")}',
+                                  Text('${language.at} ${printDateWithoutAt("${widget.item.deliveryDatetime!}Z")}',
                                       style: secondaryTextStyle(size: 12)),
                                 ],
                               ),
@@ -195,15 +197,12 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                             GestureDetector(
                               onTap: () {
                                 if (widget.item.status != ORDER_DELIVERED) {
-                                  openMap(
-                                      double.parse(
-                                          widget.item.deliveryPoint!.latitude.validate()),
-                                      double.parse(
-                                          widget.item.deliveryPoint!.longitude.validate()));
-                                }
-                                else{
+                                  openMap(double.parse(widget.item.deliveryPoint!.latitude.validate()),
+                                      double.parse(widget.item.deliveryPoint!.longitude.validate()));
+                                } else {
                                   OrderDetailScreen(orderId: widget.item.id.validate()).launch(context,
-                                      pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
+                                      pageRouteAnimation: PageRouteAnimation.SlideBottomTop,
+                                      duration: 400.milliseconds);
                                 }
                               },
                               child: Row(
@@ -211,8 +210,7 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                                   ImageIcon(AssetImage(ic_to), size: 24, color: colorPrimary),
                                   12.width,
                                   Text('${widget.item.deliveryPoint!.address}',
-                                          style: primaryTextStyle(),
-                                          textAlign: TextAlign.start)
+                                          style: primaryTextStyle(), textAlign: TextAlign.start)
                                       .expand(),
                                 ],
                               ),
@@ -250,12 +248,12 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                       children: [
                         Text(language.invoice, style: secondaryTextStyle(color: Colors.white)),
                         4.width,
-                        Icon(Ionicons.md_download_outline, color: Colors.white, size: 18)
-                            .paddingBottom(4),
+                        Icon(Ionicons.md_download_outline, color: Colors.white, size: 18).paddingBottom(4),
                       ],
                     ).onTap(() {
-                      generateInvoiceCall(widget.item);
-
+                      // generateInvoiceCall(widget.item);
+                      print("invice ${widget.item.invoice}");
+                      PDFViewer(invoice: "${widget.item.invoice.validate()}",filename: "${widget.item.id.validate()}",).launch(context);
                     }),
                   ),
                 AppButton(
@@ -277,8 +275,7 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                   onTap: () {
                     OrderTrackingScreen(orderData: widget.item).launch(context);
                   },
-                ).visible((widget.item.status == ORDER_DEPARTED) &&
-                    appStore.userType != DELIVERY_MAN),
+                ).visible((widget.item.status == ORDER_DEPARTED) && appStore.userType != DELIVERY_MAN),
               ],
             ),
           ],
@@ -287,3 +284,90 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
     );
   }
 }
+
+class PDFViewer extends StatefulWidget {
+  final String invoice;
+  final String? filename;
+
+  PDFViewer({required this.invoice, this.filename = ""});
+
+  @override
+  State<PDFViewer> createState() => _PDFViewerState();
+}
+
+class _PDFViewerState extends State<PDFViewer> {
+  PdfController? pdfController;
+
+  @override
+  void initState() {
+    super.initState();
+    viewPDF();
+  }
+
+  Future<void> viewPDF() async {
+    try {
+      setState(() {
+        appStore.setLoading(true);
+        print("invoice ==> ${widget.invoice}");
+        pdfController = PdfController(document: pdf.PdfDocument.openData(InternetFile.get("${widget.invoice}")));
+        appStore.setLoading(false);
+      });
+    } catch (e) {
+      print('Error viewing PDF: $e');
+    }
+  }
+
+  Future<void> downloadPDF() async {
+    appStore.setLoading(true);
+    final response = await http.get(Uri.parse(widget.invoice));
+    if (response.statusCode == 200) {
+      print("success ${response.bodyBytes}");
+      final bytes = response.bodyBytes;
+      // final directory = await getApplicationDocumentsDirectory();
+      final directory = await getExternalStorageDirectory();
+      final path = directory!.path;
+      String fileName = widget.filename.validate().isEmpty ? "invoice": widget.filename.validate() ;
+      File file = File('${path}/${fileName}.pdf');
+      print("file ${file.path}");
+      await file.writeAsBytes(bytes, flush: true);
+      appStore.setLoading(false);
+      toast("invoice downloaded at ${file.path}");
+      final url = 'content://${file.path}';
+      final filef = File(file.path);
+      if (await filef.exists()) {
+        OpenFile.open(file.path);
+      } else {
+        throw 'File does not exist';
+      }
+     /* if (await canLaunchUrl(Uri.parse(url))) {
+        await launchUrl(Uri.parse(url));
+      } else {
+        throw 'Could not launch $url';
+      }*/
+    } else {
+      appStore.setLoading(false);
+      throw Exception('Failed to download PDF');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CommonScaffoldComponent(
+        appBar: commonAppBarWidget(language.invoice, actions: [
+          Icon(Icons.download, color: Colors.white).withWidth(60).onTap(() {
+            downloadPDF();
+          }, splashColor: Colors.transparent, hoverColor: Colors.transparent, highlightColor: Colors.transparent),
+        ]),
+        body: Stack(
+          children: [
+            PdfView(
+              controller: pdfController!,
+            ),
+            Observer(builder: (context) {
+              return loaderWidget().visible(appStore.isLoading);
+            }),
+          ],
+        ));
+  }
+}
+
