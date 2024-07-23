@@ -207,7 +207,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (widget.isShowPayment.validate()) ...[
-                      Text('${language.collectedAmount}${printAmount(widget.orderData!.totalAmount)}', style: boldTextStyle()),
+                      Text('${language.collectedAmount}${printAmount(widget.orderData!.totalAmount ?? 0)}', style: boldTextStyle()),
                       8.height,
                     ],
                     if (widget.orderData!.paymentId == null)

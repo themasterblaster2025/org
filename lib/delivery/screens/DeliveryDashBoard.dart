@@ -330,6 +330,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
               onPageChanged: (value) {
                 selectedStatusIndex =
                     statusList.indexWhere((item) => item == statusList[value]);
+                orderData.clear();
                 getOrderListApiCall();
                 setState(() {});
               },

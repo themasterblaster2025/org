@@ -105,8 +105,7 @@ class LoginScreenState extends State<LoginScreen> {
         }
         await logInApi(req).then((v) async {
           authService
-              .signInWithEmailPassword(context,
-                  email: emailController.text, password: passController.text)
+              .signInWithEmailPassword(context, email: emailController.text, password: passController.text)
               .then((value) async {
             appStore.setLoading(false);
 
@@ -134,8 +133,7 @@ class LoginScreenState extends State<LoginScreen> {
                 log('v.data!.otp ${v.data!.otpVerifyAt}');
                 if (v.data!.emailVerifiedAt.isEmptyOrNull ||
                     v.data!.otpVerifyAt.isEmptyOrNull ||
-                    (v.data!.documentVerifiedAt.isEmptyOrNull &&
-                        getStringAsync(USER_TYPE) == DELIVERY_MAN)) {
+                    (v.data!.documentVerifiedAt.isEmptyOrNull && getStringAsync(USER_TYPE) == DELIVERY_MAN)) {
                   VerificationListScreen(
                     isSignIn: true,
                   ).launch(context);
@@ -153,8 +151,7 @@ class LoginScreenState extends State<LoginScreen> {
             updateStoreCheckerData().then((source) async {
               await getUserDetail(getIntAsync(USER_ID)).then((value) async {
                 if (value.app_source.isEmptyOrNull || value.app_source != source) {
-                  await updateUserStatus({"id": getIntAsync(USER_ID), "app_source": source})
-                      .then((data) {});
+                  await updateUserStatus({"id": getIntAsync(USER_ID), "app_source": source}).then((data) {});
                 }
               }).catchError((e) {
                 log(e);
@@ -224,7 +221,9 @@ class LoginScreenState extends State<LoginScreen> {
     await getCityDetail(cityId).then((value) async {
       await setValue(CITY_DATA, value.data!.toJson());
       if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
-        if (getBoolAsync(OTP_VERIFIED)) {
+        if (getBoolAsync(OTP_VERIFIED) &&
+            getBoolAsync(EMAIL_VERIFIED) &&
+            (getBoolAsync(IS_VERIFIED_DELIVERY_MAN) || getStringAsync(USER_TYPE) == CLIENT)) {
           if (getStringAsync(USER_TYPE) == CLIENT) {
             DashboardScreen().launch(context, isNewTask: true);
           } else {
@@ -232,15 +231,15 @@ class LoginScreenState extends State<LoginScreen> {
             DHomeFragment().launch(context, isNewTask: true);
           }
         } else {
-          VerificationScreen().launch(context, isNewTask: true);
+          VerificationListScreen().launch(context, isNewTask: true);
+          // VerificationScreen().launch(context, isNewTask: true);
         }
       } else {
         UserCitySelectScreen().launch(context, isNewTask: true);
       }
     }).catchError((error) {
       if (error.toString() == CITY_NOT_FOUND_EXCEPTION) {
-        UserCitySelectScreen()
-            .launch(getContext, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+        UserCitySelectScreen().launch(getContext, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
       }
     });
   }
@@ -340,8 +339,7 @@ class LoginScreenState extends State<LoginScreen> {
                       ),
                       Align(
                         alignment: Alignment.topRight,
-                        child: Text(language.forgotPasswordQue, style: primaryTextStyle(color: colorPrimary))
-                            .onTap(() {
+                        child: Text(language.forgotPasswordQue, style: boldTextStyle(color: colorPrimary)).onTap(() {
                           ForgotPasswordScreen().launch(context);
                         }),
                       ),
@@ -369,8 +367,7 @@ class LoginScreenState extends State<LoginScreen> {
                       10.width,
                       RichText(
                         text: TextSpan(children: [
-                          TextSpan(
-                              text: '${language.iAgreeToThe} ', style: secondaryTextStyle()),
+                          TextSpan(text: '${language.iAgreeToThe} ', style: secondaryTextStyle()),
                           TextSpan(
                             text: language.termOfService,
                             style: boldTextStyle(color: colorPrimary, size: 14),
@@ -400,7 +397,7 @@ class LoginScreenState extends State<LoginScreen> {
                     },
                     width: context.width(),
                   ),
-                 /* 16.height,
+                  /* 16.height,
                   Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
@@ -455,13 +452,11 @@ class LoginScreenState extends State<LoginScreen> {
                     children: [
                       Text(language.doNotHaveAccount, style: primaryTextStyle()),
                       4.width,
-                      Text(language.signUp, style: boldTextStyle(color: colorPrimary))
-                          .onTap(() {
+                      Text(language.signUp, style: boldTextStyle(color: colorPrimary)).onTap(() {
                         RegisterScreen(
                           userType: CLIENT,
                         ).launch(context,
-                            duration: Duration(milliseconds: 500),
-                            pageRouteAnimation: PageRouteAnimation.Slide);
+                            duration: Duration(milliseconds: 500), pageRouteAnimation: PageRouteAnimation.Slide);
                       }),
                     ],
                   ),
@@ -486,8 +481,7 @@ class LoginScreenState extends State<LoginScreen> {
                         child: Image.asset(ic_google, height: 30, width: 30),
                         style: OutlinedButton.styleFrom(
                           padding: EdgeInsets.all(12),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(defaultRadius)),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius)),
                           elevation: 0,
                         ),
                         onPressed: () {
@@ -502,8 +496,7 @@ class LoginScreenState extends State<LoginScreen> {
                           child: Image.asset(ic_apple, height: 30, width: 30),
                           style: OutlinedButton.styleFrom(
                             padding: EdgeInsets.all(12),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(defaultRadius)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius)),
                             elevation: 0,
                           ),
                           onPressed: () {
@@ -530,9 +523,8 @@ class LoginScreenState extends State<LoginScreen> {
             Text("${language.becomeADeliveryBoy}", style: primaryTextStyle()),
             4.width,
             Text(language.signUp, style: boldTextStyle(color: colorPrimary)).onTap(() {
-              RegisterScreen(userType: DELIVERY_MAN).launch(context,
-                  duration: Duration(milliseconds: 500),
-                  pageRouteAnimation: PageRouteAnimation.Slide);
+              RegisterScreen(userType: DELIVERY_MAN)
+                  .launch(context, duration: Duration(milliseconds: 500), pageRouteAnimation: PageRouteAnimation.Slide);
             }),
           ],
         ),

@@ -299,7 +299,10 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                       Text(language.viewAllOrders, style: boldTextStyle(color: Colors.white)),
                     ],
                   ).onTap(() {
-                    DeliveryDashBoard().launch(context).then((value) => setState(() {}));
+                    DeliveryDashBoard().launch(context).then((value) {
+                      setState(() {});
+                      getDashboardCountDataApi();
+                    });
                   }),
                 ),
                 10.height,

@@ -608,7 +608,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     DateTimePicker(
                       controller: pickDateController,
                       type: DateTimePickerType.date,
-                      firstDate: DateTime.now(),
+                      initialDate: DateTime.now().add(Duration(days: 1)),
+                      firstDate: DateTime.now().add(Duration(days: 1)),
                       lastDate: DateTime(2050),
                       onChanged: (value) {
                         pickDate = DateTime.parse(value);

@@ -302,6 +302,15 @@ class AuthServices {
           if (value.data!.playerId.isEmptyOrNull)
             await updatePlayerId().catchError((error) {});
         }
+        updateStoreCheckerData().then((source) async {
+          await getUserDetail(getIntAsync(USER_ID)).then((value) async {
+            if (value.app_source.isEmptyOrNull || value.app_source != source) {
+              await updateUserStatus({"id": getIntAsync(USER_ID), "app_source": source}).then((data) {});
+            }
+          }).catchError((e) {
+            log(e);
+          });
+        });
       }).catchError((e) {
         appStore.setLoading(false);
         toast(e.toString());
@@ -399,7 +408,7 @@ getCityDetailApiCall(int cityId) async {
   await getCityDetail(cityId).then((value) async {
     await setValue(CITY_DATA, value.data!.toJson());
     if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
-      if (getBoolAsync(OTP_VERIFIED)) {
+      if (getBoolAsync(OTP_VERIFIED) && getBoolAsync(EMAIL_VERIFIED) && (getBoolAsync(IS_VERIFIED_DELIVERY_MAN) || getStringAsync(USER_TYPE) == CLIENT)) {
         if (getStringAsync(USER_TYPE) == CLIENT) {
           DashboardScreen().launch(getContext, isNewTask: true);
         } else {
@@ -407,7 +416,8 @@ getCityDetailApiCall(int cityId) async {
           DHomeFragment().launch(getContext, isNewTask: true);
         }
       } else {
-        VerificationScreen().launch(getContext, isNewTask: true);
+        VerificationListScreen().launch(getContext, isNewTask: true);
+        // VerificationScreen().launch(getContext, isNewTask: true);
       }
     } else {
       UserCitySelectScreen().launch(getContext, isNewTask: true);

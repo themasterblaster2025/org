@@ -271,6 +271,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     ],
                   ),
                   16.height,
+                  if(!widget.isGoogle.validate()) ...[
                   Text(language.address, style: primaryTextStyle()),
                   8.height,
                   AppTextField(
@@ -282,6 +283,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     errorThisFieldRequired: language.fieldRequiredMsg,
                   ),
                   16.height,
+    ],
                 ],
               ),
             ),

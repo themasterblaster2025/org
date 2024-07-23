@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import 'package:mighty_delivery/main/screens/VerificationListScreen.dart';
 
 import '../../delivery/fragment/DHomeFragment.dart';
 import '../../delivery/screens/DeliveryDashBoard.dart';
@@ -115,7 +116,7 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
         LiveStream().emit('UpdateOrderData');
         widget.onUpdate!.call();
       } else {
-        if (getBoolAsync(OTP_VERIFIED)) {
+        if (getBoolAsync(OTP_VERIFIED)  && getBoolAsync(EMAIL_VERIFIED) && (getBoolAsync(IS_VERIFIED_DELIVERY_MAN) || getStringAsync(USER_TYPE) == CLIENT)) {
           if (getStringAsync(USER_TYPE) == CLIENT) {
             DashboardScreen().launch(context, isNewTask: true);
           } else {
@@ -123,7 +124,8 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
             DHomeFragment().launch(context, isNewTask: true);
           }
         } else
-          VerificationScreen().launch(context, isNewTask: true);
+          VerificationListScreen().launch(context,isNewTask: true);
+          // VerificationScreen().launch(context, isNewTask: true);
       }
     }).catchError((error) {
       appStore.setLoading(false);

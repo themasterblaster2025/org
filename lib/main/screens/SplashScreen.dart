@@ -16,6 +16,7 @@ import '../../extensions/shared_pref.dart';
 import '../../extensions/system_utils.dart';
 import '../../extensions/text_styles.dart';
 import '../../languageConfiguration/LanguageDataConstant.dart';
+import '../../languageConfiguration/LanguageDefaultJson.dart';
 import '../../languageConfiguration/ServerLanguageResponse.dart';
 import '../../main.dart';
 import '../../main/models/CityListModel.dart';
@@ -169,7 +170,9 @@ class SplashScreenState extends State<SplashScreen> {
                   Image.asset(ic_logo, height: 80, width: 80, fit: BoxFit.fill)
                       .cornerRadiusWithClipRRect(defaultRadius),
                   16.height,
-                  Text(language.appName, style: boldTextStyle(size: 20), textAlign: TextAlign.center).expand(),
+                  Text(language.appName == "$defaultKeyNotFoundValue(9)" ? "Mighty Delivery" : language.appName,
+                          style: boldTextStyle(size: 20), textAlign: TextAlign.center)
+                      .expand(),
                   Text('v ${snap.data!.version.validate()}', style: secondaryTextStyle(size: 12)),
                   16.height,
                 ],
@@ -180,11 +183,6 @@ class SplashScreenState extends State<SplashScreen> {
           }
         },
       ),
-      /* Text(language.appName, style: boldTextStyle(size: 10), textAlign: TextAlign.center),
-            16.height,*/ /*
-          ],
-        ),
-      ),*/
     );
   }
 }
