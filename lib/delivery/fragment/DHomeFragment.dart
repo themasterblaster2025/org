@@ -97,15 +97,24 @@ class _DHomeFragmentState extends State<DHomeFragment> {
 
   Future<void> goToCountScreen(int index) async {
     if (index == 0 || index == 1) {
-      DeliveryDashBoard().launch(context).then((value) => setState(() {}));
+      DeliveryDashBoard().launch(context).then((value) {
+        setState(() {});
+        getDashboardCountDataApi();
+      });
     } else if (index == 2) {
       DeliveryDashBoard(
         selectedIndex: 5,
-      ).launch(context).then((value) => setState(() {}));
+      ).launch(context).then((value) {
+        setState(() {});
+        getDashboardCountDataApi();
+      });
     } else if (index == 3) {
       DeliveryDashBoard(
         selectedIndex: 1,
-      ).launch(context).then((value) => setState(() {}));
+      ).launch(context).then((value) {
+        setState(() {});
+        getDashboardCountDataApi();
+      });
     } else if (index == 4) {
       EarningHistoryScreen().launch(context);
     } else if (index == 5) {
