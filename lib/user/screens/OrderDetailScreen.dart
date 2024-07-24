@@ -35,6 +35,7 @@ import '../../main/utils/Images.dart';
 import '../../main/utils/Widgets.dart';
 import '../../user/components/CancelOrderDialog.dart';
 import '../../user/screens/ReturnOrderScreen.dart';
+import '../components/OrderCardComponent.dart';
 import 'OrderHistoryScreen.dart';
 import 'RateReviewScreen.dart';
 
@@ -374,6 +375,28 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                           orderData!.status == ORDER_DEPARTED || orderData!.status == ORDER_ACCEPTED),
                                     ],
                                   ),
+                                  if (orderData!.status == ORDER_DELIVERED && appStore.userType == CLIENT) ...[
+                                    AppButton(
+                                      elevation: 0,
+                                      height: 35,
+                                      color: Colors.transparent,
+                                      padding: EdgeInsets.symmetric(horizontal: 8),
+                                      shapeBorder: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(defaultRadius),
+                                        side: BorderSide(color: colorPrimary),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(language.invoice, style: primaryTextStyle(color: colorPrimary)),
+                                          Icon(Icons.arrow_right, color: colorPrimary),
+                                        ],
+                                      ),
+                                      onTap: () {
+                                        PDFViewer(invoice: "${orderData!.invoice.validate()}",filename: "${orderData!.id.validate()}",).launch(context);
+                                      },
+                                    )
+                                  ],
                                 ],
                               ),
                             ),
