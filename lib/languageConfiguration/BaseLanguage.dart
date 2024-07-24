@@ -823,4 +823,5 @@ class BaseLanguage {
 
   String get collectedAmount => getContentValueFromKey(409);
   String get reject =>  getContentValueFromKey(410);
+  String get forKey =>  getContentValueFromKey(411);
 }

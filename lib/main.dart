@@ -152,7 +152,7 @@ class MyAppState extends State<MyApp> {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
           CountryLocalizations.delegate,
-          AppLocalizations(), // todo
+          AppLocalizations(),
         ],
         localeResolutionCallback: (locale, supportedLocales) => locale,
         locale: Locale(appStore.selectedLanguage.validate(value: defaultLanguageCode)),

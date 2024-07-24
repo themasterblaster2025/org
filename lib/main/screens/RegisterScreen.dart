@@ -106,7 +106,7 @@ class RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
-      appBarTitle: language.signUp,
+      appBarTitle: "${language.signUp.capitalizeFirstLetter()} ${language.forKey} ${widget.userType == CLIENT ? language.lblUser.toLowerCase() : language.lblDeliveryBoy.toLowerCase()}",
       body: Stack(
         children: [
           SingleChildScrollView(
