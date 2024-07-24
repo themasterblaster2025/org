@@ -191,7 +191,7 @@ class WalletScreenState extends State<WalletScreen> {
                 ],
               ),
               onPageScrollChange: () {
-                appStore.setLoading(true);
+                // appStore.setLoading(true);
               },
               onNextPage: () {
                 if (currentPage < totalPage) {

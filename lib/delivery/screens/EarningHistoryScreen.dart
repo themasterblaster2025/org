@@ -137,7 +137,7 @@ class EarningHistoryScreenState extends State<EarningHistoryScreen> {
               ],
             ),
             onPageScrollChange: () {
-              appStore.setLoading(true);
+              // appStore.setLoading(true);
             },
             onNextPage: () {
               if (currentPage < totalPage) {

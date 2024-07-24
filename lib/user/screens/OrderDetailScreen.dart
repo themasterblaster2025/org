@@ -850,34 +850,35 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                       ).visible((orderData!.distanceCharge.validate() != 0 ||
                                               orderData!.weightCharge.validate() != 0) &&
                                           orderData!.extraCharges.keys.length != 0),*/
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          16.height,
-                                          Text(language.extraCharges, style: boldTextStyle()),
-                                          8.height,
-                                          Column(
-                                              children: List.generate(orderData!.extraCharges!.keys.length, (index) {
-                                            return Padding(
-                                              padding: EdgeInsets.only(bottom: 8),
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Text(
-                                                      orderData!.extraCharges.keys
-                                                          .elementAt(index)
-                                                          .replaceAll("_", " "),
-                                                      style: primaryTextStyle()),
-                                                  16.width,
-                                                  Text(
-                                                      '${printAmount(orderData!.extraCharges.values.elementAt(index))}',
-                                                      style: primaryTextStyle()),
-                                                ],
-                                              ),
-                                            );
-                                          }).toList()),
-                                        ],
-                                      ).visible(orderData!.extraCharges.keys.length != 0),
+                                      if (orderData!.extraCharges != null)
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            16.height,
+                                            Text(language.extraCharges, style: boldTextStyle()),
+                                            8.height,
+                                            Column(
+                                                children: List.generate(orderData!.extraCharges!.keys.length, (index) {
+                                              return Padding(
+                                                padding: EdgeInsets.only(bottom: 8),
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                        orderData!.extraCharges.keys
+                                                            .elementAt(index)
+                                                            .replaceAll("_", " "),
+                                                        style: primaryTextStyle()),
+                                                    16.width,
+                                                    Text(
+                                                        '${printAmount(orderData!.extraCharges.values.elementAt(index))}',
+                                                        style: primaryTextStyle()),
+                                                  ],
+                                                ),
+                                              );
+                                            }).toList()),
+                                          ],
+                                        ).visible(orderData!.extraCharges.keys.length != 0),
                                       16.height,
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -897,7 +898,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                         style: boldTextStyle(size: 20)),
                                                   ],
                                                 )
-                                              : Text('${printAmount(orderData!.totalAmount.validate())}',
+                                              : Text('${printAmount(orderData!.totalAmount ?? 0)}',
                                                   style: boldTextStyle(size: 20)),
                                         ],
                                       ),
@@ -953,10 +954,14 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                             Align(
                               alignment: Alignment.bottomCenter,
                               child: commonButton(language.returnOrder, () {
-                                ReturnOrderScreen(orderData!,orderItems: orderItems,).launch(context);
+                                ReturnOrderScreen(
+                                  orderData!,
+                                  orderItems: orderItems,
+                                ).launch(context);
                               }, width: context.width()),
                             ).visible(orderData!.status == ORDER_DELIVERED &&
-                                !orderData!.returnOrderId! && orderData!.parentOrderId == null &&
+                                !orderData!.returnOrderId! &&
+                                orderData!.parentOrderId == null &&
                                 getStringAsync(USER_TYPE) == CLIENT),
                           ],
                         ),
