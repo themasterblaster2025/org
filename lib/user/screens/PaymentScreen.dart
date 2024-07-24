@@ -122,7 +122,8 @@ class PaymentScreenState extends State<PaymentScreen> {
         paymentGatewayList.forEach((element) {
           if (element.type == PAYMENT_TYPE_STRIPE) {
             stripPaymentKey = element.isTest == 1 ? element.testValue!.secretKey : element.liveValue!.secretKey;
-            stripPaymentPublishKey = element.isTest == 1 ? element.testValue!.publishableKey : element.liveValue!.publishableKey;
+            stripPaymentPublishKey =
+                element.isTest == 1 ? element.testValue!.publishableKey : element.liveValue!.publishableKey;
           } else if (element.type == PAYMENT_TYPE_PAYSTACK) {
             payStackPublicKey = element.isTest == 1 ? element.testValue!.publicKey : element.liveValue!.publicKey;
           } else if (element.type == PAYMENT_TYPE_RAZORPAY) {
@@ -130,16 +131,19 @@ class PaymentScreenState extends State<PaymentScreen> {
           } else if (element.type == PAYMENT_TYPE_FLUTTERWAVE) {
             flutterWavePublicKey = element.isTest == 1 ? element.testValue!.publicKey : element.liveValue!.publicKey;
             flutterWaveSecretKey = element.isTest == 1 ? element.testValue!.secretKey : element.liveValue!.secretKey;
-            flutterWaveEncryptionKey = element.isTest == 1 ? element.testValue!.encryptionKey : element.liveValue!.encryptionKey;
+            flutterWaveEncryptionKey =
+                element.isTest == 1 ? element.testValue!.encryptionKey : element.liveValue!.encryptionKey;
           } else if (element.type == PAYMENT_TYPE_PAYPAL) {
-            payPalTokenizationKey = element.isTest == 1 ? element.testValue!.tokenizationKey : element.liveValue!.tokenizationKey;
+            payPalTokenizationKey =
+                element.isTest == 1 ? element.testValue!.tokenizationKey : element.liveValue!.tokenizationKey;
           } else if (element.type == PAYMENT_TYPE_PAYTABS) {
             payTabsProfileId = element.isTest == 1 ? element.testValue!.profileId : element.liveValue!.profileId;
             payTabsClientKey = element.isTest == 1 ? element.testValue!.clientKey : element.liveValue!.clientKey;
             payTabsServerKey = element.isTest == 1 ? element.testValue!.serverKey : element.liveValue!.serverKey;
           } else if (element.type == PAYMENT_TYPE_MERCADOPAGO) {
             mercadoPagoPublicKey = element.isTest == 1 ? element.testValue!.publicKey : element.liveValue!.publicKey;
-            mercadoPagoAccessToken = element.isTest == 1 ? element.testValue!.accessToken : element.liveValue!.accessToken;
+            mercadoPagoAccessToken =
+                element.isTest == 1 ? element.testValue!.accessToken : element.liveValue!.accessToken;
           } else if (element.type == PAYMENT_TYPE_PAYTM) {
             paytmMerchantId = element.isTest == 1 ? element.testValue!.merchantId : element.liveValue!.merchantId;
             paytmMerchantKey = element.isTest == 1 ? element.testValue!.merchantKey : element.liveValue!.merchantKey;
@@ -156,7 +160,8 @@ class PaymentScreenState extends State<PaymentScreen> {
   }
 
   /// Save Payment
-  Future<void> savePaymentApiCall({String? paymentType, String? txnId, String? paymentStatus = PAYMENT_PENDING, Map? transactionDetail}) async {
+  Future<void> savePaymentApiCall(
+      {String? paymentType, String? txnId, String? paymentStatus = PAYMENT_PENDING, Map? transactionDetail}) async {
     Map req = {
       "id": "",
       "order_id": widget.orderId.toString(),
@@ -213,9 +218,10 @@ class PaymentScreenState extends State<PaymentScreen> {
       'signature': response.signature,
     };
     if (widget.isWallet == true) {
-      paymentConfirm();
+      paymentConfirm(paymentType: PAYMENT_TYPE_RAZORPAY, transactionId: response.paymentId);
     } else {
-      savePaymentApiCall(paymentType: PAYMENT_TYPE_RAZORPAY, paymentStatus: 'paid', txnId: response.paymentId, transactionDetail: req);
+      savePaymentApiCall(
+          paymentType: PAYMENT_TYPE_RAZORPAY, paymentStatus: 'paid', txnId: response.paymentId, transactionDetail: req);
     }
   }
 
@@ -235,7 +241,10 @@ class PaymentScreenState extends State<PaymentScreen> {
 
   /// FlutterWave Payment
   void flutterWaveCheckout() async {
-    final customer = Customer(name: getStringAsync(NAME), phoneNumber: getStringAsync(USER_CONTACT_NUMBER), email: getStringAsync(USER_EMAIL));
+    final customer = Customer(
+        name: getStringAsync(NAME),
+        phoneNumber: getStringAsync(USER_CONTACT_NUMBER),
+        email: getStringAsync(USER_EMAIL));
 
     final Flutterwave flutterwave = Flutterwave(
       context: context,
@@ -257,9 +266,13 @@ class PaymentScreenState extends State<PaymentScreen> {
         "reference": response.txRef.toString(),
       };
       if (widget.isWallet == true) {
-        paymentConfirm();
+        paymentConfirm(paymentType: PAYMENT_TYPE_FLUTTERWAVE, transactionId: response.transactionId);
       } else {
-        savePaymentApiCall(paymentStatus: PAYMENT_PAID, txnId: response.transactionId, paymentType: PAYMENT_TYPE_FLUTTERWAVE, transactionDetail: req);
+        savePaymentApiCall(
+            paymentStatus: PAYMENT_PAID,
+            txnId: response.transactionId,
+            paymentType: PAYMENT_TYPE_FLUTTERWAVE,
+            transactionDetail: req);
       }
       print("${response.toJson()}");
     } else {
@@ -305,10 +318,13 @@ class PaymentScreenState extends State<PaymentScreen> {
             customerId: getIntAsync(USER_ID).toString(),
           );
 
-          await Stripe.instance.initPaymentSheet(paymentSheetParameters: setupPaymentSheetParameters).then((value) async {
+          await Stripe.instance
+              .initPaymentSheet(paymentSheetParameters: setupPaymentSheetParameters)
+              .then((value) async {
             await Stripe.instance.presentPaymentSheet().then((value) async {
               if (widget.isWallet == true) {
-                paymentConfirm();
+                print("");
+                paymentConfirm(paymentType: PAYMENT_TYPE_STRIPE, transactionId: res.id);
               } else {
                 savePaymentApiCall(paymentType: PAYMENT_TYPE_STRIPE, paymentStatus: PAYMENT_PAID, txnId: res.id);
               }
@@ -351,9 +367,13 @@ class PaymentScreenState extends State<PaymentScreen> {
       };
       if (response.message == 'Success') {
         if (widget.isWallet == true) {
-          paymentConfirm();
+          paymentConfirm(paymentType: PAYMENT_TYPE_PAYSTACK, transactionId: response.reference);
         } else {
-          savePaymentApiCall(paymentType: PAYMENT_TYPE_PAYSTACK, paymentStatus: PAYMENT_PAID, transactionDetail: req, txnId: response.reference);
+          savePaymentApiCall(
+              paymentType: PAYMENT_TYPE_PAYSTACK,
+              paymentStatus: PAYMENT_PAID,
+              transactionDetail: req,
+              txnId: response.reference);
         }
       } else {
         toast(language.transactionFailed);
@@ -385,7 +405,10 @@ class PaymentScreenState extends State<PaymentScreen> {
 
   /// Paypal Payment
   void payPalPayment() async {
-    final request = BraintreePayPalRequest(amount: widget.totalAmount.toString(), currencyCode: appStore.currencyCode, displayName: getStringAsync(USER_NAME));
+    final request = BraintreePayPalRequest(
+        amount: widget.totalAmount.toString(),
+        currencyCode: appStore.currencyCode,
+        displayName: getStringAsync(USER_NAME));
     final result = await Braintree.requestPaypalNonce(
       payPalTokenizationKey!,
       request,
@@ -397,9 +420,13 @@ class PaymentScreenState extends State<PaymentScreen> {
         "paypal_payer_id": result.paypalPayerId,
       };
       if (widget.isWallet == true) {
-        paymentConfirm();
+        paymentConfirm(paymentType: PAYMENT_TYPE_PAYPAL, transactionId: result.nonce);
       } else {
-        savePaymentApiCall(paymentType: PAYMENT_TYPE_PAYPAL, paymentStatus: PAYMENT_PAID, txnId: result.nonce, transactionDetail: request);
+        savePaymentApiCall(
+            paymentType: PAYMENT_TYPE_PAYPAL,
+            paymentStatus: PAYMENT_PAID,
+            txnId: result.nonce,
+            transactionDetail: request);
       }
     }
   }
@@ -413,9 +440,12 @@ class PaymentScreenState extends State<PaymentScreen> {
           if (transactionDetails["isSuccess"]) {
             toast("successful transaction");
             if (widget.isWallet == true) {
-              paymentConfirm();
+              paymentConfirm(paymentType: PAYMENT_TYPE_PAYTABS, transactionId: transactionDetails['transactionReference']);
             } else {
-              savePaymentApiCall(txnId: transactionDetails['transactionReference'], paymentType: PAYMENT_TYPE_PAYTABS, paymentStatus: 'paid');
+              savePaymentApiCall(
+                  txnId: transactionDetails['transactionReference'],
+                  paymentType: PAYMENT_TYPE_PAYTABS,
+                  paymentStatus: 'paid');
             }
           } else {
             toast(language.transactionFailed);
@@ -431,8 +461,15 @@ class PaymentScreenState extends State<PaymentScreen> {
   }
 
   PaymentSdkConfigurationDetails generateConfig() {
-    var billingDetails = payTab.BillingDetails(getStringAsync(NAME), getStringAsync(USER_EMAIL), getStringAsync(USER_CONTACT_NUMBER), getStringAsync(USER_ADDRESS),
-        CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).name.validate(), CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate(), "", "");
+    var billingDetails = payTab.BillingDetails(
+        getStringAsync(NAME),
+        getStringAsync(USER_EMAIL),
+        getStringAsync(USER_CONTACT_NUMBER),
+        getStringAsync(USER_ADDRESS),
+        CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).name.validate(),
+        CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate(),
+        "",
+        "");
     List<PaymentSdkAPms> apms = [];
     apms.add(PaymentSdkAPms.STC_PAY);
     var configuration = PaymentSdkConfigurationDetails(
@@ -501,7 +538,9 @@ class PaymentScreenState extends State<PaymentScreen> {
       loading = true;
     });
 
-    String callBackUrl = (isTestType ? 'https://securegw-stage.paytm.in' : 'https://securegw.paytm.in') + '/theia/paytmCallback?ORDER_ID=' + widget.orderId.toString();
+    String callBackUrl = (isTestType ? 'https://securegw-stage.paytm.in' : 'https://securegw.paytm.in') +
+        '/theia/paytmCallback?ORDER_ID=' +
+        widget.orderId.toString();
 
     var url = 'https://desolate-anchorage-29312.herokuapp.com/generateTxnToken';
 
@@ -545,9 +584,10 @@ class PaymentScreenState extends State<PaymentScreen> {
               toast(value['response']['RESPMSG']);
               if (value['response']['STATUS'] == 'TXN_SUCCESS') {
                 if (widget.isWallet == true) {
-                  paymentConfirm();
+                  paymentConfirm(paymentType: PAYMENT_TYPE_PAYTM, transactionId:  value['response']['TXNID']);
                 } else {
-                  savePaymentApiCall(paymentType: PAYMENT_TYPE_PAYTM, paymentStatus: 'paid', txnId: value['response']['TXNID']);
+                  savePaymentApiCall(
+                      paymentType: PAYMENT_TYPE_PAYTM, paymentStatus: 'paid', txnId: value['response']['TXNID']);
                 }
               }
             }
@@ -594,7 +634,7 @@ class PaymentScreenState extends State<PaymentScreen> {
     );
     if (response.isSuccess) {
       if (widget.isWallet == true) {
-        paymentConfirm();
+        paymentConfirm(paymentType: PAYMENT_TYPE_MYFATOORAH, transactionId:  response.paymentId);
       } else {
         savePaymentApiCall(paymentType: PAYMENT_TYPE_MYFATOORAH, txnId: response.paymentId, paymentStatus: 'paid');
       }
@@ -603,12 +643,12 @@ class PaymentScreenState extends State<PaymentScreen> {
     }
   }
 
-  Future<void> paymentConfirm() async {
+  Future<void> paymentConfirm({String? paymentType, String? transactionId}) async {
     Map req = {
       "user_id": getIntAsync(USER_ID),
       "type": "credit",
       "amount": widget.totalAmount,
-      "transaction_type": "topup",
+      "transaction_type": "Your wallet has been upgraded via $paymentType. Transaction ID: $transactionId",
       "currency": appStore.currencyCode,
     };
     appStore.isLoading = true;
@@ -656,7 +696,8 @@ class PaymentScreenState extends State<PaymentScreen> {
                                     decoration: boxDecorationWithRoundedCorners(
                                       backgroundColor: context.cardColor,
                                       borderRadius: BorderRadius.circular(defaultRadius),
-                                      border: Border.all(color: mData.type == selectedPaymentType ? colorPrimary : borderColor),
+                                      border: Border.all(
+                                          color: mData.type == selectedPaymentType ? colorPrimary : borderColor),
                                     ),
                                     child: Row(
                                       children: [
