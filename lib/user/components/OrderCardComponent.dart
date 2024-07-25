@@ -346,6 +346,7 @@ class _PDFViewerState extends State<PDFViewer> {
       }*/
     } else {
       appStore.setLoading(false);
+      toast("Failed to download pdf");
       throw Exception('Failed to download PDF');
     }
   }

@@ -102,6 +102,7 @@ class SplashScreenState extends State<SplashScreen> {
         if (appStore.isLoggedIn && getIntAsync(USER_ID) != 0) {
           await getUserDetail(getIntAsync(USER_ID)).then((value) async {
             setValue(IS_VERIFIED_DELIVERY_MAN, !value.documentVerifiedAt.isEmptyOrNull);
+            appStore.setUserType(value.userType.validate());
 
             if (value.deletedAt != null) {
               logout(context);
