@@ -47,6 +47,7 @@ import '../models/UserProfileDetailModel.dart';
 import '../models/VehicleModel.dart';
 import '../models/WalletListModel.dart';
 import '../models/WithDrawListModel.dart';
+import '../services/AuthServices.dart';
 import 'NetworkUtils.dart';
 
 //region Auth
@@ -110,7 +111,10 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
     }).catchError((e) {
       log(e.toString());
       if (e.toString() == "User not found") {
-        toast(language.userNotFound);
+        print("inside user not found");
+        //todo test
+        authService.registerUserWithDB(loginResponse.data!.email.validate(), request["password"], loginResponse);
+        // toast(language.userNotFound);
       }
     });
     await setValue(IS_VERIFIED_DELIVERY_MAN, !loginResponse.data!.documentVerifiedAt.isEmptyOrNull);

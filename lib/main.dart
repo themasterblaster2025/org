@@ -25,6 +25,7 @@ import 'languageConfiguration/LanguageDefaultJson.dart';
 import 'languageConfiguration/ServerLanguageResponse.dart';
 import 'main/models/FileModel.dart';
 import 'main/screens/NoInternetScreen.dart';
+import 'main/services/AuthServices.dart';
 import 'main/services/ChatMessagesService.dart';
 import 'main/services/NotificationService.dart';
 import 'main/services/UserServices.dart';
@@ -42,6 +43,7 @@ List<LanguageJsonData>? defaultServerLanguageData = [];
 
 UserService userService = UserService();
 ChatMessageService chatMessageService = ChatMessageService();
+AuthServices authService = AuthServices();
 NotificationService notificationService = NotificationService();
 late List<FileModel> fileList = [];
 bool isCurrentlyOnNoInternet = false;

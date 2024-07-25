@@ -221,7 +221,9 @@ class WalletScreenState extends State<WalletScreen> {
                     ).launch(context);
                   else {
                     toast(language.bankNotFound);
-                    BankDetailScreen(isWallet: true).launch(context);
+                    BankDetailScreen(isWallet: true).launch(context).then((value) {
+                      init();
+                    });
                   }
                 },
               ).paddingSymmetric(horizontal: 16, vertical: 8)
@@ -234,7 +236,10 @@ class WalletScreenState extends State<WalletScreen> {
     return Container(
       margin: EdgeInsets.only(bottom: 16),
       padding: EdgeInsets.all(8),
-      decoration: boxDecorationWithRoundedCorners(borderRadius: radius(defaultRadius), backgroundColor: Colors.transparent, border: Border.all(color: colorPrimary.withOpacity(0.08))),
+      decoration: boxDecorationWithRoundedCorners(
+          borderRadius: radius(defaultRadius),
+          backgroundColor: Colors.transparent,
+          border: Border.all(color: colorPrimary.withOpacity(0.08))),
       child: Row(
         children: [
           Container(
@@ -253,7 +258,8 @@ class WalletScreenState extends State<WalletScreen> {
               ],
             ),
           ),
-          Text('${data.type == CREDIT ? '+' : '-'} ${printAmount(data.amount)}', style: boldTextStyle(color: data.type == CREDIT ? Colors.green : Colors.red))
+          Text('${data.type == CREDIT ? '+' : '-'} ${printAmount(data.amount)}',
+              style: boldTextStyle(color: data.type == CREDIT ? Colors.green : Colors.red))
         ],
       ),
     );

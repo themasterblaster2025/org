@@ -118,7 +118,9 @@ class _DHomeFragmentState extends State<DHomeFragment> {
     } else if (index == 4) {
       EarningHistoryScreen().launch(context);
     } else if (index == 5) {
-      WalletScreen().launch(context);
+      WalletScreen().launch(context).then((value) {
+        getDashboardCountDataApi();
+      });
     } else {
       if (countData?.walletBalance.validate() != 0) {
         await getBankDetail();
@@ -157,6 +159,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
       log(error.toString());
     });
   }
+
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
@@ -242,90 +245,96 @@ class _DHomeFragmentState extends State<DHomeFragment> {
           ),
         ],
       ),
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Column(
-              children: [
-                12.height,
-                Row(
-                  children: [
-                    Text(
-                      language.filterBelowCount,
-                      style: boldTextStyle(size: 16, color: colorPrimary),
+      body: RefreshIndicator(
+        onRefresh: ()async{
+          getDashboardCountDataApi();
+        },
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Column(
+                children: [
+                  12.height,
+                  Row(
+                    children: [
+                      Text(
+                        language.filterBelowCount,
+                        style: boldTextStyle(size: 16, color: colorPrimary),
+                      ),
+                      Spacer(),
+                      Icon(
+                        Icons.filter_list,
+                        color: colorPrimary,
+                      ).onTap(() async {
+                        await showInDialog(context,
+                                shape: RoundedRectangleBorder(borderRadius: radius()),
+                                builder: (_) => FilterCountScreen(),
+                                contentPadding: EdgeInsets.zero)
+                            .then((value) {
+                          String startDate = DateFormat('yyyy-MM-dd').format(value[0]);
+                          String endDate = DateFormat('yyyy-MM-dd').format(value[1]);
+                          getDashboardCountDataApi(startDate: startDate, endDate: endDate);
+                        });
+                      }),
+                    ],
+                  ).paddingSymmetric(horizontal: 10),
+                  8.height,
+                  // Wrap(
+                  //   runSpacing: 8.0,
+                  //   children:[
+                  //     countWidget(text: "Today Order", value: 2).paddingOnly(right: 8),
+                  //     countWidget(text: "Remaining Order", value: 2).paddingOnly(right: 8),
+                  //     countWidget(text: "Completed Order", value: 2).paddingOnly(right: 8),
+                  //     countWidget(text: "InProgress Order", value: 2).paddingOnly(right: 8),
+                  //     countWidget(text: "Commission", value: 2).paddingOnly(right: 8),
+                  //     countWidget(text: "Wallet Balance", value: 2).paddingOnly(right: 8),
+                  //     countWidget(text: "Pending Withdrawal Request", value: 2).paddingOnly(right: 8),
+                  //     countWidget(text: "Completed Withdrawal Request", value: 2).paddingOnly(right: 8),
+                  //   ],),
+
+                  GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1.45,
+                      mainAxisSpacing: 4,
+                      crossAxisSpacing: 4,
                     ),
-                    Spacer(),
-                    Icon(
-                      Icons.filter_list,
-                      color: colorPrimary,
-                    ).onTap(() async {
-                      await showInDialog(context,
-                              shape: RoundedRectangleBorder(borderRadius: radius()),
-                              builder: (_) => FilterCountScreen(),
-                              contentPadding: EdgeInsets.zero)
-                          .then((value) {
-                        String startDate = DateFormat('yyyy-MM-dd').format(value[0]);
-                        String endDate = DateFormat('yyyy-MM-dd').format(value[1]);
-                        getDashboardCountDataApi(startDate: startDate, endDate: endDate);
+                    cacheExtent: 2.0,
+                    shrinkWrap: false,
+                    physics: AlwaysScrollableScrollPhysics(),
+                    controller: scrollController,
+                    padding: EdgeInsets.fromLTRB(7, 5, 7, 5),
+                    itemBuilder: (context, index) {
+                      return countWidget(text: items[index], value: getCount(index), color: colorList[index]).onTap(() {
+                        goToCountScreen(index);
+                      });
+                    },
+                    itemCount: items.length,
+                  ).expand(),
+                  8.height,
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(language.viewAllOrders, style: boldTextStyle(color: Colors.white)),
+                      ],
+                    ).onTap(() {
+                      DeliveryDashBoard().launch(context).then((value) {
+                        setState(() {});
+                        getDashboardCountDataApi();
                       });
                     }),
-                  ],
-                ).paddingSymmetric(horizontal: 10),
-                8.height,
-                // Wrap(
-                //   runSpacing: 8.0,
-                //   children:[
-                //     countWidget(text: "Today Order", value: 2).paddingOnly(right: 8),
-                //     countWidget(text: "Remaining Order", value: 2).paddingOnly(right: 8),
-                //     countWidget(text: "Completed Order", value: 2).paddingOnly(right: 8),
-                //     countWidget(text: "InProgress Order", value: 2).paddingOnly(right: 8),
-                //     countWidget(text: "Commission", value: 2).paddingOnly(right: 8),
-                //     countWidget(text: "Wallet Balance", value: 2).paddingOnly(right: 8),
-                //     countWidget(text: "Pending Withdrawal Request", value: 2).paddingOnly(right: 8),
-                //     countWidget(text: "Completed Withdrawal Request", value: 2).paddingOnly(right: 8),
-                //   ],),
-
-                GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 1.45,
-                    mainAxisSpacing: 4,
-                    crossAxisSpacing: 4,
                   ),
-                  cacheExtent: 2.0,
-                  shrinkWrap: false,
-                  controller: scrollController,
-                  padding: EdgeInsets.fromLTRB(7, 5, 7, 5),
-                  itemBuilder: (context, index) {
-                    return countWidget(text: items[index], value: getCount(index), color: colorList[index]).onTap(() {
-                      goToCountScreen(index);
-                    });
-                  },
-                  itemCount: items.length,
-                ).expand(),
-                8.height,
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(language.viewAllOrders, style: boldTextStyle(color: Colors.white)),
-                    ],
-                  ).onTap(() {
-                    DeliveryDashBoard().launch(context).then((value) {
-                      setState(() {});
-                      getDashboardCountDataApi();
-                    });
-                  }),
-                ),
-                10.height,
-              ],
+                  10.height,
+                ],
+              ),
             ),
-          ),
-          Observer(builder: (context) => Positioned.fill(child: loaderWidget().visible(appStore.isLoading))),
-        ],
+            Observer(builder: (context) => Positioned.fill(child: loaderWidget().visible(appStore.isLoading))),
+          ],
+        ),
       ),
     );
   }

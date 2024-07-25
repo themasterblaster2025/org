@@ -192,7 +192,7 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
                           .expand(),
                       16.width,
                       Text(
-                          '${printAmount(countExtraCharge(totalAmount: (fixedCharges + widget.weightCharge + widget.distanceCharge), chargesType: mData.valueType!, charges: mData.value!))}',
+                          '${printAmount(countExtraCharge(totalAmount: (fixedCharges + widget.weightCharge + widget.distanceCharge + widget.vehiclePrice.validate()), chargesType: mData.valueType!, charges: mData.value!))}',
                           style: boldTextStyle(size: 14)),
                     ],
                   ),

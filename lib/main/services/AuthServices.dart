@@ -44,9 +44,7 @@ class AuthServices {
   Future<User?> createAuthUser(String? email, String? password) async {
     User? userCredential;
     try {
-      await _auth
-          .createUserWithEmailAndPassword(email: email!, password: password!)
-          .then((value) {
+      await _auth.createUserWithEmailAndPassword(email: email!, password: password!).then((value) {
         userCredential = value.user!;
       });
     } on FirebaseException catch (error) {
@@ -54,9 +52,7 @@ class AuthServices {
           error.code == "account-exists-with-different-credential" ||
           error.code == "email-already-in-use") {
         try {
-          await _auth
-              .signInWithEmailAndPassword(email: email!, password: password!)
-              .then((value) {
+          await _auth.signInWithEmailAndPassword(email: email!, password: password!).then((value) {
             userCredential = value.user!;
           });
         } on FirebaseException catch (error) {
@@ -103,14 +99,11 @@ class AuthServices {
           userModel.createdAt = Timestamp.now().toDate().toString();
           userModel.updatedAt = Timestamp.now().toDate().toString();
           userModel.playerId = getStringAsync(PLAYER_ID);
-          await userService
-              .addDocumentWithCustomId(user.uid, userModel.toJson())
-              .then((value) async {
+          await userService.addDocumentWithCustomId(user.uid, userModel.toJson()).then((value) async {
             Map request = {"email": userModel.email, "password": password};
             await logInApi(request).then((res) async {
               await setValue(USER_TOKEN, res.data!.apiToken.validate());
-              await signInWithEmailPassword(context,
-                      email: email.validate(), password: password.validate())
+              await signInWithEmailPassword(context, email: email.validate(), password: password.validate())
                   .then((value) {
                 updateUserStatus({
                   "id": getIntAsync(USER_ID),
@@ -122,8 +115,7 @@ class AuthServices {
                 updateStoreCheckerData().then((source) async {
                   await getUserDetail(getIntAsync(USER_ID)).then((value) async {
                     if (value.app_source.isEmptyOrNull || value.app_source != source) {
-                      await updateUserStatus({"id": getIntAsync(USER_ID), "app_source": source})
-                          .then((data) {});
+                      await updateUserStatus({"id": getIntAsync(USER_ID), "app_source": source}).then((data) {});
                     }
                   }).catchError((e) {
                     log(e);
@@ -131,12 +123,10 @@ class AuthServices {
                 });
                 if (res.data!.emailVerifiedAt.isEmptyOrNull ||
                     res.data!.otpVerifyAt.isEmptyOrNull ||
-                    (res.data!.documentVerifiedAt.isEmptyOrNull &&
-                        getStringAsync(USER_TYPE) == DELIVERY_MAN)) {
+                    (res.data!.documentVerifiedAt.isEmptyOrNull && getStringAsync(USER_TYPE) == DELIVERY_MAN)) {
                   VerificationListScreen().launch(context);
                 } else {
-                  UserCitySelectScreen().launch(context,
-                      isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+                  UserCitySelectScreen().launch(context, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
                 }
               });
             }).catchError((e) {
@@ -162,11 +152,50 @@ class AuthServices {
     }
   }
 
-  Future<void> signInWithEmailPassword(context,
-      {required String email, required String password}) async {
-    await _auth
-        .signInWithEmailAndPassword(email: email, password: password)
-        .then((value) async {
+  Future<void> registerUserWithDB(String email, String password, LoginResponse value) async {
+    try {
+      createAuthUser(email, password).then((user) async {
+        if (user != null) {
+          print("user ==>>>  ${user.uid}");
+          UserData userModel = UserData();
+          userModel.email = value.data!.email;
+          userModel.contactNumber = value.data!.contactNumber;
+          userModel.name = value.data!.name;
+          userModel.username = value.data!.username;
+          userModel.userType = value.data!.userType;
+          userModel.longitude = value.data!.longitude;
+          userModel.latitude = value.data!.longitude;
+          userModel.countryName = value.data!.countryName;
+          userModel.cityName = value.data!.cityName;
+          userModel.status = value.data!.status;
+          userModel.playerId = value.data!.playerId;
+          userModel.profileImage = value.data!.profileImage;
+          userModel.createdAt = Timestamp.now().toDate().toString();
+          userModel.updatedAt = Timestamp.now().toDate().toString();
+          userModel.playerId = getStringAsync(PLAYER_ID);
+          await userService.addDocumentWithCustomId(user.uid, userModel.toJson()).then((value) async {
+            await userService.getUser(email: email).then((value) async {
+              await setValue(UID, value.uid.validate());
+            });
+          }).catchError((e) {
+            appStore.setLoading(false);
+            toast(e.toString());
+          });
+        } else {
+          appStore.setLoading(false);
+          throw language.errorSomethingWentWrong;
+        }
+      }).catchError((e) {
+        appStore.setLoading(false);
+      });
+    } on FirebaseException catch (error) {
+      appStore.setLoading(false);
+      toast(getMessageFromErrorCode(error));
+    }
+  }
+
+  Future<void> signInWithEmailPassword(context, {required String email, required String password}) async {
+    await _auth.signInWithEmailAndPassword(email: email, password: password).then((value) async {
       appStore.setLoading(true);
       final User user = value.user!;
       UserData userModel = await userService.getUser(email: user.email);
@@ -226,9 +255,7 @@ class AuthServices {
 
       log(userModel.toJson());
 
-      await userService
-          .addDocumentWithCustomId(currentUser.uid, userModel.toJson())
-          .then((value) {
+      await userService.addDocumentWithCustomId(currentUser.uid, userModel.toJson()).then((value) {
         //
       }).catchError((e) {
         throw e;
@@ -243,8 +270,7 @@ class AuthServices {
     if (loginType == LoginTypeGoogle) {
       if (currentUser.displayName.validate().split(' ').length >= 1)
         firstName = currentUser.displayName.splitBefore(' ');
-      if (currentUser.displayName.validate().split(' ').length >= 2)
-        lastName = currentUser.displayName.splitAfter(' ');
+      if (currentUser.displayName.validate().split(' ').length >= 2) lastName = currentUser.displayName.splitAfter(' ');
     } else {
       firstName = getStringAsync('appleGivenName').validate();
       lastName = getStringAsync('appleFamilyName').validate();
@@ -257,8 +283,7 @@ class AuthServices {
       "login_type": loginType,
       "user_type": userType,
       "accessToken": accessToken,
-      if (!currentUser.phoneNumber.isEmptyOrNull)
-        'contact_number': currentUser.phoneNumber.validate(),
+      if (!currentUser.phoneNumber.isEmptyOrNull) 'contact_number': currentUser.phoneNumber.validate(),
     };
 
     await logInApi(req, isSocialLogin: true).then((value) async {
@@ -283,9 +308,7 @@ class AuthServices {
       userModel.createdAt = Timestamp.now().toDate().toString();
       userModel.updatedAt = Timestamp.now().toDate().toString();
       userModel.playerId = getStringAsync(PLAYER_ID);
-      await userService
-          .addDocumentWithCustomId(currentUser.uid, userModel.toJson())
-          .then((v) async {
+      await userService.addDocumentWithCustomId(currentUser.uid, userModel.toJson()).then((v) async {
         await setValue(USER_PROFILE_PHOTO, currentUser.photoURL.toString());
         if (value.data!.contactNumber.isEmptyOrNull) {
           EditProfileScreen(isGoogle: true).launch(getContext, isNewTask: true);
@@ -294,13 +317,10 @@ class AuthServices {
             await getCountryDetailApiCall(value.data!.countryId.validate());
             getCityDetailApiCall(value.data!.cityId.validate());
           } else {
-            UserCitySelectScreen().launch(getContext,
-                isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+            UserCitySelectScreen().launch(getContext, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
           }
-          if (value.data!.uid.isEmptyOrNull)
-            await updateUid(getStringAsync(UID)).catchError((error) {});
-          if (value.data!.playerId.isEmptyOrNull)
-            await updatePlayerId().catchError((error) {});
+          if (value.data!.uid.isEmptyOrNull) await updateUid(getStringAsync(UID)).catchError((error) {});
+          if (value.data!.playerId.isEmptyOrNull) await updatePlayerId().catchError((error) {});
         }
         updateStoreCheckerData().then((source) async {
           await getUserDetail(getIntAsync(USER_ID)).then((value) async {
@@ -327,8 +347,7 @@ class AuthServices {
 
     if (googleSignInAccount != null) {
       //Authentication
-      final GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount.authentication;
+      final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
 
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleSignInAuthentication.accessToken,
@@ -347,8 +366,7 @@ class AuthServices {
 
       googleSignIn.signOut();
 
-      await loginFromFirebase(user, LoginTypeGoogle, googleSignInAuthentication.accessToken,
-          userType: userType);
+      await loginFromFirebase(user, LoginTypeGoogle, googleSignInAuthentication.accessToken, userType: userType);
     } else {
       throw language.errorSomethingWentWrong;
     }
@@ -377,8 +395,7 @@ class AuthServices {
             await saveAppleData(result);
           }
 
-          await loginFromFirebase(
-              user, LoginTypeApple, String.fromCharCodes(appleIdCredential.authorizationCode!),
+          await loginFromFirebase(user, LoginTypeApple, String.fromCharCodes(appleIdCredential.authorizationCode!),
               userType: userType.validate());
           break;
         case AuthorizationStatus.error:
@@ -408,7 +425,9 @@ getCityDetailApiCall(int cityId) async {
   await getCityDetail(cityId).then((value) async {
     await setValue(CITY_DATA, value.data!.toJson());
     if (CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate().isNotEmpty) {
-      if (getBoolAsync(OTP_VERIFIED) && getBoolAsync(EMAIL_VERIFIED) && (getBoolAsync(IS_VERIFIED_DELIVERY_MAN) || getStringAsync(USER_TYPE) == CLIENT)) {
+      if (getBoolAsync(OTP_VERIFIED) &&
+          getBoolAsync(EMAIL_VERIFIED) &&
+          (getBoolAsync(IS_VERIFIED_DELIVERY_MAN) || getStringAsync(USER_TYPE) == CLIENT)) {
         if (getStringAsync(USER_TYPE) == CLIENT) {
           DashboardScreen().launch(getContext, isNewTask: true);
         } else {
@@ -424,8 +443,7 @@ getCityDetailApiCall(int cityId) async {
     }
   }).catchError((error) {
     if (error.toString() == CITY_NOT_FOUND_EXCEPTION) {
-      UserCitySelectScreen()
-          .launch(getContext, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+      UserCitySelectScreen().launch(getContext, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
     }
   });
 }
@@ -437,8 +455,7 @@ Future deleteUserFirebase() async {
   }
 }
 
-sendOtp(BuildContext context,
-    {required String phoneNumber, required Function(String) onUpdate}) async {
+sendOtp(BuildContext context, {required String phoneNumber, required Function(String) onUpdate}) async {
   appStore.setLoading(true);
   try {
     await FirebaseAuth.instance.verifyPhoneNumber(

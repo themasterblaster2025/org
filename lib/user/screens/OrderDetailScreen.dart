@@ -393,7 +393,10 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                         ],
                                       ),
                                       onTap: () {
-                                        PDFViewer(invoice: "${orderData!.invoice.validate()}",filename: "${orderData!.id.validate()}",).launch(context);
+                                        PDFViewer(
+                                          invoice: "${orderData!.invoice.validate()}",
+                                          filename: "${orderData!.id.validate()}",
+                                        ).launch(context);
                                       },
                                     )
                                   ],
@@ -713,7 +716,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                             child: Icon(Ionicons.md_chatbox_outline,
                                                                 size: 22, color: colorPrimary))
                                                         .visible(orderData!.status != ORDER_DELIVERED &&
-                                                            orderData!.status != ORDER_CANCELLED),
+                                                            orderData!.status != ORDER_CANCELLED && userData!.userType.validate() != ADMIN),
                                                   ],
                                                 ),
                                                 4.height,
@@ -798,134 +801,144 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     status: orderData!.status,
                                     isDetail: true,
                                   )
-                                : Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      if (orderItems.validate().isNotEmpty)
+                                : Container(
+                                    width: context.width(),
+                                    padding: EdgeInsets.all(16),
+                                    decoration: boxDecorationWithRoundedCorners(
+                                      borderRadius: BorderRadius.circular(defaultRadius),
+                                      border: Border.all(color: colorPrimary.withOpacity(0.2)),
+                                      backgroundColor: Colors.transparent,
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        if (orderItems.validate().isNotEmpty)
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(language.productAmount, style: primaryTextStyle()),
+                                              16.width,
+                                              Text('${printAmount(productAmount)}', style: primaryTextStyle()),
+                                            ],
+                                          ),
+                                        if (orderData!.vehicleData != null)
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text("${language.vehicle} ${language.price.toLowerCase()}",
+                                                  style: primaryTextStyle()),
+                                              16.width,
+                                              Text('${printAmount(orderData!.vehicleData!.price)}',
+                                                  style: primaryTextStyle()),
+                                            ],
+                                          ),
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(language.productAmount, style: primaryTextStyle()),
+                                            Text(language.deliveryCharge, style: primaryTextStyle()),
                                             16.width,
-                                            Text('${printAmount(productAmount)}', style: primaryTextStyle()),
+                                            Text('${printAmount(orderData!.fixedCharges.validate())}',
+                                                style: primaryTextStyle()),
                                           ],
                                         ),
-                                      if (orderData!.vehicleData != null)
+                                        if (orderData!.distanceCharge.validate() != 0)
+                                          Column(
+                                            children: [
+                                              8.height,
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(language.distanceCharge, style: primaryTextStyle()),
+                                                  16.width,
+                                                  Text('${printAmount(orderData!.distanceCharge.validate())}',
+                                                      style: primaryTextStyle()),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        if (orderData!.weightCharge.validate() != 0)
+                                          Column(
+                                            children: [
+                                              8.height,
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(language.weightCharge, style: primaryTextStyle()),
+                                                  16.width,
+                                                  Text('${printAmount(orderData!.weightCharge.validate())}',
+                                                      style: primaryTextStyle()),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        /*Align(
+                                          alignment: Alignment.bottomRight,
+                                          child: Column(
+                                            children: [
+                                              8.height,
+                                              Text(
+                                                  '${printAmount(orderData!.fixedCharges.validate() + orderData!.distanceCharge.validate() + orderData!.weightCharge.validate())}',
+                                                  style: primaryTextStyle()),
+                                            ],
+                                          ),
+                                        ).visible((orderData!.distanceCharge.validate() != 0 ||
+                                                orderData!.weightCharge.validate() != 0) &&
+                                            orderData!.extraCharges.keys.length != 0),*/
+                                        if (orderData!.extraCharges != null)
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              16.height,
+                                              Text(language.extraCharges, style: boldTextStyle()),
+                                              8.height,
+                                              Column(
+                                                  children:
+                                                      List.generate(orderData!.extraCharges!.keys.length, (index) {
+                                                return Padding(
+                                                  padding: EdgeInsets.only(bottom: 8),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                          orderData!.extraCharges.keys
+                                                              .elementAt(index)
+                                                              .replaceAll("_", " "),
+                                                          style: primaryTextStyle()),
+                                                      16.width,
+                                                      Text(
+                                                          '${printAmount(orderData!.extraCharges.values.elementAt(index))}',
+                                                          style: primaryTextStyle()),
+                                                    ],
+                                                  ),
+                                                );
+                                              }).toList()),
+                                            ],
+                                          ).visible(orderData!.extraCharges.keys.length != 0),
+                                        16.height,
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text("${language.vehicle} ${language.price.toLowerCase()}",
-                                                style: primaryTextStyle()),
-                                            16.width,
-                                            Text('${printAmount(orderData!.vehicleData!.price)}',
-                                                style: primaryTextStyle()),
+                                            Text(language.total, style: boldTextStyle(size: 20)),
+                                            (orderData!.status == ORDER_CANCELLED &&
+                                                    payment != null &&
+                                                    payment!.deliveryManFee == 0)
+                                                ? Row(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      Text('${printAmount(orderData!.totalAmount.validate())}',
+                                                          style: secondaryTextStyle(
+                                                              size: 16, decoration: TextDecoration.lineThrough)),
+                                                      8.width,
+                                                      Text('${printAmount(payment!.cancelCharges.validate())}',
+                                                          style: boldTextStyle(size: 20)),
+                                                    ],
+                                                  )
+                                                : Text('${printAmount(orderData!.totalAmount ?? 0)}',
+                                                    style: boldTextStyle(size: 20)),
                                           ],
                                         ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(language.deliveryCharge, style: primaryTextStyle()),
-                                          16.width,
-                                          Text('${printAmount(orderData!.fixedCharges.validate())}',
-                                              style: primaryTextStyle()),
-                                        ],
-                                      ),
-                                      if (orderData!.distanceCharge.validate() != 0)
-                                        Column(
-                                          children: [
-                                            8.height,
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(language.distanceCharge, style: primaryTextStyle()),
-                                                16.width,
-                                                Text('${printAmount(orderData!.distanceCharge.validate())}',
-                                                    style: primaryTextStyle()),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      if (orderData!.weightCharge.validate() != 0)
-                                        Column(
-                                          children: [
-                                            8.height,
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(language.weightCharge, style: primaryTextStyle()),
-                                                16.width,
-                                                Text('${printAmount(orderData!.weightCharge.validate())}',
-                                                    style: primaryTextStyle()),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      /*Align(
-                                        alignment: Alignment.bottomRight,
-                                        child: Column(
-                                          children: [
-                                            8.height,
-                                            Text(
-                                                '${printAmount(orderData!.fixedCharges.validate() + orderData!.distanceCharge.validate() + orderData!.weightCharge.validate())}',
-                                                style: primaryTextStyle()),
-                                          ],
-                                        ),
-                                      ).visible((orderData!.distanceCharge.validate() != 0 ||
-                                              orderData!.weightCharge.validate() != 0) &&
-                                          orderData!.extraCharges.keys.length != 0),*/
-                                      if (orderData!.extraCharges != null)
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            16.height,
-                                            Text(language.extraCharges, style: boldTextStyle()),
-                                            8.height,
-                                            Column(
-                                                children: List.generate(orderData!.extraCharges!.keys.length, (index) {
-                                              return Padding(
-                                                padding: EdgeInsets.only(bottom: 8),
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                        orderData!.extraCharges.keys
-                                                            .elementAt(index)
-                                                            .replaceAll("_", " "),
-                                                        style: primaryTextStyle()),
-                                                    16.width,
-                                                    Text(
-                                                        '${printAmount(orderData!.extraCharges.values.elementAt(index))}',
-                                                        style: primaryTextStyle()),
-                                                  ],
-                                                ),
-                                              );
-                                            }).toList()),
-                                          ],
-                                        ).visible(orderData!.extraCharges.keys.length != 0),
-                                      16.height,
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(language.total, style: boldTextStyle(size: 20)),
-                                          (orderData!.status == ORDER_CANCELLED &&
-                                                  payment != null &&
-                                                  payment!.deliveryManFee == 0)
-                                              ? Row(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-                                                    Text('${printAmount(orderData!.totalAmount.validate())}',
-                                                        style: secondaryTextStyle(
-                                                            size: 16, decoration: TextDecoration.lineThrough)),
-                                                    8.width,
-                                                    Text('${printAmount(payment!.cancelCharges.validate())}',
-                                                        style: boldTextStyle(size: 20)),
-                                                  ],
-                                                )
-                                              : Text('${printAmount(orderData!.totalAmount ?? 0)}',
-                                                  style: boldTextStyle(size: 20)),
-                                        ],
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                             16.height,
                             if (orderData!.status == ORDER_CANCELLED && payment != null)

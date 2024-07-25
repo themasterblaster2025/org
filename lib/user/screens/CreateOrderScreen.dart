@@ -316,6 +316,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       /// total amount
       totalAmount = cityData!.fixedCharges! + weightCharge + distanceCharge;
 
+      /// vehicle charge
+      if (selectedVehicle != null && appStore.isVehicleOrder != 0) {
+        VehicleData vehicle = vehicleList.firstWhere((element) => element.id == selectedVehicle);
+        totalAmount += vehicle.price.validate();
+      }
+
       /// calculate extra charges
       if (cityData!.extraCharges != null) {
         cityData!.extraCharges!.forEach((element) {
@@ -324,11 +330,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         });
       }
 
-      /// vehicle charge
-      if (selectedVehicle != null && appStore.isVehicleOrder != 0) {
-        VehicleData vehicle = vehicleList.firstWhere((element) => element.id == selectedVehicle);
-        totalAmount += vehicle.price.validate();
-      }
+
 
       /// All Charges
       totalAmount = (totalAmount + totalExtraCharge + productAmount).toStringAsFixed(digitAfterDecimal).toDouble();

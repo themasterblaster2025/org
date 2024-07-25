@@ -41,7 +41,7 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
     };
     appStore.setLoading(true);
 
-    await setValue(USER_PASSWORD, newPassController.text.trim());
+    // await setValue(USER_PASSWORD, newPassController.text.trim());
 
     await changePassword(req).then((value) {
       toast(value.message.toString());
@@ -123,11 +123,7 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
         padding: EdgeInsets.all(16),
         child: commonButton(language.saveChanges, () {
           if (formKey.currentState!.validate()) {
-            if (getStringAsync(USER_EMAIL) == 'jose@gmail.com' || getStringAsync(USER_EMAIL) == 'mark@gmail.com') {
-              toast(language.demoMsg);
-            } else {
-              submit();
-            }
+            submit();
           }
         }),
       ),
