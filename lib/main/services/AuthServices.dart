@@ -156,7 +156,6 @@ class AuthServices {
     try {
       createAuthUser(email, password).then((user) async {
         if (user != null) {
-          print("user ==>>>  ${user.uid}");
           UserData userModel = UserData();
           userModel.email = value.data!.email;
           userModel.contactNumber = value.data!.contactNumber;
@@ -173,10 +172,9 @@ class AuthServices {
           userModel.createdAt = Timestamp.now().toDate().toString();
           userModel.updatedAt = Timestamp.now().toDate().toString();
           userModel.playerId = getStringAsync(PLAYER_ID);
-          await userService.addDocumentWithCustomId(user.uid, userModel.toJson()).then((value) async {
-            await userService.getUser(email: email).then((value) async {
-              await setValue(UID, value.uid.validate());
-            });
+          await userService.addDocumentWithCustomId(user.uid, userModel.toJson()).then((val) async {
+            await setValue(UID, user.uid.validate());
+            await updateUid(user.uid.validate()).catchError((error) {});
           }).catchError((e) {
             appStore.setLoading(false);
             toast(e.toString());

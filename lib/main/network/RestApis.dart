@@ -111,8 +111,6 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
     }).catchError((e) {
       log(e.toString());
       if (e.toString() == "User not found") {
-        print("inside user not found");
-        //todo test
         authService.registerUserWithDB(loginResponse.data!.email.validate(), request["password"], loginResponse);
         // toast(language.userNotFound);
       }

@@ -104,7 +104,6 @@ class LoginScreenState extends State<LoginScreen> {
           await setValue(USER_PASSWORD, passController.text);
         }
         await logInApi(req).then((v) async {
-          print("start after response");
           authService
               .signInWithEmailPassword(context, email: emailController.text, password: passController.text)
               .then((value) async {
