@@ -246,14 +246,15 @@ class _DHomeFragmentState extends State<DHomeFragment> {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: ()async{
+        onRefresh: () async {
           getDashboardCountDataApi();
         },
         child: Stack(
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Column(
+              child: ListView(
+                physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                 children: [
                   12.height,
                   Row(
@@ -301,8 +302,9 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                       crossAxisSpacing: 4,
                     ),
                     cacheExtent: 2.0,
-                    shrinkWrap: false,
-                    physics: AlwaysScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    // physics: BouncingScrollPhysics(
+                    //     parent: AlwaysScrollableScrollPhysics()),
                     controller: scrollController,
                     padding: EdgeInsets.fromLTRB(7, 5, 7, 5),
                     itemBuilder: (context, index) {
@@ -311,8 +313,8 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                       });
                     },
                     itemCount: items.length,
-                  ).expand(),
-                  8.height,
+                  ),
+                  /*18.height,
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary),
@@ -328,12 +330,30 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                       });
                     }),
                   ),
-                  10.height,
+                  10.height,*/
                 ],
               ),
             ),
             Observer(builder: (context) => Positioned.fill(child: loaderWidget().visible(appStore.isLoading))),
           ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(language.viewAllOrders, style: boldTextStyle(color: Colors.white)),
+            ],
+          ).onTap(() {
+            DeliveryDashBoard().launch(context).then((value) {
+              setState(() {});
+              getDashboardCountDataApi();
+            });
+          }),
         ),
       ),
     );
