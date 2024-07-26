@@ -54,7 +54,7 @@ const mAppDescription =
 const mCopyright = '© 2024 MeetMighty IT Solutions';
 const mPrivacyPolicy = "$DOMAIN_URL/privacypolicy";
 const mTermAndCondition = "$DOMAIN_URL/termofservice";
-const mHelpAndSupport = 'https://support.meetmighty.com/';
+const mHelpAndSupport = 'https://meetmighty.com/mobile/delivery-admin/';
 const mContactPref = 'hello@meetmighty.com';
 //endregion
 
