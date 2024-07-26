@@ -374,7 +374,12 @@ class _DHomeFragmentState extends State<DHomeFragment> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('$value', style: boldTextStyle(size: 27, color: textPrimaryColor)),
+          Text(
+            '$value',
+            style: boldTextStyle(size: 27, color: textPrimaryColor),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
           4.height,
           Text(
             countName(text),

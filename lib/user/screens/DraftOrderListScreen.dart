@@ -106,8 +106,8 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
                                 ? Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(DateFormat('dd MMM yyyy').format(DateTime.parse(item.date!).toLocal()), style: secondaryTextStyle()),
-                                      Text(DateFormat('hh:mm a').format(DateTime.parse(item.date!).toLocal()), style: secondaryTextStyle()),
+                                      Text(DateFormat('dd MMM yyyy').format(DateTime.parse("${item.date!}Z").toLocal()), style: secondaryTextStyle()),
+                                      Text(DateFormat('hh:mm a').format(DateTime.parse("${item.date!}Z").toLocal()), style: secondaryTextStyle()),
                                     ],
                                   )
                                 : SizedBox(),

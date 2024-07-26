@@ -170,9 +170,9 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     children: [
                                       orderData!.date != null
                                           ? Text(
-                                                  '${DateFormat('dd MMM yyyy').format(DateTime.parse(orderData!.date!).toLocal())} ' +
+                                                  '${DateFormat('dd MMM yyyy').format(DateTime.parse("${orderData!.date!}Z").toLocal())} ' +
                                                       ' ${language.at.toLowerCase()} ' +
-                                                      ' ${DateFormat('hh:mm a').format(DateTime.parse(orderData!.date!).toLocal())}',
+                                                      ' ${DateFormat('hh:mm a').format(DateTime.parse("${orderData!.date!}Z").toLocal())}',
                                                   style: primaryTextStyle(size: 14))
                                               .expand()
                                           : SizedBox(),

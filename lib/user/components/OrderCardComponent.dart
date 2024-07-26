@@ -66,9 +66,9 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
               children: [
                 widget.item.date != null
                     ? Text(
-                            DateFormat('dd MMM yyyy').format(DateTime.parse(widget.item.date!).toLocal()) +
+                            DateFormat('dd MMM yyyy').format(DateTime.parse("${widget.item.date!}Z").toLocal()) +
                                 " ${language.at.toLowerCase()} " +
-                                DateFormat('hh:mm a').format(DateTime.parse(widget.item.date!).toLocal()),
+                                DateFormat('hh:mm a').format(DateTime.parse("${widget.item.date!}Z").toLocal()),
                             style: primaryTextStyle(size: 14))
                         .expand()
                     : SizedBox(),

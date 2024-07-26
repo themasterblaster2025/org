@@ -174,6 +174,7 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                         Expanded(
                           flex: 2,
                           child: DropdownButtonFormField<int>(
+                            isExpanded: true,
                             value: selectedCountry,
                             decoration: commonInputDecoration(),
                             items:

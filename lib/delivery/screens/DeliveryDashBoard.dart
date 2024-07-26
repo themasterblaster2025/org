@@ -605,7 +605,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                     Row(
                       children: [
                         data.date != null
-                            ? Text(printDate(data.date ?? ''), style: secondaryTextStyle())
+                            ? Text(printDate("${data.date}Z"), style: secondaryTextStyle())
                                 .expand()
                             : SizedBox(),
                         Text('${printAmount(data.totalAmount ?? 0)}', style: boldTextStyle()),
