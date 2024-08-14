@@ -42,11 +42,13 @@ class RegisterScreenState extends State<RegisterScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController passController = TextEditingController();
+  TextEditingController partnerCodeController = TextEditingController();
 
   FocusNode nameFocus = FocusNode();
   FocusNode emailFocus = FocusNode();
   FocusNode phoneFocus = FocusNode();
   FocusNode passFocus = FocusNode();
+  FocusNode partnerCodeFocus = FocusNode();
 
   bool isAcceptedTc = false;
 
@@ -69,6 +71,8 @@ class RegisterScreenState extends State<RegisterScreen> {
           "email": emailController.text.trim(),
           "password": passController.text.trim(),
           "player_id": getStringAsync(PLAYER_ID).validate(),
+          if (partnerCodeController.text.isNotEmpty) "partner_referral_code": partnerCodeController.text.trim()
+
           // if (widget.userType == DELIVERY_MAN) "status": 1
         };
         await signUpApi(request).then((res) async {
@@ -106,7 +110,8 @@ class RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
-      appBarTitle: "${language.signUp.capitalizeFirstLetter()} ${language.forKey} ${widget.userType == CLIENT ? language.lblUser.toLowerCase() : language.lblDeliveryBoy.toLowerCase()}",
+      appBarTitle:
+          "${language.signUp.capitalizeFirstLetter()} ${language.forKey} ${widget.userType == CLIENT ? language.lblUser.toLowerCase() : language.lblDeliveryBoy.toLowerCase()}",
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -166,7 +171,8 @@ class RegisterScreenState extends State<RegisterScreen> {
                               dialogTextStyle: primaryTextStyle(),
                               searchDecoration: InputDecoration(
                                 iconColor: Theme.of(context).dividerColor,
-                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
+                                enabledBorder:
+                                    UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
                                 focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: colorPrimary)),
                               ),
                               searchStyle: primaryTextStyle(),
@@ -202,6 +208,13 @@ class RegisterScreenState extends State<RegisterScreen> {
                     errorThisFieldRequired: language.fieldRequiredMsg,
                     errorMinimumPasswordLength: language.passwordInvalid,
                   ),
+                  8.height,
+                  AppTextField(
+                    controller: partnerCodeController,
+                    textFieldType: TextFieldType.NAME,
+                    focus: partnerCodeFocus,
+                    decoration: commonInputDecoration(),
+                  ),
                   16.height,
                   Row(
                     children: [
@@ -210,10 +223,10 @@ class RegisterScreenState extends State<RegisterScreen> {
                         width: 20,
                         child: Checkbox(
                           shape: RoundedRectangleBorder(borderRadius: radius(4)),
+                          checkColor: Colors.white,
                           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           focusColor: colorPrimary,
                           activeColor: colorPrimary,
-                          checkColor: Colors.white,
                           value: isAcceptedTc,
                           onChanged: (bool? value) async {
                             isAcceptedTc = value!;
@@ -221,10 +234,9 @@ class RegisterScreenState extends State<RegisterScreen> {
                           },
                         ),
                       ),
-                      16.width,
+                      10.width,
                       RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(children: <TextSpan>[
+                        text: TextSpan(children: [
                           TextSpan(text: '${language.iAgreeToThe} ', style: secondaryTextStyle()),
                           TextSpan(
                             text: language.termOfService,

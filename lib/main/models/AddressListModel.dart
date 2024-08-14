@@ -1,6 +1,5 @@
 import 'package:mighty_delivery/main/models/PaginationModel.dart';
 
-
 class AddressListModel {
   PaginationModel? pagination;
   List<AddressData>? data;
@@ -8,9 +7,7 @@ class AddressListModel {
   AddressListModel({this.pagination, this.data});
 
   AddressListModel.fromJson(Map<String, dynamic> json) {
-    pagination = json['pagination'] != null
-        ? new PaginationModel.fromJson(json['pagination'])
-        : null;
+    pagination = json['pagination'] != null ? new PaginationModel.fromJson(json['pagination']) : null;
     if (json['data'] != null) {
       data = <AddressData>[];
       json['data'].forEach((v) {
@@ -46,22 +43,24 @@ class AddressData {
   String? createdAt;
   String? updatedAt;
   String? deletedAt;
+  String? addressType;
 
   AddressData(
       {this.id,
-        this.userId,
-        this.userName,
-        this.countryId,
-        this.countryName,
-        this.cityId,
-        this.cityName,
-        this.address,
-        this.latitude,
-        this.longitude,
-        this.contactNumber,
-        this.createdAt,
-        this.updatedAt,
-        this.deletedAt});
+      this.userId,
+      this.userName,
+      this.countryId,
+      this.countryName,
+      this.cityId,
+      this.cityName,
+      this.address,
+      this.latitude,
+      this.longitude,
+      this.contactNumber,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt,
+      this.addressType});
 
   AddressData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -78,6 +77,7 @@ class AddressData {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
+    addressType = json['address_type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -96,6 +96,7 @@ class AddressData {
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['deleted_at'] = this.deletedAt;
+    data['address_type'] = this.addressType;
     return data;
   }
 }

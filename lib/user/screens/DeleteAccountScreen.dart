@@ -28,19 +28,17 @@ class DeleteAccountScreenState extends State<DeleteAccountScreen> {
   }
 
   Future deleteAccount(BuildContext context) async {
-    Map req = {"id": getIntAsync(USER_ID)};
     appStore.setLoading(true);
-    await deleteUser(req).then((value) async {
-      await userService.removeDocument(getStringAsync(UID)).then((value) async {
-        await deleteUserFirebase().then((value) async {
+    print("----------------------deleteAccount${getStringAsync(UID)}");
+    await userService.removeDocument(getStringAsync(UID)).then((value) async {
+      await deleteUserFirebase().then((value) async {
+        Map deleteAccountReq = {"id": getIntAsync(USER_ID), "type": "forcedelete"};
+        await userAction(deleteAccountReq).then((value) async {
           await logout(context, isDeleteAccount: true).then((value) async {
             appStore.setLoading(false);
             await removeKey(USER_EMAIL);
             await removeKey(USER_PASSWORD);
           });
-        }).catchError((error) {
-          appStore.setLoading(false);
-          toast(error.toString());
         });
       }).catchError((error) {
         appStore.setLoading(false);
@@ -89,7 +87,8 @@ class DeleteAccountScreenState extends State<DeleteAccountScreen> {
                       positiveText: language.yes,
                       negativeText: language.no,
                       onAccept: (c) async {
-                        if (getStringAsync(USER_EMAIL) == 'jose@gmail.com' || getStringAsync(USER_EMAIL) == 'mark@gmail.com') {
+                        if (getStringAsync(USER_EMAIL) == 'jose@gmail.com' ||
+                            getStringAsync(USER_EMAIL) == 'mark@gmail.com') {
                           toast(language.demoMsg);
                         } else {
                           await deleteAccount(context);

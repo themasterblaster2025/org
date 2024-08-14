@@ -41,6 +41,12 @@ class AddAddressScreenState extends State<AddAddressScreen> {
   TextEditingController contactController = TextEditingController();
   double? latitude, longitude;
   String countryCode = defaultPhoneCode;
+  String dropDownValue = 'Home';
+  var items = [
+    'Home',
+    'Work',
+    'Friend',
+  ];
 
   @override
   void initState() {
@@ -49,7 +55,9 @@ class AddAddressScreenState extends State<AddAddressScreen> {
   }
 
   void init() async {
-    countryCode = CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.isEmptyOrNull ? defaultPhoneCode : CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate();
+    countryCode = CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.isEmptyOrNull
+        ? defaultPhoneCode
+        : CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate();
     if (widget.addressData != null) {
       addressController.text = widget.addressData!.address.validate();
       countryCode = widget.addressData!.contactNumber.validate().split(" ").first;
@@ -73,7 +81,8 @@ class AddAddressScreenState extends State<AddAddressScreen> {
       "longitude": longitude,
       "contact_number": '$countryCode ${contactController.text}',
       "city_id": getIntAsync(CITY_ID).toString(),
-      "country_id": getIntAsync(COUNTRY_ID).toString()
+      "country_id": getIntAsync(COUNTRY_ID).toString(),
+      "address_type": dropDownValue
     };
     appStore.setLoading(true);
 
@@ -158,7 +167,8 @@ class AddAddressScreenState extends State<AddAddressScreen> {
                               dialogTextStyle: primaryTextStyle(),
                               searchDecoration: InputDecoration(
                                 iconColor: Theme.of(context).dividerColor,
-                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
+                                enabledBorder:
+                                    UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
                                 focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: colorPrimary)),
                               ),
                               searchStyle: primaryTextStyle(),
@@ -181,6 +191,28 @@ class AddAddressScreenState extends State<AddAddressScreen> {
                     },
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
+                    ],
+                  ),
+                  8.height,
+                  Row(
+                    children: [
+                      Text("Select Address type").expand(),
+                      DropdownButton(
+                        value: dropDownValue,
+                        icon: const Icon(Icons.keyboard_arrow_down),
+                        items: items.map((String items) {
+                          return DropdownMenuItem(
+                            value: items,
+                            child: Text(items),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            dropDownValue = newValue!;
+                            print("------------------------${dropDownValue}");
+                          });
+                        },
+                      ),
                     ],
                   ),
                 ],

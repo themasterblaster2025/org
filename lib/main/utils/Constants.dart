@@ -10,8 +10,10 @@ const mAppName = 'Mighty Delivery';
 
 //region Baseurl
 //Note: Domain url is where you uploaded your laravel code
-const DOMAIN_URL = 'https://meetmighty.com/mobile/delivery-admin'; // Don't add slash at the end of the url
-// const DOMAIN_URL = 'https://localdeliverysystem.meetmighty.com/admin'; // Don't add slash at the end of the url
+//live
+//const DOMAIN_URL = 'https://meetmighty.com/mobile/delivery-admin'; // Don't add slash at the end of the url
+//test
+const DOMAIN_URL = 'https://meetmighty.com/mobile/delivery-admin-dev'; // Don't add slash at the end of the url
 // Don't add slash at the end of the url
 //endregion
 
@@ -54,8 +56,8 @@ const mAppDescription =
 const mCopyright = '© 2024 MeetMighty IT Solutions';
 const mPrivacyPolicy = "$DOMAIN_URL/privacypolicy";
 const mTermAndCondition = "$DOMAIN_URL/termofservice";
-const mHelpAndSupport = 'https://meetmighty.com/mobile/delivery-admin/';
-const mContactPref = 'hello@meetmighty.com';
+//const mHelpAndSupport = 'https://meetmighty.com/mobile/delivery-admin/';
+//const mContactPref = 'hello@meetmighty.com';
 //endregion
 
 const mInvoiceCompanyName = 'Roberts Private Limited';
@@ -255,6 +257,8 @@ AppThemeMode appThemeMode = AppThemeMode();
 
 //region FireBase Collection Name
 const MESSAGES_COLLECTION = "messages";
+const ORDERS_COLLECTION = "orders";
+const ORDERS_MESSAGES_COLLECTION = "orderMessages";
 const USER_COLLECTION = "users";
 const CONTACT_COLLECTION = "contact";
 const CHAT_DATA_IMAGES = "chatImages";
@@ -337,3 +341,4 @@ const CURRENT_LONGITUDE = 'CURRENT_LONGITUDE';
 const CURRENT_CITY = 'CURRENT_CITY';
 
 const FONT_SIZE_PREF = 'FONT_SIZE_PREF';
+const int cancelOrderDuration = 60;

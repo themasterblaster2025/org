@@ -183,6 +183,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       appStore.setCurrencyCode(value.currencyCode ?? CURRENCY_CODE);
       appStore.setCurrencySymbol(value.currency ?? CURRENCY_SYMBOL);
       appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
+      appStore.setSupportEmail(value.supportEmail ?? "");
+      appStore.setCopyRight(value.siteCopyright ?? "");
       appStore.isVehicleOrder = value.isVehicleInOrder ?? 0;
       setState(() {});
     }).catchError((error) {
@@ -329,8 +331,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               countExtraCharge(totalAmount: totalAmount, charges: element.charges!, chargesType: element.chargesType!);
         });
       }
-
-
 
       /// All Charges
       totalAmount = (totalAmount + totalExtraCharge + productAmount).toStringAsFixed(digitAfterDecimal).toDouble();
@@ -742,7 +742,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
           Row(
             children: [
-              Text(language.weight, style: primaryTextStyle()).expand(),
+              Text(language.weight, style: primaryTextStyle()),
+              3.width,
+              Text(" (${appStore.distanceUnit})", style: secondaryTextStyle()).expand(),
               Container(
                 decoration: BoxDecoration(
                     border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
@@ -1255,6 +1257,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     ),
                     validator: (value) {
                       if (value!.trim().isEmpty) return language.fieldRequiredMsg;
+                      //todo add keys
+                      if (value!.length < 8 || value.length > 15) return "please enter valid mobile number";
                       // if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
                       return null;
                     },

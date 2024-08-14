@@ -38,13 +38,14 @@ class AboutUsScreenState extends State<AboutUsScreen> {
           4.height,
           GestureDetector(
             onTap: () async {
-              commonLaunchUrl('mailto:$mContactPref');
+              commonLaunchUrl('mailto:${appStore.supportEmail}');
             },
-            child: Text(mContactPref, style: primaryTextStyle(color: colorPrimary)),
+            child: Text(appStore.supportEmail, style: primaryTextStyle(color: colorPrimary)),
           ),
         ],
       ).center().paddingAll(16),
-      bottomNavigationBar: Text(language.copyRight, style: secondaryTextStyle(size: 12), textAlign: TextAlign.center).paddingAll(10),
+      bottomNavigationBar:
+          Text(language.copyRight, style: secondaryTextStyle(size: 12), textAlign: TextAlign.center).paddingAll(10),
     );
   }
 }

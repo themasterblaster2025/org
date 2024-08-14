@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:developer' as lg;
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
@@ -35,8 +36,10 @@ import '../../main/models/PaymentGatewayListModel.dart';
 import '../../main/screens/LoginScreen.dart';
 import '../../main/utils/Constants.dart';
 import '../models/AddressListModel.dart';
+import '../models/AdminChatModel.dart';
 import '../models/AppSettingModel.dart';
 import '../models/AutoCompletePlacesListModel.dart';
+import '../models/CustomerSupportModel.dart';
 import '../models/DirectionsResponse.dart';
 import '../models/InvoiceSettingModel.dart';
 import '../models/OrderDetailModel.dart';
@@ -106,11 +109,16 @@ Future<LoginResponse> logInApi(Map request, {bool isSocialLogin = false}) async 
 
     appStore.setUserProfile(loginResponse.data!.profileImage.validate());
     await userService.getUser(email: loginResponse.data!.email.validate()).then((value) async {
-      log(value);
-      await setValue(UID, value.uid.validate());
+      log(value.toString());
+      //  await setValue(UID, value.uid.validate());
     }).catchError((e) {
       log(e.toString());
-      if (e.toString() == "User not found") {
+      print("---------------${loginResponse.data!.loginType}");
+      if (loginResponse.data!.loginType == LoginTypeGoogle || loginResponse.data!.loginType == LoginTypeApple) {
+      } else if (e.toString() == "User not found") {
+        // toast("-----------------user not found");
+
+        // if(loginResponse.data!.loginType == )
         authService.registerUserWithDB(loginResponse.data!.email.validate(), request["password"], loginResponse);
         // toast(language.userNotFound);
       }
@@ -694,6 +702,44 @@ Future<DashboardCount> getDashboardCount({String? startDate, String? endDate}) a
 Future<PageListModel> getPagesList() async {
   return PageListModel.fromJson(await handleResponse(await buildHttpResponse(
     'pages-list',
+    method: HttpMethod.GET,
+  )));
+}
+
+/// get completed OrderList
+Future<OrderListModel> getUserOrderHistoryList({required int page}) async {
+  String endPoint = 'order-list?client_id=${getIntAsync(USER_ID)}&page=$page&status=completed&exclude_status=draft';
+  OrderListModel orders =
+      OrderListModel.fromJson(await handleResponse(await buildHttpResponse(endPoint, method: HttpMethod.GET)));
+  return orders;
+}
+
+Future<AdminChatModel> getChatList(int? page) async {
+  return AdminChatModel.fromJson(await handleResponse(await buildHttpResponse(
+    'chatsystem-list?page=$page',
+    method: HttpMethod.GET,
+  )));
+}
+
+Future<LDBaseResponse> saveChat(Map req) async {
+  return LDBaseResponse.fromJson(
+      await handleResponse(await buildHttpResponse('chatmessage-save', method: HttpMethod.POST, request: req)));
+}
+
+Future<LDBaseResponse> saveCustomerSupport(Map req) async {
+  return LDBaseResponse.fromJson(
+      await handleResponse(await buildHttpResponse('customersupport-save', method: HttpMethod.POST, request: req)));
+}
+
+Future<CustomerSupportListModel> getCustomerSupportList({int? page, int? support_id}) async {
+  String endpoint = 'customersupport-list';
+  if (page != null && page > 0) {
+    endpoint += '?page=$page';
+  } else if (support_id != null && support_id > 0) {
+    endpoint += '?support_id=$support_id';
+  }
+  return CustomerSupportListModel.fromJson(await handleResponse(await buildHttpResponse(
+    endpoint,
     method: HttpMethod.GET,
   )));
 }

@@ -41,8 +41,7 @@ class MyAddressListScreenState extends State<MyAddressListScreen> {
     appStore.setLoading(true);
     init();
     scrollController.addListener(() {
-      if (scrollController.position.pixels == scrollController.position.maxScrollExtent &&
-          !appStore.isLoading) {
+      if (scrollController.position.pixels == scrollController.position.maxScrollExtent && !appStore.isLoading) {
         if (page < totalPage) {
           page++;
           appStore.setLoading(true);
@@ -111,8 +110,7 @@ class MyAddressListScreenState extends State<MyAddressListScreen> {
                       AddressData item = addressList[index];
                       return InkWell(
                         onTap: () async {
-                          bool? res =
-                              await AddAddressScreen(addressData: item).launch(context);
+                          bool? res = await AddAddressScreen(addressData: item).launch(context);
                           if (res != null) {
                             page = 1;
                             init();
@@ -131,9 +129,19 @@ class MyAddressListScreenState extends State<MyAddressListScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(item.address.validate(), style: primaryTextStyle()),
+                                  if (!item.addressType.isEmptyOrNull) 8.height,
+                                  if (!item.addressType.isEmptyOrNull)
+                                    //TODO add key
+                                    Row(
+                                      children: [
+                                        Text("Address type:"),
+                                        8.width,
+                                        Text(item.addressType != null ? item.addressType.toString() : "Home",
+                                            style: primaryTextStyle()),
+                                      ],
+                                    ),
                                   8.height,
-                                  Text(item.contactNumber.validate(),
-                                      style: secondaryTextStyle()),
+                                  Text(item.contactNumber.validate(), style: secondaryTextStyle()),
                                 ],
                               ).expand(),
                               8.width,

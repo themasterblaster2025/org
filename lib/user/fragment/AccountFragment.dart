@@ -6,8 +6,11 @@ import 'package:mighty_delivery/extensions/extension_util/list_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/main/components/HtmlWidgtet.dart';
+import 'package:mighty_delivery/main/models/CustomerSupportModel.dart';
+import 'package:mighty_delivery/main/screens/CustomerSupportScreen.dart';
 import 'package:mighty_delivery/user/screens/FavouriteStoreScreen.dart';
 import 'package:mighty_delivery/user/screens/PageDetailScreen.dart';
+import 'package:mighty_delivery/user/screens/refer_earn_screen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../extensions/animatedList/animated_configurations.dart';
@@ -28,6 +31,7 @@ import '../../main/screens/BankDetailScreen.dart';
 import '../../main/screens/ChangePasswordScreen.dart';
 import '../../main/screens/EditProfileScreen.dart';
 import '../../main/screens/LanguageScreen.dart';
+import '../../main/screens/order_history_list.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
@@ -153,6 +157,18 @@ class AccountFragmentState extends State<AccountFragment> {
                   accountSettingItemWidget(ic_wallet, language.wallet, () {
                     WalletScreen().launch(context);
                   }),
+                  //TODO add keys
+                  accountSettingItemWidget(ic_change_password, "Customer support", () {
+                    CustomerSupportScreen().launch(context);
+                  }),
+                  //todo add key
+                  accountSettingItemWidget(ic_earn, "Refer & Earn", () {
+                    ReferEarnScreen().launch(context);
+                  }),
+                  //todo add key
+                  accountSettingItemWidget(ic_order, "History", () {
+                    OrderHistoryScreen().launch(context);
+                  }).visible(appStore.userType == CLIENT),
                   accountSettingItemWidget(
                     ic_bank_detail,
                     language.bankDetails,
@@ -192,9 +208,9 @@ class AccountFragmentState extends State<AccountFragment> {
                     commonLaunchUrl(mPrivacyPolicy);
                   }),
                   accountSettingItemWidget(ic_information, language.helpAndSupport, () {
-                    commonLaunchUrl(mHelpAndSupport);
+                    commonLaunchUrl(appStore.supportEmail);
                   }),
-                   accountSettingItemWidget(ic_document, language.termAndCondition, () {
+                  accountSettingItemWidget(ic_document, language.termAndCondition, () {
                     commonLaunchUrl(mTermAndCondition);
                   }),
                   accountSettingItemWidget(ic_information, language.aboutUs, () {

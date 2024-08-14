@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mighty_delivery/extensions/colors.dart';
 import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
@@ -249,17 +250,38 @@ class WalletScreenState extends State<WalletScreen> {
           ),
           10.width,
           Expanded(
+            flex: 2,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(transactionType(data.transactionType!), style: secondaryTextStyle(color: textPrimaryColorGlobal)),
                 SizedBox(height: 8),
                 Text(printDate(data.createdAt.validate()), style: secondaryTextStyle(size: 12)),
+                SizedBox(height: 8),
               ],
             ),
           ),
-          Text('${data.type == CREDIT ? '+' : '-'} ${printAmount(data.amount)}',
-              style: boldTextStyle(color: data.type == CREDIT ? Colors.green : Colors.red))
+          Container(
+            child: Column(
+              children: [
+                Text('${data.type == CREDIT ? '+' : '-'} ${printAmount(data.amount)}',
+                    style: boldTextStyle(color: data.type == CREDIT ? Colors.green : Colors.red)),
+                6.height,
+                //TODO add key
+                Container(
+                        decoration: boxDecorationDefault(
+                            border: Border.all(color: Colors.grey.withOpacity(0.2)), color: Colors.transparent),
+                        child: Text('copy', style: boldTextStyle(color: colorPrimary, size: 14)).paddingAll(6).center())
+                    .onTap(() {
+                  Clipboard.setData(ClipboardData(text: data.transactionType!.split(":")[1])).then((_) {
+                    //TODO add key
+                    snackBar(context, content: Text("${data.transactionType!.split(":")[1]}  copied to clipboard"));
+                  });
+                  //TODO add key
+                }).visible(data.transactionType!.contains("Transaction ID")),
+              ],
+            ),
+          )
         ],
       ),
     );

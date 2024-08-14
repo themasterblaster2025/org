@@ -123,6 +123,7 @@ class LoginScreenState extends State<LoginScreen> {
             } else {
               appStore.setUserType(v.data!.userType.toString());
               if (getIntAsync(STATUS) == 1) {
+                print("=========================================getStringAsync(UID)${getStringAsync(UID)}");
                 updateUserStatus({
                   "id": getIntAsync(USER_ID),
                   "uid": getStringAsync(UID),

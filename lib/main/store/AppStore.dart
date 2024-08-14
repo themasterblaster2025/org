@@ -74,6 +74,10 @@ abstract class _AppStore with Store {
   String distanceUnit = '';
   @observable
   String userType = '';
+  @observable
+  String copyRight = '';
+  @observable
+  String supportEmail = '';
 
   @action
   Future<void> setLoading(bool val) async {
@@ -191,5 +195,15 @@ abstract class _AppStore with Store {
   @action
   void setUserType(String val) {
     userType = val;
+  }
+
+  @action
+  Future<void> setCopyRight(String val) async {
+    copyRight = val;
+  }
+
+  @action
+  Future<void> setSupportEmail(String val) async {
+    supportEmail = val;
   }
 }

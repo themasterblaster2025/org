@@ -154,6 +154,7 @@ class AuthServices {
 
   Future<void> registerUserWithDB(String email, String password, LoginResponse value) async {
     try {
+      print("-----------------------registerUserWithDB${value.data!.loginType}");
       createAuthUser(email, password).then((user) async {
         if (user != null) {
           UserData userModel = UserData();
@@ -196,14 +197,20 @@ class AuthServices {
     await _auth.signInWithEmailAndPassword(email: email, password: password).then((value) async {
       appStore.setLoading(true);
       final User user = value.user!;
-      UserData userModel = await userService.getUser(email: user.email);
-      await updateUserData(userModel);
+      //   UserData userModel = await userService.getUser(email: user.email);
+
+      await userService.getUser(email: user.email).then((value1) async {
+        await updateUserData(value1);
+        //Login Details to SharedPreferences
+        //    setValue(UID, value1.uid.validate());
+        setValue(USER_EMAIL, value1.email.validate());
+        setValue(IS_LOGGED_IN, true);
+        log(value);
+      }).catchError((error) {
+        log(error.toString());
+      });
 
       appStore.setLoading(true);
-      //Login Details to SharedPreferences
-      setValue(UID, userModel.uid.validate());
-      setValue(USER_EMAIL, userModel.email.validate());
-      setValue(IS_LOGGED_IN, true);
     }).catchError((e) {
       log(e.toString());
     });
@@ -434,7 +441,6 @@ getCityDetailApiCall(int cityId) async {
         }
       } else {
         VerificationListScreen().launch(getContext, isNewTask: true);
-        // VerificationScreen().launch(getContext, isNewTask: true);
       }
     } else {
       UserCitySelectScreen().launch(getContext, isNewTask: true);
@@ -448,8 +454,12 @@ getCityDetailApiCall(int cityId) async {
 
 Future deleteUserFirebase() async {
   if (FirebaseAuth.instance.currentUser != null) {
-    FirebaseAuth.instance.currentUser!.delete();
-    await FirebaseAuth.instance.signOut();
+    try {
+      FirebaseAuth.instance.currentUser!.delete();
+      await FirebaseAuth.instance.signOut();
+    } catch (e) {
+      print("===========${e.toString()}");
+    }
   }
 }
 

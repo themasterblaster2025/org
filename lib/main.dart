@@ -10,6 +10,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
+import 'package:mighty_delivery/main/services/OrdersMessageService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main/models/models.dart';
@@ -42,8 +43,9 @@ LanguageJsonData? selectedServerLanguageData;
 List<LanguageJsonData>? defaultServerLanguageData = [];
 
 UserService userService = UserService();
-ChatMessageService chatMessageService = ChatMessageService();
+//ChatMessageService chatMessageService = ChatMessageService();
 AuthServices authService = AuthServices();
+OrdersMessageService ordersMessageService = OrdersMessageService();
 NotificationService notificationService = NotificationService();
 late List<FileModel> fileList = [];
 bool isCurrentlyOnNoInternet = false;
@@ -68,7 +70,8 @@ void main() async {
     appStore.setUserEmail(getStringAsync(USER_EMAIL), isInitialization: true);
     appStore.setUserProfile(getStringAsync(USER_PROFILE_PHOTO), isInitializing: true);
     FilterAttributeModel? filterData = FilterAttributeModel.fromJson(getJSONAsync(FILTER_DATA));
-    appStore.setFiltering(filterData.orderStatus != null || !filterData.fromDate.isEmptyOrNull || !filterData.toDate.isEmptyOrNull);
+    appStore.setFiltering(
+        filterData.orderStatus != null || !filterData.fromDate.isEmptyOrNull || !filterData.toDate.isEmptyOrNull);
     print("===========setLanguage${appStore.selectedLanguage}");
     int themeModeIndex = getIntAsync(THEME_MODE_INDEX);
     if (themeModeIndex == appThemeMode.themeModeLight) {

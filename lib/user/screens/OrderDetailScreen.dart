@@ -3,6 +3,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
+import 'package:mighty_delivery/extensions/colors.dart';
 import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/list_extensions.dart';
@@ -62,6 +64,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
   double? totalDistance;
   String? distance, duration;
   num productAmount = 0;
+  bool canCancel = false;
 
   @override
   void initState() {
@@ -96,15 +99,27 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
         });
       }
       if (getStringAsync(USER_TYPE) == CLIENT) {
-        userData = value.deliveryManDetail;
+        userData = value.deliveryManDetail != null ? value.deliveryManDetail : UserData();
+        print("-------------------userDataCLIENT${userData!.toJson().toString()}");
       } else {
         userData = value.clientDetail;
+        print("-------------------userDataNOTCLIENT${userData!.toJson().toString()}");
       }
+      canUserCancelOrder();
       getDistanceApiCall();
+
       setState(() {});
     }).catchError((error) {
       toast(error.toString());
     }).whenComplete(() => appStore.setLoading(false));
+  }
+
+  canUserCancelOrder() {
+    DateTime orderDate = DateTime.parse("${orderData!.date!}Z").toLocal();
+    DateTime currentDate = DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())).toLocal();
+
+    int differenceInMinutes = currentDate.difference(orderDate).inMinutes;
+    canCancel = differenceInMinutes < cancelOrderDuration;
   }
 
   getDistanceApiCall() async {
@@ -371,35 +386,34 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                         onTap: () {
                                           OrderHistoryScreen(orderHistory: orderHistory.validate()).launch(context);
                                         },
-                                      ).visible(
-                                          orderData!.status == ORDER_DEPARTED || orderData!.status == ORDER_ACCEPTED),
+                                      ),
+                                      if (orderData!.status == ORDER_DELIVERED && appStore.userType == CLIENT) ...[
+                                        AppButton(
+                                          elevation: 0,
+                                          height: 35,
+                                          color: Colors.transparent,
+                                          padding: EdgeInsets.symmetric(horizontal: 8),
+                                          shapeBorder: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(defaultRadius),
+                                            side: BorderSide(color: colorPrimary),
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(language.invoice, style: primaryTextStyle(color: colorPrimary)),
+                                              Icon(Icons.arrow_right, color: colorPrimary),
+                                            ],
+                                          ),
+                                          onTap: () {
+                                            PDFViewer(
+                                              invoice: "${orderData!.invoice.validate()}",
+                                              filename: "${orderData!.id.validate()}",
+                                            ).launch(context);
+                                          },
+                                        )
+                                      ],
                                     ],
                                   ),
-                                  if (orderData!.status == ORDER_DELIVERED && appStore.userType == CLIENT) ...[
-                                    AppButton(
-                                      elevation: 0,
-                                      height: 35,
-                                      color: Colors.transparent,
-                                      padding: EdgeInsets.symmetric(horizontal: 8),
-                                      shapeBorder: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(defaultRadius),
-                                        side: BorderSide(color: colorPrimary),
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text(language.invoice, style: primaryTextStyle(color: colorPrimary)),
-                                          Icon(Icons.arrow_right, color: colorPrimary),
-                                        ],
-                                      ),
-                                      onTap: () {
-                                        PDFViewer(
-                                          invoice: "${orderData!.invoice.validate()}",
-                                          filename: "${orderData!.id.validate()}",
-                                        ).launch(context);
-                                      },
-                                    )
-                                  ],
                                 ],
                               ),
                             ),
@@ -709,14 +723,18 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                           Icon(Octicons.verified, color: Colors.green, size: 18),
                                                       ],
                                                     ),
-                                                    InkWell(
-                                                            onTap: () {
-                                                              ChatScreen(userData: userData).launch(context);
-                                                            },
-                                                            child: Icon(Ionicons.md_chatbox_outline,
-                                                                size: 22, color: colorPrimary))
-                                                        .visible(orderData!.status != ORDER_DELIVERED &&
-                                                            orderData!.status != ORDER_CANCELLED && userData!.userType.validate() != ADMIN),
+                                                    // InkWell(
+                                                    //         onTap: () {
+                                                    //           ChatScreen(
+                                                    //                   userData: userData,
+                                                    //                   orderId: orderData!.id.toString().validate())
+                                                    //               .launch(context);
+                                                    //         },
+                                                    //         child: Icon(Ionicons.md_chatbox_outline,
+                                                    //             size: 22, color: colorPrimary))
+                                                    //     .visible(orderData!.status != ORDER_DELIVERED &&
+                                                    //         orderData!.status != ORDER_CANCELLED &&
+                                                    //         userData!.userType.validate() != ADMIN),
                                                   ],
                                                 ),
                                                 4.height,
@@ -986,7 +1004,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                               ),
                             ).visible(getStringAsync(USER_TYPE) == CLIENT &&
                                 orderData!.status != ORDER_DELIVERED &&
-                                orderData!.status != ORDER_CANCELLED),
+                                orderData!.status != ORDER_CANCELLED &&
+                                canCancel),
                             Align(
                               alignment: Alignment.bottomCenter,
                               child: commonButton(language.returnOrder, () {
@@ -1003,6 +1022,55 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                         ),
                       ],
                     ),
+                    Positioned(
+                        bottom: 10,
+                        right: 10,
+                        child: Container(
+                            width: 60,
+                            height: 60,
+                            margin: EdgeInsets.only(bottom: 20),
+                            decoration: boxDecorationWithRoundedCorners(
+                                borderRadius: BorderRadius.circular(40),
+                                border: Border.all(color: colorPrimary.withOpacity(0.3)),
+                                backgroundColor: colorPrimary),
+                            child: Stack(
+                              children: [
+                                if (userData != null && userData!.uid != null)
+                                  Positioned(
+                                    top: 8,
+                                    right: 10,
+                                    child: StreamBuilder<int>(
+                                        stream: ordersMessageService.getUnReadCount(
+                                            receiverId: userData!.uid!, orderId: orderData!.id.toString()),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData && snapshot.data != null && snapshot.data! > 0) {
+                                            return Lottie.asset(ic_chat_unread_count,
+                                                width: 18, height: 18, fit: BoxFit.cover);
+                                          }
+                                          return SizedBox();
+                                        }),
+                                  ).visible(orderData!.status != ORDER_DELIVERED &&
+                                      orderData!.status != ORDER_CANCELLED &&
+                                      userData!.userType.validate() != ADMIN),
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  bottom: 0,
+                                  left: 0,
+                                  child: Icon(
+                                    Icons.chat_bubble_outline,
+                                    size: 25,
+                                    color: white,
+                                  ),
+                                )
+                              ],
+                            )).onTap(() {
+                          ChatScreen(userData: userData, orderId: orderData!.id.toString().validate()).launch(context);
+                        })).visible(orderData!.status !=
+                            ORDER_CREATED &&
+                        orderData!.status != ORDER_DELIVERED &&
+                        orderData!.status != ORDER_CANCELLED &&
+                        userData!.userType.validate() != ADMIN),
                   ],
                 )
               : SizedBox(),

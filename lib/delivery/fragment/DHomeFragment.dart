@@ -153,6 +153,8 @@ class _DHomeFragmentState extends State<DHomeFragment> {
     await getAppSetting().then((value) {
       appStore.setCurrencyCode(value.currencyCode ?? CURRENCY_CODE);
       appStore.setCurrencySymbol(value.currency ?? CURRENCY_SYMBOL);
+      appStore.setCopyRight(value.siteCopyright ?? "");
+      appStore.setSupportEmail(value.supportEmail ?? "");
       appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
       setState(() {});
     }).catchError((error) {

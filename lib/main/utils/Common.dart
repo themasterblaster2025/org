@@ -495,19 +495,16 @@ cashConfirmDialog() {
 }
 
 Future deleteAccount(BuildContext context) async {
-  Map req = {"id": getIntAsync(USER_ID)};
   appStore.setLoading(true);
-  await deleteUser(req).then((value) async {
-    await userService.removeDocument(getStringAsync(UID)).then((value) async {
-      await deleteUserFirebase().then((value) async {
+  await userService.removeDocument(getStringAsync(UID)).then((value) async {
+    await deleteUserFirebase().then((value) async {
+      Map deleteAccountReq = {"id": getIntAsync(USER_ID), "type": "forcedelete"};
+      await userAction(deleteAccountReq).then((value) async {
         await logout(context, isDeleteAccount: true).then((value) async {
           appStore.setLoading(false);
           await removeKey(USER_EMAIL);
           await removeKey(USER_PASSWORD);
         });
-      }).catchError((error) {
-        appStore.setLoading(false);
-        toast(error.toString());
       });
     }).catchError((error) {
       appStore.setLoading(false);

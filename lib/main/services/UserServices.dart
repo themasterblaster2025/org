@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
+import 'package:mighty_delivery/extensions/shared_pref.dart';
 
 import '../../extensions/common.dart';
 import '../../extensions/system_utils.dart';
@@ -26,6 +27,7 @@ class UserService extends BaseService {
   Future<UserData> getUser({String? email}) {
     return ref!.where("email", isEqualTo: email).limit(1).get().then((value) {
       if (value.docs.length == 1) {
+        setValue(UID, value.docs.first.id);
         return UserData.fromJson(value.docs.first.data() as Map<String, dynamic>);
       } else {
         throw language.userNotFound;

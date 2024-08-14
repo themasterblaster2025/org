@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:intl/intl.dart';
 import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 
 import '../../extensions/common.dart';
+import '../../extensions/decorations.dart';
 import '../../extensions/system_utils.dart';
 import '../../extensions/text_styles.dart';
 import '../../main.dart';
@@ -151,7 +153,8 @@ class WithDrawScreenState extends State<WithDrawScreen> {
                     child: Container(
                       padding: EdgeInsets.all(16),
                       margin: EdgeInsets.only(bottom: 16),
-                      decoration: BoxDecoration(color: colorPrimary, borderRadius: BorderRadius.circular(defaultRadius)),
+                      decoration:
+                          BoxDecoration(color: colorPrimary, borderRadius: BorderRadius.circular(defaultRadius)),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
@@ -176,20 +179,143 @@ class WithDrawScreenState extends State<WithDrawScreen> {
                       return Container(
                         margin: EdgeInsets.only(top: 8, bottom: 8),
                         padding: EdgeInsets.all(12),
-                        decoration: BoxDecoration(border: Border.all(color: Colors.grey.withOpacity(0.4)), borderRadius: BorderRadius.circular(defaultRadius)),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.withOpacity(0.4)),
+                            borderRadius: BorderRadius.circular(defaultRadius)),
                         child: Row(
                           children: [
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(printStatus(data.status!), style: boldTextStyle(color: withdrawStatusColor(data.status!))),
+                                  Text(printStatus(data.status!),
+                                      style: boldTextStyle(color: withdrawStatusColor(data.status!))),
                                   SizedBox(height: 8),
                                   Text(printDate(data.createdAt!), style: secondaryTextStyle()),
                                 ],
                               ),
                             ),
-                            Text('${printAmount(data.amount!.toDouble())}', style: primaryTextStyle()),
+                            Column(
+                              children: [
+                                Text('${printAmount(data.amount!.toDouble())}', style: primaryTextStyle()),
+                                4.height,
+                                Container(
+                                        decoration: boxDecorationDefault(
+                                            border: Border.all(color: Colors.grey.withOpacity(0.2)),
+                                            color: Colors.transparent),
+                                        child: Text('Details', style: boldTextStyle(size: 12)).paddingAll(6).center())
+                                    .onTap(() {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return Dialog(
+                                        insetPadding: EdgeInsets.all(16),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Text("Withdraw details", style: boldTextStyle(size: 18)),
+                                                Icon(Icons.close, size: 20).onTap(() {
+                                                  finish(context);
+                                                })
+                                              ],
+                                            ),
+                                            Divider(color: context.dividerColor),
+                                            8.height,
+                                            Column(
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    //TODO add keys
+                                                    Text("Transaction id", style: secondaryTextStyle()),
+                                                    Text(data.withdrawDetails!.transactionId.toString(),
+                                                        style: primaryTextStyle()),
+                                                  ],
+                                                ).visible(!data.withdrawDetails!.transactionId.isEmptyOrNull),
+                                              ],
+                                            ),
+                                            8.height,
+                                            Column(
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    //TODO add keys
+                                                    Text("Via", style: secondaryTextStyle()),
+                                                    Text(data.withdrawDetails!.via.toString(),
+                                                        style: primaryTextStyle()),
+                                                  ],
+                                                ).visible(!data.withdrawDetails!.transactionId.isEmptyOrNull),
+                                              ],
+                                            ),
+                                            8.height,
+                                            Column(
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    //TODO add keys
+                                                    Text("Created date", style: secondaryTextStyle()),
+                                                    Text(
+                                                        DateFormat('yyyy-MM-dd').format(
+                                                            DateTime.parse(data.withdrawDetails!.createdAt.toString())),
+                                                        style: primaryTextStyle()),
+                                                  ],
+                                                ).visible(!data.withdrawDetails!.transactionId.isEmptyOrNull),
+                                              ],
+                                            ),
+                                            8.height,
+                                            Column(
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    //TODO add keys
+                                                    Text("Others Details", style: secondaryTextStyle()),
+                                                    Text(data.withdrawDetails!.otherDetail.toString()),
+                                                  ],
+                                                ).visible(!data.withdrawDetails!.transactionId.isEmptyOrNull),
+                                              ],
+                                            ),
+                                            8.height,
+                                            if (!data.withdrawDetails!.withdrawDetailImage.isEmptyOrNull)
+                                              Column(
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      //TODO add keys
+                                                      Text("Image", style: secondaryTextStyle()),
+                                                      Container(
+                                                          width: 100,
+                                                          height: 100,
+                                                          child: Image.network(
+                                                              data.withdrawDetails!.withdrawDetailImage.validate(),
+                                                              height: 60,
+                                                              width: 60,
+                                                              fit: BoxFit.cover,
+                                                              alignment: Alignment.center))
+                                                    ],
+                                                  ).visible(!data.withdrawDetails!.transactionId.isEmptyOrNull),
+                                                ],
+                                              ),
+                                          ],
+                                        ).paddingAll(16),
+                                      );
+                                    },
+                                  );
+                                }).visible(data.withdrawDetails != null),
+                              ],
+                            ),
                           ],
                         ),
                       );

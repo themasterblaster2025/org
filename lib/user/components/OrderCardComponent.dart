@@ -253,7 +253,10 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                     ).onTap(() {
                       // generateInvoiceCall(widget.item);
                       print("invice ${widget.item.invoice}");
-                      PDFViewer(invoice: "${widget.item.invoice.validate()}",filename: "${widget.item.id.validate()}",).launch(context);
+                      PDFViewer(
+                        invoice: "${widget.item.invoice.validate()}",
+                        filename: "${widget.item.id.validate()}",
+                      ).launch(context);
                     }),
                   ),
                 AppButton(
@@ -326,7 +329,7 @@ class _PDFViewerState extends State<PDFViewer> {
       // final directory = await getApplicationDocumentsDirectory();
       final directory = await getExternalStorageDirectory();
       final path = directory!.path;
-      String fileName = widget.filename.validate().isEmpty ? "invoice": widget.filename.validate() ;
+      String fileName = widget.filename.validate().isEmpty ? "invoice" : widget.filename.validate();
       File file = File('${path}/${fileName}.pdf');
       print("file ${file.path}");
       await file.writeAsBytes(bytes, flush: true);
@@ -339,7 +342,7 @@ class _PDFViewerState extends State<PDFViewer> {
       } else {
         throw 'File does not exist';
       }
-     /* if (await canLaunchUrl(Uri.parse(url))) {
+      /* if (await canLaunchUrl(Uri.parse(url))) {
         await launchUrl(Uri.parse(url));
       } else {
         throw 'Could not launch $url';
@@ -364,6 +367,13 @@ class _PDFViewerState extends State<PDFViewer> {
             PdfView(
               controller: pdfController!,
             ),
+            PdfPageNumber(
+              controller: pdfController!,
+              builder: (_, loadingState, page, pagesCount) {
+                if (page == 0) return loaderWidget();
+                return SizedBox();
+              },
+            ),
             Observer(builder: (context) {
               return loaderWidget().visible(appStore.isLoading);
             }),
@@ -371,4 +381,3 @@ class _PDFViewerState extends State<PDFViewer> {
         ));
   }
 }
-

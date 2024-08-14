@@ -24,6 +24,7 @@ import '../../main/network/RestApis.dart';
 import '../../main/screens/AboutUsScreen.dart';
 import '../../main/screens/BankDetailScreen.dart';
 import '../../main/screens/ChangePasswordScreen.dart';
+import '../../main/screens/CustomerSupportScreen.dart';
 import '../../main/screens/EditProfileScreen.dart';
 import '../../main/screens/LanguageScreen.dart';
 import '../../main/utils/Colors.dart';
@@ -33,6 +34,7 @@ import '../../main/utils/Images.dart';
 import '../../user/screens/DeleteAccountScreen.dart';
 import '../../user/screens/PageDetailScreen.dart';
 import '../../user/screens/WalletScreen.dart';
+import '../../user/screens/refer_earn_screen.dart';
 import '../screens/EarningHistoryScreen.dart';
 import '../screens/VerifyDeliveryPersonScreen.dart';
 
@@ -159,6 +161,10 @@ class DProfileFragmentState extends State<DProfileFragment> {
                         accountSettingItemWidget(ic_earning, language.earningHistory, () {
                           EarningHistoryScreen().launch(context);
                         }),
+                        //todo add key
+                        accountSettingItemWidget(ic_earn, "Refer & Earn", () {
+                          ReferEarnScreen().launch(context);
+                        }),
                         accountSettingItemWidget(ic_wallet, language.wallet, () {
                           WalletScreen().launch(context);
                         }),
@@ -181,17 +187,21 @@ class DProfileFragmentState extends State<DProfileFragment> {
                               builder: (_) => ThemeSelectionDialog(),
                               contentPadding: EdgeInsets.zero);
                         }),
+                        //TODO add keys
+                        accountSettingItemWidget(ic_change_password, "Customer support", () {
+                          CustomerSupportScreen().launch(context);
+                        }),
                         accountSettingItemWidget(ic_delete_account, language.deleteAccount, () async {
                           DeleteAccountScreen().launch(context);
                         }, isLast: true),
                         mTitle(language.general),
-                         accountSettingItemWidget(ic_document, language.privacyPolicy, () {
+                        accountSettingItemWidget(ic_document, language.privacyPolicy, () {
                           commonLaunchUrl(mPrivacyPolicy);
                         }),
                         accountSettingItemWidget(ic_information, language.helpAndSupport, () {
-                          commonLaunchUrl(mHelpAndSupport);
+                          commonLaunchUrl(appStore.supportEmail);
                         }),
-                          accountSettingItemWidget(ic_document, language.termAndCondition, () {
+                        accountSettingItemWidget(ic_document, language.termAndCondition, () {
                           commonLaunchUrl(mTermAndCondition);
                         }),
                         accountSettingItemWidget(ic_information, language.aboutUs, () {
@@ -203,12 +213,12 @@ class DProfileFragmentState extends State<DProfileFragment> {
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
                               PageData item = pageList[index];
-                                return accountSettingItemWidget(ic_pages, item.title.validate(), () {
-                                  PageDetailScreen(
-                                    title: item.title.validate(),
-                                    description: item.description.validate(),
-                                  ).launch(context);
-                                });
+                              return accountSettingItemWidget(ic_pages, item.title.validate(), () {
+                                PageDetailScreen(
+                                  title: item.title.validate(),
+                                  description: item.description.validate(),
+                                ).launch(context);
+                              });
                             },
                             itemCount: pageList.length,
                           )

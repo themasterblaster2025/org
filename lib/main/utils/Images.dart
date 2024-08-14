@@ -5,7 +5,7 @@ const ic_to = "assets/ic_to.png";
 const ic_select_region = 'assets/ic_select_region.png';
 
 const ic_google_map = 'assets/icons/ic_google_map.png';
-const ic_address= 'assets/icons/ic_address.png';
+const ic_address = 'assets/icons/ic_address.png';
 const ic_edit = 'assets/icon/ic_edit.png';
 const ic_earning = 'assets/icon/ic_earning.png';
 const ic_wallet = 'assets/icon/ic_wallet.png';
@@ -17,6 +17,7 @@ const ic_languages = 'assets/icon/ic_languages.png';
 const ic_dark_mode = 'assets/icon/ic_dark_mode.png';
 const ic_delete_account = 'assets/icon/ic_delete_account.png';
 const ic_document = 'assets/icon/ic_document.png';
+const ic_earn = 'assets/icon/ic_earn.png';
 const ic_information = 'assets/icon/ic_information.png';
 const ic_profile = 'assets/profile.png';
 const ic_clock = 'assets/icons/ic_clock.png';
@@ -37,3 +38,5 @@ const ic_order = 'assets/icon/ic_order.png';
 
 const ic_apple = 'assets/icons/ic_apple.png';
 const ic_google = 'assets/icons/ic_google.png';
+const ic_chat_unread_count = 'assets/message_detect_anim.json';
+const ic_refer_earn = 'assets/refer_earn.json';

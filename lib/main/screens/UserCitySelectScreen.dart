@@ -105,18 +105,17 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
 
   Future<void> updateCountryCityApiCall() async {
     appStore.setLoading(true);
-    await updateUserStatus({
-      "id": getIntAsync(USER_ID),
-      "country_id": selectedCountry,
-      "city_id": selectedCity
-    }).then((value) {
+    await updateUserStatus({"id": getIntAsync(USER_ID), "country_id": selectedCountry, "city_id": selectedCity})
+        .then((value) {
       appStore.setLoading(false);
       if (widget.isBack) {
         finish(context);
         LiveStream().emit('UpdateOrderData');
         widget.onUpdate!.call();
       } else {
-        if (getBoolAsync(OTP_VERIFIED)  && getBoolAsync(EMAIL_VERIFIED) && (getBoolAsync(IS_VERIFIED_DELIVERY_MAN) || getStringAsync(USER_TYPE) == CLIENT)) {
+        if (getBoolAsync(OTP_VERIFIED) &&
+            getBoolAsync(EMAIL_VERIFIED) &&
+            (getBoolAsync(IS_VERIFIED_DELIVERY_MAN) || getStringAsync(USER_TYPE) == CLIENT)) {
           if (getStringAsync(USER_TYPE) == CLIENT) {
             DashboardScreen().launch(context, isNewTask: true);
           } else {
@@ -124,8 +123,8 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
             DHomeFragment().launch(context, isNewTask: true);
           }
         } else
-          VerificationListScreen().launch(context,isNewTask: true);
-          // VerificationScreen().launch(context, isNewTask: true);
+          VerificationListScreen().launch(context, isNewTask: true);
+        // VerificationScreen().launch(context, isNewTask: true);
       }
     }).catchError((error) {
       appStore.setLoading(false);
@@ -159,17 +158,12 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                   padding: EdgeInsets.all(16),
                   children: [
                     16.height,
-                    Image.asset(ic_select_region,
-                            height: 180, fit: BoxFit.contain)
-                        .center(),
+                    Image.asset(ic_select_region, height: 180, fit: BoxFit.contain).center(),
                     30.height,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(
-                            flex: 1,
-                            child:
-                                Text(language.country, style: boldTextStyle())),
+                        Expanded(flex: 1, child: Text(language.country, style: boldTextStyle())),
                         16.width,
                         Expanded(
                           flex: 2,
@@ -177,8 +171,7 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                             isExpanded: true,
                             value: selectedCountry,
                             decoration: commonInputDecoration(),
-                            items:
-                                countryData.map<DropdownMenuItem<int>>((item) {
+                            items: countryData.map<DropdownMenuItem<int>>((item) {
                               return DropdownMenuItem(
                                 value: item.id,
                                 child: Text(item.name ?? ''),
@@ -193,8 +186,7 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                               setState(() {});
                             },
                             validator: (value) {
-                              if (selectedCountry == null)
-                                return language.fieldRequiredMsg;
+                              if (selectedCountry == null) return language.fieldRequiredMsg;
                               return null;
                             },
                           ),
@@ -204,18 +196,14 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                     16.height,
                     Row(
                       children: [
-                        Expanded(
-                            flex: 1,
-                            child: Text(language.city, style: boldTextStyle())),
+                        Expanded(flex: 1, child: Text(language.city, style: boldTextStyle())),
                         16.width,
                         Expanded(
                           flex: 2,
                           child: AppTextField(
                             controller: searchCityController,
                             textFieldType: TextFieldType.OTHER,
-                            decoration: commonInputDecoration(
-                                hintText: language.selectCity,
-                                suffixIcon: Icons.search),
+                            decoration: commonInputDecoration(hintText: language.selectCity, suffixIcon: Icons.search),
                             onChanged: (value) {
                               getCityApiCall(name: value);
                             },
@@ -246,17 +234,14 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(vertical: 12),
                                   child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(mData.name!,
                                           style: selectedCity == mData.id
-                                              ? boldTextStyle(
-                                                  color: colorPrimary)
+                                              ? boldTextStyle(color: colorPrimary)
                                               : primaryTextStyle()),
                                       selectedCity == mData.id
-                                          ? Icon(Icons.check_circle,
-                                              color: colorPrimary)
+                                          ? Icon(Icons.check_circle, color: colorPrimary)
                                           : SizedBox(),
                                     ],
                                   ),
