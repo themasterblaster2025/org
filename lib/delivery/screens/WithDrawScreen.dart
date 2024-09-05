@@ -18,6 +18,7 @@ import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Widgets.dart';
+import '../../main/utils/dynamic_theme.dart';
 
 class WithDrawScreen extends StatefulWidget {
   final Function() onTap;
@@ -113,11 +114,11 @@ class WithDrawScreenState extends State<WithDrawScreen> {
   }
 
   Color withdrawStatusColor(String status) {
-    Color color = colorPrimary;
+    Color color = ColorUtils.colorPrimary;
     if (status == DECLINE) {
       color = Colors.red;
     } else if (status == REQUESTED) {
-      color = colorPrimary;
+      color = ColorUtils.colorPrimary;
     } else if (status == APPROVED) {
       color = Colors.green;
     }
@@ -153,8 +154,8 @@ class WithDrawScreenState extends State<WithDrawScreen> {
                     child: Container(
                       padding: EdgeInsets.all(16),
                       margin: EdgeInsets.only(bottom: 16),
-                      decoration:
-                          BoxDecoration(color: colorPrimary, borderRadius: BorderRadius.circular(defaultRadius)),
+                      decoration: BoxDecoration(
+                          color: ColorUtils.colorPrimary, borderRadius: BorderRadius.circular(defaultRadius)),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
@@ -203,7 +204,9 @@ class WithDrawScreenState extends State<WithDrawScreen> {
                                         decoration: boxDecorationDefault(
                                             border: Border.all(color: Colors.grey.withOpacity(0.2)),
                                             color: Colors.transparent),
-                                        child: Text('Details', style: boldTextStyle(size: 12)).paddingAll(6).center())
+                                        child: Text(language.details, style: boldTextStyle(size: 12))
+                                            .paddingAll(6)
+                                            .center())
                                     .onTap(() {
                                   showDialog(
                                     context: context,
@@ -217,7 +220,7 @@ class WithDrawScreenState extends State<WithDrawScreen> {
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
-                                                Text("Withdraw details", style: boldTextStyle(size: 18)),
+                                                Text(language.withdrawDetails, style: boldTextStyle(size: 18)),
                                                 Icon(Icons.close, size: 20).onTap(() {
                                                   finish(context);
                                                 })
@@ -231,8 +234,7 @@ class WithDrawScreenState extends State<WithDrawScreen> {
                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
-                                                    //TODO add keys
-                                                    Text("Transaction id", style: secondaryTextStyle()),
+                                                    Text(language.transactionId, style: secondaryTextStyle()),
                                                     Text(data.withdrawDetails!.transactionId.toString(),
                                                         style: primaryTextStyle()),
                                                   ],
@@ -246,8 +248,7 @@ class WithDrawScreenState extends State<WithDrawScreen> {
                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
-                                                    //TODO add keys
-                                                    Text("Via", style: secondaryTextStyle()),
+                                                    Text(language.via, style: secondaryTextStyle()),
                                                     Text(data.withdrawDetails!.via.toString(),
                                                         style: primaryTextStyle()),
                                                   ],
@@ -261,8 +262,7 @@ class WithDrawScreenState extends State<WithDrawScreen> {
                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
-                                                    //TODO add keys
-                                                    Text("Created date", style: secondaryTextStyle()),
+                                                    Text(language.createdDate, style: secondaryTextStyle()),
                                                     Text(
                                                         DateFormat('yyyy-MM-dd').format(
                                                             DateTime.parse(data.withdrawDetails!.createdAt.toString())),
@@ -278,8 +278,7 @@ class WithDrawScreenState extends State<WithDrawScreen> {
                                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
-                                                    //TODO add keys
-                                                    Text("Others Details", style: secondaryTextStyle()),
+                                                    Text(language.otherDetails, style: secondaryTextStyle()),
                                                     Text(data.withdrawDetails!.otherDetail.toString()),
                                                   ],
                                                 ).visible(!data.withdrawDetails!.transactionId.isEmptyOrNull),
@@ -294,7 +293,7 @@ class WithDrawScreenState extends State<WithDrawScreen> {
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       //TODO add keys
-                                                      Text("Image", style: secondaryTextStyle()),
+                                                      Text(language.image, style: secondaryTextStyle()),
                                                       Container(
                                                           width: 100,
                                                           height: 100,

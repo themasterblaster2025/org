@@ -16,6 +16,7 @@ import '../../main/network/RestApis.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
+import '../../main/utils/dynamic_theme.dart';
 
 class ProductItemComponent extends StatefulWidget {
   final ProductData product;
@@ -24,12 +25,7 @@ class ProductItemComponent extends StatefulWidget {
   final Function(int)? onAdd;
   final Function(int)? onRemove;
 
-  ProductItemComponent(
-      {required this.product,
-      this.isView = false,
-      this.isSearch = false,
-      this.onAdd,
-      this.onRemove});
+  ProductItemComponent({required this.product, this.isView = false, this.isSearch = false, this.onAdd, this.onRemove});
 
   @override
   ProductItemComponentState createState() => ProductItemComponentState();
@@ -149,9 +145,7 @@ class ProductItemComponentState extends State<ProductItemComponent> {
                     ),
                   ),
                   child: commonCachedNetworkImage(widget.product.productImage.validate(),
-                          height: widget.isView ? 70 : 90,
-                          width: widget.isView ? 70 : 90,
-                          fit: BoxFit.cover)
+                          height: widget.isView ? 70 : 90, width: widget.isView ? 70 : 90, fit: BoxFit.cover)
                       .cornerRadiusWithClipRRect(defaultRadius),
                 ),
                 12.width,
@@ -159,8 +153,7 @@ class ProductItemComponentState extends State<ProductItemComponent> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     2.height,
-                    Text(widget.product.title.validate(),
-                        style: boldTextStyle(size: 14), maxLines: 2),
+                    Text(widget.product.title.validate(), style: boldTextStyle(size: 14), maxLines: 2),
                     8.height,
                     Row(
                       children: [
@@ -168,7 +161,7 @@ class ProductItemComponentState extends State<ProductItemComponent> {
                           printAmount(
                             widget.product.price.validate(),
                           ),
-                          style: boldTextStyle(size: 14, color: colorPrimary),
+                          style: boldTextStyle(size: 14, color: ColorUtils.colorPrimary),
                         ),
                         if (widget.isView) 8.width,
                         if (widget.isView)
@@ -189,7 +182,7 @@ class ProductItemComponentState extends State<ProductItemComponent> {
                     printAmount(
                       widget.product.price.validate() * widget.product.count.validate(),
                     ),
-                    style: boldTextStyle(size: 14, color: colorPrimary),
+                    style: boldTextStyle(size: 14, color: ColorUtils.colorPrimary),
                   )
                 : widget.isSearch
                     ? InkWell(
@@ -197,14 +190,14 @@ class ProductItemComponentState extends State<ProductItemComponent> {
                           await getStoreDetail(
                             widget.product.storeDetailId.validate(),
                           ).then((value) {
-                            ProductListScreen(store: value, product: widget.product)
-                                .launch(context);
+                            ProductListScreen(store: value, product: widget.product).launch(context);
                           }).catchError((error) {
                             print(error);
                           });
                         },
-                        child: Text( language.goToStore,
-                          style: boldTextStyle(size: 14, color: colorPrimary),
+                        child: Text(
+                          language.goToStore,
+                          style: boldTextStyle(size: 14, color: ColorUtils.colorPrimary),
                         ),
                       )
                     : widget.product.count == 0
@@ -215,8 +208,7 @@ class ProductItemComponentState extends State<ProductItemComponent> {
                               widget.onAdd?.call(widget.product.count);
                             },
                             child: Container(
-                              decoration: boxDecorationRoundedWithShadow(30,
-                                  backgroundColor: colorPrimary),
+                              decoration: boxDecorationRoundedWithShadow(30, backgroundColor: ColorUtils.colorPrimary),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -233,40 +225,36 @@ class ProductItemComponentState extends State<ProductItemComponent> {
                         : Container(
                             decoration: boxDecorationWithRoundedCorners(
                               borderRadius: radius(30),
-                              border: Border.all(color: borderColor),
+                              border: Border.all(color: ColorUtils.borderColor),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(Icons.remove, color: colorPrimary, size: 12)
-                                    .paddingAll(8)
-                                    .onTap(() {
+                                Icon(Icons.remove, color: ColorUtils.colorPrimary, size: 12).paddingAll(8).onTap(() {
                                   if (widget.product.count != 0) {
                                     widget.product.count = widget.product.count - 1;
                                     setState(() {});
                                     widget.onRemove?.call(widget.product.count);
                                   }
                                 },
-                                        splashColor: Colors.transparent,
-                                        highlightColor: Colors.transparent,
-                                        hoverColor: Colors.transparent),
+                                    splashColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    hoverColor: Colors.transparent),
                                 4.width,
                                 Text(
                                   widget.product.count.toInt().toString(),
-                                  style: boldTextStyle(color: colorPrimary),
+                                  style: boldTextStyle(color: ColorUtils.colorPrimary),
                                 ),
                                 4.width,
-                                Icon(Icons.add, color: colorPrimary, size: 16)
-                                    .paddingAll(8)
-                                    .onTap(() {
+                                Icon(Icons.add, color: ColorUtils.colorPrimary, size: 16).paddingAll(8).onTap(() {
                                   widget.product.count = widget.product.count + 1;
                                   setState(() {});
                                   widget.onAdd?.call(widget.product.count);
                                 },
-                                        splashColor: Colors.transparent,
-                                        highlightColor: Colors.transparent,
-                                        hoverColor: Colors.transparent),
+                                    splashColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    hoverColor: Colors.transparent),
                               ],
                             ),
                           ),
@@ -276,4 +264,3 @@ class ProductItemComponentState extends State<ProductItemComponent> {
     );
   }
 }
-

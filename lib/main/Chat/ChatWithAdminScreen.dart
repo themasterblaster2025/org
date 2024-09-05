@@ -23,6 +23,7 @@ import '../models/LoginResponse.dart';
 import '../utils/Colors.dart';
 import '../utils/Common.dart';
 import '../utils/Widgets.dart';
+import '../utils/dynamic_theme.dart';
 import 'ChatItemWidget.dart';
 
 class ChatWithAdminScreen extends StatefulWidget {
@@ -79,7 +80,7 @@ class _ChatWithAdminScreenState extends State<ChatWithAdminScreen> {
       showBack: false,
       //TODo add keys
       appBar: commonAppBarWidget(
-        "Chat with admin", // todo
+        language.chatWithAdmin,
         /* titleWidget: Row(
           children: [
             CircleAvatar(
@@ -109,11 +110,11 @@ class _ChatWithAdminScreenState extends State<ChatWithAdminScreen> {
                     return Container(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: item.sendBy != "admin" ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-                        mainAxisAlignment: item.sendBy != "admin" ? MainAxisAlignment.end : MainAxisAlignment.start,
+                        crossAxisAlignment: item.sendBy != ADMIN ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                        mainAxisAlignment: item.sendBy != ADMIN ? MainAxisAlignment.end : MainAxisAlignment.start,
                         children: [
                           Container(
-                            margin: item.sendBy != "admin"
+                            margin: item.sendBy != ADMIN
                                 ? EdgeInsets.only(
                                     top: 0.0, bottom: 0.0, left: isRTL ? 0 : context.width() * 0.25, right: 8)
                                 : EdgeInsets.only(
@@ -121,19 +122,19 @@ class _ChatWithAdminScreenState extends State<ChatWithAdminScreen> {
                             padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
                               boxShadow: appStore.isDarkMode ? null : defaultBoxShadow(),
-                              color: item.sendBy != "admin" ? colorPrimary : context.cardColor,
-                              borderRadius: item.sendBy != "admin"
+                              color: item.sendBy != ADMIN ? ColorUtils.colorPrimary : context.cardColor,
+                              borderRadius: item.sendBy != ADMIN
                                   ? radiusOnly(bottomLeft: 12, topLeft: 12, bottomRight: 0, topRight: 12)
                                   : radiusOnly(bottomLeft: 0, topLeft: 12, bottomRight: 12, topRight: 12),
                             ),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment:
-                                  item.sendBy != "admin" ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                                  item.sendBy != ADMIN ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                               children: [
                                 Text(item.message!,
                                     style: primaryTextStyle(
-                                        color: item.sendBy != "admin" ? Colors.white : textPrimaryColorGlobal),
+                                        color: item.sendBy != ADMIN ? Colors.white : textPrimaryColorGlobal),
                                     maxLines: null),
                                 1.height,
                                 Row(
@@ -143,7 +144,7 @@ class _ChatWithAdminScreenState extends State<ChatWithAdminScreen> {
                                       DateFormat('yyyy-MM-dd HH:mm')
                                           .format(DateTime.parse("${item.datetime.toString()}").toLocal()),
                                       style: primaryTextStyle(
-                                          color: item.sendBy == "admin"
+                                          color: item.sendBy == ADMIN
                                               ? Colors.blueGrey.withOpacity(0.6)
                                               : whiteColor.withOpacity(0.6),
                                           size: 10),
@@ -193,7 +194,7 @@ class _ChatWithAdminScreenState extends State<ChatWithAdminScreen> {
                       maxLines: 5,
                     ).expand(),
                     IconButton(
-                      icon: Icon(Icons.send, color: colorPrimary),
+                      icon: Icon(Icons.send, color: ColorUtils.colorPrimary),
                       onPressed: () {
                         if (messageCont.text.isNotEmpty) sendMessage();
                       },

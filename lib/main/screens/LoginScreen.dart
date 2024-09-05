@@ -8,6 +8,7 @@ import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/main/screens/VerificationListScreen.dart';
+import 'package:mighty_delivery/main/utils/dynamic_theme.dart';
 import 'package:store_checker/store_checker.dart';
 
 import '../../delivery/fragment/DHomeFragment.dart';
@@ -114,7 +115,7 @@ class LoginScreenState extends State<LoginScreen> {
                 context,
                 title: language.logoutConfirmationMsg,
                 positiveText: language.yes,
-                primaryColor: colorPrimary,
+                primaryColor: ColorUtils.colorPrimary,
                 showCancelButton: false,
                 onAccept: (v) async {
                   await logout(context, isFromLogin: true);
@@ -123,7 +124,6 @@ class LoginScreenState extends State<LoginScreen> {
             } else {
               appStore.setUserType(v.data!.userType.toString());
               if (getIntAsync(STATUS) == 1) {
-                print("=========================================getStringAsync(UID)${getStringAsync(UID)}");
                 updateUserStatus({
                   "id": getIntAsync(USER_ID),
                   "uid": getStringAsync(UID),
@@ -151,6 +151,7 @@ class LoginScreenState extends State<LoginScreen> {
             }
             updateStoreCheckerData().then((source) async {
               await getUserDetail(getIntAsync(USER_ID)).then((value) async {
+                appStore.setReferralCode(value.referralCode.validate());
                 if (value.app_source.isEmptyOrNull || value.app_source != source) {
                   await updateUserStatus({"id": getIntAsync(USER_ID), "app_source": source}).then((data) {});
                 }
@@ -274,7 +275,7 @@ class LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimaryLight,
+      backgroundColor: appStore.isDarkMode ? ColorUtils.scaffoldSecondaryDark : ColorUtils.colorPrimaryLight,
       appBar: commonAppBarWidget(language.signIn, showBack: false),
       body: Stack(
         children: [
@@ -322,8 +323,8 @@ class LoginScreenState extends State<LoginScreen> {
                               shape: RoundedRectangleBorder(borderRadius: radius(4)),
                               checkColor: Colors.white,
                               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              focusColor: colorPrimary,
-                              activeColor: colorPrimary,
+                              focusColor: ColorUtils.colorPrimary,
+                              activeColor: ColorUtils.colorPrimary,
                               value: mIsCheck,
                               onChanged: (bool? value) async {
                                 mIsCheck = value!;
@@ -340,7 +341,8 @@ class LoginScreenState extends State<LoginScreen> {
                       ),
                       Align(
                         alignment: Alignment.topRight,
-                        child: Text(language.forgotPasswordQue, style: boldTextStyle(color: colorPrimary)).onTap(() {
+                        child: Text(language.forgotPasswordQue, style: boldTextStyle(color: ColorUtils.colorPrimary))
+                            .onTap(() {
                           ForgotPasswordScreen().launch(context);
                         }),
                       ),
@@ -356,8 +358,8 @@ class LoginScreenState extends State<LoginScreen> {
                           shape: RoundedRectangleBorder(borderRadius: radius(4)),
                           checkColor: Colors.white,
                           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          focusColor: colorPrimary,
-                          activeColor: colorPrimary,
+                          focusColor: ColorUtils.colorPrimary,
+                          activeColor: ColorUtils.colorPrimary,
                           value: isAcceptedTc,
                           onChanged: (bool? value) async {
                             isAcceptedTc = value!;
@@ -371,7 +373,7 @@ class LoginScreenState extends State<LoginScreen> {
                           TextSpan(text: '${language.iAgreeToThe} ', style: secondaryTextStyle()),
                           TextSpan(
                             text: language.termOfService,
-                            style: boldTextStyle(color: colorPrimary, size: 14),
+                            style: boldTextStyle(color: ColorUtils.colorPrimary, size: 14),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 commonLaunchUrl(mTermAndCondition);
@@ -380,7 +382,7 @@ class LoginScreenState extends State<LoginScreen> {
                           TextSpan(text: ' & ', style: secondaryTextStyle()),
                           TextSpan(
                             text: language.privacyPolicy,
-                            style: boldTextStyle(color: colorPrimary, size: 14),
+                            style: boldTextStyle(color: ColorUtils.colorPrimary, size: 14),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 commonLaunchUrl(mPrivacyPolicy);
@@ -453,7 +455,7 @@ class LoginScreenState extends State<LoginScreen> {
                     children: [
                       Text(language.doNotHaveAccount, style: primaryTextStyle()),
                       4.width,
-                      Text(language.signUp, style: boldTextStyle(color: colorPrimary)).onTap(() {
+                      Text(language.signUp, style: boldTextStyle(color: ColorUtils.colorPrimary)).onTap(() {
                         RegisterScreen(
                           userType: CLIENT,
                         ).launch(context,
@@ -516,20 +518,20 @@ class LoginScreenState extends State<LoginScreen> {
         ],
       ),
       bottomNavigationBar: Container(
-        color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimaryLight,
+        color: appStore.isDarkMode ? ColorUtils.scaffoldSecondaryDark : ColorUtils.colorPrimaryLight,
         padding: EdgeInsets.all(16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text("${language.becomeADeliveryBoy}", style: primaryTextStyle()),
             4.width,
-            Text(language.signUp, style: boldTextStyle(color: colorPrimary)).onTap(() {
+            Text(language.signUp, style: boldTextStyle(color: ColorUtils.colorPrimary)).onTap(() {
               RegisterScreen(userType: DELIVERY_MAN)
                   .launch(context, duration: Duration(milliseconds: 500), pageRouteAnimation: PageRouteAnimation.Slide);
             }),
           ],
         ),
-      ),
+      ).visible(appStore.isAllowDeliveryMan),
     );
   }
 
@@ -552,7 +554,7 @@ class LoginScreenState extends State<LoginScreen> {
                 children: userTypeList.map((item) {
                   return RadioListTile<String>(
                     value: item,
-                    activeColor: colorPrimary,
+                    activeColor: ColorUtils.colorPrimary,
                     visualDensity: const VisualDensity(
                       horizontal: VisualDensity.minimumDensity,
                       vertical: VisualDensity.minimumDensity,
@@ -578,7 +580,7 @@ class LoginScreenState extends State<LoginScreen> {
                     commonButton(language.lblContinue, () {
                       finish(context);
                       onContinue();
-                    }, color: colorPrimary)
+                    }, color: ColorUtils.colorPrimary)
                         .expand(),
                   ],
                 ),

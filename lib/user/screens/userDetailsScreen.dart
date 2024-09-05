@@ -16,6 +16,7 @@ import '../../main/models/UserProfileDetailModel.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Constants.dart';
+import '../../main/utils/dynamic_theme.dart';
 
 class UserDetailsScreen extends StatefulWidget {
   UserData? userData;
@@ -79,8 +80,10 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
   }
 
   getAddress() async {
-    final currentAddress = await GeoCode().reverseGeocoding(latitude: widget.userData!.latitude.toDouble(), longitude: widget.userData!.longitude.toDouble());
-    addressValue = "${currentAddress.streetNumber},${currentAddress.region},${currentAddress.postal},${currentAddress.countryName}";
+    final currentAddress = await GeoCode().reverseGeocoding(
+        latitude: widget.userData!.latitude.toDouble(), longitude: widget.userData!.longitude.toDouble());
+    addressValue =
+        "${currentAddress.streetNumber},${currentAddress.region},${currentAddress.postal},${currentAddress.countryName}";
     setState(() {});
   }
 
@@ -103,7 +106,9 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                             12.height,
                             Container(
                               decoration: boxDecorationWithRoundedCorners(
-                                  borderRadius: BorderRadius.circular(defaultRadius), border: Border.all(color: colorPrimary.withOpacity(0.3)), backgroundColor: Colors.transparent),
+                                  borderRadius: BorderRadius.circular(defaultRadius),
+                                  border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
+                                  backgroundColor: Colors.transparent),
                               padding: EdgeInsets.all(12),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -116,7 +121,8 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                                           onTap: () {
                                             UserDetailsScreen(userData: widget.userData).launch(context);
                                           },
-                                          child: Image.network(widget.userData!.profileImage.validate(), height: 60, width: 60, fit: BoxFit.cover, alignment: Alignment.center)
+                                          child: Image.network(widget.userData!.profileImage.validate(),
+                                                  height: 60, width: 60, fit: BoxFit.cover, alignment: Alignment.center)
                                               .cornerRadiusWithClipRRect(60)),
                                       8.width,
                                       Column(
@@ -127,7 +133,8 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                                           4.height,
                                           Text(widget.userData!.email.validate(), style: secondaryTextStyle(size: 14)),
                                           4.height,
-                                          Text(widget.userData!.contactNumber.validate(), style: secondaryTextStyle(size: 14)),
+                                          Text(widget.userData!.contactNumber.validate(),
+                                              style: secondaryTextStyle(size: 14)),
                                         ],
                                       ).expand(),
 
@@ -142,7 +149,9 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                             12.height,
                             Container(
                               decoration: boxDecorationWithRoundedCorners(
-                                  borderRadius: BorderRadius.circular(defaultRadius), border: Border.all(color: colorPrimary.withOpacity(0.3)), backgroundColor: Colors.transparent),
+                                  borderRadius: BorderRadius.circular(defaultRadius),
+                                  border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
+                                  backgroundColor: Colors.transparent),
                               padding: EdgeInsets.all(12),
                               child: Column(
                                 children: [
@@ -185,7 +194,9 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                             12.height,
                             Container(
                               decoration: boxDecorationWithRoundedCorners(
-                                  borderRadius: BorderRadius.circular(defaultRadius), border: Border.all(color: colorPrimary.withOpacity(0.3)), backgroundColor: Colors.transparent),
+                                  borderRadius: BorderRadius.circular(defaultRadius),
+                                  border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
+                                  backgroundColor: Colors.transparent),
                               padding: EdgeInsets.all(12),
                               child: Column(
                                 children: [
@@ -228,7 +239,9 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                             12.height,
                             Container(
                               decoration: boxDecorationWithRoundedCorners(
-                                  borderRadius: BorderRadius.circular(defaultRadius), border: Border.all(color: colorPrimary.withOpacity(0.3)), backgroundColor: Colors.transparent),
+                                  borderRadius: BorderRadius.circular(defaultRadius),
+                                  border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
+                                  backgroundColor: Colors.transparent),
                               padding: EdgeInsets.all(12),
                               child: Column(
                                 children: [

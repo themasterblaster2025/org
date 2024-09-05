@@ -49,11 +49,14 @@ Future<Response> buildHttpResponse(String endPoint, {HttpMethod method = HttpMet
       if (method == HttpMethod.POST) {
         log('Request: $request');
 
-        response = await http.post(url, body: jsonEncode(request), headers: headers).timeout(20.seconds, onTimeout: () => throw 'Timeout');
+        response = await http
+            .post(url, body: jsonEncode(request), headers: headers)
+            .timeout(20.seconds, onTimeout: () => throw 'Timeout');
       } else if (method == HttpMethod.DELETE) {
         response = await delete(url, headers: headers).timeout(20.seconds, onTimeout: () => throw 'Timeout');
       } else if (method == HttpMethod.PUT) {
-        response = await put(url, body: jsonEncode(request), headers: headers).timeout(20.seconds, onTimeout: () => throw 'Timeout');
+        response = await put(url, body: jsonEncode(request), headers: headers)
+            .timeout(20.seconds, onTimeout: () => throw 'Timeout');
       } else {
         response = await get(url, headers: headers).timeout(20.seconds, onTimeout: () => throw 'Timeout');
       }
@@ -62,12 +65,13 @@ Future<Response> buildHttpResponse(String endPoint, {HttpMethod method = HttpMet
       dynamic responseLog = json.decode(response.body);
       if (responseLog is Map) {
         var encoder = const JsonEncoder.withIndent("    ");
-        lg.log("\n${encoder.convert(responseLog)}",name: "$method ${url.toString()} ${response.statusCode}");
+        lg.log("\n${encoder.convert(responseLog)}", name: "$method ${url.toString()} ${response.statusCode}");
       }
       // todo
 
       return response;
     } catch (e) {
+      print("---------------------------${e.toString()}");
       throw language.errorSomethingWentWrong;
     }
   } else {

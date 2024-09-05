@@ -23,6 +23,7 @@ import '../../user/screens/DashboardScreen.dart';
 import '../models/CityListModel.dart';
 import '../utils/Common.dart';
 import '../utils/Constants.dart';
+import '../utils/dynamic_theme.dart';
 import 'EmailVerificationScreen.dart';
 import 'UserCitySelectScreen.dart';
 import 'VerificationScreen.dart';
@@ -135,7 +136,7 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
           onPressed: () async {
             await showConfirmDialogCustom(
               context,
-              primaryColor: colorPrimary,
+              primaryColor: ColorUtils.colorPrimary,
               title: language.logoutConfirmationMsg,
               positiveText: language.yes,
               negativeText: language.no,
@@ -280,7 +281,7 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
       default:
         return ElevatedButton(
           onPressed: () {},
-          child: Text('Verify'),
+          child: Text(language.verify),
         );
     }
   }
@@ -307,7 +308,7 @@ Widget commonAppButton(Widget child, Function() fn, {Color? borderColor}) {
     padding: EdgeInsets.symmetric(horizontal: 8),
     shapeBorder: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(defaultRadius),
-      side: BorderSide(color: borderColor ?? colorPrimary),
+      side: BorderSide(color: borderColor ?? ColorUtils.colorPrimary),
     ),
     child: child,
     onTap: fn,

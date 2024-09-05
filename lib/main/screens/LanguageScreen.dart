@@ -17,6 +17,7 @@ import '../../languageConfiguration/ServerLanguageResponse.dart';
 import '../../main.dart';
 import '../../main/utils/Colors.dart';
 import '../components/CommonScaffoldComponent.dart';
+import '../utils/dynamic_theme.dart';
 
 class LanguageScreen extends StatefulWidget {
   static String tag = '/LanguageScreen';
@@ -26,11 +27,17 @@ class LanguageScreen extends StatefulWidget {
 }
 
 class LanguageScreenState extends State<LanguageScreen> {
-  int? currentIndex = 0;
+  // int? currentIndex = 0;
 
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    print(getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguageCode));
   }
 
   @override
@@ -45,22 +52,26 @@ class LanguageScreenState extends State<LanguageScreen> {
             margin: EdgeInsets.all(8),
             decoration: boxDecorationWithRoundedCorners(
                 backgroundColor: Colors.transparent,
-                border: Border.all(color: getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguageCode) == data.languageCode ? colorPrimary : dividerColor)),
+                border: Border.all(
+                    color: getStringAsync(SELECTED_LANGUAGE_COUNTRY_CODE, defaultValue: defaultCountryCode) ==
+                            data.countryCode
+                        ? ColorUtils.colorPrimary
+                        : ColorUtils.dividerColor)),
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: Row(
               children: [
-                commonCachedNetworkImage(data.languageImage.validate(), width: 34, height: 34).cornerRadiusWithClipRRect(4),
+                commonCachedNetworkImage(data.languageImage.validate(), width: 34, height: 34)
+                    .cornerRadiusWithClipRRect(4),
                 //Image.asset(data.languageName.validate(), width: 34, height: 34).cornerRadiusWithClipRRect(4),
                 8.width,
                 Text('${data.languageName.validate()}', style: primaryTextStyle()).expand(),
-                getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguageCode) == data.languageCode
-                    ? Icon(Ionicons.radio_button_on, size: 20, color: colorPrimary)
-                    : Icon(Ionicons.radio_button_off_sharp, size: 20, color: dividerColor),
+                getStringAsync(SELECTED_LANGUAGE_COUNTRY_CODE, defaultValue: defaultCountryCode) == data.countryCode
+                    ? Icon(Ionicons.radio_button_on, size: 20, color: ColorUtils.colorPrimary)
+                    : Icon(Ionicons.radio_button_off_sharp, size: 20, color: ColorUtils.dividerColor),
               ],
             ),
           ).onTap(() async {
             await setValue(SELECTED_LANGUAGE_CODE, data.languageCode);
-            setValue(SELECTED_LANGUAGE_CODE, data.languageCode);
             setValue(SELECTED_LANGUAGE_COUNTRY_CODE, data.countryCode);
             selectedServerLanguageData = data;
             setValue(IS_SELECTED_LANGUAGE_CHANGE, true);

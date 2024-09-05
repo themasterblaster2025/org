@@ -66,12 +66,15 @@ class OrderFragmentState extends State<OrderFragment> {
       appStore.setCurrencyCode(value.currencyCode ?? CURRENCY_CODE);
       appStore.setCurrencySymbol(value.currency ?? CURRENCY_SYMBOL);
       appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
-      appStore.setSupportEmail(value.supportEmail ?? "");
+      appStore.setSiteEmail(value.siteEmail ?? "");
       appStore.setCopyRight(value.siteCopyright ?? "");
       appStore.isVehicleOrder = value.isVehicleInOrder ?? 0;
       appStore.setDistanceUnit(value.distanceUnit ?? DISTANCE_UNIT_KM);
-      appStore.setSupportEmail(value.supportEmail ?? "");
       appStore.setCopyRight(value.siteCopyright ?? "");
+      appStore.setOrderTrackingIdPrefix(value.orderTrackingIdPrefix ?? "");
+      appStore.setIsInsuranceAllowed(value.isInsuranceAllowed ?? "0");
+      appStore.setInsurancePercentage(value.insurancePercentage ?? "0");
+      appStore.setInsuranceDescription(value.insuranceDescription ?? "");
       if (value.storeType!.validate().isNotEmpty) {
         storeList = value.storeType.validate();
         setState(() {});
@@ -80,22 +83,24 @@ class OrderFragmentState extends State<OrderFragment> {
     }).catchError((error) {
       log(error.toString());
     });
-    await getInvoiceSetting().then((value) {
-      if (value.invoiceData != null && value.invoiceData!.isNotEmpty) {
-        appStore.setInvoiceCompanyName(
-            value.invoiceData!.firstWhere((element) => element.key == 'company_name').value.validate());
-        appStore.setInvoiceContactNumber(
-            value.invoiceData!.firstWhere((element) => element.key == 'company_contact_number').value.validate());
-        appStore.setCompanyAddress(
-            value.invoiceData!.firstWhere((element) => element.key == 'company_address').value.validate());
-        appStore.setInvoiceCompanyLogo(
-            value.invoiceData!.firstWhere((element) => element.key == 'company_logo').value.validate());
-      }
-    }).catchError((error) {
-      toast(error.toString());
-    }).whenComplete(() {
-      appStore.setLoading(false);
-    });
+    // await getInvoiceSetting().then((value) {
+    //   if (value.invoiceData != null && value.invoiceData!.isNotEmpty) {
+    //     appStore.setInvoiceCompanyName(
+    //         value.invoiceData!.firstWhere((element) => element.key == 'company_name').value.validate());
+    //     appStore.setInvoiceContactNumber(
+    //         value.invoiceData!.firstWhere((element) => element.key == 'company_contact_number').value.validate());
+    //     appStore.setCompanyAddress(
+    //         value.invoiceData!.firstWhere((element) => element.key == 'company_address').value.validate());
+    //     appStore.setInvoiceCompanyLogo(
+    //         value.invoiceData!.firstWhere((element) => element.key == 'company_logo').value.validate());
+    //     appStore.setMaxAmountPerMonth(
+    //         value.invoiceData!.firstWhere((element) => element.key == 'max_earning_per_month').value.validate());
+    //   }
+    // }).catchError((error) {
+    //   toast(error.toString());
+    // }).whenComplete(() {
+    //   appStore.setLoading(false);
+    // });
   }
 
   getOrderListApiCall() async {

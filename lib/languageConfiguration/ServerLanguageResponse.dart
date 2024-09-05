@@ -2,12 +2,16 @@ class ServerLanguageResponse {
   bool? status;
   int? currentVersionNo;
   List<LanguageJsonData>? data;
+  bool? isAllowDeliveryMan;
+  String? themeColor;
 
   ServerLanguageResponse({this.status, this.data, this.currentVersionNo});
 
   ServerLanguageResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     currentVersionNo = json['version_code'];
+    themeColor = json['theme_color'];
+    isAllowDeliveryMan = json['allow_deliveryman'];
     if (json['data'] != null) {
       data = <LanguageJsonData>[];
       json['data'].forEach((v) {
@@ -20,6 +24,8 @@ class ServerLanguageResponse {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['status'] = this.status;
     data['version_code'] = this.currentVersionNo;
+    data['theme_color'] = this.themeColor;
+    data['allow_deliveryman'] = this.isAllowDeliveryMan;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -39,7 +45,17 @@ class LanguageJsonData {
   String? createdAt;
   String? updatedAt;
 
-  LanguageJsonData({this.id, this.languageName, this.isRtl, this.contentData, this.isDefaultLanguage, this.createdAt, this.updatedAt, this.languageCode, this.countryCode, this.languageImage});
+  LanguageJsonData(
+      {this.id,
+      this.languageName,
+      this.isRtl,
+      this.contentData,
+      this.isDefaultLanguage,
+      this.createdAt,
+      this.updatedAt,
+      this.languageCode,
+      this.countryCode,
+      this.languageImage});
 
   LanguageJsonData.fromJson(Map<String, dynamic> json) {
     id = json['id'];

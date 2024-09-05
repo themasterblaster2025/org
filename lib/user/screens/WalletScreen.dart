@@ -25,6 +25,7 @@ import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Widgets.dart';
+import '../../main/utils/dynamic_theme.dart';
 import 'PaymentScreen.dart';
 
 class WalletScreen extends StatefulWidget {
@@ -240,13 +241,13 @@ class WalletScreenState extends State<WalletScreen> {
       decoration: boxDecorationWithRoundedCorners(
           borderRadius: radius(defaultRadius),
           backgroundColor: Colors.transparent,
-          border: Border.all(color: colorPrimary.withOpacity(0.08))),
+          border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.08))),
       child: Row(
         children: [
           Container(
-            decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary.withOpacity(0.08)),
+            decoration: boxDecorationWithRoundedCorners(backgroundColor: ColorUtils.colorPrimary.withOpacity(0.08)),
             padding: EdgeInsets.all(6),
-            child: Icon(data.type == CREDIT ? Icons.add : Icons.remove, color: colorPrimary),
+            child: Icon(data.type == CREDIT ? Icons.add : Icons.remove, color: ColorUtils.colorPrimary),
           ),
           10.width,
           Expanded(
@@ -271,14 +272,17 @@ class WalletScreenState extends State<WalletScreen> {
                 Container(
                         decoration: boxDecorationDefault(
                             border: Border.all(color: Colors.grey.withOpacity(0.2)), color: Colors.transparent),
-                        child: Text('copy', style: boldTextStyle(color: colorPrimary, size: 14)).paddingAll(6).center())
+                        child: Text(language.copy, style: boldTextStyle(color: ColorUtils.colorPrimary, size: 14))
+                            .paddingAll(6)
+                            .center())
                     .onTap(() {
                   Clipboard.setData(ClipboardData(text: data.transactionType!.split(":")[1])).then((_) {
                     //TODO add key
-                    snackBar(context, content: Text("${data.transactionType!.split(":")[1]}  copied to clipboard"));
+                    snackBar(context,
+                        content: Text("${data.transactionType!.split(":")[1]}  ${language.copiedToClipboard}"));
                   });
                   //TODO add key
-                }).visible(data.transactionType!.contains("Transaction ID")),
+                }).visible(data.transactionType!.contains("Transaction Id")),
               ],
             ),
           )

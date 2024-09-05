@@ -18,6 +18,7 @@ import '../../main/models/AddressListModel.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
+import '../../main/utils/dynamic_theme.dart';
 import '../components/DeleteConfirmationDialog.dart';
 import 'AddAddressScreen.dart';
 
@@ -121,7 +122,7 @@ class MyAddressListScreenState extends State<MyAddressListScreen> {
                           padding: EdgeInsets.all(8),
                           decoration: boxDecorationWithRoundedCorners(
                               borderRadius: BorderRadius.circular(defaultRadius),
-                              border: Border.all(color: colorPrimary.withOpacity(0.4)),
+                              border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.4)),
                               backgroundColor: Colors.transparent),
                           child: Row(
                             children: [
@@ -134,9 +135,9 @@ class MyAddressListScreenState extends State<MyAddressListScreen> {
                                     //TODO add key
                                     Row(
                                       children: [
-                                        Text("Address type:"),
+                                        Text(language.addressType),
                                         8.width,
-                                        Text(item.addressType != null ? item.addressType.toString() : "Home",
+                                        Text(item.addressType != null ? item.addressType.toString() : language.home,
                                             style: primaryTextStyle()),
                                       ],
                                     ),
@@ -174,7 +175,7 @@ class MyAddressListScreenState extends State<MyAddressListScreen> {
         );
       }),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: colorPrimary,
+        backgroundColor: ColorUtils.colorPrimary,
         child: Icon(Icons.add, color: Colors.white),
         onPressed: () async {
           bool? res = await AddAddressScreen().launch(context);

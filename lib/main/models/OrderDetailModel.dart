@@ -9,17 +9,19 @@ class OrderDetailModel {
   List<OrderHistory>? orderHistory;
   List<OrderItem>? orderItem;
   OrderRating? orderRating;
-
+  CourierCompanyDetail? courierCompanyDetail;
   UserData? clientDetail;
   UserData? deliveryManDetail;
 
-  OrderDetailModel(
-      {this.data,
-      this.orderHistory,
-      this.clientDetail,
-      this.deliveryManDetail,
-      this.orderItem,
-      this.orderRating});
+  OrderDetailModel({
+    this.data,
+    this.orderHistory,
+    this.clientDetail,
+    this.deliveryManDetail,
+    this.orderItem,
+    this.orderRating,
+    this.courierCompanyDetail,
+  });
 
   OrderDetailModel.fromJson(Map<String, dynamic> json) {
     data = json['data'] != null ? new OrderData.fromJson(json['data']) : null;
@@ -36,13 +38,11 @@ class OrderDetailModel {
         orderItem!.add(new OrderItem.fromJson(v));
       });
     }
-    clientDetail =
-        json['client_detail'] != null ? new UserData.fromJson(json['client_detail']) : null;
-    deliveryManDetail = json['delivery_man_detail'] != null
-        ? new UserData.fromJson(json['delivery_man_detail'])
-        : null;
-    orderRating =
-        json["order_rating"] == null ? null : OrderRating.fromJson(json["order_rating"]);
+    clientDetail = json['client_detail'] != null ? new UserData.fromJson(json['client_detail']) : null;
+    deliveryManDetail = json['delivery_man_detail'] != null ? new UserData.fromJson(json['delivery_man_detail']) : null;
+    orderRating = json["order_rating"] == null ? null : OrderRating.fromJson(json["order_rating"]);
+    courierCompanyDetail =
+        json["courier_company_detail"] == null ? null : CourierCompanyDetail.fromJson(json["courier_company_detail"]);
   }
 
   Map<String, dynamic> toJson() {
@@ -64,6 +64,9 @@ class OrderDetailModel {
     }
     if (this.deliveryManDetail != null) {
       data['delivery_man_detail'] = this.deliveryManDetail!.toJson();
+    }
+    if (this.courierCompanyDetail != null) {
+      data['courier_company_detail'] = this.courierCompanyDetail!.toJson();
     }
     if (this.orderRating != null) {
       data["order_rating"] = orderRating?.toJson();
@@ -189,8 +192,7 @@ class OrderHistory {
     datetime = json['datetime'];
     historyType = json['history_type'];
     historyMessage = json['history_message'];
-    historyData =
-        json['history_data'] != null ? new HistoryData.fromJson(json['history_data']) : null;
+    historyData = json['history_data'] != null ? new HistoryData.fromJson(json['history_data']) : null;
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
@@ -244,7 +246,6 @@ class HistoryData {
   }
 }
 
-
 class OrderItem {
   int? id;
   int? orderId;
@@ -273,8 +274,7 @@ class OrderItem {
         quantity: json["quantity"],
         productData: json["product_data"] == null
             ? []
-            : List<ProductData>.from(
-                json["product_data"]!.map((x) => ProductData.fromJson(x))),
+            : List<ProductData>.from(json["product_data"]!.map((x) => ProductData.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -284,12 +284,9 @@ class OrderItem {
         "amount": amount,
         "total_amount": totalAmount,
         "quantity": quantity,
-        "product_data":
-            productData == null ? [] : List<dynamic>.from(productData!.map((x) => x.toJson())),
+        "product_data": productData == null ? [] : List<dynamic>.from(productData!.map((x) => x.toJson())),
       };
 }
-
-
 
 class OrderRating {
   int? id;
@@ -333,4 +330,31 @@ class OrderRating {
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
       };
+}
+
+class CourierCompanyDetail {
+  int? id;
+  String? name;
+  String? link;
+
+  CourierCompanyDetail({
+    this.id,
+    this.name,
+    this.link,
+  });
+
+  CourierCompanyDetail.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    link = json['link'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['link'] = this.link;
+
+    return data;
+  }
 }

@@ -5,6 +5,7 @@ import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/list_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import 'package:mighty_delivery/main/screens/RewardListScreen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../extensions/LiveStream.dart';
@@ -27,10 +28,12 @@ import '../../main/screens/ChangePasswordScreen.dart';
 import '../../main/screens/CustomerSupportScreen.dart';
 import '../../main/screens/EditProfileScreen.dart';
 import '../../main/screens/LanguageScreen.dart';
+import '../../main/screens/RefferalHistoryScreen.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Images.dart';
+import '../../main/utils/dynamic_theme.dart';
 import '../../user/screens/DeleteAccountScreen.dart';
 import '../../user/screens/PageDetailScreen.dart';
 import '../../user/screens/WalletScreen.dart';
@@ -97,7 +100,7 @@ class DProfileFragmentState extends State<DProfileFragment> {
                 ? Icon(suffixIcon, color: Colors.green)
                 : Icon(Icons.navigate_next, color: appStore.isDarkMode ? Colors.white : Colors.grey),
             onTap: onTap),
-        if (isLast) Divider(height: 0, color: dividerColor)
+        if (isLast) Divider(height: 0, color: ColorUtils.dividerColor)
       ],
     );
   }
@@ -126,7 +129,8 @@ class DProfileFragmentState extends State<DProfileFragment> {
                           children: [
                             Container(
                                 decoration: boxDecorationWithRoundedCorners(
-                                    boxShape: BoxShape.circle, border: Border.all(width: 2, color: colorPrimary)),
+                                    boxShape: BoxShape.circle,
+                                    border: Border.all(width: 2, color: ColorUtils.colorPrimary)),
                                 child: commonCachedNetworkImage(appStore.userProfile.validate(),
                                         height: 65, width: 65, fit: BoxFit.cover, alignment: Alignment.center)
                                     .cornerRadiusWithClipRRect(50)),
@@ -134,7 +138,7 @@ class DProfileFragmentState extends State<DProfileFragment> {
                                 decoration: boxDecorationWithRoundedCorners(
                                     boxShape: BoxShape.circle,
                                     border: Border.all(width: 1, color: white),
-                                    backgroundColor: colorPrimary),
+                                    backgroundColor: ColorUtils.colorPrimary),
                                 padding: EdgeInsets.all(4),
                                 child: Image.asset(ic_edit, color: white, height: 14, width: 14))
                           ],
@@ -161,9 +165,14 @@ class DProfileFragmentState extends State<DProfileFragment> {
                         accountSettingItemWidget(ic_earning, language.earningHistory, () {
                           EarningHistoryScreen().launch(context);
                         }),
-                        //todo add key
-                        accountSettingItemWidget(ic_earn, "Refer & Earn", () {
+                        accountSettingItemWidget(ic_change_password, language.earnedRewards, () {
+                          RewardListScreen().launch(context);
+                        }),
+                        accountSettingItemWidget(ic_earn, language.referAndEarn, () {
                           ReferEarnScreen().launch(context);
+                        }),
+                        accountSettingItemWidget(ic_refer_history, language.referralHistory, () {
+                          ReferralHistoryScreen().launch(context);
                         }),
                         accountSettingItemWidget(ic_wallet, language.wallet, () {
                           WalletScreen().launch(context);
@@ -187,8 +196,7 @@ class DProfileFragmentState extends State<DProfileFragment> {
                               builder: (_) => ThemeSelectionDialog(),
                               contentPadding: EdgeInsets.zero);
                         }),
-                        //TODO add keys
-                        accountSettingItemWidget(ic_change_password, "Customer support", () {
+                        accountSettingItemWidget(ic_change_password, language.customerSupport, () {
                           CustomerSupportScreen().launch(context);
                         }),
                         accountSettingItemWidget(ic_delete_account, language.deleteAccount, () async {
@@ -199,7 +207,7 @@ class DProfileFragmentState extends State<DProfileFragment> {
                           commonLaunchUrl(mPrivacyPolicy);
                         }),
                         accountSettingItemWidget(ic_information, language.helpAndSupport, () {
-                          commonLaunchUrl(appStore.supportEmail);
+                          commonLaunchUrl(appStore.siteEmail);
                         }),
                         accountSettingItemWidget(ic_document, language.termAndCondition, () {
                           commonLaunchUrl(mTermAndCondition);
@@ -225,15 +233,17 @@ class DProfileFragmentState extends State<DProfileFragment> {
                         ],
                         Container(
                           decoration: boxDecorationWithRoundedCorners(
-                              border: Border.all(color: colorPrimary, width: 1), backgroundColor: Colors.transparent),
+                              border: Border.all(color: ColorUtils.colorPrimary, width: 1),
+                              backgroundColor: Colors.transparent),
                           padding: EdgeInsets.all(16),
                           width: context.width(),
                           child: Text(language.logout,
-                              style: boldTextStyle(size: 18, color: colorPrimary), textAlign: TextAlign.center),
+                              style: boldTextStyle(size: 18, color: ColorUtils.colorPrimary),
+                              textAlign: TextAlign.center),
                         ).onTap(() async {
                           await showConfirmDialogCustom(
                             context,
-                            primaryColor: colorPrimary,
+                            primaryColor: ColorUtils.colorPrimary,
                             title: language.logoutConfirmationMsg,
                             positiveText: language.yes,
                             negativeText: language.no,

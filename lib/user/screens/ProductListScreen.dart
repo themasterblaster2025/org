@@ -21,6 +21,7 @@ import '../../main.dart';
 import '../../main/models/StoreListModel.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
+import '../../main/utils/dynamic_theme.dart';
 import '../components/FilterCategoryComponent.dart';
 import '../components/ProductItemComponent.dart';
 import 'CreateOrderScreen.dart';
@@ -58,8 +59,7 @@ class ProductListScreenState extends State<ProductListScreen> {
     super.initState();
     init();
     scrollController.addListener(() {
-      if (scrollController.position.pixels == scrollController.position.maxScrollExtent &&
-          !appStore.isLoading) {
+      if (scrollController.position.pixels == scrollController.position.maxScrollExtent && !appStore.isLoading) {
         if (page < totalPage) {
           page++;
           productListApi();
@@ -111,29 +111,29 @@ class ProductListScreenState extends State<ProductListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _key,
-      appBar: commonAppBarWidget(widget.store.storeName.validate(),actions: [
-                Stack(
-                  children: [
-                    Align(
-                        alignment: AlignmentDirectional.center,
-                        child: Icon(Ionicons.md_options_outline, color: Colors.white)),
-                    Positioned(
-                      right: 8,
-                      top: 16,
-                      child: Container(
-                        height: 10,
-                        width: 10,
-                        decoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
-                      ),
-                    ).visible(selectedCategory.isNotEmpty || selectedSubCategory.isNotEmpty),
-                  ],
-                ).withWidth(40).onTap(() {
-                  _key.currentState!.openEndDrawer();
-                },
-                    splashColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    highlightColor: Colors.transparent),
-              ], ),
+      appBar: commonAppBarWidget(
+        widget.store.storeName.validate(),
+        actions: [
+          Stack(
+            children: [
+              Align(
+                  alignment: AlignmentDirectional.center,
+                  child: Icon(Ionicons.md_options_outline, color: Colors.white)),
+              Positioned(
+                right: 8,
+                top: 16,
+                child: Container(
+                  height: 10,
+                  width: 10,
+                  decoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
+                ),
+              ).visible(selectedCategory.isNotEmpty || selectedSubCategory.isNotEmpty),
+            ],
+          ).withWidth(40).onTap(() {
+            _key.currentState!.openEndDrawer();
+          }, splashColor: Colors.transparent, hoverColor: Colors.transparent, highlightColor: Colors.transparent),
+        ],
+      ),
       // appBar : AppBar(
       //   titleTextStyle: primaryTextStyle(color: Colors.white, size: 20),
       //   iconTheme: IconThemeData(color: Colors.white),
@@ -163,7 +163,7 @@ class ProductListScreenState extends State<ProductListScreen> {
       //   ],
       // ),
       endDrawerEnableOpenDragGesture: true,
-          endDrawer: FilterCategoryComponent(
+      endDrawer: FilterCategoryComponent(
         storeId: widget.store.id,
         selectedCategory: selectedCategory,
         selectedSubCategory: selectedSubCategory,
@@ -187,32 +187,28 @@ class ProductListScreenState extends State<ProductListScreen> {
                         Container(
                           width: context.width(),
                           decoration: boxDecorationWithRoundedCorners(
-                              backgroundColor: colorPrimary.withOpacity(0.08),
+                              backgroundColor: ColorUtils.colorPrimary.withOpacity(0.08),
                               borderRadius: radius(defaultRadius)),
                           padding: EdgeInsets.all(12),
                           child: Row(
                             children: [
-                              commonCachedNetworkImage(
-                                      widget.store.storeImage.validate(),
-                                      height: 60,
-                                      width: 60,
-                                      fit: BoxFit.cover)
+                              commonCachedNetworkImage(widget.store.storeImage.validate(),
+                                      height: 60, width: 60, fit: BoxFit.cover)
                                   .cornerRadiusWithClipRRect(defaultRadius),
                               10.width,
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(widget.store.storeName.validate(),
-                                      style: boldTextStyle(size: 16)),
+                                  Text(widget.store.storeName.validate(), style: boldTextStyle(size: 16)),
                                   4.height,
                                   Text('$totalItem ${language.products}',
-                                  // Text('$totalItem ${language.products}',
+                                      // Text('$totalItem ${language.products}',
                                       style: secondaryTextStyle()),
                                 ],
                               ).expand()
                             ],
                           ),
-                        ).onTap((){
+                        ).onTap(() {
                           StoreDetailScreen(store: widget.store).launch(context);
                         }),
                         16.height,
@@ -269,14 +265,13 @@ class ProductListScreenState extends State<ProductListScreen> {
                   await showModalBottomSheet(
                     context: context,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
                     builder: (context) {
                       return Container(
                         width: context.width(),
                         decoration: boxDecorationWithShadow(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+                            borderRadius:
+                                BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
                         child: ListView(
                           shrinkWrap: true,
                           children: [
@@ -308,7 +303,7 @@ class ProductListScreenState extends State<ProductListScreen> {
                               children: [
                                 Text(language.total, style: boldTextStyle()),
                                 Text(printAmount(productAmount),
-                                    style: boldTextStyle(size: 14, color: colorPrimary)),
+                                    style: boldTextStyle(size: 14, color: ColorUtils.colorPrimary)),
                               ],
                             ).paddingAll(16),
                           ],
@@ -321,21 +316,21 @@ class ProductListScreenState extends State<ProductListScreen> {
                   children: [
                     Icon(Icons.local_grocery_store_outlined),
                     8.width,
-                    Text('$totalCount ${totalCount > 1 ? language.items : language.item} ${language.added}', style: primaryTextStyle()),
+                    Text('$totalCount ${totalCount > 1 ? language.items : language.item} ${language.added}',
+                        style: primaryTextStyle()),
                     Icon(showBottom ? Icons.arrow_drop_down : Icons.arrow_drop_up),
                     Spacer(),
                     AppButton(
-                      color: colorPrimary,
+                      color: ColorUtils.colorPrimary,
                       padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(language.next, style: boldTextStyle(color: Colors.white,height: 1.1)),
+                          Text(language.next, style: boldTextStyle(color: Colors.white, height: 1.1)),
                           Icon(Icons.navigate_next, color: Colors.white),
                         ],
                       ),
                       onTap: () {
-
                         CreateOrderScreen(orderItems: orderItems, storeId: widget.store.id).launch(context);
                       },
                     ),

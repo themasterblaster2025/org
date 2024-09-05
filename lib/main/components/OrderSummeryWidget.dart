@@ -13,6 +13,7 @@ import '../../main.dart';
 import '../models/OrderDetailModel.dart';
 import '../utils/Colors.dart';
 import '../utils/Constants.dart';
+import '../utils/dynamic_theme.dart';
 
 class OrderSummeryWidget extends StatefulWidget {
   static String tag = '/OrderSummeryWidget';
@@ -28,6 +29,8 @@ class OrderSummeryWidget extends StatefulWidget {
   final String? status;
   final Payment? payment;
   final bool? isDetail;
+  final num? insuranceCharge;
+  final bool? isInsuranceChargeDisplay;
 
   OrderSummeryWidget(
       {this.productAmount,
@@ -40,7 +43,9 @@ class OrderSummeryWidget extends StatefulWidget {
       required this.totalAmount,
       this.status,
       this.payment,
-      this.isDetail = false});
+      this.isDetail = false,
+      this.insuranceCharge = 0,
+      this.isInsuranceChargeDisplay = false});
 
   @override
   OrderSummeryWidgetState createState() => OrderSummeryWidgetState();
@@ -90,7 +95,7 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
       padding: EdgeInsets.all(16),
       decoration: boxDecorationWithRoundedCorners(
         borderRadius: BorderRadius.circular(defaultRadius),
-        border: Border.all(color: colorPrimary.withOpacity(0.2)),
+        border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.2)),
         backgroundColor: Colors.transparent,
       ),
       child: Column(
@@ -120,7 +125,17 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
               16.width,
               Text('${printAmount(fixedCharges)}', style: boldTextStyle(size: 14)),
             ],
-          ),
+          ).paddingBottom(8).visible(fixedCharges.validate() != 0),
+          if (widget.isInsuranceChargeDisplay!)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                //todo add keys
+                Text(language.insuranceCharge, style: secondaryTextStyle()),
+                16.width,
+                Text('${printAmount(widget.insuranceCharge)}', style: boldTextStyle(size: 14)),
+              ],
+            ).paddingBottom(8),
           Column(
             children: [
               8.height,
@@ -192,7 +207,7 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
                           .expand(),
                       16.width,
                       Text(
-                          '${printAmount(countExtraCharge(totalAmount: (fixedCharges + widget.weightCharge + widget.distanceCharge + widget.vehiclePrice.validate()), chargesType: mData.valueType!, charges: mData.value!))}',
+                          '${printAmount(countExtraCharge(totalAmount: (fixedCharges + widget.weightCharge + widget.distanceCharge + widget.vehiclePrice.validate()), chargesType: !mData.valueType.isEmptyOrNull ? mData.valueType! : "", charges: mData.value!))}',
                           style: boldTextStyle(size: 14)),
                     ],
                   ),

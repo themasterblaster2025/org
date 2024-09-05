@@ -23,6 +23,7 @@ import '../utils/Colors.dart';
 import '../utils/Common.dart';
 import '../utils/Constants.dart';
 import '../utils/Images.dart';
+import '../utils/dynamic_theme.dart';
 
 class OrderHistoryScreen extends StatefulWidget {
   const OrderHistoryScreen({super.key});
@@ -72,7 +73,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
       //todo add key
-      appBarTitle: "Completed Orders",
+      appBarTitle: language.completedOrders,
       body: Observer(builder: (context) {
         return Stack(
           children: [
@@ -103,7 +104,7 @@ class OrderHistoryItem extends StatelessWidget {
         margin: EdgeInsets.only(bottom: 16),
         decoration: boxDecorationWithRoundedCorners(
             borderRadius: BorderRadius.circular(defaultRadius),
-            border: Border.all(color: colorPrimary.withOpacity(0.3)),
+            border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
             backgroundColor: Colors.transparent),
         padding: EdgeInsets.all(12),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -127,11 +128,11 @@ class OrderHistoryItem extends StatelessWidget {
               Container(
                 decoration: boxDecorationWithRoundedCorners(
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                    border: Border.all(color: ColorUtils.borderColor, width: appStore.isDarkMode ? 0.2 : 1),
                     backgroundColor: context.cardColor),
                 padding: EdgeInsets.all(8),
                 child: Image.asset(parcelTypeIcon(orderData.parcelType.validate()),
-                    height: 24, width: 24, color: colorPrimary),
+                    height: 24, width: 24, color: ColorUtils.colorPrimary),
               ),
               8.width,
               Column(
@@ -162,7 +163,7 @@ class OrderHistoryItem extends StatelessWidget {
             ),
           Row(
             children: [
-              ImageIcon(AssetImage(ic_from), size: 24, color: colorPrimary),
+              ImageIcon(AssetImage(ic_from), size: 24, color: ColorUtils.colorPrimary),
               12.width,
               Text('${orderData.pickupPoint!.address}', style: primaryTextStyle()).expand(),
             ],
@@ -180,7 +181,7 @@ class OrderHistoryItem extends StatelessWidget {
             ),
           Row(
             children: [
-              ImageIcon(AssetImage(ic_to), size: 24, color: colorPrimary),
+              ImageIcon(AssetImage(ic_to), size: 24, color: ColorUtils.colorPrimary),
               12.width,
               Text('${orderData.deliveryPoint!.address}', style: primaryTextStyle(), textAlign: TextAlign.start)
                   .expand(),
@@ -192,7 +193,7 @@ class OrderHistoryItem extends StatelessWidget {
               children: [
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary),
+                  decoration: boxDecorationWithRoundedCorners(backgroundColor: ColorUtils.colorPrimary),
                   child: Row(
                     children: [
                       Text(language.invoice, style: secondaryTextStyle(color: Colors.white)),

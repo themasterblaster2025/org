@@ -7,6 +7,7 @@ import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart
 import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
+import 'package:mighty_delivery/main/utils/dynamic_theme.dart';
 
 import '../../extensions/common.dart';
 import '../../extensions/system_utils.dart';
@@ -102,94 +103,99 @@ class FilterCategoryComponentState extends State<FilterCategoryComponent> {
                 ).paddingOnly(left: 16, top: 50, right: 16, bottom: 16),
                 categoryList.isNotEmpty
                     ? Column(
-                  children: [
-                    ListView.builder(
-                      padding: EdgeInsets.zero,
-                      itemCount: categoryList.length,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        Category item = categoryList[index];
-                        return Theme(
-                          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-                          child: ExpansionTile(
-                            tilePadding: EdgeInsets.symmetric(horizontal: 8),
-                            childrenPadding: EdgeInsets.symmetric(horizontal: 24),
-                            initiallyExpanded: selectedSubCategory.toSet().intersection(item.subCategory.validate().map((e) => e.id).toList().toSet()).isNotEmpty,
-                            title: CheckboxListTile(
-                              dense: true,
-                              contentPadding: EdgeInsets.zero,
-                              activeColor: colorPrimary,
-                              value: selectedCategory.contains(item.id.validate()),
-                              controlAffinity: ListTileControlAffinity.leading,
-                              title: Text('${item.name}', style: primaryTextStyle()),
-                              onChanged: (value) {
-                                if (value.validate()) {
-                                  selectedCategory.add(item.id.validate());
-                                } else {
-                                  selectedCategory.remove(item.id.validate());
-                                }
-                                setState(() {});
-                              },
-                            ),
-                            children: item.subCategory.validate().map((e) {
-                              return CheckboxListTile(
-                                contentPadding: EdgeInsets.zero,
-                                dense: true,
-                                value: selectedSubCategory.contains(e.id.validate()),
-                                activeColor: colorPrimary,
-                                controlAffinity: ListTileControlAffinity.leading,
-                                title: Text('${e.subcategoryName}', style: primaryTextStyle()),
-                                onChanged: (value) {
-                                  if (value.validate()) {
-                                    selectedSubCategory.add(e.id.validate());
-                                  } else {
-                                    selectedSubCategory.remove(e.id.validate());
-                                  }
-                                  setState(() {});
-                                },
+                        children: [
+                          ListView.builder(
+                            padding: EdgeInsets.zero,
+                            itemCount: categoryList.length,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              Category item = categoryList[index];
+                              return Theme(
+                                data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                                child: ExpansionTile(
+                                  tilePadding: EdgeInsets.symmetric(horizontal: 8),
+                                  childrenPadding: EdgeInsets.symmetric(horizontal: 24),
+                                  initiallyExpanded: selectedSubCategory
+                                      .toSet()
+                                      .intersection(item.subCategory.validate().map((e) => e.id).toList().toSet())
+                                      .isNotEmpty,
+                                  title: CheckboxListTile(
+                                    dense: true,
+                                    contentPadding: EdgeInsets.zero,
+                                    activeColor: ColorUtils.colorPrimary,
+                                    value: selectedCategory.contains(item.id.validate()),
+                                    controlAffinity: ListTileControlAffinity.leading,
+                                    title: Text('${item.name}', style: primaryTextStyle()),
+                                    onChanged: (value) {
+                                      if (value.validate()) {
+                                        selectedCategory.add(item.id.validate());
+                                      } else {
+                                        selectedCategory.remove(item.id.validate());
+                                      }
+                                      setState(() {});
+                                    },
+                                  ),
+                                  children: item.subCategory.validate().map((e) {
+                                    return CheckboxListTile(
+                                      contentPadding: EdgeInsets.zero,
+                                      dense: true,
+                                      value: selectedSubCategory.contains(e.id.validate()),
+                                      activeColor: ColorUtils.colorPrimary,
+                                      controlAffinity: ListTileControlAffinity.leading,
+                                      title: Text('${e.subcategoryName}', style: primaryTextStyle()),
+                                      onChanged: (value) {
+                                        if (value.validate()) {
+                                          selectedSubCategory.add(e.id.validate());
+                                        } else {
+                                          selectedSubCategory.remove(e.id.validate());
+                                        }
+                                        setState(() {});
+                                      },
+                                    );
+                                  }).toList(),
+                                ),
                               );
-                            }).toList(),
-                          ),
-                        );
-                      },
-                    ).expand(),
-                    Row(
-                      children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius), side: BorderSide(color: appStore.isDarkMode ? Colors.white12 : viewLineColor)),
-                              elevation: 0,
-                              backgroundColor: Colors.transparent,
-                              shadowColor: Colors.transparent),
-                          child: Text(language.clear, style: boldTextStyle(color: Colors.grey)),
-                          onPressed: () {
-                            selectedCategory.clear();
-                            selectedSubCategory.clear();
-                            Navigator.pop(context);
-                            widget.onUpdate.call(selectedCategory, selectedSubCategory);
-                          },
-                        ).expand(),
-                        16.width,
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius)),
-                            elevation: 0,
-                            backgroundColor: colorPrimary,
-                          ),
-                          child: Text(language.apply, style: boldTextStyle(color: Colors.white)),
-                          // child: Text(language.apply, style: boldTextStyle(color: Colors.white)),
-                          onPressed: () {
-                            Navigator.pop(context);
-                            widget.onUpdate.call(selectedCategory, selectedSubCategory);
-                          },
-                        ).expand()
-                      ],
-                    ).paddingAll(16),
-                  ],
-                ).expand()
+                            },
+                          ).expand(),
+                          Row(
+                            children: [
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(defaultRadius),
+                                        side: BorderSide(color: appStore.isDarkMode ? Colors.white12 : viewLineColor)),
+                                    elevation: 0,
+                                    backgroundColor: Colors.transparent,
+                                    shadowColor: Colors.transparent),
+                                child: Text(language.clear, style: boldTextStyle(color: Colors.grey)),
+                                onPressed: () {
+                                  selectedCategory.clear();
+                                  selectedSubCategory.clear();
+                                  Navigator.pop(context);
+                                  widget.onUpdate.call(selectedCategory, selectedSubCategory);
+                                },
+                              ).expand(),
+                              16.width,
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius)),
+                                  elevation: 0,
+                                  backgroundColor: ColorUtils.colorPrimary,
+                                ),
+                                child: Text(language.apply, style: boldTextStyle(color: Colors.white)),
+                                // child: Text(language.apply, style: boldTextStyle(color: Colors.white)),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  widget.onUpdate.call(selectedCategory, selectedSubCategory);
+                                },
+                              ).expand()
+                            ],
+                          ).paddingAll(16),
+                        ],
+                      ).expand()
                     : appStore.isLoading
-                    ? SizedBox()
-                    : emptyWidget(),
+                        ? SizedBox()
+                        : emptyWidget(),
               ],
             ),
             loaderWidget().visible(appStore.isLoading)

@@ -18,6 +18,7 @@ import '../../main/network/RestApis.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
+import '../../main/utils/dynamic_theme.dart';
 import '../../user/screens/CreateOrderScreen.dart';
 
 class DraftOrderListScreen extends StatefulWidget {
@@ -97,7 +98,9 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
                         margin: EdgeInsets.only(bottom: 8),
                         padding: EdgeInsets.all(12),
                         decoration: boxDecorationWithRoundedCorners(
-                            borderRadius: BorderRadius.circular(defaultRadius), border: Border.all(color: colorPrimary.withOpacity(0.3)), backgroundColor: Colors.transparent),
+                            borderRadius: BorderRadius.circular(defaultRadius),
+                            border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
+                            backgroundColor: Colors.transparent),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -106,8 +109,10 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
                                 ? Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(DateFormat('dd MMM yyyy').format(DateTime.parse("${item.date!}Z").toLocal()), style: secondaryTextStyle()),
-                                      Text(DateFormat('hh:mm a').format(DateTime.parse("${item.date!}Z").toLocal()), style: secondaryTextStyle()),
+                                      Text(DateFormat('dd MMM yyyy').format(DateTime.parse("${item.date!}Z").toLocal()),
+                                          style: secondaryTextStyle()),
+                                      Text(DateFormat('hh:mm a').format(DateTime.parse("${item.date!}Z").toLocal()),
+                                          style: secondaryTextStyle()),
                                     ],
                                   )
                                 : SizedBox(),
@@ -121,10 +126,13 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
                                           Container(
                                             decoration: boxDecorationWithRoundedCorners(
                                                 borderRadius: BorderRadius.circular(8),
-                                                border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                                                border: Border.all(
+                                                    color: ColorUtils.borderColor,
+                                                    width: appStore.isDarkMode ? 0.2 : 1),
                                                 backgroundColor: context.cardColor),
                                             padding: EdgeInsets.all(8),
-                                            child: Image.asset(parcelTypeIcon(item.parcelType.validate()), height: 24, width: 24, color: colorPrimary),
+                                            child: Image.asset(parcelTypeIcon(item.parcelType.validate()),
+                                                height: 24, width: 24, color: ColorUtils.colorPrimary),
                                           ),
                                           8.width,
                                           Column(
@@ -133,7 +141,8 @@ class DraftOrderListScreenState extends State<DraftOrderListScreen> {
                                               Row(
                                                 children: [
                                                   Text(item.parcelType.validate(), style: boldTextStyle()).expand(),
-                                                  Text('${printAmount(item.totalAmount ?? 0)}', style: primaryTextStyle()),
+                                                  Text('${printAmount(item.totalAmount ?? 0)}',
+                                                      style: primaryTextStyle()),
                                                 ],
                                               ),
                                               Row(

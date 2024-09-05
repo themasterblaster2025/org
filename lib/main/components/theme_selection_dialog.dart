@@ -10,6 +10,7 @@ import '../../extensions/system_utils.dart';
 import '../../extensions/text_styles.dart';
 import '../../main.dart';
 import '../utils/Constants.dart';
+import '../utils/dynamic_theme.dart';
 
 class ThemeSelectionDialog extends StatefulWidget {
   static String tag = '/ThemeSelectionDialog';
@@ -70,7 +71,9 @@ class ThemeSelectionDialogState extends State<ThemeSelectionDialog> {
           Container(
             padding: EdgeInsets.all(8),
             alignment: Alignment.topLeft,
-            decoration: boxDecorationWithShadow(backgroundColor: colorPrimary, borderRadius: radiusOnly(topRight: defaultRadius, topLeft: defaultRadius)),
+            decoration: boxDecorationWithShadow(
+                backgroundColor: ColorUtils.colorPrimary,
+                borderRadius: radiusOnly(topRight: defaultRadius, topLeft: defaultRadius)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -96,7 +99,7 @@ class ThemeSelectionDialogState extends State<ThemeSelectionDialog> {
                     dense: true,
                     contentPadding: EdgeInsets.symmetric(horizontal: 8),
                     groupValue: currentIndex,
-                    activeColor: colorPrimary,
+                    activeColor: ColorUtils.colorPrimary,
                     title: Text(themeModeList[index]!, style: primaryTextStyle()),
                     onChanged: (dynamic val) {
                       currentIndex = index;

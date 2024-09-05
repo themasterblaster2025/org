@@ -15,6 +15,7 @@ import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Widgets.dart';
+import '../../main/utils/dynamic_theme.dart';
 
 class FilterCountScreen extends StatefulWidget {
   const FilterCountScreen({super.key});
@@ -25,12 +26,12 @@ class FilterCountScreen extends StatefulWidget {
 
 class _FilterCountScreenState extends State<FilterCountScreen> {
   List<String?> filterString = [
-    "Today",
-    "Yesterday",
-    " This week",
-    "This Month",
-    "This Year",
-    "Custom"
+    language.today,
+    language.yesterday,
+    language.thisWeek,
+    language.thisMonth,
+    language.thisYear,
+    language.custom
   ];
   int? currentIndex = 0;
   TextEditingController pickFromTimeController = TextEditingController();
@@ -58,13 +59,12 @@ class _FilterCountScreenState extends State<FilterCountScreen> {
             padding: EdgeInsets.all(8),
             alignment: Alignment.topLeft,
             decoration: boxDecorationWithShadow(
-                backgroundColor: colorPrimary,
+                backgroundColor: ColorUtils.colorPrimary,
                 borderRadius: radiusOnly(topRight: defaultRadius, topLeft: defaultRadius)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Order Filter", style: boldTextStyle(size: 20, color: Colors.white))
-                    .paddingLeft(12),
+                Text(language.orderFilter, style: boldTextStyle(size: 20, color: Colors.white)).paddingLeft(12),
                 CloseButton(color: Colors.white),
               ],
             ),
@@ -80,7 +80,7 @@ class _FilterCountScreenState extends State<FilterCountScreen> {
                   dense: true,
                   contentPadding: EdgeInsets.symmetric(horizontal: 8),
                   groupValue: currentIndex,
-                  activeColor: colorPrimary,
+                  activeColor: ColorUtils.colorPrimary,
                   title: Text(filterString[index]!, style: primaryTextStyle()),
                   onChanged: (dynamic val) {
                     currentIndex = index;
@@ -88,34 +88,25 @@ class _FilterCountScreenState extends State<FilterCountScreen> {
                     switch (val) {
                       case 0:
                         startDate = DateTime(now.year, now.month, now.day);
-                        endDate = startDate!
-                            .add(Duration(days: 1))
-                            .subtract(Duration(milliseconds: 1));
+                        endDate = startDate!.add(Duration(days: 1)).subtract(Duration(milliseconds: 1));
                         break;
                       case 1:
-                        startDate =
-                            DateTime(now.year, now.month, now.day).subtract(Duration(days: 1));
-                        endDate = DateTime(now.year, now.month, now.day)
-                            .subtract(Duration(milliseconds: 1));
+                        startDate = DateTime(now.year, now.month, now.day).subtract(Duration(days: 1));
+                        endDate = DateTime(now.year, now.month, now.day).subtract(Duration(milliseconds: 1));
                         break;
                       case 2:
                         final weekDay = now.weekday;
                         startDate = now.subtract(Duration(days: weekDay - 1));
-                        startDate =
-                            DateTime(startDate!.year, startDate!.month, startDate!.day);
-                        endDate = startDate!
-                            .add(Duration(days: 7))
-                            .subtract(Duration(milliseconds: 1));
+                        startDate = DateTime(startDate!.year, startDate!.month, startDate!.day);
+                        endDate = startDate!.add(Duration(days: 7)).subtract(Duration(milliseconds: 1));
                         break;
                       case 3:
                         startDate = DateTime(now.year, now.month, 1);
-                        endDate = DateTime(now.year, now.month + 1, 1)
-                            .subtract(Duration(milliseconds: 1));
+                        endDate = DateTime(now.year, now.month + 1, 1).subtract(Duration(milliseconds: 1));
                         break;
                       case 4:
                         startDate = DateTime(now.year, 1, 1);
-                        endDate =
-                            DateTime(now.year + 1, 1, 1).subtract(Duration(milliseconds: 1));
+                        endDate = DateTime(now.year + 1, 1, 1).subtract(Duration(milliseconds: 1));
                         break;
                       case 5:
                         break;
@@ -167,11 +158,9 @@ class _FilterCountScreenState extends State<FilterCountScreen> {
                   if (currentIndex != 5) {
                     finish(context, [startDate, endDate]);
                   } else {
-                    if (pickFromTimeController.text.isEmpty ||
-                        pickToTimeController.text.isEmpty) {
+                    if (pickFromTimeController.text.isEmpty || pickToTimeController.text.isEmpty) {
                       toast(language.mustSelectDate);
-                    }
-                    else{
+                    } else {
                       finish(context, [startDate, endDate]);
                     }
                   }

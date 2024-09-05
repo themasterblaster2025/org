@@ -22,6 +22,7 @@ import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Widgets.dart';
+import '../../main/utils/dynamic_theme.dart';
 
 class StoreDetailScreen extends StatefulWidget {
   final StoreData store;
@@ -96,27 +97,27 @@ class _StoreDetailScreenState extends State<StoreDetailScreen> {
                   ),
                   Divider(
                     height: 10,
-                    color: dividerColor,
+                    color: ColorUtils.dividerColor,
                   ),
                   8.height,
                   commonWidget(Icons.phone, widget.store.contactNumber.validate()),
                   8.height,
                   Divider(
                     height: 10,
-                    color: dividerColor,
+                    color: ColorUtils.dividerColor,
                   ),
                   8.height,
                   commonWidget(Icons.location_on_rounded, widget.store.address.validate()),
                   10.height,
                   Divider(
                     height: 10,
-                    color: dividerColor,
+                    color: ColorUtils.dividerColor,
                   ),
                   10.height,
                   commonWidget(Icons.location_city,
                       "${widget.store.cityName.validate()}, ${widget.store.countryName.validate()}"),
                   10.height,
-                  Divider(height: 0, color: dividerColor),
+                  Divider(height: 0, color: ColorUtils.dividerColor),
                   10.height,
                   Row(
                     children: [

@@ -27,5 +27,5 @@ const WaitingStatusColor = Color(0xFFDBC106);
 const pendingApprovalColorColor = Color(0xFFFD6922);
 const CreatedColorColor = Color(0xFF0088FF);
 const dialogColor = Color(0xff1D1D1D);
-const primaryExtraLight = Color(0xFFF3F3FC);
+//const primaryExtraLight = Color(0xFFF3F3FC);
 const viewLineColor = Color(0xFFEAEAEA);

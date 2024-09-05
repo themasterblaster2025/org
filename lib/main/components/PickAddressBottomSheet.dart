@@ -22,6 +22,7 @@ import '../../user/screens/MyAddressListScreen.dart';
 import '../models/AddressListModel.dart';
 import '../network/RestApis.dart';
 import '../utils/Common.dart';
+import '../utils/dynamic_theme.dart';
 
 class PickAddressBottomSheet extends StatefulWidget {
   final Function(AddressData) onPick;
@@ -70,14 +71,11 @@ class PickAddressBottomSheetState extends State<PickAddressBottomSheet> {
         children: [
           Container(
             padding: EdgeInsets.all(16),
-            color: colorPrimary.withOpacity(0.1),
+            color: ColorUtils.colorPrimary.withOpacity(0.1),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(
-                    widget.isPickup
-                        ? language.choosePickupAddress
-                        : language.chooseDeliveryAddress,
+                Text(widget.isPickup ? language.choosePickupAddress : language.chooseDeliveryAddress,
                     style: boldTextStyle()),
                 8.height,
                 Text(language.showingAllAddress, style: secondaryTextStyle()),
@@ -86,9 +84,9 @@ class PickAddressBottomSheetState extends State<PickAddressBottomSheet> {
           ),
           Row(
             children: [
-              Icon(Icons.add_circle_outline, color: colorPrimary),
+              Icon(Icons.add_circle_outline, color: ColorUtils.colorPrimary),
               10.width,
-              Text(language.addNewAddress, style: boldTextStyle(color: colorPrimary)),
+              Text(language.addNewAddress, style: boldTextStyle(color: ColorUtils.colorPrimary)),
             ],
           ).onTap(() async {
             /* if (!await Geolocator.isLocationServiceEnabled()) {
@@ -111,16 +109,15 @@ class PickAddressBottomSheetState extends State<PickAddressBottomSheet> {
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   int len = (getStringListAsync(RECENT_ADDRESS_LIST) ?? []).length;
-                  AddressData mData = AddressData.fromJson(
-                      jsonDecode(getStringListAsync(RECENT_ADDRESS_LIST)![len - index - 1]));
+                  AddressData mData =
+                      AddressData.fromJson(jsonDecode(getStringListAsync(RECENT_ADDRESS_LIST)![len - index - 1]));
                   // AddressData mData = addressList[index];
                   return Row(
                     children: [
                       Icon(Icons.location_on_outlined),
                       10.width,
-                      Text('${mData.address}', style: primaryTextStyle(), maxLines: 2)
-                          .expand(),
-                     /* 10.width,
+                      Text('${mData.address}', style: primaryTextStyle(), maxLines: 2).expand(),
+                      /* 10.width,
                      // comment this because when there is one address in list and delete it at time of deliveryAddressSelection then go back then there is issue
                       Icon(Icons.highlight_remove_outlined, color: Colors.red).onTap(() {
                         deleteUserAddressApiCall(mData.id.validate());

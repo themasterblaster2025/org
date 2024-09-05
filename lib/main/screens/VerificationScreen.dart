@@ -8,6 +8,7 @@ import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart
 import 'package:mighty_delivery/main/components/CommonScaffoldComponent.dart';
 import 'package:mighty_delivery/main/services/AuthServices.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
+import 'package:mighty_delivery/main/utils/dynamic_theme.dart';
 import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
 import 'package:otp_text_field/otp_field.dart' as otp;
 import 'package:otp_text_field/otp_field_style.dart' as o;
@@ -46,7 +47,7 @@ class VerificationScreenState extends State<VerificationScreen> {
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
       appBarTitle: language.verification,
-   /*   showBack: false,
+      /*   showBack: false,
       action: [
         IconButton(
           onPressed: () async {
@@ -81,7 +82,11 @@ class VerificationScreenState extends State<VerificationScreen> {
                           children: [
                             TextSpan(text: '${language.weSend} '),
                             TextSpan(text: language.oneTimePassword, style: boldTextStyle()),
-                            TextSpan(text: " ${language.on} " + getStringAsync(USER_CONTACT_NUMBER).replaceAll(RegExp(r'(?<=.*).(?=.{2})'), '*') ?? "-")
+                            TextSpan(
+                                text: " ${language.on} " +
+                                        getStringAsync(USER_CONTACT_NUMBER)
+                                            .replaceAll(RegExp(r'(?<=.*).(?=.{2})'), '*') ??
+                                    "-")
                           ],
                         ),
                       ),
@@ -105,14 +110,19 @@ class VerificationScreenState extends State<VerificationScreen> {
                       16.height,
                       Text(language.confirmationCode, style: boldTextStyle(size: 18)),
                       16.height,
-                      Text("${language.confirmationCodeSent} " + getStringAsync(USER_CONTACT_NUMBER).replaceAll(RegExp(r'(?<=.*).(?=.{2})'), '*') ?? "-",
-                          style: secondaryTextStyle(size: 16), textAlign: TextAlign.center),
+                      Text(
+                          "${language.confirmationCodeSent} " +
+                                  getStringAsync(USER_CONTACT_NUMBER).replaceAll(RegExp(r'(?<=.*).(?=.{2})'), '*') ??
+                              "-",
+                          style: secondaryTextStyle(size: 16),
+                          textAlign: TextAlign.center),
                       30.height,
                       otp.OTPTextField(
                         length: 6,
                         width: MediaQuery.of(context).size.width,
                         fieldWidth: 35,
-                        otpFieldStyle: o.OtpFieldStyle(borderColor: context.dividerColor, focusBorderColor: colorPrimary),
+                        otpFieldStyle: o.OtpFieldStyle(
+                            borderColor: context.dividerColor, focusBorderColor: ColorUtils.colorPrimary),
                         style: primaryTextStyle(),
                         textFieldAlignment: MainAxisAlignment.spaceAround,
                         fieldStyle: FieldStyle.box,
@@ -130,8 +140,9 @@ class VerificationScreenState extends State<VerificationScreen> {
                         children: [
                           Text(language.didNotReceiveTheCode, style: secondaryTextStyle(size: 16)),
                           4.width,
-                          Text(language.resend, style: boldTextStyle(color: colorPrimary)).onTap(() {
-                            sendOtp(context, phoneNumber: getStringAsync(USER_CONTACT_NUMBER).validate(), onUpdate: (verificationId) {
+                          Text(language.resend, style: boldTextStyle(color: ColorUtils.colorPrimary)).onTap(() {
+                            sendOtp(context, phoneNumber: getStringAsync(USER_CONTACT_NUMBER).validate(),
+                                onUpdate: (verificationId) {
                               verId = verificationId;
                               setState(() {});
                             });
@@ -141,10 +152,12 @@ class VerificationScreenState extends State<VerificationScreen> {
                       16.height,
                       commonButton(language.submit, () async {
                         appStore.setLoading(true);
-                        AuthCredential credential = PhoneAuthProvider.credential(verificationId: verId, smsCode: otpPin.validate());
+                        AuthCredential credential =
+                            PhoneAuthProvider.credential(verificationId: verId, smsCode: otpPin.validate());
                         await FirebaseAuth.instance.signInWithCredential(credential).then((value) {
                           appStore.setLoading(false);
-                          updateUserStatus({"id": getIntAsync(USER_ID), "otp_verify_at": DateTime.now().toString()}).then((value) {
+                          updateUserStatus({"id": getIntAsync(USER_ID), "otp_verify_at": DateTime.now().toString()})
+                              .then((value) {
                             setValue(OTP_VERIFIED, true);
                             finish(context);
                           });
@@ -158,7 +171,9 @@ class VerificationScreenState extends State<VerificationScreen> {
                     ],
                   ),
                 ),
-          Observer(builder: (context) => Visibility(visible: appStore.isLoading, child: Positioned.fill(child: loaderWidget()))),
+          Observer(
+              builder: (context) =>
+                  Visibility(visible: appStore.isLoading, child: Positioned.fill(child: loaderWidget()))),
         ],
       ),
     );

@@ -6,18 +6,23 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/main/services/OrdersMessageService.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main/models/models.dart';
 import '../main/screens/SplashScreen.dart';
 import '../main/utils/Constants.dart';
 import 'AppTheme.dart';
+import 'extensions/colors.dart';
 import 'extensions/common.dart';
+import 'extensions/decorations.dart';
 import 'extensions/shared_pref.dart';
 import 'languageConfiguration/AppLocalizations.dart';
 import 'languageConfiguration/BaseLanguage.dart';
@@ -25,14 +30,18 @@ import 'languageConfiguration/LanguageDataConstant.dart';
 import 'languageConfiguration/LanguageDefaultJson.dart';
 import 'languageConfiguration/ServerLanguageResponse.dart';
 import 'main/models/FileModel.dart';
+import 'main/network/RestApis.dart';
 import 'main/screens/NoInternetScreen.dart';
 import 'main/services/AuthServices.dart';
 import 'main/services/ChatMessagesService.dart';
 import 'main/services/NotificationService.dart';
 import 'main/services/UserServices.dart';
 import 'main/store/AppStore.dart';
+import 'main/utils/Colors.dart';
 import 'main/utils/Common.dart';
+import 'main/utils/dynamic_theme.dart';
 import 'main/utils/firebase_options.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 late SharedPreferences sharedPreferences;
@@ -101,14 +110,96 @@ class MyApp extends StatefulWidget {
 
 class MyAppState extends State<MyApp> {
   late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
-
+  String? color;
+  // ThemeData _lightThemeData = lightTheme();
+  //ThemeData _darkThemeData = darkTheme();
   // late StreamSubscription<Position> _streamSubscription;
   String message = 'empty';
+  // void updateTheme(color) {
+  //   setState(() {
+  //     ColorUtils.updateColors(color);
+  //     _lightThemeData = ThemeData(
+  //       primarySwatch: createMaterialColor(ColorUtils.colorPrimary),
+  //       primaryColor: ColorUtils.colorPrimary,
+  //       scaffoldBackgroundColor: Colors.white,
+  //       fontFamily: GoogleFonts.lato().fontFamily,
+  //       iconTheme: IconThemeData(color: Colors.black),
+  //       dialogBackgroundColor: Colors.white,
+  //       unselectedWidgetColor: Colors.grey,
+  //       dividerColor: dividerColor,
+  //       cardColor: Colors.white,
+  //       tabBarTheme: TabBarTheme(labelColor: Colors.black),
+  //       appBarTheme: AppBarTheme(
+  //           color: ColorUtils.colorPrimary,
+  //           elevation: 0,
+  //           systemOverlayStyle:
+  //               SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light, statusBarColor: Colors.transparent)),
+  //       dialogTheme: DialogTheme(shape: dialogShape()),
+  //       bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.white),
+  //       colorScheme: ColorScheme.light(
+  //         primary: ColorUtils.colorPrimary,
+  //       ),
+  //     ).copyWith(
+  //       pageTransitionsTheme: PageTransitionsTheme(
+  //         builders: <TargetPlatform, PageTransitionsBuilder>{
+  //           TargetPlatform.android: OpenUpwardsPageTransitionsBuilder(),
+  //           TargetPlatform.linux: OpenUpwardsPageTransitionsBuilder(),
+  //           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+  //         },
+  //       ),
+  //     );
+  //     _darkThemeData = ThemeData(
+  //       primarySwatch: createMaterialColor(ColorUtils.colorPrimary),
+  //       primaryColor: ColorUtils.colorPrimary,
+  //       scaffoldBackgroundColor: ColorUtils.scaffoldColorDark,
+  //       fontFamily: GoogleFonts.lato().fontFamily,
+  //       iconTheme: IconThemeData(color: Colors.white),
+  //       dialogBackgroundColor: ColorUtils.scaffoldSecondaryDark,
+  //       unselectedWidgetColor: Colors.white60,
+  //       dividerColor: Colors.white12,
+  //       cardColor: ColorUtils.scaffoldSecondaryDark,
+  //       tabBarTheme: TabBarTheme(labelColor: Colors.white),
+  //       appBarTheme: AppBarTheme(
+  //         color: ColorUtils.scaffoldSecondaryDark,
+  //         elevation: 0,
+  //         systemOverlayStyle: SystemUiOverlayStyle(
+  //           statusBarIconBrightness: Brightness.light,
+  //           statusBarColor: Colors.transparent,
+  //         ),
+  //       ),
+  //       dialogTheme: DialogTheme(shape: dialogShape()),
+  //       snackBarTheme: SnackBarThemeData(backgroundColor: ColorUtils.appButtonColorDark),
+  //       bottomSheetTheme: BottomSheetThemeData(backgroundColor: ColorUtils.appButtonColorDark),
+  //       colorScheme: ColorScheme.dark(
+  //         primary: ColorUtils.colorPrimary,
+  //       ),
+  //     ).copyWith(
+  //       pageTransitionsTheme: PageTransitionsTheme(
+  //         builders: <TargetPlatform, PageTransitionsBuilder>{
+  //           TargetPlatform.android: OpenUpwardsPageTransitionsBuilder(),
+  //           TargetPlatform.linux: OpenUpwardsPageTransitionsBuilder(),
+  //           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+  //         },
+  //       ),
+  //     );
+  //   });
+  // }
 
   @override
   void initState() {
     super.initState();
     init();
+    getColor();
+  }
+
+  getColor() async {
+    await getLanguageList(0).then((value) {
+      color = value.themeColor;
+      appStore.setThemeColor(value.themeColor!);
+      appStore.updateTheme(colorFromHex(value.themeColor!));
+
+      setState(() {});
+    });
   }
 
   void init() async {
@@ -147,8 +238,8 @@ class MyAppState extends State<MyApp> {
         },
         title: mAppName,
         debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
+        theme: appStore.lightTheme,
+        darkTheme: appStore.darkTheme,
         themeMode: appStore.isDarkMode ? ThemeMode.dark : ThemeMode.light,
         home: SplashScreen(),
         supportedLocales: getSupportedLocales(),

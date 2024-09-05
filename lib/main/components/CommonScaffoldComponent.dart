@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mighty_delivery/extensions/extension_util/bool_extensions.dart';
+import 'package:mighty_delivery/main/utils/dynamic_theme.dart';
 
 import '../../main.dart';
 import '../utils/Colors.dart';
@@ -33,7 +34,7 @@ class CommonScaffoldComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: extendedBody.validate(),
-      backgroundColor: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimaryLight,
+      backgroundColor: appStore.isDarkMode ? ColorUtils.scaffoldSecondaryDark : ColorUtils.colorPrimaryLight,
       appBar: appBar ?? commonAppBarWidget(appBarTitle ?? '', actions: action, showBack: showBack!, bottom: bottom),
       body: body,
       bottomNavigationBar: bottomNavigationBar,

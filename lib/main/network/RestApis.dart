@@ -13,7 +13,9 @@ import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart
 import 'package:mighty_delivery/main/models/CategoryModel.dart';
 import 'package:mighty_delivery/main/models/DashboardCountModel.dart';
 import 'package:mighty_delivery/main/models/PageListModel.dart';
+import 'package:mighty_delivery/main/models/ReferralHistoryListModel.dart';
 import 'package:mighty_delivery/main/models/WorkHoursListModel.dart';
+import 'package:mighty_delivery/main/models/rewardsListModel.dart';
 
 import '../../extensions/common.dart';
 import '../../extensions/shared_pref.dart';
@@ -43,6 +45,8 @@ import '../models/CustomerSupportModel.dart';
 import '../models/DirectionsResponse.dart';
 import '../models/InvoiceSettingModel.dart';
 import '../models/OrderDetailModel.dart';
+import '../models/OrdersLatLngResponseList.dart';
+import '../models/PageResponse.dart';
 import '../models/PlaceIdDetailModel.dart';
 import '../models/ProductListModel.dart';
 import '../models/StoreListModel.dart';
@@ -472,7 +476,7 @@ Future<LDBaseResponse> deleteUser(Map req) async {
 
 Future<LDBaseResponse> userAction(Map request) async {
   return LDBaseResponse.fromJson(
-      await handleResponse(await buildHttpResponse('user-action', request: request, method: HttpMethod.POST)));
+      await handleResponse(await buildHttpResponse('user-forceDelete', request: request, method: HttpMethod.POST)));
 }
 
 Future<WalletListModel> getWalletList({required int page}) async {
@@ -740,6 +744,34 @@ Future<CustomerSupportListModel> getCustomerSupportList({int? page, int? support
   }
   return CustomerSupportListModel.fromJson(await handleResponse(await buildHttpResponse(
     endpoint,
+    method: HttpMethod.GET,
+  )));
+}
+
+Future<RewardsListModel> getRewardsList({int? page}) async {
+  return RewardsListModel.fromJson(await handleResponse(await buildHttpResponse(
+    'reward-list?page=$page',
+    method: HttpMethod.GET,
+  )));
+}
+
+Future<ReferralHistoryListModel> getReferralList({int? page}) async {
+  return ReferralHistoryListModel.fromJson(await handleResponse(await buildHttpResponse(
+    'reference-list?page=$page',
+    method: HttpMethod.GET,
+  )));
+}
+
+Future<ordersLatLngResponseList> getLatLngOfOrders() async {
+  return ordersLatLngResponseList.fromJson(await handleResponse(await buildHttpResponse(
+    'order-location-list',
+    method: HttpMethod.GET,
+  )));
+}
+
+Future<PageResponse> getPageDetailsById({String? id}) async {
+  return PageResponse.fromJson(await handleResponse(await buildHttpResponse(
+    'page-detail?id=$id',
     method: HttpMethod.GET,
   )));
 }

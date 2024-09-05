@@ -22,6 +22,7 @@ import '../models/LoginResponse.dart';
 import '../utils/Common.dart';
 import '../utils/Constants.dart';
 import '../utils/Images.dart';
+import '../utils/dynamic_theme.dart';
 import 'ChatItemWidget.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -203,7 +204,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       maxLines: 5,
                     ).expand(),
                     IconButton(
-                      icon: Icon(Icons.send, color: colorPrimary),
+                      icon: Icon(Icons.send, color: ColorUtils.colorPrimary),
                       onPressed: () {
                         try {
                           sendMessage();

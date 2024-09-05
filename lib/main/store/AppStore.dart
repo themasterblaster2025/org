@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../extensions/colors.dart';
+import '../../extensions/decorations.dart';
 import '../../extensions/shared_pref.dart';
 import '../../languageConfiguration/AppLocalizations.dart';
 import '../../languageConfiguration/BaseLanguage.dart';
@@ -9,6 +12,7 @@ import '../../languageConfiguration/LanguageDataConstant.dart';
 import '../../main.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Constants.dart';
+import '../utils/dynamic_theme.dart';
 
 part 'AppStore.g.dart';
 
@@ -77,7 +81,89 @@ abstract class _AppStore with Store {
   @observable
   String copyRight = '';
   @observable
-  String supportEmail = '';
+  String siteEmail = '';
+  @observable
+  bool isAllowDeliveryMan = true;
+  @observable
+  String referralCode = '';
+  @observable
+  String maxAmountEarning = '';
+  @observable
+  String themeColor = '0xff00000';
+  @observable
+  String orderTrackingIdPrefixId = 'DOCS';
+  @observable
+  String isInsuranceAllowed = '0';
+  @observable
+  String insurancePercentage = '0';
+  @observable
+  String insuranceDescription = '';
+  @observable
+  ThemeData lightTheme = ThemeData(
+    primarySwatch: createMaterialColor(ColorUtils.colorPrimary),
+    primaryColor: ColorUtils.colorPrimary,
+    scaffoldBackgroundColor: Colors.white,
+    fontFamily: GoogleFonts.lato().fontFamily,
+    iconTheme: IconThemeData(color: Colors.black),
+    dialogBackgroundColor: Colors.white,
+    unselectedWidgetColor: Colors.grey,
+    dividerColor: dividerColor,
+    cardColor: Colors.white,
+    tabBarTheme: TabBarTheme(labelColor: Colors.black),
+    appBarTheme: AppBarTheme(
+        color: ColorUtils.colorPrimary,
+        elevation: 0,
+        systemOverlayStyle:
+            SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light, statusBarColor: Colors.transparent)),
+    dialogTheme: DialogTheme(shape: dialogShape()),
+    bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.white),
+    colorScheme: ColorScheme.light(
+      primary: ColorUtils.colorPrimary,
+    ),
+  ).copyWith(
+    pageTransitionsTheme: PageTransitionsTheme(
+      builders: <TargetPlatform, PageTransitionsBuilder>{
+        TargetPlatform.android: OpenUpwardsPageTransitionsBuilder(),
+        TargetPlatform.linux: OpenUpwardsPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+      },
+    ),
+  );
+
+  @observable
+  ThemeData darkTheme = ThemeData(
+    primarySwatch: createMaterialColor(ColorUtils.colorPrimary),
+    primaryColor: ColorUtils.colorPrimary,
+    scaffoldBackgroundColor: ColorUtils.scaffoldColorDark,
+    fontFamily: GoogleFonts.lato().fontFamily,
+    iconTheme: IconThemeData(color: Colors.white),
+    dialogBackgroundColor: ColorUtils.scaffoldSecondaryDark,
+    unselectedWidgetColor: Colors.white60,
+    dividerColor: Colors.white12,
+    cardColor: ColorUtils.scaffoldSecondaryDark,
+    tabBarTheme: TabBarTheme(labelColor: Colors.white),
+    appBarTheme: AppBarTheme(
+      color: ColorUtils.scaffoldSecondaryDark,
+      elevation: 0,
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarIconBrightness: Brightness.light,
+        statusBarColor: Colors.transparent,
+      ),
+    ),
+    dialogTheme: DialogTheme(shape: dialogShape()),
+    snackBarTheme: SnackBarThemeData(backgroundColor: ColorUtils.appButtonColorDark),
+    bottomSheetTheme: BottomSheetThemeData(backgroundColor: ColorUtils.appButtonColorDark),
+    colorScheme: ColorScheme.dark(
+      primary: ColorUtils.colorPrimary,
+    ),
+  ).copyWith(
+      pageTransitionsTheme: PageTransitionsTheme(
+    builders: <TargetPlatform, PageTransitionsBuilder>{
+      TargetPlatform.android: OpenUpwardsPageTransitionsBuilder(),
+      TargetPlatform.linux: OpenUpwardsPageTransitionsBuilder(),
+      TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+    },
+  ));
 
   @action
   Future<void> setLoading(bool val) async {
@@ -151,7 +237,7 @@ abstract class _AppStore with Store {
       textSecondaryColorGlobal = textSecondaryColor;
 
       defaultLoaderBgColorGlobal = Colors.white;
-      appButtonBackgroundColorGlobal = colorPrimary;
+      appButtonBackgroundColorGlobal = ColorUtils.colorPrimary;
       shadowColorGlobal = Colors.black12;
     }
   }
@@ -203,7 +289,115 @@ abstract class _AppStore with Store {
   }
 
   @action
-  Future<void> setSupportEmail(String val) async {
-    supportEmail = val;
+  Future<void> setSiteEmail(String val) async {
+    siteEmail = val;
+  }
+
+  @action
+  Future<void> setIsAllowDeliveryMan(bool val) async {
+    isAllowDeliveryMan = val;
+  }
+
+  @action
+  Future<void> setReferralCode(String val) async {
+    referralCode = val;
+  }
+
+  @action
+  Future<void> setMaxAmountPerMonth(String val) async {
+    maxAmountEarning = val;
+  }
+
+  @action
+  Future<void> setThemeColor(String val) async {
+    themeColor = val;
+  }
+
+  @action
+  Future<void> setOrderTrackingIdPrefix(String val) async {
+    orderTrackingIdPrefixId = val;
+  }
+
+  @action
+  Future<void> setInsurancePercentage(String val) async {
+    insurancePercentage = val;
+  }
+
+  @action
+  Future<void> setIsInsuranceAllowed(String val) async {
+    isInsuranceAllowed = val;
+  }
+
+  @action
+  Future<void> setInsuranceDescription(String val) async {
+    insuranceDescription = val;
+  }
+
+  @action
+  void updateTheme(Color newColor) {
+    ColorUtils.updateColors(appStore.themeColor);
+    lightTheme = ThemeData(
+      primarySwatch: createMaterialColor(newColor),
+      primaryColor: newColor,
+      scaffoldBackgroundColor: Colors.white,
+      fontFamily: GoogleFonts.lato().fontFamily,
+      iconTheme: IconThemeData(color: Colors.black),
+      dialogBackgroundColor: Colors.white,
+      unselectedWidgetColor: Colors.grey,
+      dividerColor: dividerColor,
+      cardColor: Colors.white,
+      tabBarTheme: TabBarTheme(labelColor: Colors.black),
+      appBarTheme: AppBarTheme(
+          color: newColor,
+          elevation: 0,
+          systemOverlayStyle:
+              SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light, statusBarColor: Colors.transparent)),
+      dialogTheme: DialogTheme(shape: dialogShape()),
+      bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.white),
+      colorScheme: ColorScheme.light(
+        primary: newColor,
+      ),
+    ).copyWith(
+      pageTransitionsTheme: PageTransitionsTheme(
+        builders: <TargetPlatform, PageTransitionsBuilder>{
+          TargetPlatform.android: OpenUpwardsPageTransitionsBuilder(),
+          TargetPlatform.linux: OpenUpwardsPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        },
+      ),
+    );
+    darkTheme = ThemeData(
+      primarySwatch: createMaterialColor(newColor),
+      primaryColor: newColor,
+      scaffoldBackgroundColor: ColorUtils.scaffoldColorDark,
+      fontFamily: GoogleFonts.lato().fontFamily,
+      iconTheme: IconThemeData(color: Colors.white),
+      dialogBackgroundColor: ColorUtils.scaffoldSecondaryDark,
+      unselectedWidgetColor: Colors.white60,
+      dividerColor: Colors.white12,
+      cardColor: ColorUtils.scaffoldSecondaryDark,
+      tabBarTheme: TabBarTheme(labelColor: Colors.white),
+      appBarTheme: AppBarTheme(
+        color: ColorUtils.scaffoldSecondaryDark,
+        elevation: 0,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarIconBrightness: Brightness.light,
+          statusBarColor: Colors.transparent,
+        ),
+      ),
+      dialogTheme: DialogTheme(shape: dialogShape()),
+      snackBarTheme: SnackBarThemeData(backgroundColor: ColorUtils.appButtonColorDark),
+      bottomSheetTheme: BottomSheetThemeData(backgroundColor: ColorUtils.appButtonColorDark),
+      colorScheme: ColorScheme.dark(
+        primary: newColor,
+      ),
+    ).copyWith(
+        pageTransitionsTheme: PageTransitionsTheme(
+      builders: <TargetPlatform, PageTransitionsBuilder>{
+        TargetPlatform.android: OpenUpwardsPageTransitionsBuilder(),
+        TargetPlatform.linux: OpenUpwardsPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+      },
+    ));
   }
 }

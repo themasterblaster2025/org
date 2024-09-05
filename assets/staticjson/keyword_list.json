@@ -332,6 +332,12 @@
         "keyword_id": 258,
         "keyword_name": "username",
         "keyword_value": "Username"
+      },
+      {
+        "screenId": "5",
+        "keyword_id": 503,
+        "keyword_name": "partnerCode",
+        "keyword_value": "Partner code"
       }
     ]
   },
@@ -1088,6 +1094,60 @@
         "keyword_id": 375,
         "keyword_name": "pleaseAvoidSendingProhibitedItems",
         "keyword_value": "Note: Please avoid sending prohibited items."
+      },
+      {
+        "screenId": "19",
+        "keyword_id": 434,
+        "keyword_name": "insuranceCharge",
+        "keyword_value": "Insurance charge"
+      },
+      {
+        "screenId": "19",
+        "keyword_id": 456,
+        "keyword_name": "labels",
+        "keyword_value": "Labels"
+      },
+      {
+        "screenId": "19",
+        "keyword_id": 457,
+        "keyword_name": "pickupPersonName",
+        "keyword_value": "Pickup person name"
+      },
+      {
+        "screenId": "19",
+        "keyword_id": 458,
+        "keyword_name": "pickupInstructions",
+        "keyword_value": "Pickup instructions"
+      },
+      {
+        "screenId": "19",
+        "keyword_id": 459,
+        "keyword_name": "deliveryPersonName",
+        "keyword_value": "Delivery person name"
+      },
+      {
+        "screenId": "19",
+        "keyword_id": 460,
+        "keyword_name": "deliveryInstructions",
+        "keyword_value": "Delivery instructions"
+      },
+      {
+        "screenId": "19",
+        "keyword_id": 461,
+        "keyword_name": "insurance",
+        "keyword_value": "Insurance"
+      },
+      {
+        "screenId": "19",
+        "keyword_id": 462,
+        "keyword_name": "addCourierInsurance",
+        "keyword_value": "Add Courier Insurance"
+      },
+      {
+        "screenId": "19",
+        "keyword_id": 463,
+        "keyword_name": "noThanksRisk",
+        "keyword_value": "No thanks, I'll risk it"
       }
     ]
   },
@@ -1358,6 +1418,12 @@
         "keyword_id": 169,
         "keyword_name": "sureWantToDeleteAddress",
         "keyword_value": "Are you sure want to delete this address?"
+      },
+      {
+        "screenId": "25",
+        "keyword_id": 464,
+        "keyword_name": "addressType",
+        "keyword_value": "Address type"
       }
     ]
   },
@@ -1604,6 +1670,54 @@
         "keyword_id": 407,
         "keyword_name": "yourExperience",
         "keyword_value": "How was your delivery experience with us"
+      },
+      {
+        "screenId": "27",
+        "keyword_id": 448,
+        "keyword_name": "invalidPickupAddress",
+        "keyword_value": "Invalid pickup address"
+      },
+      {
+        "screenId": "27",
+        "keyword_id": 449,
+        "keyword_name": "refusedBySender",
+        "keyword_value": "Refused by sender"
+      },
+      {
+        "screenId": "27",
+        "keyword_id": 450,
+        "keyword_name": "invalidDeliveryAddress",
+        "keyword_value": "Invalid delivery address"
+      },
+      {
+        "screenId": "27",
+        "keyword_id": 451,
+        "keyword_name": "exception",
+        "keyword_value": "Exception"
+      },
+      {
+        "screenId": "27",
+        "keyword_id": 452,
+        "keyword_name": "refusedByRecipient",
+        "keyword_value": "Refused by recipient"
+      },
+      {
+        "screenId": "27",
+        "keyword_id": 465,
+        "keyword_name": "shippedVia",
+        "keyword_value": "Shipped via"
+      },
+      {
+        "screenId": "27",
+        "keyword_id": 466,
+        "keyword_name": "pleaseSelectReason",
+        "keyword_value": "please select reason"
+      },
+      {
+        "screenId": "27",
+        "keyword_id": 467,
+        "keyword_name": "cancelAndReturn",
+        "keyword_value": "Cancel & Rerun"
       }
     ]
   },
@@ -1760,6 +1874,12 @@
         "keyword_id": 214,
         "keyword_name": "lblReturn",
         "keyword_value": "Return"
+      },
+      {
+        "screenId": "30",
+        "keyword_id": 476,
+        "keyword_name": "process",
+        "keyword_value": "Process"
       }
     ]
   },
@@ -1904,6 +2024,18 @@
         "keyword_id": 347,
         "keyword_name": "commission",
         "keyword_value": "Total earning"
+      },
+      {
+        "screenId": "32",
+        "keyword_id": 477,
+        "keyword_name": "copy",
+        "keyword_value": "copy"
+      },
+      {
+        "screenId": "32",
+        "keyword_id": 478,
+        "keyword_name": "copiedToClipboard",
+        "keyword_value": "copied to clipboard"
       }
     ]
   },
@@ -2408,6 +2540,54 @@
         "keyword_id": 278,
         "keyword_name": "withdrawMoney",
         "keyword_value": "Withdraw money"
+      },
+      {
+        "screenId": "38",
+        "keyword_id": 426,
+        "keyword_name": "details",
+        "keyword_value": "Details"
+      },
+      {
+        "screenId": "38",
+        "keyword_id": 427,
+        "keyword_name": "withdrawDetails",
+        "keyword_value": "Withdraw details"
+      },
+      {
+        "screenId": "38",
+        "keyword_id": 428,
+        "keyword_name": "transactionId",
+        "keyword_value": "Transaction id"
+      },
+      {
+        "screenId": "38",
+        "keyword_id": 429,
+        "keyword_name": "via",
+        "keyword_value": "via"
+      },
+      {
+        "screenId": "38",
+        "keyword_id": 430,
+        "keyword_name": "createdDate",
+        "keyword_value": "Created date"
+      },
+      {
+        "screenId": "38",
+        "keyword_id": 431,
+        "keyword_name": "otherDetails",
+        "keyword_value": "Other Details"
+      },
+      {
+        "screenId": "38",
+        "keyword_id": 432,
+        "keyword_name": "image",
+        "keyword_value": "Image"
+      },
+      {
+        "screenId": "38",
+        "keyword_id": 433,
+        "keyword_name": "chatWithAdmin",
+        "keyword_value": "Chat with admin"
       }
     ]
   },
@@ -2720,6 +2900,438 @@
         "keyword_id": 403,
         "keyword_name": "completedWithReq",
         "keyword_value": "Completed withdrawal request"
+      }
+    ]
+  },
+  {
+    "screenID": "44",
+    "ScreenName": "RewardListScreen",
+    "keyword_data": [
+      {
+        "screenId": "44",
+        "keyword_id": 412,
+        "keyword_name": "earnedRewards",
+        "keyword_value": "Earned rewards"
+      }
+    ]
+  },
+  {
+    "screenID": "45",
+    "ScreenName": "ReferEarnScreen",
+    "keyword_data": [
+      {
+        "screenId": "45",
+        "keyword_id": 413,
+        "keyword_name": "referAndEarn",
+        "keyword_value": "Refer & Earn"
+      },
+      {
+        "screenId": "45",
+        "keyword_id": 470,
+        "keyword_name": "referDes1",
+        "keyword_value": "Refer to your friend and get a reward upto"
+      },
+      {
+        "screenId": "45",
+        "keyword_id": 471,
+        "keyword_name": "referDes2",
+        "keyword_value": "every month "
+      },
+      {
+        "screenId": "45",
+        "keyword_id": 472,
+        "keyword_name": "referShareTitle",
+        "keyword_value": "Share this code with your friend to get rewards upto"
+      },
+      {
+        "screenId": "45",
+        "keyword_id": 473,
+        "keyword_name": "shareDes1",
+        "keyword_value": "'I’m using this "
+      },
+      {
+        "screenId": "45",
+        "keyword_id": 474,
+        "keyword_name": "shareDes2",
+        "keyword_value": "and I thought you might like it too. Use my referral code"
+      },
+      {
+        "screenId": "45",
+        "keyword_id": 475,
+        "keyword_name": "shareDes3",
+        "keyword_value": " to sign up and get some cool rewards! "
+      }
+    ]
+  },
+  {
+    "screenID": "46",
+    "ScreenName": "ReferralHistoryScreen",
+    "keyword_data": [
+      {
+        "screenId": "46",
+        "keyword_id": 414,
+        "keyword_name": "referralHistory",
+        "keyword_value": "Referral history"
+      },
+      {
+        "screenId": "46",
+        "keyword_id": 447,
+        "keyword_name": "userType",
+        "keyword_value": "User Type"
+      }
+    ]
+  },
+  {
+    "screenID": "47",
+    "ScreenName": "CustomerSupportScreen",
+    "keyword_data": [
+      {
+        "screenId": "47",
+        "keyword_id": 415,
+        "keyword_name": "customerSupport",
+        "keyword_value": "Customer support"
+      }
+    ]
+  },
+  {
+    "screenID": "48",
+    "ScreenName": "FilterCountScreen",
+    "keyword_data": [
+      {
+        "screenId": "48",
+        "keyword_id": 416,
+        "keyword_name": "today",
+        "keyword_value": "Today"
+      },
+      {
+        "screenId": "48",
+        "keyword_id": 417,
+        "keyword_name": "yesterday",
+        "keyword_value": "yesterday"
+      },
+      {
+        "screenId": "48",
+        "keyword_id": 418,
+        "keyword_name": "thisWeek",
+        "keyword_value": "This week"
+      },
+      {
+        "screenId": "48",
+        "keyword_id": 419,
+        "keyword_name": "thisMonth",
+        "keyword_value": "This Month"
+      },
+      {
+        "screenId": "48",
+        "keyword_id": 420,
+        "keyword_name": "thisYear",
+        "keyword_value": "This Year"
+      },
+      {
+        "screenId": "48",
+        "keyword_id": 421,
+        "keyword_name": "custom",
+        "keyword_value": "Custom"
+      },
+      {
+        "screenId": "48",
+        "keyword_id": 422,
+        "keyword_name": "orderFilter",
+        "keyword_value": "Order Filter"
+      }
+    ]
+  },
+  {
+    "screenID": "49",
+    "ScreenName": "OrdersMapScreen",
+    "keyword_data": [
+      {
+        "screenId": "49",
+        "keyword_id": 423,
+        "keyword_name": "pendingPickup",
+        "keyword_value": "pending pickup"
+      },
+      {
+        "screenId": "49",
+        "keyword_id": 424,
+        "keyword_name": "pendingDelivery",
+        "keyword_value": "pending delivery"
+      },
+      {
+        "screenId": "49",
+        "keyword_id": 425,
+        "keyword_name": "view",
+        "keyword_value": "view"
+      }
+    ]
+  },
+  {
+    "screenID": "50",
+    "ScreenName": "AddSupportTicketScreen",
+    "keyword_data": [
+      {
+        "screenId": "50",
+        "keyword_id": 435,
+        "keyword_name": "addSupportTicket",
+        "keyword_value": "Add support ticket"
+      },
+      {
+        "screenId": "50",
+        "keyword_id": 436,
+        "keyword_name": "message",
+        "keyword_value": "Message"
+      },
+      {
+        "screenId": "50",
+        "keyword_id": 437,
+        "keyword_name": "supportType",
+        "keyword_value": "Support Type"
+      },
+      {
+        "screenId": "50",
+        "keyword_id": 438,
+        "keyword_name": "uploadDetails",
+        "keyword_value": "Upload Details"
+      },
+      {
+        "screenId": "50",
+        "keyword_id": 439,
+        "keyword_name": "video",
+        "keyword_value": "Video"
+      },
+      {
+        "screenId": "50",
+        "keyword_id": 440,
+        "keyword_name": "select",
+        "keyword_value": "Select"
+      },
+      {
+        "screenId": "50",
+        "keyword_id": 441,
+        "keyword_name": "supportId",
+        "keyword_value": "Support id"
+      },
+      {
+        "screenId": "50",
+        "keyword_id": 442,
+        "keyword_name": "attachment",
+        "keyword_value": "Attachment"
+      },
+      {
+        "screenId": "50",
+        "keyword_id": 443,
+        "keyword_name": "viewPhoto",
+        "keyword_value": "view photo"
+      },
+      {
+        "screenId": "50",
+        "keyword_id": 444,
+        "keyword_name": "viewVideo",
+        "keyword_value": "view video"
+      },
+      {
+        "screenId": "50",
+        "keyword_id": 445,
+        "keyword_name": "resolutionDetails",
+        "keyword_value": "Resolution Details"
+      },
+      {
+        "screenId": "50",
+        "keyword_id": 446,
+        "keyword_name": "completedOrders",
+        "keyword_value": "Completed Orders"
+      }
+    ]
+  },
+  {
+    "screenID": "51",
+    "ScreenName": "AddAddressScreen",
+    "keyword_data": [
+      {
+        "screenId": "51",
+        "keyword_id": 453,
+        "keyword_name": "home",
+        "keyword_value": "Home"
+      },
+      {
+        "screenId": "51",
+        "keyword_id": 454,
+        "keyword_name": "work",
+        "keyword_value": "Work"
+      },
+      {
+        "screenId": "51",
+        "keyword_id": 455,
+        "keyword_name": "selectAddressType",
+        "keyword_value": "Select address type"
+      }
+    ]
+  },
+  {
+    "screenID": "52",
+    "ScreenName": "RateReviewScreen",
+    "keyword_data": [
+      {
+        "screenId": "52",
+        "keyword_id": 468,
+        "keyword_name": "rateUs",
+        "keyword_value": "Rate Us"
+      },
+      {
+        "screenId": "52",
+        "keyword_id": 469,
+        "keyword_name": "excellent",
+        "keyword_value": "Excellent..."
+      }
+    ]
+  },
+  {
+    "screenID": "53",
+    "ScreenName": "PackagingSymbolsInfo",
+    "keyword_data": [
+      {
+        "screenId": "53",
+        "keyword_id": 479,
+        "keyword_name": "thisWayUup",
+        "keyword_value": "This Way Up"
+      },
+      {
+        "screenId": "53",
+        "keyword_id": 480,
+        "keyword_name": "thisWayUpDesc",
+        "keyword_value": "Shows the correct upright position for the package to ensure proper handling."
+      },
+      {
+        "screenId": "53",
+        "keyword_id": 481,
+        "keyword_name": "doNotStack",
+        "keyword_value": "Do Not Stack"
+      },
+      {
+        "screenId": "53",
+        "keyword_id": 482,
+        "keyword_name": "doNotStackDesc",
+        "keyword_value": "Warns that the package should not have other items stacked on top to prevent damage."
+      },
+      {
+        "screenId": "53",
+        "keyword_id": 483,
+        "keyword_name": "temperatureSensitive",
+        "keyword_value": "Temperature-Sensitive"
+      },
+      {
+        "screenId": "53",
+        "keyword_id": 484,
+        "keyword_name": "temperatureSensitiveDesc",
+        "keyword_value": "Indicates that the package contains items that need to be kept at a specific temperature range."
+      },
+      {
+        "screenId": "53",
+        "keyword_id": 485,
+        "keyword_name": "doNotHook",
+        "keyword_value": "Do Not Use Hooks"
+      },
+      {
+        "screenId": "53",
+        "keyword_id": 486,
+        "keyword_name": "doNotHookDesc",
+        "keyword_value": "Warns that hooks should not be used to handle or lift the package."
+      },
+      {
+        "screenId": "53",
+        "keyword_id": 487,
+        "keyword_name": "explosiveMaterial",
+        "keyword_value": "Explosive Material"
+      },
+      {
+        "screenId": "53",
+        "keyword_id": 488,
+        "keyword_name": "explosiveMaterialDesc",
+        "keyword_value": "Indicates that the package contains explosive materials and should be handled with extreme caution."
+      },
+      {
+        "screenId": "53",
+        "keyword_id": 489,
+        "keyword_name": "hazard",
+        "keyword_value": "Hazardous Material"
+      },
+      {
+        "screenId": "53",
+        "keyword_id": 490,
+        "keyword_name": "hazardDesc",
+        "keyword_value": "Warns that the package contains hazardous materials that require special handling."
+      },
+      {
+        "screenId": "53",
+        "keyword_id": 491,
+        "keyword_name": "bikeDelivery",
+        "keyword_value": "Bike Delivery"
+      },
+      {
+        "screenId": "53",
+        "keyword_id": 492,
+        "keyword_name": "bikeDeliveryDesc",
+        "keyword_value": "Indicates that Delivery will be completed by bike."
+      },
+      {
+        "screenId": "53",
+        "keyword_id": 493,
+        "keyword_name": "keepDry",
+        "keyword_value": "Keep Dry"
+      },
+      {
+        "screenId": "53",
+        "keyword_id": 494,
+        "keyword_name": "keepDryDesc",
+        "keyword_value": "Indicates that the package should be kept dry and protected from moisture or water."
+      },
+      {
+        "screenId": "53",
+        "keyword_id": 495,
+        "keyword_name": "perishable",
+        "keyword_value": "Perishable"
+      },
+      {
+        "screenId": "53",
+        "keyword_id": 496,
+        "keyword_name": "perishableDesc",
+        "keyword_value": "Indicates that the package contains perishable items that need to be handled quickly to avoid spoilage."
+      },
+      {
+        "screenId": "53",
+        "keyword_id": 497,
+        "keyword_name": "recycle",
+        "keyword_value": "Recycle"
+      },
+      {
+        "screenId": "53",
+        "keyword_id": 498,
+        "keyword_name": "recycleDesc",
+        "keyword_value": "Indicates that the packaging materials are recyclable."
+      },
+      {
+        "screenId": "53",
+        "keyword_id": 499,
+        "keyword_name": "doNotOpenWithSharpObject",
+        "keyword_value": "Do Not Open with Sharp Objects"
+      },
+      {
+        "screenId": "53",
+        "keyword_id": 500,
+        "keyword_name": "doNotOpenWithSharpObjectDesc",
+        "keyword_value": "Warns against using sharp objects to open the package to prevent damage to the contents."
+      },
+      {
+        "screenId": "53",
+        "keyword_id": 501,
+        "keyword_name": "fragile",
+        "keyword_value": "Fragile (Handle with Care)"
+      },
+      {
+        "screenId": "53",
+        "keyword_id": 502,
+        "keyword_name": "fragileDesc",
+        "keyword_value": "Indicates that the contents of the package are fragile and should be handled with care to prevent breakage."
       }
     ]
   }

@@ -14,6 +14,7 @@ import '../../extensions/text_styles.dart';
 import '../../main.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
+import '../../main/utils/dynamic_theme.dart';
 
 class OTPDialog extends StatefulWidget {
   final String? phoneNumber;
@@ -53,7 +54,7 @@ class OTPDialogState extends State<OTPDialog> {
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.message, color: colorPrimary, size: 50),
+            Icon(Icons.message, color: ColorUtils.colorPrimary, size: 50),
             16.height,
             Text(language.otpVerification, style: boldTextStyle(size: 18)),
             16.height,
@@ -100,7 +101,7 @@ class OTPDialogState extends State<OTPDialog> {
               children: [
                 Text(language.didNotReceiveTheCode, style: secondaryTextStyle(size: 16)),
                 4.width,
-                Text(language.resend, style: boldTextStyle(color: colorPrimary)).onTap(() {
+                Text(language.resend, style: boldTextStyle(color: ColorUtils.colorPrimary)).onTap(() {
                   sendOtp(context, phoneNumber: widget.phoneNumber.validate(), onUpdate: (verificationId) {
                     verId = verificationId;
                     setState(() {});

@@ -23,6 +23,7 @@ import '../network/RestApis.dart';
 import '../utils/Colors.dart';
 import '../utils/Common.dart';
 import '../utils/Constants.dart';
+import '../utils/dynamic_theme.dart';
 
 class AddSupportTicketScreen extends StatefulWidget {
   const AddSupportTicketScreen({super.key});
@@ -38,7 +39,7 @@ class _AddSupportTicketScreenState extends State<AddSupportTicketScreen> {
   TextEditingController supportTypeCon = TextEditingController();
   TextEditingController resolutionDetailcon = TextEditingController();
   //todo add keys
-  List<String> supportType = ["Vehicle", "Orders", "Delivery person"];
+  //List<String> supportType = ["Vehicle", "Orders", "Delivery person"];
   String? selectedSupportType;
   String? selectedUploadValue;
   XFile? image;
@@ -52,7 +53,7 @@ class _AddSupportTicketScreenState extends State<AddSupportTicketScreen> {
   }
 
   void init() async {
-    selectedSupportType = supportType[0];
+    selectedSupportType = SUPPORT_TYPE[0];
   }
 
   @override
@@ -75,7 +76,6 @@ class _AddSupportTicketScreenState extends State<AddSupportTicketScreen> {
       multiPartRequest.files.add(await MultipartFile.fromPath('support_image', image!.path));
     if (selectedUploadValue == "Video") if (image != null)
       multiPartRequest.files.add(await MultipartFile.fromPath('support_videos', image!.path));
-    print("-------multipart ${multiPartRequest}");
 
     await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
       appStore.setLoading(false);
@@ -95,7 +95,7 @@ class _AddSupportTicketScreenState extends State<AddSupportTicketScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
-      appBarTitle: "Add support ticket", // todo
+      appBarTitle: language.addSupportTicket, // todo
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -106,14 +106,14 @@ class _AddSupportTicketScreenState extends State<AddSupportTicketScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   8.height,
-                  Text("Message", style: primaryTextStyle()), //todo
+                  Text(language.message, style: primaryTextStyle()), //todo
                   8.height,
                   AppTextField(
                     isValidationRequired: true,
                     controller: messageCon,
                     textFieldType: TextFieldType.NAME,
                     errorThisFieldRequired: language.fieldRequiredMsg,
-                    decoration: commonInputDecoration(hintText: "Message"),
+                    decoration: commonInputDecoration(hintText: language.message),
                   ),
 
                   16.height,
@@ -127,7 +127,7 @@ class _AddSupportTicketScreenState extends State<AddSupportTicketScreen> {
                   //   decoration: commonInputDecoration(hintText: "Resolution detail"),
                   // ),
                   // 16.height,
-                  Text("Support Type", style: primaryTextStyle()),
+                  Text(language.supportType, style: primaryTextStyle()),
                   8.height,
                   Container(
                     width: context.width(),
@@ -138,9 +138,9 @@ class _AddSupportTicketScreenState extends State<AddSupportTicketScreen> {
                       isExpanded: true,
                       decoration: commonInputDecoration(),
                       hint: Text(language.selectDocument, style: primaryTextStyle()),
-                      value: "Vehicle",
+                      value: SUPPORT_TYPE[0],
                       dropdownColor: context.cardColor,
-                      items: supportType.map((String e) {
+                      items: SUPPORT_TYPE.map((String e) {
                         return DropdownMenuItem<String>(
                           value: e,
                           child: Text(
@@ -158,19 +158,19 @@ class _AddSupportTicketScreenState extends State<AddSupportTicketScreen> {
                     ),
                   ),
                   16.height,
-                  Text("Upload Details", style: primaryTextStyle()),
+                  Text(language.uploadDetails, style: primaryTextStyle()),
                   8.height,
                   Container(
                     width: context.width(),
                     height: 50,
                     decoration: boxDecorationWithRoundedCorners(
-                      backgroundColor: colorPrimary.withOpacity(0.06),
+                      backgroundColor: ColorUtils.colorPrimary.withOpacity(0.06),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start, // Center the radio buttons
                       children: <Widget>[
                         Radio<String>(
-                          value: 'Image',
+                          value: IMAGE,
                           groupValue: selectedUploadValue,
                           onChanged: (String? value) {
                             setState(() {
@@ -178,10 +178,10 @@ class _AddSupportTicketScreenState extends State<AddSupportTicketScreen> {
                             });
                           },
                         ),
-                        Text('Image'),
+                        Text(language.image),
                         SizedBox(width: 20),
                         Radio<String>(
-                          value: 'Video',
+                          value: VIDEO,
                           groupValue: selectedUploadValue,
                           onChanged: (String? value) {
                             setState(() {
@@ -189,16 +189,16 @@ class _AddSupportTicketScreenState extends State<AddSupportTicketScreen> {
                             });
                           },
                         ),
-                        Text('Video').expand(),
+                        Text(language.video).expand(),
                         if (selectedUploadValue != null && !selectedUploadValue.isEmptyOrNull)
                           Container(
                                   height: 38,
                                   decoration: boxDecorationDefault(
                                       border: Border.all(color: Colors.grey.withOpacity(0.2)),
                                       color: Colors.transparent),
-                                  child: Text('Select', style: boldTextStyle(size: 12)).paddingAll(6).center())
+                                  child: Text(language.select, style: boldTextStyle(size: 12)).paddingAll(6).center())
                               .onTap(() async {
-                            if (selectedUploadValue == "Image") {
+                            if (selectedUploadValue == IMAGE) {
                               image = null;
                               image = await ImagePicker().pickImage(source: ImageSource.gallery);
                             } else {
@@ -215,13 +215,13 @@ class _AddSupportTicketScreenState extends State<AddSupportTicketScreen> {
                       ],
                     ),
                   ),
-                  if (selectedUploadValue == "Image" && image != null && !image!.path.isEmptyOrNull)
+                  if (selectedUploadValue == IMAGE && image != null && !image!.path.isEmptyOrNull)
                     Image.file(File(image!.path),
                             height: 150, width: 150, fit: BoxFit.cover, alignment: Alignment.center)
                         .paddingTop(10)
                         .center()
                         .cornerRadiusWithClipRRect(4),
-                  if (selectedUploadValue == "Video" && _controller != null)
+                  if (selectedUploadValue == VIDEO && _controller != null)
                     FutureBuilder(
                       future: _initializeVideoPlayerFuture,
                       builder: (context, snapshot) {
@@ -247,7 +247,7 @@ class _AddSupportTicketScreenState extends State<AddSupportTicketScreen> {
         ],
       ),
       bottomNavigationBar: AppButton(
-          color: colorPrimary,
+          color: ColorUtils.colorPrimary,
           textColor: Colors.white,
           text: language.save,
           onTap: () {

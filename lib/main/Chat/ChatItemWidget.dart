@@ -18,6 +18,7 @@ import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../models/ChatMessageModel.dart';
 import '../utils/Constants.dart';
+import '../utils/dynamic_theme.dart';
 
 class ChatItemWidget extends StatefulWidget {
   final ChatMessageModel? data;
@@ -137,7 +138,7 @@ class _ChatItemWidgetState extends State<ChatItemWidget> {
           ? null
           : () async {
               bool? res = await showConfirmDialog(context, language.deleteMessage,
-                  positiveText: language.yes, negativeText: language.no, buttonColor: colorPrimary);
+                  positiveText: language.yes, negativeText: language.no, buttonColor: ColorUtils.colorPrimary);
               if (res ?? false) {
                 hideKeyboard(context);
                 ordersMessageService.deleteSingleMessage(docId: widget.data!.id.toString()).then((value) {
@@ -162,7 +163,7 @@ class _ChatItemWidgetState extends State<ChatItemWidget> {
               padding: customPadding(widget.data!.messageType),
               decoration: BoxDecoration(
                 boxShadow: appStore.isDarkMode ? null : defaultBoxShadow(),
-                color: widget.data!.isMe.validate() ? colorPrimary : context.cardColor,
+                color: widget.data!.isMe.validate() ? ColorUtils.colorPrimary : context.cardColor,
                 borderRadius: widget.data!.isMe.validate()
                     ? radiusOnly(bottomLeft: 12, topLeft: 12, bottomRight: 0, topRight: 12)
                     : radiusOnly(bottomLeft: 0, topLeft: 12, bottomRight: 12, topRight: 12),

@@ -55,8 +55,6 @@ class OrdersMessageService extends BaseService {
   }
 
   Stream<int> getUnReadCount({required String receiverId, String? orderId}) {
-    print("----------------orderId${orderId}");
-    print("----------------receiverId${receiverId}");
     return ordersRef
         .doc(orderId)
         .collection(ORDERS_MESSAGES_COLLECTION)

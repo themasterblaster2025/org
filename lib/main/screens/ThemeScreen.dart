@@ -11,6 +11,7 @@ import '../../extensions/text_styles.dart';
 import '../../main.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Constants.dart';
+import '../utils/dynamic_theme.dart';
 
 class ThemeScreen extends StatefulWidget {
   @override
@@ -60,7 +61,11 @@ class _ThemeScreenState extends State<ThemeScreen> {
   @override
   Widget build(BuildContext context) {
     List<String?> themeModeList = [language.light, language.dark, language.systemDefault];
-    List<Icon> icons = [Icon(Icons.light_mode_outlined, color: context.iconColor), Icon(Icons.dark_mode_outlined, color: context.iconColor), Icon(Icons.light_mode_outlined, color: context.iconColor)];
+    List<Icon> icons = [
+      Icon(Icons.light_mode_outlined, color: context.iconColor),
+      Icon(Icons.dark_mode_outlined, color: context.iconColor),
+      Icon(Icons.light_mode_outlined, color: context.iconColor)
+    ];
     return Scaffold(
       appBar: commonAppBarWidget(language.theme),
       body: ListView(
@@ -74,7 +79,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                   icons[index],
                   16.width,
                   Text(themeModeList[index]!, style: boldTextStyle()).expand(),
-                  if (index == currentIndex) Icon(Icons.check_circle, color: colorPrimary),
+                  if (index == currentIndex) Icon(Icons.check_circle, color: ColorUtils.colorPrimary),
                 ],
               ),
             ).onTap(() async {

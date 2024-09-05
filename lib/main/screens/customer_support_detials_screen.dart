@@ -12,6 +12,7 @@ import 'package:video_player/video_player.dart';
 
 import '../../extensions/extension_util/context_extensions.dart';
 import '../utils/Constants.dart';
+import '../utils/dynamic_theme.dart';
 
 class CustomerSupportDetailsScreen extends StatefulWidget {
   final String video;
@@ -63,8 +64,8 @@ class _CustomerSupportDetailsScreenState extends State<CustomerSupportDetailsScr
       hideControlsTimer: const Duration(seconds: 1),
       showOptions: false,
       materialProgressColors: ChewieProgressColors(
-        playedColor: colorPrimary,
-        handleColor: colorPrimary,
+        playedColor: ColorUtils.colorPrimary,
+        handleColor: ColorUtils.colorPrimary,
         backgroundColor: textSecondaryColorGlobal,
         bufferedColor: textSecondaryColorGlobal,
       ),

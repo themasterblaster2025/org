@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-
+import 'package:mighty_delivery/main/utils/dynamic_theme.dart';
 
 import '../../extensions/app_button.dart';
 import '../../extensions/colors.dart';
@@ -24,7 +24,7 @@ Widget commonButton(String title, Function() onTap, {double? width, Color? color
         title,
         style: boldTextStyle(color: textColor ?? white),
       ),
-      color: color ?? colorPrimary,
+      color: color ?? ColorUtils.colorPrimary,
       onTap: onTap,
     ),
   );
@@ -40,7 +40,9 @@ Widget outlineButton(String title, Function() onTap, {double? width, Color? colo
       ),
       onPressed: onTap,
       style: TextButton.styleFrom(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius), side: BorderSide(color: color ?? borderColor)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(defaultRadius),
+            side: BorderSide(color: color ?? ColorUtils.borderColor)),
         elevation: 0,
         padding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
         backgroundColor: Colors.transparent,
@@ -56,16 +58,17 @@ Widget scheduleOptionWidget(BuildContext context, bool isSelected, String imageP
     decoration: boxDecorationWithRoundedCorners(
         border: Border.all(
             color: isSelected
-                ? colorPrimary
+                ? ColorUtils.colorPrimary
                 : appStore.isDarkMode
                     ? Colors.transparent
-                    : borderColor),
-        backgroundColor: isSelected ? colorPrimary : context.cardColor),
+                    : ColorUtils.borderColor),
+        backgroundColor: isSelected ? ColorUtils.colorPrimary : context.cardColor),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(title == language.schedule ? Feather.calendar : Feather.clock, size: 18, color: isSelected ? Colors.white : context.iconColor),
+        Icon(title == language.schedule ? Feather.calendar : Feather.clock,
+            size: 18, color: isSelected ? Colors.white : context.iconColor),
         // ImageIcon(AssetImage(imagePath), size: 20, color: isSelected ? colorPrimary : Colors.grey),
         8.width,
         Text(title, style: boldTextStyle(color: isSelected ? Colors.white : textPrimaryColorGlobal)),
@@ -98,10 +101,11 @@ AppBar commonAppBarWidget(
 }) {
   return AppBar(
     centerTitle: center,
-    title: titleWidget ?? Text(title, style: titleTextStyle ?? (boldTextStyle(color: textColor ?? Colors.white, size: textSize))),
+    title: titleWidget ??
+        Text(title, style: titleTextStyle ?? (boldTextStyle(color: textColor ?? Colors.white, size: textSize))),
     actions: actions ?? [],
     automaticallyImplyLeading: showBack,
-    backgroundColor: color ?? colorPrimary,
+    backgroundColor: color ?? ColorUtils.colorPrimary,
     leading: showBack ? (backWidget ?? BackButton(color: textColor ?? Colors.white)) : null,
     shadowColor: shadowColor,
     shape: isBottom ? RoundedRectangleBorder(borderRadius: radiusOnly(bottomRight: 20, bottomLeft: 20)) : null,

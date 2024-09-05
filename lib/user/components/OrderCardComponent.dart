@@ -29,6 +29,7 @@ import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Images.dart';
 import '../../main/utils/Widgets.dart';
+import '../../main/utils/dynamic_theme.dart';
 import '../screens/OrderDetailScreen.dart';
 import '../screens/OrderTrackingScreen.dart';
 import 'GenerateInvoice.dart';
@@ -55,7 +56,7 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
         margin: EdgeInsets.only(bottom: 16),
         decoration: boxDecorationWithRoundedCorners(
             borderRadius: BorderRadius.circular(defaultRadius),
-            border: Border.all(color: colorPrimary.withOpacity(0.3)),
+            border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
             backgroundColor: Colors.transparent),
         padding: EdgeInsets.all(12),
         child: Column(
@@ -82,6 +83,8 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                 ),
               ],
             ),
+            Text('${appStore.orderTrackingIdPrefixId.toUpperCase()}${widget.item.orderTrackingId}',
+                style: boldTextStyle(size: 12, color: ColorUtils.colorPrimary)),
             8.height,
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,11 +92,11 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                 Container(
                   decoration: boxDecorationWithRoundedCorners(
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                      border: Border.all(color: ColorUtils.borderColor, width: appStore.isDarkMode ? 0.2 : 1),
                       backgroundColor: context.cardColor),
                   padding: EdgeInsets.all(8),
                   child: Image.asset(parcelTypeIcon(widget.item.parcelType.validate()),
-                      height: 24, width: 24, color: colorPrimary),
+                      height: 24, width: 24, color: ColorUtils.colorPrimary),
                 ),
                 8.width,
                 Column(
@@ -146,7 +149,7 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                           },
                           child: Row(
                             children: [
-                              ImageIcon(AssetImage(ic_from), size: 24, color: colorPrimary),
+                              ImageIcon(AssetImage(ic_from), size: 24, color: ColorUtils.colorPrimary),
                               12.width,
                               Text('${widget.item.pickupPoint!.address}', style: primaryTextStyle()).expand(),
                             ],
@@ -163,7 +166,7 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                     ).expand(),
                     12.width,
                     if (widget.item.pickupPoint!.contactNumber != null)
-                      Icon(Ionicons.ios_call_outline, size: 20, color: colorPrimary).onTap(() {
+                      Icon(Ionicons.ios_call_outline, size: 20, color: ColorUtils.colorPrimary).onTap(() {
                         commonLaunchUrl('tel:${widget.item.pickupPoint!.contactNumber}');
                       }),
                   ],
@@ -207,7 +210,7 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                               },
                               child: Row(
                                 children: [
-                                  ImageIcon(AssetImage(ic_to), size: 24, color: colorPrimary),
+                                  ImageIcon(AssetImage(ic_to), size: 24, color: ColorUtils.colorPrimary),
                                   12.width,
                                   Text('${widget.item.deliveryPoint!.address}',
                                           style: primaryTextStyle(), textAlign: TextAlign.start)
@@ -227,7 +230,7 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                     ).expand(),
                     12.width,
                     if (widget.item.deliveryPoint!.contactNumber != null)
-                      Icon(Ionicons.ios_call_outline, size: 20, color: colorPrimary).onTap(() {
+                      Icon(Ionicons.ios_call_outline, size: 20, color: ColorUtils.colorPrimary).onTap(() {
                         commonLaunchUrl('tel:${widget.item.deliveryPoint!.contactNumber}');
                       }),
                   ],
@@ -243,7 +246,7 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                 if (widget.item.status == ORDER_DELIVERED)
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                    decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary),
+                    decoration: boxDecorationWithRoundedCorners(backgroundColor: ColorUtils.colorPrimary),
                     child: Row(
                       children: [
                         Text(language.invoice, style: secondaryTextStyle(color: Colors.white)),
@@ -266,13 +269,13 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                   padding: EdgeInsets.symmetric(horizontal: 8),
                   shapeBorder: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(defaultRadius),
-                    side: BorderSide(color: colorPrimary),
+                    side: BorderSide(color: ColorUtils.colorPrimary),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(language.trackOrder, style: primaryTextStyle(color: colorPrimary)),
-                      Icon(Icons.arrow_right, color: colorPrimary),
+                      Text(language.trackOrder, style: primaryTextStyle(color: ColorUtils.colorPrimary)),
+                      Icon(Icons.arrow_right, color: ColorUtils.colorPrimary),
                     ],
                   ),
                   onTap: () {

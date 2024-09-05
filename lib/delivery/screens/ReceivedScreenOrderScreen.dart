@@ -19,6 +19,7 @@ import '../../extensions/app_text_field.dart';
 import '../../extensions/colors.dart';
 import '../../extensions/common.dart';
 import '../../extensions/confirmation_dialog.dart';
+import '../../extensions/shared_pref.dart';
 import '../../extensions/system_utils.dart';
 import '../../extensions/text_styles.dart';
 import '../../extensions/widgets.dart';
@@ -30,6 +31,7 @@ import '../../main/services/AuthServices.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
+import '../../main/utils/dynamic_theme.dart';
 import '../../user/components/CancelOrderDialog.dart';
 import '../components/OTPDialog.dart';
 
@@ -69,7 +71,6 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   String? _pickupDatetime;
   String? _deliveryDatetime;
 
-
   @override
   void initState() {
     super.initState();
@@ -79,10 +80,9 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   Future<void> init() async {
     mIsUpdate = widget.orderData != null;
     if (mIsUpdate) {
-      if(widget.orderData!.pickupDatetime.validate().isEmpty){
-        _pickupDatetime =  DateFormat('yyyy-MM-dd HH:mm:ss').format( DateTime.now().toUtc());
-      }
-      else{
+      if (widget.orderData!.pickupDatetime.validate().isEmpty) {
+        _pickupDatetime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now().toUtc());
+      } else {
         _pickupDatetime = widget.orderData!.pickupDatetime.validate();
       }
       picUpController.text = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(
@@ -115,7 +115,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
     await updateOrder(
       orderId: widget.orderData!.id,
       pickupDatetime: _pickupDatetime,
-      deliveryDatetime:_deliveryDatetime,
+      deliveryDatetime: _deliveryDatetime,
       clientName: (deliverySignature != null || imageSignature != null) ? '1' : '0',
       deliveryman: deliverySignature != null ? '1' : '0',
       picUpSignature: imageSignature,
@@ -143,7 +143,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               AppButton(
-                color: colorPrimary,
+                color: ColorUtils.colorPrimary,
                 text: language.imagePickToCamera,
                 textStyle: primaryTextStyle(color: white),
                 onTap: () {
@@ -154,7 +154,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
               ),
               16.height,
               AppButton(
-                color: colorPrimary,
+                color: ColorUtils.colorPrimary,
                 text: language.imagePicToGallery,
                 textStyle: primaryTextStyle(color: white),
                 onTap: () {
@@ -207,7 +207,8 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (widget.isShowPayment.validate()) ...[
-                      Text('${language.collectedAmount} : ${printAmount(widget.orderData!.totalAmount ?? 0)}', style: boldTextStyle()),
+                      Text('${language.collectedAmount} : ${printAmount(widget.orderData!.totalAmount ?? 0)}',
+                          style: boldTextStyle()),
                       8.height,
                     ],
                     if (widget.orderData!.paymentId == null)
@@ -284,7 +285,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                                 key: signaturePicUPPadKey,
                                 minimumStrokeWidth: 1,
                                 maximumStrokeWidth: 3,
-                                strokeColor: colorPrimary,
+                                strokeColor: ColorUtils.colorPrimary,
                               ),
                             ),
                           ),
@@ -297,7 +298,8 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                             8.width,
                             TextButton(
                               child: Text(language.clear,
-                                  style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
+                                  style: boldTextStyle(
+                                      color: ColorUtils.colorPrimary, decoration: TextDecoration.underline)),
                               onPressed: () async {
                                 signaturePicUPPadKey.currentState!.clear();
                               },
@@ -321,7 +323,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                             key: signatureDeliveryPadKey,
                             minimumStrokeWidth: 1,
                             maximumStrokeWidth: 3,
-                            strokeColor: colorPrimary,
+                            strokeColor: ColorUtils.colorPrimary,
                           ),
                         ),
                       ).visible(
@@ -335,7 +337,8 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                             8.width,
                             TextButton(
                               child: Text(language.clear,
-                                  style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
+                                  style: boldTextStyle(
+                                      color: ColorUtils.colorPrimary, decoration: TextDecoration.underline)),
                               onPressed: () async {
                                 signatureDeliveryPadKey.currentState!.clear();
                               },
@@ -348,7 +351,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                       dense: true,
                       contentPadding: EdgeInsets.zero,
                       value: mIsCheck,
-                      activeColor: colorPrimary,
+                      activeColor: ColorUtils.colorPrimary,
                       checkColor: Colors.white,
                       title: Text(
                           widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY
@@ -369,7 +372,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                               ? language.confirmDelivery
                               : language.confirmPickup,
                           textStyle: primaryTextStyle(color: white),
-                          color: colorPrimary,
+                          color: ColorUtils.colorPrimary,
                           onTap: () async {
                             if (!mIsCheck && widget.orderData!.paymentId == null && widget.isShowPayment) {
                               return toast(language.pleaseConfirmPayment);
@@ -471,7 +474,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
     } else {
       showConfirmDialogCustom(
         context,
-        primaryColor: colorPrimary,
+        primaryColor: ColorUtils.colorPrimary,
         dialogType: DialogType.CONFIRMATION,
         title: orderTitle(widget.orderData!.status!),
         positiveText: language.yes,
@@ -485,13 +488,12 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
 
   Future<void> paymentConfirmDialog(OrderData orderData) {
     return showConfirmDialogCustom(context,
-        primaryColor: colorPrimary,
+        primaryColor: ColorUtils.colorPrimary,
         dialogType: DialogType.CONFIRMATION,
         title: orderTitle(orderData.status!),
         positiveText: language.yes,
         negativeText: language.cancel, onAccept: (c) async {
       appStore.setLoading(true);
-      print("picupcontroller ${picUpController.text}");
       Map req = {
         'order_id': orderData.id,
         'client_id': orderData.clientId,

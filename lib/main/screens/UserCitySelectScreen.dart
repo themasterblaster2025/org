@@ -24,6 +24,7 @@ import '../utils/Colors.dart';
 import '../utils/Common.dart';
 import '../utils/Constants.dart';
 import '../utils/Images.dart';
+import '../utils/dynamic_theme.dart';
 import 'VerificationScreen.dart';
 
 class UserCitySelectScreen extends StatefulWidget {
@@ -238,10 +239,10 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
                                     children: [
                                       Text(mData.name!,
                                           style: selectedCity == mData.id
-                                              ? boldTextStyle(color: colorPrimary)
+                                              ? boldTextStyle(color: ColorUtils.colorPrimary)
                                               : primaryTextStyle()),
                                       selectedCity == mData.id
-                                          ? Icon(Icons.check_circle, color: colorPrimary)
+                                          ? Icon(Icons.check_circle, color: ColorUtils.colorPrimary)
                                           : SizedBox(),
                                     ],
                                   ),

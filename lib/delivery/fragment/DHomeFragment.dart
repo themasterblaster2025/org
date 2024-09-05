@@ -35,6 +35,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../delivery/fragment/DProfileFragment.dart';
 import '../../extensions/common.dart';
 import '../../main/screens/NotificationScreen.dart';
+import '../../main/utils/dynamic_theme.dart';
 import '../screens/DeliveryDashBoard.dart';
 import '../screens/WithDrawScreen.dart';
 
@@ -154,8 +155,12 @@ class _DHomeFragmentState extends State<DHomeFragment> {
       appStore.setCurrencyCode(value.currencyCode ?? CURRENCY_CODE);
       appStore.setCurrencySymbol(value.currency ?? CURRENCY_SYMBOL);
       appStore.setCopyRight(value.siteCopyright ?? "");
-      appStore.setSupportEmail(value.supportEmail ?? "");
+      appStore.setSiteEmail(value.siteEmail ?? "");
+      appStore.setOrderTrackingIdPrefix(value.orderTrackingIdPrefix ?? "");
+      appStore.setIsInsuranceAllowed(value.isInsuranceAllowed ?? "0");
+      appStore.setInsurancePercentage(value.insurancePercentage ?? "0");
       appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
+      appStore.setInsuranceDescription(value.insuranceDescription ?? '');
       setState(() {});
     }).catchError((error) {
       log(error.toString());
@@ -263,12 +268,12 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                     children: [
                       Text(
                         language.filterBelowCount,
-                        style: boldTextStyle(size: 16, color: colorPrimary),
+                        style: boldTextStyle(size: 16, color: ColorUtils.colorPrimary),
                       ),
                       Spacer(),
                       Icon(
                         Icons.filter_list,
-                        color: colorPrimary,
+                        color: ColorUtils.colorPrimary,
                       ).onTap(() async {
                         await showInDialog(context,
                                 shape: RoundedRectangleBorder(borderRadius: radius()),
@@ -344,7 +349,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
         padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary),
+          decoration: boxDecorationWithRoundedCorners(backgroundColor: ColorUtils.colorPrimary),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

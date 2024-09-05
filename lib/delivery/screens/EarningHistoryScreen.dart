@@ -17,6 +17,7 @@ import '../../main/network/RestApis.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
+import '../../main/utils/dynamic_theme.dart';
 
 class EarningHistoryScreen extends StatefulWidget {
   @override
@@ -95,7 +96,9 @@ class EarningHistoryScreenState extends State<EarningHistoryScreen> {
             preferredSize: Size(context.width(), 80),
             child: Container(
               decoration: boxDecorationWithRoundedCorners(
-                  borderRadius: radius(defaultRadius), backgroundColor: Colors.transparent, border: Border.all(color: colorPrimary.withOpacity(appStore.isDarkMode ? 0.6 : 0.08))),
+                  borderRadius: radius(defaultRadius),
+                  backgroundColor: Colors.transparent,
+                  border: Border.all(color: ColorUtils.colorPrimary.withOpacity(appStore.isDarkMode ? 0.6 : 0.08))),
               padding: EdgeInsets.all(16),
               child: IntrinsicHeight(
                 child: Row(
@@ -103,18 +106,22 @@ class EarningHistoryScreenState extends State<EarningHistoryScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(language.earning, style: primaryTextStyle(size: 16, color: Colors.white), textAlign: TextAlign.center),
+                        Text(language.earning,
+                            style: primaryTextStyle(size: 16, color: Colors.white), textAlign: TextAlign.center),
                         6.height,
-                        Text('${printAmount(earningDetail.deliveryManCommission ?? 0)}', style: boldTextStyle(size: 20, color: Colors.white), textAlign: TextAlign.center),
+                        Text('${printAmount(earningDetail.deliveryManCommission ?? 0)}',
+                            style: boldTextStyle(size: 20, color: Colors.white), textAlign: TextAlign.center),
                       ],
                     ).expand(),
                     VerticalDivider(color: Colors.white),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(language.adminCommission, style: primaryTextStyle(size: 16, color: Colors.white), textAlign: TextAlign.center),
+                        Text(language.adminCommission,
+                            style: primaryTextStyle(size: 16, color: Colors.white), textAlign: TextAlign.center),
                         6.height,
-                        Text('${printAmount(earningDetail.adminCommission ?? 0)}', style: boldTextStyle(size: 20, color: Colors.white), textAlign: TextAlign.center),
+                        Text('${printAmount(earningDetail.adminCommission ?? 0)}',
+                            style: boldTextStyle(size: 20, color: Colors.white), textAlign: TextAlign.center),
                       ],
                     ).expand(),
                   ],
@@ -162,12 +169,18 @@ class EarningHistoryScreenState extends State<EarningHistoryScreen> {
       margin: EdgeInsets.only(bottom: 16),
       padding: EdgeInsets.all(8),
       decoration: boxDecorationWithRoundedCorners(
-          borderRadius: radius(defaultRadius), backgroundColor: Colors.transparent, border: Border.all(color: colorPrimary.withOpacity(appStore.isDarkMode ? 0.6 : 0.08))),
+          borderRadius: radius(defaultRadius),
+          backgroundColor: Colors.transparent,
+          border: Border.all(color: ColorUtils.colorPrimary.withOpacity(appStore.isDarkMode ? 0.6 : 0.08))),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            children: [Text('${language.orderId}: #${data.orderId}', style: boldTextStyle()), Spacer(), Text('${data.paymentType}', style: primaryTextStyle())],
+            children: [
+              Text('${language.orderId}: #${data.orderId}', style: boldTextStyle()),
+              Spacer(),
+              Text('${data.paymentType}', style: primaryTextStyle())
+            ],
           ),
           SizedBox(height: 4),
           Text(printDate(data.createdAt.validate()), style: secondaryTextStyle()),

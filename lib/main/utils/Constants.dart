@@ -51,9 +51,10 @@ const CURRENCY_CODE = 'INR';
 //endregion
 
 //region App description and links
-const mAppDescription =
-    'You can deliver exactly when the user wants and can start processing the user’s order almost immediately after you receive it, or you can deliver on a specific day and time.';
-const mCopyright = '© 2024 MeetMighty IT Solutions';
+//const mAppDescription =
+// 'You can deliver exactly when the user wants and can start processing the user’s order almost immediately after '
+//'you receive it, or you can deliver on a specific day and time.';
+//const mCopyright = '© 2024 MeetMighty IT Solutions';
 const mPrivacyPolicy = "$DOMAIN_URL/privacypolicy";
 const mTermAndCondition = "$DOMAIN_URL/termofservice";
 //const mHelpAndSupport = 'https://meetmighty.com/mobile/delivery-admin/';
@@ -305,6 +306,7 @@ const MIN_DISTANCE = "min_distance";
 const MIN_WEIGHT = "min_weight";
 const PER_DISTANCE_CHARGE = "per_distance_charges";
 const PER_WEIGHT_CHARGE = "per_weight_charges";
+const INSURANCE_CHARGE = "insurance_charges";
 
 //region Currency Position
 const CURRENCY_POSITION_LEFT = 'left';
@@ -342,3 +344,6 @@ const CURRENT_CITY = 'CURRENT_CITY';
 
 const FONT_SIZE_PREF = 'FONT_SIZE_PREF';
 const int cancelOrderDuration = 60;
+const SUPPORT_TYPE = ["Vehicle", "Orders", "Delivery person"];
+const SUPPORT_TICKET_STATUS_PENDING = 'pending';
+const SUPPORT_TICKET_STATUS_IN_REVIEW = 'inreview';

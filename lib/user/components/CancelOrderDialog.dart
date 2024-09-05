@@ -18,6 +18,7 @@ import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/DataProviders.dart';
 import '../../main/utils/Widgets.dart';
+import '../../main/utils/dynamic_theme.dart';
 
 class CancelOrderDialog extends StatefulWidget {
   static String tag = '/CancelOrderDialog';
@@ -93,7 +94,7 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
               Text(language.cancelOrder, style: boldTextStyle(size: 18)),
               Icon(
                 Ionicons.close_circle_outline,
-                color: colorPrimary,
+                color: ColorUtils.colorPrimary,
               ).onTap(() {
                 finish(context);
               }),
@@ -107,7 +108,8 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
             isExpanded: true,
             isDense: true,
             decoration: commonInputDecoration(),
-            items: (getStringAsync(USER_TYPE) == CLIENT ? userCancelOrderReasonList : deliveryBoyCancelOrderReasonList).map((e) {
+            items: (getStringAsync(USER_TYPE) == CLIENT ? userCancelOrderReasonList : deliveryBoyCancelOrderReasonList)
+                .map((e) {
               return DropdownMenuItem(value: e, child: Text(e));
             }).toList(),
             onChanged: (String? val) {

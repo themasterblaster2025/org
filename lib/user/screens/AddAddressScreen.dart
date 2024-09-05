@@ -23,6 +23,7 @@ import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Widgets.dart';
+import '../../main/utils/dynamic_theme.dart';
 import 'GoogleMapScreen.dart';
 
 class AddAddressScreen extends StatefulWidget {
@@ -41,11 +42,11 @@ class AddAddressScreenState extends State<AddAddressScreen> {
   TextEditingController contactController = TextEditingController();
   double? latitude, longitude;
   String countryCode = defaultPhoneCode;
-  String dropDownValue = 'Home';
+  String dropDownValue = language.home;
   var items = [
-    'Home',
-    'Work',
-    'Friend',
+    language.home,
+    language.work,
+    language.other,
   ];
 
   @override
@@ -169,7 +170,8 @@ class AddAddressScreenState extends State<AddAddressScreen> {
                                 iconColor: Theme.of(context).dividerColor,
                                 enabledBorder:
                                     UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
-                                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: colorPrimary)),
+                                focusedBorder:
+                                    UnderlineInputBorder(borderSide: BorderSide(color: ColorUtils.colorPrimary)),
                               ),
                               searchStyle: primaryTextStyle(),
                               onInit: (c) {
@@ -196,7 +198,7 @@ class AddAddressScreenState extends State<AddAddressScreen> {
                   8.height,
                   Row(
                     children: [
-                      Text("Select Address type").expand(),
+                      Text(language.selectAddressType).expand(),
                       DropdownButton(
                         value: dropDownValue,
                         icon: const Icon(Icons.keyboard_arrow_down),

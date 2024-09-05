@@ -41,6 +41,7 @@ import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Widgets.dart';
+import '../../main/utils/dynamic_theme.dart';
 import 'DashboardScreen.dart';
 
 class PaymentScreen extends StatefulWidget {
@@ -311,7 +312,7 @@ class PaymentScreenState extends State<PaymentScreen> {
           SetupPaymentSheetParameters setupPaymentSheetParameters = SetupPaymentSheetParameters(
             paymentIntentClientSecret: res.clientSecret.validate(),
             style: ThemeMode.light,
-            appearance: PaymentSheetAppearance(colors: PaymentSheetAppearanceColors(primary: colorPrimary)),
+            appearance: PaymentSheetAppearance(colors: PaymentSheetAppearanceColors(primary: ColorUtils.colorPrimary)),
             applePay: PaymentSheetApplePay(merchantCountryCode: appStore.currencyCode.toUpperCase()),
             googlePay: PaymentSheetGooglePay(merchantCountryCode: appStore.currencyCode.toUpperCase(), testEnv: true),
             merchantDisplayName: mAppName,
@@ -440,7 +441,8 @@ class PaymentScreenState extends State<PaymentScreen> {
           if (transactionDetails["isSuccess"]) {
             toast("successful transaction");
             if (widget.isWallet == true) {
-              paymentConfirm(paymentType: PAYMENT_TYPE_PAYTABS, transactionId: transactionDetails['transactionReference']);
+              paymentConfirm(
+                  paymentType: PAYMENT_TYPE_PAYTABS, transactionId: transactionDetails['transactionReference']);
             } else {
               savePaymentApiCall(
                   txnId: transactionDetails['transactionReference'],
@@ -584,7 +586,7 @@ class PaymentScreenState extends State<PaymentScreen> {
               toast(value['response']['RESPMSG']);
               if (value['response']['STATUS'] == 'TXN_SUCCESS') {
                 if (widget.isWallet == true) {
-                  paymentConfirm(paymentType: PAYMENT_TYPE_PAYTM, transactionId:  value['response']['TXNID']);
+                  paymentConfirm(paymentType: PAYMENT_TYPE_PAYTM, transactionId: value['response']['TXNID']);
                 } else {
                   savePaymentApiCall(
                       paymentType: PAYMENT_TYPE_PAYTM, paymentStatus: 'paid', txnId: value['response']['TXNID']);
@@ -634,7 +636,7 @@ class PaymentScreenState extends State<PaymentScreen> {
     );
     if (response.isSuccess) {
       if (widget.isWallet == true) {
-        paymentConfirm(paymentType: PAYMENT_TYPE_MYFATOORAH, transactionId:  response.paymentId);
+        paymentConfirm(paymentType: PAYMENT_TYPE_MYFATOORAH, transactionId: response.paymentId);
       } else {
         savePaymentApiCall(paymentType: PAYMENT_TYPE_MYFATOORAH, txnId: response.paymentId, paymentStatus: 'paid');
       }
@@ -697,7 +699,9 @@ class PaymentScreenState extends State<PaymentScreen> {
                                       backgroundColor: context.cardColor,
                                       borderRadius: BorderRadius.circular(defaultRadius),
                                       border: Border.all(
-                                          color: mData.type == selectedPaymentType ? colorPrimary : borderColor),
+                                          color: mData.type == selectedPaymentType
+                                              ? ColorUtils.colorPrimary
+                                              : ColorUtils.borderColor),
                                     ),
                                     child: Row(
                                       children: [

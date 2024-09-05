@@ -144,39 +144,29 @@ class _AppTextFieldState extends State<AppTextField> {
         return widget.validator;
       } else if (widget.textFieldType == TextFieldType.EMAIL) {
         return (s) {
-          if (s!.trim().isEmpty)
-            return widget.errorThisFieldRequired
-                .validate(value: language.fieldRequiredMsg);
-          if (!s.trim().validateEmail())
-            return widget.errorInvalidEmail.validate(value: 'Email is invalid');
+          if (s!.trim().isEmpty) return widget.errorThisFieldRequired.validate(value: language.fieldRequiredMsg);
+          if (!s.trim().validateEmail()) return widget.errorInvalidEmail.validate(value: 'Email is invalid');
           return null;
         };
       } else if (widget.textFieldType == TextFieldType.PASSWORD) {
         return (s) {
-          if (s!.trim().isEmpty)
-            return widget.errorThisFieldRequired
-                .validate(value: language.fieldRequiredMsg);
+          if (s!.trim().isEmpty) return widget.errorThisFieldRequired.validate(value: language.fieldRequiredMsg);
           if (s.trim().length < passwordLengthGlobal)
-            return widget.errorMinimumPasswordLength.validate(
-                value:
-                    'Minimum password length should be $passwordLengthGlobal');
+            return widget.errorMinimumPasswordLength
+                .validate(value: 'Minimum password length should be $passwordLengthGlobal');
           return null;
         };
       } else if (widget.textFieldType == TextFieldType.NAME ||
           widget.textFieldType == TextFieldType.PHONE ||
           widget.textFieldType == TextFieldType.NUMBER) {
         return (s) {
-          if (s!.trim().isEmpty)
-            return widget.errorThisFieldRequired
-                .validate(value: language.fieldRequiredMsg);
+          if (s!.trim().isEmpty) return widget.errorThisFieldRequired.validate(value: language.fieldRequiredMsg);
           // if (!s.trim().validatePhone()) return widget.p.validate(value: 'Enter your proper number');
           return null;
         };
       } else if (widget.textFieldType == TextFieldType.URL) {
         return (s) {
-          if (s!.trim().isEmpty)
-            return widget.errorThisFieldRequired
-                .validate(value: language.fieldRequiredMsg);
+          if (s!.trim().isEmpty) return widget.errorThisFieldRequired.validate(value: language.fieldRequiredMsg);
           if (!s.validateURL()) {
             return widget.errorInvalidURL.validate(value: language.invalidUrl);
           }
@@ -184,20 +174,15 @@ class _AppTextFieldState extends State<AppTextField> {
         };
       } else if (widget.textFieldType == TextFieldType.USERNAME) {
         return (s) {
-          if (s!.trim().isEmpty)
-            return widget.errorThisFieldRequired
-                .validate(value: language.fieldRequiredMsg);
+          if (s!.trim().isEmpty) return widget.errorThisFieldRequired.validate(value: language.fieldRequiredMsg);
           if (s.contains(' ')) {
-            return widget.errorInvalidUsername
-                .validate(value: 'Username should not contain space');
+            return widget.errorInvalidUsername.validate(value: 'Username should not contain space');
           }
           return null;
         };
       } else if (widget.textFieldType == TextFieldType.MULTILINE) {
         return (s) {
-          if (s!.trim().isEmpty)
-            return widget.errorThisFieldRequired
-                .validate(value: language.fieldRequiredMsg);
+          if (s!.trim().isEmpty) return widget.errorThisFieldRequired.validate(value: language.fieldRequiredMsg);
           return null;
         };
       } else {
@@ -241,8 +226,7 @@ class _AppTextFieldState extends State<AppTextField> {
       return TextInputType.multiline;
     } else if (widget.textFieldType == TextFieldType.PASSWORD) {
       return TextInputType.visiblePassword;
-    } else if (widget.textFieldType == TextFieldType.PHONE ||
-        widget.textFieldType == TextFieldType.NUMBER) {
+    } else if (widget.textFieldType == TextFieldType.PHONE || widget.textFieldType == TextFieldType.NUMBER) {
       return TextInputType.number;
     } else if (widget.textFieldType == TextFieldType.URL) {
       return TextInputType.url;
@@ -302,14 +286,12 @@ class _AppTextFieldState extends State<AppTextField> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
-      obscureText:
-          widget.textFieldType == TextFieldType.PASSWORD && !isPasswordVisible,
+      obscureText: widget.textFieldType == TextFieldType.PASSWORD && !isPasswordVisible,
       validator: applyValidation(),
       textCapitalization: applyTextCapitalization(),
       textInputAction: applyTextInputAction(),
       onFieldSubmitted: (s) {
-        if (widget.nextFocus != null)
-          FocusScope.of(context).requestFocus(widget.nextFocus);
+        if (widget.nextFocus != null) FocusScope.of(context).requestFocus(widget.nextFocus);
 
         if (widget.onFieldSubmitted != null) widget.onFieldSubmitted!.call(s);
       },
@@ -325,16 +307,12 @@ class _AppTextFieldState extends State<AppTextField> {
       focusNode: widget.focus,
       style: widget.textStyle ?? primaryTextStyle(),
       textAlign: widget.textAlign ?? TextAlign.start,
-      maxLines: widget.textFieldType == TextFieldType.MULTILINE
-          ? null
-          : widget.maxLines.validate(value: 1),
-      minLines: widget.minLines.validate(
-          value: widget.textFieldType == TextFieldType.MULTILINE ? 3 : 1),
+      maxLines: widget.textFieldType == TextFieldType.MULTILINE ? null : widget.maxLines.validate(value: 1),
+      minLines: widget.minLines.validate(value: widget.textFieldType == TextFieldType.MULTILINE ? 3 : 1),
       autofocus: widget.autoFocus ?? false,
       enabled: widget.enabled,
       onChanged: widget.onChanged,
-      cursorColor: widget.cursorColor ??
-          Theme.of(context).textSelectionTheme.cursorColor,
+      cursorColor: widget.cursorColor ?? Theme.of(context).textSelectionTheme.cursorColor,
       readOnly: widget.readOnly.validate(),
       maxLength: widget.maxLength,
       enableSuggestions: widget.enableSuggestions.validate(value: true),

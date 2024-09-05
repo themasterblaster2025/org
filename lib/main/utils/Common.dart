@@ -1,13 +1,18 @@
+import 'dart:convert';
 import 'dart:core';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import 'package:mighty_delivery/main/utils/dynamic_theme.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -45,18 +50,18 @@ InputDecoration commonInputDecoration(
     isDense: true,
     hintText: hintText != null ? hintText : '',
     hintStyle: secondaryTextStyle(size: 16, color: Colors.grey),
-    fillColor: colorPrimary.withOpacity(0.06),
+    fillColor: ColorUtils.colorPrimary.withOpacity(0.06),
     counterText: '',
     suffixIcon: dateTime != null
         ? dateTime
         : suffixIcon != null
-            ? Icon(suffixIcon, color: colorPrimary, size: 22).onTap(suffixOnTap)
+            ? Icon(suffixIcon, color: ColorUtils.colorPrimary, size: 22).onTap(suffixOnTap)
             : null,
     enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(style: BorderStyle.solid, color: colorPrimaryLight),
+        borderSide: BorderSide(style: BorderStyle.solid, color: ColorUtils.colorPrimary.withOpacity(0.9)),
         borderRadius: BorderRadius.circular(defaultRadius)),
     focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
+        borderSide: BorderSide(color: ColorUtils.colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
     errorBorder: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(defaultRadius)),
     focusedErrorBorder: OutlineInputBorder(
@@ -109,7 +114,7 @@ Widget placeHolderWidget({double? height, double? width, BoxFit? fit, AlignmentG
 // }
 
 Color statusColor(String status) {
-  Color color = colorPrimary;
+  Color color = ColorUtils.colorPrimary;
   switch (status) {
     case ORDER_ACCEPTED:
       return acceptColor;
@@ -136,13 +141,13 @@ Color statusColor(String status) {
 }
 
 Color paymentStatusColor(String status) {
-  Color color = colorPrimary;
+  Color color = ColorUtils.colorPrimary;
   if (status == PAYMENT_PAID) {
     color = Colors.green;
   } else if (status == PAYMENT_FAILED) {
     color = Colors.red;
   } else if (status == PAYMENT_PENDING) {
-    color = colorPrimary;
+    color = ColorUtils.colorPrimary;
   }
   return color;
 }
@@ -189,11 +194,11 @@ String printDateWithoutAt(String date) {
 // }
 
 Widget loaderWidget() {
-  return Center(child: Lottie.asset('assets/loader.json', width: 50, height: 70));
+  return Center(child: Image.asset(ic_loader, width: 50, height: 70, color: ColorUtils.colorPrimary));
 }
 
 Widget emptyWidget() {
-  return Center(child: Lottie.asset('assets/no_data.json', width: 150, height: 250));
+  return Center(child: Image.asset(ic_no_data, width: 80, height: 80, color: ColorUtils.colorPrimary));
 }
 
 String orderStatus(String orderStatus) {
@@ -298,6 +303,11 @@ oneSignalSettings() async {
     });
     OneSignal.Notifications.addClickListener((notification) async {
       var notId = notification.notification.additionalData!["id"];
+      var notType = notification.notification.additionalData!["type"];
+      print("------------------${notType.toString()}");
+      if (notType.toString().contains(ORDER_TRANSFER) || notType.toString().contains(ORDER_ASSIGNED)) {
+        playSoundForDuration();
+      }
       if (notId != null) {
         if (!appStore.isLoggedIn) {
           LoginScreen().launch(getContext);
@@ -313,7 +323,30 @@ oneSignalSettings() async {
       print('NOTIFICATION WILL DISPLAY LISTENER CALLED WITH: ${event.notification.jsonRepresentation()}');
       event.preventDefault();
       event.notification.display();
+      if (event.notification.additionalData!["type"].toString().contains(ORDER_TRANSFER) ||
+          event.notification.additionalData!["type"].toString().contains(ORDER_ASSIGNED)) {
+        playSoundForDuration();
+      }
     });
+  }
+}
+
+// Method to play the sound for 30 seconds
+void playSoundForDuration() async {
+  try {
+    FlutterRingtonePlayer().play(
+      fromAsset: ic_ringtone,
+      android: AndroidSounds.alarm,
+      ios: IosSounds.triTone,
+      looping: true,
+      volume: 0.1,
+      asAlarm: false,
+    );
+
+    await Future.delayed(Duration(seconds: 60));
+    FlutterRingtonePlayer().stop();
+  } catch (e) {
+    print('Error playing sound: $e');
   }
 }
 
@@ -567,4 +600,18 @@ Future<void> openMap(double latitude, double longitude) async {
   } else {
     throw language.mapLoadingError;
   }
+}
+
+Future<BitmapDescriptor> createMarkerIconFromAsset(String assetPath) async {
+  final ByteData data = await rootBundle.load(assetPath);
+  final Uint8List bytes = data.buffer.asUint8List();
+  return BitmapDescriptor.fromBytes(bytes);
+}
+
+Color colorFromHex(String hexColor) {
+  hexColor = hexColor.toUpperCase().replaceAll("#", "");
+  if (hexColor.length == 6) {
+    hexColor = "FF$hexColor";
+  }
+  return Color(int.parse(hexColor, radix: 16));
 }

@@ -4,6 +4,7 @@ import 'package:mighty_delivery/extensions/extension_util/context_extensions.dar
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/main/components/CommonScaffoldComponent.dart';
+import 'package:mighty_delivery/main/utils/dynamic_theme.dart';
 
 import '../../extensions/colors.dart';
 import '../../extensions/common.dart';
@@ -45,7 +46,10 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
           Text(language.skip, style: boldTextStyle(color: grey)).onTap(
             () async {
               await setValue(IS_FIRST_TIME, false);
-              LoginScreen().launch(context, isNewTask: true, duration: Duration(milliseconds: 1000), pageRouteAnimation: PageRouteAnimation.Scale);
+              LoginScreen().launch(context,
+                  isNewTask: true,
+                  duration: Duration(milliseconds: 1000),
+                  pageRouteAnimation: PageRouteAnimation.Scale);
             },
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
@@ -64,10 +68,14 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Center(child: Image.asset(pages[index].image!, width: context.width(), height: context.height() * 0.4, fit: BoxFit.cover)),
-                    Text(pages[currentPage].title!, style: boldTextStyle(size: 24), textAlign: TextAlign.center).paddingOnly(left: 30, right: 30),
+                    Center(
+                        child: Image.asset(pages[index].image!,
+                            width: context.width(), height: context.height() * 0.4, fit: BoxFit.cover)),
+                    Text(pages[currentPage].title!, style: boldTextStyle(size: 24), textAlign: TextAlign.center)
+                        .paddingOnly(left: 30, right: 30),
                     16.height,
-                    Text(pages[currentPage].subTitle!, textAlign: TextAlign.center, style: secondaryTextStyle(size: 16)).paddingOnly(left: 30, right: 30),
+                    Text(pages[currentPage].subTitle!, textAlign: TextAlign.center, style: secondaryTextStyle(size: 16))
+                        .paddingOnly(left: 30, right: 30),
                   ],
                 );
               },
@@ -86,23 +94,28 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(Icons.navigate_before, color: colorPrimary, size: 30).onTap(() {
-                      pageController.animateToPage(--currentPage, duration: Duration(milliseconds: 800), curve: Curves.easeInOut);
+                    Icon(Icons.navigate_before, color: ColorUtils.colorPrimary, size: 30).onTap(() {
+                      pageController.animateToPage(--currentPage,
+                          duration: Duration(milliseconds: 800), curve: Curves.easeInOut);
                     }).visible(currentPage != 0),
                     DotIndicator(
                       pages: pages,
                       pageController: pageController,
-                      indicatorColor: colorPrimary,
+                      indicatorColor: ColorUtils.colorPrimary,
                     ),
                     currentPage != 2
-                        ? Icon(Icons.navigate_next, color: colorPrimary, size: 30).onTap(() {
-                            pageController.animateToPage(++currentPage, duration: Duration(milliseconds: 800), curve: Curves.easeInOut);
+                        ? Icon(Icons.navigate_next, color: ColorUtils.colorPrimary, size: 30).onTap(() {
+                            pageController.animateToPage(++currentPage,
+                                duration: Duration(milliseconds: 800), curve: Curves.easeInOut);
                           })
                         : commonButton(
                             language.getStarted,
                             () async {
                               await setValue(IS_FIRST_TIME, false);
-                              LoginScreen().launch(context, isNewTask: true, duration: Duration(milliseconds: 1000), pageRouteAnimation: PageRouteAnimation.Scale);
+                              LoginScreen().launch(context,
+                                  isNewTask: true,
+                                  duration: Duration(milliseconds: 1000),
+                                  pageRouteAnimation: PageRouteAnimation.Scale);
                             },
                           ),
                   ],

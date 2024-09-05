@@ -143,8 +143,7 @@ const double degrees2Radians = pi / 180.0;
 double radians(double degrees) => degrees * degrees2Radians;
 
 void afterBuildCreated(Function()? onCreated) {
-  makeNullable(SchedulerBinding.instance)!
-      .addPostFrameCallback((_) => onCreated?.call());
+  makeNullable(SchedulerBinding.instance)!.addPostFrameCallback((_) => onCreated?.call());
 }
 
 Widget dialogAnimatedWrapperWidget({
@@ -182,9 +181,7 @@ Widget dialogAnimatedWrapperWidget({
 
     case DialogAnimation.SLIDE_BOTTOM_TOP:
       return SlideTransition(
-        position: Tween(begin: Offset(0, 1), end: Offset.zero)
-            .chain(CurveTween(curve: curve))
-            .animate(animation),
+        position: Tween(begin: Offset(0, 1), end: Offset.zero).chain(CurveTween(curve: curve)).animate(animation),
         child: Opacity(
           opacity: animation.value,
           child: FadeTransition(opacity: animation, child: child),
@@ -193,9 +190,7 @@ Widget dialogAnimatedWrapperWidget({
 
     case DialogAnimation.SLIDE_LEFT_RIGHT:
       return SlideTransition(
-        position: Tween(begin: Offset(1.0, 0.0), end: Offset.zero)
-            .chain(CurveTween(curve: curve))
-            .animate(animation),
+        position: Tween(begin: Offset(1.0, 0.0), end: Offset.zero).chain(CurveTween(curve: curve)).animate(animation),
         child: Opacity(
           opacity: animation.value,
           child: FadeTransition(opacity: animation, child: child),
@@ -204,9 +199,7 @@ Widget dialogAnimatedWrapperWidget({
 
     case DialogAnimation.SLIDE_RIGHT_LEFT:
       return SlideTransition(
-        position: Tween(begin: Offset(-1, 0), end: Offset.zero)
-            .chain(CurveTween(curve: curve))
-            .animate(animation),
+        position: Tween(begin: Offset(-1, 0), end: Offset.zero).chain(CurveTween(curve: curve)).animate(animation),
         child: Opacity(
           opacity: animation.value,
           child: FadeTransition(opacity: animation, child: child),
@@ -236,8 +229,7 @@ Route<T> buildPageRoute<T>(
       return PageRouteBuilder(
         pageBuilder: (c, a1, a2) => child,
         transitionsBuilder: (c, anim, a2, child) {
-          return RotationTransition(
-              child: child, turns: ReverseAnimation(anim));
+          return RotationTransition(child: child, turns: ReverseAnimation(anim));
         },
         transitionDuration: duration ?? pageRouteTransitionDurationGlobal,
       );
@@ -359,36 +351,36 @@ Uri mailTo({
 //   );
 // }
 
-Widget lineIndicator(list, i, {bool isPersonal = false}) {
-  return SizedBox(
-    height: 16,
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(
-        5,
-        //  list.length,
-        (ind) {
-          return Container(
-            height: 4,
-            width: 50,
-            // width: i == ind ? 30 : 12,
-            margin: EdgeInsets.all(4),
-            decoration: BoxDecoration(
-                color: i == ind
-                    ? appStore.isDarkMode == true
-                        ? Colors.white
-                        : i == ind
-                            ? colorPrimary
-                            : lightBackgroundColor
-                    : Colors.grey.withOpacity(0.5),
-                borderRadius: radius(4)),
-          );
-        },
-      ),
-    ),
-  );
-}
+// Widget lineIndicator(list, i, {bool isPersonal = false}) {
+//   return SizedBox(
+//     height: 16,
+//     child: Row(
+//       crossAxisAlignment: CrossAxisAlignment.center,
+//       mainAxisAlignment: MainAxisAlignment.center,
+//       children: List.generate(
+//         5,
+//         //  list.length,
+//         (ind) {
+//           return Container(
+//             height: 4,
+//             width: 50,
+//             // width: i == ind ? 30 : 12,
+//             margin: EdgeInsets.all(4),
+//             decoration: BoxDecoration(
+//                 color: i == ind
+//                     ? appStore.isDarkMode == true
+//                         ? Colors.white
+//                         : i == ind
+//                             ? colorPrimary
+//                             : lightBackgroundColor
+//                     : Colors.grey.withOpacity(0.5),
+//                 borderRadius: radius(4)),
+//           );
+//         },
+//       ),
+//     ),
+//   );
+// }
 
 /// returns true if network is available
 Future<bool> isNetworkAvailable() async {
@@ -404,8 +396,7 @@ Future<T?> push<T>(
   PageRouteAnimation? pageRouteAnimation,
   Duration? duration,
 }) async {
-  final context =
-      getContext; // Assuming getContext is a method or property that returns a BuildContext
+  final context = getContext; // Assuming getContext is a method or property that returns a BuildContext
 
   if (isNewTask) {
     return await Navigator.of(context).pushAndRemoveUntil(
@@ -470,13 +461,10 @@ Future<bool> checkPermission() async {
   // Request app level location permission
   LocationPermission locationPermission = await Geolocator.requestPermission();
 
-  if (locationPermission == LocationPermission.whileInUse ||
-      locationPermission == LocationPermission.always) {
+  if (locationPermission == LocationPermission.whileInUse || locationPermission == LocationPermission.always) {
     // Check system level location permission
     if (!await Geolocator.isLocationServiceEnabled()) {
-      return await Geolocator.openLocationSettings()
-          .then((value) => false)
-          .catchError((e) => false);
+      return await Geolocator.openLocationSettings().then((value) => false).catchError((e) => false);
     } else {
       return true;
     }
@@ -489,7 +477,6 @@ Future<bool> checkPermission() async {
     return false;
   }
 }
-
 
 Future<void> getCurrentLocationData({Function()? onUpdate}) async {
   if (await checkPermission()) {

@@ -23,6 +23,7 @@ import '../../main/screens/NotificationScreen.dart';
 import '../../main/screens/UserCitySelectScreen.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Constants.dart';
+import '../../main/utils/dynamic_theme.dart';
 import '../../user/components/FilterOrderComponent.dart';
 import '../../user/fragment/AccountFragment.dart';
 import '../../user/fragment/OrderFragment.dart';
@@ -88,12 +89,14 @@ class DashboardScreenState extends State<DashboardScreen> {
               Container(
                 margin: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: boxDecorationWithRoundedCorners(borderRadius: radius(defaultRadius), backgroundColor: Colors.white24),
+                decoration: boxDecorationWithRoundedCorners(
+                    borderRadius: radius(defaultRadius), backgroundColor: Colors.white24),
                 child: Row(
                   children: [
                     Icon(Ionicons.ios_location_outline, color: Colors.white, size: 18),
                     8.width,
-                    Text(CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate(), style: primaryTextStyle(color: white)),
+                    Text(CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate(),
+                        style: primaryTextStyle(color: white)),
                   ],
                 ).onTap(() {
                   UserCitySelectScreen(
@@ -109,7 +112,9 @@ class DashboardScreenState extends State<DashboardScreen> {
               Stack(
                 clipBehavior: Clip.none,
                 children: [
-                  Align(alignment: AlignmentDirectional.center, child: Icon(Ionicons.md_notifications_outline, color: Colors.white)),
+                  Align(
+                      alignment: AlignmentDirectional.center,
+                      child: Icon(Ionicons.md_notifications_outline, color: Colors.white)),
                   if (appStore.allUnreadCount != 0)
                     Observer(builder: (context) {
                       return Positioned(
@@ -120,18 +125,24 @@ class DashboardScreenState extends State<DashboardScreen> {
                           width: 20,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
-                          child: Text(appStore.allUnreadCount.toString(), style: boldTextStyle(size: appStore.allUnreadCount > 99 ? 10 : 10)),
+                          child: Text(appStore.allUnreadCount.toString(),
+                              style: boldTextStyle(size: appStore.allUnreadCount > 99 ? 10 : 10)),
                         ),
                       );
                     }),
                 ],
               ).onTap(() {
                 NotificationScreen().launch(context);
-              }, highlightColor: Colors.transparent, hoverColor: Colors.transparent, splashColor: Colors.transparent).visible(currentIndex == 0),
+              },
+                  highlightColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                  splashColor: Colors.transparent).visible(currentIndex == 0),
               8.width,
               Stack(
                 children: [
-                  Align(alignment: AlignmentDirectional.center, child: Icon(Ionicons.md_options_outline, color: Colors.white)),
+                  Align(
+                      alignment: AlignmentDirectional.center,
+                      child: Icon(Ionicons.md_options_outline, color: Colors.white)),
                   Observer(builder: (context) {
                     return Positioned(
                       right: 8,
@@ -148,19 +159,24 @@ class DashboardScreenState extends State<DashboardScreen> {
                 showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(defaultRadius), topRight: Radius.circular(defaultRadius))),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(defaultRadius), topRight: Radius.circular(defaultRadius))),
                   builder: (context) {
                     return FilterOrderComponent();
                   },
                 );
-              }, splashColor: Colors.transparent, hoverColor: Colors.transparent, highlightColor: Colors.transparent).visible(currentIndex == 0),
+              },
+                  splashColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                  highlightColor: Colors.transparent).visible(currentIndex == 0),
             ],
             showBack: false),
       ),
       body: widgetList[currentIndex],
       floatingActionButton: FloatingActionButton(
         shape: RoundedRectangleBorder(borderRadius: radius(40)),
-        backgroundColor: appStore.availableBal >= 0 ? colorPrimary : textSecondaryColorGlobal,
+        backgroundColor: appStore.availableBal >= 0 ? ColorUtils.colorPrimary : textSecondaryColorGlobal,
         child: Icon(AntDesign.plus, color: Colors.white),
         onPressed: () {
           if (appStore.availableBal >= 0) {
@@ -173,16 +189,15 @@ class DashboardScreenState extends State<DashboardScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: AnimatedBottomNavigationBar(
-        backgroundColor: bottomNavigationColor,
+        backgroundColor: ColorUtils.bottomNavigationColor,
         icons: [AntDesign.home, FontAwesome.user_o],
         activeIndex: currentIndex,
         gapLocation: GapLocation.center,
         notchSmoothness: NotchSmoothness.defaultEdge,
-        activeColor: colorPrimary,
+        activeColor: ColorUtils.colorPrimary,
         inactiveColor: Colors.grey,
         onTap: (index) => setState(() => currentIndex = index),
       ),
-
     );
   }
 }

@@ -19,6 +19,7 @@ import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Widgets.dart';
+import '../../main/utils/dynamic_theme.dart';
 
 class RateReviewScreen extends StatefulWidget {
   static String tag = '/RateReviewscreen';
@@ -59,7 +60,7 @@ class _RateReviewScreenState extends State<RateReviewScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
-      appBarTitle: "Rate US",
+      appBarTitle: language.rateUs,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -68,8 +69,7 @@ class _RateReviewScreenState extends State<RateReviewScreen> {
             children: [
               Row(
                 children: [
-                  commonCachedNetworkImage(store?.storeImage.validate(),
-                          height: 95, width: 90, fit: BoxFit.cover)
+                  commonCachedNetworkImage(store?.storeImage.validate(), height: 95, width: 90, fit: BoxFit.cover)
                       .cornerRadiusWithClipRRect(8),
                   20.width,
                   Column(
@@ -87,9 +87,7 @@ class _RateReviewScreenState extends State<RateReviewScreen> {
                         children: [
                           Icon(Icons.phone, size: 14),
                           8.width,
-                          Text((store?.contactNumber).validate(),
-                                  style: boldTextStyle(size: 14))
-                              .expand(),
+                          Text((store?.contactNumber).validate(), style: boldTextStyle(size: 14)).expand(),
                         ],
                       ),
                     ],
@@ -98,7 +96,7 @@ class _RateReviewScreenState extends State<RateReviewScreen> {
               ).paddingAll(10),
               Divider(
                 height: 10,
-                color: dividerColor,
+                color: ColorUtils.dividerColor,
               ),
               10.height,
               Text(
@@ -132,7 +130,7 @@ class _RateReviewScreenState extends State<RateReviewScreen> {
                       controller: reviewController,
                       textInputAction: TextInputAction.next,
                       textFieldType: TextFieldType.MULTILINE,
-                      decoration: commonInputDecoration(hintText: "Excellent..."),
+                      decoration: commonInputDecoration(hintText: language.excellent),
                       validator: (value) {
                         if (value!.isEmpty) return language.fieldRequiredMsg;
                       },
@@ -144,7 +142,7 @@ class _RateReviewScreenState extends State<RateReviewScreen> {
                 children: [
                   outlineButton(language.skip, () {
                     finish(context);
-                  }, color: colorPrimary)
+                  }, color: ColorUtils.colorPrimary)
                       .paddingRight(isRTL ? 4 : 16)
                       .paddingLeft(isRTL ? 16 : 0)
                       .expand(),

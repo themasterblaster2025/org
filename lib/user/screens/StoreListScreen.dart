@@ -23,6 +23,7 @@ import '../../main/models/WorkHoursListModel.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Images.dart';
+import '../../main/utils/dynamic_theme.dart';
 import '../components/StoreItemComponent.dart';
 
 class StoreListScreen extends StatefulWidget {
@@ -128,7 +129,7 @@ class StoreListScreenState extends State<StoreListScreen> {
                       label: Text(language.nearest, style: primaryTextStyle(color: isNearest ? Colors.white : null)),
                       checkmarkColor: isNearest ? Colors.white : null,
                       selected: isNearest,
-                      selectedColor: colorPrimary,
+                      selectedColor: ColorUtils.colorPrimary,
                       onSelected: (v) {
                         getCurrentLocationData(onUpdate: () {
                           isNearest = v;

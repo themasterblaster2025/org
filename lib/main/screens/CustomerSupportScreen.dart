@@ -17,6 +17,7 @@ import '../network/RestApis.dart';
 import '../utils/Colors.dart';
 import '../utils/Common.dart';
 import '../utils/Constants.dart';
+import '../utils/dynamic_theme.dart';
 import 'customer_support_detials_screen.dart';
 
 class CustomerSupportScreen extends StatefulWidget {
@@ -69,9 +70,9 @@ class _CustomerSupportScreenState extends State<CustomerSupportScreen> {
   }
 
   getStatus(String status) {
-    if (status == "pending") {
+    if (status == SUPPORT_TICKET_STATUS_PENDING) {
       return Text(status, style: boldTextStyle(color: pendingColor));
-    } else if (status == "inreview") {
+    } else if (status == SUPPORT_TICKET_STATUS_IN_REVIEW) {
       return Text(status, style: boldTextStyle(color: in_progressColor));
     } else {
       return Text(status, style: boldTextStyle(color: completedColor));
@@ -81,7 +82,7 @@ class _CustomerSupportScreenState extends State<CustomerSupportScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
-      appBarTitle: "Customer support", // todo
+      appBarTitle: language.customerSupport, // todo
       body: Observer(builder: (context) {
         return Stack(
           children: [
@@ -99,8 +100,9 @@ class _CustomerSupportScreenState extends State<CustomerSupportScreen> {
                         decoration: boxDecorationWithRoundedCorners(
                             borderRadius: BorderRadius.circular(defaultRadius),
                             border: Border.all(
-                                color:
-                                    appStore.isDarkMode ? Colors.grey.withOpacity(0.3) : colorPrimary.withOpacity(0.4)),
+                                color: appStore.isDarkMode
+                                    ? Colors.grey.withOpacity(0.3)
+                                    : ColorUtils.colorPrimary.withOpacity(0.4)),
                             backgroundColor: Colors.transparent),
                         child: Row(
                           children: [
@@ -112,7 +114,7 @@ class _CustomerSupportScreenState extends State<CustomerSupportScreen> {
                                   children: [
                                     Row(
                                       children: [
-                                        Text("Support id : ", style: boldTextStyle()), // todo
+                                        Text(language.supportId, style: boldTextStyle()), // todo
                                         Text(item.supportId.validate().toString(), style: boldTextStyle()),
                                       ],
                                     ),
@@ -123,23 +125,24 @@ class _CustomerSupportScreenState extends State<CustomerSupportScreen> {
                                 8.height,
                                 Row(
                                   children: [
-                                    Text("Support type : ", style: primaryTextStyle()), // todo
+                                    Text('${language.supportType} :', style: primaryTextStyle()), // todo
                                     Text(item.supportType.validate(), style: primaryTextStyle()),
                                   ],
                                 ),
                                 8.height,
                                 Row(
                                   children: [
-                                    Text("Message : ", style: primaryTextStyle()), // todo
+                                    Text('${language.message} :', style: primaryTextStyle()), // todo
                                     Text(item.message.validate(), style: primaryTextStyle()),
                                   ],
                                 ),
                                 8.height,
                                 Row(
                                   children: [
-                                    Text("Attachment : ", style: primaryTextStyle()),
+                                    Text('${language.attachment} :', style: primaryTextStyle()),
                                     10.width, // todo
-                                    Text((item.video.isEmptyOrNull) ? "view photo" : "view video").onTap(() {
+                                    Text((item.video.isEmptyOrNull) ? language.viewPhoto : language.viewVideo)
+                                        .onTap(() {
                                       CustomerSupportDetailsScreen(item.video.toString(), item.image.toString())
                                           .launch(context);
                                     }),
@@ -149,7 +152,7 @@ class _CustomerSupportScreenState extends State<CustomerSupportScreen> {
                                 if (item.resolutionDetail != null)
                                   Row(
                                     children: [
-                                      Text("Resolution detail : ", style: primaryTextStyle()),
+                                      Text('${language.resolutionDetails} :', style: primaryTextStyle()),
                                       10.width, // todo
                                       Text(item.resolutionDetail.validate(), style: primaryTextStyle()),
                                     ],
@@ -171,7 +174,7 @@ class _CustomerSupportScreenState extends State<CustomerSupportScreen> {
         );
       }),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: colorPrimary,
+        backgroundColor: ColorUtils.colorPrimary,
         child: Icon(Icons.add, color: Colors.white),
         onPressed: () async {
           AddSupportTicketScreen().launch(context).then((value) {

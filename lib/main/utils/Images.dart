@@ -35,8 +35,28 @@ const ic_order_created = 'assets/icon/ic_order_created.png';
 const ic_order_draft = 'assets/icon/ic_order_draft.png';
 const ic_order_transfer = 'assets/icon/ic_order_transfer.png';
 const ic_order = 'assets/icon/ic_order.png';
+const ic_no_data = 'assets/ic_no_data.png';
+const ic_loader = 'assets/ic_loading.png';
+const ic_assigned_marker = 'assets/ic_assigned_marker.png';
+const ic_accepted_marker = 'assets/ic_accepted_marker.png';
 
 const ic_apple = 'assets/icons/ic_apple.png';
 const ic_google = 'assets/icons/ic_google.png';
 const ic_chat_unread_count = 'assets/message_detect_anim.json';
 const ic_refer_earn = 'assets/refer_earn.json';
+const ic_refer_history = 'assets/icon/ic_referral.png';
+
+// packing symbols
+const ic_fragile = 'assets/packing_symbols/ic_fragile.png';
+const ic_keep_dry = 'assets/packing_symbols/ic_keep_dry.png';
+const ic_this_way_up = 'assets/packing_symbols/ic_this_way_up.png';
+const ic_do_not_stack = 'assets/packing_symbols/ic_do_not_stack.png';
+const ic_temperature_sensitive = 'assets/packing_symbols/ic_temperature_sensitive.png';
+const ic_recycle = 'assets/packing_symbols/ic_recycle.png';
+const ic_do_not_hook = 'assets/packing_symbols/ic_do_not_hook.png';
+const ic_explosive_material = 'assets/packing_symbols/ic_explosive_material.png';
+const ic_hazard = 'assets/packing_symbols/ic_hazard.png';
+const ic_perishable = 'assets/packing_symbols/ic_perishable.png';
+const ic_do_not_open_with_sharp_object = 'assets/packing_symbols/ic_do_not_open_with_sharp_object.png';
+const ic_bike_delivery = 'assets/packing_symbols/ic_bike_delivery.png';
+const ic_ringtone = 'assets/ringtone/ringtone.mp3';

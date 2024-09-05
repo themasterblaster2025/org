@@ -14,6 +14,7 @@ import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
+import '../../main/utils/dynamic_theme.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final ProductData product;
@@ -33,25 +34,29 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         shrinkWrap: true,
         children: [
           commonCachedNetworkImage(widget.product.productImage.validate(),
-              fit: BoxFit.cover,
-              width: context.width(),
-              height: context.width() * 0.7)
+                  fit: BoxFit.cover, width: context.width(), height: context.width() * 0.7)
               .cornerRadiusWithClipRRect(defaultRadius),
           8.height,
           Text(
             printAmount(
               widget.product.price.validate(),
             ),
-            style: boldTextStyle(color: colorPrimary),
+            style: boldTextStyle(color: ColorUtils.colorPrimary),
           ),
           6.height,
-          Divider(height: 10,color: dividerColor,),
+          Divider(
+            height: 10,
+            color: ColorUtils.dividerColor,
+          ),
           10.height,
-          Text( language.description,
+          Text(
+            language.description,
             style: boldTextStyle(size: 18),
           ),
           8.height,
-          HtmlWidget(postContent: widget.product.description.validate(),)
+          HtmlWidget(
+            postContent: widget.product.description.validate(),
+          )
         ],
       ),
     );

@@ -17,6 +17,7 @@ import '../../main/utils/Common.dart';
 import '../../user/screens/OrderDetailScreen.dart';
 import '../components/CommonScaffoldComponent.dart';
 import '../utils/Constants.dart';
+import '../utils/dynamic_theme.dart';
 
 class NotificationScreen extends StatefulWidget {
   @override
@@ -26,7 +27,6 @@ class NotificationScreen extends StatefulWidget {
 class NotificationScreenState extends State<NotificationScreen> {
   ScrollController scrollController = ScrollController();
   int currentPage = 1;
-
   bool mIsLastPage = false;
   List<NotificationData> notificationData = [];
 
@@ -72,7 +72,7 @@ class NotificationScreenState extends State<NotificationScreen> {
             init(request: req);
           },
           child: Text(language.markAllRead, style: secondaryTextStyle(color: Colors.white)),
-        ).paddingRight(8)
+        ).visible(appStore.allUnreadCount > 0).paddingRight(8)
       ],
       body: Observer(builder: (context) {
         return Stack(
@@ -112,7 +112,9 @@ class NotificationScreenState extends State<NotificationScreen> {
   Widget notificationCard(NotificationData data) {
     return Container(
       margin: EdgeInsets.only(bottom: 8),
-      decoration: boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(defaultRadius), backgroundColor: colorPrimary.withOpacity(0.08)),
+      decoration: boxDecorationWithRoundedCorners(
+          borderRadius: BorderRadius.circular(defaultRadius),
+          backgroundColor: ColorUtils.colorPrimary.withOpacity(0.08)),
       padding: EdgeInsets.all(12),
       child: Row(
         children: [
@@ -122,9 +124,10 @@ class NotificationScreenState extends State<NotificationScreen> {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: colorPrimary.withOpacity(0.15),
+              color: ColorUtils.colorPrimary.withOpacity(0.15),
             ),
-            child: Image.asset(statusTypeIcon(type: data.data!.type), fit: BoxFit.fill, color: colorPrimary, width: 18, height: 18),
+            child: Image.asset(statusTypeIcon(type: data.data!.type),
+                fit: BoxFit.fill, color: ColorUtils.colorPrimary, width: 18, height: 18),
           ),
           8.width,
           Column(
@@ -142,7 +145,7 @@ class NotificationScreenState extends State<NotificationScreen> {
               Row(
                 children: [
                   Text('${data.data!.message}', style: primaryTextStyle(size: 14)).expand(),
-                  if (data.readAt.isEmptyOrNull) Icon(Entypo.dot_single, color: colorPrimary),
+                  if (data.readAt.isEmptyOrNull) Icon(Entypo.dot_single, color: ColorUtils.colorPrimary),
                 ],
               ),
             ],

@@ -3,20 +3,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mighty_delivery/extensions/decorations.dart';
 import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/extensions/text_styles.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
-import 'package:mighty_delivery/main/utils/Common.dart';
+import 'package:mighty_delivery/main.dart';
 import 'package:mighty_delivery/main/utils/Images.dart';
 
 import '../../extensions/app_button.dart';
 import '../../extensions/colors.dart';
 import '../../extensions/common.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
-import '../../main/utils/Constants.dart';
+import 'package:share_plus/share_plus.dart';
+
+import '../../main/utils/dynamic_theme.dart';
 
 class ReferEarnScreen extends StatefulWidget {
   const ReferEarnScreen({super.key});
@@ -30,7 +31,7 @@ class _ReferEarnScreenState extends State<ReferEarnScreen> {
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
       //TODO add keys
-      appBarTitle: "Refer & Earn",
+      appBarTitle: language.referAndEarn,
       body: Stack(
         children: [
           Column(
@@ -39,29 +40,30 @@ class _ReferEarnScreenState extends State<ReferEarnScreen> {
             children: [
               Lottie.asset(ic_refer_earn, width: 200),
               10.height,
-              Text("Refer to your friend and get a cash reward of 50 ", style: boldTextStyle()),
-              20.height,
               Text(
-                  "Share this code with your friend and after they register order,both of you will get 50 cash rewards"
-                  ". ",
-                  style: primaryTextStyle(),
+                  "${language.referDes1}\n ${appStore.currencySymbol}${appStore.maxAmountEarning} ${language.referDes2}",
+                  style: boldTextStyle(),
                   textAlign: TextAlign.center),
+              10.height,
+              Text("${language.referShareTitle} ${appStore.currencySymbol} ${appStore.maxAmountEarning}",
+                      style: secondaryTextStyle(), textAlign: TextAlign.center)
+                  .center(),
               30.height,
               DottedBorder(
                   dashPattern: [6, 3, 2, 3],
-                  color: viewLineColor,
+                  color: ColorUtils.dividerColor,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text("AD9TYE", style: boldTextStyle(size: 20)).paddingAll(8),
+                      Text(appStore.referralCode.validate(), style: boldTextStyle(size: 20)).paddingAll(8),
                       Icon(Icons.copy, size: 18).paddingAll(8)
                     ],
                   )).onTap(() {
-                Clipboard.setData(ClipboardData(text: "AD9TYE")).then((_) {
+                Clipboard.setData(ClipboardData(text: appStore.referralCode)).then((_) {
                   //TODO add key
-                  snackBar(context, content: Text("AD9TYE  copied to clipboard"));
+                  snackBar(context, content: Text("${appStore.referralCode.validate()} copied to clipboard"));
                 });
-              }),
+              }).visible(!appStore.referralCode.isEmptyOrNull),
               30.height,
               Divider(thickness: 1, color: Colors.grey.withOpacity(0.3)),
             ],
@@ -72,11 +74,14 @@ class _ReferEarnScreenState extends State<ReferEarnScreen> {
             right: 10,
             child: AppButton(
               width: context.width(),
-              color: colorPrimary,
-              text: "Refer & Earn",
+              color: ColorUtils.colorPrimary,
+              text: language.referAndEarn,
               textStyle: primaryTextStyle(color: white),
-              onTap: () {},
-            ).expand(),
+              onTap: () {
+                Share.share('${language.shareDes1} ${language.appName}, ${language.shareDes2} '
+                    '${appStore.referralCode} ${language.shareDes3} 🚀');
+              },
+            ),
           ),
         ],
       ),

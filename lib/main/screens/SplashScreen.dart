@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mighty_delivery/delivery/fragment/DHomeFragment.dart';
 import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
@@ -8,10 +10,15 @@ import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/main/screens/EmailVerificationScreen.dart';
 import 'package:mighty_delivery/main/screens/VerificationListScreen.dart';
+import 'package:mighty_delivery/main/utils/dynamic_theme.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:provider/provider.dart';
 
+import '../../AppTheme.dart';
 import '../../delivery/screens/DeliveryDashBoard.dart';
 import '../../delivery/screens/VerifyDeliveryPersonScreen.dart';
+import '../../extensions/colors.dart';
+import '../../extensions/decorations.dart';
 import '../../extensions/shared_pref.dart';
 import '../../extensions/system_utils.dart';
 import '../../extensions/text_styles.dart';
@@ -25,6 +32,7 @@ import '../../main/screens/LoginScreen.dart';
 import '../../main/screens/WalkThroughScreen.dart';
 import '../../main/utils/Constants.dart';
 import '../../user/screens/DashboardScreen.dart';
+import '../utils/Common.dart';
 import '../utils/Images.dart';
 import 'UserCitySelectScreen.dart';
 import 'VerificationScreen.dart';
@@ -46,6 +54,9 @@ class SplashScreenState extends State<SplashScreen> {
   Future<void> init() async {
     String versionNo = await getStringAsync(CURRENT_LAN_VERSION, defaultValue: LanguageVersion);
     await getLanguageList(versionNo).then((value) {
+      appStore.setThemeColor(value.themeColor!);
+      appStore.updateTheme(colorFromHex(value.themeColor!));
+
       print("value===========${value.data!.length}");
       appStore.setLoading(false);
       if (value.status == true) {
@@ -102,6 +113,7 @@ class SplashScreenState extends State<SplashScreen> {
         if (appStore.isLoggedIn && getIntAsync(USER_ID) != 0) {
           await getUserDetail(getIntAsync(USER_ID)).then((value) async {
             setValue(IS_VERIFIED_DELIVERY_MAN, !value.documentVerifiedAt.isEmptyOrNull);
+            appStore.setReferralCode(value.referralCode.validate());
             appStore.setUserType(value.userType.validate());
 
             if (value.deletedAt != null) {

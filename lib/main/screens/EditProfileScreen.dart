@@ -28,6 +28,7 @@ import '../../main/utils/Widgets.dart';
 import '../components/CommonScaffoldComponent.dart';
 import '../models/LoginResponse.dart';
 import '../utils/Images.dart';
+import '../utils/dynamic_theme.dart';
 import 'UserCitySelectScreen.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -80,12 +81,20 @@ class EditProfileScreenState extends State<EditProfileScreen> {
 
   Widget profileImage() {
     if (imageProfile != null) {
-      return Image.file(File(imageProfile!.path), height: 100, width: 100, fit: BoxFit.cover, alignment: Alignment.center).cornerRadiusWithClipRRect(100).center();
+      return Image.file(File(imageProfile!.path),
+              height: 100, width: 100, fit: BoxFit.cover, alignment: Alignment.center)
+          .cornerRadiusWithClipRRect(100)
+          .center();
     } else {
       if (appStore.userProfile.isNotEmpty) {
-        return commonCachedNetworkImage(appStore.userProfile.validate(), fit: BoxFit.cover, height: 100, width: 100).cornerRadiusWithClipRRect(100).center();
+        return commonCachedNetworkImage(appStore.userProfile.validate(), fit: BoxFit.cover, height: 100, width: 100)
+            .cornerRadiusWithClipRRect(100)
+            .center();
       } else {
-        return commonCachedNetworkImage(ic_profile, height: 90, width: 90).cornerRadiusWithClipRRect(50).paddingOnly(right: 4, bottom: 4).center();
+        return commonCachedNetworkImage(ic_profile, height: 90, width: 90)
+            .cornerRadiusWithClipRRect(50)
+            .paddingOnly(right: 4, bottom: 4)
+            .center();
       }
     }
   }
@@ -113,7 +122,8 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     });
   }
 
-  Future updateProfile({String? userName, String? name, String? userEmail, String? address, String? contactNumber, File? file}) async {
+  Future updateProfile(
+      {String? userName, String? name, String? userEmail, String? address, String? contactNumber, File? file}) async {
     MultipartRequest multiPartRequest = await getMultiPartRequest('update-profile');
     multiPartRequest.fields['id'] = getIntAsync(USER_ID).toString();
     multiPartRequest.fields['username'] = userName.validate();
@@ -176,7 +186,10 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                         child: Container(
                           margin: EdgeInsets.only(top: 60, left: 80),
                           padding: EdgeInsets.all(6),
-                          decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary, border: Border.all(width: 1, color: Colors.white), boxShape: BoxShape.circle),
+                          decoration: boxDecorationWithRoundedCorners(
+                              backgroundColor: ColorUtils.colorPrimary,
+                              border: Border.all(width: 1, color: Colors.white),
+                              boxShape: BoxShape.circle),
                           child: Icon(
                             Icons.edit,
                             color: white,
@@ -242,8 +255,10 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                               dialogTextStyle: primaryTextStyle(),
                               searchDecoration: InputDecoration(
                                 iconColor: Theme.of(context).dividerColor,
-                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
-                                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: colorPrimary)),
+                                enabledBorder:
+                                    UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
+                                focusedBorder:
+                                    UnderlineInputBorder(borderSide: BorderSide(color: ColorUtils.colorPrimary)),
                               ),
                               searchStyle: primaryTextStyle(),
                               onInit: (c) {
@@ -271,19 +286,19 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     ],
                   ),
                   16.height,
-                  if(!widget.isGoogle.validate()) ...[
-                  Text(language.address, style: primaryTextStyle()),
-                  8.height,
-                  AppTextField(
-                    controller: addressController,
-                    textFieldType: TextFieldType.MULTILINE,
-                    focus: addressFocus,
-                    textInputAction: TextInputAction.done,
-                    decoration: commonInputDecoration(),
-                    errorThisFieldRequired: language.fieldRequiredMsg,
-                  ),
-                  16.height,
-    ],
+                  if (!widget.isGoogle.validate()) ...[
+                    Text(language.address, style: primaryTextStyle()),
+                    8.height,
+                    AppTextField(
+                      controller: addressController,
+                      textFieldType: TextFieldType.MULTILINE,
+                      focus: addressFocus,
+                      textInputAction: TextInputAction.done,
+                      decoration: commonInputDecoration(),
+                      errorThisFieldRequired: language.fieldRequiredMsg,
+                    ),
+                    16.height,
+                  ],
                 ],
               ),
             ),

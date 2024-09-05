@@ -8,6 +8,7 @@ import '../../main/utils/Colors.dart';
 import '../../main/utils/Constants.dart';
 import '../utils/Common.dart';
 import '../utils/Widgets.dart';
+import '../utils/dynamic_theme.dart';
 
 class AboutUsScreen extends StatefulWidget {
   static String tag = '/AboutUsScreen';
@@ -38,9 +39,9 @@ class AboutUsScreenState extends State<AboutUsScreen> {
           4.height,
           GestureDetector(
             onTap: () async {
-              commonLaunchUrl('mailto:${appStore.supportEmail}');
+              commonLaunchUrl('mailto:${appStore.siteEmail}');
             },
-            child: Text(appStore.supportEmail, style: primaryTextStyle(color: colorPrimary)),
+            child: Text(appStore.siteEmail, style: primaryTextStyle(color: ColorUtils.colorPrimary)),
           ),
         ],
       ).center().paddingAll(16),

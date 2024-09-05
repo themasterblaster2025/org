@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../main/utils/Colors.dart';
+import '../main/utils/dynamic_theme.dart';
 
 const scaffoldLightColor = Color(0xFFEBF2F7);
 const scaffoldDarkColor = Color(0xFF0E1116);
@@ -16,8 +17,8 @@ const transparentColor = Color(0x00000000);
 const whiteColor = Colors.white;
 const blackColor = Colors.black;
 Color shadowColorGlobal = Colors.grey.withOpacity(0.4);
-Color appBarBackgroundColorGlobal = colorPrimary;
-Color appButtonBackgroundColorGlobal = colorPrimary;
+Color appBarBackgroundColorGlobal = ColorUtils.colorPrimary;
+Color appButtonBackgroundColorGlobal = ColorUtils.colorPrimary;
 Color defaultAppButtonTextColorGlobal = Colors.white;
 //
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mighty_delivery/main/utils/Colors.dart';
+import 'package:mighty_delivery/main/utils/dynamic_theme.dart';
 
 import '../../extensions/extension_util/context_extensions.dart';
 
@@ -10,66 +11,51 @@ import '../main/utils/Constants.dart';
 import 'colors.dart';
 
 /// returns default InputDecoration for AppTextField widget
-InputDecoration defaultInputDecoration(
-  BuildContext context, {
-  String? hint,
-  String? label,
-  Color? fillColor,
-  TextStyle? textStyle,
-  bool? isFocusTExtField = false,
-  Widget? mPrefix,
-}) {
-  return InputDecoration(
-    filled: true,
-    fillColor:
-        appStore.isDarkMode ? cardDarkColor : fillColor ?? primaryExtraLight,
-    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-    floatingLabelBehavior: FloatingLabelBehavior.never,
-    prefixIcon: mPrefix ?? null,
-    border: OutlineInputBorder(
-        borderRadius: radius(8),
-        borderSide: BorderSide(
-            color: isFocusTExtField == true
-                ? Colors.transparent
-                : Colors.transparent)),
-    // border: OutlineInputBorder(borderRadius: radius(), borderSide: BorderSide(color: isFocusTExtField == true ? context.dividerColor.withOpacity(0.7) : context.dividerColor.withOpacity(0.7))),
-    focusedErrorBorder: OutlineInputBorder(
-        borderRadius: radius(8),
-        borderSide: BorderSide(
-            color: isFocusTExtField == true
-                ? context.dividerColor.withOpacity(0.7)
-                : colorPrimary)),
-    disabledBorder: OutlineInputBorder(
-        borderRadius: radius(8),
-        borderSide: BorderSide(
-            color: isFocusTExtField == true
-                ? context.dividerColor.withOpacity(0.7)
-                : context.dividerColor.withOpacity(0.7))),
-    focusedBorder: OutlineInputBorder(
-        borderRadius: radius(8),
-        borderSide: BorderSide(
-            color: isFocusTExtField == true
-                ? context.dividerColor.withOpacity(0.7)
-                : colorPrimary)),
-    enabledBorder: OutlineInputBorder(
-        borderRadius: radius(8),
-        borderSide: BorderSide(
-            color: isFocusTExtField == true
-                ? context.dividerColor.withOpacity(0.7)
-                : Colors.transparent)),
-    errorBorder: OutlineInputBorder(
-        borderRadius: radius(8),
-        borderSide: BorderSide(
-            color: isFocusTExtField == true
-                ? context.dividerColor.withOpacity(0.7)
-                : Colors.red)),
-    alignLabelWithHint: true,
-    // filled: true,
-    isDense: true,
-    labelText: label ?? "Sample Text",
-    labelStyle: secondaryTextStyle(),
-  );
-}
+// InputDecoration defaultInputDecoration(
+//   BuildContext context, {
+//   String? hint,
+//   String? label,
+//   Color? fillColor,
+//   TextStyle? textStyle,
+//   bool? isFocusTExtField = false,
+//   Widget? mPrefix,
+// }) {
+//   return InputDecoration(
+//     filled: true,
+//     fillColor: appStore.isDarkMode ? cardDarkColor : fillColor ?? colorPrimary,
+//     contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+//     floatingLabelBehavior: FloatingLabelBehavior.never,
+//     prefixIcon: mPrefix ?? null,
+//     border: OutlineInputBorder(
+//         borderRadius: radius(8),
+//         borderSide: BorderSide(color: isFocusTExtField == true ? Colors.transparent : Colors.transparent)),
+//     // border: OutlineInputBorder(borderRadius: radius(), borderSide: BorderSide(color: isFocusTExtField == true ? context.dividerColor.withOpacity(0.7) : context.dividerColor.withOpacity(0.7))),
+//     focusedErrorBorder: OutlineInputBorder(
+//         borderRadius: radius(8),
+//         borderSide: BorderSide(color: isFocusTExtField == true ? context.dividerColor.withOpacity(0.7) : colorPrimary)),
+//     disabledBorder: OutlineInputBorder(
+//         borderRadius: radius(8),
+//         borderSide: BorderSide(
+//             color: isFocusTExtField == true
+//                 ? context.dividerColor.withOpacity(0.7)
+//                 : context.dividerColor.withOpacity(0.7))),
+//     focusedBorder: OutlineInputBorder(
+//         borderRadius: radius(8),
+//         borderSide: BorderSide(color: isFocusTExtField == true ? context.dividerColor.withOpacity(0.7) : colorPrimary)),
+//     enabledBorder: OutlineInputBorder(
+//         borderRadius: radius(8),
+//         borderSide:
+//             BorderSide(color: isFocusTExtField == true ? context.dividerColor.withOpacity(0.7) : Colors.transparent)),
+//     errorBorder: OutlineInputBorder(
+//         borderRadius: radius(8),
+//         borderSide: BorderSide(color: isFocusTExtField == true ? context.dividerColor.withOpacity(0.7) : Colors.red)),
+//     alignLabelWithHint: true,
+//     // filled: true,
+//     isDense: true,
+//     labelText: label ?? "Sample Text",
+//     labelStyle: secondaryTextStyle(),
+//   );
+// }
 
 /// returns Radius
 BorderRadius radius([double? radius]) {
@@ -113,9 +99,7 @@ Decoration boxDecorationDefault({
   DecorationImage? image,
 }) {
   return BoxDecoration(
-    borderRadius: (shape != null && shape == BoxShape.circle)
-        ? null
-        : (borderRadius ?? radius()),
+    borderRadius: (shape != null && shape == BoxShape.circle) ? null : (borderRadius ?? radius()),
     boxShadow: boxShadow ?? defaultBoxShadow(),
     color: color ?? Colors.white,
     gradient: gradient,
@@ -139,11 +123,10 @@ Decoration boxDecorationWithRoundedCorners({
   return BoxDecoration(
     color: backgroundColor == null
         ? appStore.isDarkMode
-            ? cardDarkColor
+            ? ColorUtils.cardDarkColor
             : cardLightColor
         : backgroundColor,
-    borderRadius:
-        boxShape == BoxShape.circle ? null : (borderRadius ?? radius()),
+    borderRadius: boxShape == BoxShape.circle ? null : (borderRadius ?? radius()),
     gradient: gradient,
     border: border,
     boxShadow: boxShadow,
@@ -177,7 +160,7 @@ Decoration boxDecorationWithShadow({
         ),
     color: backgroundColor == null
         ? appStore.isDarkMode
-            ? cardDarkColor
+            ? ColorUtils.cardDarkColor
             : cardLightColor
         : backgroundColor,
     gradient: gradient,
@@ -207,7 +190,7 @@ Decoration boxDecorationRoundedWithShadow(
     ),
     color: backgroundColor == null
         ? appStore.isDarkMode
-            ? cardDarkColor
+            ? ColorUtils.cardDarkColor
             : cardLightColor
         : backgroundColor,
     gradient: gradient,

@@ -22,6 +22,7 @@ import '../../main/utils/Widgets.dart';
 import '../components/CommonScaffoldComponent.dart';
 import '../network/RestApis.dart';
 import '../services/AuthServices.dart';
+import '../utils/dynamic_theme.dart';
 
 class RegisterScreen extends StatefulWidget {
   final String? userType;
@@ -71,7 +72,7 @@ class RegisterScreenState extends State<RegisterScreen> {
           "email": emailController.text.trim(),
           "password": passController.text.trim(),
           "player_id": getStringAsync(PLAYER_ID).validate(),
-          if (partnerCodeController.text.isNotEmpty) "partner_referral_code": partnerCodeController.text.trim()
+          if (partnerCodeController.text.isNotEmpty) "referral_code": partnerCodeController.text.trim()
 
           // if (widget.userType == DELIVERY_MAN) "status": 1
         };
@@ -173,7 +174,8 @@ class RegisterScreenState extends State<RegisterScreen> {
                                 iconColor: Theme.of(context).dividerColor,
                                 enabledBorder:
                                     UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
-                                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: colorPrimary)),
+                                focusedBorder:
+                                    UnderlineInputBorder(borderSide: BorderSide(color: ColorUtils.colorPrimary)),
                               ),
                               searchStyle: primaryTextStyle(),
                               onInit: (c) {
@@ -209,10 +211,13 @@ class RegisterScreenState extends State<RegisterScreen> {
                     errorMinimumPasswordLength: language.passwordInvalid,
                   ),
                   8.height,
+                  Text(language.parnerCode, style: primaryTextStyle()),
+                  8.height,
                   AppTextField(
                     controller: partnerCodeController,
                     textFieldType: TextFieldType.NAME,
                     focus: partnerCodeFocus,
+                    isValidationRequired: false,
                     decoration: commonInputDecoration(),
                   ),
                   16.height,
@@ -225,8 +230,8 @@ class RegisterScreenState extends State<RegisterScreen> {
                           shape: RoundedRectangleBorder(borderRadius: radius(4)),
                           checkColor: Colors.white,
                           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          focusColor: colorPrimary,
-                          activeColor: colorPrimary,
+                          focusColor: ColorUtils.colorPrimary,
+                          activeColor: ColorUtils.colorPrimary,
                           value: isAcceptedTc,
                           onChanged: (bool? value) async {
                             isAcceptedTc = value!;
@@ -240,7 +245,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           TextSpan(text: '${language.iAgreeToThe} ', style: secondaryTextStyle()),
                           TextSpan(
                             text: language.termOfService,
-                            style: boldTextStyle(color: colorPrimary, size: 14),
+                            style: boldTextStyle(color: ColorUtils.colorPrimary, size: 14),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 commonLaunchUrl(mTermAndCondition);
@@ -249,7 +254,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           TextSpan(text: ' & ', style: secondaryTextStyle()),
                           TextSpan(
                             text: language.privacyPolicy,
-                            style: boldTextStyle(color: colorPrimary, size: 14),
+                            style: boldTextStyle(color: ColorUtils.colorPrimary, size: 14),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 commonLaunchUrl(mPrivacyPolicy);
@@ -269,7 +274,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                     children: [
                       Text(language.alreadyHaveAnAccount, style: primaryTextStyle()),
                       4.width,
-                      Text(language.signIn, style: boldTextStyle(color: colorPrimary)).onTap(() {
+                      Text(language.signIn, style: boldTextStyle(color: ColorUtils.colorPrimary)).onTap(() {
                         finish(context);
                       }),
                     ],

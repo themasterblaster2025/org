@@ -21,6 +21,7 @@ import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Images.dart';
+import '../../main/utils/dynamic_theme.dart';
 
 class TrackingScreen extends StatefulWidget {
   final int? orderId;
@@ -78,7 +79,9 @@ class TrackingScreenState extends State<TrackingScreen> {
       deliveryBoy = Marker(
         markerId: id,
         position: LatLng(event.latitude, event.longitude),
-        infoWindow: InfoWindow(title: language.yourLocation, snippet: '${language.lastUpdateAt} ${DateFormat('yyyy-MM-dd hh:mm').format(DateTime.now())}'),
+        infoWindow: InfoWindow(
+            title: language.yourLocation,
+            snippet: '${language.lastUpdateAt} ${DateFormat('yyyy-MM-dd hh:mm').format(DateTime.now())}'),
         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
       );
 
@@ -90,7 +93,8 @@ class TrackingScreenState extends State<TrackingScreen> {
             position: e.status == ORDER_ACCEPTED
                 ? LatLng(e.pickupPoint!.latitude.toDouble(), e.pickupPoint!.longitude.toDouble())
                 : LatLng(e.deliveryPoint!.latitude.toDouble(), e.deliveryPoint!.longitude.toDouble()),
-            infoWindow: InfoWindow(title: e.status == ORDER_ACCEPTED ? e.pickupPoint!.address : e.deliveryPoint!.address),
+            infoWindow:
+                InfoWindow(title: e.status == ORDER_ACCEPTED ? e.pickupPoint!.address : e.deliveryPoint!.address),
             icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
           ),
         );
@@ -177,7 +181,7 @@ class TrackingScreenState extends State<TrackingScreen> {
                       itemBuilder: (_, index) {
                         OrderData data = widget.order[index];
                         return Container(
-                          color: orderId == data.id ? colorPrimary.withOpacity(0.1) : Colors.transparent,
+                          color: orderId == data.id ? ColorUtils.colorPrimary.withOpacity(0.1) : Colors.transparent,
                           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -190,28 +194,33 @@ class TrackingScreenState extends State<TrackingScreen> {
                                     children: [
                                       Container(
                                         child: Image.asset(ic_google_map, height: 30, width: 30),
-                                        decoration: boxDecorationWithRoundedCorners(borderRadius: radius(defaultRadius), backgroundColor: context.cardColor),
+                                        decoration: boxDecorationWithRoundedCorners(
+                                            borderRadius: radius(defaultRadius), backgroundColor: context.cardColor),
                                         padding: EdgeInsets.all(2),
                                       ).onTap(
                                         () {
                                           if (data.status == ORDER_ACCEPTED) {
-                                            MapsLauncher.launchCoordinates(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble());
+                                            MapsLauncher.launchCoordinates(data.pickupPoint!.latitude.toDouble(),
+                                                data.pickupPoint!.longitude.toDouble());
                                           } else {
-                                            MapsLauncher.launchCoordinates(data.deliveryPoint!.latitude.toDouble(), data.deliveryPoint!.longitude.toDouble());
+                                            MapsLauncher.launchCoordinates(data.deliveryPoint!.latitude.toDouble(),
+                                                data.deliveryPoint!.longitude.toDouble());
                                           }
                                         },
                                       ),
                                       16.width,
                                       AppButton(
                                         padding: EdgeInsets.zero,
-                                        color: colorPrimary,
+                                        color: ColorUtils.colorPrimary,
                                         text: language.track,
                                         textStyle: primaryTextStyle(color: Colors.white),
                                         onTap: () async {
                                           orderId = data.id;
                                           orderLatLong = data.status == ORDER_ACCEPTED
-                                              ? LatLng(data.pickupPoint!.latitude.toDouble(), data.pickupPoint!.longitude.toDouble())
-                                              : LatLng(data.deliveryPoint!.latitude.toDouble(), data.deliveryPoint!.longitude.toDouble());
+                                              ? LatLng(data.pickupPoint!.latitude.toDouble(),
+                                                  data.pickupPoint!.longitude.toDouble())
+                                              : LatLng(data.deliveryPoint!.latitude.toDouble(),
+                                                  data.deliveryPoint!.longitude.toDouble());
                                           await setPolyLines(orderLat: orderLatLong);
                                           setState(() {});
                                         },
@@ -224,8 +233,13 @@ class TrackingScreenState extends State<TrackingScreen> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Icon(Icons.location_on, color: colorPrimary),
-                                  Text(data.status == ORDER_ACCEPTED ? data.pickupPoint!.address.validate() : data.deliveryPoint!.address.validate(), style: primaryTextStyle()).expand(),
+                                  Icon(Icons.location_on, color: ColorUtils.colorPrimary),
+                                  Text(
+                                          data.status == ORDER_ACCEPTED
+                                              ? data.pickupPoint!.address.validate()
+                                              : data.deliveryPoint!.address.validate(),
+                                          style: primaryTextStyle())
+                                      .expand(),
                                 ],
                               ),
                             ],

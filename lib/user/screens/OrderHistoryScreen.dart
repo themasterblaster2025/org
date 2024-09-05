@@ -11,6 +11,7 @@ import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Widgets.dart';
+import '../../main/utils/dynamic_theme.dart';
 
 class OrderHistoryScreen extends StatefulWidget {
   static String tag = '/OrderHistoryScreen';
@@ -44,12 +45,13 @@ class OrderHistoryScreenState extends State<OrderHistoryScreen> {
               isFirst: index == 0 ? true : false,
               axis: TimelineAxis.vertical,
               isLast: index == (widget.orderHistory.length - 1) ? true : false,
-              indicatorStyle: IndicatorStyle(width: 15, color: colorPrimary),
-              afterLineStyle: LineStyle(color: colorPrimary, thickness: 3),
-              beforeLineStyle: LineStyle(color: colorPrimary, thickness: 3),
+              indicatorStyle: IndicatorStyle(width: 15, color: ColorUtils.colorPrimary),
+              afterLineStyle: LineStyle(color: ColorUtils.colorPrimary, thickness: 3),
+              beforeLineStyle: LineStyle(color: ColorUtils.colorPrimary, thickness: 3),
               endChild: Row(
                 children: [
-                  ImageIcon(AssetImage(statusTypeIcon(type: mData.historyType)), color: colorPrimary.withOpacity(0.8), size: 20),
+                  ImageIcon(AssetImage(statusTypeIcon(type: mData.historyType)),
+                      color: ColorUtils.colorPrimary.withOpacity(0.8), size: 20),
                   12.width,
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

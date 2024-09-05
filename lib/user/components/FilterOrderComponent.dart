@@ -17,6 +17,7 @@ import '../../main/models/models.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Widgets.dart';
+import '../../main/utils/dynamic_theme.dart';
 
 class FilterOrderComponent extends StatefulWidget {
   static String tag = '/FilterOrderComponent';
@@ -91,7 +92,8 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(right: 16),
                   padding: EdgeInsets.all(4),
-                  decoration: boxDecorationWithRoundedCorners(boxShape: BoxShape.circle, backgroundColor: Colors.transparent, border: Border.all()),
+                  decoration: boxDecorationWithRoundedCorners(
+                      boxShape: BoxShape.circle, backgroundColor: Colors.transparent, border: Border.all()),
                   child: Icon(
                     AntDesign.close,
                     size: 16,
@@ -122,15 +124,18 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
               runSpacing: 0,
               children: statusList.map((item) {
                 return Chip(
-                  backgroundColor: selectedStatus == item ? colorPrimary : Colors.transparent,
+                  backgroundColor: selectedStatus == item ? ColorUtils.colorPrimary : Colors.transparent,
                   label: Text(orderStatus(item)),
                   elevation: 0,
-                  labelStyle: primaryTextStyle(size: 14, color: selectedStatus == item ? white : textPrimaryColorGlobal),
+                  labelStyle:
+                      primaryTextStyle(size: 14, color: selectedStatus == item ? white : textPrimaryColorGlobal),
                   padding: EdgeInsets.zero,
                   labelPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(defaultRadius),
-                    side: BorderSide(color: selectedStatus == item ? colorPrimary : borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                    side: BorderSide(
+                        color: selectedStatus == item ? ColorUtils.colorPrimary : ColorUtils.borderColor,
+                        width: appStore.isDarkMode ? 0.2 : 1),
                   ),
                 ).onTap(() {
                   selectedStatus = item;
@@ -192,7 +197,11 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
                 if (fromDate != null && toDate == null) {
                   toDate = DateTime.parse(DateTime.now().toString());
                 }
-                setValue(FILTER_DATA, FilterAttributeModel(orderStatus: selectedStatus, fromDate: fromDate.toString(), toDate: toDate.toString()).toJson());
+                setValue(
+                    FILTER_DATA,
+                    FilterAttributeModel(
+                            orderStatus: selectedStatus, fromDate: fromDate.toString(), toDate: toDate.toString())
+                        .toJson());
                 appStore.setFiltering(selectedStatus != null || fromDate != null || toDate != null);
                 LiveStream().emit("UpdateOrderData");
               }

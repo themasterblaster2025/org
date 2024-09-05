@@ -19,6 +19,7 @@ import '../network/NetworkUtils.dart';
 import '../network/RestApis.dart';
 import '../utils/Common.dart';
 import '../utils/Constants.dart';
+import '../utils/dynamic_theme.dart';
 
 class BankDetailScreen extends StatefulWidget {
   final bool? isWallet;
@@ -80,16 +81,14 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
       MultipartRequest multiPartRequest = await getMultiPartRequest('update-profile');
       multiPartRequest.fields['username'] = getStringAsync(USER_NAME);
       multiPartRequest.fields['id'] = getIntAsync(USER_ID).toString();
-      multiPartRequest.fields['contact_number'] =
-          getStringAsync(USER_CONTACT_NUMBER).validate();
+      multiPartRequest.fields['contact_number'] = getStringAsync(USER_CONTACT_NUMBER).validate();
       multiPartRequest.fields['email'] = getStringAsync(USER_EMAIL);
       multiPartRequest.fields['user_bank_account[bank_name]'] = bankNameCon.text.trim();
       multiPartRequest.fields['user_bank_account[account_number]'] = accNumberCon.text.trim();
       multiPartRequest.fields['user_bank_account[account_holder_name]'] = nameCon.text.trim();
       multiPartRequest.fields['user_bank_account[bank_code]'] = ifscCCon.text.trim();
       multiPartRequest.fields['user_bank_account[bank_address]'] = bankAddressCon.text.trim();
-      multiPartRequest.fields['user_bank_account[routing_number]'] =
-          routingNumberCon.text.trim();
+      multiPartRequest.fields['user_bank_account[routing_number]'] = routingNumberCon.text.trim();
       multiPartRequest.fields['user_bank_account[bank_iban]'] = bankIbanCon.text.trim();
       multiPartRequest.fields['user_bank_account[bank_swift]'] = bankSwiftCon.text.trim();
       multiPartRequest.headers.addAll(buildHeaderTokens());
@@ -223,7 +222,7 @@ class _BankDetailScreenState extends State<BankDetailScreen> {
           ],
         ),
         bottomNavigationBar: AppButton(
-            color: colorPrimary,
+            color: ColorUtils.colorPrimary,
             textColor: Colors.white,
             text: language.save,
             onTap: () {

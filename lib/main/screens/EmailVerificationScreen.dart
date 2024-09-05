@@ -21,6 +21,7 @@ import '../network/RestApis.dart';
 import '../utils/Colors.dart';
 import '../utils/Common.dart';
 import '../utils/Constants.dart';
+import '../utils/dynamic_theme.dart';
 import 'LoginScreen.dart';
 import 'UserCitySelectScreen.dart';
 import 'VerificationScreen.dart';
@@ -142,7 +143,10 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
                             children: [
                               TextSpan(text: '${language.weSend} '),
                               TextSpan(text: language.oneTimePassword, style: boldTextStyle()),
-                              TextSpan(text: " ${language.on} " + getStringAsync(USER_EMAIL).replaceAll(RegExp(r'(?<=.{3}).(?=.*@)'), '*') ?? "-")
+                              TextSpan(
+                                  text: " ${language.on} " +
+                                          getStringAsync(USER_EMAIL).replaceAll(RegExp(r'(?<=.{3}).(?=.*@)'), '*') ??
+                                      "-")
                             ],
                           ),
                         ),
@@ -162,15 +166,20 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
                         16.height,
                         Text(language.confirmationCode, style: boldTextStyle(size: 18)),
                         16.height,
-                        Text("${language.confirmationCodeSent} " + getStringAsync(USER_EMAIL).replaceAll(RegExp(r'(?<=.{3}).(?=.*@)'), '*') ?? "-",
-                            style: secondaryTextStyle(size: 16), textAlign: TextAlign.center),
+                        Text(
+                            "${language.confirmationCodeSent} " +
+                                    getStringAsync(USER_EMAIL).replaceAll(RegExp(r'(?<=.{3}).(?=.*@)'), '*') ??
+                                "-",
+                            style: secondaryTextStyle(size: 16),
+                            textAlign: TextAlign.center),
                         30.height,
                         otp.OTPTextField(
                           controller: otpController,
                           length: 5,
                           width: MediaQuery.of(context).size.width,
                           fieldWidth: 35,
-                          otpFieldStyle: o.OtpFieldStyle(borderColor: context.dividerColor, focusBorderColor: colorPrimary),
+                          otpFieldStyle: o.OtpFieldStyle(
+                              borderColor: context.dividerColor, focusBorderColor: ColorUtils.colorPrimary),
                           style: primaryTextStyle(),
                           textFieldAlignment: MainAxisAlignment.spaceAround,
                           fieldStyle: FieldStyle.box,
@@ -189,7 +198,7 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
                           children: [
                             Text(language.didNotReceiveTheCode, style: secondaryTextStyle(size: 16)),
                             4.width,
-                            Text(language.resend, style: boldTextStyle(color: colorPrimary)).onTap(() {
+                            Text(language.resend, style: boldTextStyle(color: ColorUtils.colorPrimary)).onTap(() {
                               resendOtpEmailApiCall();
                             }),
                           ],
@@ -201,7 +210,9 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
                       ],
                     ),
                   ),
-            Observer(builder: (context) => Visibility(visible: appStore.isLoading, child: Positioned.fill(child: loaderWidget()))),
+            Observer(
+                builder: (context) =>
+                    Visibility(visible: appStore.isLoading, child: Positioned.fill(child: loaderWidget()))),
           ],
         ),
       ),

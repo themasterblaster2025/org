@@ -822,6 +822,193 @@ class BaseLanguage {
   String get pages => getContentValueFromKey(408);
 
   String get collectedAmount => getContentValueFromKey(409);
-  String get reject =>  getContentValueFromKey(410);
-  String get forKey =>  getContentValueFromKey(411);
+
+  String get reject => getContentValueFromKey(410);
+
+  String get forKey => getContentValueFromKey(411);
+
+  //////////////////// todo temporary added keys
+  String get earnedRewards => getContentValueFromKey(412);
+
+  String get referAndEarn => getContentValueFromKey(413);
+
+  String get referralHistory => getContentValueFromKey(414);
+
+  String get customerSupport => getContentValueFromKey(415);
+
+  String get today => getContentValueFromKey(416);
+
+  String get yesterday => getContentValueFromKey(417);
+
+  String get thisWeek => getContentValueFromKey(418);
+
+  String get thisMonth => getContentValueFromKey(419);
+
+  String get thisYear => getContentValueFromKey(420);
+
+  String get custom => getContentValueFromKey(421);
+
+  String get orderFilter => getContentValueFromKey(422);
+
+  String get pendingPickup => getContentValueFromKey(423);
+
+  String get pendingDelivery => getContentValueFromKey(424);
+
+  String get view => getContentValueFromKey(425);
+
+  String get details => getContentValueFromKey(426);
+
+  String get withdrawDetails => getContentValueFromKey(427);
+
+  String get transactionId => getContentValueFromKey(428);
+
+  String get via => getContentValueFromKey(429);
+
+  String get createdDate => getContentValueFromKey(430);
+
+  String get otherDetails => getContentValueFromKey(431);
+
+  String get image => getContentValueFromKey(432);
+
+  String get chatWithAdmin => getContentValueFromKey(433);
+
+  String get insuranceCharge => getContentValueFromKey(434);
+
+  String get addSupportTicket => getContentValueFromKey(435);
+
+  String get message => getContentValueFromKey(436);
+
+  String get supportType => getContentValueFromKey(437);
+
+  String get uploadDetails => getContentValueFromKey(438);
+
+  String get video => getContentValueFromKey(439);
+
+  String get select => getContentValueFromKey(440);
+
+  String get supportId => getContentValueFromKey(441);
+
+  String get attachment => getContentValueFromKey(442);
+
+  String get viewPhoto => getContentValueFromKey(443);
+
+  String get viewVideo => getContentValueFromKey(444);
+
+  String get resolutionDetails => getContentValueFromKey(445);
+
+  String get completedOrders => getContentValueFromKey(446);
+
+  String get userType => getContentValueFromKey(447);
+
+  String get invalidPickupAddress => getContentValueFromKey(448);
+
+  String get refusedBySender => getContentValueFromKey(449);
+
+  String get invalidDeliveryAddress => getContentValueFromKey(450);
+
+  String get exception => getContentValueFromKey(451);
+
+  String get refusedByRecipient => getContentValueFromKey(452);
+
+  String get home => getContentValueFromKey(453);
+
+  String get work => getContentValueFromKey(454);
+
+  String get selectAddressType => getContentValueFromKey(455);
+
+  String get labels => getContentValueFromKey(456);
+
+  String get pickupPersonName => getContentValueFromKey(457);
+
+  String get pickupInstructions => getContentValueFromKey(458);
+
+  String get deliveryPersonName => getContentValueFromKey(459);
+
+  String get deliveryInstructions => getContentValueFromKey(460);
+
+  String get insurance => getContentValueFromKey(461);
+
+  String get addCourierInsurance => getContentValueFromKey(462);
+
+  String get noThanksRisk => getContentValueFromKey(463);
+
+  String get addressType => getContentValueFromKey(464);
+
+  String get shippedVia => getContentValueFromKey(465);
+
+  String get pleaseSelectReason => getContentValueFromKey(466);
+
+  String get cancelAndReturn => getContentValueFromKey(467);
+
+  String get rateUs => getContentValueFromKey(468);
+
+  String get excellent => getContentValueFromKey(469);
+
+  String get referDes1 => getContentValueFromKey(470);
+
+  String get referDes2 => getContentValueFromKey(471);
+
+  String get referShareTitle => getContentValueFromKey(472);
+
+  String get shareDes1 => getContentValueFromKey(473);
+
+  String get shareDes2 => getContentValueFromKey(474);
+
+  String get shareDes3 => getContentValueFromKey(475);
+
+  String get process => getContentValueFromKey(476);
+
+  String get copy => getContentValueFromKey(477);
+
+  String get copiedToClipboard => getContentValueFromKey(478);
+
+  String get thisWayUup => getContentValueFromKey(479);
+
+  String get thisWayUpDesc => getContentValueFromKey(480);
+
+  String get doNotStack => getContentValueFromKey(481);
+
+  String get doNotStackDesc => getContentValueFromKey(482);
+
+  String get temperatureSensitive => getContentValueFromKey(483);
+
+  String get temperatureSensitiveDesc => getContentValueFromKey(484);
+
+  String get doNotHook => getContentValueFromKey(485);
+
+  String get doNotHookDesc => getContentValueFromKey(486);
+
+  String get explosiveMaterial => getContentValueFromKey(487);
+
+  String get explosiveMaterialDesc => getContentValueFromKey(488);
+
+  String get hazard => getContentValueFromKey(489);
+
+  String get hazardDesc => getContentValueFromKey(490);
+
+  String get bikeDelivery => getContentValueFromKey(491);
+
+  String get bikeDeliveryDesc => getContentValueFromKey(492);
+
+  String get keepDry => getContentValueFromKey(493);
+
+  String get keepDryDesc => getContentValueFromKey(494);
+
+  String get perishable => getContentValueFromKey(495);
+
+  String get perishableDesc => getContentValueFromKey(496);
+
+  String get recycle => getContentValueFromKey(497);
+
+  String get recycleDesc => getContentValueFromKey(498);
+
+  String get doNotOpenWithSharpObject => getContentValueFromKey(499);
+
+  String get doNotOpenWithSharpObjectDesc => getContentValueFromKey(500);
+
+  String get fragile => getContentValueFromKey(501);
+
+  String get fragileDesc => getContentValueFromKey(502);
+
+  String get parnerCode => getContentValueFromKey(503);
 }

@@ -7,11 +7,13 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:mighty_delivery/delivery/fragment/DHomeFragment.dart';
+import 'package:mighty_delivery/delivery/screens/OrdersMapScreen.dart';
 import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
+import 'package:mighty_delivery/main/utils/dynamic_theme.dart';
 
 import '../../delivery/fragment/DProfileFragment.dart';
 import '../../extensions/LiveStream.dart';
@@ -89,8 +91,12 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
       appStore.setCurrencySymbol(value.currency ?? CURRENCY_SYMBOL);
       appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
       appStore.isVehicleOrder = value.isVehicleInOrder ?? 0;
-      appStore.setSupportEmail(value.supportEmail ?? "");
+      appStore.setSiteEmail(value.siteEmail ?? "");
       appStore.setCopyRight(value.siteCopyright ?? "");
+      appStore.setOrderTrackingIdPrefix(value.orderTrackingIdPrefix ?? "");
+      appStore.setIsInsuranceAllowed(value.isInsuranceAllowed ?? "0");
+      appStore.setInsurancePercentage(value.insurancePercentage ?? "0");
+      appStore.setInsuranceDescription(value.insuranceDescription ?? "");
       // setValue(IS_VERIFIED_DELIVERY_MAN, (value.isVerifiedDeliveryMan.validate() == 1));
     }).catchError((error) {
       log(error.toString());
@@ -162,11 +168,11 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
   getOrderListApiCall() async {
     appStore.setLoading(true);
     await getDeliveryBoyOrderList(
-            page: currentPage,
-            deliveryBoyID: getIntAsync(USER_ID),
-            cityId: getIntAsync(CITY_ID),
-            countryId: getIntAsync(COUNTRY_ID),
-            orderStatus: statusList[selectedStatusIndex])
+        page: currentPage,
+        deliveryBoyID: getIntAsync(USER_ID),
+        cityId: getIntAsync(CITY_ID),
+        countryId: getIntAsync(COUNTRY_ID),
+        orderStatus: statusList[selectedStatusIndex])
         .then((value) {
       appStore.setLoading(false);
       appStore.setAllUnreadCount(value.allUnreadCount.validate());
@@ -227,11 +233,14 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
               margin: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration:
-                  boxDecorationWithRoundedCorners(borderRadius: radius(defaultRadius), backgroundColor: Colors.white24),
+              boxDecorationWithRoundedCorners(borderRadius: radius(defaultRadius), backgroundColor: Colors.white24),
               child: Row(children: [
                 Icon(Ionicons.ios_location_outline, color: Colors.white, size: 18),
                 8.width,
-                Text(CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate(),
+                Text(CityModel
+                    .fromJson(getJSONAsync(CITY_DATA))
+                    .name
+                    .validate(),
                     style: primaryTextStyle(color: white)),
               ]).onTap(() {
                 UserCitySelectScreen(
@@ -284,9 +293,9 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                 return Theme(
                   data: ThemeData(splashColor: Colors.transparent, highlightColor: Colors.transparent),
                   child: Text(orderStatus(statusList[index]),
-                          style: statusList[selectedStatusIndex] == statusList[index]
-                              ? boldTextStyle(color: Colors.white)
-                              : secondaryTextStyle(color: Colors.white70))
+                      style: statusList[selectedStatusIndex] == statusList[index]
+                          ? boldTextStyle(color: Colors.white)
+                          : secondaryTextStyle(color: Colors.white70))
                       .paddingAll(8)
                       .onTap(() {
                     currentPage = 1;
@@ -333,7 +342,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                       padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 60),
                       flipConfiguration: FlipConfiguration(duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn),
                       fadeInConfiguration:
-                          FadeInConfiguration(duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn),
+                      FadeInConfiguration(duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn),
                       onNextPage: () {
                         if (currentPage < totalPage) {
                           currentPage++;
@@ -349,8 +358,12 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                           appStore.setCurrencySymbol(value.currency ?? CURRENCY_SYMBOL);
                           appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
                           appStore.isVehicleOrder = value.isVehicleInOrder ?? 0;
-                          appStore.setSupportEmail(value.supportEmail ?? "");
+                          appStore.setSiteEmail(value.siteEmail ?? "");
                           appStore.setCopyRight(value.siteCopyright ?? "");
+                          appStore.setIsInsuranceAllowed(value.isInsuranceAllowed ?? "0");
+                          appStore.setInsurancePercentage(value.insurancePercentage ?? "0");
+                          appStore.setOrderTrackingIdPrefix(value.orderTrackingIdPrefix ?? "");
+                          appStore.setInsuranceDescription(value.insuranceDescription ?? "");
                         }).catchError((error) {
                           log(error.toString());
                         });
@@ -371,6 +384,15 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        shape: RoundedRectangleBorder(borderRadius: radius(40)),
+        backgroundColor: appStore.availableBal >= 0 ? ColorUtils.colorPrimary : textSecondaryColorGlobal,
+        child: Icon(Icons.pin_drop_outlined, color: Colors.white),
+        onPressed: () {
+          OrdersMapScreen().launch(context);
+        },
+      ).paddingAll(10),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 
@@ -380,7 +402,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
         margin: EdgeInsets.only(bottom: 16),
         decoration: boxDecorationWithRoundedCorners(
             borderRadius: BorderRadius.circular(defaultRadius),
-            border: Border.all(color: colorPrimary.withOpacity(0.3)),
+            border: Border.all(color: ColorUtils.colorPrimary),
             backgroundColor: Colors.transparent),
         padding: EdgeInsets.all(12),
         child: Column(
@@ -389,7 +411,18 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
           children: [
             Row(
               children: [
-                Text('${language.order}# ${data.id}', style: boldTextStyle(size: 14)).expand(),
+                Container(
+                  height: 50,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('${language.order}# ${data.id}', style: boldTextStyle(size: 14)).expand(),
+                      Text('${appStore.orderTrackingIdPrefixId.toUpperCase()}${data.orderTrackingId}',
+                          style: boldTextStyle(size: 12, color: ColorUtils.colorPrimary))
+                          .expand(),
+                    ],
+                  ),
+                ).expand(),
                 AppButton(
                   margin: EdgeInsets.only(right: 10),
                   elevation: 0,
@@ -410,41 +443,41 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                       },
                     );
                   },
-                ).visible(data.autoAssign == 1 && data.status == ORDER_ASSIGNED),
+                ).visible(data.status == ORDER_ASSIGNED),
                 statusList[selectedStatusIndex] != ORDER_CANCELLED
                     ? AppButton(
-                        elevation: 0,
-                        text: buttonText(statusList[selectedStatusIndex]),
-                        padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                        textStyle: boldTextStyle(color: Colors.white, size: 14),
-                        color: colorPrimary,
-                        onTap: () {
-                          if (statusList[selectedStatusIndex] == ORDER_ACCEPTED) {
-                            onTapData(orderData: data, orderStatus: statusList[selectedStatusIndex]);
-                          } else if (statusList[selectedStatusIndex] == ORDER_ARRIVED) {
-                            onTapData(orderData: data, orderStatus: statusList[selectedStatusIndex]);
-                          } else if (statusList[selectedStatusIndex] == ORDER_DEPARTED) {
-                            onTapData(orderData: data, orderStatus: statusList[selectedStatusIndex]);
-                          } else {
-                            showConfirmDialogCustom(
-                              context,
-                              primaryColor: colorPrimary,
-                              dialogType: DialogType.CONFIRMATION,
-                              title: orderTitle(statusList[selectedStatusIndex]),
-                              positiveText: language.yes,
-                              negativeText: language.no,
-                              onAccept: (c) async {
-                                appStore.setLoading(true);
-                                await onTapData(orderData: data, orderStatus: statusList[selectedStatusIndex]);
-                                appStore.setLoading(false);
-                                // finish(context);
-                              },
-                            );
-                          }
+                  elevation: 0,
+                  text: buttonText(statusList[selectedStatusIndex]),
+                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                  textStyle: boldTextStyle(color: Colors.white, size: 14),
+                  color: ColorUtils.colorPrimary,
+                  onTap: () {
+                    if (statusList[selectedStatusIndex] == ORDER_ACCEPTED) {
+                      onTapData(orderData: data, orderStatus: statusList[selectedStatusIndex]);
+                    } else if (statusList[selectedStatusIndex] == ORDER_ARRIVED) {
+                      onTapData(orderData: data, orderStatus: statusList[selectedStatusIndex]);
+                    } else if (statusList[selectedStatusIndex] == ORDER_DEPARTED) {
+                      onTapData(orderData: data, orderStatus: statusList[selectedStatusIndex]);
+                    } else {
+                      showConfirmDialogCustom(
+                        context,
+                        primaryColor: ColorUtils.colorPrimary,
+                        dialogType: DialogType.CONFIRMATION,
+                        title: orderTitle(statusList[selectedStatusIndex]),
+                        positiveText: language.yes,
+                        negativeText: language.no,
+                        onAccept: (c) async {
+                          appStore.setLoading(true);
+                          await onTapData(orderData: data, orderStatus: statusList[selectedStatusIndex]);
+                          appStore.setLoading(false);
+                          // finish(context);
                         },
-                      )
-                        .visible(statusList[selectedStatusIndex] != ORDER_DELIVERED)
-                        .paddingOnly(right: appStore.selectedLanguage == "ar" ? 10 : 0)
+                      );
+                    }
+                  },
+                )
+                    .visible(statusList[selectedStatusIndex] != ORDER_DELIVERED)
+                    .paddingOnly(right: appStore.selectedLanguage == "ar" ? 10 : 0)
                     : SizedBox()
               ],
             ),
@@ -479,7 +512,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                           },
                           child: Row(
                             children: [
-                              ImageIcon(AssetImage(ic_from), size: 24, color: colorPrimary),
+                              ImageIcon(AssetImage(ic_from), size: 24, color: ColorUtils.colorPrimary),
                               12.width,
                               Text('${data.pickupPoint!.address}', style: primaryTextStyle(size: 14)).expand(),
                             ],
@@ -489,7 +522,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                     ).expand(),
                     12.width,
                     if (data.pickupPoint!.contactNumber != null)
-                      Icon(Ionicons.ios_call_outline, size: 20, color: colorPrimary).onTap(() {
+                      Icon(Ionicons.ios_call_outline, size: 20, color: ColorUtils.colorPrimary).onTap(() {
                         commonLaunchUrl('tel:${data.pickupPoint!.contactNumber}');
                       }),
                   ],
@@ -499,10 +532,13 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                     data.pickupPoint!.startTime != null)
                   Row(
                     children: [
-                      Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.endTime!).toLocal())}',
-                              style: secondaryTextStyle(size: 12, color: Colors.red),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis)
+                      Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(
+                          DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat(
+                          'hh:mm').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language
+                          .to} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.endTime!).toLocal())}',
+                          style: secondaryTextStyle(size: 12, color: Colors.red),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis)
                           .expand(),
                     ],
                   ),
@@ -537,17 +573,17 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                       },
                       child: Row(
                         children: [
-                          ImageIcon(AssetImage(ic_to), size: 24, color: colorPrimary),
+                          ImageIcon(AssetImage(ic_to), size: 24, color: ColorUtils.colorPrimary),
                           12.width,
                           Text('${data.deliveryPoint!.address}',
-                                  style: primaryTextStyle(size: 14), textAlign: TextAlign.start)
+                              style: primaryTextStyle(size: 14), textAlign: TextAlign.start)
                               .expand(),
                         ],
                       ),
                     ).expand(),
                     12.width,
                     if (data.deliveryPoint!.contactNumber != null)
-                      Icon(Ionicons.ios_call_outline, size: 20, color: colorPrimary).onTap(() {
+                      Icon(Ionicons.ios_call_outline, size: 20, color: ColorUtils.colorPrimary).onTap(() {
                         commonLaunchUrl('tel:${data.deliveryPoint!.contactNumber}');
                       }),
                   ],
@@ -555,8 +591,11 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                 if (data.deliveryDatetime == null &&
                     data.deliveryPoint!.endTime != null &&
                     data.deliveryPoint!.startTime != null)
-                  Text('${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.endTime!).toLocal())}',
-                          style: secondaryTextStyle(color: Colors.red, size: 12))
+                  Text('${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(
+                      DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm')
+                      .format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat(
+                      'hh:mm').format(DateTime.parse(data.deliveryPoint!.endTime!).toLocal())}',
+                      style: secondaryTextStyle(color: Colors.red, size: 12))
                       .paddingOnly(top: 4)
               ],
             ),
@@ -566,7 +605,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                 Container(
                   decoration: boxDecorationWithRoundedCorners(
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                      border: Border.all(color: ColorUtils.borderColor, width: appStore.isDarkMode ? 0.2 : 1),
                       backgroundColor: context.cardColor),
                   padding: EdgeInsets.all(8),
                   child: Image.asset(parcelTypeIcon(data.parcelType.validate()),
@@ -600,12 +639,13 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                     color: Colors.transparent,
                     padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     shapeBorder: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(defaultRadius), side: BorderSide(color: colorPrimary)),
-                    child: Text(language.notifyUser, style: primaryTextStyle(color: colorPrimary)),
+                        borderRadius: BorderRadius.circular(defaultRadius),
+                        side: BorderSide(color: ColorUtils.colorPrimary)),
+                    child: Text(language.notifyUser, style: primaryTextStyle(color: ColorUtils.colorPrimary)),
                     onTap: () {
                       showConfirmDialogCustom(
                         context,
-                        primaryColor: colorPrimary,
+                        primaryColor: ColorUtils.colorPrimary,
                         dialogType: DialogType.CONFIRMATION,
                         title: language.areYouSureWantToArrive,
                         positiveText: language.yes,
@@ -617,6 +657,8 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                           });
                           appStore.setLoading(false);
                           // finish(context);
+                          int i = statusList.indexWhere((item) => item == ORDER_ARRIVED);
+                          pageController.jumpToPage(i);
                           getOrderListApiCall();
                         },
                       );
@@ -640,18 +682,24 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
       await updateOrder(orderStatus: ORDER_ACCEPTED, orderId: orderData.id).then((value) {
         toast(language.orderActiveSuccessfully);
       });
+      int i = statusList.indexWhere((item) => item == ORDER_ASSIGNED);
+      pageController.jumpToPage(i + 1);
       getOrderListApiCall();
     } else if (orderStatus == ORDER_ACCEPTED) {
       await ReceivedScreenOrderScreen(
-              orderData: orderData,
-              isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_PICKUP)
+          orderData: orderData,
+          isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_PICKUP)
           .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+      int i = statusList.indexWhere((item) => item == ORDER_PICKED_UP);
+      pageController.jumpToPage(i);
       getOrderListApiCall();
     } else if (orderStatus == ORDER_ARRIVED) {
       bool isCheck = await ReceivedScreenOrderScreen(
-              orderData: orderData,
-              isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_PICKUP)
+          orderData: orderData,
+          isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_PICKUP)
           .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+      int i = statusList.indexWhere((item) => item == ORDER_ARRIVED);
+      pageController.jumpToPage(i + 1);
       if (isCheck) {
         getOrderListApiCall();
       }
@@ -659,12 +707,16 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
       await updateOrder(orderStatus: ORDER_DEPARTED, orderId: orderData.id).then((value) {
         toast(language.orderDepartedSuccessfully);
       });
+      int i = statusList.indexWhere((item) => item == ORDER_PICKED_UP);
+      pageController.jumpToPage(i + 1);
       getOrderListApiCall();
     } else if (orderStatus == ORDER_DEPARTED) {
       await ReceivedScreenOrderScreen(
-              orderData: orderData,
-              isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_DELIVERY)
+          orderData: orderData,
+          isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_DELIVERY)
           .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+      int i = statusList.indexWhere((item) => item == ORDER_DEPARTED);
+      pageController.jumpToPage(i + 1);
       getOrderListApiCall();
     }
   }

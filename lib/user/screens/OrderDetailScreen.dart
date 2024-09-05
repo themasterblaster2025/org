@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:developer';
+
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -11,13 +15,16 @@ import 'package:mighty_delivery/extensions/extension_util/list_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/num_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import 'package:mighty_delivery/main/models/CountryDetailModel.dart';
 
 import '../../extensions/LiveStream.dart';
 import '../../extensions/animatedList/animated_scroll_view.dart';
 import '../../extensions/app_button.dart';
+import '../../extensions/app_text_field.dart';
 import '../../extensions/common.dart';
 import '../../extensions/decorations.dart';
 import '../../extensions/shared_pref.dart';
+import '../../extensions/system_utils.dart';
 import '../../extensions/text_styles.dart';
 import '../../extensions/widgets.dart';
 import '../../main.dart';
@@ -33,8 +40,11 @@ import '../../main/network/RestApis.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
+import '../../main/utils/Constants.dart';
+import '../../main/utils/DataProviders.dart';
 import '../../main/utils/Images.dart';
 import '../../main/utils/Widgets.dart';
+import '../../main/utils/dynamic_theme.dart';
 import '../../user/components/CancelOrderDialog.dart';
 import '../../user/screens/ReturnOrderScreen.dart';
 import '../components/OrderCardComponent.dart';
@@ -59,12 +69,22 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
   OrderRating? rating;
   List<OrderHistory>? orderHistory;
   List<OrderItem>? orderItems;
+  CourierCompanyDetail? courierDetails;
   Payment? payment;
   List<ExtraChargeRequestModel> list = [];
   double? totalDistance;
   String? distance, duration;
   num productAmount = 0;
+  String? reason;
+  String? otherReason;
   bool canCancel = false;
+  List<String> reasonsList = getDeliveryBoyBeforePickupCancelReasonList();
+  List<Map<String, String>> packagingSymbols = [];
+  TextEditingController reasonController = TextEditingController();
+  bool isOtherOptionSelected = false;
+  int differenceInMinutes = 0;
+  Duration remainingTime = Duration(); // Remaining time
+  Timer? timer;
 
   @override
   void initState() {
@@ -80,10 +100,12 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
 
   orderDetailApiCall() async {
     appStore.setLoading(true);
-
     await getOrderDetails(widget.orderId).then((value) {
       orderData = value.data!;
       orderHistory = value.orderHistory!;
+      if (value.courierCompanyDetail != null) {
+        courierDetails = value.courierCompanyDetail!;
+      }
       orderItems = value.orderItem.validate();
       if (orderItems.validate().isNotEmpty) {
         orderItems!.forEach((element) {
@@ -100,26 +122,92 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
       }
       if (getStringAsync(USER_TYPE) == CLIENT) {
         userData = value.deliveryManDetail != null ? value.deliveryManDetail : UserData();
-        print("-------------------userDataCLIENT${userData!.toJson().toString()}");
       } else {
         userData = value.clientDetail;
-        print("-------------------userDataNOTCLIENT${userData!.toJson().toString()}");
       }
       canUserCancelOrder();
       getDistanceApiCall();
-
-      setState(() {});
+      if (orderData!.status == ORDER_TRANSFER ||
+          orderData!.status == ORDER_ASSIGNED ||
+          orderData!.status == ORDER_ACCEPTED) {
+        reasonsList = getDeliveryBoyBeforePickupCancelReasonList();
+      } else if (orderData!.status == ORDER_PICKED_UP ||
+          orderData!.status == ORDER_DEPARTED ||
+          orderData!.status == ORDER_ARRIVED) {
+        reasonsList = getDeliveryBoyAfterPickupCancelReasonList();
+      }
+      if (orderData!.packagingSymbols != null) {
+        getPackagingSymbols().forEach((element1) {
+          orderData!.packagingSymbols!.forEach((element2) {
+            if (element1['key'] == element2.key) {
+              packagingSymbols.add(element1);
+            }
+          });
+        });
+      }
     }).catchError((error) {
       toast(error.toString());
     }).whenComplete(() => appStore.setLoading(false));
   }
 
+  cancelOrderByDeliveryManApiCall() async {
+    appStore.setLoading(true);
+    await updateOrder(
+      orderId: widget.orderId,
+      reason: reason == isOtherOptionSelected ? otherReason : reason,
+      orderStatus: ORDER_CANCELLED,
+    ).then((value) {
+      appStore.setLoading(false);
+      toast(language.orderCancelledSuccessfully);
+      finish(context);
+    }).catchError((error) {
+      appStore.setLoading(false);
+
+      log(error);
+    });
+  }
+
   canUserCancelOrder() {
     DateTime orderDate = DateTime.parse("${orderData!.date!}Z").toLocal();
     DateTime currentDate = DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())).toLocal();
-
+    Duration difference = currentDate.difference(orderDate);
     int differenceInMinutes = currentDate.difference(orderDate).inMinutes;
     canCancel = differenceInMinutes < cancelOrderDuration;
+    if (difference.inMinutes < 60) {
+      setState(() {
+        remainingTime = Duration(hours: 1) - difference;
+        startTimer();
+      });
+    } else {
+      setState(() {
+        remainingTime = Duration.zero;
+      });
+    }
+  }
+
+  void startTimer() {
+    timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
+      setState(() {
+        remainingTime = DateTime.parse("${orderData!.date!}Z")
+            .toLocal()
+            .add(Duration(hours: 1))
+            .difference(DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())).toLocal());
+
+        // Stop the timer if time is over
+        if (remainingTime.isNegative || remainingTime.inSeconds <= 0) {
+          remainingTime = Duration.zero;
+          timer.cancel();
+        }
+      });
+    });
+  }
+
+  String formatRemainingTime(Duration duration) {
+    int minutes = duration.inMinutes;
+    int seconds = duration.inSeconds % 60;
+    String formattedMinutes = minutes.toString().padLeft(2, '0');
+    String formattedSeconds = seconds.toString().padLeft(2, '0');
+    return '$formattedMinutes:$formattedSeconds';
   }
 
   getDistanceApiCall() async {
@@ -140,6 +228,46 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
         distance = totalDistance.toString() + DISTANCE_UNIT_KM;
       }
       setState(() {});
+    });
+  }
+
+  createOrderApiCall() async {
+    appStore.setLoading(true);
+    Map req = {
+      "client_id": orderData!.clientId!,
+      "date": DateTime.now().toString(),
+      "country_id": orderData!.countryId!,
+      "city_id": orderData!.cityId!,
+      "pickup_point": orderData!.deliveryPoint!,
+      "delivery_point": orderData!.pickupPoint!,
+      "extra_charges": orderData!.extraCharges!,
+      "parcel_type": orderData!.parcelType!,
+      "total_weight": orderData!.totalWeight!,
+      "total_distance": orderData!.totalDistance!,
+      "payment_collect_from": orderData!.paymentCollectFrom,
+      "status": ORDER_CREATED,
+      "payment_type": "",
+      "payment_status": "",
+      "fixed_charges": orderData!.fixedCharges!,
+      "parent_order_id": orderData!.id!,
+      "total_amount": orderData!.totalAmount ?? 0,
+      "vehicle_id": orderData!.vehicleId.validate(),
+      "reason": reason == isOtherOptionSelected ? otherReason : reason,
+      if (orderItems.validate().isNotEmpty)
+        "store_detail_id": orderItems!.first.productData!.first.storeDetailId.validate(),
+      if (orderItems.validate().isNotEmpty) "order_item": orderItems,
+      "order_id": orderData!.id,
+      "cancelorderreturn": 1
+    };
+
+    await createOrder(req).then((value) async {
+      print("------------------------${value}");
+      appStore.setLoading(false);
+      toast(value.message);
+      finish(context);
+    }).catchError((error) {
+      appStore.setLoading(false);
+      toast(error.toString());
     });
   }
 
@@ -174,7 +302,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                             Container(
                               decoration: boxDecorationWithRoundedCorners(
                                   borderRadius: BorderRadius.circular(defaultRadius),
-                                  border: Border.all(color: colorPrimary.withOpacity(0.3)),
+                                  border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
                                   backgroundColor: Colors.transparent),
                               padding: EdgeInsets.all(12),
                               child: Column(
@@ -210,6 +338,10 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                 Text(printAmount(orderData!.totalAmount ?? 0), style: boldTextStyle()),
                                             ],
                                           ),
+                                          4.height,
+                                          Text(
+                                              '${appStore.orderTrackingIdPrefixId.toUpperCase()}${orderData!.orderTrackingId}',
+                                              style: boldTextStyle(size: 12, color: ColorUtils.colorPrimary)),
                                           4.height,
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -275,7 +407,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                 },
                                                 child: Row(
                                                   children: [
-                                                    ImageIcon(AssetImage(ic_from), size: 24, color: colorPrimary),
+                                                    ImageIcon(AssetImage(ic_from),
+                                                        size: 24, color: ColorUtils.colorPrimary),
                                                     12.width,
                                                     Text('${orderData!.pickupPoint!.address}',
                                                             style: secondaryTextStyle())
@@ -293,7 +426,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                           ).expand(),
                                           12.width,
                                           if (orderData!.pickupPoint!.contactNumber != null)
-                                            Icon(Ionicons.ios_call_outline, size: 20, color: colorPrimary).onTap(() {
+                                            Icon(Ionicons.ios_call_outline, size: 20, color: ColorUtils.colorPrimary)
+                                                .onTap(() {
                                               commonLaunchUrl('tel:${orderData!.pickupPoint!.contactNumber}');
                                             }),
                                         ],
@@ -334,7 +468,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                     },
                                                     child: Row(
                                                       children: [
-                                                        ImageIcon(AssetImage(ic_to), size: 24, color: colorPrimary),
+                                                        ImageIcon(AssetImage(ic_to),
+                                                            size: 24, color: ColorUtils.colorPrimary),
                                                         12.width,
                                                         Text('${orderData!.deliveryPoint!.address}',
                                                                 style: secondaryTextStyle(), textAlign: TextAlign.start)
@@ -354,7 +489,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                           ).expand(),
                                           12.width,
                                           if (orderData!.deliveryPoint!.contactNumber != null)
-                                            Icon(Ionicons.ios_call_outline, size: 20, color: colorPrimary).onTap(() {
+                                            Icon(Ionicons.ios_call_outline, size: 20, color: ColorUtils.colorPrimary)
+                                                .onTap(() {
                                               commonLaunchUrl('tel:${orderData!.deliveryPoint!.contactNumber}');
                                             }),
                                         ],
@@ -374,13 +510,14 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                         padding: EdgeInsets.symmetric(horizontal: 8),
                                         shapeBorder: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(defaultRadius),
-                                          side: BorderSide(color: colorPrimary),
+                                          side: BorderSide(color: ColorUtils.colorPrimary),
                                         ),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            Text(language.viewHistory, style: primaryTextStyle(color: colorPrimary)),
-                                            Icon(Icons.arrow_right, color: colorPrimary),
+                                            Text(language.viewHistory,
+                                                style: primaryTextStyle(color: ColorUtils.colorPrimary)),
+                                            Icon(Icons.arrow_right, color: ColorUtils.colorPrimary),
                                           ],
                                         ),
                                         onTap: () {
@@ -395,13 +532,14 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                           padding: EdgeInsets.symmetric(horizontal: 8),
                                           shapeBorder: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(defaultRadius),
-                                            side: BorderSide(color: colorPrimary),
+                                            side: BorderSide(color: ColorUtils.colorPrimary),
                                           ),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              Text(language.invoice, style: primaryTextStyle(color: colorPrimary)),
-                                              Icon(Icons.arrow_right, color: colorPrimary),
+                                              Text(language.invoice,
+                                                  style: primaryTextStyle(color: ColorUtils.colorPrimary)),
+                                              Icon(Icons.arrow_right, color: ColorUtils.colorPrimary),
                                             ],
                                           ),
                                           onTap: () {
@@ -419,11 +557,11 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                             ),
                             16.height,
                             Text(language.parcelDetails, style: boldTextStyle(size: 16)),
-                            8.height,
+                            12.height,
                             Container(
                               decoration: boxDecorationWithRoundedCorners(
                                   borderRadius: BorderRadius.circular(defaultRadius),
-                                  border: Border.all(color: colorPrimary.withOpacity(0.3)),
+                                  border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
                                   backgroundColor: Colors.transparent),
                               padding: EdgeInsets.all(12),
                               child: Column(
@@ -435,8 +573,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                       Container(
                                         decoration: boxDecorationWithRoundedCorners(
                                             borderRadius: BorderRadius.circular(8),
-                                            border:
-                                                Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                                            border: Border.all(
+                                                color: ColorUtils.borderColor, width: appStore.isDarkMode ? 0.2 : 1),
                                             backgroundColor: Colors.transparent),
                                         padding: EdgeInsets.all(8),
                                         child: Image.asset(parcelTypeIcon(orderData!.parcelType.validate()),
@@ -469,7 +607,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                       8.height,
                                       Divider(
                                         height: 18,
-                                        color: dividerColor,
+                                        color: ColorUtils.dividerColor,
                                       ),
                                       Text(language.orderItems, style: boldTextStyle()),
                                       8.height,
@@ -506,7 +644,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                           Row(
                                                             children: [
                                                               Text(printAmount(item.amount.validate()),
-                                                                  style: boldTextStyle(size: 14, color: colorPrimary)),
+                                                                  style: boldTextStyle(
+                                                                      size: 14, color: ColorUtils.colorPrimary)),
                                                               8.width,
                                                               Text('x ${item.quantity.validate()}'.toString(),
                                                                   style: secondaryTextStyle()),
@@ -518,7 +657,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                   ).expand(),
                                                   16.width,
                                                   Text(printAmount(item.totalAmount.validate()),
-                                                      style: boldTextStyle(size: 14, color: colorPrimary)),
+                                                      style: boldTextStyle(size: 14, color: ColorUtils.colorPrimary)),
                                                 ],
                                               ),
                                             ],
@@ -534,7 +673,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                   if (orderData!.status == ORDER_DELIVERED && orderItems.validate().isNotEmpty) ...[
                                     Divider(
                                       height: 10,
-                                      color: dividerColor,
+                                      color: ColorUtils.dividerColor,
                                     ),
                                     AppButton(
                                       elevation: 0,
@@ -543,13 +682,14 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                       padding: EdgeInsets.symmetric(horizontal: 8),
                                       shapeBorder: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(defaultRadius),
-                                        side: BorderSide(color: colorPrimary),
+                                        side: BorderSide(color: ColorUtils.colorPrimary),
                                       ),
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          Text(language.rateStore, style: primaryTextStyle(color: colorPrimary)),
-                                          Icon(Icons.arrow_right, color: colorPrimary),
+                                          Text(language.rateStore,
+                                              style: primaryTextStyle(color: ColorUtils.colorPrimary)),
+                                          Icon(Icons.arrow_right, color: ColorUtils.colorPrimary),
                                         ],
                                       ),
                                       onTap: () {
@@ -599,12 +739,100 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                               ),
                             ),
                             16.height,
+                            Text(language.labels, style: boldTextStyle(size: 16)).visible(packagingSymbols.isNotEmpty),
+                            12.height.visible(packagingSymbols.isNotEmpty),
+                            Container(
+                              width: context.width(),
+                              decoration: boxDecorationWithRoundedCorners(
+                                  borderRadius: BorderRadius.circular(defaultRadius),
+                                  border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
+                                  backgroundColor: Colors.transparent),
+                              padding: EdgeInsets.all(12),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Wrap(
+                                    spacing: 20,
+                                    runSpacing: 10,
+                                    children: packagingSymbols!.map((item) {
+                                      return Container(
+                                        width: 70,
+                                        decoration: boxDecorationWithRoundedCorners(
+                                            backgroundColor: Colors.transparent,
+                                            border: Border.all(
+                                              color: ColorUtils.colorPrimary.withOpacity(0.4),
+                                            )),
+                                        child: Stack(
+                                          children: [
+                                            Image.asset(
+                                              item['image'].toString(),
+                                              width: 24,
+                                              height: 24,
+                                              color: appStore.isDarkMode
+                                                  ? Colors.white.withOpacity(0.7)
+                                                  : ColorUtils.colorPrimary,
+                                            ).center().paddingAll(10),
+                                          ],
+                                        ),
+                                      );
+                                    }).toList(),
+                                  )
+                                ],
+                              ),
+                            ).visible(packagingSymbols.isNotEmpty),
+                            16.height.visible(packagingSymbols.isNotEmpty),
+                            Text(language.shippedVia, style: boldTextStyle(size: 16))
+                                .visible(courierDetails != null && orderData!.status != ORDER_DELIVERED),
+                            12.height.visible(courierDetails != null && orderData!.status != ORDER_DELIVERED),
+                            if (courierDetails != null && orderData!.status != ORDER_DELIVERED)
+                              Container(
+                                decoration: boxDecorationWithRoundedCorners(
+                                    borderRadius: BorderRadius.circular(defaultRadius),
+                                    border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
+                                    backgroundColor: Colors.transparent),
+                                padding: EdgeInsets.all(12),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Image.asset(ic_no_data,
+                                                height: 30, width: 30, fit: BoxFit.cover, alignment: Alignment.center)
+                                            .center(),
+                                        8.width,
+                                        Text(courierDetails!.name.toString(), style: boldTextStyle()).expand(),
+                                        if (!courierDetails!.link.isEmptyOrNull)
+                                          AppButton(
+                                            elevation: 0,
+                                            height: 20,
+                                            color: Colors.transparent,
+                                            padding: EdgeInsets.symmetric(vertical: 4),
+                                            shapeBorder: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(defaultRadius),
+                                              side: BorderSide(color: ColorUtils.colorPrimary),
+                                            ),
+                                            child: Text(language.track,
+                                                style: primaryTextStyle(color: ColorUtils.colorPrimary)),
+                                            onTap: () {
+                                              commonLaunchUrl(courierDetails!.link.toString());
+                                            },
+                                          ),
+
+                                        //  .visible(orderData!.status != ORDER_DELIVERED && orderData!.status != ORDER_CANCELLED && userData!.userType!=ADMIN && userData!.userType!=DEMO_ADMIN)
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            16.height.visible(courierDetails != null && orderData!.status != ORDER_DELIVERED),
                             Text(language.paymentDetails, style: boldTextStyle(size: 16)),
                             12.height,
                             Container(
                               decoration: boxDecorationWithRoundedCorners(
                                   borderRadius: BorderRadius.circular(defaultRadius),
-                                  border: Border.all(color: colorPrimary.withOpacity(0.3)),
+                                  border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
                                   backgroundColor: Colors.transparent),
                               padding: EdgeInsets.all(12),
                               child: Column(
@@ -647,7 +875,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                               Container(
                                 decoration: boxDecorationWithRoundedCorners(
                                     borderRadius: BorderRadius.circular(defaultRadius),
-                                    border: Border.all(color: colorPrimary.withOpacity(0.3)),
+                                    border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
                                     backgroundColor: Colors.transparent),
                                 padding: EdgeInsets.all(12),
                                 child: Column(
@@ -669,7 +897,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                   ],
                                 ),
                               ),
-                            if (userData != null)
+                            if (userData != null &&
+                                (orderData!.status != ORDER_CREATED && orderData!.status != ORDER_DRAFT))
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -681,7 +910,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                   Container(
                                     decoration: boxDecorationWithRoundedCorners(
                                         borderRadius: BorderRadius.circular(defaultRadius),
-                                        border: Border.all(color: colorPrimary.withOpacity(0.3)),
+                                        border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
                                         backgroundColor: Colors.transparent),
                                     padding: EdgeInsets.all(12),
                                     child: Column(
@@ -754,7 +983,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                                 //   ChatScreen(userData: userData).launch(context);
                                                               },
                                                               child: Icon(Ionicons.call_outline,
-                                                                  size: 22, color: colorPrimary))
+                                                                  size: 22, color: ColorUtils.colorPrimary))
                                                         ],
                                                       )
                                                     : SizedBox()
@@ -810,7 +1039,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     vehiclePrice:
                                         orderData!.vehicleData != null ? orderData!.vehicleData!.price.validate() : 0,
                                     extraChargesList: list,
-                                    totalDistance: orderData!.totalDistance,
+                                    totalDistance: orderData!.totalDistance != null ? orderData!.totalDistance : 0,
                                     totalWeight: orderData!.totalWeight.validate(),
                                     distanceCharge: orderData!.distanceCharge.validate(),
                                     weightCharge: orderData!.weightCharge.validate(),
@@ -824,7 +1053,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     padding: EdgeInsets.all(16),
                                     decoration: boxDecorationWithRoundedCorners(
                                       borderRadius: BorderRadius.circular(defaultRadius),
-                                      border: Border.all(color: colorPrimary.withOpacity(0.2)),
+                                      border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.2)),
                                       backgroundColor: Colors.transparent,
                                     ),
                                     child: Column(
@@ -959,17 +1188,78 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     ),
                                   ),
                             16.height,
+                            Text(language.reason, style: boldTextStyle(size: 16)).visible(
+                                getStringAsync(USER_TYPE) == DELIVERY_MAN &&
+                                    (orderData!.status == ORDER_ACCEPTED ||
+                                        orderData!.status == ORDER_PICKED_UP ||
+                                        orderData!.status == ORDER_ARRIVED ||
+                                        orderData!.status == ORDER_DEPARTED)),
+                            8.height,
+                            DropdownButtonFormField<String>(
+                              value: reason,
+                              isExpanded: true,
+                              isDense: true,
+                              decoration: commonInputDecoration(),
+                              items: reasonsList.map((e) {
+                                return DropdownMenuItem(value: e, child: Text(e));
+                              }).toList(),
+                              onChanged: (String? val) {
+                                int index = reasonsList.indexOf(val.toString());
+                                isOtherOptionSelected = index == reasonsList.length - 1;
+                                reason = val;
+                                setState(() {});
+                              },
+                              validator: (value) {
+                                if (value == null) return language.fieldRequiredMsg;
+                                return null;
+                              },
+                            ).visible(getStringAsync(USER_TYPE) == DELIVERY_MAN &&
+                                (orderData!.status == ORDER_ACCEPTED ||
+                                    orderData!.status == ORDER_PICKED_UP ||
+                                    orderData!.status == ORDER_ARRIVED ||
+                                    orderData!.status == ORDER_DEPARTED)),
+                            16.height,
+                            // controller for reason if selected reason type is others
+                            AppTextField(
+                              textFieldType: TextFieldType.OTHER,
+                              controller: reasonController,
+                              decoration: commonInputDecoration(hintText: language.writeReasonHere),
+                              maxLines: 3,
+                              minLines: 3,
+                              onChanged: (value) {
+                                if (value.isNotEmpty) {
+                                  otherReason = reasonController.text.toString();
+                                  print("--------------reason${otherReason}");
+                                }
+                              },
+                              textInputAction: TextInputAction.done,
+                            ).visible(reason.validate().trim() == language.other.trim()),
+                            16.height,
                             if (orderData!.status == ORDER_CANCELLED && payment != null)
                               Container(
                                 width: context.width(),
                                 decoration: BoxDecoration(
-                                    color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary.withOpacity(0.1),
+                                    color: appStore.isDarkMode
+                                        ? ColorUtils.scaffoldSecondaryDark
+                                        : ColorUtils.colorPrimary.withOpacity(0.1),
                                     borderRadius: BorderRadius.circular(8)),
                                 padding: EdgeInsets.all(12),
                                 child: Text(
                                     '${language.note} ${payment!.deliveryManFee == 0 ? language.cancelBeforePickMsg : language.cancelAfterPickMsg}',
                                     style: secondaryTextStyle(color: Colors.red)),
                               ),
+                            Container(
+                              width: context.width() * 0.9,
+                              child: Text(
+                                formatRemainingTime(remainingTime),
+                                style: boldTextStyle(color: Colors.red),
+                                textAlign: TextAlign.right,
+                              ).visible(getStringAsync(USER_TYPE) == CLIENT &&
+                                  orderData!.status != ORDER_DELIVERED &&
+                                  orderData!.status != ORDER_CANCELLED &&
+                                  canCancel),
+                            ),
+                            8.height,
                             Align(
                               alignment: Alignment.bottomCenter,
                               child: Column(
@@ -977,7 +1267,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                   commonButton(language.cancelOrder, () {
                                     showInDialog(
                                       context,
-                                      backgroundColor: colorPrimaryLight,
+                                      backgroundColor: ColorUtils.colorPrimaryLight,
                                       contentPadding: EdgeInsets.all(16),
                                       builder: (p0) {
                                         return CancelOrderDialog(
@@ -994,8 +1284,9 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                   Container(
                                     width: context.width(),
                                     decoration: BoxDecoration(
-                                        color:
-                                            appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary.withOpacity(0.1),
+                                        color: appStore.isDarkMode
+                                            ? scaffoldSecondaryDark
+                                            : ColorUtils.colorPrimary.withOpacity(0.1),
                                         borderRadius: BorderRadius.circular(8)),
                                     padding: EdgeInsets.all(12),
                                     child: Text(language.cancelNote, style: secondaryTextStyle()),
@@ -1022,6 +1313,41 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                         ),
                       ],
                     ),
+                    // return order option for delivery person
+                    Positioned(
+                      bottom: 10,
+                      left: context.height() * 0.11,
+                      right: context.height() * 0.11,
+                      child: commonButton(language.cancelOrder, () {
+                        if (!reason.isEmptyOrNull) {
+                          cancelOrderByDeliveryManApiCall();
+                        } else {
+                          toast(language.pleaseSelectReason);
+                        }
+                      }, width: context.width()),
+                    ).visible((orderData!.status == ORDER_TRANSFER || orderData!.status == ORDER_ACCEPTED) &&
+                        getStringAsync(USER_TYPE) == DELIVERY_MAN),
+                    // return & cancel order option for delivery person
+                    Positioned(
+                      bottom: 10,
+                      left: context.height() * 0.11,
+                      right: context.height() * 0.11,
+                      //todo add keys
+                      child: commonButton(language.cancelAndReturn, () {
+                        if (!reason.isEmptyOrNull) {
+                          createOrderApiCall();
+                        } else {
+                          //todo add keys
+                          toast(language.pleaseSelectReason);
+                        }
+
+                        //      ReturnOrderScreen(orderData!, orderItems: orderItems, isCancelAndReturn: 1).launch(context);
+                      }, width: context.width()),
+                    ).visible((orderData!.status == ORDER_ARRIVED ||
+                            orderData!.status == ORDER_DEPARTED ||
+                            orderData!.status == ORDER_PICKED_UP) &&
+                        getStringAsync(USER_TYPE) == DELIVERY_MAN),
+                    // chat option
                     Positioned(
                         bottom: 10,
                         right: 10,
@@ -1031,8 +1357,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                             margin: EdgeInsets.only(bottom: 20),
                             decoration: boxDecorationWithRoundedCorners(
                                 borderRadius: BorderRadius.circular(40),
-                                border: Border.all(color: colorPrimary.withOpacity(0.3)),
-                                backgroundColor: colorPrimary),
+                                border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
+                                backgroundColor: ColorUtils.colorPrimary),
                             child: Stack(
                               children: [
                                 if (userData != null && userData!.uid != null)
