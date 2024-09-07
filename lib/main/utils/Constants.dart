@@ -34,10 +34,13 @@ const String FIREBASE_MESSAGING_SENDER_ID = "12372904825";
 const String FIREBASE_PROJECT_ID = "mightydelivery-10da9";
 const String FIREBASE_STORAGE_BUCKET = "mightydelivery-10da9.appspot.com";
 
+//region  firebase data  for firebase_options.dart FOR IOS APP USE
+const String FIREBASE_APP_ID_IOS = "1:12372904825:ios:f45e3d86542368cf22fda8";
+
 //for ios
-const String ANDROID_CLIENT_ID = 'YOUR ANDROID_CLIENT_ID';
-const String IOS_CLIENT_ID = 'YOUR IOS_CLIENT_ID';
-const String IOS_BUNDLE_ID = 'YOUR IOS_BUNDLE_ID';
+const String ANDROID_CLIENT_ID = '12372904825-41ti53tdtmva3p3hjf5vs58r4os7ss5o.apps.googleusercontent.com';
+const String IOS_CLIENT_ID = '12372904825-kk4skeu5ures5dnsgrkjku2t5uuompqh.apps.googleusercontent.com';
+const String IOS_BUNDLE_ID = 'com.mighty.delivery';
 //endregion
 
 //region languages and phone code

@@ -1,28 +1,23 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/main/services/OrdersMessageService.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main/models/models.dart';
 import '../main/screens/SplashScreen.dart';
 import '../main/utils/Constants.dart';
-import 'AppTheme.dart';
-import 'extensions/colors.dart';
 import 'extensions/common.dart';
-import 'extensions/decorations.dart';
 import 'extensions/shared_pref.dart';
 import 'languageConfiguration/AppLocalizations.dart';
 import 'languageConfiguration/BaseLanguage.dart';
@@ -33,15 +28,11 @@ import 'main/models/FileModel.dart';
 import 'main/network/RestApis.dart';
 import 'main/screens/NoInternetScreen.dart';
 import 'main/services/AuthServices.dart';
-import 'main/services/ChatMessagesService.dart';
 import 'main/services/NotificationService.dart';
 import 'main/services/UserServices.dart';
 import 'main/store/AppStore.dart';
-import 'main/utils/Colors.dart';
 import 'main/utils/Common.dart';
-import 'main/utils/dynamic_theme.dart';
 import 'main/utils/firebase_options.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 late SharedPreferences sharedPreferences;
@@ -65,11 +56,17 @@ String mSelectedImage = "assets/default_wallpaper.png";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  ).then((value) {
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-  });
+  if (Platform.isIOS) {
+    await Firebase.initializeApp().then((value) {
+      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    });
+  } else {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    ).then((value) {
+      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+    });
+  }
 
   // await initialize(aLocaleLanguageList: languageList());
   sharedPreferences = await SharedPreferences.getInstance();
@@ -79,8 +76,7 @@ void main() async {
     appStore.setUserEmail(getStringAsync(USER_EMAIL), isInitialization: true);
     appStore.setUserProfile(getStringAsync(USER_PROFILE_PHOTO), isInitializing: true);
     FilterAttributeModel? filterData = FilterAttributeModel.fromJson(getJSONAsync(FILTER_DATA));
-    appStore.setFiltering(
-        filterData.orderStatus != null || !filterData.fromDate.isEmptyOrNull || !filterData.toDate.isEmptyOrNull);
+    appStore.setFiltering(filterData.orderStatus != null || !filterData.fromDate.isEmptyOrNull || !filterData.toDate.isEmptyOrNull);
     print("===========setLanguage${appStore.selectedLanguage}");
     int themeModeIndex = getIntAsync(THEME_MODE_INDEX);
     if (themeModeIndex == appThemeMode.themeModeLight) {
