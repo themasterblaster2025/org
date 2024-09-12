@@ -11,7 +11,6 @@ import '../../main/utils/Common.dart';
 
 import '../../main.dart';
 import '../models/OrderDetailModel.dart';
-import '../utils/Colors.dart';
 import '../utils/Constants.dart';
 import '../utils/dynamic_theme.dart';
 
@@ -130,7 +129,6 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                //todo add keys
                 Text(language.insuranceCharge, style: secondaryTextStyle()),
                 16.width,
                 Text('${printAmount(widget.insuranceCharge)}', style: boldTextStyle(size: 14)),

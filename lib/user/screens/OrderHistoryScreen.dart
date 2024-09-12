@@ -34,41 +34,39 @@ class OrderHistoryScreenState extends State<OrderHistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: commonAppBarWidget(language.orderHistory),
-      body: Observer(builder: (context) {
-        return ListView.builder(
-          padding: EdgeInsets.all(16),
-          itemCount: widget.orderHistory.length,
-          itemBuilder: (context, index) {
-            OrderHistory mData = widget.orderHistory[index];
-            return TimelineTile(
-              alignment: TimelineAlign.start,
-              isFirst: index == 0 ? true : false,
-              axis: TimelineAxis.vertical,
-              isLast: index == (widget.orderHistory.length - 1) ? true : false,
-              indicatorStyle: IndicatorStyle(width: 15, color: ColorUtils.colorPrimary),
-              afterLineStyle: LineStyle(color: ColorUtils.colorPrimary, thickness: 3),
-              beforeLineStyle: LineStyle(color: ColorUtils.colorPrimary, thickness: 3),
-              endChild: Row(
-                children: [
-                  ImageIcon(AssetImage(statusTypeIcon(type: mData.historyType)),
-                      color: ColorUtils.colorPrimary.withOpacity(0.8), size: 20),
-                  12.width,
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(orderStatus('${mData.historyType!}'), style: boldTextStyle()),
-                      2.height,
-                      Text(messageData(mData)),
-                      2.height,
-                      Text('${printDate('${mData.createdAt}')}', style: secondaryTextStyle(size: 12)),
-                    ],
-                  ).expand(),
-                ],
-              ).paddingAll(12),
-            );
-          },
-        );
-      }),
+      body: ListView.builder(
+        padding: EdgeInsets.all(16),
+        itemCount: widget.orderHistory.length,
+        itemBuilder: (context, index) {
+          OrderHistory mData = widget.orderHistory[index];
+          return TimelineTile(
+            alignment: TimelineAlign.start,
+            isFirst: index == 0 ? true : false,
+            axis: TimelineAxis.vertical,
+            isLast: index == (widget.orderHistory.length - 1) ? true : false,
+            indicatorStyle: IndicatorStyle(width: 15, color: ColorUtils.colorPrimary),
+            afterLineStyle: LineStyle(color: ColorUtils.colorPrimary, thickness: 3),
+            beforeLineStyle: LineStyle(color: ColorUtils.colorPrimary, thickness: 3),
+            endChild: Row(
+              children: [
+                ImageIcon(AssetImage(statusTypeIcon(type: mData.historyType)),
+                    color: ColorUtils.colorPrimary.withOpacity(0.8), size: 20),
+                12.width,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(orderStatus('${mData.historyType!}'), style: boldTextStyle()),
+                    2.height,
+                    Text(messageData(mData)),
+                    2.height,
+                    Text('${printDate('${mData.createdAt}')}', style: secondaryTextStyle(size: 12)),
+                  ],
+                ).expand(),
+              ],
+            ).paddingAll(12),
+          );
+        },
+      ),
     );
   }
 

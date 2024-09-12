@@ -49,7 +49,6 @@ import '../../user/components/CancelOrderDialog.dart';
 import '../../user/screens/ReturnOrderScreen.dart';
 import '../components/OrderCardComponent.dart';
 import 'OrderHistoryScreen.dart';
-import 'RateReviewScreen.dart';
 
 class OrderDetailScreen extends StatefulWidget {
   static String tag = '/OrderDetailScreen';
@@ -173,7 +172,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
     Duration difference = currentDate.difference(orderDate);
     int differenceInMinutes = currentDate.difference(orderDate).inMinutes;
     canCancel = differenceInMinutes < cancelOrderDuration;
-    if (difference.inMinutes < 60) {
+    if (difference.inMinutes < 60 && difference.inMinutes > 0) {
       setState(() {
         remainingTime = Duration(hours: 1) - difference;
         startTimer();
@@ -222,7 +221,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
       double distanceInKms = value.rows[0].elements[0].distance.text.toString().split(' ')[0].toDouble();
       if (appStore.distanceUnit == DISTANCE_UNIT_MILE) {
         totalDistance = (MILES_PER_KM * distanceInKms);
-        distance = totalDistance.toString() + DISTANCE_UNIT_MILE;
+        distance = totalDistance!.toStringAsFixed(2) + DISTANCE_UNIT_MILE;
       } else {
         totalDistance = distanceInKms;
         distance = totalDistance.toString() + DISTANCE_UNIT_KM;
@@ -670,71 +669,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     ],
                                   ).visible(orderItems.validate().isNotEmpty),
                                   8.height,
-                                  if (orderData!.status == ORDER_DELIVERED && orderItems.validate().isNotEmpty) ...[
-                                    Divider(
-                                      height: 10,
-                                      color: ColorUtils.dividerColor,
-                                    ),
-                                    AppButton(
-                                      elevation: 0,
-                                      height: 30,
-                                      color: Colors.transparent,
-                                      padding: EdgeInsets.symmetric(horizontal: 8),
-                                      shapeBorder: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(defaultRadius),
-                                        side: BorderSide(color: ColorUtils.colorPrimary),
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Text(language.rateStore,
-                                              style: primaryTextStyle(color: ColorUtils.colorPrimary)),
-                                          Icon(Icons.arrow_right, color: ColorUtils.colorPrimary),
-                                        ],
-                                      ),
-                                      onTap: () {
-                                        RateReviewScreen(
-                                          storId: orderItems!.first.productData!.first.storeDetailId.validate(),
-                                          orderId: (orderData?.id).validate(),
-                                        ).launch(context).then((value) => init());
-                                      },
-                                    ).visible(getStringAsync(USER_TYPE) == CLIENT && rating == null),
-                                    if (rating != null)
-                                      Row(
-                                        children: [
-                                          Text(
-                                            getStringAsync(USER_TYPE) == CLIENT
-                                                ? language.yourRatingToStore
-                                                : language.rateToStore,
-                                            style: boldTextStyle(),
-                                          ),
-                                          Spacer(),
-                                          RatingBarIndicator(
-                                            rating: rating!.rating.validate().toDouble(),
-                                            itemBuilder: (context, index) => Icon(
-                                              Icons.star,
-                                              color: Colors.orange,
-                                            ),
-                                            itemCount: 5,
-                                            itemSize: 20.0,
-                                            direction: Axis.horizontal,
-                                          ).onTap(() {
-                                            if (getStringAsync(USER_TYPE) == CLIENT) {
-                                              RateReviewScreen(
-                                                storId: orderItems!.first.productData!.first.storeDetailId.validate(),
-                                                orderId: (orderData?.id).validate(),
-                                                ratingId: rating!.id.validate(),
-                                              ).launch(context).then((value) => init());
-                                            }
-                                          }),
-                                          8.width,
-                                          Text("(${rating!.rating.validate()})",
-                                              style: boldTextStyle(
-                                                size: 14,
-                                              )),
-                                        ],
-                                      ),
-                                  ],
                                 ],
                               ),
                             ),
@@ -781,10 +715,14 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                               ),
                             ).visible(packagingSymbols.isNotEmpty),
                             16.height.visible(packagingSymbols.isNotEmpty),
-                            Text(language.shippedVia, style: boldTextStyle(size: 16))
-                                .visible(courierDetails != null && orderData!.status != ORDER_DELIVERED),
-                            12.height.visible(courierDetails != null && orderData!.status != ORDER_DELIVERED),
-                            if (courierDetails != null && orderData!.status != ORDER_DELIVERED)
+                            Text(language.shippedVia, style: boldTextStyle(size: 16)).visible(courierDetails != null &&
+                                (orderData!.status != ORDER_CREATED && orderData!.status != ORDER_DELIVERED)),
+                            12.height.visible(courierDetails != null &&
+                                orderData!.status != ORDER_CREATED &&
+                                (orderData!.status != ORDER_DELIVERED)),
+                            if (courierDetails != null &&
+                                orderData!.status != ORDER_DELIVERED &&
+                                orderData!.status != ORDER_CREATED)
                               Container(
                                 decoration: boxDecorationWithRoundedCorners(
                                     borderRadius: BorderRadius.circular(defaultRadius),
@@ -865,6 +803,39 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     ],
                                   ).visible(
                                       orderData!.paymentType.validate(value: PAYMENT_TYPE_CASH) == PAYMENT_TYPE_CASH),
+                                ],
+                              ),
+                            ),
+                            8.height,
+                            Text(language.info, style: boldTextStyle(size: 16)).visible(
+                                !orderData!.pickupPoint!.description.isEmptyOrNull ||
+                                    !orderData!.deliveryPoint!.description.isEmptyOrNull),
+                            12.height,
+                            Container(
+                              decoration: boxDecorationWithRoundedCorners(
+                                  borderRadius: BorderRadius.circular(defaultRadius),
+                                  border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
+                                  backgroundColor: Colors.transparent),
+                              padding: EdgeInsets.all(12),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(language.pickupInformation, style: secondaryTextStyle()),
+                                      Text(orderData!.pickupPoint!.description.toString(),
+                                          style: boldTextStyle(size: 14)),
+                                    ],
+                                  ).visible(!orderData!.pickupPoint!.description.isEmptyOrNull),
+                                  8.height.visible(!orderData!.pickupPoint!.description.isEmptyOrNull),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(language.deliveryInformation, style: secondaryTextStyle()),
+                                      Text(orderData!.deliveryPoint!.description.toString(),
+                                          style: boldTextStyle(size: 14)),
+                                    ],
+                                  ).visible(!orderData!.deliveryPoint!.description.isEmptyOrNull),
                                 ],
                               ),
                             ),
@@ -1047,7 +1018,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     payment: payment,
                                     status: orderData!.status,
                                     isDetail: true,
-                                  )
+                                    isInsuranceChargeDisplay: orderData!.insuranceCharge != 0 ? true : false,
+                                    insuranceCharge: orderData!.insuranceCharge)
                                 : Container(
                                     width: context.width(),
                                     padding: EdgeInsets.all(16),
@@ -1088,6 +1060,17 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                 style: primaryTextStyle()),
                                           ],
                                         ),
+                                        //todo add keys
+                                        if (orderData!.insuranceCharge != 0)
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text("Insurance Charge", style: primaryTextStyle()),
+                                              16.width,
+                                              Text('${orderData!.insuranceCharge.validate()}',
+                                                  style: primaryTextStyle()),
+                                            ],
+                                          ),
                                         if (orderData!.distanceCharge.validate() != 0)
                                           Column(
                                             children: [

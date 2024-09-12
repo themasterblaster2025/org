@@ -10,7 +10,6 @@ import 'package:mighty_delivery/main/models/CustomerSupportModel.dart';
 import 'package:mighty_delivery/main/screens/CustomerSupportScreen.dart';
 import 'package:mighty_delivery/main/screens/RefferalHistoryScreen.dart';
 import 'package:mighty_delivery/main/screens/RewardListScreen.dart';
-import 'package:mighty_delivery/user/screens/FavouriteStoreScreen.dart';
 import 'package:mighty_delivery/user/screens/PageDetailScreen.dart';
 import 'package:mighty_delivery/user/screens/refer_earn_screen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -230,6 +229,7 @@ class AccountFragmentState extends State<AccountFragment> {
                     mTitle(language.pages),
                     ListView.builder(
                       shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         PageData item = pageList[index];
                         return accountSettingItemWidget(ic_pages, item.title.validate(), () {

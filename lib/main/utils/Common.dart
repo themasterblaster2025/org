@@ -331,7 +331,7 @@ oneSignalSettings() async {
   }
 }
 
-// Method to play the sound for 30 seconds
+// Method to play the sound for 60 seconds
 void playSoundForDuration() async {
   try {
     FlutterRingtonePlayer().play(

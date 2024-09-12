@@ -27,7 +27,6 @@ import '../../main/network/RestApis.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../components/OrderCardComponent.dart';
-import '../screens/StoreListScreen.dart';
 
 class OrderFragment extends StatefulWidget {
   static String tag = '/OrderFragment';
@@ -146,102 +145,7 @@ class OrderFragmentState extends State<OrderFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return /*ListView(
-      // shrinkWrap: true,
-      children: [
-        if (storeList.isNotEmpty) ...[
-          10.height,
-          Row(
-            children: [
-              Text(
-                language.whatCanWeGetYou,
-                style: boldTextStyle(size: 16, color: colorPrimary),
-              ),
-              Spacer(),
-              Icon(
-                Icons.navigate_next,
-                color: colorPrimary,
-              ).onTap(() {
-                StoreListScreen().launch(context);
-              }),
-            ],
-          ).paddingSymmetric(horizontal: 10),
-          8.height,
-          CarouselSlider(
-            options: CarouselOptions(
-              // autoPlay: true,
-              aspectRatio: 2.2,
-              viewportFraction: 0.43,
-
-              disableCenter: true,
-              enlargeCenterPage: true,
-            ),
-            items: storeList.map((e) {
-              StoreType item = e;
-              return InkWell(
-                onTap: () {
-                  StoreListScreen(type: item.id.validate()).launch(context);
-                },
-                child: Column(
-                  children: [
-                    commonCachedNetworkImage(
-                      item.image.validate(),
-                      height: context.height() * 0.18,
-                      fit: BoxFit.fill,
-                      width: context.width(),
-                    ).cornerRadiusWithClipRRect(5),
-                    4.height,
-                    Text(
-                      item.name.validate(),
-                      style: boldTextStyle(size: 14),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
-          Divider(
-            height: 6,
-            color: dividerColor,
-          ),
-        ],
-        Row(
-          children: [
-            Text(
-              language.myOrders,
-              style: boldTextStyle(size: 16, color: colorPrimary),
-            ),
-            Spacer(),
-            Row(
-              children: [
-                Icon(
-                  Icons.navigate_before,
-                  color: colorPrimary,
-                  size: 26,
-                ).visible(page != 1).onTap(() {
-                  page--;
-                  orderList.clear();
-                  setState(() {});
-                  getOrderData();
-                }),
-                Text(
-                  "Page $page of $totalPage",
-                  style: boldTextStyle(size: 15, color: colorPrimary),
-                ),
-                Icon(
-                  Icons.navigate_next,
-                  color: colorPrimary,
-                ).visible(page != totalPage).onTap(() {
-                  page++;
-                  orderList.clear();
-                  setState(() {});
-                  getOrderData();
-                }),
-              ],
-            ),
-          ],
-        ).paddingSymmetric(horizontal: 10),*/
-        AnimatedListView(
+    return AnimatedListView(
       itemCount: orderList.length,
       shrinkWrap: true,
       physics: BouncingScrollPhysics(),

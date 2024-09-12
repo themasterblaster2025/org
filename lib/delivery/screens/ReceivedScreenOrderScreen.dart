@@ -412,6 +412,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                             onTap: () async {
                               showInDialog(
                                 context,
+                                barrierDismissible: false,
                                 contentPadding: EdgeInsets.all(16),
                                 builder: (p0) {
                                   return CancelOrderDialog(

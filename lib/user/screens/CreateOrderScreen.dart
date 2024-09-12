@@ -55,7 +55,6 @@ import '../../main/utils/Widgets.dart';
 import '../../main/utils/dynamic_theme.dart';
 import '../../user/components/CreateOrderConfirmationDialog.dart';
 import '../../user/screens/DashboardScreen.dart';
-import '../components/ProductItemComponent.dart';
 import 'PaymentScreen.dart';
 import 'WalletScreen.dart';
 
@@ -179,15 +178,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     extraChargesList();
     getVehicleList(cityID: cityData!.id);
     if (widget.orderItems.validate().isNotEmpty) {
-      getStoreDetail(widget.storeId.validate()).then((value) {
-        pickAddressCont.text = value.address.validate();
-        pickLat = value.latitude.validate();
-        pickLong = value.longitude.validate();
-        pickPhoneCont.text = value.contactNumber.validate();
-        setState(() {});
-      }).catchError((error) {
-        print(error);
-      });
       widget.orderItems.validate().forEach((element) {
         orderItemsList
             .add(OrderItemModel(orderId: "", productId: element.id, quantity: element.count, amount: element.price));
@@ -362,9 +352,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             (totalAmount + totalExtraCharge + productAmount).toStringAsFixed(digitAfterDecimal).toDouble();
         insuranceAmount =
             appStore.isInsuranceAllowed == "1" ? ((appStore.insurancePercentage.toDouble() * tempTotal) / 100) : 0;
-        extraChargeList.removeWhere((item) => item.key == INSURANCE_CHARGE);
-        extraChargeList.add(
-            new ExtraChargeRequestModel(key: INSURANCE_CHARGE, value: insuranceAmount, valueType: CHARGE_TYPE_FIXED));
       }
 
       /// All Charges
@@ -439,6 +426,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       "total_parcel": totalParcelController.text.toInt(),
       "store_detail_id": widget.orderItems.validate().isEmpty ? null : widget.storeId,
       "order_item": widget.orderItems.validate().isEmpty ? null : orderItemsList,
+      "insurance_charge": insuranceAmount,
     };
 
     log("req----" + req.toString());
@@ -1525,7 +1513,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       itemCount: widget.orderItems.validate().length,
                       itemBuilder: (context, index) {
                         ProductData item = widget.orderItems.validate()[index];
-                        return ProductItemComponent(product: item, isView: true);
+                        //   return ProductItemComponent(product: item, isView: true);
+                        return Text("gffd");
                       },
                     ),
                   ],
@@ -1815,34 +1804,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    /*   Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(5, (index) {
-                        return Container(
-                          alignment: Alignment.center,
-                          height: selectedTabIndex == index ? 35 : 25,
-                          width: selectedTabIndex == index ? 35 : 25,
-                          margin: EdgeInsets.symmetric(horizontal: 8),
-                          decoration: BoxDecoration(
-                              color: selectedTabIndex >= index
-                                  ? colorPrimary
-                                  : (appStore.isDarkMode
-                                      ? scaffoldSecondaryDark
-                                      : borderColor),
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                  color: selectedTabIndex >= index
-                                      ? colorPrimary
-                                      : (appStore.isDarkMode
-                                          ? colorPrimaryLight
-                                          : colorPrimary))),
-                          child: Text('${index + 1}',
-                              style: primaryTextStyle(
-                                  color: selectedTabIndex >= index ? Colors.white : null)),
-                        );
-                      }).toList(),
-                    ),
-                    30.height,*/
                     if (selectedTabIndex == 0) createOrderWidget1(),
                     if (selectedTabIndex == 1) createOrderWidget2(),
                     if (selectedTabIndex == 2) createOrderWidget3(),
@@ -1923,17 +1884,62 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     setState(() {});
                   }
                 } else {
-                  showConfirmDialogCustom(
-                    context,
-                    title: language.createOrderConfirmationMsg,
-                    note: language.pleaseAvoidSendingProhibitedItems,
-                    positiveText: language.yes,
-                    primaryColor: ColorUtils.colorPrimary,
-                    negativeText: language.no,
-                    onAccept: (v) {
-                      createOrderApiCall(ORDER_CREATED);
-                    },
-                  );
+                  if (isSelected == 3 && (appStore.availableBal < totalAmount)) {
+                    showInDialog(
+                      getContext,
+                      contentPadding: EdgeInsets.all(16),
+                      builder: (p0) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(language.balanceInsufficientCashPayment,
+                                style: primaryTextStyle(size: 16), textAlign: TextAlign.center),
+                            30.height,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                commonButton(language.cancel, () {
+                                  finish(getContext, 0);
+                                }),
+                                commonButton(language.process, () {
+                                  // createOrderApiCall(ORDER_CREATED);
+                                  // finish(getContext, 1);
+                                  showConfirmDialogCustom(
+                                    context,
+                                    title: language.createOrderConfirmationMsg,
+                                    note: language.pleaseAvoidSendingProhibitedItems,
+                                    positiveText: language.yes,
+                                    primaryColor: ColorUtils.colorPrimary,
+                                    negativeText: language.no,
+                                    onAccept: (v) {
+                                      createOrderApiCall(ORDER_CREATED);
+                                      finish(getContext);
+                                    },
+                                  );
+                                }),
+                                commonButton(language.draft, () {
+                                  createOrderApiCall(ORDER_DRAFT);
+                                  finish(getContext, 2);
+                                }),
+                              ],
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    showConfirmDialogCustom(
+                      context,
+                      title: language.createOrderConfirmationMsg,
+                      note: language.pleaseAvoidSendingProhibitedItems,
+                      positiveText: language.yes,
+                      primaryColor: ColorUtils.colorPrimary,
+                      negativeText: language.no,
+                      onAccept: (v) {
+                        createOrderApiCall(ORDER_CREATED);
+                      },
+                    );
+                  }
                 }
               }).expand()
             ],

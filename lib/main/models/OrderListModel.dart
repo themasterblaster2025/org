@@ -97,6 +97,7 @@ class PackagingSymbol {
     required this.key,
     required this.title,
   });
+
   factory PackagingSymbol.fromJson(Map<String, dynamic> json) => PackagingSymbol(
         key: json["key"],
         title: json["title"],
@@ -153,6 +154,7 @@ class OrderData {
   String? vehicleImage;
   String? invoice;
   List<PackagingSymbol>? packagingSymbols = [];
+  num? insuranceCharge;
 
   OrderData(
       {this.orderTrackingId,
@@ -198,7 +200,8 @@ class OrderData {
       this.vehicleData,
       this.vehicleImage,
       this.packagingSymbols,
-      this.invoice});
+      this.invoice,
+      this.insuranceCharge});
 
   OrderData.fromJson(Map<String, dynamic> json) {
     orderTrackingId = json['order_tracking_id'];
@@ -244,6 +247,7 @@ class OrderData {
     vehicleData = json['vehicle_data'] != null ? new VehicleData.fromJson(json['vehicle_data']) : null;
     vehicleImage = json['vehicle_image'];
     invoice = json['invoice'];
+    insuranceCharge = json['insurance_charge'];
     packagingSymbols = json["packaging_symbols"] == null
         ? []
         : List<PackagingSymbol>.from(json["packaging_symbols"]!.map((x) => PackagingSymbol.fromJson(x)));
@@ -300,6 +304,7 @@ class OrderData {
     }
     data['vehicle_image'] = this.vehicleImage;
     data['invoice'] = this.invoice;
+    data['insurance_charge'] = this.insuranceCharge;
     data["packaging_symbols"] =
         packagingSymbols == null ? [] : List<PackagingSymbol>.from(this.packagingSymbols!.map((x) => x.toJson()));
     return data;

@@ -108,6 +108,8 @@ dependencies:
 
   flutter_rating_bar: ^4.0.1
   dotted_border: ^2.1.0
+  share_plus: ^10.0.0
+  flutter_ringtone_player: ^4.0.0+2
 
   #render htmldata
   photo_view: ^0.14.0
@@ -147,8 +149,10 @@ flutter:
 
   assets:
     - assets/
+    - assets/ringtone/
     - assets/icons/
     - assets/flag/
     - assets/icon/
+    - assets/packing_symbols/
     - assets/staticjson/
 

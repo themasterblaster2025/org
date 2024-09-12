@@ -657,43 +657,6 @@ Future<ProductListModel> getProductList({int? storeDetailId, int? page, String? 
   return ProductListModel.fromJson(await handleResponse(await buildHttpResponse(endPoint, method: HttpMethod.GET)));
 }
 
-// get store details from storeId
-Future<StoreData> getStoreDetail(int id) async {
-  return StoreData.fromJson(await handleResponse(await buildHttpResponse('store-detail?id=$id', method: HttpMethod.GET))
-      .then((value) => value['data']));
-}
-
-Future<CategoryModel> getCategorySubcategoryList({int? page, int? storeDetailId}) async {
-  return CategoryModel.fromJson(await handleResponse(
-      await buildHttpResponse('category-list?page=$page&store_id=$storeDetailId', method: HttpMethod.GET)));
-}
-
-// todo not used
-Future<WorkHoursListModel> getWorkingHoursList({int? page, int? storeDetailId}) async {
-  String endpoint = 'workhourmanage-list';
-  if (storeDetailId != null) {
-    endpoint += '?store_detail_id=$storeDetailId';
-  }
-  return WorkHoursListModel.fromJson(await handleResponse(await buildHttpResponse(endpoint, method: HttpMethod.GET)));
-}
-
-Future<LDBaseResponse> saveRateReview(Map req) async {
-  return LDBaseResponse.fromJson(
-      await handleResponse(await buildHttpResponse('rating-save', request: req, method: HttpMethod.POST)));
-}
-
-Future<LDBaseResponse> saveFavouriteStore(Map req) async {
-  return LDBaseResponse.fromJson(
-      await handleResponse(await buildHttpResponse('userFavouriteStore-save', method: HttpMethod.POST, request: req)));
-}
-
-Future<StoreListModel> getFavouriteStore() async {
-  return StoreListModel.fromJson(await handleResponse(await buildHttpResponse(
-    'userFavouriteStore-list',
-    method: HttpMethod.GET,
-  )));
-}
-
 /// Get DeliveryMan Dashboard count List
 Future<DashboardCount> getDashboardCount({String? startDate, String? endDate}) async {
   String endpoint = 'deliveryman-dashboard-data';

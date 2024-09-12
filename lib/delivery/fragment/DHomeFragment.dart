@@ -288,19 +288,6 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                     ],
                   ).paddingSymmetric(horizontal: 10),
                   8.height,
-                  // Wrap(
-                  //   runSpacing: 8.0,
-                  //   children:[
-                  //     countWidget(text: "Today Order", value: 2).paddingOnly(right: 8),
-                  //     countWidget(text: "Remaining Order", value: 2).paddingOnly(right: 8),
-                  //     countWidget(text: "Completed Order", value: 2).paddingOnly(right: 8),
-                  //     countWidget(text: "InProgress Order", value: 2).paddingOnly(right: 8),
-                  //     countWidget(text: "Commission", value: 2).paddingOnly(right: 8),
-                  //     countWidget(text: "Wallet Balance", value: 2).paddingOnly(right: 8),
-                  //     countWidget(text: "Pending Withdrawal Request", value: 2).paddingOnly(right: 8),
-                  //     countWidget(text: "Completed Withdrawal Request", value: 2).paddingOnly(right: 8),
-                  //   ],),
-
                   GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
@@ -321,23 +308,6 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                     },
                     itemCount: items.length,
                   ),
-                  /*18.height,
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(language.viewAllOrders, style: boldTextStyle(color: Colors.white)),
-                      ],
-                    ).onTap(() {
-                      DeliveryDashBoard().launch(context).then((value) {
-                        setState(() {});
-                        getDashboardCountDataApi();
-                      });
-                    }),
-                  ),
-                  10.height,*/
                 ],
               ),
             ),

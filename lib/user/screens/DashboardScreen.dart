@@ -7,7 +7,6 @@ import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/main/utils/Widgets.dart';
-import 'package:mighty_delivery/user/screens/StoreListScreen.dart';
 
 import '../../extensions/LiveStream.dart';
 import '../../extensions/colors.dart';
