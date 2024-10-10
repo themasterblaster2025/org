@@ -1420,23 +1420,15 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                               ),
                             Container(
                               width: context.width(),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    language.canOrderWithinHour,
-                                    style: secondaryTextStyle(color: Colors.red, size: 12),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ).expand(),
-                                  8.width,
-                                  Text(
-                                    formatRemainingTime(remainingTime),
-                                    style: boldTextStyle(color: Colors.red),
-                                    textAlign: TextAlign.right,
-                                  ),
-                                ],
+                              child: RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                  style: secondaryTextStyle(),
+                                  children: [
+                                    TextSpan(text: '${language.canOrderWithinHour} ',style: secondaryTextStyle(color: Colors.red, size: 12)),
+                                    TextSpan(text: "${formatRemainingTime(remainingTime)}", style: boldTextStyle(color: Colors.red)),
+                                  ],
+                                ),
                               ).visible(getStringAsync(USER_TYPE) == CLIENT &&
                                   orderData!.status != ORDER_DELIVERED &&
                                   orderData!.status != ORDER_CANCELLED &&

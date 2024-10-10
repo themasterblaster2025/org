@@ -1806,7 +1806,7 @@
         "screenId": "27",
         "keyword_id": 549,
         "keyword_name": "canOrderWithinHour",
-        "keyword_value": "You can cancel order within one hour of order placed."
+        "keyword_value": "You can cancel your order before : "
       },
       {
         "screenId": "27",

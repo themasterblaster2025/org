@@ -1,11 +1,13 @@
+import 'PaginationModel.dart';
+
 class ClaimListResponseModel {
-  Pagination? pagination;
+  PaginationModel? pagination;
   List<ClaimItem>? data;
 
   ClaimListResponseModel({this.pagination, this.data});
 
   ClaimListResponseModel.fromJson(Map<String, dynamic> json) {
-    pagination = json['pagination'] != null ? new Pagination.fromJson(json['pagination']) : null;
+    pagination = json['pagination'] != null ? new PaginationModel.fromJson(json['pagination']) : null;
     if (json['data'] != null) {
       data = <ClaimItem>[];
       json['data'].forEach((v) {
@@ -26,30 +28,7 @@ class ClaimListResponseModel {
   }
 }
 
-class Pagination {
-  int? totalItems;
-  int? perPage;
-  int? currentPage;
-  int? totalPages;
 
-  Pagination({this.totalItems, this.perPage, this.currentPage, this.totalPages});
-
-  Pagination.fromJson(Map<String, dynamic> json) {
-    totalItems = json['total_items'];
-    perPage = json['per_page'];
-    currentPage = json['currentPage'];
-    totalPages = json['totalPages'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['total_items'] = this.totalItems;
-    data['per_page'] = this.perPage;
-    data['currentPage'] = this.currentPage;
-    data['totalPages'] = this.totalPages;
-    return data;
-  }
-}
 
 class ClaimItem {
   int? id;
@@ -60,6 +39,7 @@ class ClaimItem {
   String? detail;
   String? status;
   List<String>? attachmentFile;
+  List<ClaimsHistory>? claimsHistory;
   String? createdAt;
   String? updatedAt;
 
@@ -72,6 +52,7 @@ class ClaimItem {
       this.detail,
       this.status,
       this.attachmentFile,
+        this.claimsHistory,
       this.createdAt,
       this.updatedAt});
 
@@ -84,6 +65,7 @@ class ClaimItem {
     detail = json['detail'];
     status = json['status'];
     attachmentFile = json['attachment_file'].cast<String>();
+    claimsHistory= json["claims_history"] == null ? [] : List<ClaimsHistory>.from(json["claims_history"]!.map((x) => ClaimsHistory.fromJson(x)));
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
   }
@@ -102,4 +84,44 @@ class ClaimItem {
     data['updated_at'] = this.updatedAt;
     return data;
   }
+}
+
+class ClaimsHistory {
+  int? id;
+  int? claimId;
+  int? amount;
+  String? description;
+  List<dynamic>? attachmentFile;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+
+  ClaimsHistory({
+    this.id,
+    this.claimId,
+    this.amount,
+    this.description,
+    this.attachmentFile,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  factory ClaimsHistory.fromJson(Map<String, dynamic> json) => ClaimsHistory(
+    id: json["id"],
+    claimId: json["claim_id"],
+    amount: json["amount"],
+    description: json["description"],
+    attachmentFile: json["attachment_file"] == null ? [] : List<dynamic>.from(json["attachment_file"]!.map((x) => x)),
+    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+    updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "claim_id": claimId,
+    "amount": amount,
+    "description": description,
+    "attachment_file": attachmentFile == null ? [] : List<dynamic>.from(attachmentFile!.map((x) => x)),
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
+  };
 }

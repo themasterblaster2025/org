@@ -235,6 +235,72 @@ class _ClaimDetailstDetailsScreenState extends State<ClaimDetailstDetailsScreen>
                   },
                 ),
               ),
+            if(widget.item.claimsHistory != null && widget.item.claimsHistory!.isNotEmpty) ...[
+            16.height,
+            Text(
+              "Approved amount", // todo
+              style: boldTextStyle(),
+            ),
+            8.height,
+            Container(
+                decoration: boxDecorationWithRoundedCorners(
+                    borderRadius: BorderRadius.circular(defaultRadius),
+                    border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
+                    backgroundColor: Colors.transparent),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: context.width(),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+                      padding: EdgeInsets.all(12),
+                      child: Text(widget.item.claimsHistory![0].amount.validate().toString(), style: primaryTextStyle()),
+                    ),
+                  ],
+                )),
+              16.height,
+              Text(
+                language.description,
+                style: boldTextStyle(),
+              ),
+              8.height,
+              Container(
+                  decoration: boxDecorationWithRoundedCorners(
+                      borderRadius: BorderRadius.circular(defaultRadius),
+                      border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
+                      backgroundColor: Colors.transparent),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: context.width(),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+                        padding: EdgeInsets.all(12),
+                        child: Text(widget.item.claimsHistory![0].description.validate().toString(), style: primaryTextStyle()),
+                      ),
+                    ],
+                  )),
+
+              if(widget.item.claimsHistory![0].attachmentFile != null && widget.item.claimsHistory![0].attachmentFile!.length >0)...[
+                16.height,
+                Text(
+                  language.attachment,
+                  style: boldTextStyle(),
+                ),
+                8.height,
+                Container(
+                  width: context.width(),
+                  height: 180,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: widget.item.claimsHistory![0].attachmentFile!.length,
+                    itemBuilder: (context, index) {
+                      return buildFileWidget(widget.item.claimsHistory![0].attachmentFile![index], widget.item.id.validate());
+                    },
+                  ),
+                ),
+              ],
+    ],
           ],
         ),
       ),
