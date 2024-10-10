@@ -90,8 +90,8 @@ abstract class _AppStore with Store {
   String maxAmountEarning = '';
   @observable
   String themeColor = '0xff00000';
-  @observable
-  String orderTrackingIdPrefixId = 'DOCS';
+  // @observable
+  // String orderTrackingIdPrefixId = 'DOCS';
   @observable
   String isInsuranceAllowed = '0';
   @observable
@@ -313,10 +313,10 @@ abstract class _AppStore with Store {
     themeColor = val;
   }
 
-  @action
-  Future<void> setOrderTrackingIdPrefix(String val) async {
-    orderTrackingIdPrefixId = val;
-  }
+  // @action
+  // Future<void> setOrderTrackingIdPrefix(String val) async {
+  //   orderTrackingIdPrefixId = val;
+  // }
 
   @action
   Future<void> setInsurancePercentage(String val) async {

@@ -292,7 +292,6 @@ class WithDrawScreenState extends State<WithDrawScreen> {
                                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      //TODO add keys
                                                       Text(language.image, style: secondaryTextStyle()),
                                                       Container(
                                                           width: 100,

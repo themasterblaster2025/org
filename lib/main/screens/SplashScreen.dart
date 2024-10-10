@@ -113,6 +113,9 @@ class SplashScreenState extends State<SplashScreen> {
         if (appStore.isLoggedIn && getIntAsync(USER_ID) != 0) {
           await getUserDetail(getIntAsync(USER_ID)).then((value) async {
             setValue(IS_VERIFIED_DELIVERY_MAN, !value.documentVerifiedAt.isEmptyOrNull);
+            if (value.deliverymanVehicleHistory != null) {
+              setValue(VEHICLE, value.deliverymanVehicleHistory![0].toJson());
+            }
             appStore.setReferralCode(value.referralCode.validate());
             appStore.setUserType(value.userType.validate());
 
@@ -183,7 +186,7 @@ class SplashScreenState extends State<SplashScreen> {
                   Image.asset(ic_logo, height: 80, width: 80, fit: BoxFit.fill)
                       .cornerRadiusWithClipRRect(defaultRadius),
                   16.height,
-                  Text(language.appName == "$defaultKeyNotFoundValue(9)" ? "Mighty Delivery" : language.appName,
+                  Text(language.appName == "$defaultKeyNotFoundValue(9)" ? mAppName : language.appName,
                           style: boldTextStyle(size: 20), textAlign: TextAlign.center)
                       .expand(),
                   Text('v ${snap.data!.version.validate()}', style: secondaryTextStyle(size: 12)),

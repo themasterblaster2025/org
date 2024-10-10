@@ -67,7 +67,6 @@ Future<Response> buildHttpResponse(String endPoint, {HttpMethod method = HttpMet
         var encoder = const JsonEncoder.withIndent("    ");
         lg.log("\n${encoder.convert(responseLog)}", name: "$method ${url.toString()} ${response.statusCode}");
       }
-      // todo
 
       return response;
     } catch (e) {

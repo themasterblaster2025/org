@@ -268,7 +268,6 @@ class WalletScreenState extends State<WalletScreen> {
                 Text('${data.type == CREDIT ? '+' : '-'} ${printAmount(data.amount)}',
                     style: boldTextStyle(color: data.type == CREDIT ? Colors.green : Colors.red)),
                 6.height,
-                //TODO add key
                 Container(
                         decoration: boxDecorationDefault(
                             border: Border.all(color: Colors.grey.withOpacity(0.2)), color: Colors.transparent),
@@ -277,11 +276,9 @@ class WalletScreenState extends State<WalletScreen> {
                             .center())
                     .onTap(() {
                   Clipboard.setData(ClipboardData(text: data.transactionType!.split(":")[1])).then((_) {
-                    //TODO add key
                     snackBar(context,
                         content: Text("${data.transactionType!.split(":")[1]}  ${language.copiedToClipboard}"));
                   });
-                  //TODO add key
                 }).visible(data.transactionType!.contains("Transaction Id")),
               ],
             ),

@@ -26,6 +26,7 @@ class AppSettingModel {
   String? isInsuranceAllowed;
   String? insurancePercentage;
   String? insuranceDescription;
+  String? maxEarningsPerMonth;
   List<StoreType>? storeType;
 
   AppSettingModel(
@@ -56,7 +57,8 @@ class AppSettingModel {
       this.orderTrackingIdPrefix,
       this.insurancePercentage,
       this.isInsuranceAllowed,
-      this.insuranceDescription});
+      this.insuranceDescription,
+      this.maxEarningsPerMonth});
 
   factory AppSettingModel.fromJson(Map<String, dynamic> json) {
     return AppSettingModel(
@@ -88,6 +90,7 @@ class AppSettingModel {
       insurancePercentage: json['insurance_percentage'],
       isInsuranceAllowed: json['insurance_allow'],
       insuranceDescription: json['insurance_description'],
+      maxEarningsPerMonth: json['max_earning_per_month'],
       storeType:
           json["store_type"] == null ? [] : List<StoreType>.from(json["store_type"]!.map((x) => StoreType.fromJson(x))),
     );
@@ -144,6 +147,7 @@ class AppSettingModel {
     data['insurance_allow'] = this.isInsuranceAllowed;
     data['insurance_percentage'] = this.insurancePercentage;
     data['insurance_description'] = this.insuranceDescription;
+    data['max_earning_per_month'] = this.maxEarningsPerMonth;
     data["store_type"] = this.storeType == null ? [] : List<dynamic>.from(storeType!.map((x) => x.toJson()));
 
     return data;

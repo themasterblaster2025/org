@@ -1111,7 +1111,7 @@
         "screenId": "19",
         "keyword_id": 457,
         "keyword_name": "pickupPersonName",
-        "keyword_value": "Pickup person name"
+        "keyword_value": "Pickup person contact name"
       },
       {
         "screenId": "19",
@@ -1123,7 +1123,7 @@
         "screenId": "19",
         "keyword_id": 459,
         "keyword_name": "deliveryPersonName",
-        "keyword_value": "Delivery person name"
+        "keyword_value": "Delivery person contact name"
       },
       {
         "screenId": "19",
@@ -1148,6 +1148,64 @@
         "keyword_id": 463,
         "keyword_name": "noThanksRisk",
         "keyword_value": "No thanks, I'll risk it"
+      },  {
+        "screenId": "19",
+        "keyword_id": 505,
+        "keyword_name": "approxParcelValue",
+        "keyword_value": "Enter approx parcel value"
+      },
+      {
+        "screenId": "19",
+        "keyword_id": 506,
+        "keyword_name": "reviewRoute",
+        "keyword_value": "Review route"
+      },    {
+        "screenId": "19",
+        "keyword_id": 507,
+        "keyword_name": "pickupDescription",
+        "keyword_value": "Pickup description"
+      },
+      {
+        "screenId": "19",
+        "keyword_id": 508,
+        "keyword_name": "viewMore",
+        "keyword_value": "View More"
+      },
+      {
+        "screenId": "19",
+        "keyword_id": 509,
+        "keyword_name": "contactPersonName",
+        "keyword_value": "Contact person name"
+      },
+      {
+        "screenId": "19",
+        "keyword_id": 510,
+        "keyword_name": "information",
+        "keyword_value": "Information"
+      },
+      {
+        "screenId": "19",
+        "keyword_id": 511,
+        "keyword_name": "instruction",
+        "keyword_value": "Instruction"
+      },
+      {
+        "screenId": "19",
+        "keyword_id": 516,
+        "keyword_name": "insuranceAmountValidation",
+        "keyword_value": "please enter insurance amount"
+      },
+      {
+        "screenId": "19",
+        "keyword_id": 542,
+        "keyword_name": "timeValidation",
+        "keyword_value": "Time must be at least 1 hour after the current time."
+      },
+      {
+        "screenId": "19",
+        "keyword_id": 547,
+        "keyword_name": "scheduleOrderTimeMsg",
+        "keyword_value": "Time must be at least 1 hour after the current time."
       }
     ]
   },
@@ -1292,6 +1350,18 @@
         "keyword_id": 408,
         "keyword_name": "pages",
         "keyword_value": "PAGES"
+      },
+      {
+        "screenId": "21",
+        "keyword_id": 517,
+        "keyword_name": "vehicleHistory",
+        "keyword_value": "Vehicle history"
+      },
+      {
+        "screenId": "21",
+        "keyword_id": 518,
+        "keyword_name": "update",
+        "keyword_value": "update"
       }
     ]
   },
@@ -1717,7 +1787,13 @@
         "screenId": "27",
         "keyword_id": 467,
         "keyword_name": "cancelAndReturn",
-        "keyword_value": "Cancel & Return"
+        "keyword_value": "Cancel & return"
+      },
+      {
+        "screenId": "27",
+        "keyword_id": 549,
+        "keyword_name": "canOrderWithinHour",
+        "keyword_value": "You can cancel order within one hour of order placed."
       }
     ]
   },
@@ -2168,6 +2244,12 @@
         "keyword_id": 410,
         "keyword_name": "reject",
         "keyword_value": "Reject"
+      },
+      {
+        "screenId": "33",
+        "keyword_id": 504,
+        "keyword_name": "shipped",
+        "keyword_value": "Shipped"
       }
     ]
   },
@@ -2923,7 +3005,7 @@
         "screenId": "45",
         "keyword_id": 413,
         "keyword_name": "referAndEarn",
-        "keyword_value": "Refer & Earn"
+        "keyword_value": "Refer & earn"
       },
       {
         "screenId": "45",
@@ -2960,6 +3042,24 @@
         "keyword_id": 475,
         "keyword_name": "shareDes3",
         "keyword_value": " to sign up and get some cool rewards! "
+      },
+      {
+        "screenId": "45",
+        "keyword_id": 519,
+        "keyword_name": "copiedToClipBoard",
+        "keyword_value": " copied to clipboard "
+      },
+      {
+        "screenId": "45",
+        "keyword_id": 520,
+        "keyword_name": "yourVehicle",
+        "keyword_value": " Your vehicle "
+      },
+      {
+        "screenId": "45",
+        "keyword_id": 521,
+        "keyword_name": "noVehicleAdded",
+        "keyword_value": "No vehicle added "
       }
     ]
   },
@@ -3140,7 +3240,32 @@
         "keyword_id": 446,
         "keyword_name": "completedOrders",
         "keyword_value": "Completed Orders"
+      },
+      {
+        "screenId": "50",
+        "keyword_id": 512,
+        "keyword_name": "supportType1",
+        "keyword_value": "Orders"
+      },
+      {
+        "screenId": "50",
+        "keyword_id": 513,
+        "keyword_name": "supportType2",
+        "keyword_value": "Delivery person"
+      },
+      {
+        "screenId": "50",
+        "keyword_id": 514,
+        "keyword_name": "supportType3",
+        "keyword_value": "Return order"
+      },
+      {
+        "screenId": "50",
+        "keyword_id": 515,
+        "keyword_name": "supportType4",
+        "keyword_value": "Delivery timing"
       }
+
     ]
   },
   {
@@ -3334,5 +3459,209 @@
         "keyword_value": "Indicates that the contents of the package are fragile and should be handled with care to prevent breakage."
       }
     ]
+  },
+  {
+    "screenID": "54",
+    "ScreenName": "AddDeliverymanVehicleScreen",
+    "keyword_data": [
+      {
+        "screenId": "54",
+        "keyword_id": 522,
+        "keyword_name": "updateVehicle",
+        "keyword_value": "Update vehicle"
+      },  {
+        "screenId": "54",
+        "keyword_id": 523,
+        "keyword_name": "vehicleInfo",
+        "keyword_value": "Vehicle info"
+      },
+      {
+        "screenId": "54",
+        "keyword_id": 524,
+        "keyword_name": "addVehicle",
+        "keyword_value": "Add vehicle"
+      },
+      {
+        "screenId": "54",
+        "keyword_id": 525,
+        "keyword_name": "model",
+        "keyword_value": "Model"
+      },
+      {
+        "screenId": "54",
+        "keyword_id": 526,
+        "keyword_name": "color",
+        "keyword_value": "Color"
+      },
+      {
+        "screenId": "54",
+        "keyword_id": 527,
+        "keyword_name": "yearOfManufacturing",
+        "keyword_value": "Year of manufacture"
+      },
+      {
+        "screenId": "54",
+        "keyword_id": 528,
+        "keyword_name": "vehicleIdentificationNumber",
+        "keyword_value": "Vehicle identification number"
+      },
+      {
+        "screenId": "54",
+        "keyword_id": 529,
+        "keyword_name": "licensePlateNumber",
+        "keyword_value": "License plate number"
+      },
+      {
+        "screenId": "54",
+        "keyword_id": 530,
+        "keyword_name": "currentMileage",
+        "keyword_value": "Current mileage"
+      },
+      {
+        "screenId": "54",
+        "keyword_id": 531,
+        "keyword_name": "fuelType",
+        "keyword_value": "Fuel type"
+      },
+      {
+        "screenId": "54",
+        "keyword_id": 532,
+        "keyword_name": "transmissionType",
+        "keyword_value": "Transmission type"
+      },
+      {
+        "screenId": "54",
+        "keyword_id": 533,
+        "keyword_name": "ownerName",
+        "keyword_value": "Owner name"
+      },
+      {
+        "screenId": "54",
+        "keyword_id": 534,
+        "keyword_name": "registrationDate",
+        "keyword_value": "Registration date"
+      },
+      {
+        "screenId": "54",
+        "keyword_id": 535,
+        "keyword_name": "ownerNumber",
+        "keyword_value": "Owner number"
+      }
+    ]
+  },
+  {
+    "screenID": "55",
+    "ScreenName": "SelectVehicleScreen",
+    "keyword_data": [
+      {
+        "screenId": "55",
+        "keyword_id": 536,
+        "keyword_name": "id",
+        "keyword_value": "Id"
+      },
+      {
+        "screenId": "55",
+        "keyword_id": 537,
+        "keyword_name": "active",
+        "keyword_value": "Active"
+      },
+      {
+        "screenId": "55",
+        "keyword_id": 538,
+        "keyword_name": "inActive",
+        "keyword_value": "Inactive"
+      },
+      {
+        "screenId": "55",
+        "keyword_id": 539,
+        "keyword_name": "startDate",
+        "keyword_value": "Start date"
+      },
+      {
+        "screenId": "55",
+        "keyword_id": 540,
+        "keyword_name": "endDate",
+        "keyword_value": "End date"
+      },
+      {
+        "screenId": "55",
+        "keyword_id": 541,
+        "keyword_name": "clickHere",
+        "keyword_value": "Click here"
+      }
+    ]
+  },
+  {
+    "screenID": "56",
+    "ScreenName": "ClaimScreen",
+    "keyword_data": [
+      {
+        "screenId": "56",
+        "keyword_id": 544,
+        "keyword_name": "claimHistory",
+        "keyword_value": "Claim history"
+      },
+      {
+        "screenId": "56",
+        "keyword_id": 545,
+        "keyword_name": "proofValue",
+        "keyword_value": "Proof value"
+      },{
+        "screenId": "56",
+        "keyword_id": 546,
+        "keyword_name": "trackinNo",
+        "keyword_value": "Tracking no"
+      },{
+        "screenId": "56",
+        "keyword_id": 548,
+        "keyword_name": "ofApproxParcelValue",
+        "keyword_value": "% of approx parcel value"
+      },{
+        "screenId": "56",
+        "keyword_id": 550,
+        "keyword_name": "claimInsurance",
+        "keyword_value": "Claim insurance"
+      },{
+        "screenId": "56",
+        "keyword_id": 551,
+        "keyword_name": "fillTheDetailsForClaim",
+        "keyword_value": "Fill the details for claim"
+      },{
+        "screenId": "56",
+        "keyword_id": 552,
+        "keyword_name": "addAttachmentMsg",
+        "keyword_value": "Please add images or pdfs for better clarity,however it is not compulsory to do so click 'claim' to proceed further."
+      },{
+        "screenId": "56",
+        "keyword_id": 553,
+        "keyword_name": "title",
+        "keyword_value": "Title"
+      },{
+        "screenId": "56",
+        "keyword_id": 554,
+        "keyword_name": "enterProofValue",
+        "keyword_value": "Enter proof value"
+      },{
+        "screenId": "56",
+        "keyword_id": 555,
+        "keyword_name": "selectedFiles",
+        "keyword_value": "Selected files"
+      },{
+        "screenId": "56",
+        "keyword_id": 556,
+        "keyword_name": "addProofs",
+        "keyword_value": "Add proofs"
+      },{
+        "screenId": "56",
+        "keyword_id": 543,
+        "keyword_name": "claim",
+        "keyword_value": "Claim"
+      },{
+        "screenId": "56",
+        "keyword_id": 557,
+        "keyword_name": "proofDetails",
+        "keyword_value": "Proof details"
+      }
+    ]
   }
-]
+    ]

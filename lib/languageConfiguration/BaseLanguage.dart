@@ -827,7 +827,6 @@ class BaseLanguage {
 
   String get forKey => getContentValueFromKey(411);
 
-  //////////////////// todo temporary added keys
   String get earnedRewards => getContentValueFromKey(412);
 
   String get referAndEarn => getContentValueFromKey(413);
@@ -1011,4 +1010,58 @@ class BaseLanguage {
   String get fragileDesc => getContentValueFromKey(502);
 
   String get parnerCode => getContentValueFromKey(503);
+  String get shipped => getContentValueFromKey(504);
+  String get approxParcelValue => getContentValueFromKey(505);
+  String get reviewRoute => getContentValueFromKey(506);
+  String get pickupDescription => getContentValueFromKey(507);
+  String get viewMore => getContentValueFromKey(508);
+  String get contactPersonName => getContentValueFromKey(509);
+  String get information => getContentValueFromKey(510);
+  String get instruction => getContentValueFromKey(511);
+  String get supportType1 => getContentValueFromKey(512);
+  String get supportType2 => getContentValueFromKey(513);
+  String get supportType3 => getContentValueFromKey(514);
+  String get supportType4 => getContentValueFromKey(515);
+  String get insuranceAmountValidation => getContentValueFromKey(516);
+  String get vehicleHistory => getContentValueFromKey(517);
+  String get update => getContentValueFromKey(518);
+  String get copiedToClipBoard => getContentValueFromKey(519);
+  String get yourVehicle => getContentValueFromKey(520);
+  String get noVehicleAdded => getContentValueFromKey(521);
+  String get updateVehicle => getContentValueFromKey(522);
+  String get vehicleInfo => getContentValueFromKey(523);
+  String get addVehicle => getContentValueFromKey(524);
+  String get model => getContentValueFromKey(525);
+  String get color => getContentValueFromKey(526);
+  String get yearOfManufacturing => getContentValueFromKey(527);
+  String get vehicleIdentificationNumber => getContentValueFromKey(528);
+  String get licensePlateNumber => getContentValueFromKey(529);
+  String get currentMileage => getContentValueFromKey(530);
+  String get fuelType => getContentValueFromKey(531);
+  String get transmissionType => getContentValueFromKey(532);
+  String get ownerName => getContentValueFromKey(533);
+  String get registrationDate => getContentValueFromKey(534);
+  String get ownerNumber => getContentValueFromKey(535);
+  String get id => getContentValueFromKey(536);
+  String get active => getContentValueFromKey(537);
+  String get inActive => getContentValueFromKey(538);
+  String get startDate => getContentValueFromKey(539);
+  String get endDate => getContentValueFromKey(540);
+  String get clickHere => getContentValueFromKey(541);
+  String get timeValidation => getContentValueFromKey(542);
+  String get claimHistory => getContentValueFromKey(544);
+  String get proofValue => getContentValueFromKey(545);
+  String get trackinNo => getContentValueFromKey(546);
+  String get ofApproxParcelValue => getContentValueFromKey(548);
+  String get claimInsurance => getContentValueFromKey(550);
+  String get fillTheDetailsForClaim => getContentValueFromKey(551);
+  String get addAttachmentMsg => getContentValueFromKey(552);
+  String get title => getContentValueFromKey(553);
+  String get enterProofValue => getContentValueFromKey(554);
+  String get selectedFiles => getContentValueFromKey(555);
+  String get addProofs => getContentValueFromKey(556);
+  String get claim => getContentValueFromKey(543);
+  String get scheduleOrderTimeMsg => getContentValueFromKey(547);
+  String get canOrderWithinHour => getContentValueFromKey(549);
+  String get proofDetails => getContentValueFromKey(557);
 }

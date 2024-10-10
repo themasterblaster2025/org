@@ -3,17 +3,16 @@ import 'dart:core';
 
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:mighty_delivery/extensions/extension_util/bool_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/context_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/list_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/num_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/main/utils/DataProviders.dart';
@@ -31,23 +30,16 @@ import '../../extensions/text_styles.dart';
 import '../../extensions/widgets.dart';
 import '../../main.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
-import '../../main/components/OrderSummeryWidget.dart';
+import '../../main/components/OrderAmountSummaryWidget.dart';
 import '../../main/components/PickAddressBottomSheet.dart';
-import '../../main/models/AddressListModel.dart';
-import '../../main/models/AutoCompletePlacesListModel.dart';
-import '../../main/models/CityListModel.dart';
 import '../../main/models/CountryListModel.dart';
+import '../../main/models/CreateOrderDetailModel.dart';
 import '../../main/models/ExtraChargeRequestModel.dart';
-import '../../main/models/OrderItemModel.dart';
 import '../../main/models/OrderListModel.dart';
-import '../../main/models/ParcelTypeListModel.dart';
 import '../../main/models/PaymentModel.dart';
-import '../../main/models/PlaceIdDetailModel.dart';
-import '../../main/models/ProductListModel.dart';
+import '../../main/models/TotalAmountResponse.dart';
 import '../../main/models/VehicleModel.dart';
 import '../../main/network/RestApis.dart';
-import '../../main/screens/UserCitySelectScreen.dart';
-import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Images.dart';
@@ -56,14 +48,11 @@ import '../../main/utils/dynamic_theme.dart';
 import '../../user/components/CreateOrderConfirmationDialog.dart';
 import '../../user/screens/DashboardScreen.dart';
 import 'PaymentScreen.dart';
-import 'WalletScreen.dart';
 
 class CreateOrderScreen extends StatefulWidget {
   final OrderData? orderData;
-  final List<ProductData>? orderItems;
-  final int? storeId;
 
-  CreateOrderScreen({this.orderData, this.orderItems, this.storeId});
+  CreateOrderScreen({this.orderData});
 
   @override
   CreateOrderScreenState createState() => CreateOrderScreenState();
@@ -72,8 +61,8 @@ class CreateOrderScreen extends StatefulWidget {
 class CreateOrderScreenState extends State<CreateOrderScreen> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  CityModel? cityData;
-  List<ParcelTypeData> parcelTypeList = [];
+  CityDetail? cityData;
+  List<StaticDetails> parcelTypeList = [];
 
   TextEditingController parcelTypeCont = TextEditingController();
   TextEditingController weightController = TextEditingController(text: '1');
@@ -96,6 +85,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   TextEditingController deliverDateController = TextEditingController();
   TextEditingController deliverFromTimeController = TextEditingController();
   TextEditingController deliverToTimeController = TextEditingController();
+  TextEditingController insuranceAmountController = TextEditingController();
 
   FocusNode pickPhoneFocus = FocusNode();
   FocusNode pickPersonNameFocus = FocusNode();
@@ -123,29 +113,28 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   bool? isCash = false;
 
   String paymentCollectFrom = PAYMENT_ON_PICKUP;
+  TotalAmountResponse? totalAmountResponse;
 
   DateTime? currentBackPressTime;
-  bool isPickSavedAddress = false;
-  bool isDeliverySavedAddress = false;
+  // bool isPickSavedAddress = false;
+  // bool isDeliverySavedAddress = false;
   num totalDistance = 0;
-  num totalAmount = 0;
-  List<AddressData> addressList = [];
-  AddressData? pickAddressData;
-  AddressData? deliveryAddressData;
+  // num totalAmount = 0;
+  List<UseraddressDetail> addressList = [];
+  UseraddressDetail? pickAddressData;
+  UseraddressDetail? deliveryAddressData;
   num weightCharge = 0;
   num distanceCharge = 0;
   num totalExtraCharge = 0;
   num insuranceAmount = 0.0;
+  num vehicleCharge = 0.0;
 
   List<PaymentModel> mPaymentList = getPaymentItems();
 
   List<ExtraChargeRequestModel> extraChargeList = [];
 
-  num productAmount = 0;
-  List<OrderItemModel> orderItemsList = [];
-
   int? selectedVehicle;
-  List<VehicleData> vehicleList = [];
+  List<VehicleDetail> vehicleList = [];
   VehicleData? vehicleData;
   List<Marker> markers = [];
   GoogleMapController? googleMapController;
@@ -155,6 +144,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   final List<Map<String, String>> selectedPackingSymbols = [];
   final List<Map<String, String>> packingSymbolsItems = getPackagingSymbols();
   int insuranceSelectedOption = 1;
+  List<String> appBarTitleList = [
+    language.createOrder,
+    language.pickupInformation,
+    language.deliveryInformation,
+    language.reviewRoute,
+    language.details
+  ];
 
   @override
   void initState() {
@@ -172,34 +168,61 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     deliverCountryCode = CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.isEmptyOrNull
         ? defaultPhoneCode
         : CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate();
-    await getCityDetailApiCall(getIntAsync(CITY_ID));
-    getParcelTypeListApiCall();
-    getAddressListApi();
-    extraChargesList();
-    getVehicleList(cityID: cityData!.id);
-    if (widget.orderItems.validate().isNotEmpty) {
-      widget.orderItems.validate().forEach((element) {
-        orderItemsList
-            .add(OrderItemModel(orderId: "", productId: element.id, quantity: element.count, amount: element.price));
-        productAmount = productAmount + ((element.count) * (element.price ?? 0));
-        setState(() {});
+    await getCreateOrderDetails(getIntAsync(CITY_ID)).then((value) async {
+      appStore.setLoading(false);
+      await setValue(CITY_DATA, value.cityDetail!.toJson());
+      cityData = value.cityDetail;
+      value.useraddressDetail!.forEach((element) {
+        addressList.add(element);
       });
-    }
-    await getAppSetting().then((value) {
-      appStore.setCurrencyCode(value.currencyCode ?? CURRENCY_CODE);
-      appStore.setCurrencySymbol(value.currency ?? CURRENCY_SYMBOL);
-      appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
-      appStore.setSiteEmail(value.siteEmail ?? "");
-      appStore.setCopyRight(value.siteCopyright ?? "");
-      appStore.setOrderTrackingIdPrefix(value.orderTrackingIdPrefix ?? "");
-      appStore.setIsInsuranceAllowed(value.isInsuranceAllowed ?? "0");
-      appStore.setInsurancePercentage(value.insurancePercentage ?? "0");
-      appStore.setInsuranceDescription(value.insuranceDescription ?? "");
-      appStore.isVehicleOrder = value.isVehicleInOrder ?? 0;
+      if (addressList.isNotEmpty) {
+        pickAddressData = addressList.first;
+        deliveryAddressData = addressList.first;
+      }
+      List<UseraddressDetail> list = [];
+      addressList.forEach((e) {
+        list.add(e);
+      });
+      setValue(RECENT_ADDRESS_LIST, list.map((element) => jsonEncode(element)).toList());
+      vehicleList.clear();
+      vehicleList = value.vehicleDetail!;
+      if (value.vehicleDetail!.isNotEmpty) selectedVehicle = value.vehicleDetail![0].id;
+      parcelTypeList.clear();
+      parcelTypeList.addAll(value.staticDetails!);
+      appStore.setCurrencyCode(value.appSettingDetail!.currencyCode ?? CURRENCY_CODE);
+      appStore.setCurrencySymbol(value.appSettingDetail!.currency ?? CURRENCY_SYMBOL);
+      appStore.setCurrencyPosition(value.appSettingDetail!.currencyPosition ?? CURRENCY_POSITION_LEFT);
+      appStore.setIsInsuranceAllowed(value.appSettingDetail!.isInsuranceAllow.toString());
+      appStore.setInsurancePercentage(value.appSettingDetail!.insurancePercentage.toString());
+      appStore.setInsuranceDescription(value.appSettingDetail!.insuranceDescription.toString());
+      appStore.isVehicleOrder = value.appSettingDetail!.isVehicleInOrder ?? 0;
       setState(() {});
     }).catchError((error) {
-      log(error.toString());
+      appStore.setLoading(false);
+      toast(error.toString());
     });
+    // getDistance();
+    //  await await getCityDetailApiCall(getIntAsync(CITY_ID));
+    // getParcelTypeListApiCall();
+    // getAddressListApi();
+    // extraChargesList();
+    // getVehicleList(cityID: cityData!.id);
+    //  await getAppSetting().then((value) {
+    //    appStore.setCurrencyCode(value.currencyCode ?? CURRENCY_CODE);
+    //    appStore.setCurrencySymbol(value.currency ?? CURRENCY_SYMBOL);
+    //    appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
+    //    appStore.setSiteEmail(value.siteEmail ?? "");
+    //    appStore.setCopyRight(value.siteCopyright ?? "");
+    //    appStore.setOrderTrackingIdPrefix(value.orderTrackingIdPrefix ?? "");
+    //    appStore.setIsInsuranceAllowed(value.isInsuranceAllowed ?? "0");
+    //    appStore.setInsurancePercentage(value.insurancePercentage ?? "0");
+    //    appStore.setInsuranceDescription(value.insuranceDescription ?? "");
+    //    appStore.setMaxAmountPerMonth(value.maxEarningsPerMonth ?? '');
+    //    appStore.isVehicleOrder = value.isVehicleInOrder ?? 0;
+    //    setState(() {});
+    //  }).catchError((error) {
+    //    log(error.toString());
+    //  });
 
     if (widget.orderData != null) {
       if (widget.orderData!.totalWeight != 0) weightController.text = widget.orderData!.totalWeight!.toString();
@@ -236,131 +259,119 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     }
   }
 
-  extraChargesList() {
-    extraChargeList.clear();
-    extraChargeList.add(ExtraChargeRequestModel(key: FIXED_CHARGES, value: cityData!.fixedCharges, valueType: ""));
-    extraChargeList.add(ExtraChargeRequestModel(key: MIN_DISTANCE, value: cityData!.minDistance, valueType: ""));
-    extraChargeList.add(ExtraChargeRequestModel(key: MIN_WEIGHT, value: cityData!.minWeight, valueType: ""));
-    extraChargeList
-        .add(ExtraChargeRequestModel(key: PER_DISTANCE_CHARGE, value: cityData!.perDistanceCharges, valueType: ""));
-    extraChargeList
-        .add(ExtraChargeRequestModel(key: PER_WEIGHT_CHARGE, value: cityData!.perWeightCharges, valueType: ""));
-
-    if (cityData!.extraCharges != null) {
-      cityData!.extraCharges!.forEach((element) {
-        extraChargeList.add(ExtraChargeRequestModel(
-            key: element.title!.toLowerCase().replaceAll(' ', "_"),
-            value: element.charges,
-            valueType: element.chargesType));
-      });
-    }
-  }
-
-  getCityDetailApiCall(int cityId) async {
-    await getCityDetail(cityId).then((value) async {
-      await setValue(CITY_DATA, value.data!.toJson());
-      cityData = value.data!;
-      getVehicleApiCall();
-      setState(() {});
-    }).catchError((error) {
-      if (error.toString() == CITY_NOT_FOUND_EXCEPTION) {
-        UserCitySelectScreen().launch(getContext, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
-      }
-    });
-  }
-
-  getParcelTypeListApiCall() async {
-    appStore.setLoading(true);
-    await getParcelTypeList().then((value) {
-      appStore.setLoading(false);
-      parcelTypeList.clear();
-      parcelTypeList.addAll(value.data!);
-      setState(() {});
-    }).catchError((error) {
-      appStore.setLoading(false);
-      toast(error.toString());
-    });
-  }
-
-  getVehicleApiCall({String? name}) async {
-    appStore.setLoading(true);
-    await getVehicleList(cityID: cityData!.id).then((value) {
-      appStore.setLoading(false);
-      vehicleList.clear();
-      vehicleList = value.data!;
-      if (value.data!.isNotEmpty) selectedVehicle = value.data![0].id;
-      setState(() {});
-    }).catchError((error) {
-      appStore.setLoading(false);
-      toast(error);
-    });
-  }
-
-  getTotalAmount() async {
-    String? originLat = isPickSavedAddress ? pickAddressData!.latitude.validate() : pickLat;
-    String? originLong = isPickSavedAddress ? pickAddressData!.longitude.validate() : pickLong;
-    String? destinationLat = isDeliverySavedAddress ? deliveryAddressData!.latitude.validate() : deliverLat;
-    String? destinationLong = isDeliverySavedAddress ? deliveryAddressData!.longitude.validate() : deliverLong;
+  getDistance() async {
+    String? originLat = pickLat;
+    String? originLong = pickLong;
+    String? destinationLat = deliverLat;
+    String? destinationLong = deliverLong;
     String origins = "${originLat},${originLong}";
     String destinations = "${destinationLat},${destinationLong}";
-    await getDistanceBetweenLatLng(origins, destinations).then((value) {
+    await getDistanceBetweenLatLng(origins, destinations).then((value) async {
       double distanceInKms = value.rows[0].elements[0].distance.text.toString().split(' ')[0].toDouble();
       if (appStore.distanceUnit == DISTANCE_UNIT_MILE) {
         totalDistance = (MILES_PER_KM * distanceInKms);
       } else {
         totalDistance = distanceInKms;
       }
-      totalAmount = 0;
-      weightCharge = 0;
-      distanceCharge = 0;
-      totalExtraCharge = 0;
-
-      /// calculate weight Charge
-      if (weightController.text.toDouble() > cityData!.minWeight!) {
-        weightCharge = ((weightController.text.toDouble() - cityData!.minWeight!) * cityData!.perWeightCharges!)
-            .toStringAsFixed(digitAfterDecimal)
-            .toDouble();
-      }
-
-      /// calculate distance Charge
-      if (totalDistance > cityData!.minDistance!) {
-        distanceCharge = ((totalDistance - cityData!.minDistance!) * cityData!.perDistanceCharges!)
-            .toStringAsFixed(digitAfterDecimal)
-            .toDouble();
-      }
-
-      /// total amount
-      totalAmount = cityData!.fixedCharges! + weightCharge + distanceCharge;
-
-      /// vehicle charge
-      if (selectedVehicle != null && appStore.isVehicleOrder != 0) {
-        VehicleData vehicle = vehicleList.firstWhere((element) => element.id == selectedVehicle);
-        totalAmount += vehicle.price.validate();
-      }
-
-      /// calculate extra charges
-      if (cityData!.extraCharges != null) {
-        cityData!.extraCharges!.forEach((element) {
-          totalExtraCharge +=
-              countExtraCharge(totalAmount: totalAmount, charges: element.charges!, chargesType: element.chargesType!);
-        });
-      }
-
-      /// calculate insurance Amount charges
-      if (appStore.isInsuranceAllowed == "1" && insuranceSelectedOption == 0) {
-        double tempTotal =
-            (totalAmount + totalExtraCharge + productAmount).toStringAsFixed(digitAfterDecimal).toDouble();
-        insuranceAmount =
-            appStore.isInsuranceAllowed == "1" ? ((appStore.insurancePercentage.toDouble() * tempTotal) / 100) : 0;
-      }
-
-      /// All Charges
-      totalAmount = (totalAmount + totalExtraCharge + productAmount + insuranceAmount)
-          .toStringAsFixed(digitAfterDecimal)
-          .toDouble();
+      totalDistance = distanceInKms;
       setState(() {});
-      print("---------------insurance amount${insuranceAmount}");
-      print("---------------total amount${totalAmount}");
+      await getTotalForOrder();
+    });
+  }
+  // extraChargesList() {
+  //   extraChargeList.clear();
+  //   extraChargeList.add(ExtraChargeRequestModel(key: FIXED_CHARGES, value: cityData!.fixedCharges, valueType: ""));
+  //   extraChargeList.add(ExtraChargeRequestModel(key: MIN_DISTANCE, value: cityData!.minDistance, valueType: ""));
+  //   extraChargeList.add(ExtraChargeRequestModel(key: MIN_WEIGHT, value: cityData!.minWeight, valueType: ""));
+  //   extraChargeList
+  //       .add(ExtraChargeRequestModel(key: PER_DISTANCE_CHARGE, value: cityData!.perDistanceCharges, valueType: ""));
+  //   extraChargeList
+  //       .add(ExtraChargeRequestModel(key: PER_WEIGHT_CHARGE, value: cityData!.perWeightCharges, valueType: ""));
+  //
+  //   if (cityData!.extraCharges != null) {
+  //     cityData!.extraCharges!.forEach((element) {
+  //       extraChargeList.add(ExtraChargeRequestModel(
+  //           key: element.title!.toLowerCase().replaceAll(' ', "_"),
+  //           value: element.charges,
+  //           valueType: element.chargesType));
+  //     });
+  //   }
+  // }
+
+  // getCityDetailApiCall(int cityId) async {
+  //   await getCityDetail(cityId).then((value) async {
+  //     await setValue(CITY_DATA, value.data!.toJson());
+  //     cityData = value.data!;
+  //     getVehicleApiCall();
+  //     setState(() {});
+  //   }).catchError((error) {
+  //     if (error.toString() == CITY_NOT_FOUND_EXCEPTION) {
+  //       UserCitySelectScreen().launch(getContext, isNewTask: true, pageRouteAnimation: PageRouteAnimation.Slide);
+  //     }
+  //   });
+  // }
+
+  // getParcelTypeListApiCall() async {
+  //   appStore.setLoading(true);
+  //   await getParcelTypeList().then((value) {
+  //     appStore.setLoading(false);
+  //     parcelTypeList.clear();
+  //     parcelTypeList.addAll(value.data!);
+  //     setState(() {});
+  //   }).catchError((error) {
+  //     appStore.setLoading(false);
+  //     toast(error.toString());
+  //   });
+  // }
+
+  // getVehicleApiCall({String? name}) async {
+  //   appStore.setLoading(true);
+  //   await getVehicleList(cityID: cityData!.id).then((value) {
+  //     appStore.setLoading(false);
+  //     vehicleList.clear();
+  //     vehicleList = value.data!;
+  //     if (value.data!.isNotEmpty) selectedVehicle = value.data![0].id;
+  //     setState(() {});
+  //   }).catchError((error) {
+  //     appStore.setLoading(false);
+  //     toast(error);
+  //   });
+  // }
+  getTotalForOrder() {
+    Map request = {
+      "city_id": getIntAsync(CITY_ID).toString(),
+      if (appStore.isVehicleOrder != 0)
+        "vehicle_id": vehicleList.firstWhere((element) => element.id == selectedVehicle).id,
+      "is_insurance": insuranceSelectedOption == 0 && appStore.isInsuranceAllowed == "1",
+      // "is_insurance": 0,
+      "total_weight": weightController.text.toDouble(),
+      "total_distance": totalDistance,
+      "insurance_amount": insuranceAmount
+    };
+    getTotalAmountForOrder(request).then((value) {
+      print("------------request${request.toString()}");
+      totalAmountResponse = value;
+      print("---------------${totalAmountResponse!.baseTotal}");
+      //   double chargesTotal = 0;
+      // totalAmountResponse!.extraCharges!.forEach((element) async {
+      //   double i = 0;
+      //   if (element.chargesType == CHARGE_TYPE_PERCENTAGE) {
+      //     i = (totalAmountResponse!.baseTotal!.toDouble() * element.charges!.toDouble() * 0.01)
+      //         .toStringAsFixed(digitAfterDecimal)
+      //         .toDouble();
+      //   } else {
+      //     i = element.charges!.toStringAsFixed(digitAfterDecimal).toDouble();
+      //   }
+      //
+      //   chargesTotal = chargesTotal += element.charges!;
+      // });
+      if (value.vehicleAmount != null) {
+        vehicleCharge = value.vehicleAmount!;
+      }
+      //  print("---------------${chargesTotal}");
+      //  totalAmount = totalAmountResponse!.baseTotal!.toDouble();
+      //  print("------------------KKtotalAmount${totalAmount}");
+      setState(() {});
     });
   }
 
@@ -369,9 +380,25 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     selectedPackingSymbols.map((item) {
       packaging_symbols.add({'key': item["key"]!, 'title': item['title']!});
     }).toList();
-    extraChargeList.forEach((element) {
-      print("----------------${element.key}----------------${element.value}");
-    });
+    // extraChargeList.forEach((element) {
+    //   print("----------------${element.key}----------------${element.value}");
+    // });
+    extraChargeList.clear();
+    if (totalAmountResponse!.extraCharges != null) {
+      totalAmountResponse!.extraCharges!.forEach((element) {
+        extraChargeList.add(ExtraChargeRequestModel(
+            key: element.title!.toLowerCase().replaceAll(' ', "_"),
+            value: element.charges,
+            valueType: element.chargesType));
+      });
+    }
+    print("total_amount${totalAmountResponse!.totalAmount!}");
+    //  print("total_amount${totalAmountResponse!.totalAmount! + insuranceAmount}");
+    print("insurance${insuranceAmount}");
+    print("weight${totalAmountResponse!.weightAmount!.toDouble()}");
+    print("distance_charge${totalAmountResponse!.distanceAmount!.toDouble()}");
+    print("vehicle_charge${vehicleCharge}");
+
     appStore.setLoading(true);
     Map req = {
       "id": widget.orderData != null ? widget.orderData!.id : "",
@@ -382,50 +409,58 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       //   if (appStore.isVehicleOrder != 0) "vehicle_id": selectedVehicle.toString(),
       if (!selectedVehicle.toString().isEmptyOrNull && selectedVehicle != 0 && appStore.isVehicleOrder != 0)
         "vehicle_id": selectedVehicle.toString(),
+      if (vehicleCharge != 0.0) "vehicle_charge": vehicleCharge,
       "pickup_point": {
         "start_time":
             (!isDeliverNow && pickFromDateTime != null) ? pickFromDateTime.toString() : DateTime.now().toString(),
-        "end_time": (!isDeliverNow && pickToDateTime != null) ? pickToDateTime!.toUtc().toString() : null,
-        "address": isPickSavedAddress ? pickAddressData!.address.validate() : pickAddressCont.text,
-        "latitude": isPickSavedAddress ? pickAddressData!.latitude.validate() : pickLat,
-        "longitude": isPickSavedAddress ? pickAddressData!.longitude.validate() : pickLong,
+        "end_time": (!isDeliverNow && pickToDateTime != null) ? pickToDateTime!.toString() : null,
+        // "address": isPickSavedAddress ? pickAddressData!.address.validate() : pickAddressCont.text,
+        // "latitude": isPickSavedAddress ? pickAddressData!.latitude.validate() : pickLat,
+        // "longitude": isPickSavedAddress ? pickAddressData!.longitude.validate() : pickLong,
+        "address": pickAddressCont.text,
+        "latitude": pickLat,
+        "longitude": pickLong,
         "name": pickPersonNameCont.text.toString(),
         "description": pickDesCont.text,
         "instruction": pickInstructionCont.text,
-        "contact_number": isPickSavedAddress
-            ? pickAddressData!.contactNumber.validate()
-            : '$pickupCountryCode${pickPhoneCont.text.trim()}',
+        // "contact_number": isPickSavedAddress
+        //     ? pickAddressData!.contactNumber.validate()
+        //     : '$pickupCountryCode${pickPhoneCont.text.trim()}',
+        "contact_number": '$pickupCountryCode${pickPhoneCont.text.trim()}',
       },
       "delivery_point": {
         "start_time": (!isDeliverNow && deliverFromDateTime != null) ? deliverFromDateTime.toString() : null,
         "end_time": (!isDeliverNow && deliverToDateTime != null) ? deliverToDateTime.toString() : null,
-        "address": isDeliverySavedAddress ? deliveryAddressData!.address.validate() : deliverAddressCont.text,
-        "latitude": isDeliverySavedAddress ? deliveryAddressData!.latitude.validate() : deliverLat,
-        "longitude": isDeliverySavedAddress ? deliveryAddressData!.longitude.validate() : deliverLong,
+        // "address": isDeliverySavedAddress ? deliveryAddressData!.address.validate() : deliverAddressCont.text,
+        // "latitude": isDeliverySavedAddress ? deliveryAddressData!.latitude.validate() : deliverLat,
+        // "longitude": isDeliverySavedAddress ? deliveryAddressData!.longitude.validate() : deliverLong,
+        "address": deliverAddressCont.text,
+        "latitude": deliverLat,
+        "longitude": deliverLong,
         "description": deliverDesCont.text,
         "name": deliverPersonNameCont.text.toString(),
         "instruction": deliverInstructionCont.text,
-        "contact_number": isDeliverySavedAddress
-            ? deliveryAddressData!.contactNumber.validate()
-            : '$deliverCountryCode${deliverPhoneCont.text.trim()}',
+        // "contact_number": isDeliverySavedAddress
+        //     ? deliveryAddressData!.contactNumber.validate()
+        //     : '$deliverCountryCode${deliverPhoneCont.text.trim()}',
+        "contact_number": '$deliverCountryCode${deliverPhoneCont.text.trim()}',
       },
       "packaging_symbols": packaging_symbols,
+      // "extra_charges": totalAmountResponse!.extraCharges,
       "extra_charges": extraChargeList,
       "parcel_type": parcelTypeCont.text,
       "total_weight": weightController.text.toDouble(),
       "total_distance": totalDistance.toStringAsFixed(digitAfterDecimal).validate(),
-      "payment_collect_from": widget.orderItems.validate().isEmpty ? paymentCollectFrom : PAYMENT_ON_DELIVERY,
+      "payment_collect_from": paymentCollectFrom,
       "status": orderStatus,
       "payment_type": "",
       "payment_status": "",
-      "fixed_charges": cityData!.fixedCharges.toString(),
+      "fixed_charges": totalAmountResponse!.fixedAmount!.toDouble(),
       "parent_order_id": "",
-      "total_amount": totalAmount,
-      "weight_charge": weightCharge,
-      "distance_charge": distanceCharge,
+      "total_amount": totalAmountResponse!.totalAmount!,
+      "weight_charge": totalAmountResponse!.weightAmount!.toDouble(),
+      "distance_charge": totalAmountResponse!.distanceAmount!.toDouble(),
       "total_parcel": totalParcelController.text.toInt(),
-      "store_detail_id": widget.orderItems.validate().isEmpty ? null : widget.storeId,
-      "order_item": widget.orderItems.validate().isEmpty ? null : orderItemsList,
       "insurance_charge": insuranceAmount,
     };
 
@@ -433,22 +468,21 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     // log("req----" + jsonDecode(req.toString()));
     final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
     pattern.allMatches(req.toString()).forEach((match) => print(match.group(0)));
-    orderItemsList.forEach((element) {
-      print("==>${element.toJson().toString()}");
-    });
     await createOrder(req).then((value) async {
       appStore.setLoading(false);
       toast(value.message);
       finish(context);
       if (isSelected == 2) {
-        PaymentScreen(orderId: value.orderId.validate(), totalAmount: totalAmount).launch(context);
+        PaymentScreen(
+                orderId: value.orderId.validate(), totalAmount: (totalAmountResponse!.totalAmount! + insuranceAmount))
+            .launch(context);
       } else if (isSelected == 3) {
         log("-----" + appStore.availableBal.toString());
-        if (appStore.availableBal > totalAmount) {
+        if (appStore.availableBal > (totalAmountResponse!.totalAmount! + insuranceAmount)) {
           savePaymentApiCall(
               paymentType: PAYMENT_TYPE_WALLET,
               paymentStatus: PAYMENT_PAID,
-              totalAmount: totalAmount.toString(),
+              totalAmount: (totalAmountResponse!.totalAmount! + insuranceAmount).toString(),
               orderID: value.orderId.toString());
         }
         // else {
@@ -512,59 +546,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     });
   }
 
-  Future<List<Predictions>> getPlaceAutoCompleteApiCall(String text) async {
-    List<Predictions> list = [];
-    await placeAutoCompleteApi(
-            searchText: text,
-            language: appStore.selectedLanguage,
-            countryCode: CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate(value: 'IN'))
-        .then((value) {
-      list = value.predictions ?? [];
-    }).catchError((e) {
-      throw e.toString();
-    });
-    return list;
-  }
-
-  Future<PlaceIdDetailModel?> getPlaceIdDetailApiCall({required String placeId}) async {
-    PlaceIdDetailModel? detailModel;
-    await getPlaceDetail(placeId: placeId).then((value) {
-      detailModel = value;
-    }).catchError((e) {
-      throw e.toString();
-    });
-    return detailModel;
-  }
-
-  Future<void> getAddressListApi() async {
-    /* addressList = (getStringListAsync(RECENT_ADDRESS_LIST) ?? [])
-        .map((e) => AddressData.fromJson(jsonDecode(e)))
-        .toList();
-    if (addressList.isNotEmpty) {
-      pickAddressData = addressList.first;
-      deliveryAddressData = addressList.first;
-    }
-    setState(() {});*/
-    appStore.setLoading(true);
-    await getAddressList().then((value) {
-      appStore.setLoading(false);
-      addressList.addAll(value.data.validate());
-      if (addressList.isNotEmpty) {
-        pickAddressData = addressList.first;
-        deliveryAddressData = addressList.first;
-      }
-      List<AddressData> list = [];
-      addressList.forEach((e) {
-        list.add(e);
-      });
-      setValue(RECENT_ADDRESS_LIST, list.map((element) => jsonEncode(element)).toList());
-      setState(() {});
-    }).catchError((e) {
-      appStore.setLoading(false);
-      toast(e.toString(), print: true);
-    });
-  }
-
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
@@ -592,12 +573,16 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     print("setPolyline");
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
         googleApiKey: googleMapAPIKey,
+        //  request: PolylineRequest(
+        // origin: PointLatLng(isPickSavedAddress ? pickAddressData!.latitude.toDouble() : pickLat.toDouble(),
+        //     isPickSavedAddress ? pickAddressData!.longitude.toDouble() : pickLong.toDouble()),
+        // destination: PointLatLng(
+        //     isDeliverySavedAddress ? deliveryAddressData!.latitude.toDouble() : deliverLat.toDouble(),
+        //     isDeliverySavedAddress ? deliveryAddressData!.longitude.toDouble() : deliverLong.toDouble()),
+        // mode: TravelMode.driving));
         request: PolylineRequest(
-            origin: PointLatLng(isPickSavedAddress ? pickAddressData!.latitude.toDouble() : pickLat.toDouble(),
-                isPickSavedAddress ? pickAddressData!.longitude.toDouble() : pickLong.toDouble()),
-            destination: PointLatLng(
-                isDeliverySavedAddress ? deliveryAddressData!.latitude.toDouble() : deliverLat.toDouble(),
-                isDeliverySavedAddress ? deliveryAddressData!.longitude.toDouble() : deliverLong.toDouble()),
+            origin: PointLatLng(pickLat.toDouble(), pickLong.toDouble()),
+            destination: PointLatLng(deliverLat.toDouble(), deliverLong.toDouble()),
             mode: TravelMode.driving));
     if (result.points.isNotEmpty) {
       polylineCoordinates.clear();
@@ -651,9 +636,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     DateTimePicker(
                       controller: pickDateController,
                       type: DateTimePickerType.date,
-                      initialDate: DateTime.now().add(Duration(days: 1)),
-                      firstDate: DateTime.now().add(Duration(days: 1)),
-                      lastDate: DateTime.now().add(Duration(days: 30)),
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime.now(),
                       onChanged: (value) {
                         pickDate = DateTime.parse(value);
                         deliverDate = null;
@@ -678,6 +663,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           },
                           validator: (value) {
                             if (value.validate().isEmpty) return language.fieldRequiredMsg;
+                            // Check if today’s date is selected
+                            DateTime now = DateTime.now();
+                            DateTime selectedDateTime = DateFormat('hh:mm').parse(value!);
+                            DateTime selectedDateWithTime =
+                                DateTime(now.year, now.month, now.day, selectedDateTime.hour, selectedDateTime.minute);
+
+                            // Validate if the time is at least 1 hour from now
+                            if (selectedDateWithTime.isBefore(now.add(Duration(hours: 1)))) {
+                              return language.timeValidation; //todo add keys
+                            }
+
                             return null;
                           },
                           decoration: commonInputDecoration(suffixIcon: Icons.access_time, hintText: language.from),
@@ -695,6 +691,16 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                             double fromTimeInHour = pickFromTime!.hour + pickFromTime!.minute / 60;
                             double toTimeInHour = pickToTime!.hour + pickToTime!.minute / 60;
                             double difference = toTimeInHour - fromTimeInHour;
+                            // Check if today’s date is selected
+                            DateTime now = DateTime.now();
+                            DateTime selectedDateTime = DateFormat('hh:mm').parse(value!);
+                            DateTime selectedDateWithTime =
+                                DateTime(now.year, now.month, now.day, selectedDateTime.hour, selectedDateTime.minute);
+
+                            // Validate if the time is at least 1 hour from now
+                            if (selectedDateWithTime.isBefore(now.add(Duration(hours: 1)))) {
+                              return language.scheduleOrderTimeMsg;
+                            }
                             if (difference <= 0) {
                               return language.endTimeValidationMsg;
                             }
@@ -730,6 +736,16 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       },
                       validator: (value) {
                         if (value!.isEmpty) return language.fieldRequiredMsg;
+                        // Check if today’s date is selected
+                        DateTime now = DateTime.now();
+                        DateTime selectedDateTime = DateFormat('hh:mm').parse(value!);
+                        DateTime selectedDateWithTime =
+                            DateTime(now.year, now.month, now.day, selectedDateTime.hour, selectedDateTime.minute);
+
+                        // Validate if the time is at least 1 hour from now
+                        if (selectedDateWithTime.isBefore(now.add(Duration(hours: 1)))) {
+                          return language.scheduleOrderTimeMsg;
+                        }
                         return null;
                       },
                       decoration: commonInputDecoration(suffixIcon: Icons.calendar_today, hintText: language.date),
@@ -746,6 +762,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           },
                           validator: (value) {
                             if (value.validate().isEmpty) return language.fieldRequiredMsg;
+                            // Check if today’s date is selected
+                            DateTime now = DateTime.now();
+                            DateTime selectedDateTime = DateFormat('hh:mm').parse(value!);
+                            DateTime selectedDateWithTime =
+                                DateTime(now.year, now.month, now.day, selectedDateTime.hour, selectedDateTime.minute);
+
+                            // Validate if the time is at least 1 hour from now
+                            if (selectedDateWithTime.isBefore(now.add(Duration(hours: 1)))) {
+                              return language.scheduleOrderTimeMsg;
+                            }
+
                             return null;
                           },
                           decoration: commonInputDecoration(suffixIcon: Icons.access_time, hintText: language.from),
@@ -763,6 +790,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                             double fromTimeInHour = deliverFromTime!.hour + deliverFromTime!.minute / 60;
                             double toTimeInHour = deliverToTime!.hour + deliverToTime!.minute / 60;
                             double difference = toTimeInHour - fromTimeInHour;
+                            // Check if today’s date is selected
+                            DateTime now = DateTime.now();
+                            DateTime selectedDateTime = DateFormat('hh:mm').parse(value);
+                            DateTime selectedDateWithTime =
+                                DateTime(now.year, now.month, now.day, selectedDateTime.hour, selectedDateTime.minute);
+
+                            // Validate if the time is at least 1 hour from now
+                            if (selectedDateWithTime.isBefore(now.add(Duration(hours: 1)))) {
+                              return language.scheduleOrderTimeMsg;
+                            }
+
                             if (difference < 0) {
                               return language.endTimeValidationMsg;
                             }
@@ -872,46 +910,46 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               ),
             ],
           ),
-
-          Visibility(
-            visible: appStore.isVehicleOrder != 0,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                16.height,
-                Text(language.selectVehicle, style: primaryTextStyle()),
-                8.height,
-                DropdownButtonFormField<int>(
-                  isExpanded: true,
-                  value: selectedVehicle,
-                  decoration: commonInputDecoration(),
-                  dropdownColor: Theme.of(context).cardColor,
-                  style: primaryTextStyle(),
-                  items: vehicleList.map<DropdownMenuItem<int>>((item) {
-                    return DropdownMenuItem(
-                      value: item.id,
-                      child: Row(
-                        children: [
-                          commonCachedNetworkImage(item.vehicleImage.validate(), height: 40, width: 40),
-                          SizedBox(width: 16),
-                          Text("${item.title.validate()}  (${printAmount(item.price.validate())})",
-                              style: primaryTextStyle()),
-                        ],
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    selectedVehicle = value;
-                    setState(() {});
-                  },
-                  validator: (value) {
-                    if (selectedVehicle == null) return language.fieldRequiredMsg;
-                    return null;
-                  },
-                ),
-              ],
-            ),
-          ),
+//vehicle hide
+          // Visibility(
+          //   visible: appStore.isVehicleOrder != 0,
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: [
+          //       16.height,
+          //       Text(language.selectVehicle, style: primaryTextStyle()),
+          //       8.height,
+          //       DropdownButtonFormField<int>(
+          //         isExpanded: true,
+          //         value: selectedVehicle,
+          //         decoration: commonInputDecoration(),
+          //         dropdownColor: Theme.of(context).cardColor,
+          //         style: primaryTextStyle(),
+          //         items: vehicleList.map<DropdownMenuItem<int>>((item) {
+          //           return DropdownMenuItem(
+          //             value: item.id,
+          //             child: Row(
+          //               children: [
+          //                 commonCachedNetworkImage(item.vehicleImage.validate(), height: 40, width: 40),
+          //                 SizedBox(width: 16),
+          //                 Text("${item.title.validate()}  (${printAmount(item.price.validate())})",
+          //                     style: primaryTextStyle()),
+          //               ],
+          //             ),
+          //           );
+          //         }).toList(),
+          //         onChanged: (value) {
+          //           selectedVehicle = value;
+          //           setState(() {});
+          //         },
+          //         validator: (value) {
+          //           if (selectedVehicle == null) return language.fieldRequiredMsg;
+          //           return null;
+          //         },
+          //       ),
+          //     ],
+          //   ),
+          // ),
           16.height,
           Text(language.parcelType, style: primaryTextStyle()),
           8.height,
@@ -1008,185 +1046,163 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(language.pickupInformation, style: boldTextStyle()),
-        16.height,
-        if (widget.orderItems.validate().isEmpty && addressList.isNotEmpty)
-          CheckboxListTile(
-            contentPadding: EdgeInsets.only(bottom: 8),
-            value: isPickSavedAddress,
-            checkColor: Colors.white,
-            controlAffinity: ListTileControlAffinity.leading,
-            title: Text(language.selectAddressSave, style: primaryTextStyle()),
-            dense: true,
-            activeColor: ColorUtils.colorPrimary,
-            onChanged: (value) {
-              isPickSavedAddress = value.validate();
-              setState(() {});
-            },
-          ),
-        //todo add keys
-
-        16.height,
-        isPickSavedAddress
-            ? Container(
-                decoration: boxDecorationWithRoundedCorners(
-                    borderRadius: BorderRadius.circular(defaultRadius), backgroundColor: Colors.grey.withOpacity(0.15)),
-                //   height: 90,
-                padding: EdgeInsets.all(12),
-                child: DropdownButton<AddressData>(
-                  value: pickAddressData,
-                  hint: Text(language.selectAddress, style: primaryTextStyle()),
-                  dropdownColor: context.cardColor,
-                  isExpanded: true,
-                  itemHeight: 80,
-                  underline: Container(color: Colors.red),
-                  menuMaxHeight: context.height() * 0.6,
-                  items: addressList.map((AddressData e) {
-                    return DropdownMenuItem<AddressData>(
-                      value: e,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(e.address.validate(), style: primaryTextStyle(), maxLines: 2),
-                          8.height,
-                          Text(e.contactNumber.validate(), style: secondaryTextStyle(), maxLines: 1),
-                        ],
-                      ),
+        // Text(language.pickupInformation, style: boldTextStyle()),
+        // 16.height,
+        // 16.height,
+        // isPickSavedAddress
+        //     ?
+        // Container(
+        //         decoration: boxDecorationWithRoundedCorners(
+        //             borderRadius: BorderRadius.circular(defaultRadius), backgroundColor: Colors.grey.withOpacity(0.15)),
+        //         //   height: 90,
+        //         padding: EdgeInsets.all(12),
+        //         child: DropdownButton<AddressData>(
+        //           value: pickAddressData,
+        //           hint: Text(language.selectAddress, style: primaryTextStyle()),
+        //           dropdownColor: context.cardColor,
+        //           isExpanded: true,
+        //           itemHeight: 80,
+        //           underline: Container(color: Colors.red),
+        //           menuMaxHeight: context.height() * 0.6,
+        //           items: addressList.map((AddressData e) {
+        //             return DropdownMenuItem<AddressData>(
+        //               value: e,
+        //               child: Column(
+        //                 crossAxisAlignment: CrossAxisAlignment.start,
+        //                 children: [
+        //                   Text(e.address.validate(), style: primaryTextStyle(), maxLines: 2),
+        //                   8.height,
+        //                   Text(e.contactNumber.validate(), style: secondaryTextStyle(), maxLines: 1),
+        //                 ],
+        //               ),
+        //             );
+        //           }).toList(),
+        //           selectedItemBuilder: (context) {
+        //             return addressList.map((e) {
+        //               return Column(
+        //                 crossAxisAlignment: CrossAxisAlignment.start,
+        //                 children: [
+        //                   Text(e.address.validate(), style: primaryTextStyle(), maxLines: 2),
+        //                   8.height,
+        //                   Text(e.contactNumber.validate(), style: secondaryTextStyle(), maxLines: 1),
+        //                 ],
+        //               );
+        //             }).toList();
+        //           },
+        //           onChanged: (AddressData? value) {
+        //             pickAddressData = value;
+        //             setState(() {});
+        //           },
+        //         ),
+        //       )
+        //     :
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(language.location, style: primaryTextStyle()),
+            8.height,
+            AppTextField(
+              controller: pickAddressCont,
+              readOnly: true,
+              textInputAction: TextInputAction.next,
+              nextFocus: pickPhoneFocus,
+              textFieldType: TextFieldType.MULTILINE,
+              decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+              validator: (value) {
+                if (value!.isEmpty) return language.fieldRequiredMsg;
+                if (pickLat == null || pickLong == null) return language.pleaseSelectValidAddress;
+                return null;
+              },
+              onTap: () {
+                showModalBottomSheet(
+                  shape:
+                      RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+                  context: context,
+                  builder: (context) {
+                    return PickAddressBottomSheet(
+                      onPick: (address) {
+                        pickAddressCont.text = address.address ?? "";
+                        pickLat = address.latitude.toString();
+                        pickLong = address.longitude.toString();
+                        pickPhoneCont.text = address.contactNumber.validate().substring(4);
+                        setState(() {});
+                      },
                     );
-                  }).toList(),
-                  selectedItemBuilder: (context) {
-                    return addressList.map((e) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(e.address.validate(), style: primaryTextStyle(), maxLines: 2),
-                          8.height,
-                          Text(e.contactNumber.validate(), style: secondaryTextStyle(), maxLines: 1),
-                        ],
-                      );
-                    }).toList();
                   },
-                  onChanged: (AddressData? value) {
-                    pickAddressData = value;
-                    setState(() {});
-                  },
-                ),
-              )
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(language.location, style: primaryTextStyle()),
-                  8.height,
-                  AppTextField(
-                    controller: pickAddressCont,
-                    readOnly: true,
-                    enabled: widget.orderItems.validate().isEmpty,
-                    textInputAction: TextInputAction.next,
-                    nextFocus: pickPhoneFocus,
-                    textFieldType: TextFieldType.MULTILINE,
-                    decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
-                    validator: (value) {
-                      if (value!.isEmpty) return language.fieldRequiredMsg;
-                      if (pickLat == null || pickLong == null) return language.pleaseSelectValidAddress;
-                      return null;
-                    },
-                    onTap: () {
-                      if (widget.orderItems.validate().isEmpty) {
-                        showModalBottomSheet(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
-                          context: context,
-                          builder: (context) {
-                            return PickAddressBottomSheet(
-                              onPick: (address) {
-                                pickAddressCont.text = address.address ?? "";
-                                pickLat = address.latitude.toString();
-                                pickLong = address.longitude.toString();
-                                pickPhoneCont.text = address.contactNumber.validate().substring(4);
-                                setState(() {});
-                              },
-                            );
+                ).then((value) {
+                  addressList = (getStringListAsync(RECENT_ADDRESS_LIST) ?? [])
+                      .map((e) => UseraddressDetail.fromJson(jsonDecode(e)))
+                      .toList();
+                  if (addressList.isNotEmpty) {
+                    pickAddressData = addressList.first;
+                    deliveryAddressData = addressList.first;
+                  }
+                  setState(() {});
+                });
+              },
+            ),
+            16.height,
+            Text(language.contactNumber, style: primaryTextStyle()),
+            8.height,
+            AppTextField(
+              controller: pickPhoneCont,
+              focus: pickPhoneFocus,
+              nextFocus: pickDesFocus,
+              textFieldType: TextFieldType.PHONE,
+              decoration: commonInputDecoration(
+                  suffixIcon: Icons.phone,
+                  prefixIcon: IntrinsicHeight(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CountryCodePicker(
+                          initialSelection: pickupCountryCode,
+                          showCountryOnly: false,
+                          dialogSize: Size(context.width() - 60, context.height() * 0.6),
+                          showFlag: true,
+                          showFlagDialog: true,
+                          showOnlyCountryWhenClosed: false,
+                          alignLeft: false,
+                          textStyle: primaryTextStyle(),
+                          dialogBackgroundColor: Theme.of(context).cardColor,
+                          barrierColor: Colors.black12,
+                          dialogTextStyle: primaryTextStyle(),
+                          searchDecoration: InputDecoration(
+                            iconColor: Theme.of(context).dividerColor,
+                            enabledBorder:
+                                UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
+                            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: ColorUtils.colorPrimary)),
+                          ),
+                          searchStyle: primaryTextStyle(),
+                          onInit: (c) {
+                            pickupCountryCode = c!.dialCode!;
                           },
-                        ).then((value) {
-                          addressList = (getStringListAsync(RECENT_ADDRESS_LIST) ?? [])
-                              .map((e) => AddressData.fromJson(jsonDecode(e)))
-                              .toList();
-                          if (addressList.isNotEmpty) {
-                            pickAddressData = addressList.first;
-                            deliveryAddressData = addressList.first;
-                          }
-                          setState(() {});
-                        });
-                      }
-                    },
-                  ),
-                  16.height,
-                  Text(language.contactNumber, style: primaryTextStyle()),
-                  8.height,
-                  AppTextField(
-                    controller: pickPhoneCont,
-                    focus: pickPhoneFocus,
-                    nextFocus: pickDesFocus,
-                    enabled: widget.orderItems.validate().isEmpty,
-                    textFieldType: TextFieldType.PHONE,
-                    decoration: commonInputDecoration(
-                      suffixIcon: Icons.phone,
-                      prefixIcon: widget.orderItems.validate().isEmpty
-                          ? IntrinsicHeight(
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  CountryCodePicker(
-                                    initialSelection: pickupCountryCode,
-                                    showCountryOnly: false,
-                                    dialogSize: Size(context.width() - 60, context.height() * 0.6),
-                                    showFlag: true,
-                                    showFlagDialog: true,
-                                    showOnlyCountryWhenClosed: false,
-                                    alignLeft: false,
-                                    textStyle: primaryTextStyle(),
-                                    dialogBackgroundColor: Theme.of(context).cardColor,
-                                    barrierColor: Colors.black12,
-                                    dialogTextStyle: primaryTextStyle(),
-                                    searchDecoration: InputDecoration(
-                                      iconColor: Theme.of(context).dividerColor,
-                                      enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(color: Theme.of(context).dividerColor)),
-                                      focusedBorder:
-                                          UnderlineInputBorder(borderSide: BorderSide(color: ColorUtils.colorPrimary)),
-                                    ),
-                                    searchStyle: primaryTextStyle(),
-                                    onInit: (c) {
-                                      pickupCountryCode = c!.dialCode!;
-                                    },
-                                    onChanged: (c) {
-                                      pickupCountryCode = c.dialCode!;
-                                    },
-                                  ),
-                                  VerticalDivider(color: Colors.grey.withOpacity(0.5)),
-                                ],
-                              ),
-                            )
-                          : null,
+                          onChanged: (c) {
+                            pickupCountryCode = c.dialCode!;
+                          },
+                        ),
+                        VerticalDivider(color: Colors.grey.withOpacity(0.5)),
+                      ],
                     ),
-                    textInputAction: TextInputAction.go,
-                    validator: (value) {
-                      if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-                      //  if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
-                      return null;
-                    },
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                  ),
-                ],
-              ),
+                  )),
+              textInputAction: TextInputAction.go,
+              validator: (value) {
+                if (value!.trim().isEmpty) return language.fieldRequiredMsg;
+                //  if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
+                return null;
+              },
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+              ],
+            ),
+          ],
+        ),
         16.height,
         Text(language.pickupPersonName, style: primaryTextStyle()),
         8.height,
         AppTextField(
           controller: pickPersonNameCont,
-          textInputAction: TextInputAction.go,
+          textInputAction: TextInputAction.done,
           focus: pickPersonNameFocus,
           textFieldType: TextFieldType.NAME,
           decoration: commonInputDecoration(),
@@ -1196,7 +1212,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           },
         ),
         16.height,
-        Text(language.description, style: primaryTextStyle()),
+        Text(language.pickupDescription, style: primaryTextStyle()),
         8.height,
         TextField(
           controller: pickDesCont,
@@ -1207,7 +1223,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           minLines: 3,
         ),
         16.height,
-        Text(language.pickupInformation, style: primaryTextStyle()),
+        Text(language.pickupInstructions, style: primaryTextStyle()),
         8.height,
         TextField(
           controller: pickInstructionCont,
@@ -1225,176 +1241,173 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(language.deliveryInformation, style: boldTextStyle()),
-        16.height,
-        if (addressList.isNotEmpty)
-          CheckboxListTile(
-            contentPadding: EdgeInsets.only(bottom: 8),
-            value: isDeliverySavedAddress,
-            controlAffinity: ListTileControlAffinity.leading,
-            title: Text(language.selectAddressSave, style: primaryTextStyle()),
-            dense: true,
-            checkColor: Colors.white,
-            activeColor: ColorUtils.colorPrimary,
-            onChanged: (value) {
-              isDeliverySavedAddress = value.validate();
-              setState(() {});
-            },
-          ),
-        16.height,
-        isDeliverySavedAddress
-            ? Container(
-                decoration: boxDecorationWithRoundedCorners(
-                    borderRadius: BorderRadius.circular(defaultRadius), backgroundColor: Colors.grey.withOpacity(0.15)),
-                // height: 90,
-                padding: EdgeInsets.all(12),
-                child: DropdownButton<AddressData>(
-                  value: deliveryAddressData,
-                  hint: Text(language.selectAddress, style: primaryTextStyle()),
-                  dropdownColor: context.cardColor,
-                  isExpanded: true,
-                  itemHeight: 80,
-                  underline: Container(color: Colors.red),
-                  menuMaxHeight: context.height() * 0.6,
-                  items: addressList.map((AddressData e) {
-                    return DropdownMenuItem<AddressData>(
-                      value: e,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(e.address.validate(), style: primaryTextStyle(), maxLines: 2),
-                          8.height,
-                          Text(e.contactNumber.validate(), style: secondaryTextStyle(), maxLines: 1),
-                        ],
-                      ),
-                    );
-                  }).toList(),
-                  selectedItemBuilder: (context) {
-                    return addressList.map((e) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(e.address.validate(), style: primaryTextStyle(), maxLines: 2),
-                          8.height,
-                          Text(e.contactNumber.validate(), style: secondaryTextStyle(), maxLines: 1),
-                        ],
-                      );
-                    }).toList();
-                  },
-                  onChanged: (AddressData? value) {
-                    deliveryAddressData = value;
-                    setState(() {});
-                  },
-                ),
-              )
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(language.deliveryLocation, style: primaryTextStyle()),
-                  8.height,
-                  AppTextField(
-                    controller: deliverAddressCont,
-                    readOnly: true,
-                    textInputAction: TextInputAction.next,
-                    nextFocus: deliverPhoneFocus,
-                    textFieldType: TextFieldType.MULTILINE,
-                    decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
-                    validator: (value) {
-                      if (value!.isEmpty) return language.fieldRequiredMsg;
-                      if (deliverLat == null || deliverLong == null) return language.pleaseSelectValidAddress;
-                      return null;
-                    },
-                    onTap: () {
-                      showModalBottomSheet(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
-                        context: context,
-                        builder: (context) {
-                          return PickAddressBottomSheet(
-                            onPick: (address) {
-                              deliverAddressCont.text = address.address ?? "";
-                              deliverLat = address.latitude.toString();
-                              deliverLong = address.longitude.toString();
-                              deliverPhoneCont.text = address.contactNumber.validate().substring(4);
-                              setState(() {});
-                            },
-                            isPickup: false,
-                          );
-                        },
-                      ).then((value) {
-                        addressList = (getStringListAsync(RECENT_ADDRESS_LIST) ?? [])
-                            .map((e) => AddressData.fromJson(jsonDecode(e)))
-                            .toList();
-                        if (addressList.isNotEmpty) {
-                          pickAddressData = addressList.first;
-                          deliveryAddressData = addressList.first;
-                        }
+        //    Text(language.deliveryInformation, style: boldTextStyle()),
+        //   16.height,
+        // if (addressList.isNotEmpty)
+        //   CheckboxListTile(
+        //     contentPadding: EdgeInsets.only(bottom: 8),
+        //     value: isDeliverySavedAddress,
+        //     controlAffinity: ListTileControlAffinity.leading,
+        //     title: Text(language.selectAddressSave, style: primaryTextStyle()),
+        //     dense: true,
+        //     checkColor: Colors.white,
+        //     activeColor: ColorUtils.colorPrimary,
+        //     onChanged: (value) {
+        //       isDeliverySavedAddress = value.validate();
+        //       setState(() {});
+        //     },
+        //   ),
+        //  16.height,
+        // isDeliverySavedAddress
+        //     ? Container(
+        //         decoration: boxDecorationWithRoundedCorners(
+        //             borderRadius: BorderRadius.circular(defaultRadius), backgroundColor: Colors.grey.withOpacity(0.15)),
+        //         // height: 90,
+        //         padding: EdgeInsets.all(12),
+        //         child: DropdownButton<AddressData>(
+        //           value: deliveryAddressData,
+        //           hint: Text(language.selectAddress, style: primaryTextStyle()),
+        //           dropdownColor: context.cardColor,
+        //           isExpanded: true,
+        //           itemHeight: 80,
+        //           underline: Container(color: Colors.red),
+        //           menuMaxHeight: context.height() * 0.6,
+        //           items: addressList.map((AddressData e) {
+        //             return DropdownMenuItem<AddressData>(
+        //               value: e,
+        //               child: Column(
+        //                 crossAxisAlignment: CrossAxisAlignment.start,
+        //                 children: [
+        //                   Text(e.address.validate(), style: primaryTextStyle(), maxLines: 2),
+        //                   8.height,
+        //                   Text(e.contactNumber.validate(), style: secondaryTextStyle(), maxLines: 1),
+        //                 ],
+        //               ),
+        //             );
+        //           }).toList(),
+        //           selectedItemBuilder: (context) {
+        //             return addressList.map((e) {
+        //               return Column(
+        //                 crossAxisAlignment: CrossAxisAlignment.start,
+        //                 children: [
+        //                   Text(e.address.validate(), style: primaryTextStyle(), maxLines: 2),
+        //                   8.height,
+        //                   Text(e.contactNumber.validate(), style: secondaryTextStyle(), maxLines: 1),
+        //                 ],
+        //               );
+        //             }).toList();
+        //           },
+        //           onChanged: (AddressData? value) {
+        //             deliveryAddressData = value;
+        //             setState(() {});
+        //           },
+        //         ),
+        //       )
+        //     :
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(language.deliveryLocation, style: primaryTextStyle()),
+            8.height,
+            AppTextField(
+              controller: deliverAddressCont,
+              readOnly: true,
+              textInputAction: TextInputAction.next,
+              nextFocus: deliverPhoneFocus,
+              textFieldType: TextFieldType.MULTILINE,
+              decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+              validator: (value) {
+                if (value!.isEmpty) return language.fieldRequiredMsg;
+                if (deliverLat == null || deliverLong == null) return language.pleaseSelectValidAddress;
+                return null;
+              },
+              onTap: () {
+                showModalBottomSheet(
+                  shape:
+                      RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+                  context: context,
+                  builder: (context) {
+                    return PickAddressBottomSheet(
+                      onPick: (address) {
+                        deliverAddressCont.text = address.address ?? "";
+                        deliverLat = address.latitude.toString();
+                        deliverLong = address.longitude.toString();
+                        deliverPhoneCont.text = address.contactNumber.validate().substring(4);
                         setState(() {});
-                      });
-                    },
-                  ),
-                  16.height,
-                  Text(language.deliveryContactNumber, style: primaryTextStyle()),
-                  8.height,
-                  AppTextField(
-                    controller: deliverPhoneCont,
-                    textInputAction: TextInputAction.go,
-                    focus: deliverPhoneFocus,
-                    nextFocus: deliverDesFocus,
-                    textFieldType: TextFieldType.PHONE,
-                    decoration: commonInputDecoration(
-                      suffixIcon: Icons.phone,
-                      prefixIcon: IntrinsicHeight(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CountryCodePicker(
-                              initialSelection: deliverCountryCode,
-                              showCountryOnly: false,
-                              dialogSize: Size(context.width() - 60, context.height() * 0.6),
-                              showFlag: true,
-                              showFlagDialog: true,
-                              showOnlyCountryWhenClosed: false,
-                              alignLeft: false,
-                              textStyle: primaryTextStyle(),
-                              dialogBackgroundColor: Theme.of(context).cardColor,
-                              barrierColor: Colors.black12,
-                              dialogTextStyle: primaryTextStyle(),
-                              searchDecoration: InputDecoration(
-                                iconColor: Theme.of(context).dividerColor,
-                                enabledBorder:
-                                    UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
-                                focusedBorder:
-                                    UnderlineInputBorder(borderSide: BorderSide(color: ColorUtils.colorPrimary)),
-                              ),
-                              searchStyle: primaryTextStyle(),
-                              onInit: (c) {
-                                deliverCountryCode = c!.dialCode!;
-                              },
-                              onChanged: (c) {
-                                deliverCountryCode = c.dialCode!;
-                              },
-                            ),
-                            VerticalDivider(color: Colors.grey.withOpacity(0.5)),
-                          ],
+                      },
+                      isPickup: false,
+                    );
+                  },
+                ).then((value) {
+                  addressList = (getStringListAsync(RECENT_ADDRESS_LIST) ?? [])
+                      .map((e) => UseraddressDetail.fromJson(jsonDecode(e)))
+                      .toList();
+                  if (addressList.isNotEmpty) {
+                    pickAddressData = addressList.first;
+                    deliveryAddressData = addressList.first;
+                  }
+                  setState(() {});
+                });
+              },
+            ),
+            16.height,
+            Text(language.deliveryContactNumber, style: primaryTextStyle()),
+            8.height,
+            AppTextField(
+              controller: deliverPhoneCont,
+              textInputAction: TextInputAction.go,
+              focus: deliverPhoneFocus,
+              nextFocus: deliverDesFocus,
+              textFieldType: TextFieldType.PHONE,
+              decoration: commonInputDecoration(
+                suffixIcon: Icons.phone,
+                prefixIcon: IntrinsicHeight(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CountryCodePicker(
+                        initialSelection: deliverCountryCode,
+                        showCountryOnly: false,
+                        dialogSize: Size(context.width() - 60, context.height() * 0.6),
+                        showFlag: true,
+                        showFlagDialog: true,
+                        showOnlyCountryWhenClosed: false,
+                        alignLeft: false,
+                        textStyle: primaryTextStyle(),
+                        dialogBackgroundColor: Theme.of(context).cardColor,
+                        barrierColor: Colors.black12,
+                        dialogTextStyle: primaryTextStyle(),
+                        searchDecoration: InputDecoration(
+                          iconColor: Theme.of(context).dividerColor,
+                          enabledBorder:
+                              UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
+                          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: ColorUtils.colorPrimary)),
                         ),
+                        searchStyle: primaryTextStyle(),
+                        onInit: (c) {
+                          deliverCountryCode = c!.dialCode!;
+                        },
+                        onChanged: (c) {
+                          deliverCountryCode = c.dialCode!;
+                        },
                       ),
-                    ),
-                    validator: (value) {
-                      if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-                      //todo add keys
-                      if (value!.length < 8 || value.length > 15) return "please enter valid mobile number";
-                      // if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
-                      return null;
-                    },
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
+                      VerticalDivider(color: Colors.grey.withOpacity(0.5)),
                     ],
                   ),
-                ],
+                ),
               ),
+              validator: (value) {
+                if (value!.trim().isEmpty) return language.fieldRequiredMsg;
+                //if (value!.length < 8 || value.length > 15) return "please enter valid mobile number";
+                if (value.trim().length < minContactLength || value.trim().length > maxContactLength)
+                  return language.phoneNumberInvalid;
+                return null;
+              },
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            ),
+          ],
+        ),
         16.height,
-        //todo add keys
         Text(language.deliveryPersonName, style: primaryTextStyle()),
         8.height,
         AppTextField(
@@ -1405,7 +1418,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           decoration: commonInputDecoration(),
           validator: (value) {
             if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-            //todo add keys
             // if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
             return null;
           },
@@ -1449,26 +1461,28 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         markers.isNotEmpty
             ? Container(
                 width: context.width(),
-                height: context.height() * 0.67,
-                child: Stack(
-                  children: [
-                    GoogleMap(
-                      markers: markers.map((e) => e).toSet(),
-                      polylines: _polylines,
-                      mapType: MapType.normal,
-                      cameraTargetBounds: CameraTargetBounds.unbounded,
-                      initialCameraPosition: CameraPosition(
-                          // bearing: 192.8334901395799,
-                          target: LatLng(isPickSavedAddress ? pickAddressData!.latitude.toDouble() : pickLat.toDouble(),
-                              isPickSavedAddress ? pickAddressData!.longitude.toDouble() : pickLong.toDouble()),
-                          zoom: 12),
-                      onMapCreated: onMapCreated,
-                      tiltGesturesEnabled: true,
-                      scrollGesturesEnabled: true,
-                      zoomGesturesEnabled: true,
-                      // trafficEnabled: true,
-                    )
-                  ],
+                height: context.height() * 0.80,
+                child: GoogleMap(
+                  markers: markers.map((e) => e).toSet(),
+                  polylines: _polylines,
+                  mapType: MapType.normal,
+                  cameraTargetBounds: CameraTargetBounds.unbounded,
+                  initialCameraPosition: CameraPosition(
+                      bearing: 192.8334901395799,
+                      // target: LatLng(isPickSavedAddress ? pickAddressData!.latitude.toDouble() : pickLat.toDouble(),
+                      //     isPickSavedAddress ? pickAddressData!.longitude.toDouble() : pickLong.toDouble()),
+                      target: LatLng(pickLat.toDouble(), pickLong.toDouble()),
+                      zoom: 12),
+                  onMapCreated: onMapCreated,
+                  tiltGesturesEnabled: true,
+                  scrollGesturesEnabled: true,
+                  zoomGesturesEnabled: true,
+                  gestureRecognizers: {
+                    Factory<OneSequenceGestureRecognizer>(
+                      () => EagerGestureRecognizer(), // Allow all gestures on the map
+                    ),
+                  },
+                  // trafficEnabled: true,
                 ),
               )
             : loaderWidget(),
@@ -1500,75 +1514,161 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     value: '${weightController.text} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weightType}'),
                 8.height,
                 rowWidget(title: language.numberOfParcels, value: '${totalParcelController.text}'),
-                Column(
-                  children: [
-                    16.height,
-                    Text(language.orderItems, style: boldTextStyle()),
-                    // Text(language.orderItems, style: boldTextStyle()),
-                    8.height,
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      padding: EdgeInsets.zero,
-                      itemCount: widget.orderItems.validate().length,
-                      itemBuilder: (context, index) {
-                        ProductData item = widget.orderItems.validate()[index];
-                        //   return ProductItemComponent(product: item, isView: true);
-                        return Text("gffd");
-                      },
-                    ),
-                  ],
-                ).visible(widget.orderItems.validate().isNotEmpty),
               ],
             ),
           ),
           16.height,
           addressComponent(
               title: language.pickupLocation,
-              address: isPickSavedAddress ? pickAddressData!.address.validate() : pickAddressCont.text,
-              phoneNumber: isPickSavedAddress
-                  ? pickAddressData!.contactNumber.validate()
-                  : (widget.orderItems.validate().isNotEmpty
-                      ? pickPhoneCont.text
-                      : '$pickupCountryCode ${pickPhoneCont.text.trim()}')),
+              // address: isPickSavedAddress ? pickAddressData!.address.validate() : pickAddressCont.text,
+              // phoneNumber: isPickSavedAddress
+              //     ? pickAddressData!.contactNumber.validate()
+              //     : '$pickupCountryCode ${pickPhoneCont.text.trim()}'),
+              address: pickAddressCont.text,
+              phoneNumber: '$pickupCountryCode ${pickPhoneCont.text.trim()}',
+              personName: pickPersonNameCont.text,
+              information: pickDesCont.text,
+              instruction: pickInstructionCont.text),
           16.height,
           addressComponent(
               title: language.deliveryLocation,
-              address: isDeliverySavedAddress ? deliveryAddressData!.address.validate() : deliverAddressCont.text,
-              phoneNumber: isDeliverySavedAddress
-                  ? deliveryAddressData!.contactNumber.validate()
-                  : '$deliverCountryCode ${deliverPhoneCont.text.trim()}'),
+              // address: isDeliverySavedAddress ? deliveryAddressData!.address.validate() : deliverAddressCont.text,
+              // phoneNumber: isDeliverySavedAddress
+              //     ? deliveryAddressData!.contactNumber.validate()
+              //     : '$deliverCountryCode ${deliverPhoneCont.text.trim()}'),
+              address: deliverAddressCont.text,
+              phoneNumber: '$deliverCountryCode ${deliverPhoneCont.text.trim()}',
+              personName: deliverPersonNameCont.text,
+              information: deliverDesCont.text,
+              instruction: deliverInstructionCont.text),
+          Visibility(
+            visible: appStore.isVehicleOrder != 0,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                16.height,
+                Text(language.selectVehicle, style: boldTextStyle()),
+                8.height,
+                DropdownButtonFormField<int>(
+                  isExpanded: true,
+                  value: selectedVehicle,
+                  decoration: commonInputDecoration(),
+                  dropdownColor: Theme.of(context).cardColor,
+                  style: primaryTextStyle(),
+                  items: vehicleList.map<DropdownMenuItem<int>>((item) {
+                    return DropdownMenuItem(
+                      value: item.id,
+                      child: Row(
+                        children: [
+                          commonCachedNetworkImage(item.vehicleImage.validate(), height: 40, width: 40),
+                          SizedBox(width: 16),
+                          Text("${item.title.validate()}  (${printAmount(item.price.validate())})",
+                              style: primaryTextStyle()),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    selectedVehicle = value;
+                    setState(() {});
+                    getTotalForOrder();
+                  },
+                  validator: (value) {
+                    if (selectedVehicle == null) return language.fieldRequiredMsg;
+                    return null;
+                  },
+                ),
+              ],
+            ),
+          ),
           16.height,
-          //todo add keys
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(language.insurance, style: boldTextStyle()),
               Icon(Icons.info, color: ColorUtils.themeColor).onTap(() {
-                InsuranceDetailsScreen().launch(context);
+                InsuranceDetailsScreen(appStore.insuranceDescription).launch(context);
               }).visible(appStore.insuranceDescription != null && !appStore.insuranceDescription.isEmptyOrNull)
             ],
           ).visible(appStore.isInsuranceAllowed == "1"),
           16.height.visible(appStore.isInsuranceAllowed == "1"),
-          //todo add keys
           InsuranceOptionsWidget(0, language.addCourierInsurance).visible(appStore.isInsuranceAllowed == "1"),
           16.height.visible(appStore.isInsuranceAllowed == "1"),
           InsuranceOptionsWidget(1, language.noThanksRisk).visible(appStore.isInsuranceAllowed == "1"),
           16.height,
-          OrderSummeryWidget(
-              productAmount: productAmount,
-              vehiclePrice: (selectedVehicle != null && appStore.isVehicleOrder != 0)
-                  ? vehicleList.firstWhere((element) => element.id == selectedVehicle).price
-                  : 0,
-              extraChargesList: extraChargeList,
-              totalDistance: totalDistance,
-              totalWeight: weightController.text.toDouble(),
-              distanceCharge: distanceCharge,
-              weightCharge: weightCharge,
-              insuranceCharge: insuranceAmount,
-              isInsuranceChargeDisplay:
-                  (insuranceSelectedOption == 0 && appStore.isInsuranceAllowed == "1") ? true : false,
-              totalAmount: totalAmount),
+          if (appStore.isInsuranceAllowed == "1") ...[
+            12.height,
+            Text(language.approxParcelValue, style: primaryTextStyle()),
+            9.height,
+            AppTextField(
+              controller: insuranceAmountController,
+              textFieldType: TextFieldType.NUMBER,
+              decoration: commonInputDecoration(isFill: false),
+              onChanged: (val) async {
+                if (!val.isEmptyOrNull) {
+                  print("-------------------------------val${val}");
+                  insuranceAmount = (double.parse(val) * appStore.insurancePercentage.toDouble()) / 100;
+                  print("--------------insurance amount${insuranceAmount}-----------val${val}-----------insurance "
+                      "percentage-${appStore.insurancePercentage}");
+                  await getTotalForOrder();
+                  setState(() {});
+                } else {
+                  insuranceAmount = 0;
+                  await getTotalForOrder();
+                  setState(() {});
+                }
+              },
+              onFieldSubmitted: (val) async {
+                if (!val.isEmptyOrNull) {
+                  print("-------------------------------val${val}");
+                  insuranceAmount = (double.parse(val) * appStore.insurancePercentage.toDouble()) / 100;
+                  print("--------------insurance amount${insuranceAmount}-----------val${val}-----------insurance "
+                      "percentage-${appStore.insurancePercentage}");
+                  await getTotalForOrder();
+                  setState(() {});
+                } else {
+                  insuranceAmount = 0;
+                  await getTotalForOrder();
+                  setState(() {});
+                }
+              },
+              validator: (value) {
+                if (value!.isEmpty) return language.fieldRequiredMsg;
+                return null;
+              },
+            ).visible(insuranceSelectedOption == 0),
+            16.height,
+          ],
+          if (totalAmountResponse != null)
+            OrderAmountDataWidget(
+                fixedAmount: totalAmountResponse!.fixedAmount!.toDouble(),
+                distanceAmount: totalAmountResponse!.distanceAmount!.toDouble(),
+                extraCharges: totalAmountResponse!.extraCharges!,
+                vehicleAmount: totalAmountResponse!.vehicleAmount!.toDouble(),
+                insuranceAmount: insuranceAmount.toDouble(),
+                diffWeight: totalAmountResponse!.diffWeight!.toDouble(),
+                diffDistance: totalAmountResponse!.diffDistance!.toDouble(),
+                totalAmount: totalAmountResponse!.totalAmount!.toDouble(),
+                weightAmount: totalAmountResponse!.weightAmount!.toDouble(),
+                perWeightCharge: cityData!.perWeightCharges!.toDouble(),
+                perKmCityDataCharge: cityData!.perDistanceCharges!.toDouble(),
+                perkmVehiclePrice:
+                    vehicleList.firstWhere((element) => element.id == selectedVehicle).perKmCharge!.toDouble(),
+                baseTotal: totalAmountResponse!.baseTotal!.toDouble()),
+          // OrderSummeryWidget(
+          //     //   productAmount: productAmount,
+          //     // vehiclePrice: (selectedVehicle != null && appStore.isVehicleOrder != 0)
+          //     //     ? vehicleList.firstWhere((element) => element.id == selectedVehicle).price
+          //     //     : 0,
+          //     extraChargesList: extraChargeList,
+          //     totalDistance: totalDistance,
+          //     totalWeight: weightController.text.toDouble(),
+          //     distanceCharge: distanceCharge,
+          //     weightCharge: weightCharge,
+          //     insuranceCharge: insuranceAmount,
+          //     isInsuranceChargeDisplay:
+          //         (insuranceSelectedOption == 0 && appStore.isInsuranceAllowed == "1") ? true : false,
+          //     totalAmount: totalAmount),
           16.height,
           Text(language.payment, style: boldTextStyle()),
           16.height,
@@ -1628,7 +1728,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 },
               ).expand(),
             ],
-          ).visible(isSelected == 1 && widget.orderItems.validate().isEmpty),
+          ).visible(isSelected == 1),
         ],
       ),
     );
@@ -1645,18 +1745,21 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             value: value,
             groupValue: insuranceSelectedOption,
             onChanged: (int? newValue) {
+              print("---------${value}");
               // setState(() {
               //   insuranceSelectedOption = newValue!;
               // });
               if (newValue != insuranceSelectedOption) {
                 insuranceSelectedOption = value;
                 if (insuranceSelectedOption == 0) {
-                  getTotalAmount();
+                  insuranceAmountController.clear();
+                  //     getTotalAmount();
                 } else {
                   insuranceAmount = 0.0;
-                  getTotalAmount();
+                  //     getTotalAmount();
                 }
               }
+              getTotalForOrder();
             },
             fillColor: MaterialStateProperty.resolveWith<Color?>(
               (Set<MaterialState> states) {
@@ -1669,11 +1772,23 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             activeColor: Colors.white,
           ),
           SizedBox(width: 8),
-          Text(text, style: TextStyle(color: insuranceSelectedOption == value ? Colors.white : ColorUtils.themeColor))
-              .expand(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(text,
+                  style:
+                      primaryTextStyle(color: insuranceSelectedOption == value ? Colors.white : ColorUtils.themeColor)),
+              if (insuranceSelectedOption == 0 && value == 0)
+                Text(
+                  insuranceSelectedOption == 0 ? "${appStore.insurancePercentage} ${language.ofApproxParcelValue}" : "",
+                  style: secondaryTextStyle(color: Colors.white.withOpacity(0.5), size: 13),
+                ),
+            ],
+          ).expand(),
           Text(
             insuranceSelectedOption == 0 ? "${printAmount(insuranceAmount)}" : "",
-            style: TextStyle(color: Colors.white),
+            style: primaryTextStyle(color: Colors.white),
           ).visible(value == 0).paddingOnly(right: 10),
         ],
       ),
@@ -1681,10 +1796,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       setState(() {
         insuranceSelectedOption = value;
         if (insuranceSelectedOption == 0) {
-          getTotalAmount();
+          //   getTotalAmount();
         } else {
           insuranceAmount = 0.0;
-          getTotalAmount();
+          insuranceAmountController.clear();
+          //    getTotalAmount();
         }
       });
       setState(() {});
@@ -1704,11 +1820,72 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     );
   }
 
-  Widget addressComponent({required String title, required String address, required String phoneNumber}) {
+  Widget addressComponent({
+    required String title,
+    required String address,
+    required String phoneNumber,
+    required String personName,
+    required String instruction,
+    required String information,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: boldTextStyle()),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(title, style: boldTextStyle()),
+            Text(language.viewMore, style: secondaryTextStyle(size: 12)).onTap(() {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      //   contentPadding: EdgeInsets.all(8),
+                      title: Column(
+                        children: [
+                          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                            Text(language.details, style: boldTextStyle()),
+                            Icon(Icons.close, size: 20).onTap(() {
+                              pop();
+                            })
+                          ]),
+                          10.height,
+                          Divider(height: 1, thickness: 1, color: Colors.grey.withOpacity(0.5))
+                        ],
+                      ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("${language.contactPersonName} :", style: secondaryTextStyle()),
+                              Text(personName, style: boldTextStyle()),
+                            ],
+                          ),
+                          4.height,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("${language.information} :", style: secondaryTextStyle()),
+                              Text(information, style: boldTextStyle()),
+                            ],
+                          ),
+                          4.height,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("${language.instruction}", style: secondaryTextStyle()),
+                              Text(instruction, style: boldTextStyle()),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  });
+            }),
+          ],
+        ),
         8.height,
         Container(
           width: context.width(),
@@ -1755,29 +1932,25 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     return WillPopScope(
       onWillPop: () async {
         if (selectedTabIndex == 0) {
-          if ((widget.orderItems == null)) {
-            await showInDialog(
-              context,
-              contentPadding: EdgeInsets.all(16),
-              builder: (p0) {
-                return CreateOrderConfirmationDialog(
-                  onCancel: () {
-                    finish(context);
-                    finish(context);
-                  },
-                  onSuccess: () {
-                    finish(context);
-                    createOrderApiCall(ORDER_DRAFT);
-                  },
-                  message: language.saveDraftConfirmationMsg,
-                  primaryText: language.saveDraft,
-                );
-              },
-            );
-            return false;
-          } else {
-            return true;
-          }
+          await showInDialog(
+            context,
+            contentPadding: EdgeInsets.all(16),
+            builder: (p0) {
+              return CreateOrderConfirmationDialog(
+                onCancel: () {
+                  finish(context);
+                  finish(context);
+                },
+                onSuccess: () {
+                  finish(context);
+                  createOrderApiCall(ORDER_DRAFT);
+                },
+                message: language.saveDraftConfirmationMsg,
+                primaryText: language.saveDraft,
+              );
+            },
+          );
+          return false;
         } else {
           selectedTabIndex--;
           setState(() {});
@@ -1787,7 +1960,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       child: CommonScaffoldComponent(
         // appBarTitle: language.createOrder,
 
-        appBar: commonAppBarWidget(language.createOrder, actions: [
+        appBar: commonAppBarWidget(appBarTitleList[selectedTabIndex], actions: [
           Row(
             children: [
               progressIndicator(),
@@ -1798,7 +1971,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         body: Stack(
           children: [
             SingleChildScrollView(
-              padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
+              padding: EdgeInsets.only(left: 16, top: 20, right: 16, bottom: 16),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -1839,10 +2012,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   markers.add(
                     Marker(
                       markerId: MarkerId("1"),
-                      position: isPickSavedAddress
-                          ? LatLng(pickAddressData!.latitude.validate().toDouble(),
-                              pickAddressData!.longitude.validate().toDouble())
-                          : LatLng(pickLat.toDouble(), pickLong.toDouble()),
+                      // position: isPickSavedAddress
+                      //     ? LatLng(pickAddressData!.latitude.validate().toDouble(),
+                      //         pickAddressData!.longitude.validate().toDouble())
+                      //     : LatLng(pickLat.toDouble(), pickLong.toDouble()),
+                      position: LatLng(pickLat.toDouble(), pickLong.toDouble()),
                       infoWindow: InfoWindow(title: language.sourceLocation),
                       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
                     ),
@@ -1850,14 +2024,16 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   markers.add(
                     Marker(
                       markerId: MarkerId("2"),
-                      position: isDeliverySavedAddress
-                          ? LatLng(deliveryAddressData!.latitude.validate().toDouble(),
-                              deliveryAddressData!.longitude.validate().toDouble())
-                          : LatLng(deliverLat.toDouble(), deliverLong.toDouble()),
+                      // position: isDeliverySavedAddress
+                      //     ? LatLng(deliveryAddressData!.latitude.validate().toDouble(),
+                      //         deliveryAddressData!.longitude.validate().toDouble())
+                      //     : LatLng(deliverLat.toDouble(), deliverLong.toDouble()),
+                      position: LatLng(deliverLat.toDouble(), deliverLong.toDouble()),
                       infoWindow: InfoWindow(title: language.destinationLocation),
                       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
                     ),
                   );
+                  getDistance();
                   setState(() {});
                 }
                 if (selectedTabIndex != 4) {
@@ -1879,12 +2055,23 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     if (difference.inMinutes > 0) return toast(language.pickupDeliverValidationMsg);
                     selectedTabIndex++;
                     if (selectedTabIndex == 4) {
-                      await getTotalAmount();
+                      //  await getTotalAmount();
                     }
                     setState(() {});
                   }
                 } else {
-                  if (isSelected == 3 && (appStore.availableBal < totalAmount)) {
+                  print("-------------insurance amount${insuranceAmount}");
+                  //    print("------------totalAmount${((totalAmountResponse!.totalAmount! + insuranceAmount))}");
+                  print("------------totalAmount${((totalAmountResponse!.totalAmount!))}");
+                  print("------------available balance${appStore.availableBal}");
+
+                  if (insuranceSelectedOption == 0 && insuranceAmountController.text.isEmptyOrNull) {
+                    toast(language.insuranceAmountValidation);
+                    return;
+                  }
+                  if (isSelected == 3 &&
+                      //      (appStore.availableBal < (totalAmountResponse!.totalAmount! + insuranceAmount))) {
+                      (appStore.availableBal < (totalAmountResponse!.totalAmount! + insuranceAmount))) {
                     showInDialog(
                       getContext,
                       contentPadding: EdgeInsets.all(16),
@@ -1896,12 +2083,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                                 style: primaryTextStyle(size: 16), textAlign: TextAlign.center),
                             30.height,
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 commonButton(language.cancel, () {
                                   finish(getContext, 0);
-                                }),
+                                }).expand(),
+                                6.width,
                                 commonButton(language.process, () {
+                                  //      if (appStore.isInsuranceAllowed == true && insuranceSelectedOption == 0)
                                   // createOrderApiCall(ORDER_CREATED);
                                   // finish(getContext, 1);
                                   showConfirmDialogCustom(
@@ -1916,11 +2104,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                                       finish(getContext);
                                     },
                                   );
-                                }),
+                                }).expand(),
+                                6.width,
                                 commonButton(language.draft, () {
                                   createOrderApiCall(ORDER_DRAFT);
                                   finish(getContext, 2);
-                                }),
+                                }).expand(),
                               ],
                             ),
                           ],

@@ -41,7 +41,6 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getBankDetail();
     getWalletData();

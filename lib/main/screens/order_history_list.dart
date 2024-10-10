@@ -72,7 +72,6 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
-      //todo add key
       appBarTitle: language.completedOrders,
       body: Observer(builder: (context) {
         return Stack(
@@ -112,9 +111,9 @@ class OrderHistoryItem extends StatelessWidget {
             Row(
               children: [
                 Text(
-                        DateFormat('dd MMM yyyy').format(DateTime.parse("${orderData.date!}Z").toLocal()) +
+                        DateFormat('dd MMM yyyy').format(DateTime.parse("${orderData.date!}")) +
                             " ${language.at.toLowerCase()} " +
-                            DateFormat('hh:mm a').format(DateTime.parse("${orderData.date!}Z").toLocal()),
+                            DateFormat('hh:mm a').format(DateTime.parse("${orderData.date!}")),
                         style: primaryTextStyle(size: 14))
                     .expand(),
                 if (orderData.status != ORDER_CANCELLED)

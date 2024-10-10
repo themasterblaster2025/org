@@ -22,7 +22,7 @@ class ordersLatLngResponseList {
 }
 
 class Data {
-  int? orderTrackingId;
+  String? orderTrackingId;
   int? id;
   int? clientId;
   String? clientName;
@@ -35,7 +35,7 @@ class Data {
   String? cityName;
   String? parcelType;
   int? totalWeight;
-  double? totalDistance;
+  num? totalDistance;
   int? weightCharge;
   // double? distanceCharge;
   String? pickupDatetime;

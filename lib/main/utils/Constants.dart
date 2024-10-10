@@ -104,8 +104,8 @@ FontWeight fontWeightPrimaryGlobal = FontWeight.normal;
 FontWeight fontWeightSecondaryGlobal = FontWeight.normal;
 ShapeBorder? defaultDialogShape;
 //region contact num lenghth
-const minContactLength = 10;
-const maxContactLength = 14;
+const minContactLength = 8;
+const maxContactLength = 15;
 const digitAfterDecimal = 2;
 //endregion
 
@@ -150,6 +150,7 @@ const COUNTRY_DIAL_CODE = 'COUNTRY_DIAL_CODE';
 const COUNTRY_DATA = 'COUNTRY_DATA';
 const CITY_ID = 'City';
 const CITY_DATA = 'CITY_DATA';
+const VEHICLE = 'VEHICLE';
 
 const EMAIL_VERIFIED = 'EMAIL_VERIFIED_AT';
 const IS_EMAIL_VERIFICATION = 'IS_EMAIL_VERIFICATION';
@@ -202,6 +203,7 @@ const DELETE_USER = 'deleted_at';
 const DECLINE = 'decline';
 const REQUESTED = 'requested';
 const APPROVED = 'approved';
+const COMPLETED = 'completed';
 //endregion
 
 //region OrderStatus
@@ -218,6 +220,7 @@ const ORDER_DEPARTED = 'courier_departed';
 const ORDER_TRANSFER = 'courier_transfer';
 const ORDER_PAYMENT = 'payment_status_message';
 const ORDER_FAIL = 'failed';
+const ORDER_SHIPPED = 'shipped';
 //endregion
 
 // region CountName
@@ -347,6 +350,6 @@ const CURRENT_CITY = 'CURRENT_CITY';
 
 const FONT_SIZE_PREF = 'FONT_SIZE_PREF';
 const int cancelOrderDuration = 60;
-const SUPPORT_TYPE = ["Vehicle", "Orders", "Delivery person"];
-const SUPPORT_TICKET_STATUS_PENDING = 'pending';
-const SUPPORT_TICKET_STATUS_IN_REVIEW = 'inreview';
+const STATUS_PENDING = 'pending';
+const STATUS_IN_REVIEW = 'inreview';
+const STATUS_REJECTED = 'reject';

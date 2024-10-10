@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'dart:developer';
+import 'dart:io';
 
-import 'package:flutter/gestures.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mighty_delivery/extensions/colors.dart';
@@ -15,13 +15,13 @@ import 'package:mighty_delivery/extensions/extension_util/list_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/num_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/models/CountryDetailModel.dart';
 
 import '../../extensions/LiveStream.dart';
 import '../../extensions/animatedList/animated_scroll_view.dart';
 import '../../extensions/app_button.dart';
 import '../../extensions/app_text_field.dart';
 import '../../extensions/common.dart';
+import '../../extensions/confirmation_dialog.dart';
 import '../../extensions/decorations.dart';
 import '../../extensions/shared_pref.dart';
 import '../../extensions/system_utils.dart';
@@ -30,12 +30,14 @@ import '../../extensions/widgets.dart';
 import '../../main.dart';
 import '../../main/Chat/ChatScreen.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
+import '../../main/components/OrderAmountSummaryWidget.dart';
 import '../../main/components/OrderSummeryWidget.dart';
 import '../../main/models/CountryListModel.dart';
 import '../../main/models/ExtraChargeRequestModel.dart';
 import '../../main/models/LoginResponse.dart';
 import '../../main/models/OrderDetailModel.dart';
 import '../../main/models/OrderListModel.dart';
+import '../../main/network/NetworkUtils.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
@@ -49,6 +51,7 @@ import '../../user/components/CancelOrderDialog.dart';
 import '../../user/screens/ReturnOrderScreen.dart';
 import '../components/OrderCardComponent.dart';
 import 'OrderHistoryScreen.dart';
+import 'packaging_symbols_info.dart';
 
 class OrderDetailScreen extends StatefulWidget {
   static String tag = '/OrderDetailScreen';
@@ -65,15 +68,13 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
   UserData? userData;
 
   OrderData? orderData;
-  OrderRating? rating;
   List<OrderHistory>? orderHistory;
-  List<OrderItem>? orderItems;
   CourierCompanyDetail? courierDetails;
   Payment? payment;
   List<ExtraChargeRequestModel> list = [];
   double? totalDistance;
   String? distance, duration;
-  num productAmount = 0;
+  // num productAmount = 0;
   String? reason;
   String? otherReason;
   bool canCancel = false;
@@ -84,6 +85,10 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
   int differenceInMinutes = 0;
   Duration remainingTime = Duration(); // Remaining time
   Timer? timer;
+  List<PlatformFile>? selectedFiles;
+  TextEditingController proofTitleTextEditingController = TextEditingController();
+  TextEditingController proofDetailsTextEditingController = TextEditingController();
+  GlobalKey<FormState> claimFormKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -98,6 +103,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
   }
 
   orderDetailApiCall() async {
+    print("inside orderdetails Api call");
     appStore.setLoading(true);
     await getOrderDetails(widget.orderId).then((value) {
       orderData = value.data!;
@@ -105,26 +111,31 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
       if (value.courierCompanyDetail != null) {
         courierDetails = value.courierCompanyDetail!;
       }
-      orderItems = value.orderItem.validate();
-      if (orderItems.validate().isNotEmpty) {
-        orderItems!.forEach((element) {
-          productAmount += element.totalAmount.validate();
-        });
-      }
       payment = value.payment ?? Payment();
-
-      rating = value.orderRating ?? null;
+      list.clear();
       if (orderData!.extraCharges.runtimeType == List<dynamic>) {
         (orderData!.extraCharges as List<dynamic>).forEach((element) {
           list.add(ExtraChargeRequestModel.fromJson(element));
         });
       }
+      if (orderData!.fixedCharges.validate() != 0) {
+        list.add(ExtraChargeRequestModel(key: FIXED_CHARGES, value: orderData!.fixedCharges!));
+      }
+      if (value.data!.cityDetails != null) {
+        list.add(ExtraChargeRequestModel(key: MIN_DISTANCE, value: value.data!.cityDetails!.minDistance));
+        list.add(ExtraChargeRequestModel(key: MIN_WEIGHT, value: value.data!.cityDetails!.minWeight));
+        list.add(ExtraChargeRequestModel(key: PER_DISTANCE_CHARGE, value: value.data!.cityDetails!.perDistanceCharges));
+        list.add(ExtraChargeRequestModel(key: PER_WEIGHT_CHARGE, value: value.data!.cityDetails!.perWeightCharges));
+      }
+      print("list added");
       if (getStringAsync(USER_TYPE) == CLIENT) {
         userData = value.deliveryManDetail != null ? value.deliveryManDetail : UserData();
       } else {
         userData = value.clientDetail;
       }
-      canUserCancelOrder();
+      if (getStringAsync(USER_TYPE) == CLIENT) {
+        canUserCancelOrder();
+      }
       getDistanceApiCall();
       if (orderData!.status == ORDER_TRANSFER ||
           orderData!.status == ORDER_ASSIGNED ||
@@ -145,6 +156,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
         });
       }
     }).catchError((error) {
+      print("------------${error.toString()}");
       toast(error.toString());
     }).whenComplete(() => appStore.setLoading(false));
   }
@@ -167,17 +179,20 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
   }
 
   canUserCancelOrder() {
-    DateTime orderDate = DateTime.parse("${orderData!.date!}Z").toLocal();
+    DateTime orderDate = DateTime.parse("${orderData!.date!}").toLocal();
     DateTime currentDate = DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())).toLocal();
     Duration difference = currentDate.difference(orderDate);
     int differenceInMinutes = currentDate.difference(orderDate).inMinutes;
     canCancel = differenceInMinutes < cancelOrderDuration;
-    if (difference.inMinutes < 60 && difference.inMinutes > 0) {
+    print("--------------canCancel${canCancel}");
+    if (difference.inMinutes < 60 && difference.inMinutes >= 0) {
       setState(() {
+        print("--------------remainingTime${remainingTime}");
         remainingTime = Duration(hours: 1) - difference;
         startTimer();
       });
     } else {
+      print("-------------else part completed");
       setState(() {
         remainingTime = Duration.zero;
       });
@@ -187,7 +202,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
   void startTimer() {
     timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
       setState(() {
-        remainingTime = DateTime.parse("${orderData!.date!}Z")
+        remainingTime = DateTime.parse("${orderData!.date!}")
             .toLocal()
             .add(Duration(hours: 1))
             .difference(DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())).toLocal());
@@ -252,9 +267,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
       "total_amount": orderData!.totalAmount ?? 0,
       "vehicle_id": orderData!.vehicleId.validate(),
       "reason": reason == isOtherOptionSelected ? otherReason : reason,
-      if (orderItems.validate().isNotEmpty)
-        "store_detail_id": orderItems!.first.productData!.first.storeDetailId.validate(),
-      if (orderItems.validate().isNotEmpty) "order_item": orderItems,
       "order_id": orderData!.id,
       "cancelorderreturn": 1
     };
@@ -270,6 +282,52 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
     });
   }
 
+  claimInsuranceVehicleApiCall() async {
+    hideKeyboard(context);
+    appStore.setLoading(true);
+    setState(() {});
+    MultipartRequest multiPartRequest = await getMultiPartRequest('claims-save');
+    multiPartRequest.fields['traking_no'] = orderData!.orderTrackingId.validate();
+    multiPartRequest.fields['prof_value'] = proofTitleTextEditingController.text;
+    multiPartRequest.fields['detail'] = proofDetailsTextEditingController.text;
+    multiPartRequest.fields['client_id'] = getIntAsync(USER_ID).toString();
+    if (selectedFiles != null && selectedFiles!.length > 0) {
+      selectedFiles!.forEach((element) async {
+        multiPartRequest.files.add(await MultipartFile.fromPath("attachment_file", element.path!));
+      });
+    }
+    print("---------------requestselectedFiles${multiPartRequest.files.length}");
+
+    // multiPartRequest.files.add(await MultipartFile.fromPath('vehicle_history_image', file.path));
+    multiPartRequest.headers.addAll(buildHeaderTokens());
+    sendMultiPartRequest(
+      multiPartRequest,
+      onSuccess: (data) async {
+        if (data != null) {
+          appStore.setLoading(false);
+          toast(data["message"]);
+
+          finish(context);
+          print(data.toString());
+          // VehicleSavedResponse res = VehicleSavedResponse.fromJson(data);
+          // toast(res.message.toString());
+          // setValue(VEHICLE, res.data!.toJson());
+          // LiveStream().emit("VehicleInfo");
+          // print("------------------${res.data!.vehicleInfo.make}");
+          // appStore.setLoading(false);
+          // finish(context);
+        }
+      },
+      onError: (error) {
+        toast(error.toString(), print: true);
+        appStore.setLoading(false);
+      },
+    ).catchError((e) {
+      appStore.setLoading(false);
+      toast(e.toString());
+    });
+  }
+
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
@@ -281,6 +339,48 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
     afterBuildCreated(() {
       appStore.setLoading(false);
     });
+  }
+
+  showMoreInformation({String name = "", String information = "", String instruction = ""}) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            //   contentPadding: EdgeInsets.all(8),
+            title: Column(
+              children: [
+                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                  Text(language.details, style: boldTextStyle()),
+                  Icon(Icons.close, size: 20).onTap(() {
+                    pop();
+                  })
+                ]),
+                10.height,
+                Divider(height: 1, thickness: 1, color: Colors.grey.withOpacity(0.5))
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("${language.contactPersonName} :", style: secondaryTextStyle()),
+                    Text(name, style: boldTextStyle()),
+                  ],
+                ),
+                4.height,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("${language.instruction} :", style: secondaryTextStyle()),
+                    Text(instruction, style: boldTextStyle()),
+                  ],
+                ),
+              ],
+            ),
+          );
+        });
   }
 
   @override
@@ -312,9 +412,9 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     children: [
                                       orderData!.date != null
                                           ? Text(
-                                                  '${DateFormat('dd MMM yyyy').format(DateTime.parse("${orderData!.date!}Z").toLocal())} ' +
+                                                  '${DateFormat('dd MMM yyyy').format(DateTime.parse("${orderData!.date!}").toLocal())} ' +
                                                       ' ${language.at.toLowerCase()} ' +
-                                                      ' ${DateFormat('hh:mm a').format(DateTime.parse("${orderData!.date!}Z").toLocal())}',
+                                                      ' ${DateFormat('hh:mm a').format(DateTime.parse("${orderData!.date!}").toLocal())}',
                                                   style: primaryTextStyle(size: 14))
                                               .expand()
                                           : SizedBox(),
@@ -338,8 +438,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                             ],
                                           ),
                                           4.height,
-                                          Text(
-                                              '${appStore.orderTrackingIdPrefixId.toUpperCase()}${orderData!.orderTrackingId}',
+                                          Text('${orderData!.orderTrackingId}',
                                               style: boldTextStyle(size: 12, color: ColorUtils.colorPrimary)),
                                           4.height,
                                           Row(
@@ -600,81 +699,29 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                       Text('${orderData!.totalParcel ?? 1}', style: boldTextStyle(size: 14)),
                                     ],
                                   ).visible(orderData!.totalParcel != null),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      8.height,
-                                      Divider(
-                                        height: 18,
-                                        color: ColorUtils.dividerColor,
-                                      ),
-                                      Text(language.orderItems, style: boldTextStyle()),
-                                      8.height,
-                                      ListView.separated(
-                                        shrinkWrap: true,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        padding: EdgeInsets.zero,
-                                        itemCount: orderItems.validate().length,
-                                        itemBuilder: (context, index) {
-                                          OrderItem item = orderItems.validate()[index];
-
-                                          return Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      commonCachedNetworkImage(
-                                                              item.productData.validate().first.productImage,
-                                                              height: 70,
-                                                              width: 70,
-                                                              fit: BoxFit.cover)
-                                                          .cornerRadiusWithClipRRect(16),
-                                                      10.width,
-                                                      Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          2.height,
-                                                          if (item.productData != null)
-                                                            Text(item.productData!.first.title.validate(),
-                                                                style: boldTextStyle(size: 14)),
-                                                          8.height,
-                                                          Row(
-                                                            children: [
-                                                              Text(printAmount(item.amount.validate()),
-                                                                  style: boldTextStyle(
-                                                                      size: 14, color: ColorUtils.colorPrimary)),
-                                                              8.width,
-                                                              Text('x ${item.quantity.validate()}'.toString(),
-                                                                  style: secondaryTextStyle()),
-                                                            ],
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ).expand(),
-                                                  16.width,
-                                                  Text(printAmount(item.totalAmount.validate()),
-                                                      style: boldTextStyle(size: 14, color: ColorUtils.colorPrimary)),
-                                                ],
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                        separatorBuilder: (context, index) {
-                                          return Divider();
-                                        },
-                                      ),
-                                    ],
-                                  ).visible(orderItems.validate().isNotEmpty),
                                   8.height,
                                 ],
                               ),
                             ),
                             16.height,
-                            Text(language.labels, style: boldTextStyle(size: 16)).visible(packagingSymbols.isNotEmpty),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(language.labels, style: boldTextStyle(size: 16))
+                                    .visible(packagingSymbols.isNotEmpty),
+                                Icon(Icons.info,
+                                        color: appStore.isDarkMode
+                                            ? Colors.white.withOpacity(0.7)
+                                            : ColorUtils.colorPrimary)
+                                    .onTap(() {
+                                  PackagingSymbolsInfo().launch(context);
+                                })
+                              ],
+                            ),
+                            //  Text(language.labels, style: boldTextStyle(size: 16)).visible(packagingSymbols
+                            //  .isNotEmpty),
                             12.height.visible(packagingSymbols.isNotEmpty),
+
                             Container(
                               width: context.width(),
                               decoration: boxDecorationWithRoundedCorners(
@@ -806,39 +853,94 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                 ],
                               ),
                             ),
-                            8.height,
-                            Text(language.info, style: boldTextStyle(size: 16)).visible(
-                                !orderData!.pickupPoint!.description.isEmptyOrNull ||
-                                    !orderData!.deliveryPoint!.description.isEmptyOrNull),
+                            if (!orderData!.pickupPoint!.description.isEmptyOrNull) 16.height,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(language.pickupInformation, style: boldTextStyle(size: 16))
+                                    .visible(!orderData!.pickupPoint!.description.isEmptyOrNull),
+                                Text(language.viewMore, style: secondaryTextStyle(size: 12)).onTap(() {
+                                  showMoreInformation(
+                                      name: orderData!.pickupPoint!.name.validate(),
+                                      instruction: orderData!.pickupPoint!.instruction.validate());
+                                }),
+                              ],
+                            ).visible(!orderData!.pickupPoint!.description.isEmptyOrNull),
                             12.height,
                             Container(
-                              decoration: boxDecorationWithRoundedCorners(
-                                  borderRadius: BorderRadius.circular(defaultRadius),
-                                  border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
-                                  backgroundColor: Colors.transparent),
-                              padding: EdgeInsets.all(12),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(language.pickupInformation, style: secondaryTextStyle()),
-                                      Text(orderData!.pickupPoint!.description.toString(),
-                                          style: boldTextStyle(size: 14)),
-                                    ],
-                                  ).visible(!orderData!.pickupPoint!.description.isEmptyOrNull),
-                                  8.height.visible(!orderData!.pickupPoint!.description.isEmptyOrNull),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(language.deliveryInformation, style: secondaryTextStyle()),
-                                      Text(orderData!.deliveryPoint!.description.toString(),
-                                          style: boldTextStyle(size: 14)),
-                                    ],
-                                  ).visible(!orderData!.deliveryPoint!.description.isEmptyOrNull),
-                                ],
-                              ),
-                            ),
+                                decoration: boxDecorationWithRoundedCorners(
+                                    borderRadius: BorderRadius.circular(defaultRadius),
+                                    border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
+                                    backgroundColor: Colors.transparent),
+                                padding: EdgeInsets.all(12),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(orderData!.pickupPoint!.description.toString(),
+                                        style: boldTextStyle(size: 14), maxLines: 3, overflow: TextOverflow.ellipsis),
+                                  ],
+                                )).visible(!orderData!.pickupPoint!.description.isEmptyOrNull),
+                            // if (!orderData!.pickupPoint!.name.isEmptyOrNull) 16.height,
+                            // Text(language.pickupPersonName, style: boldTextStyle(size: 16))
+                            //     .visible(!orderData!.pickupPoint!.name.isEmptyOrNull),
+                            // 12.height,
+                            // Container(
+                            //     decoration: boxDecorationWithRoundedCorners(
+                            //         borderRadius: BorderRadius.circular(defaultRadius),
+                            //         border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
+                            //         backgroundColor: Colors.transparent),
+                            //     padding: EdgeInsets.all(12),
+                            //     child: Row(
+                            //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //       children: [
+                            //         Text(orderData!.pickupPoint!.name.toString(),
+                            //             style: boldTextStyle(size: 14), maxLines: 3, overflow: TextOverflow.ellipsis),
+                            //       ],
+                            //     )).visible(!orderData!.pickupPoint!.name.isEmptyOrNull),
+                            if (!orderData!.deliveryPoint!.description.isEmptyOrNull) 16.height,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(language.deliveryInformation, style: boldTextStyle(size: 16))
+                                    .visible(!orderData!.deliveryPoint!.description.isEmptyOrNull),
+                                Text(language.viewMore, style: secondaryTextStyle(size: 12)).onTap(() {
+                                  showMoreInformation(
+                                      name: orderData!.deliveryPoint!.name.validate(),
+                                      instruction: orderData!.deliveryPoint!.instruction.validate());
+                                }),
+                              ],
+                            ).visible(!orderData!.deliveryPoint!.description.isEmptyOrNull),
+                            12.height,
+                            Container(
+                                decoration: boxDecorationWithRoundedCorners(
+                                    borderRadius: BorderRadius.circular(defaultRadius),
+                                    border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
+                                    backgroundColor: Colors.transparent),
+                                padding: EdgeInsets.all(12),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(orderData!.deliveryPoint!.description.toString(),
+                                        style: boldTextStyle(size: 14), maxLines: 3, overflow: TextOverflow.ellipsis),
+                                  ],
+                                )).visible(!orderData!.deliveryPoint!.description.isEmptyOrNull),
+                            // if (!orderData!.deliveryPoint!.name.isEmptyOrNull) 16.height,
+                            // Text(language.deliveryPersonName, style: boldTextStyle(size: 16))
+                            //     .visible(!orderData!.deliveryPoint!.name.isEmptyOrNull),
+                            // 12.height,
+                            // Container(
+                            //     decoration: boxDecorationWithRoundedCorners(
+                            //         borderRadius: BorderRadius.circular(defaultRadius),
+                            //         border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
+                            //         backgroundColor: Colors.transparent),
+                            //     padding: EdgeInsets.all(12),
+                            //     child: Row(
+                            //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //       children: [
+                            //         Text(orderData!.deliveryPoint!.name.toString(),
+                            //             style: boldTextStyle(size: 14), maxLines: 3, overflow: TextOverflow.ellipsis),
+                            //       ],
+                            //     )).visible(!orderData!.deliveryPoint!.name.isEmptyOrNull),
                             if (orderData!.vehicleData != null) 16.height,
                             if (orderData!.vehicleData != null) Text(language.vehicle, style: boldTextStyle()),
                             if (orderData!.vehicleData != null) 12.height,
@@ -849,22 +951,34 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
                                     backgroundColor: Colors.transparent),
                                 padding: EdgeInsets.all(12),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                // child: Column(
+                                //   crossAxisAlignment: CrossAxisAlignment.start,
+                                //   children: [
+                                //     if (orderData!.vehicleImage != null)
+                                //       ClipRRect(
+                                //           borderRadius: BorderRadius.circular(10),
+                                //           child: commonCachedNetworkImage(orderData!.vehicleImage,
+                                //               fit: BoxFit.fill, height: 100, width: 150)),
+                                //     8.height,
+                                //     Row(
+                                //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                //       children: [
+                                //         Text(language.vehicleName, style: secondaryTextStyle()),
+                                //         Text('${orderData!.vehicleData!.title.validate()}', style: primaryTextStyle())
+                                //       ],
+                                //     ),
+                                //   ],
+                                // ),
+                                child: Row(
                                   children: [
-                                    if (orderData!.vehicleImage != null)
-                                      ClipRRect(
-                                          borderRadius: BorderRadius.circular(10),
-                                          child: commonCachedNetworkImage(orderData!.vehicleImage,
-                                              fit: BoxFit.fill, height: 100, width: 150)),
-                                    8.height,
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(language.vehicleName, style: secondaryTextStyle()),
-                                        Text('${orderData!.vehicleData!.title.validate()}', style: primaryTextStyle())
-                                      ],
-                                    ),
+                                    ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: commonCachedNetworkImage(orderData!.vehicleImage,
+                                            fit: BoxFit.fill, height: 50, width: 50)),
+                                    SizedBox(width: 16),
+                                    Text(
+                                        "${orderData!.vehicleData!.title.validate()}  (${printAmount(orderData!.vehicleData!.price.validate())})",
+                                        style: primaryTextStyle()),
                                   ],
                                 ),
                               ),
@@ -1004,11 +1118,34 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                 ],
                               ),
                             16.height,
+                            // OrderAmountDataWidget(
+                            //     fixedAmount: orderData!.fixedCharges!.toDouble(),
+                            //     distanceAmount: orderData!.distanceCharge!.toDouble(),
+                            //     extraCharges: orderData!.extraChargesList!,
+                            //     vehicleAmount:
+                            //         orderData!.vehicleData != null ? orderData!.vehicleData!.price!.toDouble() : 0,
+                            //     insuranceAmount:
+                            //         orderData!.insuranceCharge != null ? orderData!.insuranceCharge!.toDouble() : 0,
+                            //     diffWeight: (orderData!.cityDetails!.minWeight! > orderData!.totalWeight!)
+                            //         ? (orderData!.totalDistance - orderData!.cityDetails!.minDistance!)
+                            //         : 0,
+                            //     // diffDistance: (orderData!.cityDetails!.minDistance! > orderData!.totalDistance!)
+                            //     //     ? (orderData!.totalDistance - orderData!.cityDetails!.minDistance!)
+                            //     //     : 0.0,
+                            //     diffDistance: 0,
+                            //     totalAmount: orderData!.totalAmount.toDouble(),
+                            //     weightAmount: orderData!.weightCharge != null ? orderData!.weightCharge!.toDouble() : 0,
+                            //     perWeightCharge: 0,
+                            //     perKmCityDataCharge: 0,
+                            //     perkmVehiclePrice: orderData!.vehicleData != null
+                            //         ? orderData!.vehicleData!.perKmCharge!.toDouble()
+                            //         : 0,
+                            //     baseTotal: orderData!.baseTotal!.toDouble()),
+
                             (orderData!.extraCharges.runtimeType == List<dynamic>)
                                 ? OrderSummeryWidget(
-                                    productAmount: productAmount,
-                                    vehiclePrice:
-                                        orderData!.vehicleData != null ? orderData!.vehicleData!.price.validate() : 0,
+                                    // productAmount: productAmount,
+                                    vehiclePrice: orderData!.vehicleCharge.validate(),
                                     extraChargesList: list,
                                     totalDistance: orderData!.totalDistance != null ? orderData!.totalDistance : 0,
                                     totalWeight: orderData!.totalWeight.validate(),
@@ -1019,7 +1156,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     status: orderData!.status,
                                     isDetail: true,
                                     isInsuranceChargeDisplay: orderData!.insuranceCharge != 0 ? true : false,
-                                    insuranceCharge: orderData!.insuranceCharge)
+                                    insuranceCharge: orderData!.insuranceCharge,
+                                    baseTotal: orderData!.baseTotal)
                                 : Container(
                                     width: context.width(),
                                     padding: EdgeInsets.all(16),
@@ -1031,15 +1169,15 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        if (orderItems.validate().isNotEmpty)
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(language.productAmount, style: primaryTextStyle()),
-                                              16.width,
-                                              Text('${printAmount(productAmount)}', style: primaryTextStyle()),
-                                            ],
-                                          ),
+                                        // if (orderItems.validate().isNotEmpty)
+                                        //   Row(
+                                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        //     children: [
+                                        //       Text(language.productAmount, style: primaryTextStyle()),
+                                        //       16.width,
+                                        //       Text('${printAmount(productAmount)}', style: primaryTextStyle()),
+                                        //     ],
+                                        //   ),
                                         if (orderData!.vehicleData != null)
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1060,12 +1198,11 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                 style: primaryTextStyle()),
                                           ],
                                         ),
-                                        //todo add keys
                                         if (orderData!.insuranceCharge != 0)
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text("Insurance Charge", style: primaryTextStyle()),
+                                              Text(language.insuranceCharge, style: primaryTextStyle()),
                                               16.width,
                                               Text('${orderData!.insuranceCharge.validate()}',
                                                   style: primaryTextStyle()),
@@ -1102,18 +1239,18 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                             ],
                                           ),
                                         /*Align(
-                                          alignment: Alignment.bottomRight,
-                                          child: Column(
-                                            children: [
-                                              8.height,
-                                              Text(
-                                                  '${printAmount(orderData!.fixedCharges.validate() + orderData!.distanceCharge.validate() + orderData!.weightCharge.validate())}',
-                                                  style: primaryTextStyle()),
-                                            ],
-                                          ),
-                                        ).visible((orderData!.distanceCharge.validate() != 0 ||
-                                                orderData!.weightCharge.validate() != 0) &&
-                                            orderData!.extraCharges.keys.length != 0),*/
+                                      alignment: Alignment.bottomRight,
+                                      child: Column(
+                                        children: [
+                                          8.height,
+                                          Text(
+                                              '${printAmount(orderData!.fixedCharges.validate() + orderData!.distanceCharge.validate() + orderData!.weightCharge.validate())}',
+                                              style: primaryTextStyle()),
+                                        ],
+                                      ),
+                                    ).visible((orderData!.distanceCharge.validate() != 0 ||
+                                            orderData!.weightCharge.validate() != 0) &&
+                                        orderData!.extraCharges.keys.length != 0),*/
                                         if (orderData!.extraCharges != null)
                                           Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1232,11 +1369,24 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     style: secondaryTextStyle(color: Colors.red)),
                               ),
                             Container(
-                              width: context.width() * 0.9,
-                              child: Text(
-                                formatRemainingTime(remainingTime),
-                                style: boldTextStyle(color: Colors.red),
-                                textAlign: TextAlign.right,
+                              width: context.width(),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    language.canOrderWithinHour,
+                                    style: secondaryTextStyle(color: Colors.red, size: 12),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ).expand(),
+                                  8.width,
+                                  Text(
+                                    formatRemainingTime(remainingTime),
+                                    style: boldTextStyle(color: Colors.red),
+                                    textAlign: TextAlign.right,
+                                  ),
+                                ],
                               ).visible(getStringAsync(USER_TYPE) == CLIENT &&
                                   orderData!.status != ORDER_DELIVERED &&
                                   orderData!.status != ORDER_CANCELLED &&
@@ -1256,7 +1406,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                         return CancelOrderDialog(
                                             orderId: orderData!.id.validate(),
                                             onUpdate: () {
-                                              list.clear();
+                                              //  list.clear();
                                               orderDetailApiCall();
                                               LiveStream().emit('UpdateOrderData');
                                             });
@@ -1285,7 +1435,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                               child: commonButton(language.returnOrder, () {
                                 ReturnOrderScreen(
                                   orderData!,
-                                  orderItems: orderItems,
                                 ).launch(context);
                               }, width: context.width()),
                             ).visible(orderData!.status == ORDER_DELIVERED &&
@@ -1315,12 +1464,10 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                       bottom: 10,
                       left: context.height() * 0.11,
                       right: context.height() * 0.11,
-                      //todo add keys
                       child: commonButton(language.cancelAndReturn, () {
                         if (!reason.isEmptyOrNull) {
                           createOrderApiCall();
                         } else {
-                          //todo add keys
                           toast(language.pleaseSelectReason);
                         }
 
@@ -1332,7 +1479,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                         getStringAsync(USER_TYPE) == DELIVERY_MAN),
                     // chat option
                     Positioned(
-                        bottom: 10,
+                        bottom: 50,
                         right: 10,
                         child: Container(
                             width: 60,
@@ -1380,12 +1527,233 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                         orderData!.status != ORDER_DELIVERED &&
                         orderData!.status != ORDER_CANCELLED &&
                         userData!.userType.validate() != ADMIN),
+                    //    claim option for user
+                    Positioned(
+                      bottom: 10,
+                      left: 16,
+                      right: 16,
+                      child: commonButton(language.claimInsurance, () {
+                        //  UploadClaimDetailsScreen().launch(context);
+                        selectProofData();
+                      }, width: context.width()),
+                    ).visible((orderData!.status == ORDER_PICKED_UP ||
+                            orderData!.status == ORDER_ARRIVED ||
+                            orderData!.status == ORDER_DEPARTED && getStringAsync(USER_TYPE) == CLIENT) &&
+                        orderData!.isClaimed != 1)
                   ],
                 )
               : SizedBox(),
-          Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
+          Observer(builder: (context) => loaderWidget().center().visible(appStore.isLoading)),
         ],
       ),
     );
   }
+
+  Future<void> pickFiles() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf'],
+    );
+
+    if (result != null) {
+      setState(() {
+        selectedFiles = result.files;
+      });
+    } else {
+      // User canceled the picker
+    }
+  }
+
+  Future<void> selectProofData() async {
+    return showInDialog(
+      barrierDismissible: false,
+      getContext,
+      //    contentPadding: EdgeInsets.all(16),
+      builder: (p0) {
+        return StatefulBuilder(builder: (context, selectedImagesUpdate) {
+          return Form(
+            key: claimFormKey,
+            child: SingleChildScrollView(
+              child: Container(
+                constraints: BoxConstraints(
+                  minHeight: 200.0, // Set your minimum height here
+                ),
+                child: Stack(
+                  children: [
+                    !appStore.isLoading
+                        ? Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(language.fillTheDetailsForClaim, style: boldTextStyle(), textAlign: TextAlign.start),
+                              8.height,
+                              Text(language.addAttachmentMsg,
+                                  style: secondaryTextStyle(size: 12), textAlign: TextAlign.start),
+                              10.height,
+                              Divider(color: dividerColor, height: 1),
+                              8.height,
+                              Text(language.title, style: boldTextStyle()),
+                              12.height,
+                              AppTextField(
+                                isValidationRequired: true,
+                                controller: proofTitleTextEditingController,
+                                textFieldType: TextFieldType.NAME,
+                                errorThisFieldRequired: language.fieldRequiredMsg,
+                                decoration: commonInputDecoration(hintText: language.enterProofValue),
+                              ),
+                              8.height,
+                              Text(language.description, style: boldTextStyle()),
+                              12.height,
+                              AppTextField(
+                                isValidationRequired: true,
+                                controller: proofDetailsTextEditingController,
+                                textFieldType: TextFieldType.NAME,
+                                errorThisFieldRequired: language.fieldRequiredMsg,
+                                minLines: 4,
+                                maxLines: 8,
+                                decoration: commonInputDecoration(hintText: "Enter proof details"),
+                              ),
+                              8.height,
+                              if (selectedFiles != null && selectedFiles!.length > 0)
+                                Text(language.selectedFiles, style: boldTextStyle()),
+                              if (selectedFiles != null && selectedFiles!.length > 0) 10.height,
+                              if (selectedFiles != null && selectedFiles!.length > 0)
+                                Container(
+                                  width: context.width(),
+                                  height: 120,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: selectedFiles!.length,
+                                    itemBuilder: (context, index) {
+                                      return buildFileWidget(selectedFiles![index]);
+                                    },
+                                  ),
+                                ),
+                              16.height,
+                              Row(
+                                children: [
+                                  commonButton(language.cancel, size: 14, () {
+                                    if (selectedFiles != null) selectedFiles!.clear();
+                                    finish(getContext, 0);
+                                  }).expand(),
+                                  6.width,
+                                  commonButton(
+                                    language.addProofs,
+                                    size: 14,
+                                    () async {
+                                      if (selectedFiles != null) selectedFiles!.clear();
+                                      FilePickerResult? result = await FilePicker.platform.pickFiles(
+                                        allowMultiple: true,
+                                        type: FileType.custom,
+                                        allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf'],
+                                      );
+                                      if (result != null) {
+                                        selectedImagesUpdate(() {
+                                          selectedFiles = result.files;
+                                        });
+                                      }
+                                    },
+                                  ).expand(),
+                                  6.width,
+                                  commonButton(language.claim, size: 14, () async {
+                                    if (claimFormKey.currentState!.validate()) {
+                                      selectedImagesUpdate(() {
+                                        appStore.setLoading(true);
+                                      });
+                                      hideKeyboard(context);
+
+                                      MultipartRequest multiPartRequest = await getMultiPartRequest('claims-save');
+                                      multiPartRequest.fields['traking_no'] = orderData!.orderTrackingId.validate();
+                                      multiPartRequest.fields['prof_value'] = proofTitleTextEditingController.text;
+                                      multiPartRequest.fields['detail'] = proofDetailsTextEditingController.text;
+                                      multiPartRequest.fields['client_id'] = getIntAsync(USER_ID).toString();
+                                      if (selectedFiles != null && selectedFiles!.length > 0) {
+                                        selectedFiles!.forEach((element) async {
+                                          multiPartRequest.files
+                                              .add(await MultipartFile.fromPath("attachment_file[]", element.path!));
+                                        });
+                                      }
+                                      print("---------------request${multiPartRequest.toString()}");
+
+                                      // multiPartRequest.files.add(await MultipartFile.fromPath('vehicle_history_image', file.path));
+                                      multiPartRequest.headers.addAll(buildHeaderTokens());
+                                      sendMultiPartRequest(
+                                        multiPartRequest,
+                                        onSuccess: (data) async {
+                                          if (data != null) {
+                                            appStore.setLoading(false);
+                                            toast(data["message"]);
+
+                                            finish(context);
+                                            print(data.toString());
+                                            selectedImagesUpdate(() {
+                                              appStore.setLoading(false);
+                                            });
+                                            // VehicleSavedResponse res = VehicleSavedResponse.fromJson(data);
+                                            // toast(res.message.toString());
+                                            // setValue(VEHICLE, res.data!.toJson());
+                                            // LiveStream().emit("VehicleInfo");
+                                            // print("------------------${res.data!.vehicleInfo.make}");
+                                            // appStore.setLoading(false);
+                                            // finish(context);
+                                          }
+                                        },
+                                        onError: (error) {
+                                          toast(error.toString(), print: true);
+                                          appStore.setLoading(false);
+                                        },
+                                      ).catchError((e) {
+                                        appStore.setLoading(false);
+                                        toast(e.toString());
+                                      });
+                                      //   claimInsuranceVehicleApiCall();
+                                    }
+                                    // if (selectedFiles != null) {
+                                    //   print("-------------selected files length${selectedFiles!.length}");
+                                    // }
+                                  }).expand(),
+                                ],
+                              ),
+                            ],
+                          )
+                        : Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)).center(),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+      },
+    );
+  }
+}
+
+Widget buildFileWidget(PlatformFile file) {
+  // Check if the file is an image or PDF
+  bool isImage = file.extension == 'jpg' || file.extension == 'jpeg' || file.extension == 'png';
+
+  return Stack(
+    children: [
+      Container(
+        width: 100,
+        height: 100,
+        decoration: boxDecorationWithRoundedCorners(border: Border.all(color: ColorUtils.colorPrimary)),
+        child: isImage
+            ? Image.file(
+                width: 100, height: 100,
+                File(file.path!), // File object for local image display
+                fit: BoxFit.cover,
+              ).cornerRadiusWithClipRRect(10)
+            : Center(
+                child: Icon(
+                  Icons.picture_as_pdf,
+                  size: 40,
+                  color: Colors.red,
+                ),
+              ),
+      ).paddingOnly(left: 8, right: 8)
+    ],
+  );
 }

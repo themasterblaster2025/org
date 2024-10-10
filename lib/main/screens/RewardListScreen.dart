@@ -76,7 +76,7 @@ class _RewardListScreenState extends State<RewardListScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
-      appBarTitle: language.earnedRewards, // todo
+      appBarTitle: language.earnedRewards,
       body: Observer(builder: (context) {
         return Stack(
           children: [

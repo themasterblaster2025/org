@@ -3,15 +3,15 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
-import 'package:mighty_delivery/delivery/screens/EarningHistoryScreen.dart';
-import 'package:mighty_delivery/delivery/screens/FilterCountScreen.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/num_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/models/DashboardCountModel.dart';
-import 'package:mighty_delivery/user/screens/WalletScreen.dart';
+import '../../delivery/screens/EarningHistoryScreen.dart';
+import '../../delivery/screens/FilterCountScreen.dart';
+
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/num_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/models/DashboardCountModel.dart';
+import '../../user/screens/WalletScreen.dart';
 
 import '../../extensions/LiveStream.dart';
 import '../../extensions/colors.dart';
@@ -26,7 +26,6 @@ import '../../main/models/LoginResponse.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/screens/BankDetailScreen.dart';
 import '../../main/screens/UserCitySelectScreen.dart';
-import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Widgets.dart';
@@ -156,11 +155,12 @@ class _DHomeFragmentState extends State<DHomeFragment> {
       appStore.setCurrencySymbol(value.currency ?? CURRENCY_SYMBOL);
       appStore.setCopyRight(value.siteCopyright ?? "");
       appStore.setSiteEmail(value.siteEmail ?? "");
-      appStore.setOrderTrackingIdPrefix(value.orderTrackingIdPrefix ?? "");
+      //  appStore.setOrderTrackingIdPrefix(value.orderTrackingIdPrefix ?? "");
       appStore.setIsInsuranceAllowed(value.isInsuranceAllowed ?? "0");
       appStore.setInsurancePercentage(value.insurancePercentage ?? "0");
       appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
       appStore.setInsuranceDescription(value.insuranceDescription ?? '');
+      appStore.setMaxAmountPerMonth(value.maxEarningsPerMonth ?? '');
       setState(() {});
     }).catchError((error) {
       log(error.toString());

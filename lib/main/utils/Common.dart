@@ -8,10 +8,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/num_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import 'package:mighty_delivery/main/models/CreateOrderDetailModel.dart';
 import 'package:mighty_delivery/main/utils/dynamic_theme.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -28,7 +31,9 @@ import '../../main/utils/Colors.dart';
 import '../../main/utils/Constants.dart';
 import '../../user/screens/OrderDetailScreen.dart';
 import '../Chat/ChatScreen.dart';
+import '../models/CityListModel.dart';
 import '../models/LoginResponse.dart';
+import '../models/VehicleModel.dart';
 import '../network/RestApis.dart';
 import '../screens/LoginScreen.dart';
 import '../services/AuthServices.dart';
@@ -193,8 +198,16 @@ String printDateWithoutAt(String date) {
 //   return (12742 * asin(sqrt(a))).toStringAsFixed(digitAfterDecimal).toDouble();
 // }
 
-Widget loaderWidget() {
+/*Widget loaderWidget() {
   return Center(child: Image.asset(ic_loader, width: 50, height: 70, color: ColorUtils.colorPrimary));
+}*/
+Widget loaderWidget() {
+  return Center(
+    child: LoadingAnimationWidget.hexagonDots(
+      color: ColorUtils.colorPrimary,
+      size: 50,
+    ),
+  );
 }
 
 Widget emptyWidget() {
@@ -220,6 +233,8 @@ String orderStatus(String orderStatus) {
     return language.delivered;
   } else if (orderStatus == ORDER_CANCELLED) {
     return language.cancelled;
+  } else if (orderStatus == ORDER_SHIPPED) {
+    return language.shipped;
   }
   return language.assigned;
 }
@@ -615,3 +630,87 @@ Color colorFromHex(String hexColor) {
   }
   return Color(int.parse(hexColor, radix: 16));
 }
+
+Future<double> getTotalAmountData(
+    {required double enteredWeight,
+    double totalKms = 0,
+    bool isInsuranceSelected = false,
+    CityDetail? cityData,
+    VehicleDetail? selectedVehicle,
+    double insuranceBasePrice = 0}) async {
+  double totalAmount = 0;
+  double weightCharge = 0;
+  double distanceCharge = 0;
+  double totalExtraCharge = 0;
+  double insuranceCharge = 0;
+  double fixedCharge = 0;
+  double vehicleCharge = 0;
+
+  /// calculate weight Charge
+  if (enteredWeight > cityData!.minWeight!) {
+    weightCharge = ((enteredWeight - cityData.minWeight!) * cityData.perWeightCharges!)
+        .toStringAsFixed(digitAfterDecimal)
+        .toDouble();
+  }
+  //fixed charge compulsory for city
+  fixedCharge = cityData.fixedCharges!.toDouble();
+  //if vehicle switch from admin web  selected
+  if (appStore.isVehicleOrder != 0) {
+    // if total distance is greater than min calculate per km charge  base price for kms more than min km +
+    if (totalKms > selectedVehicle!.minKm!.validate()) {
+      print("------------${selectedVehicle.minKm}--------${selectedVehicle.perKmCharge}--------------${totalKms}");
+      vehicleCharge = ((totalKms - selectedVehicle.minKm.validate()) * selectedVehicle.perKmCharge!);
+    }
+    distanceCharge = 0;
+  } else {
+    //if vehicle is not set data form city will be applicable for price
+    // if total distance is grater than min city fixed charge+( km *  difference km per distance charge)
+    if (totalKms > cityData.minDistance!) {
+      distanceCharge = (totalKms - cityData.minDistance!) *
+          cityData.perDistanceCharges!.toStringAsFixed(digitAfterDecimal).toDouble();
+    }
+    vehicleCharge = 0;
+  }
+
+  /// calculate insurance Amount charges
+  if (appStore.isInsuranceAllowed == "1" && isInsuranceSelected == true) {
+    print("insurance base price${insuranceBasePrice}--------${appStore.insurancePercentage}");
+    insuranceCharge =
+        appStore.isInsuranceAllowed == "1" ? ((appStore.insurancePercentage.toDouble() * insuranceBasePrice) / 100) : 0;
+    print(
+        "insurance base price${insuranceBasePrice}--------${appStore.insurancePercentage.toDouble()}---------------${insuranceCharge}");
+  }
+
+  /// All Charges
+  totalAmount = weightCharge + fixedCharge + distanceCharge + insuranceCharge + vehicleCharge;
+  print("============${totalAmount}");
+
+  /// calculate extra charges
+  if (cityData.extraCharges != null) {
+    cityData.extraCharges!.forEach((element) {
+      totalExtraCharge +=
+          countExtraCharge(totalAmount: totalAmount, charges: element.charges!, chargesType: element.chargesType!);
+    });
+  }
+  totalAmount = (totalAmount + totalExtraCharge).toStringAsFixed(digitAfterDecimal).toDouble();
+  print("----------------charges---------fixed "
+      "charges${fixedCharge}------------distanceCharge${distanceCharge}-------weight charge${weightCharge}extra charges${totalExtraCharge}"
+      "-------------------insurance${insuranceCharge}-----------------vehicleCharge${vehicleCharge}");
+  print("ttotal after all ${totalAmount}");
+  return totalAmount;
+}
+
+getClaimStatus(String status) {
+  if (status == STATUS_PENDING) {
+    return Text(status, style: boldTextStyle(color: pendingColor));
+  } else if (status == STATUS_IN_REVIEW) {
+    return Text(status, style: boldTextStyle(color: WaitingStatusColor));
+  } else if (status == APPROVED) {
+    return Text(status, style: boldTextStyle(color: acceptColor));
+  } else if (status == STATUS_REJECTED) {
+    return Text(status, style: boldTextStyle(color: rejectedColor));
+  } else {
+    return Text(status, style: boldTextStyle(color: completedColor));
+  }
+}
+//List<String> SUPPORT_TYPE = ["Vehicle", "Orders", "Delivery person"];

@@ -38,13 +38,18 @@ class _AddSupportTicketScreenState extends State<AddSupportTicketScreen> {
   TextEditingController messageCon = TextEditingController();
   TextEditingController supportTypeCon = TextEditingController();
   TextEditingController resolutionDetailcon = TextEditingController();
-  //todo add keys
-  //List<String> supportType = ["Vehicle", "Orders", "Delivery person"];
   String? selectedSupportType;
   String? selectedUploadValue;
   XFile? image;
+  XFile? video;
   VideoPlayerController? _controller;
   Future<void>? _initializeVideoPlayerFuture;
+  List<String> supportType = [
+    language.supportType1,
+    language.supportType2,
+    language.supportType3,
+    language.supportType4,
+  ];
 
   @override
   void initState() {
@@ -53,7 +58,7 @@ class _AddSupportTicketScreenState extends State<AddSupportTicketScreen> {
   }
 
   void init() async {
-    selectedSupportType = SUPPORT_TYPE[0];
+    selectedSupportType = supportType[0];
   }
 
   @override
@@ -71,11 +76,8 @@ class _AddSupportTicketScreenState extends State<AddSupportTicketScreen> {
     multiPartRequest.fields['support_type'] = selectedSupportType!;
     multiPartRequest.fields['user_id'] = getIntAsync(USER_ID).toString();
     multiPartRequest.fields['status'] = "pending";
-    //  multiPartRequest.fields['resolution_detail'] = "resuolution details";
-    if (selectedUploadValue == "Image") if (image != null)
-      multiPartRequest.files.add(await MultipartFile.fromPath('support_image', image!.path));
-    if (selectedUploadValue == "Video") if (image != null)
-      multiPartRequest.files.add(await MultipartFile.fromPath('support_videos', image!.path));
+    if (image != null) multiPartRequest.files.add(await MultipartFile.fromPath('support_image', image!.path));
+    if (video != null) multiPartRequest.files.add(await MultipartFile.fromPath('support_videos', image!.path));
 
     await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
       appStore.setLoading(false);
@@ -95,7 +97,7 @@ class _AddSupportTicketScreenState extends State<AddSupportTicketScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
-      appBarTitle: language.addSupportTicket, // todo
+      appBarTitle: language.addSupportTicket,
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -106,7 +108,7 @@ class _AddSupportTicketScreenState extends State<AddSupportTicketScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   8.height,
-                  Text(language.message, style: primaryTextStyle()), //todo
+                  Text(language.message, style: primaryTextStyle()),
                   8.height,
                   AppTextField(
                     isValidationRequired: true,
@@ -117,7 +119,7 @@ class _AddSupportTicketScreenState extends State<AddSupportTicketScreen> {
                   ),
 
                   16.height,
-                  // Text("Resolution detail", style: primaryTextStyle()), // todo
+                  // Text("Resolution detail", style: primaryTextStyle()),
                   // 8.height,
                   // AppTextField(
                   //   isValidationRequired: true,
@@ -138,9 +140,9 @@ class _AddSupportTicketScreenState extends State<AddSupportTicketScreen> {
                       isExpanded: true,
                       decoration: commonInputDecoration(),
                       hint: Text(language.selectDocument, style: primaryTextStyle()),
-                      value: SUPPORT_TYPE[0],
+                      value: supportType[0],
                       dropdownColor: context.cardColor,
-                      items: SUPPORT_TYPE.map((String e) {
+                      items: supportType.map((String e) {
                         return DropdownMenuItem<String>(
                           value: e,
                           child: Text(
@@ -160,85 +162,77 @@ class _AddSupportTicketScreenState extends State<AddSupportTicketScreen> {
                   16.height,
                   Text(language.uploadDetails, style: primaryTextStyle()),
                   8.height,
-                  Container(
-                    width: context.width(),
-                    height: 50,
-                    decoration: boxDecorationWithRoundedCorners(
-                      backgroundColor: ColorUtils.colorPrimary.withOpacity(0.06),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start, // Center the radio buttons
-                      children: <Widget>[
-                        Radio<String>(
-                          value: IMAGE,
-                          groupValue: selectedUploadValue,
-                          onChanged: (String? value) {
-                            setState(() {
-                              selectedUploadValue = value;
-                            });
-                          },
-                        ),
-                        Text(language.image),
-                        SizedBox(width: 20),
-                        Radio<String>(
-                          value: VIDEO,
-                          groupValue: selectedUploadValue,
-                          onChanged: (String? value) {
-                            setState(() {
-                              selectedUploadValue = value;
-                            });
-                          },
-                        ),
-                        Text(language.video).expand(),
-                        if (selectedUploadValue != null && !selectedUploadValue.isEmptyOrNull)
-                          Container(
-                                  height: 38,
-                                  decoration: boxDecorationDefault(
-                                      border: Border.all(color: Colors.grey.withOpacity(0.2)),
-                                      color: Colors.transparent),
-                                  child: Text(language.select, style: boldTextStyle(size: 12)).paddingAll(6).center())
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                          height: 38,
+                          decoration: boxDecorationWithRoundedCorners(
+                            backgroundColor: Colors.transparent,
+                            border: Border.all(color: Colors.grey.withOpacity(0.2)),
+                          ),
+                          child: Text(language.image, style: boldTextStyle(size: 12))
+                              .paddingAll(6)
+                              .center()
                               .onTap(() async {
-                            if (selectedUploadValue == IMAGE) {
-                              image = null;
-                              image = await ImagePicker().pickImage(source: ImageSource.gallery);
-                            } else {
-                              image = null;
-                              image = await ImagePicker().pickVideo(source: ImageSource.gallery);
-                            }
-                            _controller = VideoPlayerController.file(File(image!.path.toString()));
-                            _initializeVideoPlayerFuture = _controller!.initialize();
-
-                            // Loop the video
-                            _controller!.setLooping(true);
+                            image = null;
+                            image = await ImagePicker().pickImage(source: ImageSource.gallery);
                             setState(() {});
-                          }).paddingRight(10)
-                      ],
-                    ),
+                          })).expand(),
+                      20.width,
+                      Container(
+                              height: 38,
+                              decoration: boxDecorationWithRoundedCorners(
+                                  border: Border.all(color: Colors.grey.withOpacity(0.2)),
+                                  backgroundColor: Colors.transparent),
+                              child: Text(language.video, style: boldTextStyle(size: 12)).paddingAll(6).center())
+                          .onTap(() async {
+                        video = null;
+                        video = await ImagePicker().pickVideo(source: ImageSource.gallery);
+                        _controller = VideoPlayerController.file(File(video!.path.toString()));
+                        _initializeVideoPlayerFuture = _controller!.initialize();
+                        // Loop the video
+                        _controller!.setLooping(true);
+                        setState(() {});
+                      }).expand()
+                    ],
                   ),
-                  if (selectedUploadValue == IMAGE && image != null && !image!.path.isEmptyOrNull)
-                    Image.file(File(image!.path),
-                            height: 150, width: 150, fit: BoxFit.cover, alignment: Alignment.center)
-                        .paddingTop(10)
-                        .center()
-                        .cornerRadiusWithClipRRect(4),
-                  if (selectedUploadValue == VIDEO && _controller != null)
-                    FutureBuilder(
-                      future: _initializeVideoPlayerFuture,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          return Container(
-                            width: 150,
-                            height: 150, // Set height as per your requirement
-                            child: AspectRatio(
-                              aspectRatio: _controller!.value.aspectRatio,
+                  16.height,
+                  Text(language.image, style: primaryTextStyle()).visible(image != null && !image!.path.isEmptyOrNull),
+                  8.height.visible(image != null && !image!.path.isEmptyOrNull),
+                  if (image != null && !image!.path.isEmptyOrNull)
+                    Container(
+                      decoration: boxDecorationWithRoundedCorners(
+                          border: Border.all(color: ColorUtils.colorPrimary), backgroundColor: Colors.transparent),
+                      child: Image.file(File(image!.path),
+                              height: 150,
+                              width: MediaQuery.of(context).size.width,
+                              fit: BoxFit.cover,
+                              alignment: Alignment.center)
+                          .cornerRadiusWithClipRRect(10)
+                          .center(),
+                    ),
+                  16.height.visible(video != null && !video!.path.isEmptyOrNull),
+                  Text(language.video, style: primaryTextStyle()).visible(video != null && !video!.path.isEmptyOrNull),
+                  8.height.visible(video != null && !video!.path.isEmptyOrNull),
+                  if (_controller != null)
+                    Container(
+                      decoration: boxDecorationWithRoundedCorners(
+                          border: Border.all(color: ColorUtils.colorPrimary), backgroundColor: Colors.transparent),
+                      child: FutureBuilder(
+                        future: _initializeVideoPlayerFuture,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.done) {
+                            return AspectRatio(
+                              aspectRatio: 6 / 3,
                               child: VideoPlayer(_controller!),
-                            ),
-                          );
-                        } else {
-                          return Center(child: CircularProgressIndicator());
-                        }
-                      },
-                    ).paddingTop(10).center()
+                            ).cornerRadiusWithClipRRect(10);
+                          } else {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        },
+                      ).center(),
+                    )
                 ],
               ),
             ),

@@ -116,7 +116,15 @@ class PickAddressBottomSheetState extends State<PickAddressBottomSheet> {
                     children: [
                       Icon(Icons.location_on_outlined),
                       10.width,
-                      Text('${mData.address}', style: primaryTextStyle(), maxLines: 2).expand(),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('${mData.addressType}', style: secondaryTextStyle(size: 12), maxLines: 1),
+                          Container(
+                              width: context.width() * 0.82,
+                              child: Text('${mData.address}', style: primaryTextStyle(), maxLines: 2)),
+                        ],
+                      ),
                       /* 10.width,
                      // comment this because when there is one address in list and delete it at time of deliveryAddressSelection then go back then there is issue
                       Icon(Icons.highlight_remove_outlined, color: Colors.red).onTap(() {

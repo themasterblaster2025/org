@@ -1,6 +1,7 @@
 import '../../main/models/WalletListModel.dart';
 
 import '../../main/models/PaginationModel.dart';
+import 'CreateOrderDetailModel.dart';
 import 'OrderDetailModel.dart';
 import 'VehicleModel.dart';
 
@@ -110,7 +111,7 @@ class PackagingSymbol {
 }
 
 class OrderData {
-  num? orderTrackingId;
+  String? orderTrackingId;
   int? id;
   int? clientId;
   String? clientName;
@@ -146,6 +147,7 @@ class OrderData {
   bool? returnOrderId;
   num? weightCharge;
   num? distanceCharge;
+  num? vehicleCharge;
   num? totalParcel;
   int? autoAssign;
   List<dynamic>? cancelledDeliverManIds;
@@ -155,6 +157,10 @@ class OrderData {
   String? invoice;
   List<PackagingSymbol>? packagingSymbols = [];
   num? insuranceCharge;
+  num? baseTotal;
+  List<ExtraCharges>? extraChargesList;
+  CityDetail? cityDetails;
+  int? isClaimed;
 
   OrderData(
       {this.orderTrackingId,
@@ -183,6 +189,7 @@ class OrderData {
       this.deliveryManName,
       this.fixedCharges,
       this.extraCharges,
+      this.vehicleCharge,
       this.totalAmount,
       this.reason,
       this.pickupConfirmByClient,
@@ -201,7 +208,11 @@ class OrderData {
       this.vehicleImage,
       this.packagingSymbols,
       this.invoice,
-      this.insuranceCharge});
+      this.insuranceCharge,
+      this.baseTotal,
+      this.extraChargesList,
+      this.cityDetails,
+      this.isClaimed});
 
   OrderData.fromJson(Map<String, dynamic> json) {
     orderTrackingId = json['order_tracking_id'];
@@ -229,6 +240,7 @@ class OrderData {
     deliveryManId = json['delivery_man_id'];
     deliveryManName = json['delivery_man_name'];
     fixedCharges = json['fixed_charges'];
+    vehicleCharge = json['vehicle_charge'];
     extraCharges = json['extra_charges'];
     totalAmount = json['total_amount'];
     reason = json['reason'];
@@ -248,6 +260,14 @@ class OrderData {
     vehicleImage = json['vehicle_image'];
     invoice = json['invoice'];
     insuranceCharge = json['insurance_charge'];
+    baseTotal = json['base_total'];
+    isClaimed = json['isClaimed'];
+    // Fixing the issue for extraChargesList:
+    extraChargesList = json['extra_charge_list'] != null
+        ? List<ExtraCharges>.from(json['extra_charge_list'].map((x) => ExtraCharges.fromJson(x)))
+        : [];
+
+    cityDetails = json['city_details_list'] != null ? CityDetail.fromJson(json['city_details_list']) : null;
     packagingSymbols = json["packaging_symbols"] == null
         ? []
         : List<PackagingSymbol>.from(json["packaging_symbols"]!.map((x) => PackagingSymbol.fromJson(x)));
@@ -284,6 +304,7 @@ class OrderData {
     data['delivery_man_id'] = this.deliveryManId;
     data['delivery_man_name'] = this.deliveryManName;
     data['fixed_charges'] = this.fixedCharges;
+    data['vehicle_charge'] = this.vehicleCharge;
     data['extra_charges'] = this.extraCharges;
     data['total_amount'] = this.totalAmount;
     data['reason'] = this.reason;
@@ -305,6 +326,10 @@ class OrderData {
     data['vehicle_image'] = this.vehicleImage;
     data['invoice'] = this.invoice;
     data['insurance_charge'] = this.insuranceCharge;
+    data['base_total'] = this.baseTotal;
+    data['isClaimed'] = this.isClaimed;
+    data['extra_charge_list'] = this.extraChargesList;
+    data['city_details_list'] = this.cityDetails;
     data["packaging_symbols"] =
         packagingSymbols == null ? [] : List<PackagingSymbol>.from(this.packagingSymbols!.map((x) => x.toJson()));
     return data;

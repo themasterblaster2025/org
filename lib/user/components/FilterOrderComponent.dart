@@ -42,6 +42,7 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
     ORDER_PICKED_UP,
     ORDER_DELIVERED,
     ORDER_DEPARTED,
+    ORDER_SHIPPED
   ];
   String? selectedStatus;
 

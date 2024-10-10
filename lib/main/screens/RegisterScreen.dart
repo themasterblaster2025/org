@@ -72,7 +72,7 @@ class RegisterScreenState extends State<RegisterScreen> {
           "email": emailController.text.trim(),
           "password": passController.text.trim(),
           "player_id": getStringAsync(PLAYER_ID).validate(),
-          if (partnerCodeController.text.isNotEmpty) "referral_code": partnerCodeController.text.trim()
+          if (partnerCodeController.text.isNotEmpty) "partner_referral_code": partnerCodeController.text.trim()
 
           // if (widget.userType == DELIVERY_MAN) "status": 1
         };

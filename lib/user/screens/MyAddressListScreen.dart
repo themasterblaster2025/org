@@ -132,13 +132,12 @@ class MyAddressListScreenState extends State<MyAddressListScreen> {
                                   Text(item.address.validate(), style: primaryTextStyle()),
                                   if (!item.addressType.isEmptyOrNull) 8.height,
                                   if (!item.addressType.isEmptyOrNull)
-                                    //TODO add key
                                     Row(
                                       children: [
-                                        Text(language.addressType),
+                                        Text("${language.addressType}:", style: secondaryTextStyle()),
                                         8.width,
                                         Text(item.addressType != null ? item.addressType.toString() : language.home,
-                                            style: primaryTextStyle()),
+                                            style: boldTextStyle(size: 14)),
                                       ],
                                     ),
                                   8.height,

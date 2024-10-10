@@ -151,6 +151,9 @@ class LoginScreenState extends State<LoginScreen> {
             }
             updateStoreCheckerData().then((source) async {
               await getUserDetail(getIntAsync(USER_ID)).then((value) async {
+                if (value.deliverymanVehicleHistory != null) {
+                  setValue(VEHICLE, value.deliverymanVehicleHistory![0].toJson());
+                }
                 appStore.setReferralCode(value.referralCode.validate());
                 if (value.app_source.isEmptyOrNull || value.app_source != source) {
                   await updateUserStatus({"id": getIntAsync(USER_ID), "app_source": source}).then((data) {});

@@ -11,7 +11,8 @@ import 'package:mighty_delivery/main/utils/Widgets.dart';
 import '../../main/network/RestApis.dart';
 
 class InsuranceDetailsScreen extends StatefulWidget {
-  InsuranceDetailsScreen({super.key});
+  String insuranceDescription;
+  InsuranceDetailsScreen(this.insuranceDescription, {super.key});
 
   @override
   State<InsuranceDetailsScreen> createState() => _InsuranceDetailsScreenState();
@@ -30,7 +31,7 @@ class _InsuranceDetailsScreenState extends State<InsuranceDetailsScreen> {
 
   getInsuranceDetails() async {
     appStore.setLoading(true);
-    await getPageDetailsById(id: "11").then((value) {
+    await getPageDetailsById(id: widget.insuranceDescription).then((value) {
       title = value.data!.title!;
       description = value.data!.description!;
       print("-------------------------$description");

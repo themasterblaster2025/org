@@ -74,10 +74,12 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   @override
   void initState() {
     super.initState();
+    print("-----------init called${appStore.isOtpVerifyOnPickupDelivery}");
     init();
   }
 
   Future<void> init() async {
+    print("--------------------------${appStore.isOtpVerifyOnPickupDelivery}");
     mIsUpdate = widget.orderData != null;
     if (mIsUpdate) {
       if (widget.orderData!.pickupDatetime.validate().isEmpty) {
@@ -377,7 +379,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                             if (!mIsCheck && widget.orderData!.paymentId == null && widget.isShowPayment) {
                               return toast(language.pleaseConfirmPayment);
                             } else {
-                              appStore.isOtpVerifyOnPickupDelivery
+                              (appStore.isOtpVerifyOnPickupDelivery == true)
                                   ? sendOtp(
                                       context,
                                       phoneNumber: widget.orderData!.status == ORDER_DEPARTED

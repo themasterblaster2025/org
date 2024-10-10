@@ -78,7 +78,6 @@ class _ChatWithAdminScreenState extends State<ChatWithAdminScreen> {
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
       showBack: false,
-      //TODo add keys
       appBar: commonAppBarWidget(
         language.chatWithAdmin,
         /* titleWidget: Row(

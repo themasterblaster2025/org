@@ -4,12 +4,14 @@ import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/num_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import 'package:mighty_delivery/main/models/TotalAmountResponse.dart';
 import '../../extensions/decorations.dart';
 import '../../extensions/text_styles.dart';
 import '../../main/models/ExtraChargeRequestModel.dart';
 import '../../main/utils/Common.dart';
 
 import '../../main.dart';
+import '../models/CreateOrderDetailModel.dart';
 import '../models/OrderDetailModel.dart';
 import '../utils/Constants.dart';
 import '../utils/dynamic_theme.dart';
@@ -18,7 +20,7 @@ class OrderSummeryWidget extends StatefulWidget {
   static String tag = '/OrderSummeryWidget';
 
   final List<ExtraChargeRequestModel> extraChargesList;
-  final num? productAmount;
+  // final num? productAmount;
   final num? vehiclePrice;
   final num totalDistance;
   final num totalWeight;
@@ -29,10 +31,12 @@ class OrderSummeryWidget extends StatefulWidget {
   final Payment? payment;
   final bool? isDetail;
   final num? insuranceCharge;
+  final num? baseTotal;
   final bool? isInsuranceChargeDisplay;
 
   OrderSummeryWidget(
-      {this.productAmount,
+      {
+      //this.productAmount,
       this.vehiclePrice,
       required this.extraChargesList,
       required this.totalDistance,
@@ -44,7 +48,8 @@ class OrderSummeryWidget extends StatefulWidget {
       this.payment,
       this.isDetail = false,
       this.insuranceCharge = 0,
-      this.isInsuranceChargeDisplay = false});
+      this.isInsuranceChargeDisplay = false,
+      this.baseTotal});
 
   @override
   OrderSummeryWidgetState createState() => OrderSummeryWidgetState();
@@ -65,7 +70,9 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
   }
 
   Future<void> init() async {
+    print("extra list ${widget.extraChargesList.length}");
     widget.extraChargesList.forEach((element) {
+      print("---------------${element.toJson().toString()}");
       if (element.key == FIXED_CHARGES) {
         fixedCharges = element.value!;
       } else if (element.key == MIN_DISTANCE) {
@@ -100,21 +107,46 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(language.productAmount, style: secondaryTextStyle()),
-              // Text(language.productAmount, style: primaryTextStyle()),
-              16.width,
-              Text('${printAmount(widget.productAmount.validate())}', style: boldTextStyle(size: 14)),
-            ],
-          ).paddingBottom(8).visible(widget.productAmount.validate() != 0),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     Text(language.productAmount, style: secondaryTextStyle()),
+          //     // Text(language.productAmount, style: primaryTextStyle()),
+          //     // 16.width,
+          //     // Text('${printAmount(widget.productAmount.validate())}', style: boldTextStyle(size: 14)),
+          //   ],
+          // ).paddingBottom(8).visible(widget.productAmount.validate() != 0),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     Text("${language.vehicle} ${language.price.toLowerCase()}", style: secondaryTextStyle()),
+          //     16.width,
+          //     Text('${printAmount(widget.vehiclePrice.validate())}', style: boldTextStyle(size: 14)),
+          //   ],
+          // ).paddingBottom(8).visible(widget.vehiclePrice.validate() != 0),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     Text(language.deliveryCharge, style: secondaryTextStyle()),
+          //     16.width,
+          //     Text('${printAmount(fixedCharges)}', style: boldTextStyle(size: 14)),
+          //   ],
+          // ).paddingBottom(8).visible(fixedCharges.validate() != 0),
+          if (widget.isInsuranceChargeDisplay!)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(language.insuranceCharge, style: secondaryTextStyle()),
+                16.width,
+                Text('${printAmount(widget.insuranceCharge)}', style: boldTextStyle(size: 14)),
+              ],
+            ).paddingBottom(8).visible(widget.isInsuranceChargeDisplay!),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text("${language.vehicle} ${language.price.toLowerCase()}", style: secondaryTextStyle()),
               16.width,
-              Text('${printAmount(widget.vehiclePrice.validate())}', style: boldTextStyle(size: 14)),
+              Text('${printAmount(widget.vehiclePrice)}', style: boldTextStyle(size: 14)),
             ],
           ).paddingBottom(8).visible(widget.vehiclePrice.validate() != 0),
           Row(
@@ -125,15 +157,6 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
               Text('${printAmount(fixedCharges)}', style: boldTextStyle(size: 14)),
             ],
           ).paddingBottom(8).visible(fixedCharges.validate() != 0),
-          if (widget.isInsuranceChargeDisplay!)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(language.insuranceCharge, style: secondaryTextStyle()),
-                16.width,
-                Text('${printAmount(widget.insuranceCharge)}', style: boldTextStyle(size: 14)),
-              ],
-            ).paddingBottom(8),
           Column(
             children: [
               8.height,
@@ -158,7 +181,7 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
           ).visible(widget.distanceCharge != 0),
           Column(
             children: [
-              8.height,
+              //   8.height,
               Row(
                 children: [
                   Text(language.weightCharge, style: secondaryTextStyle()),
@@ -188,7 +211,7 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              16.height,
+              8.height,
               Text(language.extraCharges, style: boldTextStyle(size: 14)),
               8.height,
               Column(
@@ -198,15 +221,16 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
                   padding: EdgeInsets.only(bottom: 8),
                   child: Row(
                     children: [
-                      Text(mData.key!.replaceAll("_", " ").capitalizeFirstLetter(), style: secondaryTextStyle()),
-                      4.width,
-                      Text('(${mData.valueType == CHARGE_TYPE_PERCENTAGE ? '${mData.value}%' : '${printAmount(mData.value.validate())}'})',
-                              style: secondaryTextStyle())
-                          .expand(),
-                      16.width,
+                      Text(mData.key!.replaceAll("_", " "), style: primaryTextStyle()),
+                      SizedBox(width: 4),
+                      Expanded(
+                          child: Text(
+                              '(${mData.valueType == CHARGE_TYPE_PERCENTAGE ? '${mData.value}%' : '${printAmount(mData.value ?? 0)}'})',
+                              style: secondaryTextStyle())),
+                      SizedBox(width: 16),
                       Text(
-                          '${printAmount(countExtraCharge(totalAmount: (fixedCharges + widget.weightCharge + widget.distanceCharge + widget.vehiclePrice.validate()), chargesType: !mData.valueType.isEmptyOrNull ? mData.valueType! : "", charges: mData.value!))}',
-                          style: boldTextStyle(size: 14)),
+                          '${printAmount(countExtraCharge(totalAmount: (fixedCharges + widget.weightCharge + widget.vehiclePrice.validate() + widget.distanceCharge + widget.insuranceCharge.validate()), chargesType: mData.valueType!, charges: mData.value!))}',
+                          style: primaryTextStyle()),
                     ],
                   ),
                 );

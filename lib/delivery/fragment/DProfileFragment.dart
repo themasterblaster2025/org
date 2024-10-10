@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/list_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/screens/RewardListScreen.dart';
+import '../../delivery/screens/AddDeliverymanVehicleScreen.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/list_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/models/DeliverymanVehicleListModel.dart';
+import '../../main/screens/RewardListScreen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../extensions/LiveStream.dart';
@@ -29,7 +31,6 @@ import '../../main/screens/CustomerSupportScreen.dart';
 import '../../main/screens/EditProfileScreen.dart';
 import '../../main/screens/LanguageScreen.dart';
 import '../../main/screens/RefferalHistoryScreen.dart';
-import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Images.dart';
@@ -39,6 +40,7 @@ import '../../user/screens/PageDetailScreen.dart';
 import '../../user/screens/WalletScreen.dart';
 import '../../user/screens/refer_earn_screen.dart';
 import '../screens/EarningHistoryScreen.dart';
+import '../screens/SelectVehicleScreen.dart';
 import '../screens/VerifyDeliveryPersonScreen.dart';
 
 class DProfileFragment extends StatefulWidget {
@@ -48,6 +50,7 @@ class DProfileFragment extends StatefulWidget {
 
 class DProfileFragmentState extends State<DProfileFragment> {
   List<PageData> pageList = [];
+  DeliverymanVehicle? vehicle;
 
   @override
   void initState() {
@@ -63,6 +66,15 @@ class DProfileFragmentState extends State<DProfileFragment> {
       setState(() {});
     });
     getPageListApi();
+
+    LiveStream().on('VehicleInfo', (p0) {
+      vehicle = DeliverymanVehicle.fromJson(getJSONAsync(VEHICLE));
+      print("---------------------vehicle${vehicle!.vehicleInfo.make}");
+      setState(() {});
+    });
+    vehicle = DeliverymanVehicle.fromJson(getJSONAsync(VEHICLE));
+    print("---------------------vehicle${vehicle!.vehicleInfo.make}");
+    setState(() {});
   }
 
   Future<void> getPageListApi() async {
@@ -162,6 +174,47 @@ class DProfileFragmentState extends State<DProfileFragment> {
                       physics: NeverScrollableScrollPhysics(),
                       children: [
                         mTitle(language.ordersWalletMore),
+                        Container(
+                          decoration: boxDecorationWithRoundedCorners(
+                              borderRadius: BorderRadius.circular(defaultRadius),
+                              border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
+                              backgroundColor: Colors.transparent),
+                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                          margin: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
+                          child: Row(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    vehicle != null ? language.yourVehicle : language.noVehicleAdded,
+                                    style: primaryTextStyle(),
+                                  ),
+                                  Text(
+                                    vehicle != null ? "${vehicle!.vehicleInfo.make.validate()}" : "-",
+                                    style: boldTextStyle(),
+                                  ),
+                                ],
+                              ),
+                              Spacer(),
+                              Container(
+                                decoration: boxDecorationWithRoundedCorners(
+                                    borderRadius: BorderRadius.circular(defaultRadius),
+                                    backgroundColor: ColorUtils.colorPrimary),
+                                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                                child: Text(
+                                  vehicle != null ? language.update : language.add,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ).onTap(() {
+                                AddDeliverymanVehicleScreen(
+                                  vehicle: vehicle != null ? vehicle!.vehicleInfo : null,
+                                  isUpdate: true,
+                                ).launch(context);
+                              })
+                            ],
+                          ),
+                        ),
                         accountSettingItemWidget(ic_earning, language.earningHistory, () {
                           EarningHistoryScreen().launch(context);
                         }),
@@ -176,6 +229,9 @@ class DProfileFragmentState extends State<DProfileFragment> {
                         }),
                         accountSettingItemWidget(ic_wallet, language.wallet, () {
                           WalletScreen().launch(context);
+                        }),
+                        accountSettingItemWidget(ic_vehicle_list, language.vehicleHistory, () {
+                          SelectVehicleScreen().launch(context);
                         }),
                         accountSettingItemWidget(ic_bank_detail, language.bankDetails, () {
                           BankDetailScreen().launch(context);
@@ -207,7 +263,9 @@ class DProfileFragmentState extends State<DProfileFragment> {
                           commonLaunchUrl(mPrivacyPolicy);
                         }),
                         accountSettingItemWidget(ic_information, language.helpAndSupport, () {
-                          commonLaunchUrl(appStore.siteEmail);
+                          //    commonLaunchUrl(appStore.siteEmail);
+                          print("--------------${appStore.siteEmail}");
+                          commonLaunchUrl('mailto:${appStore.siteEmail}');
                         }),
                         accountSettingItemWidget(ic_document, language.termAndCondition, () {
                           commonLaunchUrl(mTermAndCondition);

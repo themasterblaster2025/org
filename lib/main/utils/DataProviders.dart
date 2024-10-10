@@ -38,7 +38,6 @@ List<String> getDeliveryBoyBeforePickupCancelReasonList() {
   return list;
 }
 
-//todo add keys
 List<String> getDeliveryBoyAfterPickupCancelReasonList() {
   List<String> list = [];
   list.add(language.invalidDeliveryAddress);
@@ -86,7 +85,6 @@ List<WalkThroughItemModel> getWalkThroughItems() {
   return list;
 }
 
-// todo add keys
 List<Map<String, String>> getPackagingSymbols() {
   return [
     {

@@ -78,7 +78,7 @@ class _ReferralHistoryScreenState extends State<ReferralHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
-      appBarTitle: language.referralHistory, // todo
+      appBarTitle: language.referralHistory,
       body: Observer(builder: (context) {
         return Stack(
           children: [

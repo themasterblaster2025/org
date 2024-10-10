@@ -70,10 +70,11 @@ class OrderFragmentState extends State<OrderFragment> {
       appStore.isVehicleOrder = value.isVehicleInOrder ?? 0;
       appStore.setDistanceUnit(value.distanceUnit ?? DISTANCE_UNIT_KM);
       appStore.setCopyRight(value.siteCopyright ?? "");
-      appStore.setOrderTrackingIdPrefix(value.orderTrackingIdPrefix ?? "");
+      // appStore.setOrderTrackingIdPrefix(value.orderTrackingIdPrefix ?? "");
       appStore.setIsInsuranceAllowed(value.isInsuranceAllowed ?? "0");
       appStore.setInsurancePercentage(value.insurancePercentage ?? "0");
       appStore.setInsuranceDescription(value.insuranceDescription ?? "");
+      appStore.setMaxAmountPerMonth(value.maxEarningsPerMonth ?? '');
       if (value.storeType!.validate().isNotEmpty) {
         storeList = value.storeType.validate();
         setState(() {});
@@ -130,6 +131,7 @@ class OrderFragmentState extends State<OrderFragment> {
     }).catchError((e) {
       isLastPage = true;
       toast(e.toString(), print: true);
+      print("------------${e.toString()}");
     }).whenComplete(() => appStore.setLoading(false));
   }
 

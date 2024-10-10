@@ -1,3 +1,7 @@
+import 'package:mighty_delivery/main/network/RestApis.dart';
+
+import 'DeliverymanVehicleListModel.dart';
+
 class LoginResponse {
   UserData? data;
   String? message;
@@ -53,6 +57,7 @@ class UserData {
   String? playerId;
   String? fcmToken;
   String? lastNotificationSeen;
+
   // int? isVerifiedDeliveryMan;
   String? deletedAt;
   UserBankAccount? userBankAccount;
@@ -63,6 +68,7 @@ class UserData {
   String? app_source;
   String? referralCode;
   String? partnerReferralCode;
+  List<DeliverymanVehicle>? deliverymanVehicleHistory;
 
   UserData(
       {this.apiToken,
@@ -97,7 +103,8 @@ class UserData {
       this.app_version,
       this.app_source,
       this.partnerReferralCode,
-      this.referralCode});
+      this.referralCode,
+      this.deliverymanVehicleHistory});
 
   UserData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -134,6 +141,9 @@ class UserData {
     app_source = json['app_source'];
     referralCode = json['referral_code'];
     partnerReferralCode = json['partner_referral_code'];
+    deliverymanVehicleHistory = json["DeliverymanVehicleHistory"] != null
+        ? List<DeliverymanVehicle>.from(json["DeliverymanVehicleHistory"].map((x) => DeliverymanVehicle.fromJson(x)))
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -173,6 +183,9 @@ class UserData {
     data['document_verified_at'] = this.documentVerifiedAt;
     data['referral_code'] = this.referralCode;
     data['partner_referral_code'] = this.partnerReferralCode;
+    data['DeliverymanVehicleHistory'] = this.deliverymanVehicleHistory != null
+        ? List<DeliverymanVehicle>.from(this.deliverymanVehicleHistory!.map((x) => x.toJson()))
+        : null;
 
     return data;
   }

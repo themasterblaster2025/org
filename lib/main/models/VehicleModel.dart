@@ -1,4 +1,3 @@
-
 import 'PaginationModel.dart';
 
 class VehicleListModel {
@@ -44,6 +43,8 @@ class VehicleData {
   String? createdAt;
   String? updatedAt;
   String? deletedAt;
+  num? minKm;
+  num? perKmCharge;
 
   VehicleData({
     this.id,
@@ -60,6 +61,8 @@ class VehicleData {
     this.createdAt,
     this.updatedAt,
     this.deletedAt,
+    this.minKm,
+    this.perKmCharge,
   });
 
   VehicleData.fromJson(Map<String, dynamic> json) {
@@ -77,6 +80,8 @@ class VehicleData {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
+    minKm = json['min_km'];
+    perKmCharge = json['per_km_charge'];
   }
 
   Map<String, dynamic> toJson() {
@@ -95,6 +100,8 @@ class VehicleData {
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['deleted_at'] = this.deletedAt;
+    data['min_km'] = this.minKm;
+    data['per_km_charge'] = this.perKmCharge;
     return data;
   }
 }

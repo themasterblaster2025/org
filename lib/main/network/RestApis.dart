@@ -11,6 +11,7 @@ import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/main/models/CategoryModel.dart';
+import 'package:mighty_delivery/main/models/ClaimListResponseModel.dart';
 import 'package:mighty_delivery/main/models/DashboardCountModel.dart';
 import 'package:mighty_delivery/main/models/PageListModel.dart';
 import 'package:mighty_delivery/main/models/ReferralHistoryListModel.dart';
@@ -41,7 +42,9 @@ import '../models/AddressListModel.dart';
 import '../models/AdminChatModel.dart';
 import '../models/AppSettingModel.dart';
 import '../models/AutoCompletePlacesListModel.dart';
+import '../models/CreateOrderDetailModel.dart';
 import '../models/CustomerSupportModel.dart';
+import '../models/DeliverymanVehicleListModel.dart';
 import '../models/DirectionsResponse.dart';
 import '../models/InvoiceSettingModel.dart';
 import '../models/OrderDetailModel.dart';
@@ -50,6 +53,7 @@ import '../models/PageResponse.dart';
 import '../models/PlaceIdDetailModel.dart';
 import '../models/ProductListModel.dart';
 import '../models/StoreListModel.dart';
+import '../models/TotalAmountResponse.dart';
 import '../models/UserProfileDetailModel.dart';
 import '../models/VehicleModel.dart';
 import '../models/WalletListModel.dart';
@@ -158,6 +162,7 @@ Future<void> logout(BuildContext context,
     await removeKey(STATUS);
     await removeKey(COUNTRY_ID);
     await removeKey(COUNTRY_DATA);
+    await removeKey(VEHICLE);
     await removeKey(CITY_ID);
     await removeKey(CITY_DATA);
     await removeKey(FILTER_DATA);
@@ -735,6 +740,32 @@ Future<ordersLatLngResponseList> getLatLngOfOrders() async {
 Future<PageResponse> getPageDetailsById({String? id}) async {
   return PageResponse.fromJson(await handleResponse(await buildHttpResponse(
     'page-detail?id=$id',
+    method: HttpMethod.GET,
+  )));
+}
+
+Future<CreateOrderDetailsResponse> getCreateOrderDetails(int id) async {
+  return CreateOrderDetailsResponse.fromJson(await handleResponse(await buildHttpResponse(
+    'multipledetails-list?city_id=$id',
+    method: HttpMethod.GET,
+  )));
+}
+
+Future<TotalAmountResponse> getTotalAmountForOrder(Map req) async {
+  return TotalAmountResponse.fromJson(
+      await handleResponse(await buildHttpResponse('calculatetotal-get', method: HttpMethod.POST, request: req)));
+}
+
+Future<DeliverymanVehicleListModel> getDeliveryManVehicleList(int page) async {
+  return DeliverymanVehicleListModel.fromJson(await handleResponse(await buildHttpResponse(
+    'deliverymanvehiclehistory-list?page=$page',
+    method: HttpMethod.GET,
+  )));
+}
+
+Future<ClaimListResponseModel> getClaimList(int page) async {
+  return ClaimListResponseModel.fromJson(await handleResponse(await buildHttpResponse(
+    'claims-list?page=$page',
     method: HttpMethod.GET,
   )));
 }

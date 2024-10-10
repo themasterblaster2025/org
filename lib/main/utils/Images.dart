@@ -23,6 +23,7 @@ const ic_profile = 'assets/profile.png';
 const ic_clock = 'assets/icons/ic_clock.png';
 const ic_schedule = 'assets/icons/ic_schedule.png';
 const ic_draft = 'assets/icon/ic_draft.png';
+const ic_vehicle_list = 'assets/icon/ic_vehicle_list.png';
 
 const ic_order_assigned = 'assets/icon/ic_order_assigned.png';
 const ic_order_accept = 'assets/icon/ic_order_accept.png';

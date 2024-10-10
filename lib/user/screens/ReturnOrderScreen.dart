@@ -39,9 +39,8 @@ import 'WalletScreen.dart';
 class ReturnOrderScreen extends StatefulWidget {
   static String tag = '/ReturnOrderScreen';
   final OrderData orderData;
-  final List<OrderItem>? orderItems;
 
-  ReturnOrderScreen(this.orderData, {this.orderItems});
+  ReturnOrderScreen(this.orderData);
 
   @override
   ReturnOrderScreenState createState() => ReturnOrderScreenState();
@@ -68,7 +67,6 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
   @override
   void initState() {
     super.initState();
-    print("widget.orderItems ${widget.orderItems.validate().length}");
     init();
   }
 
@@ -128,9 +126,6 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
         "total_amount": widget.orderData.totalAmount ?? 0,
         "vehicle_id": widget.orderData.vehicleId.validate(),
         "reason": reason!.validate().trim() != language.other.trim() ? reason : reasonController.text,
-        if (widget.orderItems.validate().isNotEmpty)
-          "store_detail_id": widget.orderItems!.first.productData!.first.storeDetailId.validate(),
-        if (widget.orderItems.validate().isNotEmpty) "order_item": widget.orderItems,
       };
       appStore.setLoading(true);
       await createOrder(req).then((value) async {
@@ -511,8 +506,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                       children: [
                         commonButton(language.cancel, () {
                           finish(getContext, 0);
-                        }),
-                        //todo add keys
+                        }).expand(),
                         commonButton(language.process, () {
                           // createOrderApiCall(ORDER_CREATED);
                           // finish(getContext, 1);
@@ -528,7 +522,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                               finish(getContext);
                             },
                           );
-                        }),
+                        }).expand(),
                       ],
                     ),
                   ],

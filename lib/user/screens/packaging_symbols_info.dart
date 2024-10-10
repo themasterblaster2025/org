@@ -52,17 +52,14 @@ class _PackagingSymbolsInfoState extends State<PackagingSymbolsInfo> {
                           style: boldTextStyle(),
                         ),
                         4.height,
-                        Container(
-                          width: context.width() * 0.8,
-                          child: Text(
-                            list[index]['description'].toString(),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: secondaryTextStyle(),
-                          ),
+                        Text(
+                          list[index]['description'].toString(),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: secondaryTextStyle(),
                         ),
                       ],
-                    ).paddingOnly(left: 8),
+                    ).paddingOnly(left: 8).expand(),
                   ],
                 ));
           }).paddingAll(8),

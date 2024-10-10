@@ -10,6 +10,7 @@ import 'package:mighty_delivery/main/models/CustomerSupportModel.dart';
 import 'package:mighty_delivery/main/screens/CustomerSupportScreen.dart';
 import 'package:mighty_delivery/main/screens/RefferalHistoryScreen.dart';
 import 'package:mighty_delivery/main/screens/RewardListScreen.dart';
+import 'package:mighty_delivery/user/screens/ClaimListScreen.dart';
 import 'package:mighty_delivery/user/screens/PageDetailScreen.dart';
 import 'package:mighty_delivery/user/screens/refer_earn_screen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -87,7 +88,6 @@ class AccountFragmentState extends State<AccountFragment> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getPageListApi();
   }
@@ -160,7 +160,6 @@ class AccountFragmentState extends State<AccountFragment> {
                   accountSettingItemWidget(ic_wallet, language.wallet, () {
                     WalletScreen().launch(context);
                   }),
-                  //todo add key
                   accountSettingItemWidget(ic_order, language.orderHistory, () {
                     OrderHistoryScreen().launch(context);
                   }).visible(appStore.userType == CLIENT),
@@ -202,12 +201,14 @@ class AccountFragmentState extends State<AccountFragment> {
                   accountSettingItemWidget(ic_change_password, language.customerSupport, () {
                     CustomerSupportScreen().launch(context);
                   }),
-
                   accountSettingItemWidget(ic_earn, language.referAndEarn, () {
                     ReferEarnScreen().launch(context);
                   }),
                   accountSettingItemWidget(ic_refer_history, language.referralHistory, () {
                     ReferralHistoryScreen().launch(context);
+                  }),
+                  accountSettingItemWidget(ic_refer_history, language.claimHistory, () {
+                    ClaimListScreen().launch(context);
                   }),
                   accountSettingItemWidget(ic_change_password, language.earnedRewards, () {
                     RewardListScreen().launch(context);
@@ -217,7 +218,8 @@ class AccountFragmentState extends State<AccountFragment> {
                     commonLaunchUrl(mPrivacyPolicy);
                   }),
                   accountSettingItemWidget(ic_information, language.helpAndSupport, () {
-                    commonLaunchUrl(appStore.siteEmail);
+                    print("---------------${appStore.siteEmail}");
+                    commonLaunchUrl('mailto:${appStore.siteEmail}');
                   }),
                   accountSettingItemWidget(ic_document, language.termAndCondition, () {
                     commonLaunchUrl(mTermAndCondition);

@@ -7,8 +7,6 @@ class OrderDetailModel {
   OrderData? data;
   Payment? payment;
   List<OrderHistory>? orderHistory;
-  List<OrderItem>? orderItem;
-  OrderRating? orderRating;
   CourierCompanyDetail? courierCompanyDetail;
   UserData? clientDetail;
   UserData? deliveryManDetail;
@@ -18,8 +16,6 @@ class OrderDetailModel {
     this.orderHistory,
     this.clientDetail,
     this.deliveryManDetail,
-    this.orderItem,
-    this.orderRating,
     this.courierCompanyDetail,
   });
 
@@ -32,15 +28,8 @@ class OrderDetailModel {
         orderHistory!.add(new OrderHistory.fromJson(v));
       });
     }
-    if (json['order_item'] != null) {
-      orderItem = <OrderItem>[];
-      json['order_item'].forEach((v) {
-        orderItem!.add(new OrderItem.fromJson(v));
-      });
-    }
     clientDetail = json['client_detail'] != null ? new UserData.fromJson(json['client_detail']) : null;
     deliveryManDetail = json['delivery_man_detail'] != null ? new UserData.fromJson(json['delivery_man_detail']) : null;
-    orderRating = json["order_rating"] == null ? null : OrderRating.fromJson(json["order_rating"]);
     courierCompanyDetail =
         json["courier_company_detail"] == null ? null : CourierCompanyDetail.fromJson(json["courier_company_detail"]);
   }
@@ -56,9 +45,6 @@ class OrderDetailModel {
     if (this.orderHistory != null) {
       data['order_history'] = this.orderHistory!.map((v) => v.toJson()).toList();
     }
-    if (this.orderItem != null) {
-      data['order_item'] = this.orderItem!.map((v) => v.toJson()).toList();
-    }
     if (this.clientDetail != null) {
       data['client_detail'] = this.clientDetail!.toJson();
     }
@@ -67,9 +53,6 @@ class OrderDetailModel {
     }
     if (this.courierCompanyDetail != null) {
       data['courier_company_detail'] = this.courierCompanyDetail!.toJson();
-    }
-    if (this.orderRating != null) {
-      data["order_rating"] = orderRating?.toJson();
     }
     return data;
   }

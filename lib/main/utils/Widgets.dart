@@ -13,7 +13,7 @@ import '../../main.dart';
 import 'Colors.dart';
 import 'Constants.dart';
 
-Widget commonButton(String title, Function() onTap, {double? width, Color? color, Color? textColor}) {
+Widget commonButton(String title, Function() onTap, {double? width, Color? color, Color? textColor, int? size}) {
   return SizedBox(
     width: width,
     child: AppButton(
@@ -22,7 +22,7 @@ Widget commonButton(String title, Function() onTap, {double? width, Color? color
       elevation: 0,
       child: Text(
         title,
-        style: boldTextStyle(color: textColor ?? white),
+        style: boldTextStyle(color: textColor ?? white, size: size ?? textBoldSizeGlobal.toInt()),
       ),
       color: color ?? ColorUtils.colorPrimary,
       onTap: onTap,

@@ -1,34 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/extensions/colors.dart';
+import 'package:intl/intl.dart';
+import 'package:mighty_delivery/delivery/screens/AddDeliverymanVehicleScreen.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/list_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/Chat/ChatWithAdminScreen.dart';
 import 'package:mighty_delivery/main/components/CommonScaffoldComponent.dart';
-import 'package:mighty_delivery/main/models/CustomerSupportModel.dart';
+import 'package:mighty_delivery/main/network/RestApis.dart';
 import 'package:mighty_delivery/main/screens/AddSupportTicketScreen.dart';
-
 import '../../extensions/decorations.dart';
 import '../../extensions/text_styles.dart';
 import '../../main.dart';
-import '../network/RestApis.dart';
-import '../utils/Colors.dart';
-import '../utils/Common.dart';
-import '../utils/Constants.dart';
-import '../utils/dynamic_theme.dart';
-import 'customer_support_detials_screen.dart';
+import '../../main/models/DeliverymanVehicleListModel.dart';
+import '../../main/utils/Common.dart';
+import '../../main/utils/Constants.dart';
+import '../../main/utils/dynamic_theme.dart';
 
-class CustomerSupportScreen extends StatefulWidget {
-  const CustomerSupportScreen({super.key});
+class SelectVehicleScreen extends StatefulWidget {
+  const SelectVehicleScreen({super.key});
 
   @override
-  State<CustomerSupportScreen> createState() => _CustomerSupportScreenState();
+  State<SelectVehicleScreen> createState() => _SelectVehicleScreenState();
 }
 
-class _CustomerSupportScreenState extends State<CustomerSupportScreen> {
-  List<CustomerSupport> supportList = [];
+class _SelectVehicleScreenState extends State<SelectVehicleScreen> {
+  List<DeliverymanVehicle> vehicleHistoryList = [];
   ScrollController scrollController = ScrollController();
   int page = 1;
   int totalPage = 1;
@@ -49,51 +45,42 @@ class _CustomerSupportScreenState extends State<CustomerSupportScreen> {
   }
 
   void init() {
-    getCustomerSupportListApi();
+    getDeliveryManVehicleListApi();
   }
 
-  Future<void> getCustomerSupportListApi() async {
+  Future<void> getDeliveryManVehicleListApi() async {
     appStore.setLoading(true);
-    await getCustomerSupportList(page: page).then((value) {
+    await getDeliveryManVehicleList(page).then((value) {
       appStore.setLoading(false);
       totalPage = value.pagination!.totalPages.validate(value: 1);
       page = value.pagination!.currentPage.validate(value: 1);
       if (page == 1) {
-        supportList.clear();
+        vehicleHistoryList.clear();
       }
-      supportList.addAll(value.customerSupport!);
+      vehicleHistoryList.addAll(value.data);
       appStore.setLoading(false);
       setState(() {});
     }).catchError((error) {
+      print("error ===> ${error.toString()}");
       appStore.setLoading(false);
     });
-  }
-
-  getStatus(String status) {
-    if (status == STATUS_PENDING) {
-      return Text(status, style: boldTextStyle(color: pendingColor));
-    } else if (status == STATUS_IN_REVIEW) {
-      return Text(status, style: boldTextStyle(color: in_progressColor));
-    } else {
-      return Text(status, style: boldTextStyle(color: completedColor));
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
-      appBarTitle: language.customerSupport,
+      appBarTitle: language.vehicleHistory,
       body: Observer(builder: (context) {
         return Stack(
           children: [
-            supportList.isNotEmpty
+            vehicleHistoryList.isNotEmpty
                 ? ListView.builder(
-                    itemCount: supportList.length,
+                    itemCount: vehicleHistoryList.length,
                     shrinkWrap: true,
                     controller: scrollController,
                     padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
                     itemBuilder: (context, index) {
-                      CustomerSupport item = supportList[index];
+                      DeliverymanVehicle item = vehicleHistoryList[index];
                       return Container(
                         margin: EdgeInsets.only(bottom: 16),
                         padding: EdgeInsets.all(8),
@@ -114,56 +101,62 @@ class _CustomerSupportScreenState extends State<CustomerSupportScreen> {
                                   children: [
                                     Row(
                                       children: [
-                                        Text("${language.supportId} :", style: boldTextStyle()),
-                                        Text(item.supportId.validate().toString(), style: boldTextStyle()),
+                                        Text("${language.id} : ", style: boldTextStyle()),
+                                        Text(item.id.validate().toString(), style: boldTextStyle()),
                                       ],
                                     ),
-                                    getStatus(item.status.validate())
-                                    //    Text(item.status.validate(), style: boldTextStyle()),
+                                    Text(item.isActive.validate() == 1 ? language.active : language.inActive,
+                                        style: boldTextStyle(
+                                            color:
+                                                item.isActive.validate() == 1 ? ColorUtils.colorPrimary : Colors.red)),
                                   ],
                                 ),
                                 8.height,
                                 Row(
                                   children: [
-                                    Text('${language.supportType} : ', style: primaryTextStyle()),
-                                    Text(item.supportType.validate(), style: primaryTextStyle()),
+                                    Text('${language.startDate} :', style: primaryTextStyle()),
+                                    Text('${language.startDate} :', style: primaryTextStyle()),
+                                    Text(DateFormat('dd MMM yyyy').format(item.startDatetime),
+                                        style: primaryTextStyle()),
                                   ],
                                 ),
                                 8.height,
-                                Row(
-                                  children: [
-                                    Text('${language.message} : ', style: primaryTextStyle()),
-                                    Text(item.message.validate(), style: primaryTextStyle()),
-                                  ],
-                                ),
+                                // Row(
+                                //   children: [
+                                //     Text('${language.endDate} :', style: primaryTextStyle()),
+                                //     Text(
+                                //         item.endDatetime != null
+                                //             ? DateFormat('dd MMM yyyy').format(item.endDatetime!)
+                                //             : "-",
+                                //         style: primaryTextStyle()),
+                                //   ],
+                                // ),        // Row(
+                                //   children: [
+                                //     Text('${language.endDate} :', style: primaryTextStyle()),
+                                //     Text(
+                                //         item.endDatetime != null
+                                //             ? DateFormat('dd MMM yyyy').format(item.endDatetime!)
+                                //             : "-",
+                                //         style: primaryTextStyle()),
+                                //   ],
+                                // ),
                                 8.height,
                                 Row(
                                   children: [
-                                    Text('${language.attachment} : ', style: primaryTextStyle()),
-                                    10.width,
-                                    Text((item.video.isEmptyOrNull) ? language.viewPhoto : language.viewVideo)
+                                    Text('${language.vehicleInfo} :', style: primaryTextStyle()), // todo
+                                    Text(language.clickHere, style: primaryTextStyle(color: ColorUtils.colorPrimary))
                                         .onTap(() {
-                                      CustomerSupportDetailsScreen(item.video.toString(), item.image.toString())
-                                          .launch(context);
+                                      AddDeliverymanVehicleScreen(
+                                        vehicle: item.vehicleInfo,
+                                      ).launch(context);
                                     }),
                                   ],
                                 ),
-                                if (item.resolutionDetail != null) 8.height,
-                                if (item.resolutionDetail != null)
-                                  Row(
-                                    children: [
-                                      Text('${language.resolutionDetails} :', style: primaryTextStyle()),
-                                      10.width,
-                                      Text(item.resolutionDetail.validate(), style: primaryTextStyle()),
-                                    ],
-                                  ),
                               ],
                             ).expand(),
                           ],
                         ),
-                      ).onTap(() {
-                        ChatWithAdminScreen(item.supportChatHistory, item.supportId).launch(context);
-                      });
+                      );
                     },
                   )
                 : !appStore.isLoading
@@ -177,7 +170,7 @@ class _CustomerSupportScreenState extends State<CustomerSupportScreen> {
         backgroundColor: ColorUtils.colorPrimary,
         child: Icon(Icons.add, color: Colors.white),
         onPressed: () async {
-          AddSupportTicketScreen().launch(context).then((value) {
+          AddDeliverymanVehicleScreen().launch(context).then((value) {
             init();
           });
         },

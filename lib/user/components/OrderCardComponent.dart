@@ -67,9 +67,9 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
               children: [
                 widget.item.date != null
                     ? Text(
-                            DateFormat('dd MMM yyyy').format(DateTime.parse("${widget.item.date!}Z").toLocal()) +
+                            DateFormat('dd MMM yyyy').format(DateTime.parse("${widget.item.date!}")) +
                                 " ${language.at.toLowerCase()} " +
-                                DateFormat('hh:mm a').format(DateTime.parse("${widget.item.date!}Z").toLocal()),
+                                DateFormat('hh:mm a').format(DateTime.parse("${widget.item.date!}")),
                             style: primaryTextStyle(size: 14))
                         .expand()
                     : SizedBox(),
@@ -83,8 +83,7 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                 ),
               ],
             ),
-            Text('${appStore.orderTrackingIdPrefixId.toUpperCase()}${widget.item.orderTrackingId}',
-                style: boldTextStyle(size: 12, color: ColorUtils.colorPrimary)),
+            Text('${widget.item.orderTrackingId}', style: boldTextStyle(size: 12, color: ColorUtils.colorPrimary)),
             8.height,
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,

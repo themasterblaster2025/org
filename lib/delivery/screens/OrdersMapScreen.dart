@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/extensions/text_styles.dart';
@@ -62,6 +63,7 @@ class _OrdersMapScreenState extends State<OrdersMapScreen> {
   getLatLngOfOrdersApi() async {
     appStore.setLoading(true);
     await getLatLngOfOrders().then((value) {
+      print("----------------------${value}");
       markers.clear();
       infoWindowItems.clear();
       value.data!.forEach((element) {
@@ -120,6 +122,8 @@ class _OrdersMapScreenState extends State<OrdersMapScreen> {
       });
       appStore.setLoading(false);
       setState(() {});
+    }).catchError((error) {
+      print("-----------------${error.toString()}");
     });
   }
 
@@ -174,7 +178,7 @@ class _OrdersMapScreenState extends State<OrdersMapScreen> {
                       // trafficEnabled: true,
                     ).expand()
                   : !appStore.isLoading
-                      ? Center(child: emptyWidget())
+                      ? Center(child: Text("appstore${appStore.isLoading}"))
                       : SizedBox(),
             ],
           ),
@@ -225,13 +229,19 @@ class _OrdersMapScreenState extends State<OrdersMapScreen> {
                 child: Text(orderStatus(selectedInfoWindow!.status!),
                     style: primaryTextStyle(size: 14, color: statusColor(selectedInfoWindow!.status.validate()))),
               ),
+              5.width,
               Container(
                 decoration: BoxDecoration(
                     color: statusColor(selectedInfoWindow!.title.validate()).withOpacity(0.08),
                     borderRadius: BorderRadius.circular(6)),
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                child: Text(selectedInfoWindow!.title!, style: primaryTextStyle(size: 14)),
-              ),
+                child: Text(
+                  selectedInfoWindow!.title!,
+                  style: primaryTextStyle(size: 14),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
+              ).expand(),
             ],
           ),
           SizedBox(height: 8.0),
@@ -245,7 +255,6 @@ class _OrdersMapScreenState extends State<OrdersMapScreen> {
               Container(
                 decoration: BoxDecoration(color: ColorUtils.colorPrimary, borderRadius: BorderRadius.circular(6)),
                 padding: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-                //todo add keys
                 child: Text(language.view, style: primaryTextStyle(size: 14, color: white)).onTap(() {
                   OrderDetailScreen(
                     orderId: selectedInfoWindow!.id.toInt(),

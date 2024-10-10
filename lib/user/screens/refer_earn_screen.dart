@@ -30,7 +30,6 @@ class _ReferEarnScreenState extends State<ReferEarnScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
-      //TODO add keys
       appBarTitle: language.referAndEarn,
       body: Stack(
         children: [
@@ -60,8 +59,7 @@ class _ReferEarnScreenState extends State<ReferEarnScreen> {
                     ],
                   )).onTap(() {
                 Clipboard.setData(ClipboardData(text: appStore.referralCode)).then((_) {
-                  //TODO add key
-                  snackBar(context, content: Text("${appStore.referralCode.validate()} copied to clipboard"));
+                  snackBar(context, content: Text("${appStore.referralCode.validate()} ${language.copiedToClipBoard}"));
                 });
               }).visible(!appStore.referralCode.isEmptyOrNull),
               30.height,
