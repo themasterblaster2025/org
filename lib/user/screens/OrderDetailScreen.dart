@@ -1539,7 +1539,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                     ).visible((orderData!.status == ORDER_PICKED_UP ||
                             orderData!.status == ORDER_ARRIVED ||
                             orderData!.status == ORDER_DEPARTED && getStringAsync(USER_TYPE) == CLIENT) &&
-                        orderData!.isClaimed != 1)
+                        orderData!.isClaimed == 0)
                   ],
                 )
               : SizedBox(),

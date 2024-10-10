@@ -555,13 +555,13 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                       children: [
                         GestureDetector(
                           onTap: () {
-                            if (statusList[selectedStatusIndex] != ORDER_DELIVERED) {
+                           /* if (statusList[selectedStatusIndex] != ORDER_DELIVERED) {
                               openMap(double.parse(data.pickupPoint!.latitude.validate()),
                                   double.parse(data.pickupPoint!.longitude.validate()));
-                            } else {
+                            } else {*/
                               OrderDetailScreen(orderId: data.id!).launch(context,
                                   pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
-                            }
+                            // }
                           },
                           child: Row(
                             children: [
@@ -613,13 +613,13 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                   children: [
                     GestureDetector(
                       onTap: () {
-                        if (statusList[selectedStatusIndex] != ORDER_DELIVERED) {
+                        /*if (statusList[selectedStatusIndex] != ORDER_DELIVERED) {
                           openMap(double.parse(data.deliveryPoint!.latitude.validate()),
                               double.parse(data.deliveryPoint!.longitude.validate()));
-                        } else {
+                        } else {*/
                           OrderDetailScreen(orderId: data.id!).launch(context,
                               pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
-                        }
+                        // }
                       },
                       child: Row(
                         children: [
