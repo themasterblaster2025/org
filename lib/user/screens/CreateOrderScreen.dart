@@ -1555,16 +1555,55 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   decoration: commonInputDecoration(),
                   dropdownColor: Theme.of(context).cardColor,
                   style: primaryTextStyle(),
+                  isDense: false,
                   items: vehicleList.map<DropdownMenuItem<int>>((item) {
                     return DropdownMenuItem(
                       value: item.id,
-                      child: Row(
-                        children: [
-                          commonCachedNetworkImage(item.vehicleImage.validate(), height: 40, width: 40),
-                          SizedBox(width: 16),
-                          Text("${item.title.validate()}  (${printAmount(item.price.validate())})",
-                              style: primaryTextStyle()),
-                        ],
+                      child: Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            commonCachedNetworkImage(item.vehicleImage.validate(), height: 40, width: 40),
+                            SizedBox(width: 16),
+                            Expanded(
+                              // Wrapping the Column with Expanded to prevent overflow
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start, // Align to start
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text("${language.name} : ", style: secondaryTextStyle()),
+                                      Text(
+                                        "${item.title.validate()} ",
+                                        style: primaryTextStyle(),
+                                      ).expand(),
+                                      Text("${language.price} : ", style: secondaryTextStyle()),
+                                      Text(
+                                        "(${printAmount(item.price.validate())})",
+                                        style: primaryTextStyle(),
+                                      ).paddingRight(10),
+                                    ],
+                                  ),
+                                  4.height, // Fixed height instead of 2.height
+                                  Row(
+                                    children: [
+                                      Text("${language.capacity} : ", style: secondaryTextStyle()),
+                                      Text(
+                                        "${item.capacity.validate()} ",
+                                        style: primaryTextStyle(),
+                                      ).expand(),
+                                      Text("${language.perKmCharge} : ", style: secondaryTextStyle()),
+                                      Text(
+                                        "(${printAmount(item.perKmCharge.validate())})",
+                                        style: primaryTextStyle(),
+                                      ).paddingRight(10),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   }).toList(),
@@ -1598,7 +1637,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           16.height,
           if (appStore.isInsuranceAllowed == "1") ...[
             12.height,
-            Text(language.approxParcelValue, style: primaryTextStyle()),
+            Text(language.approxParcelValue, style: primaryTextStyle()).visible(appStore.isInsuranceAllowed == "1"),
             9.height,
             AppTextField(
               controller: insuranceAmountController,

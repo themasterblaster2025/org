@@ -98,6 +98,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
       appStore.setInsurancePercentage(value.insurancePercentage ?? "0");
       appStore.setInsuranceDescription(value.insuranceDescription ?? "");
       appStore.setMaxAmountPerMonth(value.maxEarningsPerMonth ?? '');
+      appStore.setClaimDuration(value.claimDuration ?? "");
       // setValue(IS_VERIFIED_DELIVERY_MAN, (value.isVerifiedDeliveryMan.validate() == 1));
     }).catchError((error) {
       log(error.toString());
@@ -363,6 +364,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                           //   appStore.setOrderTrackingIdPrefix(value.orderTrackingIdPrefix ?? "");
                           appStore.setInsuranceDescription(value.insuranceDescription ?? "");
                           appStore.setMaxAmountPerMonth(value.maxEarningsPerMonth ?? '');
+                          appStore.setClaimDuration(value.claimDuration ?? '');
                         }).catchError((error) {
                           log(error.toString());
                         });

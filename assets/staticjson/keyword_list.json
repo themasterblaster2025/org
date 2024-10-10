@@ -949,7 +949,7 @@
         "screenId": "19",
         "keyword_id": 124,
         "keyword_name": "createOrder",
-        "keyword_value": "Create order"
+        "keyword_value": "Place order"
       },
       {
         "screenId": "19",
@@ -1206,7 +1206,20 @@
         "keyword_id": 547,
         "keyword_name": "scheduleOrderTimeMsg",
         "keyword_value": "Time must be at least 1 hour after the current time."
+      },
+      {
+        "screenId": "19",
+        "keyword_id": 558,
+        "keyword_name": "capacity",
+        "keyword_value": "Capacity"
+      },
+      {
+        "screenId": "19",
+        "keyword_id": 559,
+        "keyword_name": "perKmCharge:",
+        "keyword_value": "Per km charge:"
       }
+
     ]
   },
   {
@@ -1794,6 +1807,12 @@
         "keyword_id": 549,
         "keyword_name": "canOrderWithinHour",
         "keyword_value": "You can cancel order within one hour of order placed."
+      },
+      {
+        "screenId": "27",
+        "keyword_id": 560,
+        "keyword_name": "enterProofDetails",
+        "keyword_value": "Enter proof details"
       }
     ]
   },
