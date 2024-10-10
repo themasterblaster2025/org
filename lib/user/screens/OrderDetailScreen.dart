@@ -540,8 +540,13 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                               4.height,
                                               GestureDetector(
                                                 onTap: () {
-                                                  openMap(double.parse(orderData!.pickupPoint!.latitude.validate()),
-                                                      double.parse(orderData!.pickupPoint!.longitude.validate()));
+                                                  // openMap(double.parse(orderData!.pickupPoint!.latitude.validate()),
+                                                  //     double.parse(orderData!.pickupPoint!.longitude.validate()));
+                                                  openMap(
+                                                      double.parse(orderData!.pickupPoint!.latitude.validate()),
+                                                      double.parse(orderData!.pickupPoint!.longitude.validate()),
+                                                      double.parse(orderData!.deliveryPoint!.latitude.validate()),
+                                                      double.parse(orderData!.deliveryPoint!.longitude.validate()));
                                                 },
                                                 child: Row(
                                                   children: [
@@ -600,7 +605,12 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                   4.height,
                                                   InkWell(
                                                     onTap: () {
+                                                      // openMap(
+                                                      //     double.parse(orderData!.deliveryPoint!.latitude.validate()),
+                                                      //     double.parse(orderData!.deliveryPoint!.longitude.validate()));
                                                       openMap(
+                                                          double.parse(orderData!.pickupPoint!.latitude.validate()),
+                                                          double.parse(orderData!.pickupPoint!.longitude.validate()),
                                                           double.parse(orderData!.deliveryPoint!.latitude.validate()),
                                                           double.parse(orderData!.deliveryPoint!.longitude.validate()));
                                                     },

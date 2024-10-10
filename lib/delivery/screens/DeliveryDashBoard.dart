@@ -558,8 +558,13 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                         GestureDetector(
                           onTap: () {
                             if (statusList[selectedStatusIndex] != ORDER_DELIVERED) {
-                              openMap(double.parse(data.pickupPoint!.latitude.validate()),
-                                  double.parse(data.pickupPoint!.longitude.validate()));
+                              // openMap(double.parse(data.pickupPoint!.latitude.validate()),
+                              //     double.parse(data.pickupPoint!.longitude.validate()));
+                              openMap(
+                                  double.parse(data.pickupPoint!.latitude.validate()),
+                                  double.parse(data.pickupPoint!.longitude.validate()),
+                                  double.parse(data.deliveryPoint!.latitude.validate()),
+                                  double.parse(data.deliveryPoint!.longitude.validate()));
                             } else {
                               OrderDetailScreen(orderId: data.id!).launch(context,
                                   pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
@@ -616,7 +621,12 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                     GestureDetector(
                       onTap: () {
                         if (statusList[selectedStatusIndex] != ORDER_DELIVERED) {
-                          openMap(double.parse(data.deliveryPoint!.latitude.validate()),
+                          // openMap(double.parse(data.deliveryPoint!.latitude.validate()),
+                          //     double.parse(data.deliveryPoint!.longitude.validate()));
+                          openMap(
+                              double.parse(data.pickupPoint!.latitude.validate()),
+                              double.parse(data.pickupPoint!.longitude.validate()),
+                              double.parse(data.deliveryPoint!.latitude.validate()),
                               double.parse(data.deliveryPoint!.longitude.validate()));
                         } else {
                           OrderDetailScreen(orderId: data.id!).launch(context,

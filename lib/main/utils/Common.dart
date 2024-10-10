@@ -608,8 +608,20 @@ String getMessageFromErrorCode(FirebaseException error) {
 
 List<String> userTypeList = [CLIENT, DELIVERY_MAN];
 
-Future<void> openMap(double latitude, double longitude) async {
-  String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+// Future<void> openMap(double latitude, double longitude) async {
+//   String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+//   if (await canLaunchUrl(Uri.parse(googleUrl))) {
+//     await launchUrl(Uri.parse(googleUrl));
+//   } else {
+//     throw language.mapLoadingError;
+//   }
+// }
+
+Future<void> openMap(
+    double originLatitude, double originLongitude, double destinationLatitude, double destinationLongitude) async {
+  String googleUrl =
+      'https://www.google.com/maps/dir/?api=1&origin=$originLatitude,$originLongitude&destination=$destinationLatitude,$destinationLongitude';
+
   if (await canLaunchUrl(Uri.parse(googleUrl))) {
     await launchUrl(Uri.parse(googleUrl));
   } else {

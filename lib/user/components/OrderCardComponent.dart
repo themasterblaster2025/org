@@ -139,8 +139,11 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                         GestureDetector(
                           onTap: () {
                             if (widget.item.status != ORDER_DELIVERED) {
-                              openMap(double.parse(widget.item.pickupPoint!.latitude.validate()),
-                                  double.parse(widget.item.pickupPoint!.longitude.validate()));
+                              openMap(
+                                  double.parse(widget.item.pickupPoint!.latitude.validate()),
+                                  double.parse(widget.item.pickupPoint!.longitude.validate()),
+                                  double.parse(widget.item.deliveryPoint!.latitude.validate()),
+                                  double.parse(widget.item.deliveryPoint!.longitude.validate()));
                             } else {
                               OrderDetailScreen(orderId: widget.item.id.validate()).launch(context,
                                   pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
@@ -199,7 +202,12 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                             GestureDetector(
                               onTap: () {
                                 if (widget.item.status != ORDER_DELIVERED) {
-                                  openMap(double.parse(widget.item.deliveryPoint!.latitude.validate()),
+                                  // openMap(double.parse(widget.item.deliveryPoint!.latitude.validate()),
+                                  //     double.parse(widget.item.deliveryPoint!.longitude.validate()));
+                                  openMap(
+                                      double.parse(widget.item.pickupPoint!.latitude.validate()),
+                                      double.parse(widget.item.pickupPoint!.longitude.validate()),
+                                      double.parse(widget.item.deliveryPoint!.latitude.validate()),
                                       double.parse(widget.item.deliveryPoint!.longitude.validate()));
                                 } else {
                                   OrderDetailScreen(orderId: widget.item.id.validate()).launch(context,
