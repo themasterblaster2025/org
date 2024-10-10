@@ -1064,4 +1064,7 @@ class BaseLanguage {
   String get scheduleOrderTimeMsg => getContentValueFromKey(547);
   String get canOrderWithinHour => getContentValueFromKey(549);
   String get proofDetails => getContentValueFromKey(557);
+  String get capacity => getContentValueFromKey(558);
+  String get perKmCharge => getContentValueFromKey(559);
+  String get enterProofDetails => getContentValueFromKey(560);
 }

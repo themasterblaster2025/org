@@ -89,6 +89,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
   TextEditingController proofTitleTextEditingController = TextEditingController();
   TextEditingController proofDetailsTextEditingController = TextEditingController();
   GlobalKey<FormState> claimFormKey = GlobalKey<FormState>();
+  bool isUserEligibleForClaim = true;
 
   @override
   void initState() {
@@ -103,7 +104,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
   }
 
   orderDetailApiCall() async {
-    print("inside orderdetails Api call");
+    print("inside orderdetails Api call ${appStore.claimDuration}");
     appStore.setLoading(true);
     await getOrderDetails(widget.orderId).then((value) {
       orderData = value.data!;
@@ -135,6 +136,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
       }
       if (getStringAsync(USER_TYPE) == CLIENT) {
         canUserCancelOrder();
+        checkIfUserIsEligibleForClaim();
       }
       getDistanceApiCall();
       if (orderData!.status == ORDER_TRANSFER ||
@@ -195,6 +197,25 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
       print("-------------else part completed");
       setState(() {
         remainingTime = Duration.zero;
+      });
+    }
+  }
+
+  checkIfUserIsEligibleForClaim() {
+    // Parse the given date string
+    DateTime givenDate = DateTime.parse(orderData!.pickupPoint!.startTime.toString());
+
+    // Parse the days to add as an integer
+    int daysToAdd = int.parse(appStore.claimDuration);
+
+    // Add the days to the given date
+    DateTime newDate = givenDate.add(Duration(days: daysToAdd));
+
+    // Compare newDate with today's date
+    if (newDate.isBefore(DateTime.now())) {
+      // If the new date is in the past, hide the button
+      setState(() {
+        isUserEligibleForClaim = false;
       });
     }
   }
@@ -386,7 +407,26 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
-      appBarTitle: '${orderData != null ? orderStatus(orderData!.status.validate()) : ''}',
+      //    appBarTitle: '${orderData != null ? orderStatus(orderData!.status.validate()) : ''}',
+      appBar: commonAppBarWidget(
+        '',
+        titleWidget: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('${orderData != null ? orderStatus(orderData!.status.validate()) : ''}',
+                    style: secondaryTextStyle(size: 16, color: whiteColor)),
+                4.height,
+                Text(' # ${widget.orderId.validate()}', style: secondaryTextStyle(size: 14, color: Colors.white60)),
+              ],
+            ).expand(),
+          ],
+        ),
+      ),
       body: Stack(
         children: [
           orderData != null
@@ -717,7 +757,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                   PackagingSymbolsInfo().launch(context);
                                 })
                               ],
-                            ),
+                            ).visible(packagingSymbols.isNotEmpty),
                             //  Text(language.labels, style: boldTextStyle(size: 16)).visible(packagingSymbols
                             //  .isNotEmpty),
                             12.height.visible(packagingSymbols.isNotEmpty),
@@ -733,11 +773,11 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Wrap(
-                                    spacing: 20,
-                                    runSpacing: 10,
+                                    spacing: 8,
+                                    runSpacing: 8,
                                     children: packagingSymbols!.map((item) {
                                       return Container(
-                                        width: 70,
+                                        width: 50,
                                         decoration: boxDecorationWithRoundedCorners(
                                             backgroundColor: Colors.transparent,
                                             border: Border.all(
@@ -1538,8 +1578,10 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                       }, width: context.width()),
                     ).visible((orderData!.status == ORDER_PICKED_UP ||
                             orderData!.status == ORDER_ARRIVED ||
-                            orderData!.status == ORDER_DEPARTED && getStringAsync(USER_TYPE) == CLIENT) &&
-                        orderData!.isClaimed != 1)
+                            orderData!.status == ORDER_DEPARTED) &&
+                        ((getStringAsync(USER_TYPE) == CLIENT) &&
+                            orderData!.isClaimed == 0 &&
+                            isUserEligibleForClaim == true))
                   ],
                 )
               : SizedBox(),
@@ -1613,7 +1655,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                 errorThisFieldRequired: language.fieldRequiredMsg,
                                 minLines: 4,
                                 maxLines: 8,
-                                decoration: commonInputDecoration(hintText: "Enter proof details"),
+                                decoration: commonInputDecoration(hintText: language.enterProofDetails),
                               ),
                               8.height,
                               if (selectedFiles != null && selectedFiles!.length > 0)

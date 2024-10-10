@@ -75,6 +75,7 @@ class OrderFragmentState extends State<OrderFragment> {
       appStore.setInsurancePercentage(value.insurancePercentage ?? "0");
       appStore.setInsuranceDescription(value.insuranceDescription ?? "");
       appStore.setMaxAmountPerMonth(value.maxEarningsPerMonth ?? '');
+      appStore.setClaimDuration(value.claimDuration ?? '');
       if (value.storeType!.validate().isNotEmpty) {
         storeList = value.storeType.validate();
         setState(() {});
