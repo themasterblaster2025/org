@@ -1067,4 +1067,5 @@ class BaseLanguage {
   String get capacity => getContentValueFromKey(558);
   String get perKmCharge => getContentValueFromKey(559);
   String get enterProofDetails => getContentValueFromKey(560);
+  String get approvedAmount => getContentValueFromKey(561);
 }

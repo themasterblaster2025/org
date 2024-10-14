@@ -3680,6 +3680,12 @@
         "keyword_id": 557,
         "keyword_name": "proofDetails",
         "keyword_value": "Proof details"
+      },
+      {
+        "screenId": "56",
+        "keyword_id": 561,
+        "keyword_name": "approvedAmount",
+        "keyword_value": "Approved Amount"
       }
     ]
   }

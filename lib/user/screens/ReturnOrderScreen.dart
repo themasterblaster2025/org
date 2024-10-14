@@ -111,8 +111,11 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
         "date": DateTime.now().toString(),
         "country_id": widget.orderData.countryId!,
         "city_id": widget.orderData.cityId!,
+        "vehicle_id": widget.orderData.vehicleId.validate(),
+        "vehicle_charge": widget.orderData.vehicleCharge,
         "pickup_point": widget.orderData.deliveryPoint!,
         "delivery_point": widget.orderData.pickupPoint!,
+        "packaging_symbols": widget.orderData.packagingSymbols,
         "extra_charges": widget.orderData.extraCharges!,
         "parcel_type": widget.orderData.parcelType!,
         "total_weight": widget.orderData.totalWeight!,
@@ -124,8 +127,11 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
         "fixed_charges": widget.orderData.fixedCharges!,
         "parent_order_id": widget.orderData.id!,
         "total_amount": widget.orderData.totalAmount ?? 0,
-        "vehicle_id": widget.orderData.vehicleId.validate(),
+        "weight_charge": widget.orderData.weightCharge!.toDouble(),
         "reason": reason!.validate().trim() != language.other.trim() ? reason : reasonController.text,
+        "distance_charge": widget.orderData.distanceCharge!.toDouble(),
+        "total_parcel": widget.orderData.totalParcel!.toInt(),
+        "insurance_charge": widget.orderData.insuranceCharge,
       };
       appStore.setLoading(true);
       await createOrder(req).then((value) async {

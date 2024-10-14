@@ -207,7 +207,7 @@ class AccountFragmentState extends State<AccountFragment> {
                   accountSettingItemWidget(ic_refer_history, language.referralHistory, () {
                     ReferralHistoryScreen().launch(context);
                   }),
-                  accountSettingItemWidget(ic_refer_history, language.claimHistory, () {
+                  accountSettingItemWidget(ic_claim, language.claimHistory, () {
                     ClaimListScreen().launch(context);
                   }),
                   accountSettingItemWidget(ic_change_password, language.earnedRewards, () {

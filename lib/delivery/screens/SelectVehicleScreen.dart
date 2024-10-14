@@ -143,7 +143,7 @@ class _SelectVehicleScreenState extends State<SelectVehicleScreen> {
                                 8.height,
                                 Row(
                                   children: [
-                                    Text('${language.vehicleInfo} :', style: primaryTextStyle()), // todo
+                                    Text('${language.vehicleInfo} :', style: primaryTextStyle()),
                                     Text(language.clickHere, style: primaryTextStyle(color: ColorUtils.colorPrimary))
                                         .onTap(() {
                                       AddDeliverymanVehicleScreen(

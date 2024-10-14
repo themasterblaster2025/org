@@ -46,6 +46,7 @@ const ic_google = 'assets/icons/ic_google.png';
 const ic_chat_unread_count = 'assets/message_detect_anim.json';
 const ic_refer_earn = 'assets/refer_earn.json';
 const ic_refer_history = 'assets/icon/ic_referral.png';
+const ic_claim = 'assets/icon/ic_claim.png';
 
 // packing symbols
 const ic_fragile = 'assets/packing_symbols/ic_fragile.png';

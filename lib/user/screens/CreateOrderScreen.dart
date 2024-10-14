@@ -670,7 +670,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
                             // Validate if the time is at least 1 hour from now
                             if (selectedDateWithTime.isBefore(now.add(Duration(hours: 1)))) {
-                              return language.timeValidation; //todo add keys
+                              return language.timeValidation;
                             }
 
                             return null;

@@ -36,8 +36,6 @@ class ClaimDetailstDetailsScreen extends StatefulWidget {
 }
 
 class _ClaimDetailstDetailsScreenState extends State<ClaimDetailstDetailsScreen> {
-  late VideoPlayerController _videoPlayerController1;
-  ChewieController? _chewieController;
   int? bufferDelay;
 
   @override
@@ -45,41 +43,6 @@ class _ClaimDetailstDetailsScreenState extends State<ClaimDetailstDetailsScreen>
     super.initState();
   }
 
-  // @override
-  // void dispose() {
-  //   _videoPlayerController1.dispose();
-  //   _chewieController?.dispose();
-  //   super.dispose();
-  // }
-  //
-  // Future<void> initializePlayer() async {
-  //   _videoPlayerController1 = VideoPlayerController.networkUrl(Uri.parse(widget.video));
-  //   await Future.wait([_videoPlayerController1.initialize()]);
-  //   _createChewieController();
-  //   setState(() {});
-  // }
-  //
-  // void _createChewieController() {
-  //   _chewieController = ChewieController(
-  //     videoPlayerController: _videoPlayerController1,
-  //     autoPlay: true,
-  //     looping: true,
-  //     deviceOrientationsAfterFullScreen: [
-  //       DeviceOrientation.portraitDown,
-  //       DeviceOrientation.portraitUp,
-  //     ],
-  //     progressIndicatorDelay: bufferDelay != null ? Duration(milliseconds: bufferDelay!) : null,
-  //     hideControlsTimer: const Duration(seconds: 1),
-  //     showOptions: false,
-  //     materialProgressColors: ChewieProgressColors(
-  //       playedColor: ColorUtils.colorPrimary,
-  //       handleColor: ColorUtils.colorPrimary,
-  //       backgroundColor: textSecondaryColorGlobal,
-  //       bufferedColor: textSecondaryColorGlobal,
-  //     ),
-  //     // autoInitialize: true,
-  //   );
-  // }
   Widget buildFileWidget(String url, int id) {
     // Check if the file is an image or PDF
     bool isImage = url.contains('jpg') || url.contains('jpeg') || url.contains('png');
@@ -92,11 +55,6 @@ class _ClaimDetailstDetailsScreenState extends State<ClaimDetailstDetailsScreen>
           decoration: boxDecorationWithRoundedCorners(border: Border.all(color: ColorUtils.colorPrimary)),
           child: isImage
               ? commonCachedNetworkImage(url, width: 180, height: 180).cornerRadiusWithClipRRect(10)
-              // Image.file(
-              //         width: 100, height: 100,
-              //         File(file.path!), // File object for local image display
-              //         fit: BoxFit.cover,
-              //       ).cornerRadiusWithClipRRect(10)
               : Center(
                   child: Icon(
                     Icons.picture_as_pdf,
@@ -221,7 +179,7 @@ class _ClaimDetailstDetailsScreenState extends State<ClaimDetailstDetailsScreen>
                 )),
             16.height,
             if (widget.item.attachmentFile != null && widget.item.attachmentFile!.length > 0)
-              Text("Atachments", style: boldTextStyle()),
+              Text(language.attachment, style: boldTextStyle()),
             if (widget.item.attachmentFile != null && widget.item.attachmentFile!.length > 0) 8.height,
             if (widget.item.attachmentFile != null && widget.item.attachmentFile!.length > 0)
               Container(
@@ -235,29 +193,30 @@ class _ClaimDetailstDetailsScreenState extends State<ClaimDetailstDetailsScreen>
                   },
                 ),
               ),
-            if(widget.item.claimsHistory != null && widget.item.claimsHistory!.isNotEmpty) ...[
-            16.height,
-            Text(
-              "Approved amount", // todo
-              style: boldTextStyle(),
-            ),
-            8.height,
-            Container(
-                decoration: boxDecorationWithRoundedCorners(
-                    borderRadius: BorderRadius.circular(defaultRadius),
-                    border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
-                    backgroundColor: Colors.transparent),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: context.width(),
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
-                      padding: EdgeInsets.all(12),
-                      child: Text(widget.item.claimsHistory![0].amount.validate().toString(), style: primaryTextStyle()),
-                    ),
-                  ],
-                )),
+            if (widget.item.claimsHistory != null && widget.item.claimsHistory!.isNotEmpty) ...[
+              16.height,
+              Text(
+                language.approvedAmount, // todo
+                style: boldTextStyle(),
+              ),
+              8.height,
+              Container(
+                  decoration: boxDecorationWithRoundedCorners(
+                      borderRadius: BorderRadius.circular(defaultRadius),
+                      border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
+                      backgroundColor: Colors.transparent),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: context.width(),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+                        padding: EdgeInsets.all(12),
+                        child:
+                            Text(widget.item.claimsHistory![0].amount.validate().toString(), style: primaryTextStyle()),
+                      ),
+                    ],
+                  )),
               16.height,
               Text(
                 language.description,
@@ -276,12 +235,13 @@ class _ClaimDetailstDetailsScreenState extends State<ClaimDetailstDetailsScreen>
                         width: context.width(),
                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
                         padding: EdgeInsets.all(12),
-                        child: Text(widget.item.claimsHistory![0].description.validate().toString(), style: primaryTextStyle()),
+                        child: Text(widget.item.claimsHistory![0].description.validate().toString(),
+                            style: primaryTextStyle()),
                       ),
                     ],
                   )),
-
-              if(widget.item.claimsHistory![0].attachmentFile != null && widget.item.claimsHistory![0].attachmentFile!.length >0)...[
+              if (widget.item.claimsHistory![0].attachmentFile != null &&
+                  widget.item.claimsHistory![0].attachmentFile!.length > 0) ...[
                 16.height,
                 Text(
                   language.attachment,
@@ -295,12 +255,13 @@ class _ClaimDetailstDetailsScreenState extends State<ClaimDetailstDetailsScreen>
                     scrollDirection: Axis.horizontal,
                     itemCount: widget.item.claimsHistory![0].attachmentFile!.length,
                     itemBuilder: (context, index) {
-                      return buildFileWidget(widget.item.claimsHistory![0].attachmentFile![index], widget.item.id.validate());
+                      return buildFileWidget(
+                          widget.item.claimsHistory![0].attachmentFile![index], widget.item.id.validate());
                     },
                   ),
                 ),
               ],
-    ],
+            ],
           ],
         ),
       ),
