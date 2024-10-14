@@ -75,11 +75,28 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                     : SizedBox(),
                 Container(
                   decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(color: statusColor(widget.item.status.validate()).withOpacity(0.08))),
+                  padding: EdgeInsets.symmetric(horizontal: 3, vertical: 3),
+                  child: Icon(Icons.navigation_outlined, color: ColorUtils.colorPrimary).center(),
+                ).paddingRight(10).onTap(() {
+                  openMap(
+                      double.parse(widget.item.pickupPoint!.latitude.validate()),
+                      double.parse(widget.item.pickupPoint!.longitude.validate()),
+                      double.parse(widget.item.deliveryPoint!.latitude.validate()),
+                      double.parse(widget.item.deliveryPoint!.longitude.validate()));
+                }).visible(widget.item.status != ORDER_DELIVERED),
+                Container(
+                  decoration: BoxDecoration(
                       color: statusColor(widget.item.status.validate()).withOpacity(0.08),
                       borderRadius: BorderRadius.circular(6)),
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                  child: Text(orderStatus(widget.item.status!),
-                      style: primaryTextStyle(size: 14, color: statusColor(widget.item.status.validate()))),
+                  child: Row(
+                    children: [
+                      Text(orderStatus(widget.item.status!),
+                          style: primaryTextStyle(size: 14, color: statusColor(widget.item.status.validate()))),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -138,16 +155,18 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                         4.height,
                         GestureDetector(
                           onTap: () {
-                            if (widget.item.status != ORDER_DELIVERED) {
-                              openMap(
-                                  double.parse(widget.item.pickupPoint!.latitude.validate()),
-                                  double.parse(widget.item.pickupPoint!.longitude.validate()),
-                                  double.parse(widget.item.deliveryPoint!.latitude.validate()),
-                                  double.parse(widget.item.deliveryPoint!.longitude.validate()));
-                            } else {
-                              OrderDetailScreen(orderId: widget.item.id.validate()).launch(context,
-                                  pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
-                            }
+                            OrderDetailScreen(orderId: widget.item.id.validate()).launch(context,
+                                pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
+                            // if (widget.item.status != ORDER_DELIVERED) {
+                            //   openMap(
+                            //       double.parse(widget.item.pickupPoint!.latitude.validate()),
+                            //       double.parse(widget.item.pickupPoint!.longitude.validate()),
+                            //       double.parse(widget.item.deliveryPoint!.latitude.validate()),
+                            //       double.parse(widget.item.deliveryPoint!.longitude.validate()));
+                            // } else {
+                            //   OrderDetailScreen(orderId: widget.item.id.validate()).launch(context,
+                            //       pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
+                            // }
                           },
                           child: Row(
                             children: [
@@ -201,19 +220,21 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                             4.height,
                             GestureDetector(
                               onTap: () {
-                                if (widget.item.status != ORDER_DELIVERED) {
-                                  // openMap(double.parse(widget.item.deliveryPoint!.latitude.validate()),
-                                  //     double.parse(widget.item.deliveryPoint!.longitude.validate()));
-                                  openMap(
-                                      double.parse(widget.item.pickupPoint!.latitude.validate()),
-                                      double.parse(widget.item.pickupPoint!.longitude.validate()),
-                                      double.parse(widget.item.deliveryPoint!.latitude.validate()),
-                                      double.parse(widget.item.deliveryPoint!.longitude.validate()));
-                                } else {
-                                  OrderDetailScreen(orderId: widget.item.id.validate()).launch(context,
-                                      pageRouteAnimation: PageRouteAnimation.SlideBottomTop,
-                                      duration: 400.milliseconds);
-                                }
+                                // if (widget.item.status != ORDER_DELIVERED) {
+                                //   // openMap(double.parse(widget.item.deliveryPoint!.latitude.validate()),
+                                //   //     double.parse(widget.item.deliveryPoint!.longitude.validate()));
+                                //   openMap(
+                                //       double.parse(widget.item.pickupPoint!.latitude.validate()),
+                                //       double.parse(widget.item.pickupPoint!.longitude.validate()),
+                                //       double.parse(widget.item.deliveryPoint!.latitude.validate()),
+                                //       double.parse(widget.item.deliveryPoint!.longitude.validate()));
+                                // } else {
+                                //   OrderDetailScreen(orderId: widget.item.id.validate()).launch(context,
+                                //       pageRouteAnimation: PageRouteAnimation.SlideBottomTop,
+                                //       duration: 400.milliseconds);
+                                // }
+                                OrderDetailScreen(orderId: widget.item.id.validate()).launch(context,
+                                    pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
                               },
                               child: Row(
                                 children: [

@@ -473,16 +473,15 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       toast(value.message);
       finish(context);
       if (isSelected == 2) {
-        PaymentScreen(
-                orderId: value.orderId.validate(), totalAmount: (totalAmountResponse!.totalAmount! + insuranceAmount))
+        PaymentScreen(orderId: value.orderId.validate(), totalAmount: (totalAmountResponse!.totalAmount!))
             .launch(context);
       } else if (isSelected == 3) {
-        log("-----" + appStore.availableBal.toString());
-        if (appStore.availableBal > (totalAmountResponse!.totalAmount! + insuranceAmount)) {
+        log("-----available balance ${appStore.availableBal.toString()}-----------${totalAmountResponse!.totalAmount}----------${insuranceAmount}----------${(totalAmountResponse!.totalAmount! + insuranceAmount)}");
+        if (appStore.availableBal > (totalAmountResponse!.totalAmount!)) {
           savePaymentApiCall(
               paymentType: PAYMENT_TYPE_WALLET,
               paymentStatus: PAYMENT_PAID,
-              totalAmount: (totalAmountResponse!.totalAmount! + insuranceAmount).toString(),
+              totalAmount: (totalAmountResponse!.totalAmount!).toString(),
               orderID: value.orderId.toString());
         }
         // else {

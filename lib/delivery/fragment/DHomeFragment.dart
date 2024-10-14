@@ -155,6 +155,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
       appStore.setCurrencySymbol(value.currency ?? CURRENCY_SYMBOL);
       appStore.setCopyRight(value.siteCopyright ?? "");
       appStore.setSiteEmail(value.siteEmail ?? "");
+      appStore.setDistanceUnit(value.distanceUnit ?? DISTANCE_UNIT_KM);
       //  appStore.setOrderTrackingIdPrefix(value.orderTrackingIdPrefix ?? "");
       appStore.setIsInsuranceAllowed(value.isInsuranceAllowed ?? "0");
       appStore.setInsurancePercentage(value.insurancePercentage ?? "0");

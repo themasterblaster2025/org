@@ -52,8 +52,8 @@ class _SelectVehicleScreenState extends State<SelectVehicleScreen> {
     appStore.setLoading(true);
     await getDeliveryManVehicleList(page).then((value) {
       appStore.setLoading(false);
-      totalPage = value.pagination!.totalPages.validate(value: 1);
-      page = value.pagination!.currentPage.validate(value: 1);
+      totalPage = value.pagination.totalPages.validate(value: 1);
+      page = value.pagination.currentPage.validate(value: 1);
       if (page == 1) {
         vehicleHistoryList.clear();
       }

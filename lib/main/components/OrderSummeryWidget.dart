@@ -157,48 +157,64 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
               Text('${printAmount(fixedCharges)}', style: boldTextStyle(size: 14)),
             ],
           ).paddingBottom(8).visible(fixedCharges.validate() != 0),
-          Column(
+          Row(
             children: [
-              8.height,
+              Text(language.distanceCharge, style: secondaryTextStyle()),
+              4.width,
               Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(language.distanceCharge, style: secondaryTextStyle()),
-                  4.width,
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text('(${(widget.totalDistance - minDistance).toStringAsFixed(digitAfterDecimal)}',
-                          style: secondaryTextStyle()),
-                      Icon(Icons.close, color: Colors.grey, size: 12),
-                      Text('$perDistanceCharges)', style: secondaryTextStyle()),
-                    ],
-                  ).expand(),
-                  16.width,
-                  Text('${printAmount(widget.distanceCharge)}', style: boldTextStyle(size: 14)),
+                  Text('(${(widget.totalDistance - minDistance).toStringAsFixed(digitAfterDecimal)}',
+                      style: secondaryTextStyle()),
+                  Icon(Icons.close, color: Colors.grey, size: 12),
+                  Text('$perDistanceCharges)', style: secondaryTextStyle()),
                 ],
-              )
+              ).expand(),
+              16.width,
+              Text('${printAmount(widget.distanceCharge)}', style: boldTextStyle(size: 14)),
             ],
-          ).visible(widget.distanceCharge != 0),
-          Column(
+          ).paddingBottom(8).visible(widget.distanceCharge != 0),
+          // Column(
+          //   children: [
+          //     //  8.height,
+          //
+          //   ],
+          // ).visible(widget.distanceCharge != 0),
+          Row(
             children: [
-              //   8.height,
+              Text(language.weightCharge, style: secondaryTextStyle()),
+              4.width,
               Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(language.weightCharge, style: secondaryTextStyle()),
-                  4.width,
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text('(${widget.totalWeight - minWeight} x ', style: secondaryTextStyle()),
-                      Text('$perWeightCharges)', style: secondaryTextStyle()),
-                    ],
-                  ).expand(),
-                  16.width,
-                  Text('${printAmount(widget.weightCharge)}', style: boldTextStyle(size: 14)),
+                  Text('(${widget.totalWeight - minWeight} x ', style: secondaryTextStyle()),
+                  Text('$perWeightCharges)', style: secondaryTextStyle()),
                 ],
-              ),
+              ).expand(),
+              16.width,
+              Text('${printAmount(widget.weightCharge)}', style: boldTextStyle(size: 14)),
             ],
-          ).visible(widget.weightCharge != 0),
+          ).paddingBottom(8).visible(widget.weightCharge != 0),
+          // Column(
+          //   children: [
+          //     //   8.height,
+          //     Row(
+          //       children: [
+          //         Text(language.weightCharge, style: secondaryTextStyle()),
+          //         4.width,
+          //         Row(
+          //           crossAxisAlignment: CrossAxisAlignment.end,
+          //           children: [
+          //             Text('(${widget.totalWeight - minWeight} x ', style: secondaryTextStyle()),
+          //             Text('$perWeightCharges)', style: secondaryTextStyle()),
+          //           ],
+          //         ).expand(),
+          //         16.width,
+          //         Text('${printAmount(widget.weightCharge)}', style: boldTextStyle(size: 14)),
+          //       ],
+          //     ),
+          //   ],
+          // ).visible(widget.weightCharge != 0),
           /*Align(
             alignment: Alignment.bottomRight,
             child: Column(
@@ -230,7 +246,7 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
                       SizedBox(width: 16),
                       Text(
                           '${printAmount(countExtraCharge(totalAmount: (fixedCharges + widget.weightCharge + widget.vehiclePrice.validate() + widget.distanceCharge + widget.insuranceCharge.validate()), chargesType: mData.valueType!, charges: mData.value!))}',
-                          style: primaryTextStyle()),
+                          style: boldTextStyle(size: 14)),
                     ],
                   ),
                 );

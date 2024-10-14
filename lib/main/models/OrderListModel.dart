@@ -71,7 +71,9 @@ class PickupPoint {
     longitude = json['longitude'];
     description = json['description'];
     contactNumber = json['contact_number'];
+    print("---------------------------KK${startTime}");
     startTime = json['start_time'];
+    print("---------------------------KK${endTime}");
     endTime = json['end_time'];
   }
 

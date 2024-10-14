@@ -320,9 +320,6 @@ oneSignalSettings() async {
       var notId = notification.notification.additionalData!["id"];
       var notType = notification.notification.additionalData!["type"];
       print("------------------${notType.toString()}");
-      if (notType.toString().contains(ORDER_TRANSFER) || notType.toString().contains(ORDER_ASSIGNED)) {
-        playSoundForDuration();
-      }
       if (notId != null) {
         if (!appStore.isLoggedIn) {
           LoginScreen().launch(getContext);
@@ -340,7 +337,9 @@ oneSignalSettings() async {
       event.notification.display();
       if (event.notification.additionalData!["type"].toString().contains(ORDER_TRANSFER) ||
           event.notification.additionalData!["type"].toString().contains(ORDER_ASSIGNED)) {
-        playSoundForDuration();
+        if (getStringAsync(USER_TYPE) == DELIVERY_MAN) {
+          playSoundForDuration();
+        }
       }
     });
   }
@@ -348,15 +347,17 @@ oneSignalSettings() async {
 
 // Method to play the sound for 60 seconds
 void playSoundForDuration() async {
+  print("===========type=====================${getStringAsync(USER_TYPE)}");
   try {
-    FlutterRingtonePlayer().play(
-      fromAsset: ic_ringtone,
-      android: AndroidSounds.alarm,
-      ios: IosSounds.triTone,
-      looping: true,
-      volume: 0.1,
-      asAlarm: false,
-    );
+    // FlutterRingtonePlayer().play(
+    //   fromAsset: "assets/ringtone/ringtone.mp3",
+    //   android: AndroidSounds.alarm,
+    //   ios: IosSounds.triTone,
+    //   looping: true,
+    //   volume: 0.1,
+    //   asAlarm: false,
+    // );
+    FlutterRingtonePlayer().play(fromAsset: "assets/ringtone/ringtone.mp3", looping: true);
 
     await Future.delayed(Duration(seconds: 60));
     FlutterRingtonePlayer().stop();

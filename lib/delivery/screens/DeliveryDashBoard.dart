@@ -425,6 +425,30 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                 ).expand(),
                 Container(
                   decoration: boxDecorationWithRoundedCorners(
+                      backgroundColor:
+                          appStore.isDarkMode ? ColorUtils.scaffoldSecondaryDark : ColorUtils.colorPrimaryLight,
+                      borderRadius: BorderRadius.circular(defaultRadius),
+                      border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.5))),
+                  padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                  child: Icon(
+                    Icons.navigation_outlined,
+                    color: ColorUtils.colorPrimary,
+                    size: 28,
+                  ),
+                )
+                    .onTap(() {
+                      openMap(
+                          double.parse(data.pickupPoint!.latitude.validate()),
+                          double.parse(data.pickupPoint!.longitude.validate()),
+                          double.parse(data.deliveryPoint!.latitude.validate()),
+                          double.parse(data.deliveryPoint!.longitude.validate()));
+                    })
+                    .paddingSymmetric(horizontal: 5)
+                    .visible(data.status != ORDER_DELIVERED &&
+                        data.status != ORDER_CANCELLED &&
+                        data.status != ORDER_SHIPPED),
+                Container(
+                  decoration: boxDecorationWithRoundedCorners(
                       borderRadius: BorderRadius.circular(defaultRadius),
                       border: Border.all(color: Colors.red),
                       backgroundColor: Colors.red.withOpacity(0.2)),
@@ -557,18 +581,20 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                       children: [
                         GestureDetector(
                           onTap: () {
-                            if (statusList[selectedStatusIndex] != ORDER_DELIVERED) {
-                              // openMap(double.parse(data.pickupPoint!.latitude.validate()),
-                              //     double.parse(data.pickupPoint!.longitude.validate()));
-                              openMap(
-                                  double.parse(data.pickupPoint!.latitude.validate()),
-                                  double.parse(data.pickupPoint!.longitude.validate()),
-                                  double.parse(data.deliveryPoint!.latitude.validate()),
-                                  double.parse(data.deliveryPoint!.longitude.validate()));
-                            } else {
-                              OrderDetailScreen(orderId: data.id!).launch(context,
-                                  pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
-                            }
+                            OrderDetailScreen(orderId: data.id!).launch(context,
+                                pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
+                            // if (statusList[selectedStatusIndex] != ORDER_DELIVERED) {
+                            //   // openMap(double.parse(data.pickupPoint!.latitude.validate()),
+                            //   //     double.parse(data.pickupPoint!.longitude.validate()));
+                            //   openMap(
+                            //       double.parse(data.pickupPoint!.latitude.validate()),
+                            //       double.parse(data.pickupPoint!.longitude.validate()),
+                            //       double.parse(data.deliveryPoint!.latitude.validate()),
+                            //       double.parse(data.deliveryPoint!.longitude.validate()));
+                            // } else {
+                            //   OrderDetailScreen(orderId: data.id!).launch(context,
+                            //       pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
+                            // }
                           },
                           child: Row(
                             children: [
@@ -620,18 +646,20 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                   children: [
                     GestureDetector(
                       onTap: () {
-                        if (statusList[selectedStatusIndex] != ORDER_DELIVERED) {
-                          // openMap(double.parse(data.deliveryPoint!.latitude.validate()),
-                          //     double.parse(data.deliveryPoint!.longitude.validate()));
-                          openMap(
-                              double.parse(data.pickupPoint!.latitude.validate()),
-                              double.parse(data.pickupPoint!.longitude.validate()),
-                              double.parse(data.deliveryPoint!.latitude.validate()),
-                              double.parse(data.deliveryPoint!.longitude.validate()));
-                        } else {
-                          OrderDetailScreen(orderId: data.id!).launch(context,
-                              pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
-                        }
+                        OrderDetailScreen(orderId: data.id!).launch(context,
+                            pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
+                        // if (statusList[selectedStatusIndex] != ORDER_DELIVERED) {
+                        //   // openMap(double.parse(data.deliveryPoint!.latitude.validate()),
+                        //   //     double.parse(data.deliveryPoint!.longitude.validate()));
+                        //   openMap(
+                        //       double.parse(data.pickupPoint!.latitude.validate()),
+                        //       double.parse(data.pickupPoint!.longitude.validate()),
+                        //       double.parse(data.deliveryPoint!.latitude.validate()),
+                        //       double.parse(data.deliveryPoint!.longitude.validate()));
+                        // } else {
+                        //   OrderDetailScreen(orderId: data.id!).launch(context,
+                        //       pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
+                        // }
                       },
                       child: Row(
                         children: [

@@ -136,7 +136,9 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
       }
       if (getStringAsync(USER_TYPE) == CLIENT) {
         canUserCancelOrder();
-        checkIfUserIsEligibleForClaim();
+        if (orderData!.pickupDatetime != null) {
+          checkIfUserIsEligibleForClaim();
+        }
       }
       getDistanceApiCall();
       if (orderData!.status == ORDER_TRANSFER ||
@@ -203,7 +205,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
 
   checkIfUserIsEligibleForClaim() {
     // Parse the given date string
-    DateTime givenDate = DateTime.parse(orderData!.pickupPoint!.startTime.toString());
+    DateTime givenDate = DateTime.parse(orderData!.pickupDatetime.toString());
 
     // Parse the days to add as an integer
     int daysToAdd = int.parse(appStore.claimDuration);
@@ -273,6 +275,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
       "date": DateTime.now().toString(),
       "country_id": orderData!.countryId!,
       "city_id": orderData!.cityId!,
+      "vehicle_id": orderData!.vehicleId.validate(),
       "pickup_point": orderData!.deliveryPoint!,
       "delivery_point": orderData!.pickupPoint!,
       "extra_charges": orderData!.extraCharges!,
@@ -286,10 +289,16 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
       "fixed_charges": orderData!.fixedCharges!,
       "parent_order_id": orderData!.id!,
       "total_amount": orderData!.totalAmount ?? 0,
-      "vehicle_id": orderData!.vehicleId.validate(),
       "reason": reason == isOtherOptionSelected ? otherReason : reason,
       "order_id": orderData!.id,
-      "cancelorderreturn": 1
+      "cancelorderreturn": 1,
+      "parent_order_id": "",
+      "vehicle_charge": orderData!.vehicleCharge,
+      "packaging_symbols": orderData!.packagingSymbols,
+      "weight_charge": orderData!.weightCharge,
+      "distance_charge": orderData!.distanceCharge,
+      "total_parcel": orderData!.totalParcel,
+      "insurance_charge": orderData!.insuranceCharge,
     };
 
     await createOrder(req).then((value) async {
@@ -458,6 +467,20 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                   style: primaryTextStyle(size: 14))
                                               .expand()
                                           : SizedBox(),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(6),
+                                            border: Border.all(
+                                                color: statusColor(orderData!.status.validate()).withOpacity(0.08))),
+                                        //  padding: EdgeInsets.symmetric(horizontal: 3, vertical: 3),
+                                        child: Icon(Icons.navigation_outlined, color: ColorUtils.colorPrimary).center(),
+                                      ).onTap(() {
+                                        openMap(
+                                            double.parse(orderData!.pickupPoint!.latitude.validate()),
+                                            double.parse(orderData!.pickupPoint!.longitude.validate()),
+                                            double.parse(orderData!.deliveryPoint!.latitude.validate()),
+                                            double.parse(orderData!.deliveryPoint!.longitude.validate()));
+                                      }).visible(orderData!.status != ORDER_DELIVERED),
                                     ],
                                   ),
                                   8.height,
@@ -542,11 +565,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                 onTap: () {
                                                   // openMap(double.parse(orderData!.pickupPoint!.latitude.validate()),
                                                   //     double.parse(orderData!.pickupPoint!.longitude.validate()));
-                                                  openMap(
-                                                      double.parse(orderData!.pickupPoint!.latitude.validate()),
-                                                      double.parse(orderData!.pickupPoint!.longitude.validate()),
-                                                      double.parse(orderData!.deliveryPoint!.latitude.validate()),
-                                                      double.parse(orderData!.deliveryPoint!.longitude.validate()));
                                                 },
                                                 child: Row(
                                                   children: [
@@ -608,11 +626,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                       // openMap(
                                                       //     double.parse(orderData!.deliveryPoint!.latitude.validate()),
                                                       //     double.parse(orderData!.deliveryPoint!.longitude.validate()));
-                                                      openMap(
-                                                          double.parse(orderData!.pickupPoint!.latitude.validate()),
-                                                          double.parse(orderData!.pickupPoint!.longitude.validate()),
-                                                          double.parse(orderData!.deliveryPoint!.latitude.validate()),
-                                                          double.parse(orderData!.deliveryPoint!.longitude.validate()));
                                                     },
                                                     child: Row(
                                                       children: [
@@ -1000,38 +1013,89 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     borderRadius: BorderRadius.circular(defaultRadius),
                                     border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
                                     backgroundColor: Colors.transparent),
-                                padding: EdgeInsets.all(12),
-                                // child: Column(
-                                //   crossAxisAlignment: CrossAxisAlignment.start,
-                                //   children: [
-                                //     if (orderData!.vehicleImage != null)
-                                //       ClipRRect(
-                                //           borderRadius: BorderRadius.circular(10),
-                                //           child: commonCachedNetworkImage(orderData!.vehicleImage,
-                                //               fit: BoxFit.fill, height: 100, width: 150)),
-                                //     8.height,
-                                //     Row(
-                                //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                //       children: [
-                                //         Text(language.vehicleName, style: secondaryTextStyle()),
-                                //         Text('${orderData!.vehicleData!.title.validate()}', style: primaryTextStyle())
-                                //       ],
-                                //     ),
-                                //   ],
-                                // ),
                                 child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: commonCachedNetworkImage(orderData!.vehicleImage,
-                                            fit: BoxFit.fill, height: 50, width: 50)),
+                                    commonCachedNetworkImage(orderData!.vehicleData!.vehicleImage.validate(),
+                                        height: 40, width: 40),
                                     SizedBox(width: 16),
-                                    Text(
-                                        "${orderData!.vehicleData!.title.validate()}  (${printAmount(orderData!.vehicleData!.price.validate())})",
-                                        style: primaryTextStyle()),
+                                    Expanded(
+                                      // Wrapping the Column with Expanded to prevent overflow
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start, // Align to start
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text("${language.name} : ", style: secondaryTextStyle()),
+                                              Text(
+                                                "${orderData!.vehicleData!.title.validate()} ",
+                                                style: primaryTextStyle(),
+                                              ).expand(),
+                                              Text("${language.price} : ", style: secondaryTextStyle()),
+                                              Text(
+                                                "(${printAmount(orderData!.vehicleData!.price.validate())})",
+                                                style: primaryTextStyle(),
+                                              ).paddingRight(10),
+                                            ],
+                                          ),
+                                          4.height, // Fixed height instead of 2.height
+                                          Row(
+                                            children: [
+                                              Text("${language.capacity} : ", style: secondaryTextStyle()),
+                                              Text(
+                                                "${orderData!.vehicleData!.capacity.validate()} ",
+                                                style: primaryTextStyle(),
+                                              ).expand(),
+                                              Text("${language.perKmCharge} : ", style: secondaryTextStyle()),
+                                              Text(
+                                                "(${printAmount(orderData!.vehicleData!.perKmCharge.validate())})",
+                                                style: primaryTextStyle(),
+                                              ).paddingRight(10),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ],
-                                ),
+                                ).paddingAll(10),
                               ),
+                            // Container(
+                            //   decoration: boxDecorationWithRoundedCorners(
+                            //       borderRadius: BorderRadius.circular(defaultRadius),
+                            //       border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
+                            //       backgroundColor: Colors.transparent),
+                            //   padding: EdgeInsets.all(12),
+                            //   // child: Column(
+                            //   //   crossAxisAlignment: CrossAxisAlignment.start,
+                            //   //   children: [
+                            //   //     if (orderData!.vehicleImage != null)
+                            //   //       ClipRRect(
+                            //   //           borderRadius: BorderRadius.circular(10),
+                            //   //           child: commonCachedNetworkImage(orderData!.vehicleImage,
+                            //   //               fit: BoxFit.fill, height: 100, width: 150)),
+                            //   //     8.height,
+                            //   //     Row(
+                            //   //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //   //       children: [
+                            //   //         Text(language.vehicleName, style: secondaryTextStyle()),
+                            //   //         Text('${orderData!.vehicleData!.title.validate()}', style: primaryTextStyle())
+                            //   //       ],
+                            //   //     ),
+                            //   //   ],
+                            //   // ),
+                            //   child: Row(
+                            //     children: [
+                            //       ClipRRect(
+                            //           borderRadius: BorderRadius.circular(10),
+                            //           child: commonCachedNetworkImage(orderData!.vehicleImage,
+                            //               fit: BoxFit.fill, height: 50, width: 50)),
+                            //       SizedBox(width: 16),
+                            //       Text(
+                            //           "${orderData!.vehicleData!.title.validate()}  (${printAmount(orderData!.vehicleData!.price.validate())})",
+                            //           style: primaryTextStyle()),
+                            //     ],
+                            //   ),
+                            // ),
                             if (userData != null &&
                                 (orderData!.status != ORDER_CREATED && orderData!.status != ORDER_DRAFT))
                               Column(
@@ -1425,8 +1489,12 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                 text: TextSpan(
                                   style: secondaryTextStyle(),
                                   children: [
-                                    TextSpan(text: '${language.canOrderWithinHour} ',style: secondaryTextStyle(color: Colors.red, size: 12)),
-                                    TextSpan(text: "${formatRemainingTime(remainingTime)}", style: boldTextStyle(color: Colors.red)),
+                                    TextSpan(
+                                        text: '${language.canOrderWithinHour} ',
+                                        style: secondaryTextStyle(color: Colors.red, size: 12)),
+                                    TextSpan(
+                                        text: "${formatRemainingTime(remainingTime)}",
+                                        style: boldTextStyle(color: Colors.red)),
                                   ],
                                 ),
                               ).visible(getStringAsync(USER_TYPE) == CLIENT &&
@@ -1490,8 +1558,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                     // return order option for delivery person
                     Positioned(
                       bottom: 10,
-                      left: context.height() * 0.11,
-                      right: context.height() * 0.11,
+                      left: 14,
+                      right: 14,
                       child: commonButton(language.cancelOrder, () {
                         if (!reason.isEmptyOrNull) {
                           cancelOrderByDeliveryManApiCall();
@@ -1504,8 +1572,8 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                     // return & cancel order option for delivery person
                     Positioned(
                       bottom: 10,
-                      left: context.height() * 0.11,
-                      right: context.height() * 0.11,
+                      left: 14,
+                      right: 14,
                       child: commonButton(language.cancelAndReturn, () {
                         if (!reason.isEmptyOrNull) {
                           createOrderApiCall();
@@ -1576,6 +1644,12 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                       right: 16,
                       child: commonButton(language.claimInsurance, () {
                         //  UploadClaimDetailsScreen().launch(context);
+                        proofTitleTextEditingController.text = "";
+                        proofDetailsTextEditingController.text = "";
+                        if (selectedFiles != null) {
+                          selectedFiles!.clear();
+                        }
+
                         selectProofData();
                       }, width: context.width()),
                     ).visible((orderData!.status == ORDER_PICKED_UP ||
@@ -1623,148 +1697,144 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                 constraints: BoxConstraints(
                   minHeight: 200.0, // Set your minimum height here
                 ),
-                child: Stack(
-                  children: [
-                    !appStore.isLoading
-                        ? Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                child: !appStore.isLoading
+                    ? Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(language.fillTheDetailsForClaim, style: boldTextStyle(), textAlign: TextAlign.start),
+                          8.height,
+                          Text(language.addAttachmentMsg,
+                              style: secondaryTextStyle(size: 12), textAlign: TextAlign.start),
+                          10.height,
+                          Divider(color: dividerColor, height: 1),
+                          8.height,
+                          Text(language.title, style: boldTextStyle()),
+                          12.height,
+                          AppTextField(
+                            isValidationRequired: true,
+                            controller: proofTitleTextEditingController,
+                            textFieldType: TextFieldType.NAME,
+                            errorThisFieldRequired: language.fieldRequiredMsg,
+                            decoration: commonInputDecoration(hintText: language.enterProofValue),
+                          ),
+                          8.height,
+                          Text(language.description, style: boldTextStyle()),
+                          12.height,
+                          AppTextField(
+                            isValidationRequired: true,
+                            controller: proofDetailsTextEditingController,
+                            textFieldType: TextFieldType.NAME,
+                            errorThisFieldRequired: language.fieldRequiredMsg,
+                            minLines: 4,
+                            maxLines: 8,
+                            decoration: commonInputDecoration(hintText: language.enterProofDetails),
+                          ),
+                          8.height,
+                          if (selectedFiles != null && selectedFiles!.length > 0)
+                            Text(language.selectedFiles, style: boldTextStyle()),
+                          if (selectedFiles != null && selectedFiles!.length > 0) 10.height,
+                          if (selectedFiles != null && selectedFiles!.length > 0)
+                            Container(
+                              width: context.width(),
+                              height: 120,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: selectedFiles!.length,
+                                itemBuilder: (context, index) {
+                                  return buildFileWidget(selectedFiles![index]);
+                                },
+                              ),
+                            ),
+                          16.height,
+                          Row(
                             children: [
-                              Text(language.fillTheDetailsForClaim, style: boldTextStyle(), textAlign: TextAlign.start),
-                              8.height,
-                              Text(language.addAttachmentMsg,
-                                  style: secondaryTextStyle(size: 12), textAlign: TextAlign.start),
-                              10.height,
-                              Divider(color: dividerColor, height: 1),
-                              8.height,
-                              Text(language.title, style: boldTextStyle()),
-                              12.height,
-                              AppTextField(
-                                isValidationRequired: true,
-                                controller: proofTitleTextEditingController,
-                                textFieldType: TextFieldType.NAME,
-                                errorThisFieldRequired: language.fieldRequiredMsg,
-                                decoration: commonInputDecoration(hintText: language.enterProofValue),
-                              ),
-                              8.height,
-                              Text(language.description, style: boldTextStyle()),
-                              12.height,
-                              AppTextField(
-                                isValidationRequired: true,
-                                controller: proofDetailsTextEditingController,
-                                textFieldType: TextFieldType.NAME,
-                                errorThisFieldRequired: language.fieldRequiredMsg,
-                                minLines: 4,
-                                maxLines: 8,
-                                decoration: commonInputDecoration(hintText: language.enterProofDetails),
-                              ),
-                              8.height,
-                              if (selectedFiles != null && selectedFiles!.length > 0)
-                                Text(language.selectedFiles, style: boldTextStyle()),
-                              if (selectedFiles != null && selectedFiles!.length > 0) 10.height,
-                              if (selectedFiles != null && selectedFiles!.length > 0)
-                                Container(
-                                  width: context.width(),
-                                  height: 120,
-                                  child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: selectedFiles!.length,
-                                    itemBuilder: (context, index) {
-                                      return buildFileWidget(selectedFiles![index]);
-                                    },
-                                  ),
-                                ),
-                              16.height,
-                              Row(
-                                children: [
-                                  commonButton(language.cancel, size: 14, () {
-                                    if (selectedFiles != null) selectedFiles!.clear();
-                                    finish(getContext, 0);
-                                  }).expand(),
-                                  6.width,
-                                  commonButton(
-                                    language.addProofs,
-                                    size: 14,
-                                    () async {
-                                      if (selectedFiles != null) selectedFiles!.clear();
-                                      FilePickerResult? result = await FilePicker.platform.pickFiles(
-                                        allowMultiple: true,
-                                        type: FileType.custom,
-                                        allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf'],
-                                      );
-                                      if (result != null) {
-                                        selectedImagesUpdate(() {
-                                          selectedFiles = result.files;
-                                        });
-                                      }
-                                    },
-                                  ).expand(),
-                                  6.width,
-                                  commonButton(language.claim, size: 14, () async {
-                                    if (claimFormKey.currentState!.validate()) {
-                                      selectedImagesUpdate(() {
-                                        appStore.setLoading(true);
-                                      });
-                                      hideKeyboard(context);
+                              commonButton(language.cancel, size: 14, () {
+                                if (selectedFiles != null) selectedFiles!.clear();
+                                finish(getContext, 0);
+                              }).expand(),
+                              6.width,
+                              commonButton(
+                                language.addProofs,
+                                size: 14,
+                                () async {
+                                  if (selectedFiles != null) selectedFiles!.clear();
+                                  FilePickerResult? result = await FilePicker.platform.pickFiles(
+                                    allowMultiple: true,
+                                    type: FileType.custom,
+                                    allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf'],
+                                  );
+                                  if (result != null) {
+                                    selectedImagesUpdate(() {
+                                      selectedFiles = result.files;
+                                    });
+                                  }
+                                },
+                              ).expand(),
+                              6.width,
+                              commonButton(language.claim, size: 14, () async {
+                                if (claimFormKey.currentState!.validate()) {
+                                  selectedImagesUpdate(() {
+                                    appStore.setLoading(true);
+                                  });
+                                  hideKeyboard(context);
 
-                                      MultipartRequest multiPartRequest = await getMultiPartRequest('claims-save');
-                                      multiPartRequest.fields['traking_no'] = orderData!.orderTrackingId.validate();
-                                      multiPartRequest.fields['prof_value'] = proofTitleTextEditingController.text;
-                                      multiPartRequest.fields['detail'] = proofDetailsTextEditingController.text;
-                                      multiPartRequest.fields['client_id'] = getIntAsync(USER_ID).toString();
-                                      if (selectedFiles != null && selectedFiles!.length > 0) {
-                                        selectedFiles!.forEach((element) async {
-                                          multiPartRequest.files
-                                              .add(await MultipartFile.fromPath("attachment_file[]", element.path!));
-                                        });
-                                      }
-                                      print("---------------request${multiPartRequest.toString()}");
+                                  MultipartRequest multiPartRequest = await getMultiPartRequest('claims-save');
+                                  multiPartRequest.fields['traking_no'] = orderData!.orderTrackingId.validate();
+                                  multiPartRequest.fields['prof_value'] = proofTitleTextEditingController.text;
+                                  multiPartRequest.fields['detail'] = proofDetailsTextEditingController.text;
+                                  multiPartRequest.fields['client_id'] = getIntAsync(USER_ID).toString();
+                                  if (selectedFiles != null && selectedFiles!.length > 0) {
+                                    selectedFiles!.forEach((element) async {
+                                      multiPartRequest.files
+                                          .add(await MultipartFile.fromPath("attachment_file[]", element.path!));
+                                    });
+                                  }
+                                  print("---------------request${multiPartRequest.toString()}");
 
-                                      // multiPartRequest.files.add(await MultipartFile.fromPath('vehicle_history_image', file.path));
-                                      multiPartRequest.headers.addAll(buildHeaderTokens());
-                                      sendMultiPartRequest(
-                                        multiPartRequest,
-                                        onSuccess: (data) async {
-                                          if (data != null) {
-                                            appStore.setLoading(false);
-                                            toast(data["message"]);
-
-                                            finish(context);
-                                            print(data.toString());
-                                            selectedImagesUpdate(() {
-                                              appStore.setLoading(false);
-                                            });
-                                            // VehicleSavedResponse res = VehicleSavedResponse.fromJson(data);
-                                            // toast(res.message.toString());
-                                            // setValue(VEHICLE, res.data!.toJson());
-                                            // LiveStream().emit("VehicleInfo");
-                                            // print("------------------${res.data!.vehicleInfo.make}");
-                                            // appStore.setLoading(false);
-                                            // finish(context);
-                                          }
-                                        },
-                                        onError: (error) {
-                                          toast(error.toString(), print: true);
-                                          appStore.setLoading(false);
-                                        },
-                                      ).catchError((e) {
+                                  // multiPartRequest.files.add(await MultipartFile.fromPath('vehicle_history_image', file.path));
+                                  multiPartRequest.headers.addAll(buildHeaderTokens());
+                                  sendMultiPartRequest(
+                                    multiPartRequest,
+                                    onSuccess: (data) async {
+                                      if (data != null) {
                                         appStore.setLoading(false);
-                                        toast(e.toString());
-                                      });
-                                      //   claimInsuranceVehicleApiCall();
-                                    }
-                                    // if (selectedFiles != null) {
-                                    //   print("-------------selected files length${selectedFiles!.length}");
-                                    // }
-                                  }).expand(),
-                                ],
-                              ),
+                                        toast(data["message"]);
+
+                                        finish(context);
+                                        print(data.toString());
+                                        selectedImagesUpdate(() {
+                                          appStore.setLoading(false);
+                                        });
+                                        // VehicleSavedResponse res = VehicleSavedResponse.fromJson(data);
+                                        // toast(res.message.toString());
+                                        // setValue(VEHICLE, res.data!.toJson());
+                                        // LiveStream().emit("VehicleInfo");
+                                        // print("------------------${res.data!.vehicleInfo.make}");
+                                        // appStore.setLoading(false);
+                                        // finish(context);
+                                      }
+                                    },
+                                    onError: (error) {
+                                      toast(error.toString(), print: true);
+                                      appStore.setLoading(false);
+                                    },
+                                  ).catchError((e) {
+                                    appStore.setLoading(false);
+                                    toast(e.toString());
+                                  });
+                                  claimInsuranceVehicleApiCall();
+                                }
+                                // if (selectedFiles != null) {
+                                //   print("-------------selected files length${selectedFiles!.length}");
+                                // }
+                              }).expand(),
                             ],
-                          )
-                        : Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)).center(),
-                  ],
-                ),
+                          ),
+                        ],
+                      )
+                    : Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)).center(),
               ),
             ),
           );

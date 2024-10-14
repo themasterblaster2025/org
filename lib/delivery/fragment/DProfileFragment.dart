@@ -59,6 +59,7 @@ class DProfileFragmentState extends State<DProfileFragment> {
   }
 
   void init() async {
+    vehicle = DeliverymanVehicle.fromJson(getJSONAsync(VEHICLE));
     LiveStream().on('UpdateLanguage', (p0) {
       setState(() {});
     });
@@ -72,7 +73,7 @@ class DProfileFragmentState extends State<DProfileFragment> {
       print("---------------------vehicle${vehicle!.vehicleInfo.make}");
       setState(() {});
     });
-    vehicle = DeliverymanVehicle.fromJson(getJSONAsync(VEHICLE));
+
     print("---------------------vehicle${vehicle!.vehicleInfo.make}");
     setState(() {});
   }
