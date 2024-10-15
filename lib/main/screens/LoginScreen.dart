@@ -523,17 +523,19 @@ class LoginScreenState extends State<LoginScreen> {
       bottomNavigationBar: Container(
         color: appStore.isDarkMode ? ColorUtils.scaffoldSecondaryDark : ColorUtils.colorPrimaryLight,
         padding: EdgeInsets.all(16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("${language.becomeADeliveryBoy}", style: primaryTextStyle()),
-            4.width,
-            Text(language.signUp, style: boldTextStyle(color: ColorUtils.colorPrimary)).onTap(() {
-              RegisterScreen(userType: DELIVERY_MAN)
-                  .launch(context, duration: Duration(milliseconds: 500), pageRouteAnimation: PageRouteAnimation.Slide);
-            }),
-          ],
-        ),
+        child: appStore.isAllowDeliveryMan
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("${language.becomeADeliveryBoy}", style: primaryTextStyle()),
+                  4.width,
+                  Text(language.signUp, style: boldTextStyle(color: ColorUtils.colorPrimary)).onTap(() {
+                    RegisterScreen(userType: DELIVERY_MAN).launch(context,
+                        duration: Duration(milliseconds: 500), pageRouteAnimation: PageRouteAnimation.Slide);
+                  }),
+                ],
+              ).visible(appStore.isAllowDeliveryMan)
+            : SizedBox(),
       ).visible(appStore.isAllowDeliveryMan),
     );
   }

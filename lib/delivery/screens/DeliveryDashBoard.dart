@@ -656,9 +656,6 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                                     key: rescheduleFormKey,
                                     child: SingleChildScrollView(
                                       child: Container(
-                                        constraints: BoxConstraints(
-                                            //  minHeight: 200.0, // Set your minimum height here
-                                            ),
                                         child: !appStore.isLoading
                                             ? Column(
                                                 mainAxisSize: MainAxisSize.min,
@@ -682,15 +679,19 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                                                         language.confirmDelivery,
                                                         size: 14,
                                                         () async {
-                                                          val = 0; // Reset the form visibility
+                                                          // Reset the form visibility
 
                                                           // API call or onTapData function for "Departed"
+
+                                                          if (context.mounted) {
+                                                            Navigator.pop(context);
+                                                          }
                                                           onTapData(
                                                               orderData: data,
                                                               orderStatus: statusList[selectedStatusIndex]);
 
-                                                          selectedImagesUpdate(() {}); // Update the state
-                                                          finish(context); // Close the dialog after action
+                                                          // Update the state
+                                                          // Close the dialog after action
                                                         },
                                                       ).expand(),
                                                     ],
@@ -1064,11 +1065,10 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
       pageController.jumpToPage(i + 1);
       getOrderListApiCall();
     } else if (orderStatus == ORDER_DEPARTED) {
-      DateTime startTime = DateTime.parse(orderData.deliveryPoint!.startTime!);
-      DateTime endTime = DateTime.parse(orderData.deliveryPoint!.endTime!);
+      DateTime startTime = DateTime.parse(orderData.pickupPoint!.startTime!);
       DateTime now = DateTime.now();
       // Check if the current time is between start and end times
-      if (now.isAfter(startTime) && now.isBefore(endTime)) {
+      if (now.isAfter(startTime)) {
         await ReceivedScreenOrderScreen(
                 orderData: orderData,
                 isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_DELIVERY)

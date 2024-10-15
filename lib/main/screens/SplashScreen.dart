@@ -56,7 +56,7 @@ class SplashScreenState extends State<SplashScreen> {
     await getLanguageList(versionNo).then((value) {
       appStore.setThemeColor(value.themeColor!);
       appStore.updateTheme(colorFromHex(value.themeColor!));
-
+      appStore.setIsAllowDeliveryMan(value.isAllowDeliveryMan ?? false);
       print("value===========${value.data!.length}");
       appStore.setLoading(false);
       if (value.status == true) {

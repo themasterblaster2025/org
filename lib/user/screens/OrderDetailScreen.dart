@@ -90,6 +90,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
   TextEditingController proofDetailsTextEditingController = TextEditingController();
   GlobalKey<FormState> claimFormKey = GlobalKey<FormState>();
   bool isUserEligibleForClaim = true;
+  String vehicleDataitle = "";
 
   @override
   void initState() {
@@ -108,6 +109,10 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
     appStore.setLoading(true);
     await getOrderDetails(widget.orderId).then((value) {
       orderData = value.data!;
+      vehicleDataitle =
+          "${language.name} : ${orderData!.vehicleData!.title}, ${language.price} : ${appStore.currencySymbol}${orderData!.vehicleData!.price.validate()}, "
+          "${language.capacity} : ${orderData!.vehicleData!.capacity.validate()},${language.perKmCharge} : "
+          "${appStore.currencySymbol}${orderData!.vehicleData!.perKmCharge.validate()}";
       orderHistory = value.orderHistory!;
       if (value.courierCompanyDetail != null) {
         courierDetails = value.courierCompanyDetail!;
@@ -1028,35 +1033,58 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start, // Align to start
                                         children: [
-                                          Row(
-                                            children: [
-                                              Text("${language.name} : ", style: secondaryTextStyle()),
-                                              Text(
-                                                "${orderData!.vehicleData!.title.validate()} ",
+                                          if (vehicleDataitle != "")
+                                            Container(
+                                              width: context.width() * 0.6,
+                                              child: Text(
+                                                vehicleDataitle,
                                                 style: primaryTextStyle(),
-                                              ).expand(),
-                                              Text("${language.price} : ", style: secondaryTextStyle()),
-                                              Text(
-                                                "(${printAmount(orderData!.vehicleData!.price.validate())})",
-                                                style: primaryTextStyle(),
-                                              ).paddingRight(10),
-                                            ],
-                                          ),
-                                          4.height, // Fixed height instead of 2.height
-                                          Row(
-                                            children: [
-                                              Text("${language.capacity} : ", style: secondaryTextStyle()),
-                                              Text(
-                                                "${orderData!.vehicleData!.capacity.validate()} ",
-                                                style: primaryTextStyle(),
-                                              ).expand(),
-                                              Text("${language.perKmCharge} : ", style: secondaryTextStyle()),
-                                              Text(
-                                                "(${printAmount(orderData!.vehicleData!.perKmCharge.validate())})",
-                                                style: primaryTextStyle(),
-                                              ).paddingRight(10),
-                                            ],
-                                          ),
+                                                maxLines: 4,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            )
+                                          // Row(
+                                          //   children: [
+                                          //     Container(
+                                          //         width: 100, child: Text("${language.name} : ", style: secondaryTextStyle())),
+                                          //     Text(
+                                          //       "${item.title.validate()} ",
+                                          //       style: primaryTextStyle(),
+                                          //     ),
+                                          //   ],
+                                          // ),
+                                          // Row(
+                                          //   children: [
+                                          //     Container(
+                                          //         width: 100, child: Text("${language.price} : ", style: secondaryTextStyle())),
+                                          //     Text(
+                                          //       "${printAmount(item.price.validate())}",
+                                          //       style: primaryTextStyle(),
+                                          //     ).paddingRight(10),
+                                          //   ],
+                                          // ),
+                                          // Row(
+                                          //   children: [
+                                          //     Container(
+                                          //         width: 100,
+                                          //         child: Text("${language.capacity} : ", style: secondaryTextStyle())),
+                                          //     Text(
+                                          //       "${item.capacity.validate()} ",
+                                          //       style: primaryTextStyle(),
+                                          //     ),
+                                          //   ],
+                                          // ),
+                                          // Row(
+                                          //   children: [
+                                          //     Container(
+                                          //         width: 100,
+                                          //         child: Text("${language.perKmCharge} : ", style: secondaryTextStyle())),
+                                          //     Text(
+                                          //       "${printAmount(item.perKmCharge.validate())}",
+                                          //       style: primaryTextStyle(),
+                                          //     ).paddingRight(10),
+                                          //   ],
+                                          // ),
                                         ],
                                       ),
                                     ),

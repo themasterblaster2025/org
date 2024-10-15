@@ -1572,50 +1572,73 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   style: primaryTextStyle(),
                   isDense: false,
                   items: vehicleList.map<DropdownMenuItem<int>>((item) {
+                    String str = "${language.name} : ${item.title}, ${language.price} :${appStore.currencySymbol} "
+                        "${item.price.validate()}, "
+                        "${language.capacity} : ${item.capacity.validate()},${language.perKmCharge} :${appStore.currencySymbol} ${item.perKmCharge.validate()}";
+                    print("--------------${str}");
                     return DropdownMenuItem(
                       value: item.id,
                       child: Container(
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             commonCachedNetworkImage(item.vehicleImage.validate(), height: 40, width: 40),
                             SizedBox(width: 16),
-                            Expanded(
-                              // Wrapping the Column with Expanded to prevent overflow
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start, // Align to start
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text("${language.name} : ", style: secondaryTextStyle()),
-                                      Text(
-                                        "${item.title.validate()} ",
-                                        style: primaryTextStyle(),
-                                      ).expand(),
-                                      Text("${language.price} : ", style: secondaryTextStyle()),
-                                      Text(
-                                        "(${printAmount(item.price.validate())})",
-                                        style: primaryTextStyle(),
-                                      ).paddingRight(10),
-                                    ],
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start, // Align to start
+                              children: [
+                                Container(
+                                  width: context.width() * 0.6,
+                                  child: Text(
+                                    str,
+                                    style: primaryTextStyle(),
+                                    maxLines: 4,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  4.height, // Fixed height instead of 2.height
-                                  Row(
-                                    children: [
-                                      Text("${language.capacity} : ", style: secondaryTextStyle()),
-                                      Text(
-                                        "${item.capacity.validate()} ",
-                                        style: primaryTextStyle(),
-                                      ).expand(),
-                                      Text("${language.perKmCharge} : ", style: secondaryTextStyle()),
-                                      Text(
-                                        "(${printAmount(item.perKmCharge.validate())})",
-                                        style: primaryTextStyle(),
-                                      ).paddingRight(10),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                                )
+                                // Row(
+                                //   children: [
+                                //     Container(
+                                //         width: 100, child: Text("${language.name} : ", style: secondaryTextStyle())),
+                                //     Text(
+                                //       "${item.title.validate()} ",
+                                //       style: primaryTextStyle(),
+                                //     ),
+                                //   ],
+                                // ),
+                                // Row(
+                                //   children: [
+                                //     Container(
+                                //         width: 100, child: Text("${language.price} : ", style: secondaryTextStyle())),
+                                //     Text(
+                                //       "${printAmount(item.price.validate())}",
+                                //       style: primaryTextStyle(),
+                                //     ).paddingRight(10),
+                                //   ],
+                                // ),
+                                // Row(
+                                //   children: [
+                                //     Container(
+                                //         width: 100,
+                                //         child: Text("${language.capacity} : ", style: secondaryTextStyle())),
+                                //     Text(
+                                //       "${item.capacity.validate()} ",
+                                //       style: primaryTextStyle(),
+                                //     ),
+                                //   ],
+                                // ),
+                                // Row(
+                                //   children: [
+                                //     Container(
+                                //         width: 100,
+                                //         child: Text("${language.perKmCharge} : ", style: secondaryTextStyle())),
+                                //     Text(
+                                //       "${printAmount(item.perKmCharge.validate())}",
+                                //       style: primaryTextStyle(),
+                                //     ).paddingRight(10),
+                                //   ],
+                                // ),
+                              ],
                             ),
                           ],
                         ),

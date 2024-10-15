@@ -137,17 +137,18 @@ class _CustomerSupportScreenState extends State<CustomerSupportScreen> {
                                   ],
                                 ),
                                 8.height,
-                                Row(
-                                  children: [
-                                    Text('${language.attachment} : ', style: primaryTextStyle()),
-                                    10.width,
-                                    Text((item.video.isEmptyOrNull) ? language.viewPhoto : language.viewVideo)
-                                        .onTap(() {
-                                      CustomerSupportDetailsScreen(item.video.toString(), item.image.toString())
-                                          .launch(context);
-                                    }),
-                                  ],
-                                ),
+                                if (item.video != null || item.image != null)
+                                  Row(
+                                    children: [
+                                      Text('${language.attachment} : ', style: primaryTextStyle()),
+                                      10.width,
+                                      Text((item.video.isEmptyOrNull) ? language.viewPhoto : language.viewVideo)
+                                          .onTap(() {
+                                        CustomerSupportDetailsScreen(item.video.toString(), item.image.toString())
+                                            .launch(context);
+                                      }),
+                                    ],
+                                  ),
                                 if (item.resolutionDetail != null) 8.height,
                                 if (item.resolutionDetail != null)
                                   Row(

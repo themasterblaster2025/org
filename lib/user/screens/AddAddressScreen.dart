@@ -40,6 +40,7 @@ class AddAddressScreenState extends State<AddAddressScreen> {
 
   TextEditingController addressController = TextEditingController();
   TextEditingController contactController = TextEditingController();
+  TextEditingController addressTypeController = TextEditingController();
   double? latitude, longitude;
   String countryCode = defaultPhoneCode;
   String dropDownValue = language.home;
@@ -196,28 +197,37 @@ class AddAddressScreenState extends State<AddAddressScreen> {
                       FilteringTextInputFormatter.digitsOnly,
                     ],
                   ),
+                  16.height,
+                  Text(language.selectAddressType, style: primaryTextStyle()),
                   8.height,
-                  Row(
-                    children: [
-                      Text(language.selectAddressType).expand(),
-                      DropdownButton(
-                        value: dropDownValue,
-                        icon: const Icon(Icons.keyboard_arrow_down),
-                        items: items.map((String items) {
-                          return DropdownMenuItem(
-                            value: items,
-                            child: Text(items),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            dropDownValue = newValue!;
-                            print("------------------------${dropDownValue}");
-                          });
-                        },
-                      ),
-                    ],
+                  AppTextField(
+                    isValidationRequired: true,
+                    controller: addressTypeController,
+                    textFieldType: TextFieldType.NAME,
+                    errorThisFieldRequired: language.fieldRequiredMsg,
+                    decoration: commonInputDecoration(hintText: language.name),
                   ),
+                  // Row(
+                  //   children: [
+                  //     Text(language.selectAddressType).expand(),
+                  //     DropdownButton(
+                  //       value: dropDownValue,
+                  //       icon: const Icon(Icons.keyboard_arrow_down),
+                  //       items: items.map((String items) {
+                  //         return DropdownMenuItem(
+                  //           value: items,
+                  //           child: Text(items),
+                  //         );
+                  //       }).toList(),
+                  //       onChanged: (String? newValue) {
+                  //         setState(() {
+                  //           dropDownValue = newValue!;
+                  //           print("------------------------${dropDownValue}");
+                  //         });
+                  //       },
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
             ),
