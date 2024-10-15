@@ -263,6 +263,11 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                       }),
                   ],
                 ),
+                //TODO KRUTI
+                if (widget.item.reScheduleDateTime != null)
+                  Text('${language.note} ${language.rescheduleMsg} ${DateFormat('yyyy-MM-dd HH:mm').format(DateTime.parse(widget.item.reScheduleDateTime!))} ',
+                          style: secondaryTextStyle(color: Colors.red, size: 12))
+                      .paddingOnly(top: 4)
               ],
             ),
             if (widget.item.status != ORDER_CANCELLED ||

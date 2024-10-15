@@ -656,6 +656,10 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                             }),
                                         ],
                                       ),
+                                      if (orderData!.reScheduleDateTime != null)
+                                        Text('${language.note} ${language.rescheduleMsg} ${DateFormat('yyyy-MM-dd HH:mm').format(DateTime.parse(orderData!.reScheduleDateTime!))} ',
+                                                style: secondaryTextStyle(color: Colors.red, size: 12))
+                                            .paddingOnly(top: 4)
                                     ],
                                   ),
                                   if (orderData!.status != ORDER_CANCELLED ||

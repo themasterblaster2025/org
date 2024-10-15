@@ -1072,4 +1072,5 @@ class BaseLanguage {
   String get earlyPickupMsg => getContentValueFromKey(563);
   String get reschedule => getContentValueFromKey(564);
   String get rescheduleTitle => getContentValueFromKey(565);
+  String get rescheduleMsg => getContentValueFromKey(566);
 }

@@ -1813,6 +1813,12 @@
         "keyword_id": 560,
         "keyword_name": "enterProofDetails",
         "keyword_value": "Enter proof details"
+      },
+      {
+        "screenId": "27",
+        "keyword_id": 566,
+        "keyword_name": "rescheduleMsg",
+        "keyword_value": "Your order is rescheduled at"
       }
     ]
   },

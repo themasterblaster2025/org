@@ -932,6 +932,10 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                     data.deliveryPoint!.startTime != null)
                   Text('${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.endTime!).toLocal())}',
                           style: secondaryTextStyle(color: Colors.red, size: 12))
+                      .paddingOnly(top: 4),
+                if (data.reScheduleDateTime != null)
+                  Text('${language.note} ${language.rescheduleMsg} ${DateFormat('yyyy-MM-dd HH:mm').format(DateTime.parse(data.reScheduleDateTime!))} ',
+                          style: secondaryTextStyle(color: Colors.red, size: 12))
                       .paddingOnly(top: 4)
               ],
             ),

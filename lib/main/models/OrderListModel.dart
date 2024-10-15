@@ -163,6 +163,8 @@ class OrderData {
   List<ExtraCharges>? extraChargesList;
   CityDetail? cityDetails;
   int? isClaimed;
+  int? isRescheduled;
+  String? reScheduleDateTime;
 
   OrderData(
       {this.orderTrackingId,
@@ -214,7 +216,9 @@ class OrderData {
       this.baseTotal,
       this.extraChargesList,
       this.cityDetails,
-      this.isClaimed});
+      this.isClaimed,
+      this.isRescheduled,
+      this.reScheduleDateTime});
 
   OrderData.fromJson(Map<String, dynamic> json) {
     orderTrackingId = json['order_tracking_id'];
@@ -264,6 +268,8 @@ class OrderData {
     insuranceCharge = json['insurance_charge'];
     baseTotal = json['base_total'];
     isClaimed = json['isClaimed'];
+    isRescheduled = json['is_reschedule'];
+    reScheduleDateTime = json['rescheduledatetime'];
     // Fixing the issue for extraChargesList:
     extraChargesList = json['extra_charge_list'] != null
         ? List<ExtraCharges>.from(json['extra_charge_list'].map((x) => ExtraCharges.fromJson(x)))
@@ -332,6 +338,8 @@ class OrderData {
     data['isClaimed'] = this.isClaimed;
     data['extra_charge_list'] = this.extraChargesList;
     data['city_details_list'] = this.cityDetails;
+    data['rescheduledatetime'] = this.reScheduleDateTime;
+    data['is_reschedule'] = this.isRescheduled;
     data["packaging_symbols"] =
         packagingSymbols == null ? [] : List<PackagingSymbol>.from(this.packagingSymbols!.map((x) => x.toJson()));
     return data;
