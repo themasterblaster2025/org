@@ -1,7 +1,5 @@
-
 // DateTime Extensions
 extension DateTimeExt on DateTime {
-
   /// Returns true if given date is today
   bool get isToday {
     final now = DateTime.now();

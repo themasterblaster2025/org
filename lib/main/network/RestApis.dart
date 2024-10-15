@@ -48,6 +48,7 @@ import '../models/DeliverymanVehicleListModel.dart';
 import '../models/DirectionsResponse.dart';
 import '../models/InvoiceSettingModel.dart';
 import '../models/OrderDetailModel.dart';
+import '../models/OrderRescheduleResponse.dart';
 import '../models/OrdersLatLngResponseList.dart';
 import '../models/PageResponse.dart';
 import '../models/PlaceIdDetailModel.dart';
@@ -768,4 +769,9 @@ Future<ClaimListResponseModel> getClaimList(int page) async {
     'claims-list?page=$page',
     method: HttpMethod.GET,
   )));
+}
+
+Future<OrderRescheduleResponse> rescheduleOrder(Map request) async {
+  return OrderRescheduleResponse.fromJson(
+      await handleResponse(await buildHttpResponse('reschedule-save', method: HttpMethod.POST, request: request)));
 }

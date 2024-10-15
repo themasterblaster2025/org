@@ -2317,6 +2317,30 @@
         "keyword_id": 309,
         "keyword_name": "cancelled",
         "keyword_value": "Cancelled"
+      },
+      {
+        "screenId": "34",
+        "keyword_id": 562,
+        "keyword_name": "earlyDeliveryMsg",
+        "keyword_value": "Sorry! you can not delivery this order now.Scheduled order pickup time doesn't match with current time."
+      },
+      {
+        "screenId": "34",
+        "keyword_id": 563,
+        "keyword_name": "earlyPickupMsg",
+        "keyword_value": "Sorry! you can not pickup this order now.Scheduled order pickup time doesn't match with current time."
+      },
+      {
+        "screenId": "34",
+        "keyword_id": 564,
+        "keyword_name": "reschedule",
+        "keyword_value": "Reschedule"
+      },
+      {
+        "screenId": "34",
+        "keyword_id": 565,
+        "keyword_name": "rescheduleTitle",
+        "keyword_value": "Fill details for reschedule"
       }
     ]
   },

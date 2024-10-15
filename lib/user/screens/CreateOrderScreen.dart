@@ -637,7 +637,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       type: DateTimePickerType.date,
                       initialDate: DateTime.now(),
                       firstDate: DateTime.now(),
-                      lastDate: DateTime.now(),
+                      lastDate: DateTime.now().add(Duration(days: 30)),
                       onChanged: (value) {
                         pickDate = DateTime.parse(value);
                         deliverDate = null;
@@ -662,15 +662,26 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           },
                           validator: (value) {
                             if (value.validate().isEmpty) return language.fieldRequiredMsg;
+
                             // Check if today’s date is selected
                             DateTime now = DateTime.now();
                             DateTime selectedDateTime = DateFormat('hh:mm').parse(value!);
                             DateTime selectedDateWithTime =
                                 DateTime(now.year, now.month, now.day, selectedDateTime.hour, selectedDateTime.minute);
-
-                            // Validate if the time is at least 1 hour from now
-                            if (selectedDateWithTime.isBefore(now.add(Duration(hours: 1)))) {
-                              return language.timeValidation;
+                            if (pickDate!.year == now.year &&
+                                pickDate!.month == now.month &&
+                                pickDate!.day == now.day) {
+                              // Add 1 hour to the current time if the selected date is today
+                              if (selectedDateWithTime.isBefore(now.add(Duration(hours: 1)))) {
+                                return language.scheduleOrderTimeMsg;
+                              }
+                            } else {
+                              double fromTimeInHour = pickFromTime!.hour + pickFromTime!.minute / 60;
+                              double toTimeInHour = pickToTime!.hour + pickToTime!.minute / 60;
+                              double difference = toTimeInHour - fromTimeInHour;
+                              if (difference <= 0) {
+                                return language.endTimeValidationMsg;
+                              }
                             }
 
                             return null;
@@ -695,10 +706,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                             DateTime selectedDateTime = DateFormat('hh:mm').parse(value!);
                             DateTime selectedDateWithTime =
                                 DateTime(now.year, now.month, now.day, selectedDateTime.hour, selectedDateTime.minute);
-
-                            // Validate if the time is at least 1 hour from now
-                            if (selectedDateWithTime.isBefore(now.add(Duration(hours: 1)))) {
-                              return language.scheduleOrderTimeMsg;
+                            if (pickDate!.year == now.year &&
+                                pickDate!.month == now.month &&
+                                pickDate!.day == now.day) {
+                              // Add 1 hour to the current time if the selected date is today
+                              if (selectedDateWithTime.isBefore(now.add(Duration(hours: 1)))) {
+                                return language.scheduleOrderTimeMsg;
+                              }
                             }
                             if (difference <= 0) {
                               return language.endTimeValidationMsg;
@@ -728,23 +742,14 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       type: DateTimePickerType.date,
                       initialDate: pickDate ?? DateTime.now(),
                       firstDate: pickDate ?? DateTime.now(),
-                      lastDate: DateTime(2050),
+                      lastDate: DateTime.now().add(Duration(days: 30)),
                       onChanged: (value) {
                         deliverDate = DateTime.parse(value);
                         setState(() {});
                       },
                       validator: (value) {
                         if (value!.isEmpty) return language.fieldRequiredMsg;
-                        // Check if today’s date is selected
-                        DateTime now = DateTime.now();
-                        DateTime selectedDateTime = DateFormat('hh:mm').parse(value!);
-                        DateTime selectedDateWithTime =
-                            DateTime(now.year, now.month, now.day, selectedDateTime.hour, selectedDateTime.minute);
 
-                        // Validate if the time is at least 1 hour from now
-                        if (selectedDateWithTime.isBefore(now.add(Duration(hours: 1)))) {
-                          return language.scheduleOrderTimeMsg;
-                        }
                         return null;
                       },
                       decoration: commonInputDecoration(suffixIcon: Icons.calendar_today, hintText: language.date),
@@ -761,17 +766,25 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           },
                           validator: (value) {
                             if (value.validate().isEmpty) return language.fieldRequiredMsg;
+                            double fromTimeInHour = deliverFromTime!.hour + deliverFromTime!.minute / 60;
+                            double toTimeInHour = deliverToTime!.hour + deliverToTime!.minute / 60;
+                            double difference = toTimeInHour - fromTimeInHour;
                             // Check if today’s date is selected
                             DateTime now = DateTime.now();
                             DateTime selectedDateTime = DateFormat('hh:mm').parse(value!);
                             DateTime selectedDateWithTime =
                                 DateTime(now.year, now.month, now.day, selectedDateTime.hour, selectedDateTime.minute);
-
-                            // Validate if the time is at least 1 hour from now
-                            if (selectedDateWithTime.isBefore(now.add(Duration(hours: 1)))) {
-                              return language.scheduleOrderTimeMsg;
+                            if (pickDate!.year == now.year &&
+                                pickDate!.month == now.month &&
+                                pickDate!.day == now.day) {
+                              // Add 1 hour to the current time if the selected date is today
+                              if (selectedDateWithTime.isBefore(now.add(Duration(hours: 1)))) {
+                                return language.scheduleOrderTimeMsg;
+                              }
                             }
-
+                            if (difference <= 0) {
+                              return language.endTimeValidationMsg;
+                            }
                             return null;
                           },
                           decoration: commonInputDecoration(suffixIcon: Icons.access_time, hintText: language.from),
@@ -786,21 +799,24 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           },
                           validator: (value) {
                             if (value!.isEmpty) return language.fieldRequiredMsg;
+                            if (value.validate().isEmpty) return language.fieldRequiredMsg;
                             double fromTimeInHour = deliverFromTime!.hour + deliverFromTime!.minute / 60;
                             double toTimeInHour = deliverToTime!.hour + deliverToTime!.minute / 60;
                             double difference = toTimeInHour - fromTimeInHour;
                             // Check if today’s date is selected
                             DateTime now = DateTime.now();
-                            DateTime selectedDateTime = DateFormat('hh:mm').parse(value);
+                            DateTime selectedDateTime = DateFormat('hh:mm').parse(value!);
                             DateTime selectedDateWithTime =
                                 DateTime(now.year, now.month, now.day, selectedDateTime.hour, selectedDateTime.minute);
-
-                            // Validate if the time is at least 1 hour from now
-                            if (selectedDateWithTime.isBefore(now.add(Duration(hours: 1)))) {
-                              return language.scheduleOrderTimeMsg;
+                            if (deliverDate!.year == now.year &&
+                                deliverDate!.month == now.month &&
+                                deliverDate!.day == now.day) {
+                              // Add 1 hour to the current time if the selected date is today
+                              if (selectedDateWithTime.isBefore(now.add(Duration(hours: 1)))) {
+                                return language.scheduleOrderTimeMsg;
+                              }
                             }
-
-                            if (difference < 0) {
+                            if (difference <= 0) {
                               return language.endTimeValidationMsg;
                             }
                             return null;

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -7,10 +8,13 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import '../../delivery/screens/OrdersMapScreen.dart';
+import '../../extensions/app_text_field.dart';
 import '../../extensions/extension_util/context_extensions.dart';
 import '../../extensions/extension_util/int_extensions.dart';
 import '../../extensions/extension_util/string_extensions.dart';
 import '../../extensions/extension_util/widget_extensions.dart';
+import '../../extensions/widgets.dart';
+import '../../main/utils/Colors.dart';
 import '../../main/utils/Widgets.dart';
 import '../../main/utils/dynamic_theme.dart';
 
@@ -68,6 +72,11 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
   int totalPage = 1;
   int selectedStatusIndex = 0;
   List<OrderData> orderData = [];
+  GlobalKey<FormState> rescheduleFormKey = GlobalKey<FormState>();
+  TextEditingController reasonTitleTextEditingController = TextEditingController();
+  TextEditingController dateTextEditingController = TextEditingController();
+  TextEditingController pickDateController = TextEditingController();
+  DateTime? pickDate;
 
   @override
   void initState() {
@@ -397,6 +406,106 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
     );
   }
 
+  // Future<void> rescheduleDialog(int id) async {
+  //   return showInDialog(
+  //     barrierDismissible: false,
+  //     getContext,
+  //     //    contentPadding: EdgeInsets.all(16),
+  //     builder: (p0) {
+  //       return StatefulBuilder(builder: (context, selectedImagesUpdate) {
+  //         return Form(
+  //           key: rescheduleFormKey,
+  //           child: SingleChildScrollView(
+  //             child: Container(
+  //               constraints: BoxConstraints(
+  //                 minHeight: 200.0, // Set your minimum height here
+  //               ),
+  //               child: !appStore.isLoading
+  //                   ? Form(
+  //                       key: rescheduleFormKey,
+  //                       child: Column(
+  //                         mainAxisSize: MainAxisSize.min,
+  //                         mainAxisAlignment: MainAxisAlignment.start,
+  //                         crossAxisAlignment: CrossAxisAlignment.start,
+  //                         children: [
+  //                           //todo
+  //                           Text("Fill details for reschedule", style: boldTextStyle(), textAlign: TextAlign.start),
+  //                           10.height,
+  //                           Divider(color: dividerColor, height: 1),
+  //                           8.height,
+  //                           Text(language.reason, style: boldTextStyle()),
+  //                           12.height,
+  //                           AppTextField(
+  //                             isValidationRequired: true,
+  //                             controller: reasonTitleTextEditingController,
+  //                             textFieldType: TextFieldType.NAME,
+  //                             errorThisFieldRequired: language.fieldRequiredMsg,
+  //                             decoration: commonInputDecoration(hintText: language.reason),
+  //                           ),
+  //                           8.height,
+  //                           Text(language.date, style: boldTextStyle()),
+  //                           12.height,
+  //                           DateTimePicker(
+  //                             controller: pickDateController,
+  //                             type: DateTimePickerType.date,
+  //                             initialDate: DateTime.now(),
+  //                             firstDate: DateTime.now(),
+  //                             lastDate: DateTime.now().add(Duration(days: 30)),
+  //                             onChanged: (value) {
+  //                               pickDate = DateTime.parse(value);
+  //
+  //                               //    selectedImagesUpdate(() {});
+  //                             },
+  //                             validator: (value) {
+  //                               if (value!.isEmpty) return language.fieldRequiredMsg;
+  //                               return null;
+  //                             },
+  //                             decoration:
+  //                                 commonInputDecoration(suffixIcon: Icons.calendar_today, hintText: language.date),
+  //                           ),
+  //                           16.height,
+  //                           Row(
+  //                             children: [
+  //                               commonButton(language.cancel, size: 14, () {
+  //                                 finish(getContext, 0);
+  //                               }).expand(),
+  //                               6.width,
+  //                               commonButton(language.reschedule, size: 14, () async {
+  //                                 appStore.setLoading(true);
+  //                                 if (rescheduleFormKey.currentState!.validate()) {
+  //                                   Map request = {
+  //                                     "order_id": id,
+  //                                     "reason": reasonTitleTextEditingController.text,
+  //                                     "date": pickDate,
+  //                                   };
+  //                                   await rescheduleOrder(request).then((value) {
+  //                                     print("--------------------------${value.message}");
+  //                                     toast(value.message);
+  //                                   }).catchError((error) {
+  //                                     appStore.setLoading(false);
+  //                                     log(error.toString());
+  //                                   });
+  //                                 } else {
+  //                                   print("elser");
+  //                                 }
+  //                                 // if (selectedFiles != null) {
+  //                                 //   print("-------------selected files length${selectedFiles!.length}");
+  //                                 // }
+  //                               }).expand(),
+  //                             ],
+  //                           ),
+  //                         ],
+  //                       ),
+  //                     )
+  //                   : Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)).center(),
+  //             ),
+  //           ),
+  //         );
+  //       });
+  //     },
+  //   );
+  // }
+
   Widget orderCard(OrderData data) {
     return GestureDetector(
       child: Container(
@@ -535,7 +644,147 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                           } else if (statusList[selectedStatusIndex] == ORDER_ARRIVED) {
                             onTapData(orderData: data, orderStatus: statusList[selectedStatusIndex]);
                           } else if (statusList[selectedStatusIndex] == ORDER_DEPARTED) {
-                            onTapData(orderData: data, orderStatus: statusList[selectedStatusIndex]);
+                            int val = 0;
+                            return showInDialog(
+                              barrierDismissible: true,
+                              getContext,
+                              builder: (p0) {
+                                return StatefulBuilder(builder: (context, selectedImagesUpdate) {
+                                  // This is used to toggle the visibility of the reschedule form
+
+                                  return Form(
+                                    key: rescheduleFormKey,
+                                    child: SingleChildScrollView(
+                                      child: Container(
+                                        constraints: BoxConstraints(
+                                            //  minHeight: 200.0, // Set your minimum height here
+                                            ),
+                                        child: !appStore.isLoading
+                                            ? Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      // Reschedule button - shows the reschedule form
+                                                      commonButton(language.reschedule, size: 14, () {
+                                                        selectedImagesUpdate(() {
+                                                          val = 1;
+                                                          print("$val"); // This will make the reschedule form visible
+                                                        });
+                                                      }).expand(),
+
+                                                      6.width,
+
+                                                      // Departed button - triggers the API call and hides the form
+                                                      commonButton(
+                                                        language.confirmDelivery,
+                                                        size: 14,
+                                                        () async {
+                                                          val = 0; // Reset the form visibility
+
+                                                          // API call or onTapData function for "Departed"
+                                                          onTapData(
+                                                              orderData: data,
+                                                              orderStatus: statusList[selectedStatusIndex]);
+
+                                                          selectedImagesUpdate(() {}); // Update the state
+                                                          finish(context); // Close the dialog after action
+                                                        },
+                                                      ).expand(),
+                                                    ],
+                                                  ).visible(val == 0),
+
+                                                  // Reschedule form (only visible when val == 1)
+                                                  Column(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(language.rescheduleTitle,
+                                                          style: boldTextStyle(), textAlign: TextAlign.start),
+                                                      10.height,
+                                                      Divider(color: dividerColor, height: 1),
+                                                      8.height,
+
+                                                      // Reason text field
+                                                      Text(language.reason, style: boldTextStyle()),
+                                                      12.height,
+                                                      AppTextField(
+                                                        isValidationRequired: true,
+                                                        controller: reasonTitleTextEditingController,
+                                                        textFieldType: TextFieldType.NAME,
+                                                        errorThisFieldRequired: language.fieldRequiredMsg,
+                                                        decoration: commonInputDecoration(hintText: language.reason),
+                                                      ),
+                                                      8.height,
+
+                                                      // Date picker
+                                                      Text(language.date, style: boldTextStyle()),
+                                                      12.height,
+                                                      DateTimePicker(
+                                                        controller: pickDateController,
+                                                        type: DateTimePickerType.date,
+                                                        initialDate: DateTime.now(),
+                                                        firstDate: DateTime.now(),
+                                                        lastDate: DateTime.now().add(Duration(days: 30)),
+                                                        onChanged: (value) {
+                                                          pickDate = DateTime.parse(value);
+                                                        },
+                                                        validator: (value) {
+                                                          if (value!.isEmpty) return language.fieldRequiredMsg;
+                                                          return null;
+                                                        },
+                                                        decoration: commonInputDecoration(
+                                                            suffixIcon: Icons.calendar_today, hintText: language.date),
+                                                      ),
+
+                                                      16.height,
+
+                                                      // Buttons inside the reschedule form
+                                                      Row(
+                                                        children: [
+                                                          commonButton(language.cancel, size: 14, () {
+                                                            finish(getContext, 0); // Close the dialog
+                                                          }).expand(),
+
+                                                          6.width,
+
+                                                          // Reschedule button inside the form
+                                                          commonButton(language.reschedule, size: 14, () async {
+                                                            if (rescheduleFormKey.currentState!.validate()) {
+                                                              // Trigger the reschedule API call
+                                                              // Example API call
+                                                              Map request = {
+                                                                "order_id": data.id,
+                                                                "reason":
+                                                                    reasonTitleTextEditingController.text.toString(),
+                                                                "date": DateFormat('yyyy-MM-dd').format(pickDate!),
+                                                              };
+                                                              appStore.setLoading(true);
+                                                              await rescheduleOrder(request).then((value) {
+                                                                toast(value.message);
+                                                                appStore.setLoading(false);
+                                                                finish(context);
+                                                              });
+                                                            }
+                                                          }).expand(),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ).visible(val ==
+                                                      1), // This makes the form visible based on the value of "val"
+                                                ],
+                                              )
+                                            : Observer(builder: (context) => loaderWidget().visible(appStore.isLoading))
+                                                .center(),
+                                      ),
+                                    ),
+                                  );
+                                });
+                              },
+                            );
+                            //    onTapData(orderData: data, orderStatus: statusList[selectedStatusIndex]);
                           } else {
                             showConfirmDialogCustom(
                               context,
@@ -777,9 +1026,22 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
               orderData: orderData,
               isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_PICKUP)
           .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
-      int i = statusList.indexWhere((item) => item == ORDER_PICKED_UP);
-      pageController.jumpToPage(i);
-      getOrderListApiCall();
+      // DateTime startTime = DateTime.parse(orderData.pickupPoint!.startTime!);
+      // DateTime endTime = DateTime.parse(orderData.pickupPoint!.endTime!);
+      // DateTime now = DateTime.now();
+      // // Check if the current time is between start and end times
+      // if (now.isAfter(startTime) && now.isBefore(endTime)) {
+      //   // Allow the api call
+      //   await ReceivedScreenOrderScreen(
+      //           orderData: orderData,
+      //           isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_PICKUP)
+      //       .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+      //   int i = statusList.indexWhere((item) => item == ORDER_PICKED_UP);
+      //   pageController.jumpToPage(i);
+      //   getOrderListApiCall();
+      // } else {
+      //   toast(language.earlyPickupMsg);
+      // }
     } else if (orderStatus == ORDER_ARRIVED) {
       bool isCheck = await ReceivedScreenOrderScreen(
               orderData: orderData,
@@ -798,13 +1060,22 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
       pageController.jumpToPage(i + 1);
       getOrderListApiCall();
     } else if (orderStatus == ORDER_DEPARTED) {
-      await ReceivedScreenOrderScreen(
-              orderData: orderData,
-              isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_DELIVERY)
-          .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
-      int i = statusList.indexWhere((item) => item == ORDER_DEPARTED);
-      pageController.jumpToPage(i + 1);
-      getOrderListApiCall();
+      DateTime startTime = DateTime.parse(orderData.deliveryPoint!.startTime!);
+      DateTime endTime = DateTime.parse(orderData.deliveryPoint!.endTime!);
+      DateTime now = DateTime.now();
+      // Check if the current time is between start and end times
+      if (now.isAfter(startTime) && now.isBefore(endTime)) {
+        await ReceivedScreenOrderScreen(
+                orderData: orderData,
+                isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_DELIVERY)
+            .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+        int i = statusList.indexWhere((item) => item == ORDER_DEPARTED);
+        pageController.jumpToPage(i + 1);
+        getOrderListApiCall();
+      } else {
+        //todo add keys
+        toast(language.earlyDeliveryMsg);
+      }
     }
   }
 

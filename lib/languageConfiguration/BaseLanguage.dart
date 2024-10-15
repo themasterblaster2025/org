@@ -1068,4 +1068,8 @@ class BaseLanguage {
   String get perKmCharge => getContentValueFromKey(559);
   String get enterProofDetails => getContentValueFromKey(560);
   String get approvedAmount => getContentValueFromKey(561);
+  String get earlyDeliveryMsg => getContentValueFromKey(562);
+  String get earlyPickupMsg => getContentValueFromKey(563);
+  String get reschedule => getContentValueFromKey(564);
+  String get rescheduleTitle => getContentValueFromKey(565);
 }
