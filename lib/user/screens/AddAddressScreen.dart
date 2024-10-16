@@ -44,11 +44,11 @@ class AddAddressScreenState extends State<AddAddressScreen> {
   double? latitude, longitude;
   String countryCode = defaultPhoneCode;
   String dropDownValue = language.home;
-  var items = [
-    language.home,
-    language.work,
-    language.other,
-  ];
+  // var items = [
+  //   language.home,
+  //   language.work,
+  //   language.other,
+  // ];
 
   @override
   void initState() {
@@ -84,7 +84,7 @@ class AddAddressScreenState extends State<AddAddressScreen> {
       "contact_number": '$countryCode ${contactController.text}',
       "city_id": getIntAsync(CITY_ID).toString(),
       "country_id": getIntAsync(COUNTRY_ID).toString(),
-      "address_type": dropDownValue
+      "address_type": addressTypeController.text
     };
     appStore.setLoading(true);
 

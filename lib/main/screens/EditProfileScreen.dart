@@ -276,6 +276,8 @@ class EditProfileScreenState extends State<EditProfileScreen> {
                     validator: (value) {
                       if (value!.trim().isEmpty) return language.fieldRequiredMsg;
                       //  if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.contactLength;
+                      if (value.trim().length < minContactLength || value.trim().length > maxContactLength)
+                        return language.phoneNumberInvalid;
                       return null;
                     },
                     onTap: () {

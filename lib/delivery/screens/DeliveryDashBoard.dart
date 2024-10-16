@@ -665,19 +665,19 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                                                   Row(
                                                     children: [
                                                       // Reschedule button - shows the reschedule form
-                                                      commonButton(language.reschedule, size: 14, () {
+                                                      commonButton(language.reschedule, size: 12, () {
                                                         selectedImagesUpdate(() {
                                                           val = 1;
                                                           print("$val"); // This will make the reschedule form visible
                                                         });
                                                       }).expand(),
 
-                                                      6.width,
+                                                      2.width,
 
                                                       // Departed button - triggers the API call and hides the form
                                                       commonButton(
                                                         language.confirmDelivery,
-                                                        size: 14,
+                                                        size: 12,
                                                         () async {
                                                           // Reset the form visibility
 
@@ -1047,16 +1047,20 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
       // } else {
       //   toast(language.earlyPickupMsg);
       // }
+      int i = statusList.indexWhere((item) => item == ORDER_PICKED_UP);
+      pageController.jumpToPage(i);
+      getOrderListApiCall();
     } else if (orderStatus == ORDER_ARRIVED) {
       bool isCheck = await ReceivedScreenOrderScreen(
               orderData: orderData,
               isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_PICKUP)
           .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
-      int i = statusList.indexWhere((item) => item == ORDER_ARRIVED);
-      pageController.jumpToPage(i + 1);
+
       if (isCheck) {
         getOrderListApiCall();
       }
+      int i = statusList.indexWhere((item) => item == ORDER_ARRIVED);
+      pageController.jumpToPage(i + 1);
     } else if (orderStatus == ORDER_PICKED_UP) {
       await updateOrder(orderStatus: ORDER_DEPARTED, orderId: orderData.id).then((value) {
         toast(language.orderDepartedSuccessfully);

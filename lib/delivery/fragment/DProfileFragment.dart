@@ -59,8 +59,11 @@ class DProfileFragmentState extends State<DProfileFragment> {
   }
 
   void init() async {
-    vehicle = DeliverymanVehicle.fromJson(getJSONAsync(VEHICLE));
-    print("--------------------------${vehicle!.toJson().toString()}");
+    try {
+      vehicle = DeliverymanVehicle.fromJson(getJSONAsync(VEHICLE));
+    } catch (e) {
+      appStore.setLoading(false);
+    }
     LiveStream().on('UpdateLanguage', (p0) {
       setState(() {});
     });

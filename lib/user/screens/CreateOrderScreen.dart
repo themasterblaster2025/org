@@ -273,7 +273,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       } else {
         totalDistance = distanceInKms;
       }
-      totalDistance = distanceInKms;
       setState(() {});
       await getTotalForOrder();
     });
@@ -338,6 +337,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   //   });
   // }
   getTotalForOrder() {
+    appStore.setLoading(true);
     Map request = {
       "city_id": getIntAsync(CITY_ID).toString(),
       if (appStore.isVehicleOrder != 0)
@@ -349,6 +349,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       "insurance_amount": insuranceAmount
     };
     getTotalAmountForOrder(request).then((value) {
+      appStore.setLoading(false);
       print("------------request${request.toString()}");
       totalAmountResponse = value;
       print("---------------${totalAmountResponse!.baseTotal}");
@@ -1672,10 +1673,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           InsuranceOptionsWidget(0, language.addCourierInsurance).visible(appStore.isInsuranceAllowed == "1"),
           16.height.visible(appStore.isInsuranceAllowed == "1"),
           InsuranceOptionsWidget(1, language.noThanksRisk).visible(appStore.isInsuranceAllowed == "1"),
-          16.height,
+          16.height.visible(insuranceSelectedOption == 0),
           if (appStore.isInsuranceAllowed == "1") ...[
             12.height,
-            Text(language.approxParcelValue, style: primaryTextStyle()).visible(appStore.isInsuranceAllowed == "1"),
+            Text(language.approxParcelValue, style: primaryTextStyle()).visible(insuranceSelectedOption == 0),
             9.height,
             AppTextField(
               controller: insuranceAmountController,

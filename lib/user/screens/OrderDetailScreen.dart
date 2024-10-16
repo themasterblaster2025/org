@@ -109,10 +109,12 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
     appStore.setLoading(true);
     await getOrderDetails(widget.orderId).then((value) {
       orderData = value.data!;
-      vehicleDataitle =
-          "${language.name} : ${orderData!.vehicleData!.title}, ${language.price} : ${appStore.currencySymbol}${orderData!.vehicleData!.price.validate()}, "
-          "${language.capacity} : ${orderData!.vehicleData!.capacity.validate()},${language.perKmCharge} : "
-          "${appStore.currencySymbol}${orderData!.vehicleData!.perKmCharge.validate()}";
+      if (orderData!.vehicleData != null) {
+        vehicleDataitle =
+            "${language.name} : ${orderData!.vehicleData!.title}, ${language.price} : ${appStore.currencySymbol}${orderData!.vehicleData!.price.validate()}, "
+            "${language.capacity} : ${orderData!.vehicleData!.capacity.validate()},${language.perKmCharge} : "
+            "${appStore.currencySymbol}${orderData!.vehicleData!.perKmCharge.validate()}";
+      }
       orderHistory = value.orderHistory!;
       if (value.courierCompanyDetail != null) {
         courierDetails = value.courierCompanyDetail!;
@@ -182,7 +184,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
       finish(context);
     }).catchError((error) {
       appStore.setLoading(false);
-
+      finish(context);
       log(error);
     });
   }
@@ -317,51 +319,51 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
     });
   }
 
-  claimInsuranceVehicleApiCall() async {
-    hideKeyboard(context);
-    appStore.setLoading(true);
-    setState(() {});
-    MultipartRequest multiPartRequest = await getMultiPartRequest('claims-save');
-    multiPartRequest.fields['traking_no'] = orderData!.orderTrackingId.validate();
-    multiPartRequest.fields['prof_value'] = proofTitleTextEditingController.text;
-    multiPartRequest.fields['detail'] = proofDetailsTextEditingController.text;
-    multiPartRequest.fields['client_id'] = getIntAsync(USER_ID).toString();
-    if (selectedFiles != null && selectedFiles!.length > 0) {
-      selectedFiles!.forEach((element) async {
-        multiPartRequest.files.add(await MultipartFile.fromPath("attachment_file", element.path!));
-      });
-    }
-    print("---------------requestselectedFiles${multiPartRequest.files.length}");
-
-    // multiPartRequest.files.add(await MultipartFile.fromPath('vehicle_history_image', file.path));
-    multiPartRequest.headers.addAll(buildHeaderTokens());
-    sendMultiPartRequest(
-      multiPartRequest,
-      onSuccess: (data) async {
-        if (data != null) {
-          appStore.setLoading(false);
-          toast(data["message"]);
-
-          finish(context);
-          print(data.toString());
-          // VehicleSavedResponse res = VehicleSavedResponse.fromJson(data);
-          // toast(res.message.toString());
-          // setValue(VEHICLE, res.data!.toJson());
-          // LiveStream().emit("VehicleInfo");
-          // print("------------------${res.data!.vehicleInfo.make}");
-          // appStore.setLoading(false);
-          // finish(context);
-        }
-      },
-      onError: (error) {
-        toast(error.toString(), print: true);
-        appStore.setLoading(false);
-      },
-    ).catchError((e) {
-      appStore.setLoading(false);
-      toast(e.toString());
-    });
-  }
+  // claimInsuranceVehicleApiCall() async {
+  //   hideKeyboard(context);
+  //   appStore.setLoading(true);
+  //   setState(() {});
+  //   MultipartRequest multiPartRequest = await getMultiPartRequest('claims-save');
+  //   multiPartRequest.fields['traking_no'] = orderData!.orderTrackingId.validate();
+  //   multiPartRequest.fields['prof_value'] = proofTitleTextEditingController.text;
+  //   multiPartRequest.fields['detail'] = proofDetailsTextEditingController.text;
+  //   multiPartRequest.fields['client_id'] = getIntAsync(USER_ID).toString();
+  //   if (selectedFiles != null && selectedFiles!.length > 0) {
+  //     selectedFiles!.forEach((element) async {
+  //       multiPartRequest.files.add(await MultipartFile.fromPath("attachment_file[]", element.path!));
+  //     });
+  //   }
+  //   print("---------------requestselectedFiles${multiPartRequest.files.length}");
+  //
+  //   // multiPartRequest.files.add(await MultipartFile.fromPath('vehicle_history_image', file.path));
+  //   multiPartRequest.headers.addAll(buildHeaderTokens());
+  //   sendMultiPartRequest(
+  //     multiPartRequest,
+  //     onSuccess: (data) async {
+  //       if (data != null) {
+  //         appStore.setLoading(false);
+  //         toast(data["message"]);
+  //
+  //         finish(context);
+  //         print(data.toString());
+  //         // VehicleSavedResponse res = VehicleSavedResponse.fromJson(data);
+  //         // toast(res.message.toString());
+  //         // setValue(VEHICLE, res.data!.toJson());
+  //         // LiveStream().emit("VehicleInfo");
+  //         // print("------------------${res.data!.vehicleInfo.make}");
+  //         // appStore.setLoading(false);
+  //         // finish(context);
+  //       }
+  //     },
+  //     onError: (error) {
+  //       toast(error.toString(), print: true);
+  //       appStore.setLoading(false);
+  //     },
+  //   ).catchError((e) {
+  //     appStore.setLoading(false);
+  //     toast(e.toString());
+  //   });
+  // }
 
   @override
   void setState(fn) {
@@ -1551,6 +1553,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                               //  list.clear();
                                               orderDetailApiCall();
                                               LiveStream().emit('UpdateOrderData');
+                                              setState(() {});
                                             });
                                       },
                                     );
@@ -1839,6 +1842,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                         selectedImagesUpdate(() {
                                           appStore.setLoading(false);
                                         });
+                                        orderDetailApiCall();
                                         // VehicleSavedResponse res = VehicleSavedResponse.fromJson(data);
                                         // toast(res.message.toString());
                                         // setValue(VEHICLE, res.data!.toJson());
@@ -1856,7 +1860,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     appStore.setLoading(false);
                                     toast(e.toString());
                                   });
-                                  claimInsuranceVehicleApiCall();
+                                  //  claimInsuranceVehicleApiCall();
                                 }
                                 // if (selectedFiles != null) {
                                 //   print("-------------selected files length${selectedFiles!.length}");

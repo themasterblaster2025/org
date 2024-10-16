@@ -136,8 +136,7 @@ class MyAddressListScreenState extends State<MyAddressListScreen> {
                                       children: [
                                         Text("${language.addressType}:", style: secondaryTextStyle()),
                                         8.width,
-                                        Text(item.addressType != null ? item.addressType.toString() : language.home,
-                                            style: boldTextStyle(size: 14)),
+                                        Text(item.addressType.toString(), style: boldTextStyle(size: 14)),
                                       ],
                                     ),
                                   8.height,

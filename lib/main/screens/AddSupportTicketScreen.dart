@@ -71,6 +71,7 @@ class _AddSupportTicketScreenState extends State<AddSupportTicketScreen> {
   }
 
   Future saveCustomerSupportApi() async {
+    appStore.setLoading(true);
     MultipartRequest multiPartRequest = await getMultiPartRequest('customersupport-save');
     multiPartRequest.fields['message'] = messageCon.text;
     multiPartRequest.fields['support_type'] = selectedSupportType!;
@@ -237,7 +238,7 @@ class _AddSupportTicketScreenState extends State<AddSupportTicketScreen> {
               ),
             ),
           ),
-          loaderWidget().visible(appStore.isLoading)
+          Observer(builder: (context) => Positioned.fill(child: loaderWidget().visible(appStore.isLoading))),
         ],
       ),
       bottomNavigationBar: AppButton(
