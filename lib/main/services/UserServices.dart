@@ -1,20 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/shared_pref.dart';
-
-import '../../extensions/common.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/shared_pref.dart';
 import '../../extensions/system_utils.dart';
 import '../../main.dart';
 import '../models/LoginResponse.dart';
-import '../utils/Common.dart';
 import '../utils/Constants.dart';
-import 'AuthServices.dart';
 import 'BaseServices.dart';
 
 class UserService extends BaseService {
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
-  FirebaseStorage _storage = FirebaseStorage.instance;
+//  FirebaseStorage _storage = FirebaseStorage.instance;
 
   UserService() {
     ref = fireStore.collection(USER_COLLECTION);

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
 
 import '../../extensions/LiveStream.dart';
 import '../../extensions/decorations.dart';
@@ -37,28 +36,6 @@ class ThemeSelectionDialogState extends State<ThemeSelectionDialog> {
   void setState(fn) {
     if (mounted) super.setState(fn);
   }
-
-  // String _getName(ThemeModes themeModes) {
-  //   switch (themeModes) {
-  //     case ThemeModes.Light:
-  //       return language.light;
-  //     case ThemeModes.Dark:
-  //       return language.dark;
-  //     case ThemeModes.SystemDefault:
-  //       return language.systemDefault;
-  //   }
-  // }
-
-  // Widget _getIcons(BuildContext context, ThemeModes themeModes) {
-  //   switch (themeModes) {
-  //     case ThemeModes.Light:
-  //       return Icon(LineIcons.sun, color: context.iconColor);
-  //     case ThemeModes.Dark:
-  //       return Icon(LineIcons.moon, color: context.iconColor);
-  //     case ThemeModes.SystemDefault:
-  //       return Icon(LineIcons.sun, color: context.iconColor);
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {

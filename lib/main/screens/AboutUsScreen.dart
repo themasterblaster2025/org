@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
 
 import '../../extensions/text_styles.dart';
 import '../../main.dart';
-import '../../main/utils/Colors.dart';
-import '../../main/utils/Constants.dart';
 import '../utils/Common.dart';
 import '../utils/Widgets.dart';
 import '../utils/dynamic_theme.dart';

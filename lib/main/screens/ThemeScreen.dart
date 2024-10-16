@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/utils/Widgets.dart';
-
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/utils/Widgets.dart';
 import '../../extensions/LiveStream.dart';
 import '../../extensions/shared_pref.dart';
 import '../../extensions/system_utils.dart';
 import '../../extensions/text_styles.dart';
 import '../../main.dart';
-import '../../main/utils/Colors.dart';
 import '../../main/utils/Constants.dart';
 import '../utils/dynamic_theme.dart';
 
@@ -35,28 +33,6 @@ class _ThemeScreenState extends State<ThemeScreen> {
   void setState(fn) {
     if (mounted) super.setState(fn);
   }
-
-  // String _getName(AppThemeMode themeModes) {
-  //   switch (themeModes) {
-  //     case themeModes.themeModeLight:
-  //       return language.light;
-  //     case ThemeModes.Dark:
-  //       return language.dark;
-  //     case ThemeModes.SystemDefault:
-  //       return language.systemDefault;
-  //   }
-  // }
-  //
-  // Widget _getIcons(BuildContext context, ThemeModes themeModes) {
-  //   switch (themeModes) {
-  //     case ThemeModes.Light:
-  //       return Icon(LineIcons.sun, color: context.iconColor);
-  //     case ThemeModes.Dark:
-  //       return Icon(LineIcons.moon, color: context.iconColor);
-  //     case ThemeModes.SystemDefault:
-  //       return Icon(LineIcons.sun, color: context.iconColor);
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {

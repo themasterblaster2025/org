@@ -1,30 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/list_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/network/RestApis.dart';
-import 'package:mighty_delivery/main/utils/Constants.dart';
-
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/network/RestApis.dart';
+import '../../main/utils/Constants.dart';
 import '../../extensions/colors.dart';
-import '../../extensions/common.dart';
 import '../../extensions/decorations.dart';
-import '../../extensions/shared_pref.dart';
 import '../../extensions/text_styles.dart';
 import '../../main.dart';
 import '../components/CommonScaffoldComponent.dart';
-import '../models/AdminChatModel.dart';
-import '../models/ChatMessageModel.dart';
 import '../models/CustomerSupportModel.dart';
-import '../models/LoginResponse.dart';
-import '../utils/Colors.dart';
 import '../utils/Common.dart';
 import '../utils/Widgets.dart';
 import '../utils/dynamic_theme.dart';
-import 'ChatItemWidget.dart';
 
 class ChatWithAdminScreen extends StatefulWidget {
   List<SupportChatHistory>? supportChatHistory;
@@ -80,18 +70,6 @@ class _ChatWithAdminScreenState extends State<ChatWithAdminScreen> {
       showBack: false,
       appBar: commonAppBarWidget(
         language.chatWithAdmin,
-        /* titleWidget: Row(
-          children: [
-            CircleAvatar(
-                backgroundColor: context.cardColor,
-                backgroundImage: NetworkImage(widget.userData!.profileImage.validate()),
-                minRadius: 20),
-            10.width,
-            Text(widget.userData!.name.validate(), style: TextStyle(color: whiteColor))
-                .paddingSymmetric(vertical: 16)
-                .expand(),
-          ],
-        ),*/
       ),
       body: Container(
         height: context.height(),

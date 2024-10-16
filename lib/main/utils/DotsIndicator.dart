@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/extensions/extension_util/double_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import '../../extensions/extension_util/double_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
 
 import '../../extensions/colors.dart';
 import '../../extensions/decorations.dart';
@@ -83,28 +82,21 @@ class DotIndicatorState extends State<DotIndicator> {
           return AnimatedContainer(
             duration: Duration(milliseconds: 300),
             height: selectedIndex == idx
-                ? (widget.currentDotWidth ??
-                    widget.currentDotSize.validate(value: 14))
+                ? (widget.currentDotWidth ?? widget.currentDotSize.validate(value: 14))
                 : widget.dotSize.validate(value: 8),
-            width: selectedIndex == idx
-                ? widget.currentDotSize.validate(value: 14)
-                : widget.dotSize.validate(value: 8),
+            width: selectedIndex == idx ? widget.currentDotSize.validate(value: 14) : widget.dotSize.validate(value: 8),
             margin: EdgeInsets.all(4),
             decoration: BoxDecoration(
-              shape: selectedIndex == idx
-                  ? widget.currentBoxShape ?? BoxShape.circle
-                  : widget.boxShape ?? BoxShape.circle,
+              shape:
+                  selectedIndex == idx ? widget.currentBoxShape ?? BoxShape.circle : widget.boxShape ?? BoxShape.circle,
               color: selectedIndex == idx
                   ? widget.indicatorColor ?? white
                   : widget.unselectedIndicatorColor ?? Colors.black26,
-              borderRadius: selectedIndex == idx
-                  ? widget.currentBorderRadius
-                  : widget.borderRadius,
+              borderRadius: selectedIndex == idx ? widget.currentBorderRadius : widget.borderRadius,
             ),
           ).onTap(() {
             selectedIndex = idx;
-            widget.pageController.animateToPage(idx,
-                duration: Duration(milliseconds: 300), curve: Curves.linear);
+            widget.pageController.animateToPage(idx, duration: Duration(milliseconds: 300), curve: Curves.linear);
 
             setState(() {});
 

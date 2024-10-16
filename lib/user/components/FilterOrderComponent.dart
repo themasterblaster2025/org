@@ -1,10 +1,9 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
 
 import '../../extensions/LiveStream.dart';
 import '../../extensions/colors.dart';
@@ -164,6 +163,7 @@ class FilterOrderComponentState extends State<FilterOrderComponent> {
                     if (fromDate == null && toDate != null) {
                       return language.mustSelectStartDate;
                     }
+                    return null;
                   },
                   decoration: commonInputDecoration(suffixIcon: Ionicons.calendar_outline, hintText: language.from),
                 ).expand(),

@@ -1,32 +1,25 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/components/CommonScaffoldComponent.dart';
-import 'package:mighty_delivery/main/services/AuthServices.dart';
-import 'package:mighty_delivery/main/utils/Widgets.dart';
-import 'package:mighty_delivery/main/utils/dynamic_theme.dart';
-import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
+import '../../main/services/AuthServices.dart';
+import '../../main/utils/Widgets.dart';
+import '../../main/utils/dynamic_theme.dart';
 import 'package:otp_text_field/otp_field.dart' as otp;
 import 'package:otp_text_field/otp_field_style.dart' as o;
 import 'package:otp_text_field/style.dart';
-
-import '../../delivery/screens/DeliveryDashBoard.dart';
 import '../../extensions/common.dart';
-import '../../extensions/confirmation_dialog.dart';
 import '../../extensions/shared_pref.dart';
 import '../../extensions/system_utils.dart';
 import '../../extensions/text_styles.dart';
 import '../../main.dart';
-import '../models/CityListModel.dart';
 import '../network/RestApis.dart';
-import '../utils/Colors.dart';
 import '../utils/Common.dart';
 import '../utils/Constants.dart';
-import 'UserCitySelectScreen.dart';
 
 class VerificationScreen extends StatefulWidget {
   @override
@@ -47,24 +40,6 @@ class VerificationScreenState extends State<VerificationScreen> {
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
       appBarTitle: language.verification,
-      /*   showBack: false,
-      action: [
-        IconButton(
-          onPressed: () async {
-            await showConfirmDialogCustom(
-              context,
-              primaryColor: colorPrimary,
-              title: language.logoutConfirmationMsg,
-              positiveText: language.yes,
-              negativeText: language.no,
-              onAccept: (c) {
-                logout(context, isVerification: true);
-              },
-            );
-          },
-          icon: Icon(Icons.logout, color: Colors.white),
-        ),
-      ],*/
       body: Stack(
         children: [
           isOtpSend == false
@@ -84,9 +59,7 @@ class VerificationScreenState extends State<VerificationScreen> {
                             TextSpan(text: language.oneTimePassword, style: boldTextStyle()),
                             TextSpan(
                                 text: " ${language.on} " +
-                                        getStringAsync(USER_CONTACT_NUMBER)
-                                            .replaceAll(RegExp(r'(?<=.*).(?=.{2})'), '*') ??
-                                    "-")
+                                    getStringAsync(USER_CONTACT_NUMBER).replaceAll(RegExp(r'(?<=.*).(?=.{2})'), '*'))
                           ],
                         ),
                       ),
@@ -112,8 +85,7 @@ class VerificationScreenState extends State<VerificationScreen> {
                       16.height,
                       Text(
                           "${language.confirmationCodeSent} " +
-                                  getStringAsync(USER_CONTACT_NUMBER).replaceAll(RegExp(r'(?<=.*).(?=.{2})'), '*') ??
-                              "-",
+                              getStringAsync(USER_CONTACT_NUMBER).replaceAll(RegExp(r'(?<=.*).(?=.{2})'), '*'),
                           style: secondaryTextStyle(size: 16),
                           textAlign: TextAlign.center),
                       30.height,

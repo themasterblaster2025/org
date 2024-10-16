@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/components/CommonScaffoldComponent.dart';
-import 'package:mighty_delivery/main/utils/dynamic_theme.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
+import '../../main/utils/dynamic_theme.dart';
 
 import '../../extensions/colors.dart';
 import '../../extensions/common.dart';
@@ -12,7 +12,6 @@ import '../../extensions/shared_pref.dart';
 import '../../extensions/text_styles.dart';
 import '../../main.dart';
 import '../../main/models/models.dart';
-import '../../main/utils/Colors.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/DataProviders.dart';
 import '../../main/utils/Widgets.dart';

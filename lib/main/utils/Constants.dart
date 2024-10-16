@@ -1,6 +1,6 @@
 //region App name
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
 
 import '../../extensions/colors.dart';
 import '../../extensions/common.dart';
@@ -52,16 +52,8 @@ const defaultPhoneCode = '+91';
 const CURRENCY_SYMBOL = '₹';
 const CURRENCY_CODE = 'INR';
 //endregion
-
-//region App description and links
-//const mAppDescription =
-// 'You can deliver exactly when the user wants and can start processing the user’s order almost immediately after '
-//'you receive it, or you can deliver on a specific day and time.';
-//const mCopyright = '© 2024 MeetMighty IT Solutions';
 const mPrivacyPolicy = "$DOMAIN_URL/privacypolicy";
 const mTermAndCondition = "$DOMAIN_URL/termofservice";
-//const mHelpAndSupport = 'https://meetmighty.com/mobile/delivery-admin/';
-//const mContactPref = 'hello@meetmighty.com';
 //endregion
 
 const mInvoiceCompanyName = 'Roberts Private Limited';

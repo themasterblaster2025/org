@@ -2,7 +2,7 @@
 //
 // import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:firebase_storage/firebase_storage.dart';
-// import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
+// import '../../extensions/extension_util/string_extensions.dart';
 // import 'package:path/path.dart';
 //
 // import '../../extensions/shared_pref.dart';

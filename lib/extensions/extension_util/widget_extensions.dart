@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/main/utils/Constants.dart';
+import '../../main/utils/Constants.dart';
 import '../colors.dart';
 import '../common.dart';
 import '../../extensions/decorations.dart';
@@ -252,8 +252,7 @@ extension WidgetExtension on Widget? {
   }) {
     return InkWell(
       onTap: function as void Function()?,
-      borderRadius: borderRadius ??
-          (defaultInkWellRadius != null ? radius(defaultInkWellRadius) : null),
+      borderRadius: borderRadius ?? (defaultInkWellRadius != null ? radius(defaultInkWellRadius) : null),
       child: this,
       splashColor: splashColor ?? defaultInkWellSplashColor,
       hoverColor: hoverColor ?? defaultInkWellHoverColor,
@@ -263,19 +262,15 @@ extension WidgetExtension on Widget? {
 
   /// Launch a new screen
   Future<T?> launch<T>(BuildContext context,
-      {bool isNewTask = false,
-      PageRouteAnimation? pageRouteAnimation,
-      Duration? duration}) async {
+      {bool isNewTask = false, PageRouteAnimation? pageRouteAnimation, Duration? duration}) async {
     if (isNewTask) {
       return await Navigator.of(context).pushAndRemoveUntil(
-        buildPageRoute(
-            this!, pageRouteAnimation ?? pageRouteAnimationGlobal, duration),
+        buildPageRoute(this!, pageRouteAnimation ?? pageRouteAnimationGlobal, duration),
         (route) => false,
       );
     } else {
       return await Navigator.of(context).push(
-        buildPageRoute(
-            this!, pageRouteAnimation ?? pageRouteAnimationGlobal, duration),
+        buildPageRoute(this!, pageRouteAnimation ?? pageRouteAnimationGlobal, duration),
       );
     }
   }

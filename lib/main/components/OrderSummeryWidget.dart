@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/num_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/models/TotalAmountResponse.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/num_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
 import '../../extensions/decorations.dart';
 import '../../extensions/text_styles.dart';
 import '../../main/models/ExtraChargeRequestModel.dart';
 import '../../main/utils/Common.dart';
-
 import '../../main.dart';
-import '../models/CreateOrderDetailModel.dart';
 import '../models/OrderDetailModel.dart';
 import '../utils/Constants.dart';
 import '../utils/dynamic_theme.dart';
@@ -70,9 +67,7 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
   }
 
   Future<void> init() async {
-    print("extra list ${widget.extraChargesList.length}");
     widget.extraChargesList.forEach((element) {
-      print("---------------${element.toJson().toString()}");
       if (element.key == FIXED_CHARGES) {
         fixedCharges = element.value!;
       } else if (element.key == MIN_DISTANCE) {
@@ -107,31 +102,6 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     Text(language.productAmount, style: secondaryTextStyle()),
-          //     // Text(language.productAmount, style: primaryTextStyle()),
-          //     // 16.width,
-          //     // Text('${printAmount(widget.productAmount.validate())}', style: boldTextStyle(size: 14)),
-          //   ],
-          // ).paddingBottom(8).visible(widget.productAmount.validate() != 0),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     Text("${language.vehicle} ${language.price.toLowerCase()}", style: secondaryTextStyle()),
-          //     16.width,
-          //     Text('${printAmount(widget.vehiclePrice.validate())}', style: boldTextStyle(size: 14)),
-          //   ],
-          // ).paddingBottom(8).visible(widget.vehiclePrice.validate() != 0),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     Text(language.deliveryCharge, style: secondaryTextStyle()),
-          //     16.width,
-          //     Text('${printAmount(fixedCharges)}', style: boldTextStyle(size: 14)),
-          //   ],
-          // ).paddingBottom(8).visible(fixedCharges.validate() != 0),
           if (widget.isInsuranceChargeDisplay!)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -174,12 +144,6 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
               Text('${printAmount(widget.distanceCharge)}', style: boldTextStyle(size: 14)),
             ],
           ).paddingBottom(8).visible(widget.distanceCharge != 0),
-          // Column(
-          //   children: [
-          //     //  8.height,
-          //
-          //   ],
-          // ).visible(widget.distanceCharge != 0),
           Row(
             children: [
               Text(language.weightCharge, style: secondaryTextStyle()),
@@ -195,35 +159,6 @@ class OrderSummeryWidgetState extends State<OrderSummeryWidget> {
               Text('${printAmount(widget.weightCharge)}', style: boldTextStyle(size: 14)),
             ],
           ).paddingBottom(8).visible(widget.weightCharge != 0),
-          // Column(
-          //   children: [
-          //     //   8.height,
-          //     Row(
-          //       children: [
-          //         Text(language.weightCharge, style: secondaryTextStyle()),
-          //         4.width,
-          //         Row(
-          //           crossAxisAlignment: CrossAxisAlignment.end,
-          //           children: [
-          //             Text('(${widget.totalWeight - minWeight} x ', style: secondaryTextStyle()),
-          //             Text('$perWeightCharges)', style: secondaryTextStyle()),
-          //           ],
-          //         ).expand(),
-          //         16.width,
-          //         Text('${printAmount(widget.weightCharge)}', style: boldTextStyle(size: 14)),
-          //       ],
-          //     ),
-          //   ],
-          // ).visible(widget.weightCharge != 0),
-          /*Align(
-            alignment: Alignment.bottomRight,
-            child: Column(
-              children: [
-                8.height,
-                Text('${printAmount((fixedCharges + widget.distanceCharge + widget.weightCharge).toStringAsFixed(digitAfterDecimal).toDouble())}', style:boldTextStyle(size: 14)),
-              ],
-            ),
-          ).visible((widget.weightCharge != 0 || widget.distanceCharge != 0) && extraList.length != 0),*/
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

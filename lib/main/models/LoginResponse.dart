@@ -1,5 +1,3 @@
-import 'package:mighty_delivery/main/network/RestApis.dart';
-
 import 'DeliverymanVehicleListModel.dart';
 
 class LoginResponse {

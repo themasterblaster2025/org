@@ -1,18 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/models/ClaimListResponseModel.dart';
-import 'package:mighty_delivery/user/screens/ClaimDetailsScreen.dart';
-
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/models/ClaimListResponseModel.dart';
+import '../../user/screens/ClaimDetailsScreen.dart';
 import '../../extensions/decorations.dart';
 import '../../extensions/text_styles.dart';
 import '../../main.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/network/RestApis.dart';
-import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/dynamic_theme.dart';

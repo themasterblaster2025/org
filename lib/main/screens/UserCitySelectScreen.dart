@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/screens/VerificationListScreen.dart';
-
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/screens/VerificationListScreen.dart';
 import '../../delivery/fragment/DHomeFragment.dart';
-import '../../delivery/screens/DeliveryDashBoard.dart';
 import '../../extensions/LiveStream.dart';
 import '../../extensions/animatedList/animated_list_view.dart';
 import '../../extensions/animatedList/animated_scroll_view.dart';
@@ -20,12 +18,10 @@ import '../components/CommonScaffoldComponent.dart';
 import '../models/CityListModel.dart';
 import '../models/CountryListModel.dart';
 import '../network/RestApis.dart';
-import '../utils/Colors.dart';
 import '../utils/Common.dart';
 import '../utils/Constants.dart';
 import '../utils/Images.dart';
 import '../utils/dynamic_theme.dart';
-import 'VerificationScreen.dart';
 
 class UserCitySelectScreen extends StatefulWidget {
   static String tag = '/UserCitySelectScreen';
@@ -120,12 +116,10 @@ class UserCitySelectScreenState extends State<UserCitySelectScreen> {
           if (getStringAsync(USER_TYPE) == CLIENT) {
             DashboardScreen().launch(context, isNewTask: true);
           } else {
-            // DeliveryDashBoard().launch(context, isNewTask: true);
             DHomeFragment().launch(context, isNewTask: true);
           }
         } else
           VerificationListScreen().launch(context, isNewTask: true);
-        // VerificationScreen().launch(context, isNewTask: true);
       }
     }).catchError((error) {
       appStore.setLoading(false);

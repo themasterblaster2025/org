@@ -1,30 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/extensions/extension_util/bool_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/extensions/system_utils.dart';
-import 'package:mighty_delivery/main/components/CommonScaffoldComponent.dart';
-import 'package:mighty_delivery/main/utils/Widgets.dart';
-import 'package:mighty_delivery/user/screens/DashboardScreen.dart';
+import '../../extensions/extension_util/bool_extensions.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../extensions/system_utils.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
+import '../../main/utils/Widgets.dart';
+import '../../user/screens/DashboardScreen.dart';
 import 'package:otp_text_field/otp_field.dart' as otp;
 import 'package:otp_text_field/otp_field_style.dart' as o;
 import 'package:otp_text_field/style.dart';
 
 import '../../extensions/common.dart';
-import '../../extensions/confirmation_dialog.dart';
 import '../../extensions/shared_pref.dart';
 import '../../extensions/text_styles.dart';
 import '../../main.dart';
 import '../network/RestApis.dart';
-import '../utils/Colors.dart';
 import '../utils/Common.dart';
 import '../utils/Constants.dart';
 import '../utils/dynamic_theme.dart';
-import 'LoginScreen.dart';
-import 'UserCitySelectScreen.dart';
-import 'VerificationScreen.dart';
 
 class EmailVerificationScreen extends StatefulWidget {
   final bool? isSignIn;
@@ -100,32 +95,6 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
         });
       },
       child: CommonScaffoldComponent(
-        /*appBarTitle: language.verification,
-        showBack: false,
-        action: [
-          IconButton(
-            onPressed: () async {
-              await showConfirmDialogCustom(
-                context,
-                primaryColor: colorPrimary,
-                title: language.logoutConfirmationMsg,
-                positiveText: language.yes,
-                negativeText: language.no,
-                onAccept: (c) async {
-                  appStore.setLoading(true);
-                  try {
-                    await logout(context, isVerification: true).then((value) async {
-                      appStore.setLoading(false);
-                    });
-                  } catch (e) {
-                    print(e.toString());
-                  }
-                },
-              );
-            },
-            icon: Icon(Icons.logout, color: Colors.white),
-          ),
-        ],*/
         body: Stack(
           children: [
             widget.isSignIn == true && isEmailSend == false
@@ -145,8 +114,7 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
                               TextSpan(text: language.oneTimePassword, style: boldTextStyle()),
                               TextSpan(
                                   text: " ${language.on} " +
-                                          getStringAsync(USER_EMAIL).replaceAll(RegExp(r'(?<=.{3}).(?=.*@)'), '*') ??
-                                      "-")
+                                      getStringAsync(USER_EMAIL).replaceAll(RegExp(r'(?<=.{3}).(?=.*@)'), '*'))
                             ],
                           ),
                         ),
@@ -168,8 +136,7 @@ class EmailVerificationScreenState extends State<EmailVerificationScreen> {
                         16.height,
                         Text(
                             "${language.confirmationCodeSent} " +
-                                    getStringAsync(USER_EMAIL).replaceAll(RegExp(r'(?<=.{3}).(?=.*@)'), '*') ??
-                                "-",
+                                getStringAsync(USER_EMAIL).replaceAll(RegExp(r'(?<=.{3}).(?=.*@)'), '*'),
                             style: secondaryTextStyle(size: 16),
                             textAlign: TextAlign.center),
                         30.height,

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:geocode/geocode.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/models/LoginResponse.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/models/LoginResponse.dart';
 
 import '../../extensions/animatedList/animated_scroll_view.dart';
 import '../../extensions/decorations.dart';
@@ -14,7 +14,6 @@ import '../../main.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/UserProfileDetailModel.dart';
 import '../../main/network/RestApis.dart';
-import '../../main/utils/Colors.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/dynamic_theme.dart';
 
@@ -67,10 +66,10 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
     appStore.setLoading(true);
     await getWalletList(page: 1).then((value) {
       appStore.setLoading(false);
-      onlineReceived = value!.walletBalance!.onlineReceived.toString();
-      totalAmount = value!.walletBalance!.totalAmount.toString();
-      totalWithdrawn = value!.walletBalance!.totalWithdrawn.toString();
-      manualReceived = value!.walletBalance!.manualReceived.toString();
+      onlineReceived = value.walletBalance!.onlineReceived.toString();
+      totalAmount = value.walletBalance!.totalAmount.toString();
+      totalWithdrawn = value.walletBalance!.totalWithdrawn.toString();
+      manualReceived = value.walletBalance!.manualReceived.toString();
       setState(() {});
     }).catchError((error) {
       appStore.setLoading(false);

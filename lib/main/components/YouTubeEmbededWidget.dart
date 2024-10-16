@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:mighty_delivery/extensions/extension_util/bool_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/utils/Common.dart';
-
+import '../../extensions/extension_util/bool_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/utils/Common.dart';
 
 class YouTubeEmbedWidget extends StatelessWidget {
   final String videoId;

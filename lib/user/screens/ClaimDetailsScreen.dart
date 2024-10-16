@@ -1,23 +1,12 @@
-import 'dart:io';
-
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chewie/chewie.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:mighty_delivery/extensions/colors.dart';
-import 'package:mighty_delivery/extensions/decorations.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main.dart';
-import 'package:mighty_delivery/main/models/ClaimListResponseModel.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
-import 'package:mighty_delivery/main/utils/Common.dart';
-import 'package:mighty_delivery/main/utils/Widgets.dart';
-import 'package:video_player/video_player.dart';
-
+import '../../extensions/decorations.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main.dart';
+import '../../main/models/ClaimListResponseModel.dart';
+import '../../main/utils/Common.dart';
 import '../../extensions/extension_util/context_extensions.dart';
 import '../../extensions/text_styles.dart';
 import '../../main/components/CommonScaffoldComponent.dart';

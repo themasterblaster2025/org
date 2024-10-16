@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/extensions/extension_util/bool_extensions.dart';
-import 'package:mighty_delivery/main/utils/dynamic_theme.dart';
+import '../../extensions/extension_util/bool_extensions.dart';
+import '../../main/utils/dynamic_theme.dart';
 
 import '../../main.dart';
-import '../utils/Colors.dart';
 import '../utils/Widgets.dart';
 
 class CommonScaffoldComponent extends StatelessWidget {

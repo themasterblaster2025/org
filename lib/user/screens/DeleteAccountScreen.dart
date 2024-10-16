@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
 
 import '../../extensions/common.dart';
 import '../../extensions/confirmation_dialog.dart';
@@ -29,7 +29,6 @@ class DeleteAccountScreenState extends State<DeleteAccountScreen> {
 
   Future deleteAccount(BuildContext context) async {
     appStore.setLoading(true);
-    print("----------------------deleteAccount${getStringAsync(UID)}");
     await userService.removeDocument(getStringAsync(UID)).then((value) async {
       await deleteUserFirebase().then((value) async {
         Map deleteAccountReq = {"id": getIntAsync(USER_ID), "type": "forcedelete"};

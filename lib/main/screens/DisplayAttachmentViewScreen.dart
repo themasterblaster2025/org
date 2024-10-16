@@ -1,15 +1,12 @@
-import 'dart:ffi';
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:internet_file/internet_file.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdfx/pdfx.dart' as pdf;
@@ -17,7 +14,6 @@ import 'package:http/http.dart' as hh;
 import 'package:pdfx/pdfx.dart';
 import '../../extensions/common.dart';
 import '../../main.dart';
-import '../components/CommonScaffoldComponent.dart';
 import '../utils/Common.dart';
 import '../utils/Widgets.dart';
 
@@ -34,7 +30,6 @@ class DisplayAttachmentViewScreen extends StatefulWidget {
 class _DisplayAttachmentViewScreenState extends State<DisplayAttachmentViewScreen> {
   Future<void> downloadPDF() async {
     appStore.setLoading(true);
-    String file = "";
     final response = await hh.get(Uri.parse(widget.value.validate()));
     if (response.statusCode == 200) {
       print("success ${response.bodyBytes}");

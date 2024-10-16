@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/delivery/screens/VerifyDeliveryPersonScreen.dart';
-import 'package:mighty_delivery/extensions/extension_util/bool_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/components/CommonScaffoldComponent.dart';
-import 'package:mighty_delivery/main/models/LoginResponse.dart';
-import 'package:mighty_delivery/main/network/RestApis.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
-
+import '../../delivery/screens/VerifyDeliveryPersonScreen.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
+import '../../main/models/LoginResponse.dart';
+import '../../main/network/RestApis.dart';
 import '../../delivery/fragment/DHomeFragment.dart';
-import '../../delivery/screens/DeliveryDashBoard.dart';
 import '../../extensions/app_button.dart';
 import '../../extensions/common.dart';
 import '../../extensions/confirmation_dialog.dart';
-import '../../extensions/decorations.dart';
 import '../../extensions/shared_pref.dart';
 import '../../extensions/text_styles.dart';
 import '../../main.dart';
@@ -161,12 +156,6 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                /* LinearProgressIndicator(
-                  value: calculateProgress(),
-                  minHeight: 8,
-                  backgroundColor: Colors.grey[500],
-                  valueColor: AlwaysStoppedAnimation<Color>(colorPrimary),
-                ),*/
                 20.height,
                 ListView.builder(
                   itemCount: verificationSteps.length,
@@ -189,29 +178,6 @@ class _VerificationListScreenState extends State<VerificationListScreen> {
                   },
                 ).expand(),
                 // Spacer(),
-                /*Container(
-                  margin: EdgeInsets.only(left: 10, right: 10),
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        language.next,
-                        style: secondaryTextStyle(
-                          color: Colors.white,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ).onTap(() async {
-                  if (verificationSteps.any((element) => element.status == VerificationStatus.pending)) {
-                    toast(language.youMustVerifyAboveAll);
-                  } else {
-                    goToDashboard();
-                  }
-                })*/
               ],
             ),
           ),

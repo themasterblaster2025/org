@@ -1,27 +1,21 @@
-import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/utils/Widgets.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/utils/Widgets.dart';
 import '../../extensions/colors.dart';
 import '../../extensions/decorations.dart';
 import '../../extensions/shared_pref.dart';
 import '../../extensions/system_utils.dart';
 import '../../extensions/text_styles.dart';
-import '../../main/utils/Colors.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
 import '../../main.dart';
 import '../components/CommonScaffoldComponent.dart';
-import '../services/ChatMessagesService.dart';
 import '../models/ChatMessageModel.dart';
-import '../models/FileModel.dart';
 import '../models/LoginResponse.dart';
-import '../utils/Common.dart';
 import '../utils/Constants.dart';
-import '../utils/Images.dart';
 import '../utils/dynamic_theme.dart';
 import 'ChatItemWidget.dart';
 
@@ -153,13 +147,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 itemBuilder: (context, snap, index) {
                   ChatMessageModel data = ChatMessageModel.fromJson(snap[index].data() as Map<String, dynamic>);
                   data.isMe = data.senderId == sender.uid;
-                  if (widget.orderId == data.orderId) {
-                    print("===========================${data.message}");
-                  }
-
-                  //  print(data.isMe);
-                  // print(data.senderId);
-
+                  if (widget.orderId == data.orderId) {}
                   return ChatItemWidget(data: data);
                 },
               ).paddingBottom(76),
@@ -197,7 +185,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         try {
                           sendMessage();
                         } catch (e) {
-                          print("=====================${e.toString()}");
+                          print("error : ${e.toString()}");
                         }
                       },
                       cursorHeight: 20,
@@ -209,7 +197,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         try {
                           sendMessage();
                         } catch (e) {
-                          print("=====================${e.toString()}");
+                          print("error :${e.toString()}");
                         }
                       },
                     )

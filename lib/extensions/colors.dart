@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-import '../main/utils/Colors.dart';
 import '../main/utils/dynamic_theme.dart';
 
 const scaffoldLightColor = Color(0xFFEBF2F7);

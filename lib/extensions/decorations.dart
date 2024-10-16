@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
-import 'package:mighty_delivery/main/utils/dynamic_theme.dart';
-
-import '../../extensions/extension_util/context_extensions.dart';
-
-import '../../extensions/text_styles.dart';
+import '../../main/utils/dynamic_theme.dart';
 import '../main.dart';
 
 import '../main/utils/Constants.dart';

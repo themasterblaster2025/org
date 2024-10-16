@@ -1,18 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:http/http.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/main.dart';
-
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../main.dart';
 import '../../extensions/shared_pref.dart';
 import '../../extensions/system_utils.dart';
 import '../utils/Constants.dart';
 import '../utils/Images.dart';
 
 class NotificationService {
-  Future<void> sendPushNotifications(String title, String content, {String? id, String? image, String? receiverPlayerId}) async {
+  Future<void> sendPushNotifications(String title, String content,
+      {String? id, String? image, String? receiverPlayerId}) async {
     log(receiverPlayerId);
     Map req = {
       'headings': {

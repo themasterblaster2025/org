@@ -74,11 +74,9 @@ class DProfileFragmentState extends State<DProfileFragment> {
 
     LiveStream().on('VehicleInfo', (p0) {
       vehicle = DeliverymanVehicle.fromJson(getJSONAsync(VEHICLE));
-      print("---------------------vehicle${vehicle!.vehicleInfo.make}");
       setState(() {});
     });
 
-    print("---------------------vehicle${vehicle!.vehicleInfo.make}");
     setState(() {});
   }
 

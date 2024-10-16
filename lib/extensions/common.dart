@@ -7,8 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:html/parser.dart';
-import 'package:mighty_delivery/extensions/shared_pref.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
+import '../../extensions/shared_pref.dart';
 import '../extensions/extension_util/context_extensions.dart';
 import '../extensions/extension_util/device_extensions.dart';
 import '../extensions/extension_util/int_extensions.dart';
@@ -18,7 +17,6 @@ import '../extensions/widgets.dart';
 import '../../main.dart';
 import '../main/utils/Constants.dart';
 import 'confirmation_dialog.dart';
-import 'decorations.dart';
 
 /// Make any variable nullable
 T? makeNullable<T>(T? value) => value;

@@ -1,8 +1,7 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../extensions/system_utils.dart';
@@ -54,14 +53,7 @@ class PdfViewWidgetState extends State<PdfViewWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final wv = WebViewWidget(controller: wbController
-      // (
-      // initialUrl: Uri.dataFromString(getPdfBodyScript(), mimeType: 'text/html', encoding: Encoding.getByName('utf-8')).toString(),
-      // initialMediaPlaybackPolicy: AutoMediaPlaybackPolicy.always_allow,
-      // onWebViewCreated: (wbc) {
-      //   wbController = wbc;
-      // },
-    );
+    final wv = WebViewWidget(controller: wbController);
     return Scaffold(
       body: Container(
         margin: EdgeInsets.only(top: 26),

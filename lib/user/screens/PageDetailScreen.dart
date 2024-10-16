@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/main/components/CommonScaffoldComponent.dart';
-import 'package:mighty_delivery/main/components/HtmlWidgtet.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
+import '../../main/components/HtmlWidgtet.dart';
 
 class PageDetailScreen extends StatefulWidget {
   final String title;

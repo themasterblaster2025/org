@@ -2,29 +2,25 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-// import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:internet_file/internet_file.dart';
 import 'package:intl/intl.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/components/CommonScaffoldComponent.dart';
-import 'package:mighty_delivery/main/models/OrderListModel.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
+import '../../main/models/OrderListModel.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdfx/pdfx.dart';
 import 'package:pdfx/pdfx.dart' as pdf;
-import 'package:permission_handler/permission_handler.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../extensions/app_button.dart';
 import '../../extensions/common.dart';
 import '../../extensions/decorations.dart';
 import '../../extensions/text_styles.dart';
 import '../../main.dart';
-import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Images.dart';
@@ -32,7 +28,6 @@ import '../../main/utils/Widgets.dart';
 import '../../main/utils/dynamic_theme.dart';
 import '../screens/OrderDetailScreen.dart';
 import '../screens/OrderTrackingScreen.dart';
-import 'GenerateInvoice.dart';
 import 'package:http/http.dart' as http;
 
 class OrderCardComponent extends StatefulWidget {
@@ -220,19 +215,6 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                             4.height,
                             GestureDetector(
                               onTap: () {
-                                // if (widget.item.status != ORDER_DELIVERED) {
-                                //   // openMap(double.parse(widget.item.deliveryPoint!.latitude.validate()),
-                                //   //     double.parse(widget.item.deliveryPoint!.longitude.validate()));
-                                //   openMap(
-                                //       double.parse(widget.item.pickupPoint!.latitude.validate()),
-                                //       double.parse(widget.item.pickupPoint!.longitude.validate()),
-                                //       double.parse(widget.item.deliveryPoint!.latitude.validate()),
-                                //       double.parse(widget.item.deliveryPoint!.longitude.validate()));
-                                // } else {
-                                //   OrderDetailScreen(orderId: widget.item.id.validate()).launch(context,
-                                //       pageRouteAnimation: PageRouteAnimation.SlideBottomTop,
-                                //       duration: 400.milliseconds);
-                                // }
                                 OrderDetailScreen(orderId: widget.item.id.validate()).launch(context,
                                     pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
                               },

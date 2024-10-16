@@ -1,11 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-
-import '../../extensions/shared_pref.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
 import '../../extensions/system_utils.dart';
 import '../../main.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
@@ -89,12 +85,6 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> with WidgetsBindingOb
                   longitude: selectedPlace!.geometry!.location.lng,
                   placeAddress: selectedPlace!.formattedAddress,
                 );
-                /*List<PlaceAddressModel> list = (getStringListAsync(RECENT_ADDRESS_LIST) ?? []).map((e) => PlaceAddressModel.fromJson(jsonDecode(e))).toList();
-                bool isExist = list.any((element) => element.placeId == selectedPlace!.placeId);
-                if (!isExist) {
-                  list.add(selectedModel);
-                  setValue(RECENT_ADDRESS_LIST, list.map((element) => jsonEncode(element)).toList());
-                }*/
                 finish(context, selectedModel);
               });
             },

@@ -406,106 +406,6 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
     );
   }
 
-  // Future<void> rescheduleDialog(int id) async {
-  //   return showInDialog(
-  //     barrierDismissible: false,
-  //     getContext,
-  //     //    contentPadding: EdgeInsets.all(16),
-  //     builder: (p0) {
-  //       return StatefulBuilder(builder: (context, selectedImagesUpdate) {
-  //         return Form(
-  //           key: rescheduleFormKey,
-  //           child: SingleChildScrollView(
-  //             child: Container(
-  //               constraints: BoxConstraints(
-  //                 minHeight: 200.0, // Set your minimum height here
-  //               ),
-  //               child: !appStore.isLoading
-  //                   ? Form(
-  //                       key: rescheduleFormKey,
-  //                       child: Column(
-  //                         mainAxisSize: MainAxisSize.min,
-  //                         mainAxisAlignment: MainAxisAlignment.start,
-  //                         crossAxisAlignment: CrossAxisAlignment.start,
-  //                         children: [
-  //                           //todo
-  //                           Text("Fill details for reschedule", style: boldTextStyle(), textAlign: TextAlign.start),
-  //                           10.height,
-  //                           Divider(color: dividerColor, height: 1),
-  //                           8.height,
-  //                           Text(language.reason, style: boldTextStyle()),
-  //                           12.height,
-  //                           AppTextField(
-  //                             isValidationRequired: true,
-  //                             controller: reasonTitleTextEditingController,
-  //                             textFieldType: TextFieldType.NAME,
-  //                             errorThisFieldRequired: language.fieldRequiredMsg,
-  //                             decoration: commonInputDecoration(hintText: language.reason),
-  //                           ),
-  //                           8.height,
-  //                           Text(language.date, style: boldTextStyle()),
-  //                           12.height,
-  //                           DateTimePicker(
-  //                             controller: pickDateController,
-  //                             type: DateTimePickerType.date,
-  //                             initialDate: DateTime.now(),
-  //                             firstDate: DateTime.now(),
-  //                             lastDate: DateTime.now().add(Duration(days: 30)),
-  //                             onChanged: (value) {
-  //                               pickDate = DateTime.parse(value);
-  //
-  //                               //    selectedImagesUpdate(() {});
-  //                             },
-  //                             validator: (value) {
-  //                               if (value!.isEmpty) return language.fieldRequiredMsg;
-  //                               return null;
-  //                             },
-  //                             decoration:
-  //                                 commonInputDecoration(suffixIcon: Icons.calendar_today, hintText: language.date),
-  //                           ),
-  //                           16.height,
-  //                           Row(
-  //                             children: [
-  //                               commonButton(language.cancel, size: 14, () {
-  //                                 finish(getContext, 0);
-  //                               }).expand(),
-  //                               6.width,
-  //                               commonButton(language.reschedule, size: 14, () async {
-  //                                 appStore.setLoading(true);
-  //                                 if (rescheduleFormKey.currentState!.validate()) {
-  //                                   Map request = {
-  //                                     "order_id": id,
-  //                                     "reason": reasonTitleTextEditingController.text,
-  //                                     "date": pickDate,
-  //                                   };
-  //                                   await rescheduleOrder(request).then((value) {
-  //                                     print("--------------------------${value.message}");
-  //                                     toast(value.message);
-  //                                   }).catchError((error) {
-  //                                     appStore.setLoading(false);
-  //                                     log(error.toString());
-  //                                   });
-  //                                 } else {
-  //                                   print("elser");
-  //                                 }
-  //                                 // if (selectedFiles != null) {
-  //                                 //   print("-------------selected files length${selectedFiles!.length}");
-  //                                 // }
-  //                               }).expand(),
-  //                             ],
-  //                           ),
-  //                         ],
-  //                       ),
-  //                     )
-  //                   : Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)).center(),
-  //             ),
-  //           ),
-  //         );
-  //       });
-  //     },
-  //   );
-  // }
-
   Widget orderCard(OrderData data) {
     return GestureDetector(
       child: Container(
@@ -609,27 +509,6 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                         );
                       }).paddingSymmetric(horizontal: 5)
                     : SizedBox(),
-                /*AppButton(
-                  margin: EdgeInsets.only(right: 10),
-                  elevation: 0,
-                  text: language.reject,
-                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                  textStyle: boldTextStyle(color: Colors.red),
-                  color: Colors.red.withOpacity(0.2),
-                  onTap: () {
-                    showConfirmDialogCustom(
-                      context,
-                      primaryColor: Colors.red,
-                      dialogType: DialogType.CONFIRMATION,
-                      title: language.orderCancelConfirmation,
-                      positiveText: language.yes,
-                      negativeText: language.no,
-                      onAccept: (c) async {
-                        await cancelOrder(data);
-                      },
-                    );
-                  },
-                ).visible(data.status == ORDER_ASSIGNED),*/
                 (statusList[selectedStatusIndex] != ORDER_CANCELLED &&
                         statusList[selectedStatusIndex] != ORDER_ASSIGNED)
                     ? AppButton(
@@ -679,19 +558,12 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                                                         language.confirmDelivery,
                                                         size: 12,
                                                         () async {
-                                                          // Reset the form visibility
-
-                                                          // API call or onTapData function for "Departed"
-
                                                           if (context.mounted) {
                                                             Navigator.pop(context);
                                                           }
                                                           onTapData(
                                                               orderData: data,
                                                               orderStatus: statusList[selectedStatusIndex]);
-
-                                                          // Update the state
-                                                          // Close the dialog after action
                                                         },
                                                       ).expand(),
                                                     ],
@@ -833,18 +705,6 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                           onTap: () {
                             OrderDetailScreen(orderId: data.id!).launch(context,
                                 pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
-                            // if (statusList[selectedStatusIndex] != ORDER_DELIVERED) {
-                            //   // openMap(double.parse(data.pickupPoint!.latitude.validate()),
-                            //   //     double.parse(data.pickupPoint!.longitude.validate()));
-                            //   openMap(
-                            //       double.parse(data.pickupPoint!.latitude.validate()),
-                            //       double.parse(data.pickupPoint!.longitude.validate()),
-                            //       double.parse(data.deliveryPoint!.latitude.validate()),
-                            //       double.parse(data.deliveryPoint!.longitude.validate()));
-                            // } else {
-                            //   OrderDetailScreen(orderId: data.id!).launch(context,
-                            //       pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
-                            // }
                           },
                           child: Row(
                             children: [
@@ -898,18 +758,6 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                       onTap: () {
                         OrderDetailScreen(orderId: data.id!).launch(context,
                             pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
-                        // if (statusList[selectedStatusIndex] != ORDER_DELIVERED) {
-                        //   // openMap(double.parse(data.deliveryPoint!.latitude.validate()),
-                        //   //     double.parse(data.deliveryPoint!.longitude.validate()));
-                        //   openMap(
-                        //       double.parse(data.pickupPoint!.latitude.validate()),
-                        //       double.parse(data.pickupPoint!.longitude.validate()),
-                        //       double.parse(data.deliveryPoint!.latitude.validate()),
-                        //       double.parse(data.deliveryPoint!.longitude.validate()));
-                        // } else {
-                        //   OrderDetailScreen(orderId: data.id!).launch(context,
-                        //       pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
-                        // }
                       },
                       child: Row(
                         children: [

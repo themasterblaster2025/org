@@ -1,5 +1,3 @@
-import 'CustomerSupportModel.dart';
-import 'CustomerSupportModel.dart';
 import 'PaginationModel.dart';
 
 class CustomerSupportListModel {

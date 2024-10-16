@@ -1,4 +1,4 @@
-import 'package:mighty_delivery/main/models/CreateOrderDetailModel.dart';
+import '../../main/models/CreateOrderDetailModel.dart';
 
 class TotalAmountResponse {
   num? fixedAmount;

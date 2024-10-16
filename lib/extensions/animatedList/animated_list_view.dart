@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
 
 import 'animated_configurations.dart';
 
@@ -100,8 +100,7 @@ class _AnimatedListViewState extends State<AnimatedListView> {
       /// Enable Pagination
 
       scrollController!.addListener(() {
-        if (scrollController!.position.maxScrollExtent ==
-            scrollController!.offset) {
+        if (scrollController!.position.maxScrollExtent == scrollController!.offset) {
           widget.onNextPage?.call();
         }
 

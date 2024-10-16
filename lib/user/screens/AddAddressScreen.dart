@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/models/AddressListModel.dart';
-import 'package:mighty_delivery/main/network/RestApis.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/models/AddressListModel.dart';
+import '../../main/network/RestApis.dart';
 
 import '../../extensions/app_text_field.dart';
 import '../../extensions/common.dart';
@@ -19,7 +19,6 @@ import '../../main.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/CountryListModel.dart';
 import '../../main/models/PlaceAddressModel.dart';
-import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Widgets.dart';
@@ -43,12 +42,6 @@ class AddAddressScreenState extends State<AddAddressScreen> {
   TextEditingController addressTypeController = TextEditingController();
   double? latitude, longitude;
   String countryCode = defaultPhoneCode;
-  String dropDownValue = language.home;
-  // var items = [
-  //   language.home,
-  //   language.work,
-  //   language.other,
-  // ];
 
   @override
   void initState() {
@@ -207,27 +200,6 @@ class AddAddressScreenState extends State<AddAddressScreen> {
                     errorThisFieldRequired: language.fieldRequiredMsg,
                     decoration: commonInputDecoration(hintText: language.name),
                   ),
-                  // Row(
-                  //   children: [
-                  //     Text(language.selectAddressType).expand(),
-                  //     DropdownButton(
-                  //       value: dropDownValue,
-                  //       icon: const Icon(Icons.keyboard_arrow_down),
-                  //       items: items.map((String items) {
-                  //         return DropdownMenuItem(
-                  //           value: items,
-                  //           child: Text(items),
-                  //         );
-                  //       }).toList(),
-                  //       onChanged: (String? newValue) {
-                  //         setState(() {
-                  //           dropDownValue = newValue!;
-                  //           print("------------------------${dropDownValue}");
-                  //         });
-                  //       },
-                  //     ),
-                  //   ],
-                  // ),
                 ],
               ),
             ),

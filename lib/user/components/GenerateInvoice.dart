@@ -2,8 +2,8 @@
 // import 'package:flutter/material.dart' as mi;
 // import 'package:flutter/services.dart';
 // import 'package:intl/intl.dart';
-// import 'package:mighty_delivery/extensions/extension_util/num_extensions.dart';
-// import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
+// import '../../extensions/extension_util/num_extensions.dart';
+// import '../../extensions/extension_util/string_extensions.dart';
 // import '../../extensions/shared_pref.dart';
 // import '../../main.dart';
 // import '../../main/models/CountryListModel.dart';

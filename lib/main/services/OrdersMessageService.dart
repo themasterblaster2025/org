@@ -1,9 +1,6 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:mighty_delivery/extensions/shared_pref.dart';
-
+import '../../extensions/shared_pref.dart';
 import '../../main.dart';
 import '../models/ChatMessageModel.dart';
 import '../utils/Constants.dart';
@@ -13,7 +10,7 @@ class OrdersMessageService extends BaseService {
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
   late CollectionReference ordersRef;
-  FirebaseStorage _storage = FirebaseStorage.instance;
+  //FirebaseStorage _storage = FirebaseStorage.instance;
 
   OrdersMessageService() {
     ordersRef = fireStore.collection(ORDERS_COLLECTION);
@@ -39,7 +36,6 @@ class OrdersMessageService extends BaseService {
   }
 
   Future<void> setUnReadStatusToTrue({String? orderId}) async {
-    print("--------------------setUnReadStatusToTrue${getStringAsync(UID)}");
     ordersRef
         .doc(orderId)
         .collection(ORDERS_MESSAGES_COLLECTION)

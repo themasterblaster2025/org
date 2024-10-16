@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:mighty_delivery/extensions/extension_util/bool_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/utils/Widgets.dart';
+import '../../extensions/extension_util/bool_extensions.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/utils/Widgets.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
@@ -19,7 +19,6 @@ import '../../extensions/app_text_field.dart';
 import '../../extensions/colors.dart';
 import '../../extensions/common.dart';
 import '../../extensions/confirmation_dialog.dart';
-import '../../extensions/shared_pref.dart';
 import '../../extensions/system_utils.dart';
 import '../../extensions/text_styles.dart';
 import '../../extensions/widgets.dart';
@@ -28,7 +27,6 @@ import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/OrderListModel.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/services/AuthServices.dart';
-import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/dynamic_theme.dart';
@@ -74,12 +72,10 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   @override
   void initState() {
     super.initState();
-    print("-----------init called${appStore.isOtpVerifyOnPickupDelivery}");
     init();
   }
 
   Future<void> init() async {
-    print("--------------------------${appStore.isOtpVerifyOnPickupDelivery}");
     mIsUpdate = widget.orderData != null;
     if (mIsUpdate) {
       if (widget.orderData!.pickupDatetime.validate().isEmpty) {

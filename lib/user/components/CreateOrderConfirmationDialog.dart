@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
 import '../../extensions/system_utils.dart';
 import '../../extensions/text_styles.dart';
 import '../../main/utils/Widgets.dart';

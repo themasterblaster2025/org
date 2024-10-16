@@ -3,9 +3,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-
-//import 'package:nb_utils/nb_utils.dart';
-
 import '../extensions/shared_pref.dart';
 import '../main.dart';
 import '../main/utils/Constants.dart';
@@ -17,8 +14,7 @@ const LanguageJsonDataRes = 'LanguageJsonDataRes'; // DO NOT CHANGE
 const CURRENT_LAN_VERSION = 'LanguageData'; // DO NOT CHANGE
 const LanguageVersion = '0'; // DO NOT CHANGE
 const SELECTED_LANGUAGE_CODE = 'selected_language_code'; // DO NOT CHANGE
-const SELECTED_LANGUAGE_COUNTRY_CODE =
-    'selected_language_country_code'; // DO NOT CHANGE
+const SELECTED_LANGUAGE_COUNTRY_CODE = 'selected_language_country_code'; // DO NOT CHANGE
 const IS_SELECTED_LANGUAGE_CHANGE = 'isSelectedLanguageChange';
 
 Locale defaultLanguageLocale = Locale(defaultLanguageCode, defaultCountryCode);
@@ -26,15 +22,13 @@ Locale defaultLanguageLocale = Locale(defaultLanguageCode, defaultCountryCode);
 Locale setDefaultLocate() {
   String getJsonData = getStringAsync(LanguageJsonDataRes, defaultValue: "");
   if (getJsonData.isNotEmpty) {
-    ServerLanguageResponse languageSettings =
-        ServerLanguageResponse.fromJson(json.decode(getJsonData.trim()));
+    ServerLanguageResponse languageSettings = ServerLanguageResponse.fromJson(json.decode(getJsonData.trim()));
     if (languageSettings.data!.length > 0) {
       defaultServerLanguageData = languageSettings.data;
       performLanguageOperation(defaultServerLanguageData);
     }
   }
-  if (defaultServerLanguageData != null &&
-      defaultServerLanguageData!.length > 0) {
+  if (defaultServerLanguageData != null && defaultServerLanguageData!.length > 0) {
     performLanguageOperation(defaultServerLanguageData);
   }
 
@@ -42,28 +36,24 @@ Locale setDefaultLocate() {
 }
 
 performLanguageOperation(List<LanguageJsonData>? _defaultServerLanguageData) {
-  String selectedLanguageCode =
-      getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: "");
+  String selectedLanguageCode = getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: "");
   bool isFoundLocalSelectedLanguage = false;
   bool isFoundSelectedLanguageFromServer = false;
 
   for (int index = 0; index < _defaultServerLanguageData!.length; index++) {
     if (selectedLanguageCode.isNotEmpty) {
-      if (_defaultServerLanguageData[index].languageCode ==
-          selectedLanguageCode) {
+      if (_defaultServerLanguageData[index].languageCode == selectedLanguageCode) {
         isFoundLocalSelectedLanguage = true;
-        defaultLanguageLocale = Locale(
-            _defaultServerLanguageData[index].languageCode!,
-            _defaultServerLanguageData[index].countryCode!);
+        defaultLanguageLocale =
+            Locale(_defaultServerLanguageData[index].languageCode!, _defaultServerLanguageData[index].countryCode!);
         selectedServerLanguageData = _defaultServerLanguageData[index];
         break;
       }
     }
     if (_defaultServerLanguageData[index].isDefaultLanguage == 1) {
       isFoundSelectedLanguageFromServer = true;
-      defaultLanguageLocale = Locale(
-          _defaultServerLanguageData[index].languageCode!,
-          _defaultServerLanguageData[index].countryCode!);
+      defaultLanguageLocale =
+          Locale(_defaultServerLanguageData[index].languageCode!, _defaultServerLanguageData[index].countryCode!);
       selectedServerLanguageData = _defaultServerLanguageData[index];
     }
   }
@@ -76,11 +66,9 @@ performLanguageOperation(List<LanguageJsonData>? _defaultServerLanguageData) {
 List<Locale> getSupportedLocales() {
   print("get supported called");
   List<Locale> list = [];
-  if (defaultServerLanguageData != null &&
-      defaultServerLanguageData!.length > 0) {
+  if (defaultServerLanguageData != null && defaultServerLanguageData!.length > 0) {
     for (int index = 0; index < defaultServerLanguageData!.length; index++) {
-      list.add(Locale(defaultServerLanguageData![index].languageCode!,
-          defaultServerLanguageData![index].countryCode!));
+      list.add(Locale(defaultServerLanguageData![index].languageCode!, defaultServerLanguageData![index].countryCode!));
     }
   } else {
     list.add(defaultLanguageLocale);
@@ -92,13 +80,9 @@ String getContentValueFromKey(int keywordId) {
   String defaultKeyValue = defaultKeyNotFoundValue;
   bool isFoundKey = false;
   if (selectedServerLanguageData != null) {
-    for (int index = 0;
-        index < selectedServerLanguageData!.contentData!.length;
-        index++) {
-      if (selectedServerLanguageData!.contentData![index].keywordId ==
-          keywordId) {
-        defaultKeyValue =
-            selectedServerLanguageData!.contentData![index].keywordValue!;
+    for (int index = 0; index < selectedServerLanguageData!.contentData!.length; index++) {
+      if (selectedServerLanguageData!.contentData![index].keywordId == keywordId) {
+        defaultKeyValue = selectedServerLanguageData!.contentData![index].keywordValue!;
         isFoundKey = true;
         break;
       }
@@ -120,13 +104,11 @@ String getContentValueFromKey(int keywordId) {
 
 initJsonFile() async {
   print("init josn");
-  final String jsonString =
-      await rootBundle.loadString('assets/staticjson/keyword_list.json');
+  final String jsonString = await rootBundle.loadString('assets/staticjson/keyword_list.json');
   final list = json.decode(jsonString) as List;
   print("list==========================${list}");
-  List<LocalLanguageResponse> finalList = list
-      .map((jsonElement) => LocalLanguageResponse.fromJson(jsonElement))
-      .toList();
+  List<LocalLanguageResponse> finalList =
+      list.map((jsonElement) => LocalLanguageResponse.fromJson(jsonElement)).toList();
   defaultLanguageDataKeys.clear();
   print("final list length finallist${finalList.length}");
 
@@ -146,14 +128,11 @@ initJsonFile() async {
 
 String getCountryCode() {
   String defaultCode = countryCode!;
-  String selectedLang =
-      getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguageCode);
-  if (defaultServerLanguageData != null &&
-      defaultServerLanguageData!.length > 0) {
+  String selectedLang = getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguageCode);
+  if (defaultServerLanguageData != null && defaultServerLanguageData!.length > 0) {
     for (int index = 0; index < defaultServerLanguageData!.length; index++) {
       if (selectedLang == defaultServerLanguageData![index].languageCode) {
-        List<String> selectedCoutry =
-            defaultServerLanguageData![index].countryCode!.split("-");
+        List<String> selectedCoutry = defaultServerLanguageData![index].countryCode!.split("-");
         if (selectedCoutry.length > 0) {
           defaultCode = selectedCoutry[1];
         }

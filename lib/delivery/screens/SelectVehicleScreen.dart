@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
-import 'package:mighty_delivery/delivery/screens/AddDeliverymanVehicleScreen.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/components/CommonScaffoldComponent.dart';
-import 'package:mighty_delivery/main/network/RestApis.dart';
-import 'package:mighty_delivery/main/screens/AddSupportTicketScreen.dart';
+import '../../delivery/screens/AddDeliverymanVehicleScreen.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
+import '../../main/network/RestApis.dart';
 import '../../extensions/decorations.dart';
 import '../../extensions/text_styles.dart';
 import '../../main.dart';
@@ -121,25 +119,6 @@ class _SelectVehicleScreenState extends State<SelectVehicleScreen> {
                                   ],
                                 ),
                                 8.height,
-                                // Row(
-                                //   children: [
-                                //     Text('${language.endDate} :', style: primaryTextStyle()),
-                                //     Text(
-                                //         item.endDatetime != null
-                                //             ? DateFormat('dd MMM yyyy').format(item.endDatetime!)
-                                //             : "-",
-                                //         style: primaryTextStyle()),
-                                //   ],
-                                // ),        // Row(
-                                //   children: [
-                                //     Text('${language.endDate} :', style: primaryTextStyle()),
-                                //     Text(
-                                //         item.endDatetime != null
-                                //             ? DateFormat('dd MMM yyyy').format(item.endDatetime!)
-                                //             : "-",
-                                //         style: primaryTextStyle()),
-                                //   ],
-                                // ),
                                 8.height,
                                 Row(
                                   children: [

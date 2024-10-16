@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/extensions/system_utils.dart';
-import 'package:mighty_delivery/extensions/text_styles.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../extensions/system_utils.dart';
+import '../../extensions/text_styles.dart';
 
 import '../main/utils/Colors.dart';
 import '../main/utils/Constants.dart';
@@ -17,15 +17,7 @@ import 'loader_widget.dart';
 enum DialogType { CONFIRMATION, ACCEPT, DELETE, UPDATE, ADD, RETRY }
 
 /// Enum for Dialog Animation
-enum DialogAnimation {
-  DEFAULT,
-  ROTATE,
-  SLIDE_TOP_BOTTOM,
-  SLIDE_BOTTOM_TOP,
-  SLIDE_LEFT_RIGHT,
-  SLIDE_RIGHT_LEFT,
-  SCALE
-}
+enum DialogAnimation { DEFAULT, ROTATE, SLIDE_TOP_BOTTOM, SLIDE_BOTTOM_TOP, SLIDE_LEFT_RIGHT, SLIDE_RIGHT_LEFT, SCALE }
 
 /// dialog primary color
 Color getDialogPrimaryColor(BuildContext context, DialogType dialogType, Color? primaryColor) {
@@ -157,8 +149,7 @@ Widget? getCenteredImage(
           color: getDialogPrimaryColor(context, dialogType, primaryColor).withOpacity(0.2),
           shape: BoxShape.circle,
         ),
-        child: Icon(Icons.close,
-            color: getDialogPrimaryColor(context, dialogType, primaryColor), size: 40),
+        child: Icon(Icons.close, color: getDialogPrimaryColor(context, dialogType, primaryColor), size: 40),
         padding: EdgeInsets.all(16),
       );
       break;
@@ -359,8 +350,7 @@ Future<bool?> showConfirmDialogCustom(
             width ?? customDialogWidth,
             centerImage,
             shape,
-          ).cornerRadiusWithClipRRectOnly(
-              topLeft: defaultRadius.toInt(), topRight: defaultRadius.toInt()),
+          ).cornerRadiusWithClipRRectOnly(topLeft: defaultRadius.toInt(), topRight: defaultRadius.toInt()),
           content: Container(
             width: width ?? customDialogWidth,
             color: Colors.transparent,
@@ -409,8 +399,7 @@ Future<bool?> showConfirmDialogCustom(
                           6.width,
                           Text(
                             negativeText ?? 'Cancel',
-                            style: boldTextStyle(
-                                color: negativeTextColor ?? textPrimaryColorGlobal),
+                            style: boldTextStyle(color: negativeTextColor ?? textPrimaryColorGlobal),
                           ),
                         ],
                       ).fit(),

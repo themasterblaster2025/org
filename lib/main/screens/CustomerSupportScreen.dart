@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/extensions/colors.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/list_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/Chat/ChatWithAdminScreen.dart';
-import 'package:mighty_delivery/main/components/CommonScaffoldComponent.dart';
-import 'package:mighty_delivery/main/models/CustomerSupportModel.dart';
-import 'package:mighty_delivery/main/screens/AddSupportTicketScreen.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/Chat/ChatWithAdminScreen.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
+import '../../main/models/CustomerSupportModel.dart';
+import '../../main/screens/AddSupportTicketScreen.dart';
 
 import '../../extensions/decorations.dart';
 import '../../extensions/text_styles.dart';

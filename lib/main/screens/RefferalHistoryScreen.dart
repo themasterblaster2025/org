@@ -1,28 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:intl/intl.dart';
-import 'package:mighty_delivery/extensions/colors.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/list_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/Chat/ChatWithAdminScreen.dart';
-import 'package:mighty_delivery/main/components/CommonScaffoldComponent.dart';
-import 'package:mighty_delivery/main/models/CustomerSupportModel.dart';
-import 'package:mighty_delivery/main/models/ReferralHistoryListModel.dart';
-import 'package:mighty_delivery/main/models/rewardsListModel.dart';
-import 'package:mighty_delivery/main/screens/AddSupportTicketScreen.dart';
-
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
 import '../../extensions/decorations.dart';
 import '../../extensions/text_styles.dart';
 import '../../main.dart';
 import '../models/LoginResponse.dart';
 import '../network/RestApis.dart';
-import '../utils/Colors.dart';
 import '../utils/Common.dart';
 import '../utils/Constants.dart';
 import '../utils/dynamic_theme.dart';
-import 'customer_support_detials_screen.dart';
 
 class ReferralHistoryScreen extends StatefulWidget {
   const ReferralHistoryScreen({super.key});

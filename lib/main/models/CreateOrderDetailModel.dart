@@ -275,7 +275,7 @@ class VehicleDetail {
   String? vehicleImage;
   String? createdAt;
   String? updatedAt;
-  Null? deletedAt;
+  String? deletedAt;
 
   VehicleDetail(
       {this.id,

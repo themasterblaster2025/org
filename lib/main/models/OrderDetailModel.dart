@@ -1,7 +1,6 @@
-import 'package:mighty_delivery/main/models/LoginResponse.dart';
+import '../../main/models/LoginResponse.dart';
 
 import 'OrderListModel.dart';
-import 'ProductListModel.dart';
 
 class OrderDetailModel {
   OrderData? data;
@@ -236,7 +235,6 @@ class OrderItem {
   int? amount;
   num? totalAmount;
   int? quantity;
-  List<ProductData>? productData;
 
   OrderItem({
     this.id,
@@ -245,7 +243,6 @@ class OrderItem {
     this.amount,
     this.totalAmount,
     this.quantity,
-    this.productData,
   });
 
   factory OrderItem.fromJson(Map<String, dynamic> json) => OrderItem(
@@ -255,9 +252,6 @@ class OrderItem {
         amount: json["amount"],
         totalAmount: json["total_amount"],
         quantity: json["quantity"],
-        productData: json["product_data"] == null
-            ? []
-            : List<ProductData>.from(json["product_data"]!.map((x) => ProductData.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -267,7 +261,6 @@ class OrderItem {
         "amount": amount,
         "total_amount": totalAmount,
         "quantity": quantity,
-        "product_data": productData == null ? [] : List<dynamic>.from(productData!.map((x) => x.toJson())),
       };
 }
 

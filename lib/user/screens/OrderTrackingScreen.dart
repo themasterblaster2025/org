@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
 
 import '../../main.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
@@ -59,14 +59,12 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
   getDeliveryBoyDetails() {
     getUserDetail(widget.orderData.deliveryManId.validate()).then((value) {
       deliveryBoyData = value;
-      sourceLocation =
-          LatLng(deliveryBoyData!.latitude.toDouble(), deliveryBoyData!.longitude.toDouble());
+      sourceLocation = LatLng(deliveryBoyData!.latitude.toDouble(), deliveryBoyData!.longitude.toDouble());
       MarkerId id = MarkerId("DeliveryBoy");
       markers.remove(id);
       deliveryBoyMarker = Marker(
         markerId: id,
-        position: LatLng(
-            deliveryBoyData!.latitude.toDouble(), deliveryBoyData!.longitude.toDouble()),
+        position: LatLng(deliveryBoyData!.latitude.toDouble(), deliveryBoyData!.longitude.toDouble()),
         infoWindow: InfoWindow(
             title: '${deliveryBoyData!.name.validate()}',
             snippet: '${language.lastUpdatedAt} ${dateParse(deliveryBoyData!.updatedAt!)}'),
@@ -77,8 +75,8 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
         Marker(
           markerId: MarkerId(widget.orderData.cityName.validate()),
           position: widget.orderData.status == ORDER_ACCEPTED
-              ? LatLng(widget.orderData.pickupPoint!.latitude.toDouble(),
-                  widget.orderData.pickupPoint!.longitude.toDouble())
+              ? LatLng(
+                  widget.orderData.pickupPoint!.latitude.toDouble(), widget.orderData.pickupPoint!.longitude.toDouble())
               : LatLng(widget.orderData.deliveryPoint!.latitude.toDouble(),
                   widget.orderData.deliveryPoint!.longitude.toDouble()),
           infoWindow: InfoWindow(
@@ -88,9 +86,7 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
           icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
         ),
       );
-      setPolyLines(
-          deliveryLatLng: LatLng(
-              deliveryBoyData!.latitude.toDouble(), deliveryBoyData!.longitude.toDouble()));
+      setPolyLines(deliveryLatLng: LatLng(deliveryBoyData!.latitude.toDouble(), deliveryBoyData!.longitude.toDouble()));
       setState(() {});
     }).catchError((error) {
       print(error);
@@ -105,8 +101,8 @@ class OrderTrackingScreenState extends State<OrderTrackingScreen> {
         request: PolylineRequest(
           origin: PointLatLng(deliveryLatLng.latitude, deliveryLatLng.longitude),
           destination: widget.orderData.status == ORDER_ACCEPTED
-              ? PointLatLng(widget.orderData.pickupPoint!.latitude.toDouble(),
-                  widget.orderData.pickupPoint!.longitude.toDouble())
+              ? PointLatLng(
+                  widget.orderData.pickupPoint!.latitude.toDouble(), widget.orderData.pickupPoint!.longitude.toDouble())
               : PointLatLng(widget.orderData.deliveryPoint!.latitude.toDouble(),
                   widget.orderData.deliveryPoint!.longitude.toDouble()),
           mode: TravelMode.driving,

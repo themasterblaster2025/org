@@ -3,31 +3,26 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:mighty_delivery/extensions/extension_util/bool_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/screens/VerificationListScreen.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/screens/VerificationListScreen.dart';
 import 'package:store_checker/store_checker.dart' as src;
 import 'package:store_checker/store_checker.dart';
 import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 
 import '../../delivery/fragment/DHomeFragment.dart';
-import '../../delivery/screens/DeliveryDashBoard.dart';
 import '../../extensions/common.dart';
 import '../../extensions/extension_util/device_extensions.dart';
 import '../../extensions/shared_pref.dart';
 import '../../extensions/system_utils.dart';
 import '../../main.dart';
-import '../../main/screens/LoginScreen.dart';
 import '../../user/screens/DashboardScreen.dart';
 import '../models/CityListModel.dart';
 import '../models/LoginResponse.dart';
 import '../network/RestApis.dart';
 import '../screens/EditProfileScreen.dart';
-import '../screens/EmailVerificationScreen.dart';
 import '../screens/UserCitySelectScreen.dart';
-import '../screens/VerificationScreen.dart';
 import '../utils/Common.dart';
 import '../utils/Constants.dart';
 
@@ -155,7 +150,6 @@ class AuthServices {
 
   Future<void> registerUserWithDB(String email, String password, LoginResponse value) async {
     try {
-      print("-----------------------registerUserWithDB${value.data!.loginType}");
       createAuthUser(email, password).then((user) async {
         if (user != null) {
           UserData userModel = UserData();
@@ -198,8 +192,6 @@ class AuthServices {
     await _auth.signInWithEmailAndPassword(email: email, password: password).then((value) async {
       appStore.setLoading(true);
       final User user = value.user!;
-      //   UserData userModel = await userService.getUser(email: user.email);
-
       await userService.getUser(email: user.email).then((value1) async {
         await updateUserData(value1);
         //Login Details to SharedPreferences

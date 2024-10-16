@@ -2,20 +2,15 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/extensions/extension_util/bool_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/screens/VerificationListScreen.dart';
-import 'package:mighty_delivery/main/utils/dynamic_theme.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/screens/VerificationListScreen.dart';
+import '../../main/utils/dynamic_theme.dart';
 import 'package:store_checker/store_checker.dart';
-
 import '../../delivery/fragment/DHomeFragment.dart';
-import '../../delivery/screens/DeliveryDashBoard.dart';
-import '../../delivery/screens/VerifyDeliveryPersonScreen.dart';
 import '../../extensions/app_text_field.dart';
-import '../../extensions/colors.dart';
 import '../../extensions/common.dart';
 import '../../extensions/confirmation_dialog.dart';
 import '../../extensions/decorations.dart';
@@ -27,7 +22,6 @@ import '../../main.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/screens/ForgotPasswordScreen.dart';
 import '../../main/screens/RegisterScreen.dart';
-import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Widgets.dart';
@@ -35,9 +29,7 @@ import '../../user/screens/DashboardScreen.dart';
 import '../models/CityListModel.dart';
 import '../services/AuthServices.dart';
 import '../utils/Images.dart';
-import 'EmailVerificationScreen.dart';
 import 'UserCitySelectScreen.dart';
-import 'VerificationScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   static String tag = '/LoginScreen';
@@ -403,55 +395,6 @@ class LoginScreenState extends State<LoginScreen> {
                     },
                     width: context.width(),
                   ),
-                  /* 16.height,
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      OutlinedButton(
-                        child: Text(language.demoUser,
-                            style: secondaryTextStyle(
-                                size: 16,
-                                color:
-                                    isDemoSelected == 0 ? colorPrimary : textSecondaryColor)),
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(
-                              width: isDemoSelected == 0 ? 1 : 0.5,
-                              color: isDemoSelected == 0 ? colorPrimary : textSecondaryColor),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(defaultRadius)),
-                          elevation: 0,
-                        ),
-                        onPressed: () {
-                          isDemoSelected = 0;
-                          emailController.text = 'mark@gmail.com';
-                          passController.text = '123456';
-                          setState(() {});
-                        },
-                      ).expand(),
-                      16.width,
-                      OutlinedButton(
-                        child: Text(language.demoDeliveryMan,
-                            style: secondaryTextStyle(
-                                size: 16,
-                                color:
-                                    isDemoSelected == 1 ? colorPrimary : textSecondaryColor)),
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(
-                              width: isDemoSelected == 1 ? 1 : 0.5,
-                              color: isDemoSelected == 1 ? colorPrimary : textSecondaryColor),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(defaultRadius)),
-                          elevation: 0,
-                        ),
-                        onPressed: () {
-                          isDemoSelected = 1;
-                          emailController.text = 'jose@gmail.com';
-                          passController.text = '123456';
-                          setState(() {});
-                        },
-                      ).expand(),
-                    ],
-                  ),*/
                   32.height,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

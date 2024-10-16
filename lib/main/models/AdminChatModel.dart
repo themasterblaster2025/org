@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'PaginationModel.dart';
 
 class AdminChatModel {

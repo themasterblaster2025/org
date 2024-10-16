@@ -4,11 +4,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:http/http.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/list_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/list_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
 
 import '../../extensions/common.dart';
 import '../../extensions/confirmation_dialog.dart';
@@ -22,7 +22,6 @@ import '../../main/models/DeliveryDocumentListModel.dart';
 import '../../main/models/DocumentListModel.dart';
 import '../../main/network/NetworkUtils.dart';
 import '../../main/network/RestApis.dart';
-import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/dynamic_theme.dart';
@@ -81,12 +80,6 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
       deliveryPersonDocuments.addAll(res.data!);
       deliveryPersonDocuments.forEach((element) {
         uploadedDocList!.add(element.documentId!);
-        /*  remainingDocuments.forEach((doc) {
-          if (doc.id == element.documentId) {
-            remainingDocuments.remove(doc);
-            setState(() { });
-          }
-        });*/
         remainingDocuments.removeWhere((doc) => element.documentId == doc.id);
         selectedDoc = remainingDocuments.validate().isNotEmpty ? remainingDocuments[0] : null;
         setState(() {});

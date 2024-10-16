@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/extensions/colors.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/models/LoginResponse.dart';
-
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/models/LoginResponse.dart';
 import '../../delivery/screens/WithDrawScreen.dart';
 import '../../extensions/animatedList/animated_list_view.dart';
 import '../../extensions/app_text_field.dart';
@@ -21,7 +19,6 @@ import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/WalletListModel.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/screens/BankDetailScreen.dart';
-import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Widgets.dart';

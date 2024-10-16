@@ -1,24 +1,12 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:mighty_delivery/delivery/fragment/DHomeFragment.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/screens/EmailVerificationScreen.dart';
-import 'package:mighty_delivery/main/screens/VerificationListScreen.dart';
-import 'package:mighty_delivery/main/utils/dynamic_theme.dart';
+import '../../delivery/fragment/DHomeFragment.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/screens/VerificationListScreen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:provider/provider.dart';
-
-import '../../AppTheme.dart';
-import '../../delivery/screens/DeliveryDashBoard.dart';
-import '../../delivery/screens/VerifyDeliveryPersonScreen.dart';
-import '../../extensions/colors.dart';
-import '../../extensions/decorations.dart';
 import '../../extensions/shared_pref.dart';
 import '../../extensions/system_utils.dart';
 import '../../extensions/text_styles.dart';
@@ -35,7 +23,6 @@ import '../../user/screens/DashboardScreen.dart';
 import '../utils/Common.dart';
 import '../utils/Images.dart';
 import 'UserCitySelectScreen.dart';
-import 'VerificationScreen.dart';
 
 class SplashScreen extends StatefulWidget {
   static String tag = '/SplashScreen';
@@ -57,7 +44,6 @@ class SplashScreenState extends State<SplashScreen> {
       appStore.setThemeColor(value.themeColor!);
       appStore.updateTheme(colorFromHex(value.themeColor!));
       appStore.setIsAllowDeliveryMan(value.isAllowDeliveryMan ?? false);
-      print("value===========${value.data!.length}");
       appStore.setLoading(false);
       if (value.status == true) {
         setValue(CURRENT_LAN_VERSION, value.currentVersionNo.toString());
@@ -96,17 +82,6 @@ class SplashScreenState extends State<SplashScreen> {
       appStore.setLoading(false);
       log(error);
     });
-
-    // default language eng
-    // String getJsonData = getStringAsync(LanguageJsonDataRes, defaultValue: "");
-    // if (getJsonData.isNotEmpty) {
-    //   ServerLanguageResponse languageSettings = ServerLanguageResponse.fromJson(json.decode(getJsonData.trim()));
-    //   print("============${languageSettings.data!.length}");
-    //   if (languageSettings.data!.length > 0) {
-    //     defaultServerLanguageData = languageSettings.data;
-    //     performLanguageOperation(defaultServerLanguageData);
-    //   }
-    // }
     Future.delayed(
       Duration(seconds: 1),
       () async {

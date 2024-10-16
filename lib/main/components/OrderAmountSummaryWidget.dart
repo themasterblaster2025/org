@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/num_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/models/CreateOrderDetailModel.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/num_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/models/CreateOrderDetailModel.dart';
 import '../../extensions/decorations.dart';
 import '../../extensions/text_styles.dart';
 import '../../main/utils/Common.dart';
-
 import '../../main.dart';
-import '../models/OrderDetailModel.dart';
-import '../models/TotalAmountResponse.dart';
 import '../utils/Constants.dart';
 import '../utils/dynamic_theme.dart';
 
@@ -61,8 +58,6 @@ class OrderAmountDataWidgetState extends State<OrderAmountDataWidget> {
   void initState() {
     super.initState();
     baseTotal = widget.baseTotal!.toDouble();
-    print("-------vehicle price${widget.perkmVehiclePrice}");
-
     cal();
     setState(() {});
   }
@@ -82,8 +77,6 @@ class OrderAmountDataWidgetState extends State<OrderAmountDataWidget> {
       chargesTotal = chargesTotal += element.charges!;
     });
     extraChargesTotal = chargesTotal;
-    print("------------------extrachagres total${extraChargesTotal}");
-    print("--------------${widget.baseTotal}");
     setState(() {});
   }
 

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,10 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/main/services/OrdersMessageService.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../main/services/OrdersMessageService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../main/models/models.dart';
 import '../main/screens/SplashScreen.dart';
 import '../main/utils/Constants.dart';
@@ -94,12 +92,6 @@ void main() async {
   runApp(MyApp());
 }
 
-Future<void> initializeDefault() async {
-  FirebaseApp app = await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-}
-
 class MyApp extends StatefulWidget {
   @override
   MyAppState createState() => MyAppState();
@@ -108,80 +100,6 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
   String? color;
-  // ThemeData _lightThemeData = lightTheme();
-  //ThemeData _darkThemeData = darkTheme();
-  // late StreamSubscription<Position> _streamSubscription;
-  String message = 'empty';
-  // void updateTheme(color) {
-  //   setState(() {
-  //     ColorUtils.updateColors(color);
-  //     _lightThemeData = ThemeData(
-  //       primarySwatch: createMaterialColor(ColorUtils.colorPrimary),
-  //       primaryColor: ColorUtils.colorPrimary,
-  //       scaffoldBackgroundColor: Colors.white,
-  //       fontFamily: GoogleFonts.lato().fontFamily,
-  //       iconTheme: IconThemeData(color: Colors.black),
-  //       dialogBackgroundColor: Colors.white,
-  //       unselectedWidgetColor: Colors.grey,
-  //       dividerColor: dividerColor,
-  //       cardColor: Colors.white,
-  //       tabBarTheme: TabBarTheme(labelColor: Colors.black),
-  //       appBarTheme: AppBarTheme(
-  //           color: ColorUtils.colorPrimary,
-  //           elevation: 0,
-  //           systemOverlayStyle:
-  //               SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light, statusBarColor: Colors.transparent)),
-  //       dialogTheme: DialogTheme(shape: dialogShape()),
-  //       bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.white),
-  //       colorScheme: ColorScheme.light(
-  //         primary: ColorUtils.colorPrimary,
-  //       ),
-  //     ).copyWith(
-  //       pageTransitionsTheme: PageTransitionsTheme(
-  //         builders: <TargetPlatform, PageTransitionsBuilder>{
-  //           TargetPlatform.android: OpenUpwardsPageTransitionsBuilder(),
-  //           TargetPlatform.linux: OpenUpwardsPageTransitionsBuilder(),
-  //           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-  //         },
-  //       ),
-  //     );
-  //     _darkThemeData = ThemeData(
-  //       primarySwatch: createMaterialColor(ColorUtils.colorPrimary),
-  //       primaryColor: ColorUtils.colorPrimary,
-  //       scaffoldBackgroundColor: ColorUtils.scaffoldColorDark,
-  //       fontFamily: GoogleFonts.lato().fontFamily,
-  //       iconTheme: IconThemeData(color: Colors.white),
-  //       dialogBackgroundColor: ColorUtils.scaffoldSecondaryDark,
-  //       unselectedWidgetColor: Colors.white60,
-  //       dividerColor: Colors.white12,
-  //       cardColor: ColorUtils.scaffoldSecondaryDark,
-  //       tabBarTheme: TabBarTheme(labelColor: Colors.white),
-  //       appBarTheme: AppBarTheme(
-  //         color: ColorUtils.scaffoldSecondaryDark,
-  //         elevation: 0,
-  //         systemOverlayStyle: SystemUiOverlayStyle(
-  //           statusBarIconBrightness: Brightness.light,
-  //           statusBarColor: Colors.transparent,
-  //         ),
-  //       ),
-  //       dialogTheme: DialogTheme(shape: dialogShape()),
-  //       snackBarTheme: SnackBarThemeData(backgroundColor: ColorUtils.appButtonColorDark),
-  //       bottomSheetTheme: BottomSheetThemeData(backgroundColor: ColorUtils.appButtonColorDark),
-  //       colorScheme: ColorScheme.dark(
-  //         primary: ColorUtils.colorPrimary,
-  //       ),
-  //     ).copyWith(
-  //       pageTransitionsTheme: PageTransitionsTheme(
-  //         builders: <TargetPlatform, PageTransitionsBuilder>{
-  //           TargetPlatform.android: OpenUpwardsPageTransitionsBuilder(),
-  //           TargetPlatform.linux: OpenUpwardsPageTransitionsBuilder(),
-  //           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-  //         },
-  //       ),
-  //     );
-  //   });
-  // }
-
   @override
   void initState() {
     super.initState();

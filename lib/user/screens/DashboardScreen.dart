@@ -2,12 +2,11 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/utils/Widgets.dart';
-
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/utils/Widgets.dart';
 import '../../extensions/LiveStream.dart';
 import '../../extensions/colors.dart';
 import '../../extensions/common.dart';
@@ -20,7 +19,6 @@ import '../../main/models/CityListModel.dart';
 import '../../main/models/models.dart';
 import '../../main/screens/NotificationScreen.dart';
 import '../../main/screens/UserCitySelectScreen.dart';
-import '../../main/utils/Colors.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/dynamic_theme.dart';
 import '../../user/components/FilterOrderComponent.dart';

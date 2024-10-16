@@ -1,23 +1,13 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/list_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/extensions/text_styles.dart';
-import 'package:mighty_delivery/main/models/AppSettingModel.dart';
-import 'package:mighty_delivery/main/screens/VerificationListScreen.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
-
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/list_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
 import '../../extensions/LiveStream.dart';
 import '../../extensions/animatedList/animated_configurations.dart';
 import '../../extensions/animatedList/animated_list_view.dart';
-import '../../extensions/app_button.dart';
 import '../../extensions/common.dart';
-import '../../extensions/decorations.dart';
 import '../../extensions/shared_pref.dart';
 import '../../extensions/system_utils.dart';
 import '../../main.dart';
@@ -84,24 +74,6 @@ class OrderFragmentState extends State<OrderFragment> {
     }).catchError((error) {
       log(error.toString());
     });
-    // await getInvoiceSetting().then((value) {
-    //   if (value.invoiceData != null && value.invoiceData!.isNotEmpty) {
-    //     appStore.setInvoiceCompanyName(
-    //         value.invoiceData!.firstWhere((element) => element.key == 'company_name').value.validate());
-    //     appStore.setInvoiceContactNumber(
-    //         value.invoiceData!.firstWhere((element) => element.key == 'company_contact_number').value.validate());
-    //     appStore.setCompanyAddress(
-    //         value.invoiceData!.firstWhere((element) => element.key == 'company_address').value.validate());
-    //     appStore.setInvoiceCompanyLogo(
-    //         value.invoiceData!.firstWhere((element) => element.key == 'company_logo').value.validate());
-    //     appStore.setMaxAmountPerMonth(
-    //         value.invoiceData!.firstWhere((element) => element.key == 'max_earning_per_month').value.validate());
-    //   }
-    // }).catchError((error) {
-    //   toast(error.toString());
-    // }).whenComplete(() {
-    //   appStore.setLoading(false);
-    // });
   }
 
   getOrderListApiCall() async {

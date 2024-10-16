@@ -2,12 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mighty_delivery/extensions/colors.dart';
-import 'package:mighty_delivery/extensions/decorations.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/utils/Colors.dart';
-import 'package:mighty_delivery/main/utils/Common.dart';
-import 'package:mighty_delivery/main/utils/Widgets.dart';
+import '../../extensions/colors.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/utils/Common.dart';
+import '../../main/utils/Widgets.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../extensions/extension_util/context_extensions.dart';

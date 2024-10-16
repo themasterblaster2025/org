@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/extensions/decorations.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/extensions/text_styles.dart';
-import 'package:mighty_delivery/main/utils/Widgets.dart';
-
+import '../../extensions/decorations.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../extensions/text_styles.dart';
+import '../../main/utils/Widgets.dart';
 import '../../main.dart';
 import '../../main/utils/DataProviders.dart';
 import '../../main/utils/dynamic_theme.dart';

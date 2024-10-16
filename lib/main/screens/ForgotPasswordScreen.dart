@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
 
 import '../../extensions/app_text_field.dart';
 import '../../extensions/common.dart';
@@ -85,14 +85,12 @@ class ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ),
             ),
           ),
-          Observer(
-              builder: (context) => loaderWidget().visible(appStore.isLoading)),
+          Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
         ],
       ),
       bottomNavigationBar: commonButton(language.submit, () {
         if (formKey.currentState!.validate()) {
-          if (forgotEmailController.text == 'jose@gmail.com' ||
-              forgotEmailController.text == 'mark@gmail.com') {
+          if (forgotEmailController.text == 'jose@gmail.com' || forgotEmailController.text == 'mark@gmail.com') {
             toast(language.demoMsg);
           } else {
             submit();

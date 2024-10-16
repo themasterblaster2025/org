@@ -1,22 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:developer' as lg;
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
-import 'package:mighty_delivery/extensions/extension_util/bool_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/models/CategoryModel.dart';
-import 'package:mighty_delivery/main/models/ClaimListResponseModel.dart';
-import 'package:mighty_delivery/main/models/DashboardCountModel.dart';
-import 'package:mighty_delivery/main/models/PageListModel.dart';
-import 'package:mighty_delivery/main/models/ReferralHistoryListModel.dart';
-import 'package:mighty_delivery/main/models/WorkHoursListModel.dart';
-import 'package:mighty_delivery/main/models/rewardsListModel.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/models/ClaimListResponseModel.dart';
+import '../../main/models/DashboardCountModel.dart';
+import '../../main/models/PageListModel.dart';
+import '../../main/models/ReferralHistoryListModel.dart';
+import '../../main/models/rewardsListModel.dart';
 
 import '../../extensions/common.dart';
 import '../../extensions/shared_pref.dart';
@@ -51,15 +46,11 @@ import '../models/OrderDetailModel.dart';
 import '../models/OrderRescheduleResponse.dart';
 import '../models/OrdersLatLngResponseList.dart';
 import '../models/PageResponse.dart';
-import '../models/PlaceIdDetailModel.dart';
-import '../models/ProductListModel.dart';
-import '../models/StoreListModel.dart';
 import '../models/TotalAmountResponse.dart';
 import '../models/UserProfileDetailModel.dart';
 import '../models/VehicleModel.dart';
 import '../models/WalletListModel.dart';
 import '../models/WithDrawListModel.dart';
-import '../services/AuthServices.dart';
 import 'NetworkUtils.dart';
 
 //region Auth
@@ -470,11 +461,6 @@ Future<AutoCompletePlacesListModel> placeAutoCompleteApi(
       method: HttpMethod.GET)));
 }
 
-Future<PlaceIdDetailModel> getPlaceDetail({String placeId = ''}) async {
-  return PlaceIdDetailModel.fromJson(
-      await handleResponse(await buildHttpResponse('place-detail-api?placeid=$placeId', method: HttpMethod.GET)));
-}
-
 Future<LDBaseResponse> deleteUser(Map req) async {
   return LDBaseResponse.fromJson(
       await handleResponse(await buildHttpResponse('delete-user', request: req, method: HttpMethod.POST)));
@@ -627,43 +613,7 @@ Future<ServerLanguageResponse> getLanguageList(versionNo) async {
           .then((value) => value));
 }
 
-// get store list
-Future<StoreListModel> getStoreList(
-    {required int page, String? storeType, String? title, bool isNearby = false}) async {
-  String endPoint = 'store-list?page=$page&city_id=${getIntAsync(CITY_ID)}&country_id=${getIntAsync(COUNTRY_ID)}';
-  if (isNearby) {
-    endPoint =
-        endPoint + '&latitude=${getDoubleAsync(CURRENT_LATITUDE)}&longitude=${getDoubleAsync(CURRENT_LONGITUDE)}';
-  }
-  if (storeType != null) {
-    endPoint = endPoint + '&store_type=$storeType';
-  }
-  if (title != null) {
-    endPoint = endPoint + '&title=$title';
-  }
-  return StoreListModel.fromJson(await handleResponse(await buildHttpResponse(endPoint, method: HttpMethod.GET)));
-}
-
-// get Product list
-Future<ProductListModel> getProductList({int? storeDetailId, int? page, String? title, bool isNearest = false}) async {
-  String endPoint = 'product-list?page=$page';
-  if (storeDetailId != null) {
-    endPoint = endPoint + "&store_detail_id=$storeDetailId";
-  }
-  if (title != null) {
-    if (isNearest) {
-      endPoint =
-          endPoint + '&latitude=${getDoubleAsync(CURRENT_LATITUDE)}&longitude=${getDoubleAsync(CURRENT_LONGITUDE)}';
-    }
-    if (getIntAsync(CITY_ID) != 0) {
-      endPoint = endPoint + "&city_id=${getIntAsync(CITY_ID)}";
-    }
-    endPoint = endPoint + "&title=$title";
-  }
-  return ProductListModel.fromJson(await handleResponse(await buildHttpResponse(endPoint, method: HttpMethod.GET)));
-}
-
-/// Get DeliveryMan Dashboard count List
+// Get DeliveryMan Dashboard count List
 Future<DashboardCount> getDashboardCount({String? startDate, String? endDate}) async {
   String endpoint = 'deliveryman-dashboard-data';
   if (startDate != null && endDate != null) {

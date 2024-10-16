@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/list_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/main/components/HtmlWidgtet.dart';
-import 'package:mighty_delivery/main/models/CustomerSupportModel.dart';
-import 'package:mighty_delivery/main/screens/CustomerSupportScreen.dart';
-import 'package:mighty_delivery/main/screens/RefferalHistoryScreen.dart';
-import 'package:mighty_delivery/main/screens/RewardListScreen.dart';
-import 'package:mighty_delivery/user/screens/ClaimListScreen.dart';
-import 'package:mighty_delivery/user/screens/PageDetailScreen.dart';
-import 'package:mighty_delivery/user/screens/refer_earn_screen.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/list_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/screens/CustomerSupportScreen.dart';
+import '../../main/screens/RefferalHistoryScreen.dart';
+import '../../main/screens/RewardListScreen.dart';
+import '../../user/screens/ClaimListScreen.dart';
+import '../../user/screens/PageDetailScreen.dart';
+import '../../user/screens/refer_earn_screen.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../extensions/animatedList/animated_configurations.dart';
@@ -34,7 +32,6 @@ import '../../main/screens/ChangePasswordScreen.dart';
 import '../../main/screens/EditProfileScreen.dart';
 import '../../main/screens/LanguageScreen.dart';
 import '../../main/screens/order_history_list.dart';
-import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Images.dart';
@@ -218,7 +215,6 @@ class AccountFragmentState extends State<AccountFragment> {
                     commonLaunchUrl(mPrivacyPolicy);
                   }),
                   accountSettingItemWidget(ic_information, language.helpAndSupport, () {
-                    print("---------------${appStore.siteEmail}");
                     commonLaunchUrl('mailto:${appStore.siteEmail}');
                   }),
                   accountSettingItemWidget(ic_document, language.termAndCondition, () {

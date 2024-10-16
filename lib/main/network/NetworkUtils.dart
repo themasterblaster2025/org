@@ -4,8 +4,8 @@ import 'dart:developer' as lg;
 
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
 
 import '../../extensions/common.dart';
 import '../../extensions/shared_pref.dart';

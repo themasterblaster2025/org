@@ -1,4 +1,4 @@
-import 'package:mighty_delivery/main/models/LoginResponse.dart';
+import '../../main/models/LoginResponse.dart';
 
 import 'PaginationModel.dart';
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
 
 import '../../extensions/animatedList/animated_list_view.dart';
 import '../../extensions/decorations.dart';
@@ -12,7 +12,6 @@ import '../../extensions/text_styles.dart';
 import '../../main.dart';
 import '../../main/models/NotificationModel.dart';
 import '../../main/network/RestApis.dart';
-import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../user/screens/OrderDetailScreen.dart';
 import '../components/CommonScaffoldComponent.dart';

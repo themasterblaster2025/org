@@ -8,20 +8,19 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mighty_delivery/extensions/colors.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/list_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/num_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import '../../extensions/colors.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/list_extensions.dart';
+import '../../extensions/extension_util/num_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
 
 import '../../extensions/LiveStream.dart';
 import '../../extensions/animatedList/animated_scroll_view.dart';
 import '../../extensions/app_button.dart';
 import '../../extensions/app_text_field.dart';
 import '../../extensions/common.dart';
-import '../../extensions/confirmation_dialog.dart';
 import '../../extensions/decorations.dart';
 import '../../extensions/shared_pref.dart';
 import '../../extensions/system_utils.dart';
@@ -30,7 +29,6 @@ import '../../extensions/widgets.dart';
 import '../../main.dart';
 import '../../main/Chat/ChatScreen.dart';
 import '../../main/components/CommonScaffoldComponent.dart';
-import '../../main/components/OrderAmountSummaryWidget.dart';
 import '../../main/components/OrderSummeryWidget.dart';
 import '../../main/models/CountryListModel.dart';
 import '../../main/models/ExtraChargeRequestModel.dart';
@@ -41,7 +39,6 @@ import '../../main/network/NetworkUtils.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
-import '../../main/utils/Constants.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/DataProviders.dart';
 import '../../main/utils/Images.dart';
@@ -105,7 +102,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
   }
 
   orderDetailApiCall() async {
-    print("inside orderdetails Api call ${appStore.claimDuration}");
     appStore.setLoading(true);
     await getOrderDetails(widget.orderId).then((value) {
       orderData = value.data!;
@@ -195,15 +191,12 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
     Duration difference = currentDate.difference(orderDate);
     int differenceInMinutes = currentDate.difference(orderDate).inMinutes;
     canCancel = differenceInMinutes < cancelOrderDuration;
-    print("--------------canCancel${canCancel}");
     if (difference.inMinutes < 60 && difference.inMinutes >= 0) {
       setState(() {
-        print("--------------remainingTime${remainingTime}");
         remainingTime = Duration(hours: 1) - difference;
         startTimer();
       });
     } else {
-      print("-------------else part completed");
       setState(() {
         remainingTime = Duration.zero;
       });
@@ -294,7 +287,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
       "payment_type": "",
       "payment_status": "",
       "fixed_charges": orderData!.fixedCharges!,
-      "parent_order_id": orderData!.id!,
       "total_amount": orderData!.totalAmount ?? 0,
       "reason": reason == isOtherOptionSelected ? otherReason : reason,
       "order_id": orderData!.id,
@@ -318,52 +310,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
       toast(error.toString());
     });
   }
-
-  // claimInsuranceVehicleApiCall() async {
-  //   hideKeyboard(context);
-  //   appStore.setLoading(true);
-  //   setState(() {});
-  //   MultipartRequest multiPartRequest = await getMultiPartRequest('claims-save');
-  //   multiPartRequest.fields['traking_no'] = orderData!.orderTrackingId.validate();
-  //   multiPartRequest.fields['prof_value'] = proofTitleTextEditingController.text;
-  //   multiPartRequest.fields['detail'] = proofDetailsTextEditingController.text;
-  //   multiPartRequest.fields['client_id'] = getIntAsync(USER_ID).toString();
-  //   if (selectedFiles != null && selectedFiles!.length > 0) {
-  //     selectedFiles!.forEach((element) async {
-  //       multiPartRequest.files.add(await MultipartFile.fromPath("attachment_file[]", element.path!));
-  //     });
-  //   }
-  //   print("---------------requestselectedFiles${multiPartRequest.files.length}");
-  //
-  //   // multiPartRequest.files.add(await MultipartFile.fromPath('vehicle_history_image', file.path));
-  //   multiPartRequest.headers.addAll(buildHeaderTokens());
-  //   sendMultiPartRequest(
-  //     multiPartRequest,
-  //     onSuccess: (data) async {
-  //       if (data != null) {
-  //         appStore.setLoading(false);
-  //         toast(data["message"]);
-  //
-  //         finish(context);
-  //         print(data.toString());
-  //         // VehicleSavedResponse res = VehicleSavedResponse.fromJson(data);
-  //         // toast(res.message.toString());
-  //         // setValue(VEHICLE, res.data!.toJson());
-  //         // LiveStream().emit("VehicleInfo");
-  //         // print("------------------${res.data!.vehicleInfo.make}");
-  //         // appStore.setLoading(false);
-  //         // finish(context);
-  //       }
-  //     },
-  //     onError: (error) {
-  //       toast(error.toString(), print: true);
-  //       appStore.setLoading(false);
-  //     },
-  //   ).catchError((e) {
-  //     appStore.setLoading(false);
-  //     toast(e.toString());
-  //   });
-  // }
 
   @override
   void setState(fn) {
@@ -809,7 +755,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                   Wrap(
                                     spacing: 8,
                                     runSpacing: 8,
-                                    children: packagingSymbols!.map((item) {
+                                    children: packagingSymbols.map((item) {
                                       return Container(
                                         width: 50,
                                         decoration: boxDecorationWithRoundedCorners(
@@ -954,23 +900,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                         style: boldTextStyle(size: 14), maxLines: 3, overflow: TextOverflow.ellipsis),
                                   ],
                                 )).visible(!orderData!.pickupPoint!.description.isEmptyOrNull),
-                            // if (!orderData!.pickupPoint!.name.isEmptyOrNull) 16.height,
-                            // Text(language.pickupPersonName, style: boldTextStyle(size: 16))
-                            //     .visible(!orderData!.pickupPoint!.name.isEmptyOrNull),
-                            // 12.height,
-                            // Container(
-                            //     decoration: boxDecorationWithRoundedCorners(
-                            //         borderRadius: BorderRadius.circular(defaultRadius),
-                            //         border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
-                            //         backgroundColor: Colors.transparent),
-                            //     padding: EdgeInsets.all(12),
-                            //     child: Row(
-                            //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //       children: [
-                            //         Text(orderData!.pickupPoint!.name.toString(),
-                            //             style: boldTextStyle(size: 14), maxLines: 3, overflow: TextOverflow.ellipsis),
-                            //       ],
-                            //     )).visible(!orderData!.pickupPoint!.name.isEmptyOrNull),
                             if (!orderData!.deliveryPoint!.description.isEmptyOrNull) 16.height,
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -998,23 +927,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                         style: boldTextStyle(size: 14), maxLines: 3, overflow: TextOverflow.ellipsis),
                                   ],
                                 )).visible(!orderData!.deliveryPoint!.description.isEmptyOrNull),
-                            // if (!orderData!.deliveryPoint!.name.isEmptyOrNull) 16.height,
-                            // Text(language.deliveryPersonName, style: boldTextStyle(size: 16))
-                            //     .visible(!orderData!.deliveryPoint!.name.isEmptyOrNull),
-                            // 12.height,
-                            // Container(
-                            //     decoration: boxDecorationWithRoundedCorners(
-                            //         borderRadius: BorderRadius.circular(defaultRadius),
-                            //         border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
-                            //         backgroundColor: Colors.transparent),
-                            //     padding: EdgeInsets.all(12),
-                            //     child: Row(
-                            //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //       children: [
-                            //         Text(orderData!.deliveryPoint!.name.toString(),
-                            //             style: boldTextStyle(size: 14), maxLines: 3, overflow: TextOverflow.ellipsis),
-                            //       ],
-                            //     )).visible(!orderData!.deliveryPoint!.name.isEmptyOrNull),
                             if (orderData!.vehicleData != null) 16.height,
                             if (orderData!.vehicleData != null) Text(language.vehicle, style: boldTextStyle()),
                             if (orderData!.vehicleData != null) 12.height,
@@ -1045,91 +957,12 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                 overflow: TextOverflow.ellipsis,
                                               ),
                                             )
-                                          // Row(
-                                          //   children: [
-                                          //     Container(
-                                          //         width: 100, child: Text("${language.name} : ", style: secondaryTextStyle())),
-                                          //     Text(
-                                          //       "${item.title.validate()} ",
-                                          //       style: primaryTextStyle(),
-                                          //     ),
-                                          //   ],
-                                          // ),
-                                          // Row(
-                                          //   children: [
-                                          //     Container(
-                                          //         width: 100, child: Text("${language.price} : ", style: secondaryTextStyle())),
-                                          //     Text(
-                                          //       "${printAmount(item.price.validate())}",
-                                          //       style: primaryTextStyle(),
-                                          //     ).paddingRight(10),
-                                          //   ],
-                                          // ),
-                                          // Row(
-                                          //   children: [
-                                          //     Container(
-                                          //         width: 100,
-                                          //         child: Text("${language.capacity} : ", style: secondaryTextStyle())),
-                                          //     Text(
-                                          //       "${item.capacity.validate()} ",
-                                          //       style: primaryTextStyle(),
-                                          //     ),
-                                          //   ],
-                                          // ),
-                                          // Row(
-                                          //   children: [
-                                          //     Container(
-                                          //         width: 100,
-                                          //         child: Text("${language.perKmCharge} : ", style: secondaryTextStyle())),
-                                          //     Text(
-                                          //       "${printAmount(item.perKmCharge.validate())}",
-                                          //       style: primaryTextStyle(),
-                                          //     ).paddingRight(10),
-                                          //   ],
-                                          // ),
                                         ],
                                       ),
                                     ),
                                   ],
                                 ).paddingAll(10),
                               ),
-                            // Container(
-                            //   decoration: boxDecorationWithRoundedCorners(
-                            //       borderRadius: BorderRadius.circular(defaultRadius),
-                            //       border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
-                            //       backgroundColor: Colors.transparent),
-                            //   padding: EdgeInsets.all(12),
-                            //   // child: Column(
-                            //   //   crossAxisAlignment: CrossAxisAlignment.start,
-                            //   //   children: [
-                            //   //     if (orderData!.vehicleImage != null)
-                            //   //       ClipRRect(
-                            //   //           borderRadius: BorderRadius.circular(10),
-                            //   //           child: commonCachedNetworkImage(orderData!.vehicleImage,
-                            //   //               fit: BoxFit.fill, height: 100, width: 150)),
-                            //   //     8.height,
-                            //   //     Row(
-                            //   //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //   //       children: [
-                            //   //         Text(language.vehicleName, style: secondaryTextStyle()),
-                            //   //         Text('${orderData!.vehicleData!.title.validate()}', style: primaryTextStyle())
-                            //   //       ],
-                            //   //     ),
-                            //   //   ],
-                            //   // ),
-                            //   child: Row(
-                            //     children: [
-                            //       ClipRRect(
-                            //           borderRadius: BorderRadius.circular(10),
-                            //           child: commonCachedNetworkImage(orderData!.vehicleImage,
-                            //               fit: BoxFit.fill, height: 50, width: 50)),
-                            //       SizedBox(width: 16),
-                            //       Text(
-                            //           "${orderData!.vehicleData!.title.validate()}  (${printAmount(orderData!.vehicleData!.price.validate())})",
-                            //           style: primaryTextStyle()),
-                            //     ],
-                            //   ),
-                            // ),
                             if (userData != null &&
                                 (orderData!.status != ORDER_CREATED && orderData!.status != ORDER_DRAFT))
                               Column(
@@ -1185,18 +1018,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                           Icon(Octicons.verified, color: Colors.green, size: 18),
                                                       ],
                                                     ),
-                                                    // InkWell(
-                                                    //         onTap: () {
-                                                    //           ChatScreen(
-                                                    //                   userData: userData,
-                                                    //                   orderId: orderData!.id.toString().validate())
-                                                    //               .launch(context);
-                                                    //         },
-                                                    //         child: Icon(Ionicons.md_chatbox_outline,
-                                                    //             size: 22, color: colorPrimary))
-                                                    //     .visible(orderData!.status != ORDER_DELIVERED &&
-                                                    //         orderData!.status != ORDER_CANCELLED &&
-                                                    //         userData!.userType.validate() != ADMIN),
                                                   ],
                                                 ),
                                                 4.height,
@@ -1266,29 +1087,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                 ],
                               ),
                             16.height,
-                            // OrderAmountDataWidget(
-                            //     fixedAmount: orderData!.fixedCharges!.toDouble(),
-                            //     distanceAmount: orderData!.distanceCharge!.toDouble(),
-                            //     extraCharges: orderData!.extraChargesList!,
-                            //     vehicleAmount:
-                            //         orderData!.vehicleData != null ? orderData!.vehicleData!.price!.toDouble() : 0,
-                            //     insuranceAmount:
-                            //         orderData!.insuranceCharge != null ? orderData!.insuranceCharge!.toDouble() : 0,
-                            //     diffWeight: (orderData!.cityDetails!.minWeight! > orderData!.totalWeight!)
-                            //         ? (orderData!.totalDistance - orderData!.cityDetails!.minDistance!)
-                            //         : 0,
-                            //     // diffDistance: (orderData!.cityDetails!.minDistance! > orderData!.totalDistance!)
-                            //     //     ? (orderData!.totalDistance - orderData!.cityDetails!.minDistance!)
-                            //     //     : 0.0,
-                            //     diffDistance: 0,
-                            //     totalAmount: orderData!.totalAmount.toDouble(),
-                            //     weightAmount: orderData!.weightCharge != null ? orderData!.weightCharge!.toDouble() : 0,
-                            //     perWeightCharge: 0,
-                            //     perKmCityDataCharge: 0,
-                            //     perkmVehiclePrice: orderData!.vehicleData != null
-                            //         ? orderData!.vehicleData!.perKmCharge!.toDouble()
-                            //         : 0,
-                            //     baseTotal: orderData!.baseTotal!.toDouble()),
 
                             (orderData!.extraCharges.runtimeType == List<dynamic>)
                                 ? OrderSummeryWidget(
@@ -1317,15 +1115,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        // if (orderItems.validate().isNotEmpty)
-                                        //   Row(
-                                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        //     children: [
-                                        //       Text(language.productAmount, style: primaryTextStyle()),
-                                        //       16.width,
-                                        //       Text('${printAmount(productAmount)}', style: primaryTextStyle()),
-                                        //     ],
-                                        //   ),
                                         if (orderData!.vehicleData != null)
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1386,19 +1175,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                               ),
                                             ],
                                           ),
-                                        /*Align(
-                                      alignment: Alignment.bottomRight,
-                                      child: Column(
-                                        children: [
-                                          8.height,
-                                          Text(
-                                              '${printAmount(orderData!.fixedCharges.validate() + orderData!.distanceCharge.validate() + orderData!.weightCharge.validate())}',
-                                              style: primaryTextStyle()),
-                                        ],
-                                      ),
-                                    ).visible((orderData!.distanceCharge.validate() != 0 ||
-                                            orderData!.weightCharge.validate() != 0) &&
-                                        orderData!.extraCharges.keys.length != 0),*/
                                         if (orderData!.extraCharges != null)
                                           Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1497,7 +1273,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                               onChanged: (value) {
                                 if (value.isNotEmpty) {
                                   otherReason = reasonController.text.toString();
-                                  print("--------------reason${otherReason}");
                                 }
                               },
                               textInputAction: TextInputAction.done,
@@ -1826,8 +1601,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                           .add(await MultipartFile.fromPath("attachment_file[]", element.path!));
                                     });
                                   }
-                                  print("---------------request${multiPartRequest.toString()}");
-
                                   // multiPartRequest.files.add(await MultipartFile.fromPath('vehicle_history_image', file.path));
                                   multiPartRequest.headers.addAll(buildHeaderTokens());
                                   sendMultiPartRequest(
@@ -1843,13 +1616,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                           appStore.setLoading(false);
                                         });
                                         orderDetailApiCall();
-                                        // VehicleSavedResponse res = VehicleSavedResponse.fromJson(data);
-                                        // toast(res.message.toString());
-                                        // setValue(VEHICLE, res.data!.toJson());
-                                        // LiveStream().emit("VehicleInfo");
-                                        // print("------------------${res.data!.vehicleInfo.make}");
-                                        // appStore.setLoading(false);
-                                        // finish(context);
                                       }
                                     },
                                     onError: (error) {
@@ -1862,9 +1628,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                   });
                                   //  claimInsuranceVehicleApiCall();
                                 }
-                                // if (selectedFiles != null) {
-                                //   print("-------------selected files length${selectedFiles!.length}");
-                                // }
                               }).expand(),
                             ],
                           ),

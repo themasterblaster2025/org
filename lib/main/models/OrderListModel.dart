@@ -2,7 +2,6 @@ import '../../main/models/WalletListModel.dart';
 
 import '../../main/models/PaginationModel.dart';
 import 'CreateOrderDetailModel.dart';
-import 'OrderDetailModel.dart';
 import 'VehicleModel.dart';
 
 class OrderListModel {
@@ -71,9 +70,7 @@ class PickupPoint {
     longitude = json['longitude'];
     description = json['description'];
     contactNumber = json['contact_number'];
-    print("---------------------------KK${startTime}");
     startTime = json['start_time'];
-    print("---------------------------KK${endTime}");
     endTime = json['end_time'];
   }
 
@@ -225,13 +222,11 @@ class OrderData {
     id = json['id'];
     clientId = json['client_id'];
     clientName = json['client_name'];
-    print("----------cleint name${clientName}");
     date = json['date'];
     pickupPoint = json['pickup_point'] != null ? new PickupPoint.fromJson(json['pickup_point']) : null;
     deliveryPoint = json['delivery_point'] != null ? new PickupPoint.fromJson(json['delivery_point']) : null;
     countryId = json['country_id'];
     countryName = json['country_name'];
-    print("----------countryName ${clientName}");
     cityId = json['city_id'];
     cityName = json['city_name'];
     parcelType = json['parcel_type'];
@@ -239,7 +234,6 @@ class OrderData {
     totalDistance = json['total_distance'];
     pickupDatetime = json['pickup_datetime'];
     deliveryDatetime = json['delivery_datetime'];
-    print("----------deliveryDatetime ${deliveryDatetime}");
     parentOrderId = json['parent_order_id'];
     status = json['status'];
     paymentId = json['payment_id'];

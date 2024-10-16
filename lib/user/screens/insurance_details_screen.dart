@@ -1,12 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/extensions/loader_widget.dart';
-import 'package:mighty_delivery/main.dart';
-import 'package:mighty_delivery/main/components/HtmlWidgtet.dart';
-import 'package:mighty_delivery/main/models/PageResponse.dart';
-import 'package:mighty_delivery/main/utils/Common.dart';
-import 'package:mighty_delivery/main/utils/Widgets.dart';
+import '../../main.dart';
+import '../../main/components/HtmlWidgtet.dart';
+import '../../main/models/PageResponse.dart';
+import '../../main/utils/Common.dart';
+import '../../main/utils/Widgets.dart';
 
 import '../../main/network/RestApis.dart';
 
@@ -34,7 +31,6 @@ class _InsuranceDetailsScreenState extends State<InsuranceDetailsScreen> {
     await getPageDetailsById(id: widget.insuranceDescription).then((value) {
       title = value.data!.title!;
       description = value.data!.description!;
-      print("-------------------------$description");
       appStore.setLoading(false);
       setState(() {});
     });
@@ -46,7 +42,7 @@ class _InsuranceDetailsScreenState extends State<InsuranceDetailsScreen> {
         appBar: commonAppBarWidget((title.isNotEmpty) ? title.toString() : ""),
         body: Stack(
           children: [
-            description != null && description.isNotEmpty
+            description.isNotEmpty
                 ? SingleChildScrollView(child: HtmlWidget(postContent: description))
                 : !appStore.isLoading
                     ? emptyWidget()

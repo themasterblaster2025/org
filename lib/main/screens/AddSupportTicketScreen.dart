@@ -4,23 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mighty_delivery/extensions/common.dart';
-import 'package:mighty_delivery/extensions/decorations.dart';
-import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
-import 'package:mighty_delivery/extensions/shared_pref.dart';
-import 'package:mighty_delivery/extensions/system_utils.dart';
+import '../../extensions/common.dart';
+import '../../extensions/decorations.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../extensions/shared_pref.dart';
+import '../../extensions/system_utils.dart';
 import 'package:video_player/video_player.dart';
-
 import '../../extensions/app_button.dart';
 import '../../extensions/app_text_field.dart';
 import '../../extensions/text_styles.dart';
 import '../../main.dart';
 import '../components/CommonScaffoldComponent.dart';
 import '../network/RestApis.dart';
-import '../utils/Colors.dart';
 import '../utils/Common.dart';
 import '../utils/Constants.dart';
 import '../utils/dynamic_theme.dart';
@@ -118,18 +116,7 @@ class _AddSupportTicketScreenState extends State<AddSupportTicketScreen> {
                     errorThisFieldRequired: language.fieldRequiredMsg,
                     decoration: commonInputDecoration(hintText: language.message),
                   ),
-
                   16.height,
-                  // Text("Resolution detail", style: primaryTextStyle()),
-                  // 8.height,
-                  // AppTextField(
-                  //   isValidationRequired: true,
-                  //   controller: resolutionDetailcon,
-                  //   textFieldType: TextFieldType.NAME,
-                  //   errorThisFieldRequired: language.fieldRequiredMsg,
-                  //   decoration: commonInputDecoration(hintText: "Resolution detail"),
-                  // ),
-                  // 16.height,
                   Text(language.supportType, style: primaryTextStyle()),
                   8.height,
                   Container(

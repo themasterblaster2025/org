@@ -125,7 +125,6 @@ class AddDeliverymanVehicleScreenState extends State<AddDeliverymanVehicleScreen
       multiPartRequest.fields['registration_date'] = registrationDateController.text;
       multiPartRequest.fields['owner_number'] = ownerNumberCont.text;
       multiPartRequest.fields['vehicle_id'] = selectedVehicle.toString();
-      // multiPartRequest.files.add(await MultipartFile.fromPath('vehicle_history_image', file.path));
       multiPartRequest.headers.addAll(buildHeaderTokens());
       sendMultiPartRequest(
         multiPartRequest,
@@ -135,7 +134,6 @@ class AddDeliverymanVehicleScreenState extends State<AddDeliverymanVehicleScreen
             toast(res.message.toString());
             setValue(VEHICLE, res.data!.toJson());
             LiveStream().emit("VehicleInfo");
-            print("------------------${res.data!.vehicleInfo.make}");
             appStore.setLoading(false);
             finish(context);
           }
@@ -337,9 +335,10 @@ class AddDeliverymanVehicleScreenState extends State<AddDeliverymanVehicleScreen
                         setState(() {});
                       },
                       validator: (value) {
-                        if (registrationDateController.text == null) {
+                        if (registrationDateController.text.isEmptyOrNull) {
                           return language.mustSelectStartDate;
                         }
+                        return null;
                       },
                       decoration: commonInputDecoration(suffixIcon: Ionicons.calendar_outline, hintText: language.from),
                     ),
