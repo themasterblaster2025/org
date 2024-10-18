@@ -55,16 +55,7 @@ class DeliveryDashBoard extends StatefulWidget {
 }
 
 class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindingObserver {
-  List<String> statusList = [
-    ORDER_ASSIGNED,
-    ORDER_ACCEPTED,
-    ORDER_ARRIVED,
-    ORDER_PICKED_UP,
-    ORDER_DEPARTED,
-    ORDER_DELIVERED,
-    ORDER_CANCELLED,
-    ORDER_SHIPPED
-  ];
+  List<String> statusList = [ORDER_ASSIGNED, ORDER_ACCEPTED, ORDER_ARRIVED, ORDER_PICKED_UP, ORDER_DEPARTED, ORDER_DELIVERED, ORDER_CANCELLED, ORDER_SHIPPED];
   ScrollController scrollController = ScrollController();
   ScrollController scrollController1 = ScrollController();
   PageController pageController = PageController();
@@ -178,13 +169,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
 
   getOrderListApiCall() async {
     appStore.setLoading(true);
-    await getDeliveryBoyOrderList(
-            page: currentPage,
-            deliveryBoyID: getIntAsync(USER_ID),
-            cityId: getIntAsync(CITY_ID),
-            countryId: getIntAsync(COUNTRY_ID),
-            orderStatus: statusList[selectedStatusIndex])
-        .then((value) {
+    await getDeliveryBoyOrderList(page: currentPage, deliveryBoyID: getIntAsync(USER_ID), cityId: getIntAsync(CITY_ID), countryId: getIntAsync(COUNTRY_ID), orderStatus: statusList[selectedStatusIndex]).then((value) {
       appStore.setLoading(false);
       appStore.setAllUnreadCount(value.allUnreadCount.validate());
       currentPage = value.pagination!.currentPage!;
@@ -243,13 +228,11 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
             Container(
               margin: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration:
-                  boxDecorationWithRoundedCorners(borderRadius: radius(defaultRadius), backgroundColor: Colors.white24),
+              decoration: boxDecorationWithRoundedCorners(borderRadius: radius(defaultRadius), backgroundColor: Colors.white24),
               child: Row(children: [
                 Icon(Ionicons.ios_location_outline, color: Colors.white, size: 18),
                 8.width,
-                Text(CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate(),
-                    style: primaryTextStyle(color: white)),
+                Text(CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate(), style: primaryTextStyle(color: white)),
               ]).onTap(() {
                 UserCitySelectScreen(
                   isBack: true,
@@ -264,9 +247,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
             Stack(
               clipBehavior: Clip.none,
               children: [
-                Align(
-                    alignment: AlignmentDirectional.center,
-                    child: Icon(Ionicons.md_notifications_outline, color: Colors.white)),
+                Align(alignment: AlignmentDirectional.center, child: Icon(Ionicons.md_notifications_outline, color: Colors.white)),
                 Observer(builder: (context) {
                   return Positioned(
                     right: 0,
@@ -276,8 +257,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                         width: 20,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
-                        child: Text('${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}',
-                            style: primaryTextStyle(size: appStore.allUnreadCount < 99 ? 12 : 8, color: Colors.white))),
+                        child: Text('${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}', style: primaryTextStyle(size: appStore.allUnreadCount < 99 ? 12 : 8, color: Colors.white))),
                   ).visible(appStore.allUnreadCount != 0);
                 }),
               ],
@@ -300,12 +280,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
               itemBuilder: (ctx, index) {
                 return Theme(
                   data: ThemeData(splashColor: Colors.transparent, highlightColor: Colors.transparent),
-                  child: Text(orderStatus(statusList[index]),
-                          style: statusList[selectedStatusIndex] == statusList[index]
-                              ? boldTextStyle(color: Colors.white)
-                              : secondaryTextStyle(color: Colors.white70))
-                      .paddingAll(8)
-                      .onTap(() {
+                  child: Text(orderStatus(statusList[index]), style: statusList[selectedStatusIndex] == statusList[index] ? boldTextStyle(color: Colors.white) : secondaryTextStyle(color: Colors.white70)).paddingAll(8).onTap(() {
                     currentPage = 1;
                     selectedStatusIndex = statusList.indexWhere((item) => item == statusList[index]);
                     pageController.jumpToPage(selectedStatusIndex);
@@ -349,8 +324,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                       listAnimationType: ListAnimationType.Slide,
                       padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 60),
                       flipConfiguration: FlipConfiguration(duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn),
-                      fadeInConfiguration:
-                          FadeInConfiguration(duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn),
+                      fadeInConfiguration: FadeInConfiguration(duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn),
                       onNextPage: () {
                         if (currentPage < totalPage) {
                           currentPage++;
@@ -410,10 +384,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
     return GestureDetector(
       child: Container(
         margin: EdgeInsets.only(bottom: 16),
-        decoration: boxDecorationWithRoundedCorners(
-            borderRadius: BorderRadius.circular(defaultRadius),
-            border: Border.all(color: ColorUtils.colorPrimary),
-            backgroundColor: Colors.transparent),
+        decoration: boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(defaultRadius), border: Border.all(color: ColorUtils.colorPrimary), backgroundColor: Colors.transparent),
         padding: EdgeInsets.all(12),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -427,17 +398,13 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('${language.order}# ${data.id}', style: boldTextStyle(size: 14)).expand(),
-                      Text('${data.orderTrackingId}', style: boldTextStyle(size: 12, color: ColorUtils.colorPrimary))
-                          .expand(),
+                      Text('${data.orderTrackingId}', style: boldTextStyle(size: 12, color: ColorUtils.colorPrimary)).expand(),
                     ],
                   ),
                 ).expand(),
                 Container(
-                  decoration: boxDecorationWithRoundedCorners(
-                      backgroundColor:
-                          appStore.isDarkMode ? ColorUtils.scaffoldSecondaryDark : ColorUtils.colorPrimaryLight,
-                      borderRadius: BorderRadius.circular(defaultRadius),
-                      border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.5))),
+                  decoration:
+                      boxDecorationWithRoundedCorners(backgroundColor: appStore.isDarkMode ? ColorUtils.scaffoldSecondaryDark : ColorUtils.colorPrimaryLight, borderRadius: BorderRadius.circular(defaultRadius), border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.5))),
                   padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                   child: Icon(
                     Icons.navigation_outlined,
@@ -446,21 +413,12 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                   ),
                 )
                     .onTap(() {
-                      openMap(
-                          double.parse(data.pickupPoint!.latitude.validate()),
-                          double.parse(data.pickupPoint!.longitude.validate()),
-                          double.parse(data.deliveryPoint!.latitude.validate()),
-                          double.parse(data.deliveryPoint!.longitude.validate()));
+                      openMap(double.parse(data.pickupPoint!.latitude.validate()), double.parse(data.pickupPoint!.longitude.validate()), double.parse(data.deliveryPoint!.latitude.validate()), double.parse(data.deliveryPoint!.longitude.validate()));
                     })
                     .paddingSymmetric(horizontal: 5)
-                    .visible(data.status != ORDER_DELIVERED &&
-                        data.status != ORDER_CANCELLED &&
-                        data.status != ORDER_SHIPPED),
+                    .visible(data.status != ORDER_DELIVERED && data.status != ORDER_CANCELLED && data.status != ORDER_SHIPPED),
                 Container(
-                  decoration: boxDecorationWithRoundedCorners(
-                      borderRadius: BorderRadius.circular(defaultRadius),
-                      border: Border.all(color: Colors.red),
-                      backgroundColor: Colors.red.withOpacity(0.2)),
+                  decoration: boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(defaultRadius), border: Border.all(color: Colors.red), backgroundColor: Colors.red.withOpacity(0.2)),
                   padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                   child: Icon(
                     Icons.close,
@@ -482,10 +440,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                 }).visible(data.status == ORDER_ASSIGNED),
                 (statusList[selectedStatusIndex] == ORDER_ASSIGNED)
                     ? Container(
-                        decoration: boxDecorationWithRoundedCorners(
-                            borderRadius: BorderRadius.circular(defaultRadius),
-                            border: Border.all(color: ColorUtils.colorPrimary),
-                            backgroundColor: ColorUtils.colorPrimary),
+                        decoration: boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(defaultRadius), border: Border.all(color: ColorUtils.colorPrimary), backgroundColor: ColorUtils.colorPrimary),
                         padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                         child: Icon(
                           Icons.check,
@@ -509,8 +464,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                         );
                       }).paddingSymmetric(horizontal: 5)
                     : SizedBox(),
-                (statusList[selectedStatusIndex] != ORDER_CANCELLED &&
-                        statusList[selectedStatusIndex] != ORDER_ASSIGNED)
+                (statusList[selectedStatusIndex] != ORDER_CANCELLED && statusList[selectedStatusIndex] != ORDER_ASSIGNED)
                     ? AppButton(
                         elevation: 0,
                         text: buttonText(statusList[selectedStatusIndex]),
@@ -561,9 +515,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                                                           if (context.mounted) {
                                                             Navigator.pop(context);
                                                           }
-                                                          onTapData(
-                                                              orderData: data,
-                                                              orderStatus: statusList[selectedStatusIndex]);
+                                                          onTapData(orderData: data, orderStatus: statusList[selectedStatusIndex]);
                                                         },
                                                       ).expand(),
                                                     ],
@@ -574,8 +526,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                                                     mainAxisAlignment: MainAxisAlignment.start,
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text(language.rescheduleTitle,
-                                                          style: boldTextStyle(), textAlign: TextAlign.start),
+                                                      Text(language.rescheduleTitle, style: boldTextStyle(), textAlign: TextAlign.start),
                                                       10.height,
                                                       Divider(color: dividerColor, height: 1),
                                                       8.height,
@@ -608,8 +559,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                                                           if (value!.isEmpty) return language.fieldRequiredMsg;
                                                           return null;
                                                         },
-                                                        decoration: commonInputDecoration(
-                                                            suffixIcon: Icons.calendar_today, hintText: language.date),
+                                                        decoration: commonInputDecoration(suffixIcon: Icons.calendar_today, hintText: language.date),
                                                       ),
 
                                                       16.height,
@@ -630,8 +580,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                                                               // Example API call
                                                               Map request = {
                                                                 "order_id": data.id,
-                                                                "reason":
-                                                                    reasonTitleTextEditingController.text.toString(),
+                                                                "reason": reasonTitleTextEditingController.text.toString(),
                                                                 "date": DateFormat('yyyy-MM-dd').format(pickDate!),
                                                               };
                                                               appStore.setLoading(true);
@@ -645,12 +594,10 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                                                         ],
                                                       ),
                                                     ],
-                                                  ).visible(val ==
-                                                      1), // This makes the form visible based on the value of "val"
+                                                  ).visible(val == 1), // This makes the form visible based on the value of "val"
                                                 ],
                                               )
-                                            : Observer(builder: (context) => loaderWidget().visible(appStore.isLoading))
-                                                .center(),
+                                            : Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)).center(),
                                       ),
                                     ),
                                   );
@@ -675,10 +622,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                             );
                           }
                         },
-                      )
-                        .visible(statusList[selectedStatusIndex] != ORDER_DELIVERED &&
-                            statusList[selectedStatusIndex] != ORDER_SHIPPED)
-                        .paddingOnly(right: appStore.selectedLanguage == "ar" ? 10 : 0)
+                      ).visible(statusList[selectedStatusIndex] != ORDER_DELIVERED && statusList[selectedStatusIndex] != ORDER_SHIPPED).paddingOnly(right: appStore.selectedLanguage == "ar" ? 10 : 0)
                     : SizedBox()
               ],
             ),
@@ -692,8 +636,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                     children: [
                       Text(language.picked, style: secondaryTextStyle(size: 12)),
                       4.height,
-                      Text('${language.at} ${printDateWithoutAt("${data.pickupDatetime!}Z")}',
-                          style: secondaryTextStyle(size: 12)),
+                      Text('${language.at} ${printDateWithoutAt("${data.pickupDatetime!}Z")}', style: secondaryTextStyle(size: 12)),
                     ],
                   ),
                 4.height,
@@ -703,8 +646,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                       children: [
                         GestureDetector(
                           onTap: () {
-                            OrderDetailScreen(orderId: data.id!).launch(context,
-                                pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
+                            OrderDetailScreen(orderId: data.id!).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
                           },
                           child: Row(
                             children: [
@@ -723,15 +665,11 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                       }),
                   ],
                 ),
-                if (data.pickupDatetime == null &&
-                    data.pickupPoint!.endTime != null &&
-                    data.pickupPoint!.startTime != null)
+                if (data.pickupDatetime == null && data.pickupPoint!.endTime != null && data.pickupPoint!.startTime != null)
                   Row(
                     children: [
                       Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.pickupPoint!.endTime!).toLocal())}',
-                              style: secondaryTextStyle(size: 12, color: Colors.red),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis)
+                              style: secondaryTextStyle(size: 12, color: Colors.red), maxLines: 2, overflow: TextOverflow.ellipsis)
                           .expand(),
                     ],
                   ),
@@ -747,8 +685,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                     children: [
                       Text(language.delivered, style: secondaryTextStyle(size: 12)),
                       4.height,
-                      Text('${language.at} ${printDateWithoutAt("${data.deliveryDatetime!}Z")}',
-                          style: secondaryTextStyle(size: 12)),
+                      Text('${language.at} ${printDateWithoutAt("${data.deliveryDatetime!}Z")}', style: secondaryTextStyle(size: 12)),
                     ],
                   ),
                 4.height,
@@ -756,16 +693,13 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                   children: [
                     GestureDetector(
                       onTap: () {
-                        OrderDetailScreen(orderId: data.id!).launch(context,
-                            pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
+                        OrderDetailScreen(orderId: data.id!).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
                       },
                       child: Row(
                         children: [
                           ImageIcon(AssetImage(ic_to), size: 24, color: ColorUtils.colorPrimary),
                           12.width,
-                          Text('${data.deliveryPoint!.address}',
-                                  style: primaryTextStyle(size: 14), textAlign: TextAlign.start)
-                              .expand(),
+                          Text('${data.deliveryPoint!.address}', style: primaryTextStyle(size: 14), textAlign: TextAlign.start).expand(),
                         ],
                       ),
                     ).expand(),
@@ -776,29 +710,20 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                       }),
                   ],
                 ),
-                if (data.deliveryDatetime == null &&
-                    data.deliveryPoint!.endTime != null &&
-                    data.deliveryPoint!.startTime != null)
+                if (data.deliveryDatetime == null && data.deliveryPoint!.endTime != null && data.deliveryPoint!.startTime != null)
                   Text('${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(data.deliveryPoint!.endTime!).toLocal())}',
                           style: secondaryTextStyle(color: Colors.red, size: 12))
                       .paddingOnly(top: 4),
-                if (data.reScheduleDateTime != null)
-                  Text('${language.note} ${language.rescheduleMsg} ${DateFormat('yyyy-MM-dd HH:mm').format(DateTime.parse(data.reScheduleDateTime!))} ',
-                          style: secondaryTextStyle(color: Colors.red, size: 12))
-                      .paddingOnly(top: 4)
+                if (data.reScheduleDateTime != null) Text('${language.note} ${language.rescheduleMsg} ${DateFormat('yyyy-MM-dd HH:mm').format(DateTime.parse(data.reScheduleDateTime!))} ', style: secondaryTextStyle(color: Colors.red, size: 12)).paddingOnly(top: 4)
               ],
             ),
             Divider(height: 30, thickness: 1, color: context.dividerColor),
             Row(
               children: [
                 Container(
-                  decoration: boxDecorationWithRoundedCorners(
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: ColorUtils.borderColor, width: appStore.isDarkMode ? 0.2 : 1),
-                      backgroundColor: context.cardColor),
+                  decoration: boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(8), border: Border.all(color: ColorUtils.borderColor, width: appStore.isDarkMode ? 0.2 : 1), backgroundColor: context.cardColor),
                   padding: EdgeInsets.all(8),
-                  child: Image.asset(parcelTypeIcon(data.parcelType.validate()),
-                      height: 24, width: 24, color: Colors.grey),
+                  child: Image.asset(parcelTypeIcon(data.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
                 ),
                 8.width,
                 Column(
@@ -808,9 +733,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                     4.height,
                     Row(
                       children: [
-                        data.date != null
-                            ? Text(printDate("${data.date}"), style: secondaryTextStyle()).expand()
-                            : SizedBox(),
+                        data.date != null ? Text(printDate("${data.date}"), style: secondaryTextStyle()).expand() : SizedBox(),
                         Text('${printAmount(data.totalAmount ?? 0)}', style: boldTextStyle()),
                       ],
                     ),
@@ -827,9 +750,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
                     elevation: 0,
                     color: Colors.transparent,
                     padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                    shapeBorder: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(defaultRadius),
-                        side: BorderSide(color: ColorUtils.colorPrimary)),
+                    shapeBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius), side: BorderSide(color: ColorUtils.colorPrimary)),
                     child: Text(language.notifyUser, style: primaryTextStyle(color: ColorUtils.colorPrimary)),
                     onTap: () {
                       showConfirmDialogCustom(
@@ -860,8 +781,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
         ),
       ),
       onTap: () {
-        OrderDetailScreen(orderId: data.id!)
-            .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
+        OrderDetailScreen(orderId: data.id!).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
       },
     );
   }
@@ -875,10 +795,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
       pageController.jumpToPage(i + 1);
       getOrderListApiCall();
     } else if (orderStatus == ORDER_ACCEPTED) {
-      await ReceivedScreenOrderScreen(
-              orderData: orderData,
-              isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_PICKUP)
-          .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+      await ReceivedScreenOrderScreen(orderData: orderData, isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_PICKUP).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
       // DateTime startTime = DateTime.parse(orderData.pickupPoint!.startTime!);
       // DateTime endTime = DateTime.parse(orderData.pickupPoint!.endTime!);
       // DateTime now = DateTime.now();
@@ -899,10 +816,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
       pageController.jumpToPage(i);
       getOrderListApiCall();
     } else if (orderStatus == ORDER_ARRIVED) {
-      bool isCheck = await ReceivedScreenOrderScreen(
-              orderData: orderData,
-              isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_PICKUP)
-          .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+      bool isCheck = await ReceivedScreenOrderScreen(orderData: orderData, isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_PICKUP).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
 
       if (isCheck) {
         getOrderListApiCall();
@@ -917,14 +831,11 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
       pageController.jumpToPage(i + 1);
       getOrderListApiCall();
     } else if (orderStatus == ORDER_DEPARTED) {
-      DateTime startTime = DateTime.parse(orderData.pickupPoint!.startTime!);
+      DateTime startTime = DateTime.parse(orderData.pickupDatetime!);
       DateTime now = DateTime.now();
       // Check if the current time is between start and end times
       if (now.isAfter(startTime)) {
-        await ReceivedScreenOrderScreen(
-                orderData: orderData,
-                isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_DELIVERY)
-            .launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+        await ReceivedScreenOrderScreen(orderData: orderData, isShowPayment: orderData.paymentId == null && orderData.paymentCollectFrom == PAYMENT_ON_DELIVERY).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
         int i = statusList.indexWhere((item) => item == ORDER_DEPARTED);
         pageController.jumpToPage(i + 1);
         getOrderListApiCall();

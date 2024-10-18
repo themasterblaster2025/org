@@ -123,7 +123,7 @@ class OrderFragmentState extends State<OrderFragment> {
     return AnimatedListView(
       itemCount: orderList.length,
       shrinkWrap: true,
-      physics: BouncingScrollPhysics(),
+      physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       listAnimationType: ListAnimationType.Slide,
       padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 60),
       flipConfiguration: FlipConfiguration(duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn),

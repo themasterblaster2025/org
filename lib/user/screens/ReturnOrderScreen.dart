@@ -86,10 +86,8 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
       if (!isDeliverNow) {
         DateTime pickFromDateTime = pickDate!.add(Duration(hours: pickFromTime!.hour, minutes: pickFromTime!.minute));
         DateTime pickToDateTime = pickDate!.add(Duration(hours: pickToTime!.hour, minutes: pickToTime!.minute));
-        DateTime deliverFromDateTime =
-            deliverDate!.add(Duration(hours: deliverFromTime!.hour, minutes: deliverFromTime!.minute));
-        DateTime deliverToDateTime =
-            deliverDate!.add(Duration(hours: deliverToTime!.hour, minutes: deliverToTime!.minute));
+        DateTime deliverFromDateTime = deliverDate!.add(Duration(hours: deliverFromTime!.hour, minutes: deliverFromTime!.minute));
+        DateTime deliverToDateTime = deliverDate!.add(Duration(hours: deliverToTime!.hour, minutes: deliverToTime!.minute));
         widget.orderData.deliveryPoint!.startTime = pickFromDateTime.toString();
         widget.orderData.deliveryPoint!.endTime = pickToDateTime.toString();
         widget.orderData.pickupPoint!.startTime = deliverFromDateTime.toString();
@@ -135,17 +133,12 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
         toast(value.message);
         finish(context);
         if (isSelected == 2) {
-          PaymentScreen(orderId: value.orderId.validate(), totalAmount: widget.orderData.totalAmount ?? 0)
-              .launch(context);
+          PaymentScreen(orderId: value.orderId.validate(), totalAmount: widget.orderData.totalAmount ?? 0).launch(context);
         } else if (isSelected == 3) {
           log("-----" + appStore.availableBal.toString());
 
           if (appStore.availableBal > (widget.orderData.totalAmount ?? 0)) {
-            savePaymentApiCall(
-                paymentType: PAYMENT_TYPE_WALLET,
-                paymentStatus: PAYMENT_PAID,
-                totalAmount: widget.orderData.totalAmount.toString(),
-                orderID: value.orderId.toString());
+            savePaymentApiCall(paymentType: PAYMENT_TYPE_WALLET, paymentStatus: PAYMENT_PAID, totalAmount: widget.orderData.totalAmount.toString(), orderID: value.orderId.toString());
           }
         } else {
           DashboardScreen().launch(context, isNewTask: true);
@@ -158,13 +151,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
   }
 
   /// Save Payment
-  Future<void> savePaymentApiCall(
-      {String? paymentType,
-      String? totalAmount,
-      String? orderID,
-      String? txnId,
-      String? paymentStatus = PAYMENT_PENDING,
-      Map? transactionDetail}) async {
+  Future<void> savePaymentApiCall({String? paymentType, String? totalAmount, String? orderID, String? txnId, String? paymentStatus = PAYMENT_PENDING, Map? transactionDetail}) async {
     Map req = {
       "id": "",
       "order_id": orderID,
@@ -386,8 +373,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            ImageIcon(AssetImage(mData.image.validate()),
-                                size: 20, color: isSelected == mData.index ? ColorUtils.colorPrimary : Colors.grey),
+                            ImageIcon(AssetImage(mData.image.validate()), size: 20, color: isSelected == mData.index ? ColorUtils.colorPrimary : Colors.grey),
                             16.width,
                             Text(mData.title!, style: boldTextStyle()).expand(),
                           ],
@@ -408,12 +394,8 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                         value: paymentCollectFrom,
                         decoration: commonInputDecoration(),
                         items: [
-                          DropdownMenuItem(
-                              value: PAYMENT_ON_PICKUP,
-                              child: Text(language.pickupLocation, style: primaryTextStyle(), maxLines: 1)),
-                          DropdownMenuItem(
-                              value: PAYMENT_ON_DELIVERY,
-                              child: Text(language.deliveryLocation, style: primaryTextStyle(), maxLines: 1)),
+                          DropdownMenuItem(value: PAYMENT_ON_PICKUP, child: Text(language.pickupLocation, style: primaryTextStyle(), maxLines: 1)),
+                          DropdownMenuItem(value: PAYMENT_ON_DELIVERY, child: Text(language.deliveryLocation, style: primaryTextStyle(), maxLines: 1)),
                         ],
                         onChanged: (value) {
                           paymentCollectFrom = value!;
@@ -483,8 +465,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(language.balanceInsufficientCashPayment,
-                        style: primaryTextStyle(size: 16), textAlign: TextAlign.center),
+                    Text(language.balanceInsufficientCashPayment, style: primaryTextStyle(size: 16), textAlign: TextAlign.center),
                     30.height,
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -492,6 +473,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
                         commonButton(language.cancel, () {
                           finish(getContext, 0);
                         }).expand(),
+                        3.width,
                         commonButton(language.process, () {
                           // createOrderApiCall(ORDER_CREATED);
                           // finish(getContext, 1);
@@ -527,7 +509,7 @@ class ReturnOrderScreenState extends State<ReturnOrderScreen> {
               },
             );
           }
-          createOrderApiCall();
+          //   createOrderApiCall();
         }),
       ),
     );
