@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
+import 'package:mighty_delivery/extensions/shared_pref.dart';
 import '../../extensions/extension_util/context_extensions.dart';
 import '../../extensions/extension_util/int_extensions.dart';
 import '../../extensions/extension_util/widget_extensions.dart';
@@ -50,10 +51,7 @@ class _ChatWithAdminScreenState extends State<ChatWithAdminScreen> {
 
   Future<void> sendMessage() async {
     messageFocus.unfocus();
-    Map req = {
-      "support_id": widget.supportId,
-      "message": messageCont.text,
-    };
+    Map req = {"support_id": widget.supportId, "message": messageCont.text, "user_id": getIntAsync(USER_ID)};
     appStore.setLoading(true);
     await saveChat(req).then((value) {
       messageCont.clear();
@@ -91,40 +89,25 @@ class _ChatWithAdminScreenState extends State<ChatWithAdminScreen> {
                         mainAxisAlignment: item.sendBy != ADMIN ? MainAxisAlignment.end : MainAxisAlignment.start,
                         children: [
                           Container(
-                            margin: item.sendBy != ADMIN
-                                ? EdgeInsets.only(
-                                    top: 0.0, bottom: 0.0, left: isRTL ? 0 : context.width() * 0.25, right: 8)
-                                : EdgeInsets.only(
-                                    top: 2.0, bottom: 2.0, left: 8, right: isRTL ? 0 : context.width() * 0.25),
+                            margin: item.sendBy != ADMIN ? EdgeInsets.only(top: 0.0, bottom: 0.0, left: isRTL ? 0 : context.width() * 0.25, right: 8) : EdgeInsets.only(top: 2.0, bottom: 2.0, left: 8, right: isRTL ? 0 : context.width() * 0.25),
                             padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
                               boxShadow: appStore.isDarkMode ? null : defaultBoxShadow(),
                               color: item.sendBy != ADMIN ? ColorUtils.colorPrimary : context.cardColor,
-                              borderRadius: item.sendBy != ADMIN
-                                  ? radiusOnly(bottomLeft: 12, topLeft: 12, bottomRight: 0, topRight: 12)
-                                  : radiusOnly(bottomLeft: 0, topLeft: 12, bottomRight: 12, topRight: 12),
+                              borderRadius: item.sendBy != ADMIN ? radiusOnly(bottomLeft: 12, topLeft: 12, bottomRight: 0, topRight: 12) : radiusOnly(bottomLeft: 0, topLeft: 12, bottomRight: 12, topRight: 12),
                             ),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment:
-                                  item.sendBy != ADMIN ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+                              crossAxisAlignment: item.sendBy != ADMIN ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                               children: [
-                                Text(item.message!,
-                                    style: primaryTextStyle(
-                                        color: item.sendBy != ADMIN ? Colors.white : textPrimaryColorGlobal),
-                                    maxLines: null),
+                                Text(item.message!, style: primaryTextStyle(color: item.sendBy != ADMIN ? Colors.white : textPrimaryColorGlobal), maxLines: null),
                                 1.height,
                                 Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text(
-                                      DateFormat('yyyy-MM-dd HH:mm')
-                                          .format(DateTime.parse("${item.datetime.toString()}").toLocal()),
-                                      style: primaryTextStyle(
-                                          color: item.sendBy == ADMIN
-                                              ? Colors.blueGrey.withOpacity(0.6)
-                                              : whiteColor.withOpacity(0.6),
-                                          size: 10),
+                                      DateFormat('yyyy-MM-dd HH:mm').format(DateTime.parse("${item.datetime.toString()}").toLocal()),
+                                      style: primaryTextStyle(color: item.sendBy == ADMIN ? Colors.blueGrey.withOpacity(0.6) : whiteColor.withOpacity(0.6), size: 10),
                                     ),
                                   ],
                                 ),

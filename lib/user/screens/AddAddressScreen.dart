@@ -50,13 +50,12 @@ class AddAddressScreenState extends State<AddAddressScreen> {
   }
 
   void init() async {
-    countryCode = CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.isEmptyOrNull
-        ? defaultPhoneCode
-        : CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate();
+    countryCode = CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.isEmptyOrNull ? defaultPhoneCode : CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate();
     if (widget.addressData != null) {
       addressController.text = widget.addressData!.address.validate();
       countryCode = widget.addressData!.contactNumber.validate().split(" ").first;
       contactController.text = widget.addressData!.contactNumber.validate().split(" ").last;
+      addressTypeController.text = widget.addressData!.addressType.validate();
       latitude = widget.addressData!.latitude.toDouble();
       longitude = widget.addressData!.longitude.toDouble();
     }
@@ -162,10 +161,8 @@ class AddAddressScreenState extends State<AddAddressScreen> {
                               dialogTextStyle: primaryTextStyle(),
                               searchDecoration: InputDecoration(
                                 iconColor: Theme.of(context).dividerColor,
-                                enabledBorder:
-                                    UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
-                                focusedBorder:
-                                    UnderlineInputBorder(borderSide: BorderSide(color: ColorUtils.colorPrimary)),
+                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
+                                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: ColorUtils.colorPrimary)),
                               ),
                               searchStyle: primaryTextStyle(),
                               onInit: (c) {
@@ -182,8 +179,7 @@ class AddAddressScreenState extends State<AddAddressScreen> {
                     ),
                     validator: (value) {
                       if (value!.trim().isEmpty) return language.fieldRequiredMsg;
-                      if (value.trim().length < minContactLength || value.trim().length > maxContactLength)
-                        return language.phoneNumberInvalid;
+                      if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.phoneNumberInvalid;
                       return null;
                     },
                     inputFormatters: [

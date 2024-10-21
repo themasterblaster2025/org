@@ -67,9 +67,7 @@ class OrderAmountDataWidgetState extends State<OrderAmountDataWidget> {
     widget.extraCharges!.forEach((element) async {
       double i = 0;
       if (element.chargesType == CHARGE_TYPE_PERCENTAGE) {
-        i = (widget.baseTotal!.toDouble() * element.charges!.toDouble() * 0.01)
-            .toStringAsFixed(digitAfterDecimal)
-            .toDouble();
+        i = (widget.baseTotal!.toDouble() * element.charges!.toDouble() * 0.01).toStringAsFixed(digitAfterDecimal).toDouble();
       } else {
         i = element.charges!.toStringAsFixed(digitAfterDecimal).toDouble();
       }
@@ -98,21 +96,23 @@ class OrderAmountDataWidgetState extends State<OrderAmountDataWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Text("${language.vehicle} ${language.price.toLowerCase()}", style: secondaryTextStyle()),
-              4.width,
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text('(${widget.diffDistance!.toStringAsFixed(digitAfterDecimal)} x ', style: secondaryTextStyle()),
-                  Text('${widget.perkmVehiclePrice!.toStringAsFixed(digitAfterDecimal)})', style: secondaryTextStyle()),
-                ],
-              ).visible(widget.diffDistance!.toDouble() > 0).expand(),
-              16.width,
-              Text('${printAmount(widget.vehicleAmount)}', style: boldTextStyle(size: 14)),
-            ],
-          ).paddingBottom(8).visible(widget.vehicleAmount != 0),
+          if (appStore.isVehicleOrder == 1)
+            Row(
+              children: [
+                Text("${language.vehicle} ${language.price.toLowerCase()}", style: secondaryTextStyle()),
+                4.width,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text('(${widget.diffDistance!.toStringAsFixed(digitAfterDecimal)} x ', style: secondaryTextStyle()),
+                    Text('${widget.perkmVehiclePrice!.toStringAsFixed(digitAfterDecimal)})', style: secondaryTextStyle()),
+                  ],
+                ).visible(widget.diffDistance!.toDouble() > 0).expand(),
+                16.width,
+                Text('${printAmount(widget.vehicleAmount)}', style: boldTextStyle(size: 14)),
+              ],
+            ).paddingBottom(8),
+          // ).paddingBottom(8).visible(widget.vehicleAmount != 0),
           Row(
             children: [
               Text(language.weightCharge, style: secondaryTextStyle()),
@@ -176,13 +176,9 @@ class OrderAmountDataWidgetState extends State<OrderAmountDataWidget> {
                     children: [
                       Text(mData.title!.replaceAll("_", " ").capitalizeFirstLetter(), style: secondaryTextStyle()),
                       4.width,
-                      Text('(${mData.chargesType == CHARGE_TYPE_PERCENTAGE ? '${mData.charges}%' : '${printAmount(mData.charges!.toDouble())}'})',
-                              style: secondaryTextStyle())
-                          .expand(),
+                      Text('(${mData.chargesType == CHARGE_TYPE_PERCENTAGE ? '${mData.charges}%' : '${printAmount(mData.charges!.toDouble())}'})', style: secondaryTextStyle()).expand(),
                       16.width,
-                      Text(
-                          '${printAmount(countExtraCharge(totalAmount: widget.baseTotal!, chargesType: !mData.chargesType.isEmptyOrNull ? mData.chargesType! : "", charges: mData.charges!))}',
-                          style: boldTextStyle(size: 14)),
+                      Text('${printAmount(countExtraCharge(totalAmount: widget.baseTotal!, chargesType: !mData.chargesType.isEmptyOrNull ? mData.chargesType! : "", charges: mData.charges!))}', style: boldTextStyle(size: 14)),
                     ],
                   ),
                 );

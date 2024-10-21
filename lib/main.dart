@@ -74,8 +74,7 @@ void main() async {
     appStore.setUserEmail(getStringAsync(USER_EMAIL), isInitialization: true);
     appStore.setUserProfile(getStringAsync(USER_PROFILE_PHOTO), isInitializing: true);
     FilterAttributeModel? filterData = FilterAttributeModel.fromJson(getJSONAsync(FILTER_DATA));
-    appStore.setFiltering(
-        filterData.orderStatus != null || !filterData.fromDate.isEmptyOrNull || !filterData.toDate.isEmptyOrNull);
+    appStore.setFiltering(filterData.orderStatus != null || !filterData.fromDate.isEmptyOrNull || !filterData.toDate.isEmptyOrNull);
     print("===========setLanguage${appStore.selectedLanguage}");
     int themeModeIndex = getIntAsync(THEME_MODE_INDEX);
     if (themeModeIndex == appThemeMode.themeModeLight) {
@@ -104,18 +103,18 @@ class MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     init();
-    getColor();
+    //  getColor();
   }
 
-  getColor() async {
-    await getLanguageList(0).then((value) {
-      color = value.themeColor;
-      appStore.setThemeColor(value.themeColor!);
-      appStore.updateTheme(colorFromHex(value.themeColor!));
-
-      setState(() {});
-    });
-  }
+  // getColor() async {
+  //   await getLanguageList(0).then((value) {
+  //     color = value.themeColor;
+  //     appStore.setThemeColor(value.themeColor!);
+  //     appStore.updateTheme(colorFromHex(value.themeColor!));
+  //
+  //     setState(() {});
+  //   });
+  // }
 
   void init() async {
     _connectivitySubscription = Connectivity().onConnectivityChanged.listen((e) {

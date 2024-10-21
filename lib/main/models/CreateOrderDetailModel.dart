@@ -5,8 +5,7 @@ class CreateOrderDetailsResponse {
   List<StaticDetails>? staticDetails;
   AppSettingDetail? appSettingDetail;
 
-  CreateOrderDetailsResponse(
-      {this.cityDetail, this.vehicleDetail, this.useraddressDetail, this.staticDetails, this.appSettingDetail});
+  CreateOrderDetailsResponse({this.cityDetail, this.vehicleDetail, this.useraddressDetail, this.staticDetails, this.appSettingDetail});
 
   CreateOrderDetailsResponse.fromJson(Map<String, dynamic> json) {
     cityDetail = json['city-detail'] != null ? new CityDetail.fromJson(json['city-detail']) : null;
@@ -28,8 +27,7 @@ class CreateOrderDetailsResponse {
         staticDetails!.add(new StaticDetails.fromJson(v));
       });
     }
-    appSettingDetail =
-        json['app-setting-detail'] != null ? new AppSettingDetail.fromJson(json['app-setting-detail']) : null;
+    appSettingDetail = json['app-setting-detail'] != null ? new AppSettingDetail.fromJson(json['app-setting-detail']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -61,18 +59,18 @@ class CityDetail {
   String? countryName;
   // Country? country;
   int? status;
-  int? fixedCharges;
+  num? fixedCharges;
   List<ExtraCharges>? extraCharges;
-  int? cancelCharges;
+  num? cancelCharges;
   int? minDistance;
   int? minWeight;
-  int? perDistanceCharges;
-  int? perWeightCharges;
+  num? perDistanceCharges;
+  num? perWeightCharges;
   String? createdAt;
   String? updatedAt;
   String? deletedAt;
   String? commissionType;
-  int? adminCommission;
+  num? adminCommission;
 
   CityDetail(
       {this.id,
@@ -352,21 +350,7 @@ class UseraddressDetail {
   String? createdAt;
   String? updatedAt;
 
-  UseraddressDetail(
-      {this.id,
-      this.userId,
-      this.userName,
-      this.countryId,
-      this.countryName,
-      this.cityId,
-      this.cityName,
-      this.addressType,
-      this.address,
-      this.latitude,
-      this.longitude,
-      this.contactNumber,
-      this.createdAt,
-      this.updatedAt});
+  UseraddressDetail({this.id, this.userId, this.userName, this.countryId, this.countryName, this.cityId, this.cityName, this.addressType, this.address, this.latitude, this.longitude, this.contactNumber, this.createdAt, this.updatedAt});
 
   UseraddressDetail.fromJson(Map<String, dynamic> json) {
     id = json['id'];
