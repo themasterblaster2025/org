@@ -878,6 +878,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
     _getOrdersWithBidsStream = FirebaseFirestore.instance
         .collection(ORDERS_BID_COLLECTION)
         .where(ALL_DELIVERY_MAN_IDS, arrayContains: getIntAsync(USER_ID))
+        // .where(ORDER_STATUS, isEqualTo: ORDER_CREATED)
         .snapshots()
         .listen(
       (snapshot) {
@@ -889,11 +890,8 @@ class _DHomeFragmentState extends State<DHomeFragment> {
 
             if (data.isNotEmpty) {
               latestOrder = data[0];
-              if (latestOrder?.isListening == null ||
-                  latestOrder?.isListening == 0) {
-                if (latestOrder?.status == ORDER_CREATED) {
-                  getOrderListApiCall(latestOrder!.orderId);
-                }
+              if (latestOrder?.status == ORDER_CREATED) {
+                getOrderListApiCall(latestOrder!.orderId);
               }
             }
           } catch (e) {
@@ -926,11 +924,8 @@ class _DHomeFragmentState extends State<DHomeFragment> {
 
           if (data.isNotEmpty) {
             latestOrderToCancelBid = data[0];
-            if (latestOrderToCancelBid?.isListening == null ||
-                latestOrderToCancelBid?.isListening == 0) {
-              if (latestOrderToCancelBid?.status == ORDER_CREATED) {
-                getOrderListApiCall(latestOrderToCancelBid!.orderId);
-              }
+            if (latestOrderToCancelBid?.status == ORDER_CREATED) {
+              getOrderListApiCall(latestOrderToCancelBid!.orderId);
             }
           }
         } catch (e) {

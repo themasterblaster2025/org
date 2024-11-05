@@ -1,4 +1,4 @@
-package com.mighty.delivery
+package com.mdelivery.bidding
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
