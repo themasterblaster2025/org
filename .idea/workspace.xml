@@ -5,26 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8691243f-0de7-470a-bacd-cbe44eceb665" name="Changes" comment="invoice after ordercomplete, orderList ui change,">
-      <change afterPath="$PROJECT_DIR$/lib/delivery/fragment/DHomeFragment.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/delivery/screens/FilterCountScreen.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/main/models/DashboardCountModel.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.dart_tool/package_config.json" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/package_config_subset" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/package_config_subset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.dart_tool/version" beforeDir="false" afterPath="$PROJECT_DIR$/.dart_tool/version" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.flutter-plugins" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/delivery/screens/DeliveryDashBoard.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/delivery/screens/DeliveryDashBoard.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/delivery/screens/ReceivedScreenOrderScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/delivery/screens/ReceivedScreenOrderScreen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/languageConfiguration/LanguageDataConstant.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/languageConfiguration/LanguageDataConstant.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/models/LoginResponse.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/models/LoginResponse.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/network/RestApis.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/network/RestApis.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/screens/BankDetailScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/screens/BankDetailScreen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/screens/LoginScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/screens/LoginScreen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/screens/SplashScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/screens/SplashScreen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/screens/UserCitySelectScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/screens/UserCitySelectScreen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/screens/VerificationListScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/screens/VerificationListScreen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/screens/VerificationScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/screens/VerificationScreen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main/services/AuthServices.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/services/AuthServices.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/delivery/fragment/DHomeFragment.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/delivery/fragment/DHomeFragment.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main/models/OrderListModel.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/models/OrderListModel.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main/utils/Constants.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/utils/Constants.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main/utils/Widgets.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main/utils/Widgets.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/user/screens/CreateOrderScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/screens/CreateOrderScreen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/user/screens/ReturnOrderScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/screens/ReturnOrderScreen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/user/screens/OrderDetailScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/user/screens/OrderDetailScreen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/linux/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/linux/flutter/generated_plugin_registrant.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/linux/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/linux/flutter/generated_plugins.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,6 +51,22 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitLabMergeRequestFiltersHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPENED&quot;,
+    &quot;assignee&quot;: {
+      &quot;type&quot;: &quot;org.jetbrains.plugins.gitlab.mergerequest.ui.filters.GitLabMergeRequestsFiltersValue.MergeRequestsMemberFilterValue.MergeRequestsAssigneeFilterValue&quot;,
+      &quot;username&quot;: &quot;Gosplex_Dev&quot;,
+      &quot;fullname&quot;: &quot;John Developer&quot;
+    }
+  }
+}</component>
+  <component name="GitLabMergeRequestsSettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;first&quot;: &quot;https://gitlab.com/mobile-app23/on-demand-local-delivery-system/localdelivery_flutter.git&quot;,
+    &quot;second&quot;: &quot;073e1341-3ca9-4a0e-b6e3-80130dab92e8&quot;
+  }
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -74,29 +86,29 @@
     <option name="openDirectoriesWithSingleClick" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Flutter.main.dart.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;com.google.services.firebase.aqiPopupShown&quot;: &quot;true&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;add__store__module&quot;,
-    &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/meet09/Documents/client/joe boateng/localdelivery_flutter&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Flutter.main.dart.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "com.google.services.firebase.aqiPopupShown": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "rc__v__20",
+    "io.flutter.reload.alreadyRun": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/Flutter Projects/localdelivery_flutter",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.general",
+    "show.migrate.to.gradle.popup": "false"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/assets/icons" />

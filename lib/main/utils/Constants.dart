@@ -11,9 +11,9 @@ const mAppName = 'Mighty Delivery';
 //region Baseurl
 //Note: Domain url is where you uploaded your laravel code
 //live
-const DOMAIN_URL = 'https://meetmighty.com/mobile/delivery-admin'; // Don't add slash at the end of the url
+// const DOMAIN_URL = 'https://meetmighty.com/mobile/delivery-admin'; // Don't add slash at the end of the url
 //test
-//const DOMAIN_URL = 'https://meetmighty.com/mobile/delivery-admin-dev'; // Don't add slash at the end of the url
+const DOMAIN_URL = 'https://meetmighty.com/mobile/delivery-admin-dev'; // Don't add slash at the end of the url
 // Don't add slash at the end of the url
 //endregion
 
