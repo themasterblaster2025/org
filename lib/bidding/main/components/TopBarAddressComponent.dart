@@ -21,10 +21,7 @@ class TopBarAddressComponent extends StatelessWidget {
     return Container(
       width: context.width(),
       margin: EdgeInsets.all(16),
-      decoration: boxDecorationWithRoundedCorners(
-          borderRadius: BorderRadius.circular(defaultRadius),
-          border: Border.all(color: Colors.transparent),
-          backgroundColor: ColorUtils.colorPrimary.withOpacity(0.1)),
+      decoration: boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(defaultRadius), border: Border.all(color: Colors.transparent), backgroundColor: ColorUtils.colorPrimary.withOpacity(0.1)),
       padding: EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,33 +29,18 @@ class TopBarAddressComponent extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Icon(Icons.near_me_outlined, color: ColorUtils.colorPrimary)
-                  .paddingAll(0),
-              Text("...", style: boldTextStyle(color: Colors.grey))
-                  .paddingRight(2),
-              Text(orderData!.pickupPoint?.address ?? "",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: boldTextStyle(size: 16))
-                  .expand(),
+              Icon(Icons.near_me_outlined, color: ColorUtils.colorPrimary).paddingAll(0),
+              Text("...", style: boldTextStyle(color: Colors.grey)).paddingRight(2),
+              Text(orderData!.pickupPoint?.address ?? "", maxLines: 2, overflow: TextOverflow.ellipsis, style: boldTextStyle(size: 16)).expand(),
             ],
           ).animate().fade().scale(),
           16.height,
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("...", style: boldTextStyle(size: 16, color: Colors.grey))
-                  .paddingRight(0),
-              Icon(Icons.location_on_outlined, color: ColorUtils.colorPrimary)
-                  .paddingAll(0),
-              Text(orderData!.deliveryPoint?.address ?? "",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: boldTextStyle(size: 16))
-                  .expand()
-                  .animate()
-                  .fade()
-                  .scale(),
+              Text("...", style: boldTextStyle(size: 16, color: Colors.grey)).paddingRight(0),
+              Icon(Icons.location_on_outlined, color: ColorUtils.colorPrimary).paddingAll(0),
+              Text(orderData!.deliveryPoint?.address ?? "", maxLines: 2, overflow: TextOverflow.ellipsis, style: boldTextStyle(size: 16)).expand().animate().fade().scale(),
             ],
           ),
           16.height,
@@ -72,8 +54,7 @@ class TopBarAddressComponent extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: language.distance + ": ",
-                      style: boldTextStyle(
-                          size: 16, color: ColorUtils.colorPrimary),
+                      style: boldTextStyle(size: 16, color: ColorUtils.colorPrimary),
                     ),
                     TextSpan(
                       text: "${orderData!.totalDistance} km",
@@ -91,9 +72,7 @@ class TopBarAddressComponent extends StatelessWidget {
                     borderRadius: BorderRadius.circular(defaultRadius),
                   ),
                 ),
-                child: Text("View More",
-                        style: boldTextStyle(size: 16, color: Colors.white))
-                    .paddingAll(0),
+                child: Text(language.viewMore, style: boldTextStyle(size: 16, color: Colors.white)).paddingAll(0),
               ).animate().fade().scale(),
             ],
           ),

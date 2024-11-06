@@ -38,8 +38,7 @@ class Bidlistscreen extends StatefulWidget {
   State<Bidlistscreen> createState() => _BidlistscreenState();
 }
 
-class _BidlistscreenState extends State<Bidlistscreen>
-    with SingleTickerProviderStateMixin {
+class _BidlistscreenState extends State<Bidlistscreen> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late StreamSubscription _streamSubscription;
 
@@ -77,7 +76,7 @@ class _BidlistscreenState extends State<Bidlistscreen>
       setState(() {});
     }).catchError((e, s) {
       appStore.setLoading(false);
-      toast('Failed to fetch bids. Please try again.');
+      toast(language.bidFetchFailedMsg);
     }).whenComplete(() => appStore.setLoading(false));
   }
 
@@ -87,11 +86,7 @@ class _BidlistscreenState extends State<Bidlistscreen>
   }) async {
     appStore.setLoading(true);
 
-    Map<String, String> req = {
-      "id": widget.orderData!.id.toString(),
-      "delivery_man_id": deliveryManId,
-      "is_bid_accept": isAccept ? "1" : "2"
-    };
+    Map<String, String> req = {"id": widget.orderData!.id.toString(), "delivery_man_id": deliveryManId, "is_bid_accept": isAccept ? "1" : "2"};
 
     try {
       final response = await acceptOrRejectBid(req);
@@ -115,12 +110,7 @@ class _BidlistscreenState extends State<Bidlistscreen>
 
   _listenToStream() {
     log("Listening to stream");
-    _streamSubscription = FirebaseFirestore.instance
-        .collection(ORDERS_BID_COLLECTION)
-        .doc(
-            ORDERS_BID_COLLECTION_DOC_PREFIX + widget.orderData!.id!.toString())
-        .snapshots()
-        .listen((snapshot) {
+    _streamSubscription = FirebaseFirestore.instance.collection(ORDERS_BID_COLLECTION).doc(ORDERS_BID_COLLECTION_DOC_PREFIX + widget.orderData!.id!.toString()).snapshots().listen((snapshot) {
       if (snapshot.exists) {
         getOrderBidListApiCall(widget.orderData!.id!);
       }
@@ -132,11 +122,9 @@ class _BidlistscreenState extends State<Bidlistscreen>
   @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
-      appBarTitle: "Bids",
+      appBarTitle: language.bids,
       action: [
-        Text("${language.orderId}: #${widget.orderData!.id}",
-                style: boldTextStyle(size: 16, color: Colors.white))
-            .withWidth(120),
+        Text("${language.orderId}: #${widget.orderData!.id}", style: boldTextStyle(size: 16, color: Colors.white)).withWidth(120),
       ],
       body: Stack(
         children: [
@@ -168,9 +156,7 @@ class _BidlistscreenState extends State<Bidlistscreen>
       return SizedBox.shrink();
     } else if (OrderBidData.isEmpty) {
       log("No bids found");
-      return Center(
-          child: Text('There are no bids for this order! Please wait.',
-              style: boldTextStyle()));
+      return Center(child: Text(language.noBidsFound, style: boldTextStyle()));
     } else {
       log("Bids found");
       return buildBidListView();
@@ -181,15 +167,12 @@ class _BidlistscreenState extends State<Bidlistscreen>
     return Container(
       width: context.width(),
       margin: EdgeInsets.all(16),
-      decoration: boxDecorationWithRoundedCorners(
-          borderRadius: BorderRadius.circular(defaultRadius),
-          border: Border.all(color: Colors.transparent),
-          backgroundColor: ColorUtils.colorPrimary.withOpacity(0.1)),
+      decoration: boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(defaultRadius), border: Border.all(color: Colors.transparent), backgroundColor: ColorUtils.colorPrimary.withOpacity(0.1)),
       padding: EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Bid Request", style: boldTextStyle(size: 16)),
+          Text(language.bidRequest, style: boldTextStyle(size: 16)),
           16.height,
           SizedBox(
             width: context.width(),
@@ -230,9 +213,7 @@ class _BidlistscreenState extends State<Bidlistscreen>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      orderDetail.deliveryManName!
-                          .validate()
-                          .capitalizeFirstLetter(),
+                      orderDetail.deliveryManName!.validate().capitalizeFirstLetter(),
                       style: boldTextStyle(size: 14, color: Colors.grey),
                     ),
                     Text(
@@ -251,14 +232,11 @@ class _BidlistscreenState extends State<Bidlistscreen>
                         await showConfirmDialogCustom(
                           context,
                           primaryColor: ColorUtils.colorPrimary,
-                          title: "Do you want to accept this bid?",
+                          title: "${language.acceptBidConfirm}?",
                           positiveText: language.yes,
                           negativeText: language.no,
                           onAccept: (c) {
-                            declineOrAcceptBid(
-                                deliveryManId:
-                                    orderDetail.deliveryManId.toString(),
-                                isAccept: true);
+                            declineOrAcceptBid(deliveryManId: orderDetail.deliveryManId.toString(), isAccept: true);
                           },
                         );
                       },
@@ -274,14 +252,11 @@ class _BidlistscreenState extends State<Bidlistscreen>
                         await showConfirmDialogCustom(
                           context,
                           primaryColor: ColorUtils.colorPrimary,
-                          title: "Do you want to decline this bid?",
+                          title: "${language.declineBidConfirm}?",
                           positiveText: language.yes,
                           negativeText: language.no,
                           onAccept: (c) {
-                            declineOrAcceptBid(
-                                deliveryManId:
-                                    orderDetail.deliveryManId.toString(),
-                                isAccept: false);
+                            declineOrAcceptBid(deliveryManId: orderDetail.deliveryManId.toString(), isAccept: false);
                           },
                         );
                       },
@@ -297,12 +272,7 @@ class _BidlistscreenState extends State<Bidlistscreen>
                   ],
                 ),
                 onTap: () {
-                  if (orderDetail.notes != null || orderDetail.notes == "")
-                    showMoreInfoDialog(
-                        context: context,
-                        imageUrl: orderDetail.deliveryManImage.validate(),
-                        notes: orderDetail.notes!,
-                        name: orderDetail.deliveryManName!);
+                  if (orderDetail.notes != null || orderDetail.notes == "") showMoreInfoDialog(context: context, imageUrl: orderDetail.deliveryManImage.validate(), notes: orderDetail.notes!, name: orderDetail.deliveryManName!);
                 },
               );
             },
@@ -328,8 +298,7 @@ class _BidlistscreenState extends State<Bidlistscreen>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              commonCachedNetworkImage(imageUrl,
-                  radius: 80, width: 80, height: 80),
+              commonCachedNetworkImage(imageUrl, radius: 80, width: 80, height: 80),
               16.height,
               Text(
                 name.capitalizeFirstLetter(),
@@ -345,10 +314,9 @@ class _BidlistscreenState extends State<Bidlistscreen>
               16.height,
               ElevatedButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Close'),
+                child: Text(language.close),
                 style: ElevatedButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 ),
               ),
             ],

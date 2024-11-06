@@ -185,8 +185,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
       //  appStore.setOrderTrackingIdPrefix(value.orderTrackingIdPrefix ?? "");
       appStore.setIsInsuranceAllowed(value.isInsuranceAllowed ?? "0");
       appStore.setInsurancePercentage(value.insurancePercentage ?? "0");
-      appStore.setCurrencyPosition(
-          value.currencyPosition ?? CURRENCY_POSITION_LEFT);
+      appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
       appStore.setInsuranceDescription(value.insuranceDescription ?? '');
       appStore.setMaxAmountPerMonth(value.maxEarningsPerMonth ?? '');
       setState(() {});
@@ -200,11 +199,9 @@ class _DHomeFragmentState extends State<DHomeFragment> {
     if (mounted) super.setState(fn);
   }
 
-  Future<void> getDashboardCountDataApi(
-      {String? startDate, String? endDate}) async {
+  Future<void> getDashboardCountDataApi({String? startDate, String? endDate}) async {
     appStore.setLoading(true);
-    await getDashboardCount(startDate: startDate, endDate: endDate)
-        .then((value) {
+    await getDashboardCount(startDate: startDate, endDate: endDate).then((value) {
       appStore.setLoading(false);
       countData = value;
       setState(() {});
@@ -237,9 +234,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
             return Container(
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: appStore.isDarkMode
-                    ? ColorUtils.scaffoldSecondaryDark
-                    : ColorUtils.scaffoldColorLight,
+                color: appStore.isDarkMode ? ColorUtils.scaffoldSecondaryDark : ColorUtils.scaffoldColorLight,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20),
                   topRight: Radius.circular(20),
@@ -257,11 +252,9 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Place your Bid',
-                              style: boldTextStyle(size: 20)),
+                          Text(language.placeYourBid, style: boldTextStyle(size: 20)),
                           IconButton(
-                            icon: Icon(Icons.close,
-                                color: ColorUtils.colorPrimary, size: 30),
+                            icon: Icon(Icons.close, color: ColorUtils.colorPrimary, size: 30),
                             onPressed: () => Navigator.pop(context),
                           ),
                         ],
@@ -276,13 +269,11 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                               border: Border.all(color: Colors.red),
                             ),
                             child: IconButton(
-                              icon: Icon(Icons.remove,
-                                  color: Colors.red, size: 30),
+                              icon: Icon(Icons.remove, color: Colors.red, size: 30),
                               onPressed: () {
                                 setModalState(() {
                                   if (biddedAmount > 0) {
-                                    biddedAmount -=
-                                        (biddedAmount >= 10) ? 10 : 1;
+                                    biddedAmount -= (biddedAmount >= 10) ? 10 : 1;
                                     if (biddedAmount < 0) {
                                       biddedAmount = 0;
                                     }
@@ -292,11 +283,9 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                             ),
                           ),
                           24.width,
-                          Text('${appStore.currencyCode}',
-                              style: boldTextStyle(size: 24)),
+                          Text('${appStore.currencyCode}', style: boldTextStyle(size: 24)),
                           SizedBox(width: 4),
-                          Text(biddedAmount.toStringAsFixed(2),
-                              style: boldTextStyle(size: 40)),
+                          Text(biddedAmount.toStringAsFixed(2), style: boldTextStyle(size: 40)),
                           24.width,
                           Container(
                             decoration: boxDecorationWithRoundedCorners(
@@ -304,8 +293,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                               border: Border.all(color: Colors.green),
                             ),
                             child: IconButton(
-                              icon: Icon(Icons.add,
-                                  color: Colors.green, size: 30),
+                              icon: Icon(Icons.add, color: Colors.green, size: 30),
                               onPressed: () {
                                 setModalState(() {
                                   biddedAmount += 10;
@@ -316,8 +304,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                         ],
                       ).paddingSymmetric(horizontal: 16, vertical: 12),
                       16.height,
-                      Text('Say anything... (Optional)',
-                          style: boldTextStyle(size: 16)),
+                      Text(language.saySomething, style: boldTextStyle(size: 16)),
                       SizedBox(height: 8),
                       Container(
                         decoration: BoxDecoration(
@@ -328,9 +315,8 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                           controller: reasonController,
                           textFieldType: TextFieldType.NAME,
                           decoration: InputDecoration(
-                            hintText: 'Write Here',
-                            hintStyle: secondaryTextStyle(
-                                size: 16, color: Colors.grey),
+                            hintText: language.writeAMessage,
+                            hintStyle: secondaryTextStyle(size: 16, color: Colors.grey),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                               borderSide: BorderSide.none,
@@ -346,7 +332,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                           await showConfirmDialogCustom(
                             context,
                             primaryColor: ColorUtils.colorPrimary,
-                            title: "Confirm bid?",
+                            title: "${language.confirmBid}?",
                             positiveText: language.yes,
                             negativeText: language.no,
                             onAccept: (c) async {
@@ -360,9 +346,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        child: Text('Confirm',
-                            style:
-                                boldTextStyle(size: 20, color: Colors.white)),
+                        child: Text(language.confirm, style: boldTextStyle(size: 20, color: Colors.white)),
                       ).withSize(width: context.width(), height: 60),
                       8.height,
                     ],
@@ -399,7 +383,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
     } catch (error) {
       appStore.setLoading(false);
       log('Error during apply bid API call: $error');
-      toast('Failed to apply bid. Please try again.');
+      toast(language.errorSomethingWentWrong);
     }
   }
 
@@ -426,12 +410,8 @@ class _DHomeFragmentState extends State<DHomeFragment> {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: appStore.isDarkMode
-                    ? ColorUtils.scaffoldSecondaryDark
-                    : ColorUtils.scaffoldColorLight,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(2 * defaultRadius),
-                    topRight: Radius.circular(2 * defaultRadius)),
+                color: appStore.isDarkMode ? ColorUtils.scaffoldSecondaryDark : ColorUtils.scaffoldColorLight,
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(2 * defaultRadius), topRight: Radius.circular(2 * defaultRadius)),
               ),
               child: SingleChildScrollView(
                 child: Column(
@@ -443,36 +423,21 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                         margin: EdgeInsets.only(top: 16),
                         height: 6,
                         width: 60,
-                        decoration: BoxDecoration(
-                            color: ColorUtils.themeColor,
-                            borderRadius: BorderRadius.circular(defaultRadius)),
+                        decoration: BoxDecoration(color: ColorUtils.themeColor, borderRadius: BorderRadius.circular(defaultRadius)),
                         alignment: Alignment.center,
                       ),
                     ),
                     SizedBox(height: 8),
                     Row(
                       children: [
-                        Text("Accept Bid?", style: primaryTextStyle(size: 18)),
+                        Text("${language.acceptBid}?", style: primaryTextStyle(size: 18)),
                         Spacer(),
                         Container(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                          decoration: BoxDecoration(
-                              color: appStore.isDarkMode
-                                  ? ColorUtils.scaffoldSecondaryDark
-                                  : ColorUtils.scaffoldColorLight,
-                              borderRadius:
-                                  BorderRadius.circular(defaultRadius),
-                              border:
-                                  Border.all(color: ColorUtils.colorPrimary)),
-                          child: Text("View All",
-                              style:
-                                  boldTextStyle(color: ColorUtils.colorPrimary),
-                              textAlign: TextAlign.center),
+                          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                          decoration: BoxDecoration(color: appStore.isDarkMode ? ColorUtils.scaffoldSecondaryDark : ColorUtils.scaffoldColorLight, borderRadius: BorderRadius.circular(defaultRadius), border: Border.all(color: ColorUtils.colorPrimary)),
+                          child: Text(language.viewAll, style: boldTextStyle(color: ColorUtils.colorPrimary), textAlign: TextAlign.center),
                         ).onTap(() {
-                          DeliveryBidListScreen().launch(context,
-                              pageRouteAnimation:
-                                  PageRouteAnimation.SlideBottomTop);
+                          DeliveryBidListScreen().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
                         })
                       ],
                     ).paddingSymmetric(horizontal: 16),
@@ -487,41 +452,21 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               ClipRRect(
-                                borderRadius:
-                                    BorderRadius.circular(defaultRadius),
-                                child: commonCachedNetworkImage(
-                                    order.clientImage.validate(),
-                                    height: 35,
-                                    width: 35,
-                                    fit: BoxFit.cover),
+                                borderRadius: BorderRadius.circular(defaultRadius),
+                                child: commonCachedNetworkImage(order.clientImage.validate(), height: 35, width: 35, fit: BoxFit.cover),
                               ),
                               SizedBox(width: 12),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                        '${order.clientName.validate().capitalizeFirstLetter()}',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: boldTextStyle(size: 14)),
+                                    Text('${order.clientName.validate().capitalizeFirstLetter()}', maxLines: 1, overflow: TextOverflow.ellipsis, style: boldTextStyle(size: 14)),
                                     SizedBox(height: 4),
-                                    Text('${order.clientEmail.validate()}',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: secondaryTextStyle()),
+                                    Text('${order.clientEmail.validate()}', maxLines: 1, overflow: TextOverflow.ellipsis, style: secondaryTextStyle()),
                                   ],
                                 ),
                               ),
-                              RichText(
-                                  text: TextSpan(children: [
-                                TextSpan(
-                                    text: "${language.orderId}: ",
-                                    style: secondaryTextStyle(size: 16)),
-                                TextSpan(
-                                    text: '#${order.orderId}',
-                                    style: boldTextStyle(size: 14))
-                              ])),
+                              RichText(text: TextSpan(children: [TextSpan(text: "${language.orderId}: ", style: secondaryTextStyle(size: 16)), TextSpan(text: '#${order.orderId}', style: boldTextStyle(size: 14))])),
                             ],
                           ),
                           Container(
@@ -533,40 +478,21 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                               children: [
                                 Expanded(
                                   child: Row(
-                                    children: [
-                                      Text('Estimate Amount:',
-                                          style: secondaryTextStyle(size: 16)),
-                                      SizedBox(width: 4),
-                                      Text(
-                                          "${printAmount(orderList[0].totalAmount)}",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: boldTextStyle(size: 14))
-                                    ],
+                                    children: [Text('${language.estimateAmount}:', style: secondaryTextStyle(size: 16)), SizedBox(width: 4), Text("${printAmount(orderList[0].totalAmount)}", maxLines: 1, overflow: TextOverflow.ellipsis, style: boldTextStyle(size: 14))],
                                   ),
                                 ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Text('${language.distance}:',
-                                        style: secondaryTextStyle(size: 16)),
-                                    SizedBox(width: 4),
-                                    Text('${orderList[0].totalDistance} km',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: boldTextStyle(size: 14))
-                                  ],
+                                  children: [Text('${language.distance}:', style: secondaryTextStyle(size: 16)), SizedBox(width: 4), Text('${orderList[0].totalDistance} km', maxLines: 1, overflow: TextOverflow.ellipsis, style: boldTextStyle(size: 14))],
                                 ),
                               ],
                             ),
                             width: context.width(),
                           ),
                           addressDisplayWidget(
-                            startAddress:
-                                "${orderList[0].pickupPoint?.address ?? ''}",
-                            endAddress:
-                                "${orderList[0].deliveryPoint?.address ?? ''}",
+                            startAddress: "${orderList[0].pickupPoint?.address ?? ''}",
+                            endAddress: "${orderList[0].deliveryPoint?.address ?? ''}",
                             startLatLong: LatLng(1, 1),
                             endLatLong: LatLng(1, 1),
                           ),
@@ -575,23 +501,16 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                             children: [
                               Expanded(
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 8),
-                                  decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.circular(defaultRadius),
-                                      border: Border.all(color: Colors.red)),
-                                  child: Text("Decline",
-                                      style: boldTextStyle(color: Colors.red),
-                                      textAlign: TextAlign.center),
+                                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(defaultRadius), border: Border.all(color: Colors.red)),
+                                  child: Text(language.decline, style: boldTextStyle(color: Colors.red), textAlign: TextAlign.center),
                                 ).onTap(appStore.isLoading
                                     ? null
                                     : () async {
                                         await showConfirmDialogCustom(
                                           context,
                                           primaryColor: ColorUtils.colorPrimary,
-                                          title:
-                                              "Are you sure you want to decline this bid?",
+                                          title: "${language.declineBidConfirm}?",
                                           positiveText: language.yes,
                                           negativeText: language.no,
                                           onAccept: (c) {
@@ -603,15 +522,9 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                               16.width,
                               Expanded(
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 8),
-                                  decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.circular(defaultRadius),
-                                      border: Border.all(color: Colors.green)),
-                                  child: Text("Accept",
-                                      style: boldTextStyle(color: Colors.green),
-                                      textAlign: TextAlign.center),
+                                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(defaultRadius), border: Border.all(color: Colors.green)),
+                                  child: Text(language.accept, style: boldTextStyle(color: Colors.green), textAlign: TextAlign.center),
                                 ).onTap(appStore.isLoading
                                     ? null
                                     : () {
@@ -650,12 +563,8 @@ class _DHomeFragmentState extends State<DHomeFragment> {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: appStore.isDarkMode
-                    ? ColorUtils.scaffoldSecondaryDark
-                    : ColorUtils.scaffoldColorLight,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(2 * defaultRadius),
-                    topRight: Radius.circular(2 * defaultRadius)),
+                color: appStore.isDarkMode ? ColorUtils.scaffoldSecondaryDark : ColorUtils.scaffoldColorLight,
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(2 * defaultRadius), topRight: Radius.circular(2 * defaultRadius)),
               ),
               child: SingleChildScrollView(
                 child: Column(
@@ -667,17 +576,14 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                         margin: EdgeInsets.only(top: 16),
                         height: 6,
                         width: 60,
-                        decoration: BoxDecoration(
-                            color: ColorUtils.themeColor,
-                            borderRadius: BorderRadius.circular(defaultRadius)),
+                        decoration: BoxDecoration(color: ColorUtils.themeColor, borderRadius: BorderRadius.circular(defaultRadius)),
                         alignment: Alignment.center,
                       ),
                     ),
                     SizedBox(height: 8),
                     Padding(
                       padding: EdgeInsets.only(left: 16),
-                      child: Text("Cancel Bid?",
-                          style: primaryTextStyle(size: 18)),
+                      child: Text("${language.cancelBid}?", style: primaryTextStyle(size: 18)),
                     ),
                     SizedBox(height: 8),
                     Padding(
@@ -688,42 +594,22 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               ClipRRect(
-                                borderRadius:
-                                    BorderRadius.circular(defaultRadius),
-                                child: commonCachedNetworkImage(
-                                    order.clientImage.validate(),
-                                    height: 40,
-                                    width: 40,
-                                    fit: BoxFit.cover),
+                                borderRadius: BorderRadius.circular(defaultRadius),
+                                child: commonCachedNetworkImage(order.clientImage.validate(), height: 40, width: 40, fit: BoxFit.cover),
                               ),
                               12.width,
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                        '${order.clientName.validate().capitalizeFirstLetter()}',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: boldTextStyle(size: 14)),
+                                    Text('${order.clientName.validate().capitalizeFirstLetter()}', maxLines: 1, overflow: TextOverflow.ellipsis, style: boldTextStyle(size: 14)),
                                     SizedBox(height: 4),
-                                    Text('${order.clientEmail.validate()}',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: secondaryTextStyle()),
+                                    Text('${order.clientEmail.validate()}', maxLines: 1, overflow: TextOverflow.ellipsis, style: secondaryTextStyle()),
                                   ],
                                 ),
                               ),
                               12.width,
-                              RichText(
-                                  text: TextSpan(children: [
-                                TextSpan(
-                                    text: "${language.orderId}: ",
-                                    style: secondaryTextStyle(size: 16)),
-                                TextSpan(
-                                    text: '#${order.orderId}',
-                                    style: boldTextStyle(size: 14))
-                              ]))
+                              RichText(text: TextSpan(children: [TextSpan(text: "${language.orderId}: ", style: secondaryTextStyle(size: 16)), TextSpan(text: '#${order.orderId}', style: boldTextStyle(size: 14))]))
                             ],
                           ),
                           Container(
@@ -735,40 +621,21 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                               children: [
                                 Expanded(
                                   child: Row(
-                                    children: [
-                                      Text('Estimated Amount:',
-                                          style: secondaryTextStyle(size: 16)),
-                                      SizedBox(width: 4),
-                                      Text(
-                                          "${printAmount(orderList[0].totalAmount)}",
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: boldTextStyle(size: 14))
-                                    ],
+                                    children: [Text('${language.estimateAmount}:', style: secondaryTextStyle(size: 16)), SizedBox(width: 4), Text("${printAmount(orderList[0].totalAmount)}", maxLines: 1, overflow: TextOverflow.ellipsis, style: boldTextStyle(size: 14))],
                                   ),
                                 ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Text('${language.distance}:',
-                                        style: secondaryTextStyle(size: 16)),
-                                    SizedBox(width: 4),
-                                    Text('${orderList[0].totalDistance} km',
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: boldTextStyle(size: 14))
-                                  ],
+                                  children: [Text('${language.distance}:', style: secondaryTextStyle(size: 16)), SizedBox(width: 4), Text('${orderList[0].totalDistance} km', maxLines: 1, overflow: TextOverflow.ellipsis, style: boldTextStyle(size: 14))],
                                 ),
                               ],
                             ),
                             width: context.width(),
                           ),
                           addressDisplayWidget(
-                            startAddress:
-                                "${orderList[0].pickupPoint?.address ?? ''}",
-                            endAddress:
-                                "${orderList[0].deliveryPoint?.address ?? ''}",
+                            startAddress: "${orderList[0].pickupPoint?.address ?? ''}",
+                            endAddress: "${orderList[0].deliveryPoint?.address ?? ''}",
                             startLatLong: LatLng(1, 1),
                             endLatLong: LatLng(1, 1),
                           ),
@@ -777,28 +644,20 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                             children: [
                               Expanded(
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 8),
-                                  decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.circular(defaultRadius),
-                                      border: Border.all(color: Colors.red)),
-                                  child: Text("Withdraw Bid",
-                                      style: boldTextStyle(color: Colors.red),
-                                      textAlign: TextAlign.center),
+                                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(defaultRadius), border: Border.all(color: Colors.red)),
+                                  child: Text("${language.withdrawBid}", style: boldTextStyle(color: Colors.red), textAlign: TextAlign.center),
                                 ).onTap(appStore.isLoading
                                     ? null
                                     : () async {
                                         await showConfirmDialogCustom(
                                           context,
                                           primaryColor: ColorUtils.colorPrimary,
-                                          title:
-                                              "Do you want to withdraw this bid?",
+                                          title: "${language.withdrawBidConfirm}?",
                                           positiveText: language.yes,
                                           negativeText: language.no,
                                           onAccept: (c) {
-                                            declineOrCancelBid(
-                                                isDecline: false);
+                                            declineOrCancelBid(isDecline: false);
                                           },
                                         );
                                       }),
@@ -821,12 +680,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
     );
   }
 
-  Widget addressDisplayWidget(
-      {String? startAddress,
-      String? endAddress,
-      required LatLng startLatLong,
-      required LatLng endLatLong,
-      bool? isMultiple}) {
+  Widget addressDisplayWidget({String? startAddress, String? endAddress, required LatLng startLatLong, required LatLng endLatLong, bool? isMultiple}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -834,9 +688,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
           children: [
             Icon(Icons.near_me, color: Colors.green, size: 18),
             SizedBox(width: 8),
-            Expanded(
-                child: Text(startAddress ?? ''.validate(),
-                    style: primaryTextStyle(size: 14), maxLines: 2)),
+            Expanded(child: Text(startAddress ?? ''.validate(), style: primaryTextStyle(size: 14), maxLines: 2)),
             // mapRedirectionWidget(
             //     latLong: LatLng(startLatLong.latitude.toDouble(),
             //         startLatLong.longitude.toDouble()))
@@ -861,9 +713,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
           children: [
             Icon(Icons.location_on, color: Colors.red, size: 18),
             SizedBox(width: 8),
-            Expanded(
-                child: Text(endAddress ?? '',
-                    style: primaryTextStyle(size: 14), maxLines: 2)),
+            Expanded(child: Text(endAddress ?? '', style: primaryTextStyle(size: 14), maxLines: 2)),
             SizedBox(width: 8),
             // mapRedirectionWidget(
             //     latLong: LatLng(endLatLong.latitude.toDouble(),
@@ -884,9 +734,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
       (snapshot) {
         if (snapshot.docs.isNotEmpty) {
           try {
-            List<BidOrderModel> data = snapshot.docs
-                .map((e) => BidOrderModel.fromJson(e.data()))
-                .toList();
+            List<BidOrderModel> data = snapshot.docs.map((e) => BidOrderModel.fromJson(e.data())).toList();
 
             if (data.isNotEmpty) {
               latestOrder = data[0];
@@ -911,16 +759,10 @@ class _DHomeFragmentState extends State<DHomeFragment> {
   }
 
   listenToOrderWithBidsStreamToCancelBid() {
-    _getOrdersWithBidsStreamToCancelBid = FirebaseFirestore.instance
-        .collection(ORDERS_BID_COLLECTION)
-        .where(ACCEPTED_DELIVERY_MAN_IDS, arrayContains: getIntAsync(USER_ID))
-        .snapshots()
-        .listen((snapshot) {
+    _getOrdersWithBidsStreamToCancelBid = FirebaseFirestore.instance.collection(ORDERS_BID_COLLECTION).where(ACCEPTED_DELIVERY_MAN_IDS, arrayContains: getIntAsync(USER_ID)).snapshots().listen((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         try {
-          List<BidOrderModel> data = snapshot.docs
-              .map((e) => BidOrderModel.fromJson(e.data()))
-              .toList();
+          List<BidOrderModel> data = snapshot.docs.map((e) => BidOrderModel.fromJson(e.data())).toList();
 
           if (data.isNotEmpty) {
             latestOrderToCancelBid = data[0];
@@ -950,11 +792,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
 
   declineOrCancelBid({required bool isDecline}) async {
     appStore.setLoading(true);
-    Map req = {
-      "id": isDecline ? latestOrder!.orderId : latestOrderToCancelBid!.orderId,
-      "delivery_man_id": getIntAsync(USER_ID).toString(),
-      "is_bid_accept": "2"
-    };
+    Map req = {"id": isDecline ? latestOrder!.orderId : latestOrderToCancelBid!.orderId, "delivery_man_id": getIntAsync(USER_ID).toString(), "is_bid_accept": isDecline ? "2" : "3"};
 
     try {
       await acceptOrRejectBid(req).then(
@@ -970,7 +808,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
       );
     } catch (e) {
       appStore.setLoading(false);
-      toast('Failed to decline bid. Please try again.');
+      toast(language.errorSomethingWentWrong);
     }
   }
 
@@ -984,15 +822,11 @@ class _DHomeFragmentState extends State<DHomeFragment> {
           Container(
             margin: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: boxDecorationWithRoundedCorners(
-                borderRadius: radius(defaultRadius),
-                backgroundColor: Colors.white24),
+            decoration: boxDecorationWithRoundedCorners(borderRadius: radius(defaultRadius), backgroundColor: Colors.white24),
             child: Row(children: [
-              Icon(Ionicons.ios_location_outline,
-                  color: Colors.white, size: 18),
+              Icon(Ionicons.ios_location_outline, color: Colors.white, size: 18),
               8.width,
-              Text(CityModel.fromJson(getJSONAsync(CITY_DATA)).name!.validate(),
-                  style: primaryTextStyle(color: white)),
+              Text(CityModel.fromJson(getJSONAsync(CITY_DATA)).name!.validate(), style: primaryTextStyle(color: white)),
             ]).onTap(() {
               UserCitySelectScreen(
                 isBack: true,
@@ -1001,18 +835,12 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                   setState(() {});
                 },
               ).launch(context);
-            },
-                highlightColor: Colors.transparent,
-                hoverColor: Colors.transparent,
-                splashColor: Colors.transparent),
+            }, highlightColor: Colors.transparent, hoverColor: Colors.transparent, splashColor: Colors.transparent),
           ),
           Stack(
             clipBehavior: Clip.none,
             children: [
-              Align(
-                  alignment: AlignmentDirectional.center,
-                  child: Icon(Ionicons.md_notifications_outline,
-                      color: Colors.white)),
+              Align(alignment: AlignmentDirectional.center, child: Icon(Ionicons.md_notifications_outline, color: Colors.white)),
               Observer(builder: (context) {
                 return Positioned(
                   right: 0,
@@ -1021,13 +849,8 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                       height: 20,
                       width: 20,
                       alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: Colors.orange, shape: BoxShape.circle),
-                      child: Text(
-                          '${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}',
-                          style: primaryTextStyle(
-                              size: appStore.allUnreadCount < 99 ? 12 : 8,
-                              color: Colors.white))),
+                      decoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
+                      child: Text('${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}', style: primaryTextStyle(size: appStore.allUnreadCount < 99 ? 12 : 8, color: Colors.white))),
                 ).visible(appStore.allUnreadCount != 0);
               }),
             ],
@@ -1037,8 +860,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
           IconButton(
             padding: EdgeInsets.only(right: 8),
             onPressed: () async {
-              DProfileFragment().launch(context,
-                  pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+              DProfileFragment().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
             },
             icon: Icon(Ionicons.settings_outline, color: Colors.white),
           ),
@@ -1053,34 +875,24 @@ class _DHomeFragmentState extends State<DHomeFragment> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: ListView(
-                physics: BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()),
+                physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                 children: [
                   12.height,
                   Row(
                     children: [
                       Text(
                         language.filterBelowCount,
-                        style: boldTextStyle(
-                            size: 16, color: ColorUtils.colorPrimary),
+                        style: boldTextStyle(size: 16, color: ColorUtils.colorPrimary),
                       ),
                       Spacer(),
                       Icon(
                         Icons.filter_list,
                         color: ColorUtils.colorPrimary,
                       ).onTap(() async {
-                        await showInDialog(context,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: radius()),
-                                builder: (_) => FilterCountScreen(),
-                                contentPadding: EdgeInsets.zero)
-                            .then((value) {
-                          String startDate =
-                              DateFormat('yyyy-MM-dd').format(value[0]);
-                          String endDate =
-                              DateFormat('yyyy-MM-dd').format(value[1]);
-                          getDashboardCountDataApi(
-                              startDate: startDate, endDate: endDate);
+                        await showInDialog(context, shape: RoundedRectangleBorder(borderRadius: radius()), builder: (_) => FilterCountScreen(), contentPadding: EdgeInsets.zero).then((value) {
+                          String startDate = DateFormat('yyyy-MM-dd').format(value[0]);
+                          String endDate = DateFormat('yyyy-MM-dd').format(value[1]);
+                          getDashboardCountDataApi(startDate: startDate, endDate: endDate);
                         });
                       }),
                     ],
@@ -1100,11 +912,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                     controller: scrollController,
                     padding: EdgeInsets.fromLTRB(7, 5, 7, 5),
                     itemBuilder: (context, index) {
-                      return countWidget(
-                              text: items[index],
-                              value: getCount(index),
-                              color: colorList[index])
-                          .onTap(() {
+                      return countWidget(text: items[index], value: getCount(index), color: colorList[index]).onTap(() {
                         goToCountScreen(index);
                       });
                     },
@@ -1113,12 +921,8 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                 ],
               ),
             ),
-            latestOrderToCancelBid != null
-                ? bidCancelView(order: latestOrderToCancelBid ?? null)
-                : bidAcceptView(order: latestOrder ?? null),
-            Observer(
-                builder: (context) => Positioned.fill(
-                    child: loaderWidget().visible(appStore.isLoading))),
+            latestOrderToCancelBid != null ? bidCancelView(order: latestOrderToCancelBid ?? null) : bidAcceptView(order: latestOrder ?? null),
+            Observer(builder: (context) => Positioned.fill(child: loaderWidget().visible(appStore.isLoading))),
           ],
         ),
       ),
@@ -1126,13 +930,11 @@ class _DHomeFragmentState extends State<DHomeFragment> {
         padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: boxDecorationWithRoundedCorners(
-              backgroundColor: ColorUtils.colorPrimary),
+          decoration: boxDecorationWithRoundedCorners(backgroundColor: ColorUtils.colorPrimary),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(language.viewAllOrders,
-                  style: boldTextStyle(color: Colors.white)),
+              Text(language.viewAllOrders, style: boldTextStyle(color: Colors.white)),
             ],
           ).onTap(() {
             DeliveryDashBoard().launch(context).then((value) {
@@ -1152,12 +954,7 @@ class _DHomeFragmentState extends State<DHomeFragment> {
   }) {
     // Color color =
     return Container(
-      decoration: appStore.isDarkMode
-          ? boxDecorationWithRoundedCorners(
-              borderRadius: BorderRadius.circular(defaultRadius),
-              backgroundColor: color)
-          : boxDecorationRoundedWithShadow(defaultRadius.toInt(),
-              backgroundColor: color),
+      decoration: appStore.isDarkMode ? boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(defaultRadius), backgroundColor: color) : boxDecorationRoundedWithShadow(defaultRadius.toInt(), backgroundColor: color),
       padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,

@@ -70,17 +70,15 @@ class _DeliveryBidListScreenState extends State<DeliveryBidListScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
-      appBarTitle: 'Delivery Bids',
+      appBarTitle: language.deliveryBid,
       body: AnimatedListView(
         itemCount: bidListData?.length ?? 0,
         shrinkWrap: true,
         physics: BouncingScrollPhysics(),
         listAnimationType: ListAnimationType.Slide,
         padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 60),
-        flipConfiguration: FlipConfiguration(
-            duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn),
-        fadeInConfiguration: FadeInConfiguration(
-            duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn),
+        flipConfiguration: FlipConfiguration(duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn),
+        fadeInConfiguration: FadeInConfiguration(duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn),
         onNextPage: () {
           if (page < totalPage) {
             page++;
@@ -100,15 +98,15 @@ class _DeliveryBidListScreenState extends State<DeliveryBidListScreen> {
 
           switch (bid.isBidAccept) {
             case 1:
-              statusText = 'Accepted';
+              statusText = language.accepted;
               statusColor = Colors.green;
               break;
             case 0:
-              statusText = 'Pending';
+              statusText = language.pending;
               statusColor = Colors.orange;
               break;
             default:
-              statusText = 'Rejected';
+              statusText = language.rejected;
               statusColor = Colors.red;
               break;
           }
@@ -117,8 +115,7 @@ class _DeliveryBidListScreenState extends State<DeliveryBidListScreen> {
             margin: EdgeInsets.only(bottom: 16),
             decoration: boxDecorationWithRoundedCorners(
               borderRadius: BorderRadius.circular(defaultRadius),
-              border:
-                  Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
+              border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
               backgroundColor: Colors.transparent,
             ),
             padding: EdgeInsets.all(12),
@@ -146,14 +143,14 @@ class _DeliveryBidListScreenState extends State<DeliveryBidListScreen> {
                 Row(
                   children: [
                     Text(
-                      'Note: ${bid.notes ?? 'No notes available'}',
+                      '${language.note}: ${bid.notes ?? '${language.noNotesAvailable}'}',
                       style: secondaryTextStyle(size: 14),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                     ).expand(),
                     8.width,
                     Text(
-                      'Bid Amount: ${bid.bidAmount!.toStringAsFixed(2)}',
+                      '${language.bidAmount}: ${bid.bidAmount!.toStringAsFixed(2)}',
                       style: boldTextStyle(),
                     ),
                   ],

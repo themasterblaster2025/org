@@ -1073,4 +1073,25 @@ class BaseLanguage {
   String get reschedule => getContentValueFromKey(564);
   String get rescheduleTitle => getContentValueFromKey(565);
   String get rescheduleMsg => getContentValueFromKey(566);
+  String get confirmBid => getContentValueFromKey(576);
+  String get saySomething => getContentValueFromKey(577);
+  String get placeYourBid => getContentValueFromKey(578);
+  String get noNotesAvailable => getContentValueFromKey(581);
+  String get bidAmount => getContentValueFromKey(582);
+  String get confirm => getContentValueFromKey(575);
+  String get deliveryBid => getContentValueFromKey(579);
+  String get acceptBid => getContentValueFromKey(567);
+  String get viewAll => getContentValueFromKey(568);
+  String get estimateAmount => getContentValueFromKey(569);
+  String get decline => getContentValueFromKey(570);
+  String get declineBidConfirm => getContentValueFromKey(571);
+  String get cancelBid => getContentValueFromKey(572);
+  String get withdrawBid => getContentValueFromKey(573);
+  String get withdrawBidConfirm => getContentValueFromKey(574);
+  String get bidFetchFailedMsg => getContentValueFromKey(583);
+  String get bids => getContentValueFromKey(584);
+  String get noBidsFound => getContentValueFromKey(585);
+  String get bidRequest => getContentValueFromKey(586);
+  String get acceptBidConfirm => getContentValueFromKey(587);
+  String get close => getContentValueFromKey(588);
 }
