@@ -4,7 +4,7 @@ class DashboardCount {
   int? inprogressOrder;
   int? completeOrder;
   num? commission;
-  int? walletBalance;
+  num? walletBalance;
   int? pendingWithdrawRequest;
   int? completeWithdrawRequest;
 

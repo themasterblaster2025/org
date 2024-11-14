@@ -58,6 +58,7 @@ class BidListData {
   int? id;
   int? orderId;
   num? bidAmount;
+  num? totalAmount;
   String? notes;
   int? isBidAccept;
   String? createdAt;
@@ -67,6 +68,7 @@ class BidListData {
       {this.id,
       this.orderId,
       this.bidAmount,
+      this.totalAmount,
       this.notes,
       this.isBidAccept,
       this.createdAt,
@@ -76,6 +78,7 @@ class BidListData {
     id = json['id'];
     orderId = json['order_id'];
     bidAmount = json['bid_amount'];
+    totalAmount = json['total_amount'];
     notes = json['notes'];
     isBidAccept = json['is_bid_accept'];
     createdAt = json['created_at'];
@@ -87,6 +90,7 @@ class BidListData {
     data['id'] = this.id;
     data['order_id'] = this.orderId;
     data['bid_amount'] = this.bidAmount;
+    data['total_amount'] = this.totalAmount;
     data['notes'] = this.notes;
     data['is_bid_accept'] = this.isBidAccept;
     data['created_at'] = this.createdAt;

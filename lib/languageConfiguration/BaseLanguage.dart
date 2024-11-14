@@ -1094,4 +1094,13 @@ class BaseLanguage {
   String get bidRequest => getContentValueFromKey(586);
   String get acceptBidConfirm => getContentValueFromKey(587);
   String get close => getContentValueFromKey(588);
+  String get orderAvailableForBidding => getContentValueFromKey(589);
+  String get bidAvailableForCancel => getContentValueFromKey(590);
+  String get bidAccepted => getContentValueFromKey(591);
+  String get bidPlaced => getContentValueFromKey(592);
+  String get newOrder => getContentValueFromKey(593);
+  String get bidRejected => getContentValueFromKey(594);
+  String get placeBid => getContentValueFromKey(595);
+  String get totalAmount => getContentValueFromKey(596);
+  String get youPlaced => getContentValueFromKey(597);
 }

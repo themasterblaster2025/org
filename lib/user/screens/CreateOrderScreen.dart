@@ -64,7 +64,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   TextEditingController parcelTypeCont = TextEditingController();
   TextEditingController weightController = TextEditingController(text: '1');
-  TextEditingController totalParcelController = TextEditingController(text: '1');
+  TextEditingController totalParcelController =
+      TextEditingController(text: '1');
 
   TextEditingController pickAddressCont = TextEditingController();
   TextEditingController pickPersonNameCont = TextEditingController();
@@ -97,7 +98,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   String deliverCountryCode = defaultPhoneCode;
   String pickupCountryCode = defaultPhoneCode;
 
-  DateTime? pickFromDateTime, pickToDateTime, deliverFromDateTime, deliverToDateTime;
+  DateTime? pickFromDateTime,
+      pickToDateTime,
+      deliverFromDateTime,
+      deliverToDateTime;
   DateTime? pickDate, deliverDate;
   TimeOfDay? pickFromTime, pickToTime, deliverFromTime, deliverToTime;
 
@@ -141,7 +145,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   final List<Map<String, String>> selectedPackingSymbols = [];
   final List<Map<String, String>> packingSymbolsItems = getPackagingSymbols();
   int insuranceSelectedOption = 1;
-  List<String> appBarTitleList = [language.createOrder, language.pickupInformation, language.deliveryInformation, language.reviewRoute, language.details];
+  List<String> appBarTitleList = [
+    language.createOrder,
+    language.pickupInformation,
+    language.deliveryInformation,
+    language.reviewRoute,
+    language.details
+  ];
 
   @override
   void initState() {
@@ -153,8 +163,14 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   }
 
   Future<void> init() async {
-    pickupCountryCode = CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.isEmptyOrNull ? defaultPhoneCode : CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate();
-    deliverCountryCode = CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.isEmptyOrNull ? defaultPhoneCode : CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate();
+    pickupCountryCode =
+        CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.isEmptyOrNull
+            ? defaultPhoneCode
+            : CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate();
+    deliverCountryCode =
+        CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.isEmptyOrNull
+            ? defaultPhoneCode
+            : CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate();
     await getCreateOrderDetails(getIntAsync(CITY_ID)).then((value) async {
       appStore.setLoading(false);
       await setValue(CITY_DATA, value.cityDetail!.toJson());
@@ -170,18 +186,26 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       addressList.forEach((e) {
         list.add(e);
       });
-      setValue(RECENT_ADDRESS_LIST, list.map((element) => jsonEncode(element)).toList());
+      setValue(RECENT_ADDRESS_LIST,
+          list.map((element) => jsonEncode(element)).toList());
       vehicleList.clear();
       vehicleList = value.vehicleDetail!;
-      if (value.vehicleDetail!.isNotEmpty) selectedVehicle = value.vehicleDetail![0].id;
+      if (value.vehicleDetail!.isNotEmpty)
+        selectedVehicle = value.vehicleDetail![0].id;
       parcelTypeList.clear();
       parcelTypeList.addAll(value.staticDetails!);
-      appStore.setCurrencyCode(value.appSettingDetail!.currencyCode ?? CURRENCY_CODE);
-      appStore.setCurrencySymbol(value.appSettingDetail!.currency ?? CURRENCY_SYMBOL);
-      appStore.setCurrencyPosition(value.appSettingDetail!.currencyPosition ?? CURRENCY_POSITION_LEFT);
-      appStore.setIsInsuranceAllowed(value.appSettingDetail!.isInsuranceAllow.toString());
-      appStore.setInsurancePercentage(value.appSettingDetail!.insurancePercentage.toString());
-      appStore.setInsuranceDescription(value.appSettingDetail!.insuranceDescription.toString());
+      appStore.setCurrencyCode(
+          value.appSettingDetail!.currencyCode ?? CURRENCY_CODE);
+      appStore.setCurrencySymbol(
+          value.appSettingDetail!.currency ?? CURRENCY_SYMBOL);
+      appStore.setCurrencyPosition(
+          value.appSettingDetail!.currencyPosition ?? CURRENCY_POSITION_LEFT);
+      appStore.setIsInsuranceAllowed(
+          value.appSettingDetail!.isInsuranceAllow.toString());
+      appStore.setInsurancePercentage(
+          value.appSettingDetail!.insurancePercentage.toString());
+      appStore.setInsuranceDescription(
+          value.appSettingDetail!.insuranceDescription.toString());
       appStore.isVehicleOrder = value.appSettingDetail!.isVehicleInOrder ?? 0;
       setState(() {});
     }).catchError((error) {
@@ -189,37 +213,71 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       toast(error.toString());
     });
     if (widget.orderData != null) {
-      if (widget.orderData!.totalWeight != 0) weightController.text = widget.orderData!.totalWeight!.toString();
-      if (widget.orderData!.totalParcel != null) totalParcelController.text = widget.orderData!.totalParcel!.toString();
+      if (widget.orderData!.totalWeight != 0)
+        weightController.text = widget.orderData!.totalWeight!.toString();
+      if (widget.orderData!.totalParcel != null)
+        totalParcelController.text = widget.orderData!.totalParcel!.toString();
       parcelTypeCont.text = widget.orderData!.parcelType.validate();
 
       pickAddressCont.text = widget.orderData!.pickupPoint!.address.validate();
       pickPersonNameCont.text = widget.orderData!.pickupPoint!.name.validate();
-      deliverPersonNameCont.text = widget.orderData!.deliveryPoint!.name.validate();
-      deliverInstructionCont.text = widget.orderData!.deliveryPoint!.instruction.validate();
-      pickInstructionCont.text = widget.orderData!.pickupPoint!.instruction.validate();
+      deliverPersonNameCont.text =
+          widget.orderData!.deliveryPoint!.name.validate();
+      deliverInstructionCont.text =
+          widget.orderData!.deliveryPoint!.instruction.validate();
+      pickInstructionCont.text =
+          widget.orderData!.pickupPoint!.instruction.validate();
       pickLat = widget.orderData!.pickupPoint!.latitude.validate();
       pickLong = widget.orderData!.pickupPoint!.longitude.validate();
-      if (widget.orderData!.pickupPoint!.contactNumber.validate().split(" ").length == 1) {
-        pickPhoneCont.text = widget.orderData!.pickupPoint!.contactNumber.validate().split(" ").last;
+      if (widget.orderData!.pickupPoint!.contactNumber
+              .validate()
+              .split(" ")
+              .length ==
+          1) {
+        pickPhoneCont.text = widget.orderData!.pickupPoint!.contactNumber
+            .validate()
+            .split(" ")
+            .last;
       } else {
-        pickupCountryCode = widget.orderData!.pickupPoint!.contactNumber.validate().split(" ").first;
-        pickPhoneCont.text = widget.orderData!.pickupPoint!.contactNumber.validate().split(" ").last;
+        pickupCountryCode = widget.orderData!.pickupPoint!.contactNumber
+            .validate()
+            .split(" ")
+            .first;
+        pickPhoneCont.text = widget.orderData!.pickupPoint!.contactNumber
+            .validate()
+            .split(" ")
+            .last;
       }
       pickDesCont.text = widget.orderData!.pickupPoint!.description.validate();
 
-      deliverAddressCont.text = widget.orderData!.deliveryPoint!.address.validate();
+      deliverAddressCont.text =
+          widget.orderData!.deliveryPoint!.address.validate();
       deliverLat = widget.orderData!.deliveryPoint!.latitude.validate();
       deliverLong = widget.orderData!.deliveryPoint!.longitude.validate();
-      if (widget.orderData!.deliveryPoint!.contactNumber.validate().split(" ").length == 1) {
-        deliverPhoneCont.text = widget.orderData!.deliveryPoint!.contactNumber.validate().split(" ").last;
+      if (widget.orderData!.deliveryPoint!.contactNumber
+              .validate()
+              .split(" ")
+              .length ==
+          1) {
+        deliverPhoneCont.text = widget.orderData!.deliveryPoint!.contactNumber
+            .validate()
+            .split(" ")
+            .last;
       } else {
-        deliverCountryCode = widget.orderData!.deliveryPoint!.contactNumber.validate().split(" ").first;
-        deliverPhoneCont.text = widget.orderData!.deliveryPoint!.contactNumber.validate().split(" ").last;
+        deliverCountryCode = widget.orderData!.deliveryPoint!.contactNumber
+            .validate()
+            .split(" ")
+            .first;
+        deliverPhoneCont.text = widget.orderData!.deliveryPoint!.contactNumber
+            .validate()
+            .split(" ")
+            .last;
       }
-      deliverDesCont.text = widget.orderData!.deliveryPoint!.description.validate();
+      deliverDesCont.text =
+          widget.orderData!.deliveryPoint!.description.validate();
 
-      paymentCollectFrom = widget.orderData!.paymentCollectFrom.validate(value: PAYMENT_ON_PICKUP);
+      paymentCollectFrom = widget.orderData!.paymentCollectFrom
+          .validate(value: PAYMENT_ON_PICKUP);
     }
   }
 
@@ -231,7 +289,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     String origins = "${originLat},${originLong}";
     String destinations = "${destinationLat},${destinationLong}";
     await getDistanceBetweenLatLng(origins, destinations).then((value) async {
-      double distanceInKms = value.rows[0].elements[0].distance.text.toString().split(' ')[0].toDouble();
+      double distanceInKms = value.rows[0].elements[0].distance.text
+          .toString()
+          .split(' ')[0]
+          .toDouble();
       if (appStore.distanceUnit == DISTANCE_UNIT_MILE) {
         totalDistance = (MILES_PER_KM * distanceInKms);
       } else {
@@ -250,7 +311,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     extraChargeList.clear();
     if (totalAmountResponse!.extraCharges != null) {
       totalAmountResponse!.extraCharges!.forEach((element) {
-        extraChargeList.add(ExtraChargeRequestModel(key: element.title!.toLowerCase().replaceAll(' ', "_"), value: element.charges, valueType: element.chargesType));
+        extraChargeList.add(ExtraChargeRequestModel(
+            key: element.title!.toLowerCase().replaceAll(' ', "_"),
+            value: element.charges,
+            valueType: element.chargesType));
       });
     }
     print("total_amount${totalAmountResponse!.totalAmount!}");
@@ -267,11 +331,18 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       "country_id": getIntAsync(COUNTRY_ID).toString(),
       "city_id": getIntAsync(CITY_ID).toString(),
       //   if (appStore.isVehicleOrder != 0) "vehicle_id": selectedVehicle.toString(),
-      if (!selectedVehicle.toString().isEmptyOrNull && selectedVehicle != 0 && appStore.isVehicleOrder != 0) "vehicle_id": selectedVehicle.toString(),
+      if (!selectedVehicle.toString().isEmptyOrNull &&
+          selectedVehicle != 0 &&
+          appStore.isVehicleOrder != 0)
+        "vehicle_id": selectedVehicle.toString(),
       if (vehicleCharge != 0.0) "vehicle_charge": vehicleCharge,
       "pickup_point": {
-        "start_time": (!isDeliverNow && pickFromDateTime != null) ? pickFromDateTime.toString() : DateTime.now().toString(),
-        "end_time": (!isDeliverNow && pickToDateTime != null) ? pickToDateTime!.toString() : null,
+        "start_time": (!isDeliverNow && pickFromDateTime != null)
+            ? pickFromDateTime.toString()
+            : DateTime.now().toString(),
+        "end_time": (!isDeliverNow && pickToDateTime != null)
+            ? pickToDateTime!.toString()
+            : null,
         "address": pickAddressCont.text,
         "latitude": pickLat,
         "longitude": pickLong,
@@ -281,8 +352,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         "contact_number": '$pickupCountryCode${pickPhoneCont.text.trim()}',
       },
       "delivery_point": {
-        "start_time": (!isDeliverNow && deliverFromDateTime != null) ? deliverFromDateTime.toString() : null,
-        "end_time": (!isDeliverNow && deliverToDateTime != null) ? deliverToDateTime.toString() : null,
+        "start_time": (!isDeliverNow && deliverFromDateTime != null)
+            ? deliverFromDateTime.toString()
+            : null,
+        "end_time": (!isDeliverNow && deliverToDateTime != null)
+            ? deliverToDateTime.toString()
+            : null,
         "address": deliverAddressCont.text,
         "latitude": deliverLat,
         "longitude": deliverLong,
@@ -295,7 +370,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       "extra_charges": extraChargeList,
       "parcel_type": parcelTypeCont.text,
       "total_weight": weightController.text.toDouble(),
-      "total_distance": totalDistance.toStringAsFixed(digitAfterDecimal).validate(),
+      "total_distance":
+          totalDistance.toStringAsFixed(digitAfterDecimal).validate(),
       "payment_collect_from": paymentCollectFrom,
       "status": orderStatus,
       "bid_type": biddingSelectedOption ? 1 : 0,
@@ -312,17 +388,26 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
     log("req----" + req.toString());
     final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
-    pattern.allMatches(req.toString()).forEach((match) => print(match.group(0)));
+    pattern
+        .allMatches(req.toString())
+        .forEach((match) => print(match.group(0)));
     await createOrder(req).then((value) async {
       appStore.setLoading(false);
       toast(value.message);
       finish(context);
       if (isSelected == 2) {
-        PaymentScreen(orderId: value.orderId.validate(), totalAmount: (totalAmountResponse!.totalAmount!)).launch(context);
+        PaymentScreen(
+                orderId: value.orderId.validate(),
+                totalAmount: (totalAmountResponse!.totalAmount!))
+            .launch(context);
       } else if (isSelected == 3) {
         log("-----available balance ${appStore.availableBal.toString()}-----------${totalAmountResponse!.totalAmount}----------${insuranceAmount}----------${(totalAmountResponse!.totalAmount! + insuranceAmount)}");
         if (appStore.availableBal > (totalAmountResponse!.totalAmount!)) {
-          savePaymentApiCall(paymentType: PAYMENT_TYPE_WALLET, paymentStatus: PAYMENT_PAID, totalAmount: (totalAmountResponse!.totalAmount!).toString(), orderID: value.orderId.toString());
+          savePaymentApiCall(
+              paymentType: PAYMENT_TYPE_WALLET,
+              paymentStatus: PAYMENT_PAID,
+              totalAmount: (totalAmountResponse!.totalAmount!).toString(),
+              orderID: value.orderId.toString());
         }
       } else {
         DashboardScreen().launch(
@@ -342,8 +427,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     appStore.setLoading(true);
     Map request = {
       "city_id": getIntAsync(CITY_ID).toString(),
-      if (appStore.isVehicleOrder != 0) "vehicle_id": vehicleList.firstWhere((element) => element.id == selectedVehicle).id,
-      "is_insurance": insuranceSelectedOption == 0 && appStore.isInsuranceAllowed == "1",
+      if (appStore.isVehicleOrder != 0)
+        "vehicle_id": vehicleList
+            .firstWhere((element) => element.id == selectedVehicle)
+            .id,
+      "is_insurance":
+          insuranceSelectedOption == 0 && appStore.isInsuranceAllowed == "1",
       // "is_insurance": 0,
       "total_weight": weightController.text.toDouble(),
       "total_distance": totalDistance,
@@ -361,7 +450,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     });
   }
 
-  Future<void> savePaymentApiCall({String? paymentType, String? totalAmount, String? orderID, String? txnId, String? paymentStatus = PAYMENT_PENDING, Map? transactionDetail}) async {
+  Future<void> savePaymentApiCall(
+      {String? paymentType,
+      String? totalAmount,
+      String? orderID,
+      String? txnId,
+      String? paymentStatus = PAYMENT_PENDING,
+      Map? transactionDetail}) async {
     Map req = {
       "id": "",
       "order_id": orderID,
@@ -405,13 +500,22 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         if (point.longitude > maxLong) maxLong = point.longitude;
       });
     });
-    googleMapController?.animateCamera(CameraUpdate.newLatLngBounds(LatLngBounds(southwest: LatLng(minLat, minLong), northeast: LatLng(maxLat, maxLong)), 20));
+    googleMapController?.animateCamera(CameraUpdate.newLatLngBounds(
+        LatLngBounds(
+            southwest: LatLng(minLat, minLong),
+            northeast: LatLng(maxLat, maxLong)),
+        20));
   }
 
   setPolylines() async {
     print("setPolyline");
-    PolylineResult result =
-        await polylinePoints.getRouteBetweenCoordinates(googleApiKey: googleMapAPIKey, request: PolylineRequest(origin: PointLatLng(pickLat.toDouble(), pickLong.toDouble()), destination: PointLatLng(deliverLat.toDouble(), deliverLong.toDouble()), mode: TravelMode.driving));
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+        googleApiKey: googleMapAPIKey,
+        request: PolylineRequest(
+            origin: PointLatLng(pickLat.toDouble(), pickLong.toDouble()),
+            destination:
+                PointLatLng(deliverLat.toDouble(), deliverLong.toDouble()),
+            mode: TravelMode.driving));
     if (result.points.isNotEmpty) {
       polylineCoordinates.clear();
       result.points.forEach((PointLatLng point) {
@@ -421,7 +525,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       print("--address not found ---");
     }
     setState(() {
-      Polyline polyline = Polyline(polylineId: PolylineId("poly"), color: Color.fromARGB(255, 40, 122, 198), width: 5, points: polylineCoordinates);
+      Polyline polyline = Polyline(
+          polylineId: PolylineId("poly"),
+          color: Color.fromARGB(255, 40, 122, 198),
+          width: 5,
+          points: polylineCoordinates);
       _polylines.add(polyline);
     });
   }
@@ -435,22 +543,36 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              scheduleOptionWidget(context, isDeliverNow, ic_clock, language.deliveryNow).onTap(() {
+              scheduleOptionWidget(
+                      context, isDeliverNow, ic_clock, language.deliveryNow)
+                  .onTap(() {
                 isDeliverNow = true;
                 setState(() {});
-              }),
+              }).expand(),
               8.width,
-              scheduleOptionWidget(context, !isDeliverNow, ic_schedule, language.schedule).onTap(() {
+              scheduleOptionWidget(
+                      context, !isDeliverNow, ic_schedule, language.schedule)
+                  .onTap(() {
                 isDeliverNow = false;
                 setState(() {});
-              }),
-              8.width,
-              enableBidOptionWidget(context, biddingSelectedOption, Icons.handshake_outlined, "Bid").onTap(() {
-                biddingSelectedOption = !biddingSelectedOption;
-                setState(() {});
-              }).expand()
+              }).expand(),
             ],
           ),
+          16.height,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              enableBidOptionWidget(context, biddingSelectedOption,
+                      Icons.handshake_outlined, language.bids)
+                  .onTap(() {
+                biddingSelectedOption = !biddingSelectedOption;
+                setState(() {});
+              }).expand(),
+              const Spacer(),
+            ],
+          ),
+
           16.height,
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -459,7 +581,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               16.height,
               Container(
                 padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(border: Border.all(color: ColorUtils.borderColor, width: appStore.isDarkMode ? 0.2 : 1), borderRadius: BorderRadius.circular(defaultRadius)),
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        color: ColorUtils.borderColor,
+                        width: appStore.isDarkMode ? 0.2 : 1),
+                    borderRadius: BorderRadius.circular(defaultRadius)),
                 child: Column(
                   children: [
                     DateTimePicker(
@@ -478,7 +604,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         if (value!.isEmpty) return language.fieldRequiredMsg;
                         return null;
                       },
-                      decoration: commonInputDecoration(suffixIcon: Icons.calendar_today, hintText: language.date),
+                      decoration: commonInputDecoration(
+                          suffixIcon: Icons.calendar_today,
+                          hintText: language.date),
                     ),
                     16.height,
                     Row(
@@ -487,24 +615,37 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           controller: pickFromTimeController,
                           type: DateTimePickerType.time,
                           onChanged: (value) {
-                            pickFromTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
+                            pickFromTime = TimeOfDay.fromDateTime(
+                                DateFormat('hh:mm').parse(value));
                             setState(() {});
                           },
                           validator: (value) {
-                            if (value.validate().isEmpty) return language.fieldRequiredMsg;
+                            if (value.validate().isEmpty)
+                              return language.fieldRequiredMsg;
 
                             // Check if today’s date is selected
                             DateTime now = DateTime.now();
-                            DateTime selectedDateTime = DateFormat('hh:mm').parse(value!);
-                            DateTime selectedDateWithTime = DateTime(now.year, now.month, now.day, selectedDateTime.hour, selectedDateTime.minute);
-                            if (pickDate!.year == now.year && pickDate!.month == now.month && pickDate!.day == now.day) {
+                            DateTime selectedDateTime =
+                                DateFormat('hh:mm').parse(value!);
+                            DateTime selectedDateWithTime = DateTime(
+                                now.year,
+                                now.month,
+                                now.day,
+                                selectedDateTime.hour,
+                                selectedDateTime.minute);
+                            if (pickDate!.year == now.year &&
+                                pickDate!.month == now.month &&
+                                pickDate!.day == now.day) {
                               // Add 1 hour to the current time if the selected date is today
-                              if (selectedDateWithTime.isBefore(now.add(Duration(hours: 1)))) {
+                              if (selectedDateWithTime
+                                  .isBefore(now.add(Duration(hours: 1)))) {
                                 return language.scheduleOrderTimeMsg;
                               }
                             } else {
-                              double fromTimeInHour = pickFromTime!.hour + pickFromTime!.minute / 60;
-                              double toTimeInHour = pickToTime!.hour + pickToTime!.minute / 60;
+                              double fromTimeInHour = pickFromTime!.hour +
+                                  pickFromTime!.minute / 60;
+                              double toTimeInHour =
+                                  pickToTime!.hour + pickToTime!.minute / 60;
                               double difference = toTimeInHour - fromTimeInHour;
                               if (difference <= 0) {
                                 return language.endTimeValidationMsg;
@@ -513,28 +654,43 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
                             return null;
                           },
-                          decoration: commonInputDecoration(suffixIcon: Icons.access_time, hintText: language.from),
+                          decoration: commonInputDecoration(
+                              suffixIcon: Icons.access_time,
+                              hintText: language.from),
                         ).expand(),
                         16.width,
                         DateTimePicker(
                           controller: pickToTimeController,
                           type: DateTimePickerType.time,
                           onChanged: (value) {
-                            pickToTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
+                            pickToTime = TimeOfDay.fromDateTime(
+                                DateFormat('hh:mm').parse(value));
                             setState(() {});
                           },
                           validator: (value) {
-                            if (value.validate().isEmpty) return language.fieldRequiredMsg;
-                            double fromTimeInHour = pickFromTime!.hour + pickFromTime!.minute / 60;
-                            double toTimeInHour = pickToTime!.hour + pickToTime!.minute / 60;
+                            if (value.validate().isEmpty)
+                              return language.fieldRequiredMsg;
+                            double fromTimeInHour =
+                                pickFromTime!.hour + pickFromTime!.minute / 60;
+                            double toTimeInHour =
+                                pickToTime!.hour + pickToTime!.minute / 60;
                             double difference = toTimeInHour - fromTimeInHour;
                             // Check if today’s date is selected
                             DateTime now = DateTime.now();
-                            DateTime selectedDateTime = DateFormat('hh:mm').parse(value!);
-                            DateTime selectedDateWithTime = DateTime(now.year, now.month, now.day, selectedDateTime.hour, selectedDateTime.minute);
-                            if (pickDate!.year == now.year && pickDate!.month == now.month && pickDate!.day == now.day) {
+                            DateTime selectedDateTime =
+                                DateFormat('hh:mm').parse(value!);
+                            DateTime selectedDateWithTime = DateTime(
+                                now.year,
+                                now.month,
+                                now.day,
+                                selectedDateTime.hour,
+                                selectedDateTime.minute);
+                            if (pickDate!.year == now.year &&
+                                pickDate!.month == now.month &&
+                                pickDate!.day == now.day) {
                               // Add 1 hour to the current time if the selected date is today
-                              if (selectedDateWithTime.isBefore(now.add(Duration(hours: 1)))) {
+                              if (selectedDateWithTime
+                                  .isBefore(now.add(Duration(hours: 1)))) {
                                 return language.scheduleOrderTimeMsg;
                               }
                             }
@@ -543,7 +699,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                             }
                             return null;
                           },
-                          decoration: commonInputDecoration(suffixIcon: Icons.access_time, hintText: language.to),
+                          decoration: commonInputDecoration(
+                              suffixIcon: Icons.access_time,
+                              hintText: language.to),
                         ).expand()
                       ],
                     ),
@@ -556,7 +714,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               Container(
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  border: Border.all(color: ColorUtils.borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                  border: Border.all(
+                      color: ColorUtils.borderColor,
+                      width: appStore.isDarkMode ? 0.2 : 1),
                   borderRadius: BorderRadius.circular(defaultRadius),
                 ),
                 child: Column(
@@ -576,7 +736,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
                         return null;
                       },
-                      decoration: commonInputDecoration(suffixIcon: Icons.calendar_today, hintText: language.date),
+                      decoration: commonInputDecoration(
+                          suffixIcon: Icons.calendar_today,
+                          hintText: language.date),
                     ),
                     16.height,
                     Row(
@@ -585,21 +747,34 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           controller: deliverFromTimeController,
                           type: DateTimePickerType.time,
                           onChanged: (value) {
-                            deliverFromTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
+                            deliverFromTime = TimeOfDay.fromDateTime(
+                                DateFormat('hh:mm').parse(value));
                             setState(() {});
                           },
                           validator: (value) {
-                            if (value.validate().isEmpty) return language.fieldRequiredMsg;
-                            double fromTimeInHour = deliverFromTime!.hour + deliverFromTime!.minute / 60;
-                            double toTimeInHour = deliverToTime!.hour + deliverToTime!.minute / 60;
+                            if (value.validate().isEmpty)
+                              return language.fieldRequiredMsg;
+                            double fromTimeInHour = deliverFromTime!.hour +
+                                deliverFromTime!.minute / 60;
+                            double toTimeInHour = deliverToTime!.hour +
+                                deliverToTime!.minute / 60;
                             double difference = toTimeInHour - fromTimeInHour;
                             // Check if today’s date is selected
                             DateTime now = DateTime.now();
-                            DateTime selectedDateTime = DateFormat('hh:mm').parse(value!);
-                            DateTime selectedDateWithTime = DateTime(now.year, now.month, now.day, selectedDateTime.hour, selectedDateTime.minute);
-                            if (pickDate!.year == now.year && pickDate!.month == now.month && pickDate!.day == now.day) {
+                            DateTime selectedDateTime =
+                                DateFormat('hh:mm').parse(value!);
+                            DateTime selectedDateWithTime = DateTime(
+                                now.year,
+                                now.month,
+                                now.day,
+                                selectedDateTime.hour,
+                                selectedDateTime.minute);
+                            if (pickDate!.year == now.year &&
+                                pickDate!.month == now.month &&
+                                pickDate!.day == now.day) {
                               // Add 1 hour to the current time if the selected date is today
-                              if (selectedDateWithTime.isBefore(now.add(Duration(hours: 1)))) {
+                              if (selectedDateWithTime
+                                  .isBefore(now.add(Duration(hours: 1)))) {
                                 return language.scheduleOrderTimeMsg;
                               }
                             }
@@ -608,29 +783,45 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                             }
                             return null;
                           },
-                          decoration: commonInputDecoration(suffixIcon: Icons.access_time, hintText: language.from),
+                          decoration: commonInputDecoration(
+                              suffixIcon: Icons.access_time,
+                              hintText: language.from),
                         ).expand(),
                         16.width,
                         DateTimePicker(
                           controller: deliverToTimeController,
                           type: DateTimePickerType.time,
                           onChanged: (value) {
-                            deliverToTime = TimeOfDay.fromDateTime(DateFormat('hh:mm').parse(value));
+                            deliverToTime = TimeOfDay.fromDateTime(
+                                DateFormat('hh:mm').parse(value));
                             setState(() {});
                           },
                           validator: (value) {
-                            if (value!.isEmpty) return language.fieldRequiredMsg;
-                            if (value.validate().isEmpty) return language.fieldRequiredMsg;
-                            double fromTimeInHour = deliverFromTime!.hour + deliverFromTime!.minute / 60;
-                            double toTimeInHour = deliverToTime!.hour + deliverToTime!.minute / 60;
+                            if (value!.isEmpty)
+                              return language.fieldRequiredMsg;
+                            if (value.validate().isEmpty)
+                              return language.fieldRequiredMsg;
+                            double fromTimeInHour = deliverFromTime!.hour +
+                                deliverFromTime!.minute / 60;
+                            double toTimeInHour = deliverToTime!.hour +
+                                deliverToTime!.minute / 60;
                             double difference = toTimeInHour - fromTimeInHour;
                             // Check if today’s date is selected
                             DateTime now = DateTime.now();
-                            DateTime selectedDateTime = DateFormat('hh:mm').parse(value);
-                            DateTime selectedDateWithTime = DateTime(now.year, now.month, now.day, selectedDateTime.hour, selectedDateTime.minute);
-                            if (deliverDate!.year == now.year && deliverDate!.month == now.month && deliverDate!.day == now.day) {
+                            DateTime selectedDateTime =
+                                DateFormat('hh:mm').parse(value);
+                            DateTime selectedDateWithTime = DateTime(
+                                now.year,
+                                now.month,
+                                now.day,
+                                selectedDateTime.hour,
+                                selectedDateTime.minute);
+                            if (deliverDate!.year == now.year &&
+                                deliverDate!.month == now.month &&
+                                deliverDate!.day == now.day) {
                               // Add 1 hour to the current time if the selected date is today
-                              if (selectedDateWithTime.isBefore(now.add(Duration(hours: 1)))) {
+                              if (selectedDateWithTime
+                                  .isBefore(now.add(Duration(hours: 1)))) {
                                 return language.scheduleOrderTimeMsg;
                               }
                             }
@@ -639,7 +830,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                             }
                             return null;
                           },
-                          decoration: commonInputDecoration(suffixIcon: Icons.access_time, hintText: language.to),
+                          decoration: commonInputDecoration(
+                              suffixIcon: Icons.access_time,
+                              hintText: language.to),
                         ).expand()
                       ],
                     ),
@@ -658,17 +851,28 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               3.width,
               //   Text(" (${appStore.distanceUnit})", style: secondaryTextStyle()).expand(),
               Container(
-                decoration: BoxDecoration(border: Border.all(color: ColorUtils.borderColor, width: appStore.isDarkMode ? 0.2 : 1), borderRadius: BorderRadius.circular(defaultRadius)),
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        color: ColorUtils.borderColor,
+                        width: appStore.isDarkMode ? 0.2 : 1),
+                    borderRadius: BorderRadius.circular(defaultRadius)),
                 child: IntrinsicHeight(
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.remove, color: appStore.isDarkMode ? Colors.white : Colors.grey).paddingAll(12).onTap(() {
+                      Icon(Icons.remove,
+                              color: appStore.isDarkMode
+                                  ? Colors.white
+                                  : Colors.grey)
+                          .paddingAll(12)
+                          .onTap(() {
                         if (weightController.text.toDouble() > 1) {
-                          weightController.text = (weightController.text.toDouble() - 1).toString();
+                          weightController.text =
+                              (weightController.text.toDouble() - 1).toString();
                         }
                       }),
-                      VerticalDivider(thickness: 1, color: context.dividerColor),
+                      VerticalDivider(
+                          thickness: 1, color: context.dividerColor),
                       Container(
                         width: 50,
                         child: AppTextField(
@@ -678,14 +882,23 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           textFieldType: TextFieldType.PHONE,
                           decoration: InputDecoration(
                             counterText: '',
-                            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: ColorUtils.colorPrimary)),
+                            focusedBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: ColorUtils.colorPrimary)),
                             border: InputBorder.none,
                           ),
                         ),
                       ),
-                      VerticalDivider(thickness: 1, color: context.dividerColor),
-                      Icon(Icons.add, color: appStore.isDarkMode ? Colors.white : Colors.grey).paddingAll(12).onTap(() {
-                        weightController.text = (weightController.text.toDouble() + 1).toString();
+                      VerticalDivider(
+                          thickness: 1, color: context.dividerColor),
+                      Icon(Icons.add,
+                              color: appStore.isDarkMode
+                                  ? Colors.white
+                                  : Colors.grey)
+                          .paddingAll(12)
+                          .onTap(() {
+                        weightController.text =
+                            (weightController.text.toDouble() + 1).toString();
                       }),
                     ],
                   ),
@@ -698,19 +911,32 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           // 8.height,
           Row(
             children: [
-              Text(language.numberOfParcels, style: primaryTextStyle()).expand(),
+              Text(language.numberOfParcels, style: primaryTextStyle())
+                  .expand(),
               Container(
-                decoration: BoxDecoration(border: Border.all(color: ColorUtils.borderColor, width: appStore.isDarkMode ? 0.2 : 1), borderRadius: BorderRadius.circular(defaultRadius)),
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        color: ColorUtils.borderColor,
+                        width: appStore.isDarkMode ? 0.2 : 1),
+                    borderRadius: BorderRadius.circular(defaultRadius)),
                 child: IntrinsicHeight(
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.remove, color: appStore.isDarkMode ? Colors.white : Colors.grey).paddingAll(12).onTap(() {
+                      Icon(Icons.remove,
+                              color: appStore.isDarkMode
+                                  ? Colors.white
+                                  : Colors.grey)
+                          .paddingAll(12)
+                          .onTap(() {
                         if (totalParcelController.text.toInt() > 1) {
-                          totalParcelController.text = (totalParcelController.text.toInt() - 1).toString();
+                          totalParcelController.text =
+                              (totalParcelController.text.toInt() - 1)
+                                  .toString();
                         }
                       }),
-                      VerticalDivider(thickness: 1, color: context.dividerColor),
+                      VerticalDivider(
+                          thickness: 1, color: context.dividerColor),
                       Container(
                         width: 50,
                         child: AppTextField(
@@ -720,14 +946,23 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           textFieldType: TextFieldType.PHONE,
                           decoration: InputDecoration(
                             counterText: '',
-                            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: ColorUtils.colorPrimary)),
+                            focusedBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: ColorUtils.colorPrimary)),
                             border: InputBorder.none,
                           ),
                         ),
                       ),
-                      VerticalDivider(thickness: 1, color: context.dividerColor),
-                      Icon(Icons.add, color: appStore.isDarkMode ? Colors.white : Colors.grey).paddingAll(12).onTap(() {
-                        totalParcelController.text = (totalParcelController.text.toInt() + 1).toString();
+                      VerticalDivider(
+                          thickness: 1, color: context.dividerColor),
+                      Icon(Icons.add,
+                              color: appStore.isDarkMode
+                                  ? Colors.white
+                                  : Colors.grey)
+                          .paddingAll(12)
+                          .onTap(() {
+                        totalParcelController.text =
+                            (totalParcelController.text.toInt() + 1).toString();
                       }),
                     ],
                   ),
@@ -761,7 +996,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 labelPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(defaultRadius),
-                  side: BorderSide(color: ColorUtils.borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                  side: BorderSide(
+                      color: ColorUtils.borderColor,
+                      width: appStore.isDarkMode ? 0.2 : 1),
                 ),
               ).onTap(() {
                 parcelTypeCont.text = item.label!;
@@ -774,7 +1011,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(language.labels, style: primaryTextStyle()),
-              Icon(Icons.info, color: appStore.isDarkMode ? Colors.white.withOpacity(0.7) : ColorUtils.colorPrimary).onTap(() {
+              Icon(Icons.info,
+                      color: appStore.isDarkMode
+                          ? Colors.white.withOpacity(0.7)
+                          : ColorUtils.colorPrimary)
+                  .onTap(() {
                 PackagingSymbolsInfo().launch(context);
               })
             ],
@@ -794,7 +1035,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       item['image']!,
                       width: 24,
                       height: 24,
-                      color: appStore.isDarkMode ? Colors.white.withOpacity(0.7) : ColorUtils.colorPrimary,
+                      color: appStore.isDarkMode
+                          ? Colors.white.withOpacity(0.7)
+                          : ColorUtils.colorPrimary,
                     ).center().paddingAll(10),
                     if (isSelected)
                       Positioned(
@@ -841,15 +1084,19 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               textInputAction: TextInputAction.next,
               nextFocus: pickPhoneFocus,
               textFieldType: TextFieldType.MULTILINE,
-              decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+              decoration:
+                  commonInputDecoration(suffixIcon: Icons.location_on_outlined),
               validator: (value) {
                 if (value!.isEmpty) return language.fieldRequiredMsg;
-                if (pickLat == null || pickLong == null) return language.pleaseSelectValidAddress;
+                if (pickLat == null || pickLong == null)
+                  return language.pleaseSelectValidAddress;
                 return null;
               },
               onTap: () {
                 showModalBottomSheet(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(defaultRadius))),
                   context: context,
                   builder: (context) {
                     return PickAddressBottomSheet(
@@ -857,13 +1104,16 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         pickAddressCont.text = address.address ?? "";
                         pickLat = address.latitude.toString();
                         pickLong = address.longitude.toString();
-                        pickPhoneCont.text = address.contactNumber.validate().substring(4);
+                        pickPhoneCont.text =
+                            address.contactNumber.validate().substring(4);
                         setState(() {});
                       },
                     );
                   },
                 ).then((value) {
-                  addressList = (getStringListAsync(RECENT_ADDRESS_LIST) ?? []).map((e) => UseraddressDetail.fromJson(jsonDecode(e))).toList();
+                  addressList = (getStringListAsync(RECENT_ADDRESS_LIST) ?? [])
+                      .map((e) => UseraddressDetail.fromJson(jsonDecode(e)))
+                      .toList();
                   if (addressList.isNotEmpty) {
                     pickAddressData = addressList.first;
                     deliveryAddressData = addressList.first;
@@ -889,7 +1139,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         CountryCodePicker(
                           initialSelection: pickupCountryCode,
                           showCountryOnly: false,
-                          dialogSize: Size(context.width() - 60, context.height() * 0.6),
+                          dialogSize: Size(
+                              context.width() - 60, context.height() * 0.6),
                           showFlag: true,
                           showFlagDialog: true,
                           showOnlyCountryWhenClosed: false,
@@ -900,8 +1151,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           dialogTextStyle: primaryTextStyle(),
                           searchDecoration: InputDecoration(
                             iconColor: Theme.of(context).dividerColor,
-                            enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
-                            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: ColorUtils.colorPrimary)),
+                            enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).dividerColor)),
+                            focusedBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: ColorUtils.colorPrimary)),
                           ),
                           searchStyle: primaryTextStyle(),
                           onInit: (c) {
@@ -982,15 +1237,19 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               textInputAction: TextInputAction.next,
               nextFocus: deliverPhoneFocus,
               textFieldType: TextFieldType.MULTILINE,
-              decoration: commonInputDecoration(suffixIcon: Icons.location_on_outlined),
+              decoration:
+                  commonInputDecoration(suffixIcon: Icons.location_on_outlined),
               validator: (value) {
                 if (value!.isEmpty) return language.fieldRequiredMsg;
-                if (deliverLat == null || deliverLong == null) return language.pleaseSelectValidAddress;
+                if (deliverLat == null || deliverLong == null)
+                  return language.pleaseSelectValidAddress;
                 return null;
               },
               onTap: () {
                 showModalBottomSheet(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(defaultRadius))),
                   context: context,
                   builder: (context) {
                     return PickAddressBottomSheet(
@@ -998,14 +1257,17 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         deliverAddressCont.text = address.address ?? "";
                         deliverLat = address.latitude.toString();
                         deliverLong = address.longitude.toString();
-                        deliverPhoneCont.text = address.contactNumber.validate().substring(4);
+                        deliverPhoneCont.text =
+                            address.contactNumber.validate().substring(4);
                         setState(() {});
                       },
                       isPickup: false,
                     );
                   },
                 ).then((value) {
-                  addressList = (getStringListAsync(RECENT_ADDRESS_LIST) ?? []).map((e) => UseraddressDetail.fromJson(jsonDecode(e))).toList();
+                  addressList = (getStringListAsync(RECENT_ADDRESS_LIST) ?? [])
+                      .map((e) => UseraddressDetail.fromJson(jsonDecode(e)))
+                      .toList();
                   if (addressList.isNotEmpty) {
                     pickAddressData = addressList.first;
                     deliveryAddressData = addressList.first;
@@ -1032,7 +1294,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       CountryCodePicker(
                         initialSelection: deliverCountryCode,
                         showCountryOnly: false,
-                        dialogSize: Size(context.width() - 60, context.height() * 0.6),
+                        dialogSize:
+                            Size(context.width() - 60, context.height() * 0.6),
                         showFlag: true,
                         showFlagDialog: true,
                         showOnlyCountryWhenClosed: false,
@@ -1043,8 +1306,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         dialogTextStyle: primaryTextStyle(),
                         searchDecoration: InputDecoration(
                           iconColor: Theme.of(context).dividerColor,
-                          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
-                          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: ColorUtils.colorPrimary)),
+                          enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Theme.of(context).dividerColor)),
+                          focusedBorder: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: ColorUtils.colorPrimary)),
                         ),
                         searchStyle: primaryTextStyle(),
                         onInit: (c) {
@@ -1062,7 +1329,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               validator: (value) {
                 if (value!.trim().isEmpty) return language.fieldRequiredMsg;
                 //if (value!.length < 8 || value.length > 15) return "please enter valid mobile number";
-                if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.phoneNumberInvalid;
+                if (value.trim().length < minContactLength ||
+                    value.trim().length > maxContactLength)
+                  return language.phoneNumberInvalid;
                 return null;
               },
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -1141,7 +1410,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   zoomGesturesEnabled: true,
                   gestureRecognizers: {
                     Factory<OneSequenceGestureRecognizer>(
-                      () => EagerGestureRecognizer(), // Allow all gestures on the map
+                      () =>
+                          EagerGestureRecognizer(), // Allow all gestures on the map
                     ),
                   },
                   // trafficEnabled: true,
@@ -1163,17 +1433,24 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             padding: EdgeInsets.all(16),
             decoration: boxDecorationWithRoundedCorners(
               borderRadius: BorderRadius.circular(defaultRadius),
-              border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.2)),
+              border:
+                  Border.all(color: ColorUtils.colorPrimary.withOpacity(0.2)),
               backgroundColor: Colors.transparent,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                rowWidget(title: language.parcelType, value: parcelTypeCont.text),
+                rowWidget(
+                    title: language.parcelType, value: parcelTypeCont.text),
                 8.height,
-                rowWidget(title: language.weight, value: '${weightController.text} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weightType}'),
+                rowWidget(
+                    title: language.weight,
+                    value:
+                        '${weightController.text} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weightType}'),
                 8.height,
-                rowWidget(title: language.numberOfParcels, value: '${totalParcelController.text}'),
+                rowWidget(
+                    title: language.numberOfParcels,
+                    value: '${totalParcelController.text}'),
               ],
             ),
           ),
@@ -1197,7 +1474,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               //     ? deliveryAddressData!.contactNumber.validate()
               //     : '$deliverCountryCode ${deliverPhoneCont.text.trim()}'),
               address: deliverAddressCont.text,
-              phoneNumber: '$deliverCountryCode ${deliverPhoneCont.text.trim()}',
+              phoneNumber:
+                  '$deliverCountryCode ${deliverPhoneCont.text.trim()}',
               personName: deliverPersonNameCont.text,
               information: deliverDesCont.text,
               instruction: deliverInstructionCont.text),
@@ -1217,7 +1495,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   style: primaryTextStyle(),
                   isDense: false,
                   items: vehicleList.map<DropdownMenuItem<int>>((item) {
-                    String str = "${language.name} : ${item.title}, ${language.price} :${appStore.currencySymbol} "
+                    String str =
+                        "${language.name} : ${item.title}, ${language.price} :${appStore.currencySymbol} "
                         "${item.price.validate()}, "
                         "${language.capacity} : ${item.capacity.validate()},${language.perKmCharge} :${appStore.currencySymbol} ${item.perKmCharge.validate()}";
                     return DropdownMenuItem(
@@ -1226,10 +1505,14 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            commonCachedNetworkImage(item.vehicleImage.validate(), height: 40, width: 40),
+                            commonCachedNetworkImage(
+                                item.vehicleImage.validate(),
+                                height: 40,
+                                width: 40),
                             SizedBox(width: 16),
                             Column(
-                              crossAxisAlignment: CrossAxisAlignment.start, // Align to start
+                              crossAxisAlignment:
+                                  CrossAxisAlignment.start, // Align to start
                               children: [
                                 Container(
                                   width: context.width() * 0.6,
@@ -1295,7 +1578,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     getTotalForOrder();
                   },
                   validator: (value) {
-                    if (selectedVehicle == null) return language.fieldRequiredMsg;
+                    if (selectedVehicle == null)
+                      return language.fieldRequiredMsg;
                     return null;
                   },
                 ),
@@ -1308,18 +1592,22 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             children: [
               Text(language.insurance, style: boldTextStyle()),
               Icon(Icons.info, color: ColorUtils.themeColor).onTap(() {
-                InsuranceDetailsScreen(appStore.insuranceDescription).launch(context);
+                InsuranceDetailsScreen(appStore.insuranceDescription)
+                    .launch(context);
               }).visible(!appStore.insuranceDescription.isEmptyOrNull)
             ],
           ).visible(appStore.isInsuranceAllowed == "1"),
           16.height.visible(appStore.isInsuranceAllowed == "1"),
-          InsuranceOptionsWidget(0, language.addCourierInsurance).visible(appStore.isInsuranceAllowed == "1"),
+          InsuranceOptionsWidget(0, language.addCourierInsurance)
+              .visible(appStore.isInsuranceAllowed == "1"),
           16.height.visible(appStore.isInsuranceAllowed == "1"),
-          InsuranceOptionsWidget(1, language.noThanksRisk).visible(appStore.isInsuranceAllowed == "1"),
+          InsuranceOptionsWidget(1, language.noThanksRisk)
+              .visible(appStore.isInsuranceAllowed == "1"),
           16.height.visible(insuranceSelectedOption == 0),
           if (appStore.isInsuranceAllowed == "1") ...[
             12.height,
-            Text(language.approxParcelValue, style: primaryTextStyle()).visible(insuranceSelectedOption == 0),
+            Text(language.approxParcelValue, style: primaryTextStyle())
+                .visible(insuranceSelectedOption == 0),
             9.height,
             AppTextField(
               controller: insuranceAmountController,
@@ -1327,7 +1615,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               decoration: commonInputDecoration(isFill: false),
               onChanged: (val) async {
                 if (!val.isEmptyOrNull) {
-                  insuranceAmount = (double.parse(val) * appStore.insurancePercentage.toDouble()) / 100;
+                  insuranceAmount = (double.parse(val) *
+                          appStore.insurancePercentage.toDouble()) /
+                      100;
                   await getTotalForOrder();
                   setState(() {});
                 } else {
@@ -1338,7 +1628,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               },
               onFieldSubmitted: (val) async {
                 if (!val.isEmptyOrNull) {
-                  insuranceAmount = (double.parse(val) * appStore.insurancePercentage.toDouble()) / 100;
+                  insuranceAmount = (double.parse(val) *
+                          appStore.insurancePercentage.toDouble()) /
+                      100;
                   await getTotalForOrder();
                   setState(() {});
                 } else {
@@ -1367,7 +1659,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 weightAmount: totalAmountResponse!.weightAmount!.toDouble(),
                 perWeightCharge: cityData!.perWeightCharges!.toDouble(),
                 perKmCityDataCharge: cityData!.perDistanceCharges!.toDouble(),
-                perkmVehiclePrice: vehicleList.firstWhere((element) => element.id == selectedVehicle).perKmCharge!.toDouble(),
+                perkmVehiclePrice: vehicleList
+                    .firstWhere((element) => element.id == selectedVehicle)
+                    .perKmCharge!
+                    .toDouble(),
                 baseTotal: totalAmountResponse!.baseTotal!.toDouble()),
           16.height,
           Text(language.payment, style: boldTextStyle()),
@@ -1380,15 +1675,28 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 width: (context.width() - 48) / 3,
                 padding: EdgeInsets.all(8),
                 alignment: Alignment.center,
-                decoration: boxDecorationWithRoundedCorners(border: Border.all(color: isSelected == mData.index ? ColorUtils.colorPrimary : ColorUtils.borderColor), backgroundColor: Colors.transparent),
+                decoration: boxDecorationWithRoundedCorners(
+                    border: Border.all(
+                        color: isSelected == mData.index
+                            ? ColorUtils.colorPrimary
+                            : ColorUtils.borderColor),
+                    backgroundColor: Colors.transparent),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ImageIcon(AssetImage(mData.image.validate()), size: 20, color: isSelected == mData.index ? ColorUtils.colorPrimary : ColorUtils.dividerColor),
+                    ImageIcon(AssetImage(mData.image.validate()),
+                        size: 20,
+                        color: isSelected == mData.index
+                            ? ColorUtils.colorPrimary
+                            : ColorUtils.dividerColor),
                     8.width,
-                    Text(mData.title!, style: primaryTextStyle(color: isSelected == mData.index ? ColorUtils.colorPrimary : textSecondaryColorGlobal)),
+                    Text(mData.title!,
+                        style: primaryTextStyle(
+                            color: isSelected == mData.index
+                                ? ColorUtils.colorPrimary
+                                : textSecondaryColorGlobal)),
                   ],
                 ),
               ).onTap(() {
@@ -1409,8 +1717,14 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 value: paymentCollectFrom,
                 decoration: commonInputDecoration(),
                 items: [
-                  DropdownMenuItem(value: PAYMENT_ON_PICKUP, child: Text(language.pickupLocation, style: primaryTextStyle(), maxLines: 1)),
-                  DropdownMenuItem(value: PAYMENT_ON_DELIVERY, child: Text(language.deliveryLocation, style: primaryTextStyle(), maxLines: 1)),
+                  DropdownMenuItem(
+                      value: PAYMENT_ON_PICKUP,
+                      child: Text(language.pickupLocation,
+                          style: primaryTextStyle(), maxLines: 1)),
+                  DropdownMenuItem(
+                      value: PAYMENT_ON_DELIVERY,
+                      child: Text(language.deliveryLocation,
+                          style: primaryTextStyle(), maxLines: 1)),
                 ],
                 onChanged: (value) {
                   paymentCollectFrom = value!;
@@ -1426,7 +1740,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   Widget InsuranceOptionsWidget(int value, String text) {
     return Container(
-      decoration: boxDecorationWithRoundedCorners(backgroundColor: insuranceSelectedOption == value ? ColorUtils.colorPrimary : Colors.grey.withOpacity(0.1)),
+      decoration: boxDecorationWithRoundedCorners(
+          backgroundColor: insuranceSelectedOption == value
+              ? ColorUtils.colorPrimary
+              : Colors.grey.withOpacity(0.1)),
       //  padding: EdgeInsets.all(8.0),
       child: Row(
         children: [
@@ -1465,16 +1782,25 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(text, style: primaryTextStyle(color: insuranceSelectedOption == value ? Colors.white : ColorUtils.themeColor)),
+              Text(text,
+                  style: primaryTextStyle(
+                      color: insuranceSelectedOption == value
+                          ? Colors.white
+                          : ColorUtils.themeColor)),
               if (insuranceSelectedOption == 0 && value == 0)
                 Text(
-                  insuranceSelectedOption == 0 ? "${appStore.insurancePercentage} ${language.ofApproxParcelValue}" : "",
-                  style: secondaryTextStyle(color: Colors.white.withOpacity(0.5), size: 13),
+                  insuranceSelectedOption == 0
+                      ? "${appStore.insurancePercentage} ${language.ofApproxParcelValue}"
+                      : "",
+                  style: secondaryTextStyle(
+                      color: Colors.white.withOpacity(0.5), size: 13),
                 ),
             ],
           ).expand(),
           Text(
-            insuranceSelectedOption == 0 ? "${printAmount(insuranceAmount)}" : "",
+            insuranceSelectedOption == 0
+                ? "${printAmount(insuranceAmount)}"
+                : "",
             style: primaryTextStyle(color: Colors.white),
           ).visible(value == 0).paddingOnly(right: 10),
         ],
@@ -1500,7 +1826,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       children: [
         Text(title, style: secondaryTextStyle()),
         16.width,
-        Text(value, style: boldTextStyle(size: 14), maxLines: 3, textAlign: TextAlign.end, overflow: TextOverflow.ellipsis).expand(),
+        Text(value,
+                style: boldTextStyle(size: 14),
+                maxLines: 3,
+                textAlign: TextAlign.end,
+                overflow: TextOverflow.ellipsis)
+            .expand(),
       ],
     );
   }
@@ -1520,7 +1851,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(title, style: boldTextStyle()),
-            Text(language.viewMore, style: secondaryTextStyle(size: 12)).onTap(() {
+            Text(language.viewMore, style: secondaryTextStyle(size: 12))
+                .onTap(() {
               showDialog(
                   context: context,
                   builder: (BuildContext context) {
@@ -1528,14 +1860,19 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       //   contentPadding: EdgeInsets.all(8),
                       title: Column(
                         children: [
-                          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                            Text(language.details, style: boldTextStyle()),
-                            Icon(Icons.close, size: 20).onTap(() {
-                              pop();
-                            })
-                          ]),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(language.details, style: boldTextStyle()),
+                                Icon(Icons.close, size: 20).onTap(() {
+                                  pop();
+                                })
+                              ]),
                           10.height,
-                          Divider(height: 1, thickness: 1, color: Colors.grey.withOpacity(0.5))
+                          Divider(
+                              height: 1,
+                              thickness: 1,
+                              color: Colors.grey.withOpacity(0.5))
                         ],
                       ),
                       content: Column(
@@ -1544,7 +1881,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("${language.contactPersonName} :", style: secondaryTextStyle()),
+                              Text("${language.contactPersonName} :",
+                                  style: secondaryTextStyle()),
                               Text(personName, style: boldTextStyle()),
                             ],
                           ),
@@ -1552,7 +1890,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("${language.information} :", style: secondaryTextStyle()),
+                              Text("${language.information} :",
+                                  style: secondaryTextStyle()),
                               Text(information, style: boldTextStyle()),
                             ],
                           ),
@@ -1560,7 +1899,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("${language.instruction}", style: secondaryTextStyle()),
+                              Text("${language.instruction}",
+                                  style: secondaryTextStyle()),
                               Text(instruction, style: boldTextStyle()),
                             ],
                           ),
@@ -1589,7 +1929,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 children: [
                   Icon(Icons.call, size: 14),
                   8.width,
-                  Text(phoneNumber, style: secondaryTextStyle()).visible(phoneNumber.isNotEmpty),
+                  Text(phoneNumber, style: secondaryTextStyle())
+                      .visible(phoneNumber.isNotEmpty),
                 ],
               ),
             ],
@@ -1603,9 +1944,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     return CircularPercentIndicator(
       radius: 20.0,
       lineWidth: 2.0,
-      percent: ((selectedTabIndex + 1) / 5) > 1 ? 1 : (selectedTabIndex + 1) / 5,
+      percent:
+          ((selectedTabIndex + 1) / 5) > 1 ? 1 : (selectedTabIndex + 1) / 5,
       animation: true,
-      center: Text((selectedTabIndex + 1).toInt().toString() + " /5", style: boldTextStyle(size: 11, color: Colors.white)),
+      center: Text((selectedTabIndex + 1).toInt().toString() + " /5",
+          style: boldTextStyle(size: 11, color: Colors.white)),
       backgroundColor: Colors.white.withOpacity(0.25),
       progressColor: Colors.white,
     );
@@ -1655,7 +1998,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         body: Stack(
           children: [
             SingleChildScrollView(
-              padding: EdgeInsets.only(left: 16, top: 20, right: 16, bottom: 16),
+              padding:
+                  EdgeInsets.only(left: 16, top: 20, right: 16, bottom: 16),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -1688,7 +2032,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     .paddingRight(isRTL ? 4 : 16)
                     .paddingLeft(isRTL ? 16 : 0)
                     .expand(),
-              commonButton(selectedTabIndex != 4 ? language.next : language.createOrder, () async {
+              commonButton(
+                  selectedTabIndex != 4 ? language.next : language.createOrder,
+                  () async {
                 FocusScope.of(context).requestFocus(new FocusNode());
                 log('------selected tab index${selectedTabIndex}');
                 if (selectedTabIndex == 2) {
@@ -1698,15 +2044,19 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                       markerId: MarkerId("1"),
                       position: LatLng(pickLat.toDouble(), pickLong.toDouble()),
                       infoWindow: InfoWindow(title: language.sourceLocation),
-                      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+                      icon: BitmapDescriptor.defaultMarkerWithHue(
+                          BitmapDescriptor.hueRed),
                     ),
                   );
                   markers.add(
                     Marker(
                       markerId: MarkerId("2"),
-                      position: LatLng(deliverLat.toDouble(), deliverLong.toDouble()),
-                      infoWindow: InfoWindow(title: language.destinationLocation),
-                      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+                      position:
+                          LatLng(deliverLat.toDouble(), deliverLong.toDouble()),
+                      infoWindow:
+                          InfoWindow(title: language.destinationLocation),
+                      icon: BitmapDescriptor.defaultMarkerWithHue(
+                          BitmapDescriptor.hueRed),
                     ),
                   );
                   getDistance();
@@ -1717,15 +2067,27 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     Duration difference = Duration();
                     Duration differenceCurrentTime = Duration();
                     if (!isDeliverNow) {
-                      pickFromDateTime = pickDate!.add(Duration(hours: pickFromTime!.hour, minutes: pickFromTime!.minute));
-                      pickToDateTime = pickDate!.add(Duration(hours: pickToTime!.hour, minutes: pickToTime!.minute));
-                      deliverFromDateTime = deliverDate!.add(Duration(hours: deliverFromTime!.hour, minutes: deliverFromTime!.minute));
-                      deliverToDateTime = deliverDate!.add(Duration(hours: deliverToTime!.hour, minutes: deliverToTime!.minute));
-                      difference = pickFromDateTime!.difference(deliverFromDateTime!);
-                      differenceCurrentTime = DateTime.now().difference(pickFromDateTime!);
+                      pickFromDateTime = pickDate!.add(Duration(
+                          hours: pickFromTime!.hour,
+                          minutes: pickFromTime!.minute));
+                      pickToDateTime = pickDate!.add(Duration(
+                          hours: pickToTime!.hour,
+                          minutes: pickToTime!.minute));
+                      deliverFromDateTime = deliverDate!.add(Duration(
+                          hours: deliverFromTime!.hour,
+                          minutes: deliverFromTime!.minute));
+                      deliverToDateTime = deliverDate!.add(Duration(
+                          hours: deliverToTime!.hour,
+                          minutes: deliverToTime!.minute));
+                      difference =
+                          pickFromDateTime!.difference(deliverFromDateTime!);
+                      differenceCurrentTime =
+                          DateTime.now().difference(pickFromDateTime!);
                     }
-                    if (differenceCurrentTime.inMinutes > 0) return toast(language.pickupCurrentValidationMsg);
-                    if (difference.inMinutes > 0) return toast(language.pickupDeliverValidationMsg);
+                    if (differenceCurrentTime.inMinutes > 0)
+                      return toast(language.pickupCurrentValidationMsg);
+                    if (difference.inMinutes > 0)
+                      return toast(language.pickupDeliverValidationMsg);
                     selectedTabIndex++;
                     if (selectedTabIndex == 4) {
                       //  await getTotalAmount();
@@ -1733,13 +2095,16 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     setState(() {});
                   }
                 } else {
-                  if (insuranceSelectedOption == 0 && insuranceAmountController.text.isEmptyOrNull) {
+                  if (insuranceSelectedOption == 0 &&
+                      insuranceAmountController.text.isEmptyOrNull) {
                     toast(language.insuranceAmountValidation);
                     return;
                   }
                   if (isSelected == 3 &&
                       //      (appStore.availableBal < (totalAmountResponse!.totalAmount! + insuranceAmount))) {
-                      (appStore.availableBal < (totalAmountResponse!.totalAmount! + insuranceAmount))) {
+                      (appStore.availableBal <
+                          (totalAmountResponse!.totalAmount! +
+                              insuranceAmount))) {
                     showInDialog(
                       getContext,
                       contentPadding: EdgeInsets.all(16),
@@ -1747,7 +2112,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         return Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(language.balanceInsufficientCashPayment, style: primaryTextStyle(size: 16), textAlign: TextAlign.center),
+                            Text(language.balanceInsufficientCashPayment,
+                                style: primaryTextStyle(size: 16),
+                                textAlign: TextAlign.center),
                             30.height,
                             Row(
                               children: [
@@ -1762,7 +2129,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                                   showConfirmDialogCustom(
                                     context,
                                     title: language.createOrderConfirmationMsg,
-                                    note: language.pleaseAvoidSendingProhibitedItems,
+                                    note: language
+                                        .pleaseAvoidSendingProhibitedItems,
                                     positiveText: language.yes,
                                     primaryColor: ColorUtils.colorPrimary,
                                     negativeText: language.no,

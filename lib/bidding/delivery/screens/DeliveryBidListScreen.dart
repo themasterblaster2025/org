@@ -1,9 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:mighty_delivery/bidding/delivery/screens/OrderDetailsWithBidScreen.dart';
 import 'package:mighty_delivery/extensions/animatedList/animated_list_view.dart';
 import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
-import 'package:mighty_delivery/extensions/extension_util/num_extensions.dart';
 import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
 import 'package:mighty_delivery/main/components/CommonScaffoldComponent.dart';
 import 'package:mighty_delivery/main/utils/Common.dart';
@@ -27,37 +25,25 @@ class DeliveryBidListScreen extends StatefulWidget {
 
 class _DeliveryBidListScreenState extends State<DeliveryBidListScreen> {
   List<BidListData>? bidListData = [];
-  int page = 1;
-  int totalPage = 1;
-  bool isLastPage = false;
 
   getBidListApiCall() async {
     appStore.setLoading(true);
     try {
       final res = await getBidList();
       appStore.setLoading(false);
-
-      isLastPage = false;
-
       List<BidListData> newBidListData = res.data ?? [];
-
-      if (page == 1) {
-        bidListData!.clear();
-      }
-
+      newBidListData.retainWhere(
+          (element) => element.isBidAccept == null || element.isBidAccept == 0);
       bidListData!.addAll(newBidListData);
-
       setState(() {});
     } catch (e) {
       appStore.setLoading(false);
-      isLastPage = true;
       setState(() {});
       toast(e.toString());
     }
   }
 
   Future<void> callBidListApi() async {
-    log("API CALL");
     await getBidListApiCall();
   }
 
@@ -77,17 +63,12 @@ class _DeliveryBidListScreenState extends State<DeliveryBidListScreen> {
         physics: BouncingScrollPhysics(),
         listAnimationType: ListAnimationType.Slide,
         padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 60),
-        flipConfiguration: FlipConfiguration(duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn),
-        fadeInConfiguration: FadeInConfiguration(duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn),
-        onNextPage: () {
-          if (page < totalPage) {
-            page++;
-            setState(() {});
-            callBidListApi();
-          }
-        },
+        flipConfiguration: FlipConfiguration(
+            duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn),
+        fadeInConfiguration: FadeInConfiguration(
+            duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn),
+        onNextPage: () {},
         onSwipeRefresh: () async {
-          page = 1;
           callBidListApi();
           return Future.value(true);
         },
@@ -98,15 +79,19 @@ class _DeliveryBidListScreenState extends State<DeliveryBidListScreen> {
 
           switch (bid.isBidAccept) {
             case 1:
-              statusText = language.accepted;
+              statusText = "${language.bidAccepted}";
               statusColor = Colors.green;
               break;
             case 0:
-              statusText = language.pending;
+              statusText = "${language.bidPlaced}";
               statusColor = Colors.orange;
               break;
+            case null:
+              statusText = "${language.newOrder}";
+              statusColor = Colors.purple;
+              break;
             default:
-              statusText = language.rejected;
+              statusText = "${language.bidRejected}";
               statusColor = Colors.red;
               break;
           }
@@ -115,7 +100,8 @@ class _DeliveryBidListScreenState extends State<DeliveryBidListScreen> {
             margin: EdgeInsets.only(bottom: 16),
             decoration: boxDecorationWithRoundedCorners(
               borderRadius: BorderRadius.circular(defaultRadius),
-              border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
+              border:
+                  Border.all(color: ColorUtils.colorPrimary.withOpacity(0.3)),
               backgroundColor: Colors.transparent,
             ),
             padding: EdgeInsets.all(12),
@@ -133,9 +119,16 @@ class _DeliveryBidListScreenState extends State<DeliveryBidListScreen> {
                       ),
                     ),
                     8.width,
-                    Text(
-                      statusText,
-                      style: boldTextStyle(color: statusColor),
+                    Container(
+                      padding: EdgeInsets.only(left: 8, right: 8),
+                      decoration: boxDecorationWithRoundedCorners(
+                        borderRadius: BorderRadius.circular(4),
+                        backgroundColor: statusColor.withOpacity(0.1),
+                      ),
+                      child: Text(
+                        statusText,
+                        style: boldTextStyle(color: statusColor),
+                      ),
                     ),
                   ],
                 ),
@@ -143,21 +136,24 @@ class _DeliveryBidListScreenState extends State<DeliveryBidListScreen> {
                 Row(
                   children: [
                     Text(
-                      '${language.note}: ${bid.notes ?? '${language.noNotesAvailable}'}',
-                      style: secondaryTextStyle(size: 14),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
+                      '${language.totalAmount}: ${appStore.currencySymbol} ${bid.totalAmount!}',
+                      style: boldTextStyle(size: 14),
                     ).expand(),
                     8.width,
                     Text(
-                      '${language.bidAmount}: ${bid.bidAmount!.toStringAsFixed(2)}',
-                      style: boldTextStyle(),
+                      '${language.bidAmount}: ${appStore.currencySymbol} ${bid.bidAmount!}',
+                      style: boldTextStyle(size: 14),
                     ),
                   ],
                 )
               ],
             ),
-          );
+          ).onTap(() {
+            OrderDetailWithBidScreen(
+              bidData: bid,
+              orderId: bid.orderId!,
+            ).launch(context);
+          });
         },
         emptyWidget: Stack(
           children: [
