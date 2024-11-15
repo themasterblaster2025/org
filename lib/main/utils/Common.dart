@@ -1,12 +1,16 @@
 import 'dart:core';
+import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chewie/chewie.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import '../../extensions/decorations.dart';
 import '../../extensions/extension_util/int_extensions.dart';
 import '../../extensions/extension_util/string_extensions.dart';
 import '../../extensions/extension_util/widget_extensions.dart';
@@ -32,13 +36,7 @@ import '../services/AuthServices.dart';
 import 'Images.dart';
 import 'Widgets.dart';
 
-InputDecoration commonInputDecoration(
-    {String? hintText,
-    IconData? suffixIcon,
-    Function()? suffixOnTap,
-    Widget? dateTime,
-    Widget? prefixIcon,
-    bool? isFill = true}) {
+InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, Function()? suffixOnTap, Widget? dateTime, Widget? prefixIcon, bool? isFill = true}) {
   return InputDecoration(
     errorMaxLines: 3,
     contentPadding: EdgeInsets.all(16),
@@ -54,15 +52,10 @@ InputDecoration commonInputDecoration(
         : suffixIcon != null
             ? Icon(suffixIcon, color: ColorUtils.colorPrimary, size: 22).onTap(suffixOnTap)
             : null,
-    enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(style: BorderStyle.solid, color: ColorUtils.colorPrimary.withOpacity(0.9)),
-        borderRadius: BorderRadius.circular(defaultRadius)),
-    focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: ColorUtils.colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
-    errorBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(defaultRadius)),
-    focusedErrorBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(defaultRadius)),
+    enabledBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.solid, color: ColorUtils.colorPrimary.withOpacity(0.9)), borderRadius: BorderRadius.circular(defaultRadius)),
+    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: ColorUtils.colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
+    errorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(defaultRadius)),
+    focusedErrorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(defaultRadius)),
   );
 }
 
@@ -95,15 +88,12 @@ Widget commonCachedNetworkImage(
       },
     );
   } else {
-    return Image.asset(url!, height: height, width: width, fit: fit, alignment: alignment ?? Alignment.center)
-        .cornerRadiusWithClipRRect(radius ?? defaultRadius);
+    return Image.asset(url!, height: height, width: width, fit: fit, alignment: alignment ?? Alignment.center).cornerRadiusWithClipRRect(radius ?? defaultRadius);
   }
 }
 
 Widget placeHolderWidget({double? height, double? width, BoxFit? fit, AlignmentGeometry? alignment, double? radius}) {
-  return Image.asset('assets/placeholder.jpg',
-          height: height, width: width, fit: fit ?? BoxFit.cover, alignment: alignment ?? Alignment.center)
-      .cornerRadiusWithClipRRect(radius ?? defaultRadius);
+  return Image.asset('assets/placeholder.jpg', height: height, width: width, fit: fit ?? BoxFit.cover, alignment: alignment ?? Alignment.center).cornerRadiusWithClipRRect(radius ?? defaultRadius);
 }
 
 Color statusColor(String status) {
@@ -167,15 +157,11 @@ String parcelTypeIcon(String? parcelType) {
 }
 
 String printDate(String date) {
-  return DateFormat('dd MMM yyyy').format(DateTime.parse(date).toLocal()) +
-      " at " +
-      DateFormat('hh:mm a').format(DateTime.parse(date).toLocal());
+  return DateFormat('dd MMM yyyy').format(DateTime.parse(date).toLocal()) + " at " + DateFormat('hh:mm a').format(DateTime.parse(date).toLocal());
 }
 
 String printDateWithoutAt(String date) {
-  return DateFormat('dd MMM yyyy').format(DateTime.parse(date).toLocal()) +
-      " " +
-      DateFormat('hh:mm a').format(DateTime.parse(date).toLocal());
+  return DateFormat('dd MMM yyyy').format(DateTime.parse(date).toLocal()) + " " + DateFormat('hh:mm a').format(DateTime.parse(date).toLocal());
 }
 
 Widget loaderWidget() {
@@ -289,8 +275,7 @@ oneSignalSettings() async {
       print('NOTIFICATION WILL DISPLAY LISTENER CALLED WITH: ${event.notification.jsonRepresentation()}');
       event.preventDefault();
       event.notification.display();
-      if (event.notification.additionalData!["type"].toString().contains(ORDER_TRANSFER) ||
-          event.notification.additionalData!["type"].toString().contains(ORDER_ASSIGNED)) {
+      if (event.notification.additionalData!["type"].toString().contains(ORDER_TRANSFER) || event.notification.additionalData!["type"].toString().contains(ORDER_ASSIGNED)) {
         if (getStringAsync(USER_TYPE) == DELIVERY_MAN) {
           playSoundForDuration();
         }
@@ -326,8 +311,7 @@ Future<void> saveOneSignalPlayerId() async {
     print(OneSignal.User.pushSubscription.token);
     print(state.current.jsonRepresentation());
 
-    if (OneSignal.User.pushSubscription.id.validate().isNotEmpty)
-      await setValue(PLAYER_ID, OneSignal.User.pushSubscription.id.validate());
+    if (OneSignal.User.pushSubscription.id.validate().isNotEmpty) await setValue(PLAYER_ID, OneSignal.User.pushSubscription.id.validate());
   });
 }
 
@@ -440,9 +424,7 @@ String paymentType(String paymentType) {
 }
 
 String printAmount(var amount) {
-  return appStore.currencyPosition == CURRENCY_POSITION_LEFT
-      ? '${appStore.currencySymbol} ${amount.toStringAsFixed(digitAfterDecimal)}'
-      : '${amount.toStringAsFixed(digitAfterDecimal)} ${appStore.currencySymbol}';
+  return appStore.currencyPosition == CURRENCY_POSITION_LEFT ? '${appStore.currencySymbol} ${amount.toStringAsFixed(digitAfterDecimal)}' : '${amount.toStringAsFixed(digitAfterDecimal)} ${appStore.currencySymbol}';
 }
 
 Future<void> commonLaunchUrl(String url, {bool forceWebView = false}) async {
@@ -546,10 +528,8 @@ List<String> userTypeList = [CLIENT, DELIVERY_MAN];
 //   }
 // }
 
-Future<void> openMap(
-    double originLatitude, double originLongitude, double destinationLatitude, double destinationLongitude) async {
-  String googleUrl =
-      'https://www.google.com/maps/dir/?api=1&origin=$originLatitude,$originLongitude&destination=$destinationLatitude,$destinationLongitude';
+Future<void> openMap(double originLatitude, double originLongitude, double destinationLatitude, double destinationLongitude) async {
+  String googleUrl = 'https://www.google.com/maps/dir/?api=1&origin=$originLatitude,$originLongitude&destination=$destinationLatitude,$destinationLongitude';
 
   if (await canLaunchUrl(Uri.parse(googleUrl))) {
     await launchUrl(Uri.parse(googleUrl));

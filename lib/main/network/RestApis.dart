@@ -37,6 +37,7 @@ import '../models/AddressListModel.dart';
 import '../models/AdminChatModel.dart';
 import '../models/AppSettingModel.dart';
 import '../models/AutoCompletePlacesListModel.dart';
+import '../models/CouponListResponseModel.dart';
 import '../models/CreateOrderDetailModel.dart';
 import '../models/CustomerSupportModel.dart';
 import '../models/DeliverymanVehicleListModel.dart';
@@ -661,4 +662,11 @@ Future<ClaimListResponseModel> getClaimList(int page) async {
 
 Future<OrderRescheduleResponse> rescheduleOrder(Map request) async {
   return OrderRescheduleResponse.fromJson(await handleResponse(await buildHttpResponse('reschedule-save', method: HttpMethod.POST, request: request)));
+}
+
+Future<CouponListResponseModel> getCouponListApi(int page) async {
+  return CouponListResponseModel.fromJson(await handleResponse(await buildHttpResponse(
+    'coupon-list?page=$page',
+    method: HttpMethod.GET,
+  )));
 }

@@ -1,14 +1,23 @@
 import 'dart:io';
 
+import 'package:chewie/chewie.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:mighty_delivery/main/utils/Colors.dart';
+import 'package:mighty_delivery/main/utils/Images.dart';
+import '../../extensions/decorations.dart';
 import '../../extensions/extension_util/bool_extensions.dart';
 import '../../extensions/extension_util/context_extensions.dart';
 import '../../extensions/extension_util/int_extensions.dart';
 import '../../extensions/extension_util/string_extensions.dart';
 import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/network/NetworkUtils.dart';
 import '../../main/utils/Widgets.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
@@ -32,6 +41,7 @@ import '../../main/utils/Constants.dart';
 import '../../main/utils/dynamic_theme.dart';
 import '../../user/components/CancelOrderDialog.dart';
 import '../components/OTPDialog.dart';
+import 'package:video_player/video_player.dart';
 
 class ReceivedScreenOrderScreen extends StatefulWidget {
   final OrderData? orderData;
@@ -68,6 +78,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
 
   String? _pickupDatetime;
   String? _deliveryDatetime;
+  List<PlatformFile>? selectedFiles;
 
   @override
   void initState() {
@@ -83,10 +94,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
       } else {
         _pickupDatetime = widget.orderData!.pickupDatetime.validate();
       }
-      picUpController.text = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(
-          widget.orderData!.pickupDatetime.validate().isEmpty
-              ? DateTime.now().toString()
-              : DateTime.parse("${widget.orderData!.pickupDatetime.validate()}Z").toLocal().toString()));
+      picUpController.text = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.orderData!.pickupDatetime.validate().isEmpty ? DateTime.now().toString() : DateTime.parse("${widget.orderData!.pickupDatetime.validate()}Z").toLocal().toString()));
       reasonController.text = widget.orderData!.reason.validate();
       reason = widget.orderData!.reason.validate();
       log(picUpController);
@@ -122,9 +130,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
       orderStatus: widget.orderData!.status == ORDER_DEPARTED ? ORDER_DELIVERED : ORDER_PICKED_UP,
     ).then((value) {
       appStore.setLoading(false);
-      toast(widget.orderData!.status == ORDER_DEPARTED
-          ? language.orderDeliveredSuccessfully
-          : language.orderPickupSuccessfully);
+      toast(widget.orderData!.status == ORDER_DEPARTED ? language.orderDeliveredSuccessfully : language.orderPickupSuccessfully);
       finish(context, true);
     }).catchError((error) {
       appStore.setLoading(false);
@@ -205,8 +211,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (widget.isShowPayment.validate()) ...[
-                      Text('${language.collectedAmount} : ${printAmount(widget.orderData!.totalAmount ?? 0)}',
-                          style: boldTextStyle()),
+                      Text('${language.collectedAmount} : ${printAmount(widget.orderData!.totalAmount ?? 0)}', style: boldTextStyle()),
                       8.height,
                     ],
                     if (widget.orderData!.paymentId == null)
@@ -233,8 +238,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                                 Text(language.info, style: boldTextStyle()),
                                 4.height,
                                 widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY
-                                    ? Text(language.paymentCollectFromDelivery,
-                                        style: secondaryTextStyle(), overflow: TextOverflow.ellipsis, maxLines: 2)
+                                    ? Text(language.paymentCollectFromDelivery, style: secondaryTextStyle(), overflow: TextOverflow.ellipsis, maxLines: 2)
                                     : Text(language.paymentCollectFromPickup, style: secondaryTextStyle()),
                               ],
                             ).paddingAll(8).expand(),
@@ -269,14 +273,11 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                     Text(language.userSignature, style: boldTextStyle()),
                     8.height,
                     widget.orderData!.pickupConfirmByClient == 1 || widget.orderData!.status == ORDER_DEPARTED
-                        ? commonCachedNetworkImage(widget.orderData!.pickupTimeSignature,
-                            fit: BoxFit.cover, height: 150, width: context.width())
+                        ? commonCachedNetworkImage(widget.orderData!.pickupTimeSignature, fit: BoxFit.cover, height: 150, width: context.width())
                         : Container(
                             height: 150,
                             width: context.width(),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(defaultRadius),
-                                color: Colors.grey.withOpacity(0.15)),
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(defaultRadius), color: Colors.grey.withOpacity(0.15)),
                             child: Screenshot(
                               controller: pickupScreenshotController,
                               child: SfSignaturePad(
@@ -295,9 +296,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                           children: [
                             8.width,
                             TextButton(
-                              child: Text(language.clear,
-                                  style: boldTextStyle(
-                                      color: ColorUtils.colorPrimary, decoration: TextDecoration.underline)),
+                              child: Text(language.clear, style: boldTextStyle(color: ColorUtils.colorPrimary, decoration: TextDecoration.underline)),
                               onPressed: () async {
                                 signaturePicUPPadKey.currentState!.clear();
                               },
@@ -305,16 +304,13 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                           ],
                         ),
                       ),
-                    Text(language.deliveryTimeSignature, style: boldTextStyle()).visible(
-                        widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
-                    8.height.visible(
-                        widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
+                    Text(language.deliveryTimeSignature, style: boldTextStyle()).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
+                    8.height.visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
                     if (widget.orderData!.status == ORDER_DEPARTED)
                       Container(
                         height: 150,
                         width: context.width(),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(defaultRadius), color: Colors.grey.withOpacity(0.15)),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(defaultRadius), color: Colors.grey.withOpacity(0.15)),
                         child: Screenshot(
                           controller: deliveryScreenshotController,
                           child: SfSignaturePad(
@@ -324,8 +320,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                             strokeColor: ColorUtils.colorPrimary,
                           ),
                         ),
-                      ).visible(
-                          widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
+                      ).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
                     if (widget.orderData!.status == ORDER_DEPARTED)
                       Align(
                         alignment: Alignment.bottomRight,
@@ -334,72 +329,116 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                           children: [
                             8.width,
                             TextButton(
-                              child: Text(language.clear,
-                                  style: boldTextStyle(
-                                      color: ColorUtils.colorPrimary, decoration: TextDecoration.underline)),
+                              child: Text(language.clear, style: boldTextStyle(color: ColorUtils.colorPrimary, decoration: TextDecoration.underline)),
                               onPressed: () async {
                                 signatureDeliveryPadKey.currentState!.clear();
                               },
                             ),
                           ],
                         ),
-                      ).visible(
-                          widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
+                      ).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
                     CheckboxListTile(
                       dense: true,
                       contentPadding: EdgeInsets.zero,
                       value: mIsCheck,
                       activeColor: ColorUtils.colorPrimary,
                       checkColor: Colors.white,
-                      title: Text(
-                          widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY
-                              ? language.paymentCollectFrom
-                              : language.isPaymentCollected,
-                          style: primaryTextStyle()),
+                      title: Text(widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY ? language.paymentCollectFrom : language.isPaymentCollected, style: primaryTextStyle()),
                       onChanged: (val) {
                         mIsCheck = val!;
                         setState(() {});
                       },
                     ).visible(widget.isShowPayment),
+                    Text("Proof", style: boldTextStyle()),
+                    16.height,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(width: 8),
+                        Container(
+                          decoration: boxDecorationDefault(border: Border.all(color: ColorUtils.colorPrimary)),
+                          width: 100,
+                          height: 100,
+                          child: Icon(Icons.add),
+                        ).onTap(() async {
+                          try {
+                            final result = await FilePicker.platform.pickFiles(
+                              type: FileType.custom,
+                              allowedExtensions: ['jpg', 'png', 'mp4', 'mov'],
+                              allowMultiple: true,
+                            );
+                            if (result != null) {
+                              setState(() {
+                                if (selectedFiles == null) {
+                                  selectedFiles = result.files;
+                                } else {
+                                  selectedFiles!.addAll(result.files);
+                                }
+                              });
+                            }
+                          } catch (e) {
+                            print("Error picking files: $e");
+                          }
+                        }),
+                        if (selectedFiles != null && selectedFiles!.isNotEmpty)
+                          Expanded(
+                            child: Container(
+                              height: 120,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: selectedFiles!.length,
+                                itemBuilder: (context, index) {
+                                  VideoPlayerController? videoPlayerController;
+                                  bool isImage = selectedFiles![index].extension == 'jpg' || selectedFiles![index].extension == 'jpeg' || selectedFiles![index].extension == 'png';
+                                  if (!isImage) {
+                                    videoPlayerController = VideoPlayerController.networkUrl(
+                                      Uri.parse(selectedFiles![index].path.toString()),
+                                    );
+                                    Future.wait([videoPlayerController.initialize()]);
+                                  }
+                                  return buildFileWidget(selectedFiles![index], index, isImage, videoPlayerController);
+                                },
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
                     16.height,
                     Row(
                       children: [
                         AppButton(
                           width: context.width(),
-                          text: widget.orderData!.status == ORDER_DEPARTED
-                              ? language.confirmDelivery
-                              : language.confirmPickup,
+                          text: widget.orderData!.status == ORDER_DEPARTED ? language.confirmDelivery : language.confirmPickup,
                           textStyle: primaryTextStyle(color: white),
                           color: ColorUtils.colorPrimary,
                           onTap: () async {
                             if (!mIsCheck && widget.orderData!.paymentId == null && widget.isShowPayment) {
                               return toast(language.pleaseConfirmPayment);
                             } else {
-                              (appStore.isOtpVerifyOnPickupDelivery == true)
-                                  ? sendOtp(
-                                      context,
-                                      phoneNumber: widget.orderData!.status == ORDER_DEPARTED
-                                          ? widget.orderData!.deliveryPoint!.contactNumber.validate()
-                                          : widget.orderData!.pickupPoint!.contactNumber.validate(),
-                                      onUpdate: (verificationId) async {
-                                        await showInDialog(context,
-                                            builder: (context) => OTPDialog(
-                                                phoneNumber: widget.orderData!.status == ORDER_DEPARTED
-                                                    ? widget.orderData!.deliveryPoint!.contactNumber.validate()
-                                                    : widget.orderData!.pickupPoint!.contactNumber.validate(),
-                                                onUpdate: () {
-                                                  saveOrderData();
-                                                },
-                                                verificationId: verificationId),
-                                            barrierDismissible: false);
-                                      },
-                                    )
-                                  : saveOrderData();
+                              if (appStore.isOtpVerifyOnPickupDelivery == true) {
+                                sendOtp(
+                                  context,
+                                  phoneNumber: widget.orderData!.status == ORDER_DEPARTED ? widget.orderData!.deliveryPoint!.contactNumber.validate() : widget.orderData!.pickupPoint!.contactNumber.validate(),
+                                  onUpdate: (verificationId) async {
+                                    await showInDialog(context,
+                                        builder: (context) => OTPDialog(
+                                            phoneNumber: widget.orderData!.status == ORDER_DEPARTED ? widget.orderData!.deliveryPoint!.contactNumber.validate() : widget.orderData!.pickupPoint!.contactNumber.validate(),
+                                            onUpdate: () async {
+                                              await saveProofData();
+                                              saveOrderData();
+                                            },
+                                            verificationId: verificationId),
+                                        barrierDismissible: false);
+                                  },
+                                );
+                              } else {
+                                await saveProofData();
+                                saveOrderData();
+                              }
                             }
                           },
                         ).expand(),
-                        if (widget.orderData!.status == ORDER_ACCEPTED && widget.orderData!.status == ORDER_ARRIVED)
-                          16.width,
+                        if (widget.orderData!.status == ORDER_ACCEPTED && widget.orderData!.status == ORDER_ARRIVED) 16.width,
                         if (widget.orderData!.status == ORDER_ACCEPTED && widget.orderData!.status == ORDER_ARRIVED)
                           AppButton(
                             width: context.width(),
@@ -438,6 +477,39 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
     );
   }
 
+  saveProofData() async {
+    // to add proof data for order pickup & deliver
+    MultipartRequest multiPartRequest = await getMultiPartRequest('profOfpicture-save');
+    multiPartRequest.fields['order_id'] = widget.orderData!.id.toString();
+    multiPartRequest.fields['type'] = widget.orderData!.status!;
+    if (selectedFiles != null && selectedFiles!.length > 0) {
+      selectedFiles!.forEach((element) async {
+        multiPartRequest.files.add(await MultipartFile.fromPath("prof_picture", element.path!));
+      });
+    }
+    // multiPartRequest.files.add(await MultipartFile.fromPath('vehicle_history_image', file.path));
+    multiPartRequest.headers.addAll(buildHeaderTokens());
+    sendMultiPartRequest(
+      multiPartRequest,
+      onSuccess: (data) async {
+        if (data != null) {
+          appStore.setLoading(false);
+          toast(data["message"]);
+
+          finish(context);
+          print(data.toString());
+        }
+      },
+      onError: (error) {
+        toast(error.toString(), print: true);
+        appStore.setLoading(false);
+      },
+    ).catchError((e) {
+      appStore.setLoading(false);
+      toast(e.toString());
+    });
+  }
+
   Future<void> saveOrderData() async {
     if (widget.orderData!.status == ORDER_DEPARTED) {
       if (deliveryDateController.text.isEmpty) {
@@ -458,15 +530,11 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
       }
     }
 
-    if (widget.orderData!.paymentId == null &&
-        widget.orderData!.paymentCollectFrom == PAYMENT_ON_PICKUP &&
-        (widget.orderData!.status == ORDER_ACCEPTED || widget.orderData!.status == ORDER_ARRIVED)) {
+    if (widget.orderData!.paymentId == null && widget.orderData!.paymentCollectFrom == PAYMENT_ON_PICKUP && (widget.orderData!.status == ORDER_ACCEPTED || widget.orderData!.status == ORDER_ARRIVED)) {
       appStore.setLoading(true);
       await paymentConfirmDialog(widget.orderData!);
       appStore.setLoading(false);
-    } else if (widget.orderData!.paymentId == null &&
-        widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY &&
-        widget.orderData!.status == ORDER_DEPARTED) {
+    } else if (widget.orderData!.paymentId == null && widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY && widget.orderData!.status == ORDER_DEPARTED) {
       appStore.setLoading(true);
       await paymentConfirmDialog(widget.orderData!);
       appStore.setLoading(false);
@@ -486,12 +554,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   }
 
   Future<void> paymentConfirmDialog(OrderData orderData) {
-    return showConfirmDialogCustom(context,
-        primaryColor: ColorUtils.colorPrimary,
-        dialogType: DialogType.CONFIRMATION,
-        title: orderTitle(orderData.status!),
-        positiveText: language.yes,
-        negativeText: language.cancel, onAccept: (c) async {
+    return showConfirmDialogCustom(context, primaryColor: ColorUtils.colorPrimary, dialogType: DialogType.CONFIRMATION, title: orderTitle(orderData.status!), positiveText: language.yes, negativeText: language.cancel, onAccept: (c) async {
       appStore.setLoading(true);
       Map req = {
         'order_id': orderData.id,
@@ -516,5 +579,113 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
     }, onCancel: (v) {
       finish(context, false);
     });
+  }
+
+  Widget buildFileWidget(PlatformFile file, int index, bool isImage, VideoPlayerController? videoPlayerController) {
+    // Check if the file is an image or PDF
+    bool isImage = file.extension == 'jpg' || file.extension == 'jpeg' || file.extension == 'png';
+    return Stack(
+      children: [
+        Container(
+                width: 100,
+                height: 100,
+                decoration: boxDecorationWithRoundedCorners(border: Border.all(color: ColorUtils.colorPrimary)),
+                child: isImage
+                    ? Image.file(
+                        width: 100, height: 100,
+                        File(file.path!), // File object for local image display
+                        fit: BoxFit.cover,
+                      ).cornerRadiusWithClipRRect(10)
+                    // .onTap(() {
+                    //     return showDialog(
+                    //         context: context,
+                    //         builder: (_) {
+                    //           return AspectRatio(
+                    //             aspectRatio: 9 / 16,
+                    //             child: Stack(
+                    //               children: [
+                    //                 Image.file(
+                    //                   width: context.width() * 0.85,
+                    //                   height: context.height() * 0.85,
+                    //                   File(file.path!), // File object for local image display
+                    //                   fit: BoxFit.cover,
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //           );
+                    //         });
+                    //   })
+                    : Container(
+                        child: Icon(
+                          Icons.play_circle,
+                          color: ColorUtils.colorPrimary,
+                        ),
+                      ).onTap(() {
+                        return showDialog(
+                          context: context,
+                          builder: (_) {
+                            ChewieController? chewieController;
+                            chewieController = ChewieController(
+                              videoPlayerController: videoPlayerController!,
+                              autoPlay: true,
+                              looping: true,
+                              deviceOrientationsAfterFullScreen: [
+                                DeviceOrientation.portraitDown,
+                                DeviceOrientation.portraitUp,
+                              ],
+                              //       progressIndicatorDelay: bufferDelay != null ? Duration(milliseconds: bufferDelay!) : null,
+                              hideControlsTimer: const Duration(seconds: 1),
+                              showOptions: false,
+                              materialProgressColors: ChewieProgressColors(
+                                playedColor: ColorUtils.colorPrimary,
+                                handleColor: ColorUtils.colorPrimary,
+                                backgroundColor: textSecondaryColorGlobal,
+                                bufferedColor: textSecondaryColorGlobal,
+                              ),
+                              // autoInitialize: true,
+                            );
+                            return Container(
+                              width: context.width(),
+                              height: context.height(),
+                              child: Stack(
+                                children: [
+                                  AspectRatio(
+                                    aspectRatio: 9 / 16,
+                                    child: chewieController != null && chewieController.videoPlayerController.value.isInitialized ? Chewie(controller: chewieController) : SizedBox(),
+                                  ).center(),
+                                  Icon(
+                                    size: 16,
+                                    Icons.close,
+                                    color: Colors.red,
+                                  ).onTap(() {})
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      }).cornerRadiusWithClipRRect(10))
+            .paddingOnly(left: 4),
+        Positioned(
+            right: 4,
+            top: 4,
+            child: Container(
+              width: 20,
+              height: 20,
+              color: ColorUtils.borderColor,
+              child: Icon(
+                size: 16,
+                Icons.close,
+                color: Colors.red,
+              ).center(),
+            ).onTap(() {
+              if (index < selectedFiles!.length) {
+                // Check if index is valid
+                setState(() {
+                  selectedFiles!.removeAt(index);
+                });
+              }
+            }).cornerRadiusWithClipRRect(40))
+      ],
+    );
   }
 }

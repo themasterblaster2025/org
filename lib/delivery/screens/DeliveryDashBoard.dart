@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -788,6 +789,7 @@ class DeliveryDashBoardState extends State<DeliveryDashBoard> with WidgetsBindin
 
   Future<void> onTapData({required String orderStatus, required OrderData orderData}) async {
     if (orderStatus == ORDER_ASSIGNED) {
+      FlutterRingtonePlayer().stop();
       await updateOrder(orderStatus: ORDER_ACCEPTED, orderId: orderData.id).then((value) {
         toast(language.orderActiveSuccessfully);
       });

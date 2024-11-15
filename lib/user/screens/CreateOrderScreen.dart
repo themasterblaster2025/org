@@ -14,6 +14,8 @@ import '../../extensions/extension_util/context_extensions.dart';
 import '../../extensions/extension_util/int_extensions.dart';
 import '../../extensions/extension_util/string_extensions.dart';
 import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/models/CouponListResponseModel.dart';
+import '../../main/screens/CouponListScreen.dart';
 import '../../main/utils/DataProviders.dart';
 import '../../user/screens/insurance_details_screen.dart';
 import '../../user/screens/packaging_symbols_info.dart';
@@ -139,14 +141,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   final List<Map<String, String>> selectedPackingSymbols = [];
   final List<Map<String, String>> packingSymbolsItems = getPackagingSymbols();
   int insuranceSelectedOption = 1;
-  List<String> appBarTitleList = [
-    language.createOrder,
-    language.pickupInformation,
-    language.deliveryInformation,
-    language.reviewRoute,
-    language.details
-  ];
-
+  List<String> appBarTitleList = [language.createOrder, language.pickupInformation, language.deliveryInformation, language.reviewRoute, language.details];
+  CouponListResponseModel? couponListResponseModel;
   @override
   void initState() {
     super.initState();
@@ -156,13 +152,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     });
   }
 
-  Future<void> init() async {
-    pickupCountryCode = CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.isEmptyOrNull
-        ? defaultPhoneCode
-        : CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate();
-    deliverCountryCode = CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.isEmptyOrNull
-        ? defaultPhoneCode
-        : CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate();
+  getStaticDetailsForOrder() async {
     await getCreateOrderDetails(getIntAsync(CITY_ID)).then((value) async {
       appStore.setLoading(false);
       await setValue(CITY_DATA, value.cityDetail!.toJson());
@@ -196,6 +186,19 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       appStore.setLoading(false);
       toast(error.toString());
     });
+  }
+
+  getCouponList() async {
+    await getCouponListApi(1).then((value) async {
+      couponListResponseModel = value;
+    });
+  }
+
+  Future<void> init() async {
+    pickupCountryCode = CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.isEmptyOrNull ? defaultPhoneCode : CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate();
+    deliverCountryCode = CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.isEmptyOrNull ? defaultPhoneCode : CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate();
+    await getStaticDetailsForOrder();
+    await getCouponList();
     if (widget.orderData != null) {
       if (widget.orderData!.totalWeight != 0) weightController.text = widget.orderData!.totalWeight!.toString();
       if (widget.orderData!.totalParcel != null) totalParcelController.text = widget.orderData!.totalParcel!.toString();
@@ -250,19 +253,20 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     });
   }
 
-  getTotalForOrder() {
+  getTotalForOrder() async {
+    print("getTotalForOrder called");
     appStore.setLoading(true);
     Map request = {
       "city_id": getIntAsync(CITY_ID).toString(),
-      if (appStore.isVehicleOrder != 0)
-        "vehicle_id": vehicleList.firstWhere((element) => element.id == selectedVehicle).id,
+      if (appStore.isVehicleOrder != 0) "vehicle_id": vehicleList.firstWhere((element) => element.id == selectedVehicle).id,
       "is_insurance": insuranceSelectedOption == 0 && appStore.isInsuranceAllowed == "1",
       // "is_insurance": 0,
       "total_weight": weightController.text.toDouble(),
       "total_distance": totalDistance,
-      "insurance_amount": insuranceAmount
+      "insurance_amount": insuranceAmountController.text.isEmpty ? 0 : insuranceAmountController.text
     };
-    getTotalAmountForOrder(request).then((value) {
+    await getTotalAmountForOrder(request).then((value) {
+      print("getTotalForOrder response");
       appStore.setLoading(false);
       print("------------request${request.toString()}");
       totalAmountResponse = value;
@@ -282,10 +286,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     extraChargeList.clear();
     if (totalAmountResponse!.extraCharges != null) {
       totalAmountResponse!.extraCharges!.forEach((element) {
-        extraChargeList.add(ExtraChargeRequestModel(
-            key: element.title!.toLowerCase().replaceAll(' ', "_"),
-            value: element.charges,
-            valueType: element.chargesType));
+        extraChargeList.add(ExtraChargeRequestModel(key: element.title!.toLowerCase().replaceAll(' ', "_"), value: element.charges, valueType: element.chargesType));
       });
     }
     print("total_amount${totalAmountResponse!.totalAmount!}");
@@ -302,12 +303,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       "country_id": getIntAsync(COUNTRY_ID).toString(),
       "city_id": getIntAsync(CITY_ID).toString(),
       //   if (appStore.isVehicleOrder != 0) "vehicle_id": selectedVehicle.toString(),
-      if (!selectedVehicle.toString().isEmptyOrNull && selectedVehicle != 0 && appStore.isVehicleOrder != 0)
-        "vehicle_id": selectedVehicle.toString(),
+      if (!selectedVehicle.toString().isEmptyOrNull && selectedVehicle != 0 && appStore.isVehicleOrder != 0) "vehicle_id": selectedVehicle.toString(),
       if (vehicleCharge != 0.0) "vehicle_charge": vehicleCharge,
       "pickup_point": {
-        "start_time":
-            (!isDeliverNow && pickFromDateTime != null) ? pickFromDateTime.toString() : DateTime.now().toString(),
+        "start_time": (!isDeliverNow && pickFromDateTime != null) ? pickFromDateTime.toString() : DateTime.now().toString(),
         "end_time": (!isDeliverNow && pickToDateTime != null) ? pickToDateTime!.toString() : null,
         "address": pickAddressCont.text,
         "latitude": pickLat,
@@ -354,16 +353,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       toast(value.message);
       finish(context);
       if (isSelected == 2) {
-        PaymentScreen(orderId: value.orderId.validate(), totalAmount: (totalAmountResponse!.totalAmount!))
-            .launch(context);
+        PaymentScreen(orderId: value.orderId.validate(), totalAmount: (totalAmountResponse!.totalAmount!)).launch(context);
       } else if (isSelected == 3) {
         log("-----available balance ${appStore.availableBal.toString()}-----------${totalAmountResponse!.totalAmount}----------${insuranceAmount}----------${(totalAmountResponse!.totalAmount! + insuranceAmount)}");
         if (appStore.availableBal > (totalAmountResponse!.totalAmount!)) {
-          savePaymentApiCall(
-              paymentType: PAYMENT_TYPE_WALLET,
-              paymentStatus: PAYMENT_PAID,
-              totalAmount: (totalAmountResponse!.totalAmount!).toString(),
-              orderID: value.orderId.toString());
+          savePaymentApiCall(paymentType: PAYMENT_TYPE_WALLET, paymentStatus: PAYMENT_PAID, totalAmount: (totalAmountResponse!.totalAmount!).toString(), orderID: value.orderId.toString());
         }
       } else {
         DashboardScreen().launch(
@@ -378,13 +372,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   }
 
   /// Save Payment
-  Future<void> savePaymentApiCall(
-      {String? paymentType,
-      String? totalAmount,
-      String? orderID,
-      String? txnId,
-      String? paymentStatus = PAYMENT_PENDING,
-      Map? transactionDetail}) async {
+  Future<void> savePaymentApiCall({String? paymentType, String? totalAmount, String? orderID, String? txnId, String? paymentStatus = PAYMENT_PENDING, Map? transactionDetail}) async {
     Map req = {
       "id": "",
       "order_id": orderID,
@@ -428,18 +416,13 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         if (point.longitude > maxLong) maxLong = point.longitude;
       });
     });
-    googleMapController?.animateCamera(CameraUpdate.newLatLngBounds(
-        LatLngBounds(southwest: LatLng(minLat, minLong), northeast: LatLng(maxLat, maxLong)), 20));
+    googleMapController?.animateCamera(CameraUpdate.newLatLngBounds(LatLngBounds(southwest: LatLng(minLat, minLong), northeast: LatLng(maxLat, maxLong)), 20));
   }
 
   setPolylines() async {
     print("setPolyline");
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-        googleApiKey: googleMapAPIKey,
-        request: PolylineRequest(
-            origin: PointLatLng(pickLat.toDouble(), pickLong.toDouble()),
-            destination: PointLatLng(deliverLat.toDouble(), deliverLong.toDouble()),
-            mode: TravelMode.driving));
+    PolylineResult result =
+        await polylinePoints.getRouteBetweenCoordinates(googleApiKey: googleMapAPIKey, request: PolylineRequest(origin: PointLatLng(pickLat.toDouble(), pickLong.toDouble()), destination: PointLatLng(deliverLat.toDouble(), deliverLong.toDouble()), mode: TravelMode.driving));
     if (result.points.isNotEmpty) {
       polylineCoordinates.clear();
       result.points.forEach((PointLatLng point) {
@@ -449,11 +432,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       print("--address not found ---");
     }
     setState(() {
-      Polyline polyline = Polyline(
-          polylineId: PolylineId("poly"),
-          color: Color.fromARGB(255, 40, 122, 198),
-          width: 5,
-          points: polylineCoordinates);
+      Polyline polyline = Polyline(polylineId: PolylineId("poly"), color: Color.fromARGB(255, 40, 122, 198), width: 5, points: polylineCoordinates);
       _polylines.add(polyline);
     });
   }
@@ -484,9 +463,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               16.height,
               Container(
                 padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                    border: Border.all(color: ColorUtils.borderColor, width: appStore.isDarkMode ? 0.2 : 1),
-                    borderRadius: BorderRadius.circular(defaultRadius)),
+                decoration: BoxDecoration(border: Border.all(color: ColorUtils.borderColor, width: appStore.isDarkMode ? 0.2 : 1), borderRadius: BorderRadius.circular(defaultRadius)),
                 child: Column(
                   children: [
                     DateTimePicker(
@@ -523,11 +500,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                             // Check if today’s date is selected
                             DateTime now = DateTime.now();
                             DateTime selectedDateTime = DateFormat('hh:mm').parse(value!);
-                            DateTime selectedDateWithTime =
-                                DateTime(now.year, now.month, now.day, selectedDateTime.hour, selectedDateTime.minute);
-                            if (pickDate!.year == now.year &&
-                                pickDate!.month == now.month &&
-                                pickDate!.day == now.day) {
+                            DateTime selectedDateWithTime = DateTime(now.year, now.month, now.day, selectedDateTime.hour, selectedDateTime.minute);
+                            if (pickDate!.year == now.year && pickDate!.month == now.month && pickDate!.day == now.day) {
                               // Add 1 hour to the current time if the selected date is today
                               if (selectedDateWithTime.isBefore(now.add(Duration(hours: 1)))) {
                                 return language.scheduleOrderTimeMsg;
@@ -561,11 +535,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                             // Check if today’s date is selected
                             DateTime now = DateTime.now();
                             DateTime selectedDateTime = DateFormat('hh:mm').parse(value!);
-                            DateTime selectedDateWithTime =
-                                DateTime(now.year, now.month, now.day, selectedDateTime.hour, selectedDateTime.minute);
-                            if (pickDate!.year == now.year &&
-                                pickDate!.month == now.month &&
-                                pickDate!.day == now.day) {
+                            DateTime selectedDateWithTime = DateTime(now.year, now.month, now.day, selectedDateTime.hour, selectedDateTime.minute);
+                            if (pickDate!.year == now.year && pickDate!.month == now.month && pickDate!.day == now.day) {
                               // Add 1 hour to the current time if the selected date is today
                               if (selectedDateWithTime.isBefore(now.add(Duration(hours: 1)))) {
                                 return language.scheduleOrderTimeMsg;
@@ -629,11 +600,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                             // Check if today’s date is selected
                             DateTime now = DateTime.now();
                             DateTime selectedDateTime = DateFormat('hh:mm').parse(value!);
-                            DateTime selectedDateWithTime =
-                                DateTime(now.year, now.month, now.day, selectedDateTime.hour, selectedDateTime.minute);
-                            if (pickDate!.year == now.year &&
-                                pickDate!.month == now.month &&
-                                pickDate!.day == now.day) {
+                            DateTime selectedDateWithTime = DateTime(now.year, now.month, now.day, selectedDateTime.hour, selectedDateTime.minute);
+                            if (pickDate!.year == now.year && pickDate!.month == now.month && pickDate!.day == now.day) {
                               // Add 1 hour to the current time if the selected date is today
                               if (selectedDateWithTime.isBefore(now.add(Duration(hours: 1)))) {
                                 return language.scheduleOrderTimeMsg;
@@ -663,11 +631,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                             // Check if today’s date is selected
                             DateTime now = DateTime.now();
                             DateTime selectedDateTime = DateFormat('hh:mm').parse(value);
-                            DateTime selectedDateWithTime =
-                                DateTime(now.year, now.month, now.day, selectedDateTime.hour, selectedDateTime.minute);
-                            if (deliverDate!.year == now.year &&
-                                deliverDate!.month == now.month &&
-                                deliverDate!.day == now.day) {
+                            DateTime selectedDateWithTime = DateTime(now.year, now.month, now.day, selectedDateTime.hour, selectedDateTime.minute);
+                            if (deliverDate!.year == now.year && deliverDate!.month == now.month && deliverDate!.day == now.day) {
                               // Add 1 hour to the current time if the selected date is today
                               if (selectedDateWithTime.isBefore(now.add(Duration(hours: 1)))) {
                                 return language.scheduleOrderTimeMsg;
@@ -697,16 +662,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               3.width,
               //   Text(" (${appStore.distanceUnit})", style: secondaryTextStyle()).expand(),
               Container(
-                decoration: BoxDecoration(
-                    border: Border.all(color: ColorUtils.borderColor, width: appStore.isDarkMode ? 0.2 : 1),
-                    borderRadius: BorderRadius.circular(defaultRadius)),
+                decoration: BoxDecoration(border: Border.all(color: ColorUtils.borderColor, width: appStore.isDarkMode ? 0.2 : 1), borderRadius: BorderRadius.circular(defaultRadius)),
                 child: IntrinsicHeight(
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.remove, color: appStore.isDarkMode ? Colors.white : Colors.grey)
-                          .paddingAll(12)
-                          .onTap(() {
+                      Icon(Icons.remove, color: appStore.isDarkMode ? Colors.white : Colors.grey).paddingAll(12).onTap(() {
                         if (weightController.text.toDouble() > 1) {
                           weightController.text = (weightController.text.toDouble() - 1).toString();
                         }
@@ -743,16 +704,12 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             children: [
               Text(language.numberOfParcels, style: primaryTextStyle()).expand(),
               Container(
-                decoration: BoxDecoration(
-                    border: Border.all(color: ColorUtils.borderColor, width: appStore.isDarkMode ? 0.2 : 1),
-                    borderRadius: BorderRadius.circular(defaultRadius)),
+                decoration: BoxDecoration(border: Border.all(color: ColorUtils.borderColor, width: appStore.isDarkMode ? 0.2 : 1), borderRadius: BorderRadius.circular(defaultRadius)),
                 child: IntrinsicHeight(
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.remove, color: appStore.isDarkMode ? Colors.white : Colors.grey)
-                          .paddingAll(12)
-                          .onTap(() {
+                      Icon(Icons.remove, color: appStore.isDarkMode ? Colors.white : Colors.grey).paddingAll(12).onTap(() {
                         if (totalParcelController.text.toInt() > 1) {
                           totalParcelController.text = (totalParcelController.text.toInt() - 1).toString();
                         }
@@ -821,8 +778,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(language.labels, style: primaryTextStyle()),
-              Icon(Icons.info, color: appStore.isDarkMode ? Colors.white.withOpacity(0.7) : ColorUtils.colorPrimary)
-                  .onTap(() {
+              Icon(Icons.info, color: appStore.isDarkMode ? Colors.white.withOpacity(0.7) : ColorUtils.colorPrimary).onTap(() {
                 PackagingSymbolsInfo().launch(context);
               })
             ],
@@ -897,8 +853,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               },
               onTap: () {
                 showModalBottomSheet(
-                  shape:
-                      RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
                   context: context,
                   builder: (context) {
                     return PickAddressBottomSheet(
@@ -912,9 +867,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     );
                   },
                 ).then((value) {
-                  addressList = (getStringListAsync(RECENT_ADDRESS_LIST) ?? [])
-                      .map((e) => UseraddressDetail.fromJson(jsonDecode(e)))
-                      .toList();
+                  addressList = (getStringListAsync(RECENT_ADDRESS_LIST) ?? []).map((e) => UseraddressDetail.fromJson(jsonDecode(e))).toList();
                   if (addressList.isNotEmpty) {
                     pickAddressData = addressList.first;
                     deliveryAddressData = addressList.first;
@@ -951,8 +904,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                           dialogTextStyle: primaryTextStyle(),
                           searchDecoration: InputDecoration(
                             iconColor: Theme.of(context).dividerColor,
-                            enabledBorder:
-                                UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
+                            enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
                             focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: ColorUtils.colorPrimary)),
                           ),
                           searchStyle: primaryTextStyle(),
@@ -1042,8 +994,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               },
               onTap: () {
                 showModalBottomSheet(
-                  shape:
-                      RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(defaultRadius))),
                   context: context,
                   builder: (context) {
                     return PickAddressBottomSheet(
@@ -1058,9 +1009,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     );
                   },
                 ).then((value) {
-                  addressList = (getStringListAsync(RECENT_ADDRESS_LIST) ?? [])
-                      .map((e) => UseraddressDetail.fromJson(jsonDecode(e)))
-                      .toList();
+                  addressList = (getStringListAsync(RECENT_ADDRESS_LIST) ?? []).map((e) => UseraddressDetail.fromJson(jsonDecode(e))).toList();
                   if (addressList.isNotEmpty) {
                     pickAddressData = addressList.first;
                     deliveryAddressData = addressList.first;
@@ -1098,8 +1047,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         dialogTextStyle: primaryTextStyle(),
                         searchDecoration: InputDecoration(
                           iconColor: Theme.of(context).dividerColor,
-                          enabledBorder:
-                              UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
+                          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).dividerColor)),
                           focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: ColorUtils.colorPrimary)),
                         ),
                         searchStyle: primaryTextStyle(),
@@ -1118,8 +1066,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               validator: (value) {
                 if (value!.trim().isEmpty) return language.fieldRequiredMsg;
                 //if (value!.length < 8 || value.length > 15) return "please enter valid mobile number";
-                if (value.trim().length < minContactLength || value.trim().length > maxContactLength)
-                  return language.phoneNumberInvalid;
+                if (value.trim().length < minContactLength || value.trim().length > maxContactLength) return language.phoneNumberInvalid;
                 return null;
               },
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -1228,9 +1175,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               children: [
                 rowWidget(title: language.parcelType, value: parcelTypeCont.text),
                 8.height,
-                rowWidget(
-                    title: language.weight,
-                    value: '${weightController.text} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weightType}'),
+                rowWidget(title: language.weight, value: '${weightController.text} ${CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).weightType}'),
                 8.height,
                 rowWidget(title: language.numberOfParcels, value: '${totalParcelController.text}'),
               ],
@@ -1362,6 +1307,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             ),
           ),
           16.height,
+          //insurance start
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -1411,8 +1357,90 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 return null;
               },
             ).visible(insuranceSelectedOption == 0),
-            16.height,
+            //16.height,
           ],
+          // insurance end
+          //coupen start
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              //todo add keys
+              Text("Offers & Benefits", style: boldTextStyle()),
+              8.height,
+              Container(
+                // padding: EdgeInsets.all(16),
+                decoration: boxDecorationWithRoundedCorners(
+                  borderRadius: BorderRadius.circular(defaultRadius),
+                  border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.2)),
+                  backgroundColor: Colors.transparent,
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: context.width() * 0.74,
+                              //     padding: EdgeInsets.all(16),
+                              child: Row(
+                                //todo add proper icon
+                                children: [
+                                  Icon(
+                                    Icons.contact_support_outlined,
+                                    color: ColorUtils.colorPrimary,
+                                  ),
+                                  Text(
+                                    couponListResponseModel!.data!.first.couponCode.toString(),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: boldTextStyle(color: ColorUtils.colorPrimary),
+                                  )
+                                ],
+                              ),
+                            ),
+                            4.height,
+                            Text(
+                              //todo add keys
+                              "Save ${appStore.currencySymbol} 120 on this order",
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: secondaryTextStyle(),
+                            )
+                          ],
+                        ),
+                        Text(
+                          //todo add keys
+                          language.apply,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: boldTextStyle(color: ColorUtils.colorPrimary),
+                        )
+                      ],
+                    ).paddingAll(16),
+                    10.height.visible(couponListResponseModel!.data!.length > 1),
+                    Divider(color: Colors.grey.withOpacity(0.3), height: 0.5).visible(couponListResponseModel!.data!.length > 1),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("More coupons", style: primaryTextStyle(size: 16)),
+                        Icon(
+                          Icons.navigate_next,
+                          size: 18,
+                        )
+                      ],
+                    ).paddingAll(8).visible(couponListResponseModel!.data!.length > 1).onTap(() {
+                      CouponListScreen().launch(context);
+                    }),
+                  ],
+                ),
+              ),
+            ],
+          ).visible(appStore.isInsuranceAllowed == "1"),
+          // coupen end
+          16.height,
           if (totalAmountResponse != null)
             OrderAmountDataWidget(
                 fixedAmount: totalAmountResponse!.fixedAmount!.toDouble(),
@@ -1426,8 +1454,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 weightAmount: totalAmountResponse!.weightAmount!.toDouble(),
                 perWeightCharge: cityData!.perWeightCharges!.toDouble(),
                 perKmCityDataCharge: cityData!.perDistanceCharges!.toDouble(),
-                perkmVehiclePrice:
-                    vehicleList.firstWhere((element) => element.id == selectedVehicle).perKmCharge!.toDouble(),
+                perkmVehiclePrice: vehicleList.firstWhere((element) => element.id == selectedVehicle).perKmCharge!.toDouble(),
                 baseTotal: totalAmountResponse!.baseTotal!.toDouble()),
           16.height,
           Text(language.payment, style: boldTextStyle()),
@@ -1440,21 +1467,15 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 width: (context.width() - 48) / 3,
                 padding: EdgeInsets.all(8),
                 alignment: Alignment.center,
-                decoration: boxDecorationWithRoundedCorners(
-                    border:
-                        Border.all(color: isSelected == mData.index ? ColorUtils.colorPrimary : ColorUtils.borderColor),
-                    backgroundColor: Colors.transparent),
+                decoration: boxDecorationWithRoundedCorners(border: Border.all(color: isSelected == mData.index ? ColorUtils.colorPrimary : ColorUtils.borderColor), backgroundColor: Colors.transparent),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    ImageIcon(AssetImage(mData.image.validate()),
-                        size: 20, color: isSelected == mData.index ? ColorUtils.colorPrimary : ColorUtils.dividerColor),
+                    ImageIcon(AssetImage(mData.image.validate()), size: 20, color: isSelected == mData.index ? ColorUtils.colorPrimary : ColorUtils.dividerColor),
                     8.width,
-                    Text(mData.title!,
-                        style: primaryTextStyle(
-                            color: isSelected == mData.index ? ColorUtils.colorPrimary : textSecondaryColorGlobal)),
+                    Text(mData.title!, style: primaryTextStyle(color: isSelected == mData.index ? ColorUtils.colorPrimary : textSecondaryColorGlobal)),
                   ],
                 ),
               ).onTap(() {
@@ -1475,12 +1496,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 value: paymentCollectFrom,
                 decoration: commonInputDecoration(),
                 items: [
-                  DropdownMenuItem(
-                      value: PAYMENT_ON_PICKUP,
-                      child: Text(language.pickupLocation, style: primaryTextStyle(), maxLines: 1)),
-                  DropdownMenuItem(
-                      value: PAYMENT_ON_DELIVERY,
-                      child: Text(language.deliveryLocation, style: primaryTextStyle(), maxLines: 1)),
+                  DropdownMenuItem(value: PAYMENT_ON_PICKUP, child: Text(language.pickupLocation, style: primaryTextStyle(), maxLines: 1)),
+                  DropdownMenuItem(value: PAYMENT_ON_DELIVERY, child: Text(language.deliveryLocation, style: primaryTextStyle(), maxLines: 1)),
                 ],
                 onChanged: (value) {
                   paymentCollectFrom = value!;
@@ -1496,8 +1513,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   Widget InsuranceOptionsWidget(int value, String text) {
     return Container(
-      decoration: boxDecorationWithRoundedCorners(
-          backgroundColor: insuranceSelectedOption == value ? ColorUtils.colorPrimary : Colors.grey.withOpacity(0.1)),
+      decoration: boxDecorationWithRoundedCorners(backgroundColor: insuranceSelectedOption == value ? ColorUtils.colorPrimary : Colors.grey.withOpacity(0.1)),
       //  padding: EdgeInsets.all(8.0),
       child: Row(
         children: [
@@ -1536,9 +1552,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(text,
-                  style:
-                      primaryTextStyle(color: insuranceSelectedOption == value ? Colors.white : ColorUtils.themeColor)),
+              Text(text, style: primaryTextStyle(color: insuranceSelectedOption == value ? Colors.white : ColorUtils.themeColor)),
               if (insuranceSelectedOption == 0 && value == 0)
                 Text(
                   insuranceSelectedOption == 0 ? "${appStore.insurancePercentage} ${language.ofApproxParcelValue}" : "",
@@ -1573,9 +1587,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       children: [
         Text(title, style: secondaryTextStyle()),
         16.width,
-        Text(value,
-                style: boldTextStyle(size: 14), maxLines: 3, textAlign: TextAlign.end, overflow: TextOverflow.ellipsis)
-            .expand(),
+        Text(value, style: boldTextStyle(size: 14), maxLines: 3, textAlign: TextAlign.end, overflow: TextOverflow.ellipsis).expand(),
       ],
     );
   }
@@ -1680,8 +1692,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       lineWidth: 2.0,
       percent: ((selectedTabIndex + 1) / 5) > 1 ? 1 : (selectedTabIndex + 1) / 5,
       animation: true,
-      center:
-          Text((selectedTabIndex + 1).toInt().toString() + " /5", style: boldTextStyle(size: 11, color: Colors.white)),
+      center: Text((selectedTabIndex + 1).toInt().toString() + " /5", style: boldTextStyle(size: 11, color: Colors.white)),
       backgroundColor: Colors.white.withOpacity(0.25),
       progressColor: Colors.white,
     );
@@ -1701,9 +1712,14 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   finish(context);
                   finish(context);
                 },
-                onSuccess: () {
+                onSuccess: () async {
                   finish(context);
-                  createOrderApiCall(ORDER_DRAFT);
+                  if (totalAmountResponse == null) {
+                    await getTotalForOrder();
+                    await createOrderApiCall(ORDER_DRAFT);
+                  } else {
+                    createOrderApiCall(ORDER_DRAFT);
+                  }
                 },
                 message: language.saveDraftConfirmationMsg,
                 primaryText: language.saveDraft,
@@ -1793,13 +1809,10 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                     Duration difference = Duration();
                     Duration differenceCurrentTime = Duration();
                     if (!isDeliverNow) {
-                      pickFromDateTime =
-                          pickDate!.add(Duration(hours: pickFromTime!.hour, minutes: pickFromTime!.minute));
+                      pickFromDateTime = pickDate!.add(Duration(hours: pickFromTime!.hour, minutes: pickFromTime!.minute));
                       pickToDateTime = pickDate!.add(Duration(hours: pickToTime!.hour, minutes: pickToTime!.minute));
-                      deliverFromDateTime =
-                          deliverDate!.add(Duration(hours: deliverFromTime!.hour, minutes: deliverFromTime!.minute));
-                      deliverToDateTime =
-                          deliverDate!.add(Duration(hours: deliverToTime!.hour, minutes: deliverToTime!.minute));
+                      deliverFromDateTime = deliverDate!.add(Duration(hours: deliverFromTime!.hour, minutes: deliverFromTime!.minute));
+                      deliverToDateTime = deliverDate!.add(Duration(hours: deliverToTime!.hour, minutes: deliverToTime!.minute));
                       difference = pickFromDateTime!.difference(deliverFromDateTime!);
                       differenceCurrentTime = DateTime.now().difference(pickFromDateTime!);
                     }
@@ -1826,8 +1839,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                         return Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(language.balanceInsufficientCashPayment,
-                                style: primaryTextStyle(size: 16), textAlign: TextAlign.center),
+                            Text(language.balanceInsufficientCashPayment, style: primaryTextStyle(size: 16), textAlign: TextAlign.center),
                             30.height,
                             Row(
                               children: [
