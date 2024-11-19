@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mighty_delivery/extensions/colors.dart';
+import 'package:mighty_delivery/extensions/common.dart';
 import 'package:mighty_delivery/main/models/CouponListResponseModel.dart';
 import '../../extensions/extension_util/int_extensions.dart';
 import '../../extensions/extension_util/string_extensions.dart';
@@ -37,7 +41,9 @@ class _CouponListScreenState extends State<CouponListScreen> {
     super.initState();
     init();
     scrollController.addListener(() {
-      if (scrollController.position.pixels == scrollController.position.maxScrollExtent && !appStore.isLoading) {
+      if (scrollController.position.pixels ==
+              scrollController.position.maxScrollExtent &&
+          !appStore.isLoading) {
         if (page < totalPage) {
           page++;
           appStore.setLoading(true);
@@ -48,10 +54,10 @@ class _CouponListScreenState extends State<CouponListScreen> {
   }
 
   void init() {
-    getCustomerSupportListApi();
+    getCouponListApiCall();
   }
 
-  Future<void> getCustomerSupportListApi() async {
+  Future<void> getCouponListApiCall() async {
     appStore.setLoading(true);
     await getCouponListApi(page).then((value) {
       appStore.setLoading(false);
@@ -71,8 +77,7 @@ class _CouponListScreenState extends State<CouponListScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
-      //todo add keys
-      appBarTitle: language.customerSupport,
+      appBarTitle: "Coupon List",
       body: Observer(builder: (context) {
         return Stack(
           children: [
@@ -81,66 +86,124 @@ class _CouponListScreenState extends State<CouponListScreen> {
                     itemCount: couponList.length,
                     shrinkWrap: true,
                     controller: scrollController,
-                    padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+                    // padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
                     itemBuilder: (context, index) {
                       CouponModel item = couponList[index];
                       return Container(
-                        margin: EdgeInsets.only(bottom: 16),
-                        padding: EdgeInsets.all(8),
-                        decoration: boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(defaultRadius), border: Border.all(color: appStore.isDarkMode ? Colors.grey.withOpacity(0.3) : ColorUtils.colorPrimary.withOpacity(0.4)), backgroundColor: Colors.transparent),
+                        width: double.infinity,
+                        decoration: boxDecorationWithRoundedCorners(
+                          backgroundColor: appStore.isDarkMode
+                              ? Colors.transparent
+                              : Colors.white,
+                          borderRadius:
+                              BorderRadius.circular(defaultRadius + 5),
+                          border: Border.all(color: ColorUtils.colorPrimary),
+                        ),
+                        height: 100,
                         child: Row(
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text("${language.id} :", style: boldTextStyle()),
-                                        Text(item.id.validate().toString(), style: boldTextStyle()),
-                                      ],
-                                    ),
-                                    Text(item.status.toString(), style: boldTextStyle()),
-                                  ],
+                            Container(
+                              decoration: boxDecorationDefault(
+                                  color: ColorUtils.colorPrimary,
+                                  borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(defaultRadius),
+                                      bottomLeft:
+                                          Radius.circular(defaultRadius))),
+                              child: Center(
+                                child: RotatedBox(
+                                  quarterTurns: 3,
+                                  child: item.valueType == "fixed"
+                                      ? Text(
+                                          "${appStore.currencySymbol}${item.discountAmount} OFF",
+                                          style: boldTextStyle(
+                                              color: Colors.white, size: 18),
+                                        )
+                                      : Text(
+                                          "${item.discountAmount}% OFF",
+                                          style: boldTextStyle(
+                                              color: Colors.white, size: 18),
+                                        ),
                                 ),
-                                8.height,
-                                Row(
-                                  children: [
-                                    //todo add key
-                                    Text('Coupon code : ', style: primaryTextStyle()),
-                                    Text(item.couponCode.validate(), style: primaryTextStyle()),
-                                  ],
-                                ),
-                                8.height,
-                                Row(
-                                  children: [
-                                    Text('${language.startDate} : ', style: primaryTextStyle()),
-                                    Text(item.startDate.validate(), style: primaryTextStyle()),
-                                  ],
-                                ),
-                                8.height,
-                                Row(
-                                  children: [
-                                    Text('${language.endDate} : ', style: primaryTextStyle()),
-                                    10.width,
-                                    Text(item.endDate.validate(), style: primaryTextStyle()),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    //todo add keys
-                                    Text('Type :', style: primaryTextStyle()),
-                                    10.width,
-                                    Text(item.valueType.validate(), style: primaryTextStyle()),
-                                  ],
-                                ),
-                              ],
-                            ).expand(),
+                              ),
+                            ).expand(flex: 1),
+                            Container(
+                              color: appStore.isDarkMode
+                                  ? Colors.transparent
+                                  : Colors.white,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "${item.couponCode}",
+                                            style: boldTextStyle(size: 20),
+                                          ),
+                                          4.height,
+                                          item.valueType == "fixed"
+                                              ? Text(
+                                                  "Save ${appStore.currencySymbol}${item.discountAmount} On Your Order",
+                                                  style: secondaryTextStyle(),
+                                                )
+                                              : Text(
+                                                  "Save ${item.discountAmount}% On Your Order",
+                                                  style: secondaryTextStyle(),
+                                                ),
+                                          4.height,
+                                        ],
+                                      ),
+                                      // Apply Button
+                                      TextButton(
+                                        onPressed: () {
+                                          pop(item);
+                                        },
+                                        child: Text(
+                                          'Select',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ],
+                                  ).paddingSymmetric(
+                                      horizontal: 10, vertical: 1),
+                                  Divider(
+                                    color: Colors.grey,
+                                  ),
+                                  2.height,
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Expires In: ",
+                                        style: secondaryTextStyle(),
+                                      ),
+                                      CountdownTimer(
+                                        startDate:
+                                            DateTime.parse(item.startDate!),
+                                        targetDate: DateTime.parse(item
+                                            .endDate!), // Target date and time
+                                      ),
+                                    ],
+                                  ).paddingSymmetric(horizontal: 10)
+                                ],
+                              ),
+                            ).expand(flex: 9),
                           ],
                         ),
-                      );
+                      ).onTap(() {
+                        pop(item);
+                      }).paddingSymmetric(vertical: 10, horizontal: 10);
                     },
                   )
                 : !appStore.isLoading
@@ -150,6 +213,88 @@ class _CouponListScreenState extends State<CouponListScreen> {
           ],
         );
       }),
+    );
+  }
+}
+
+class CountdownTimer extends StatefulWidget {
+  final DateTime startDate;
+  final DateTime targetDate;
+
+  CountdownTimer({required this.startDate, required this.targetDate});
+
+  @override
+  _CountdownTimerState createState() => _CountdownTimerState();
+}
+
+class _CountdownTimerState extends State<CountdownTimer> {
+  late Timer _timer;
+  Duration _timeLeft = Duration();
+
+  @override
+  void initState() {
+    super.initState();
+    _calculateTimeLeft();
+    _startTimer();
+  }
+
+  void _calculateTimeLeft() {
+    setState(() {
+      if (widget.startDate.day == widget.targetDate.day &&
+          widget.startDate.month == widget.targetDate.month &&
+          widget.startDate.year == widget.targetDate.year) {
+        DateTime endOfDay = DateTime(
+          widget.startDate.year,
+          widget.startDate.month,
+          widget.startDate.day,
+          23,
+          59,
+          59,
+        );
+        _timeLeft = endOfDay.difference(DateTime.now());
+      } else {
+        _timeLeft = widget.targetDate.difference(DateTime.now());
+      }
+    });
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      _calculateTimeLeft();
+      if (_timeLeft.isNegative) {
+        _timer.cancel();
+      }
+    });
+  }
+
+  String _formatTime() {
+    if (widget.startDate.day == widget.targetDate.day &&
+        widget.startDate.month == widget.targetDate.month &&
+        widget.startDate.year == widget.targetDate.year) {
+      final hours = _timeLeft.inHours;
+      final minutes = _timeLeft.inMinutes % 60;
+      final seconds = _timeLeft.inSeconds % 60;
+      return "$hours hrs $minutes mins $seconds secs";
+    } else {
+      final days = _timeLeft.inDays;
+      final hours = _timeLeft.inHours % 24;
+      final minutes = _timeLeft.inMinutes % 60;
+      final seconds = _timeLeft.inSeconds % 60;
+      return "$days days $hours hrs $minutes mins $seconds secs";
+    }
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      _timeLeft.isNegative ? "Time's up!" : _formatTime(),
+      style: boldTextStyle(size: 12, color: darkRed),
     );
   }
 }

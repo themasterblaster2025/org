@@ -7,7 +7,9 @@ class CouponListResponseModel {
 
   CouponListResponseModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
-    pagination = json['pagination'] != null ? new Pagination.fromJson(json['pagination']) : null;
+    pagination = json['pagination'] != null
+        ? new Pagination.fromJson(json['pagination'])
+        : null;
     if (json['data'] != null) {
       data = <CouponModel>[];
       json['data'].forEach((v) {
@@ -35,7 +37,8 @@ class Pagination {
   int? currentPage;
   int? totalPages;
 
-  Pagination({this.totalItems, this.perPage, this.currentPage, this.totalPages});
+  Pagination(
+      {this.totalItems, this.perPage, this.currentPage, this.totalPages});
 
   Pagination.fromJson(Map<String, dynamic> json) {
     totalItems = json['total_items'];
@@ -68,7 +71,19 @@ class CouponModel {
   String? updatedAt;
   Null? deletedAt;
 
-  CouponModel({this.id, this.couponCode, this.startDate, this.endDate, this.valueType, this.discountAmount, this.cityType, this.cityId, this.status, this.createdAt, this.updatedAt, this.deletedAt});
+  CouponModel(
+      {this.id,
+      this.couponCode,
+      this.startDate,
+      this.endDate,
+      this.valueType,
+      this.discountAmount,
+      this.cityType,
+      this.cityId,
+      this.status,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt});
 
   CouponModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
