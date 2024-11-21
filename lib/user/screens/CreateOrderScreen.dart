@@ -464,6 +464,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
       "distance_charge": totalAmountResponse!.distanceAmount!.toDouble(),
       "total_parcel": totalParcelController.text.toInt(),
       "insurance_charge": insuranceAmount,
+      "discount_amount": (totalAmountResponse!.totalAmount! - calculateTotalAmount()),
+      "coupon_code": selectedCoupon?.couponCode ?? null,
     };
 
     log("req----" + req.toString());

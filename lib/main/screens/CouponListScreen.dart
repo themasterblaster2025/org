@@ -95,8 +95,7 @@ class _CouponListScreenState extends State<CouponListScreen> {
                           backgroundColor: appStore.isDarkMode
                               ? Colors.transparent
                               : Colors.white,
-                          borderRadius:
-                              BorderRadius.circular(defaultRadius + 5),
+                          borderRadius: BorderRadius.circular(defaultRadius),
                           border: Border.all(color: ColorUtils.colorPrimary),
                         ),
                         height: 100,
@@ -127,9 +126,13 @@ class _CouponListScreenState extends State<CouponListScreen> {
                               ),
                             ).expand(flex: 1),
                             Container(
-                              color: appStore.isDarkMode
-                                  ? Colors.transparent
-                                  : Colors.white,
+                              decoration: boxDecorationWithRoundedCorners(
+                                backgroundColor: appStore.isDarkMode
+                                    ? Colors.transparent
+                                    : Colors.white,
+                                borderRadius:
+                                    BorderRadius.circular(defaultRadius),
+                              ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [

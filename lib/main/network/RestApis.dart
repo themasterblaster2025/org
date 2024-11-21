@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
@@ -359,6 +360,7 @@ Future updateOrder({
   int? orderId,
   File? picUpSignature,
   File? deliverySignature,
+  List<PlatformFile>? selectedFiles
 }) async {
   MultipartRequest multiPartRequest = await getMultiPartRequest('order-update/$orderId');
   if (pickupDatetime != null) multiPartRequest.fields['pickup_datetime'] = pickupDatetime;
@@ -370,6 +372,14 @@ Future updateOrder({
 
   if (picUpSignature != null) multiPartRequest.files.add(await MultipartFile.fromPath('pickup_time_signature', picUpSignature.path));
   if (deliverySignature != null) multiPartRequest.files.add(await MultipartFile.fromPath('delivery_time_signature', deliverySignature.path));
+
+  if (selectedFiles != null) {
+    for (var file in selectedFiles) {
+      if (file.path != null) {
+        multiPartRequest.files.add(await MultipartFile.fromPath('prof_file[]', file.path!));
+      }
+    }
+  }
   print("==> ${multiPartRequest.toString()}");
   await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
     if (data != null) {

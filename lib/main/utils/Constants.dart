@@ -213,6 +213,8 @@ const ORDER_TRANSFER = 'courier_transfer';
 const ORDER_PAYMENT = 'payment_status_message';
 const ORDER_FAIL = 'failed';
 const ORDER_SHIPPED = 'shipped';
+const ORDER_PICK_UP_TIME = 'pickup_time';
+const ORDER_DELIVERY_TIME = 'delivery_time';
 //endregion
 
 // region CountName

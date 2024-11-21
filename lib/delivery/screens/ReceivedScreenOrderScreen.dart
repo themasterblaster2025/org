@@ -142,6 +142,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
       orderStatus: widget.orderData!.status == ORDER_DEPARTED
           ? ORDER_DELIVERED
           : ORDER_PICKED_UP,
+      selectedFiles: selectedFiles
     ).then((value) {
       appStore.setLoading(false);
       toast(widget.orderData!.status == ORDER_DEPARTED
@@ -152,53 +153,6 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
       appStore.setLoading(false);
       log(error);
     });
-  }
-
-  Future<void> selectPic() async {
-    return showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              AppButton(
-                color: ColorUtils.colorPrimary,
-                text: language.imagePickToCamera,
-                textStyle: primaryTextStyle(color: white),
-                onTap: () {
-                  val = 1;
-                  getImage();
-                  finish(context);
-                },
-              ),
-              16.height,
-              AppButton(
-                color: ColorUtils.colorPrimary,
-                text: language.imagePicToGallery,
-                textStyle: primaryTextStyle(color: white),
-                onTap: () {
-                  val = 2;
-                  getImage();
-                  finish(context);
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Future<void> getImage() async {
-    if (val == 1) {
-      imageProfile = await ImagePicker()
-          .pickImage(source: ImageSource.camera, imageQuality: 100);
-    } else {
-      imageProfile = await ImagePicker()
-          .pickImage(source: ImageSource.gallery, imageQuality: 100);
-    }
-    setState(() {});
   }
 
   @override
@@ -412,7 +366,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(width: 8),
+                        8.width,
                         Container(
                           decoration: boxDecorationDefault(
                               border:
@@ -579,18 +533,18 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   }
 
   saveProofData() async {
-    // to add proof data for order pickup & deliver
     MultipartRequest multiPartRequest =
         await getMultiPartRequest('profOfpicture-save');
     multiPartRequest.fields['order_id'] = widget.orderData!.id.toString();
-    multiPartRequest.fields['type'] = widget.orderData!.status!;
+    multiPartRequest.fields['type'] = widget.orderData!.status == ORDER_DEPARTED
+        ? ORDER_DELIVERY_TIME
+        : ORDER_PICK_UP_TIME;
     if (selectedFiles != null && selectedFiles!.length > 0) {
-      selectedFiles!.forEach((element) async {
-        multiPartRequest.files
-            .add(await MultipartFile.fromPath("prof_picture", element.path!));
-      });
+      for (var element in selectedFiles!) {
+        multiPartRequest.files.add(await MultipartFile.fromPath("prof_file[]", element.path!));
+      };
     }
-    // multiPartRequest.files.add(await MultipartFile.fromPath('vehicle_history_image', file.path));
+
     multiPartRequest.headers.addAll(buildHeaderTokens());
     sendMultiPartRequest(
       multiPartRequest,
@@ -598,16 +552,17 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
         if (data != null) {
           appStore.setLoading(false);
           toast(data["message"]);
-
           finish(context);
           print(data.toString());
         }
       },
       onError: (error) {
+        log("MULTIPART ERROR:::::::: ${error}");
         toast(error.toString(), print: true);
         appStore.setLoading(false);
       },
-    ).catchError((e) {
+    ).catchError((e, s) {
+      log("MULTIPART ERROR:::::::: ${e}, STACKTRACE:::::: ${s}");
       appStore.setLoading(false);
       toast(e.toString());
     });
@@ -706,7 +661,9 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                 width: 100,
                 height: 100,
                 decoration: boxDecorationWithRoundedCorners(
-                    border: Border.all(color: ColorUtils.colorPrimary)),
+                  border: Border.all(color: ColorUtils.colorPrimary),
+                  backgroundColor: Color(0xff1A1A1A)
+                ),
                 child: isImage
                     ? Image.file(
                         width: 100, height: 100,
@@ -732,17 +689,19 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                     //           );
                     //         });
                     //   })
-                    : Container(
+                    :  Container(
                         child: Icon(
                           Icons.play_circle,
-                          color: ColorUtils.colorPrimary,
+                          color: Colors.white,
                         ),
                       ).onTap(() {
                         return showDialog(
                           context: context,
+                          barrierDismissible:
+                              true, // Dismiss dialog when tapping outside
                           builder: (_) {
-                            ChewieController? chewieController;
-                            chewieController = ChewieController(
+                            ChewieController chewieController =
+                                ChewieController(
                               videoPlayerController: videoPlayerController!,
                               autoPlay: true,
                               looping: true,
@@ -750,8 +709,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                                 DeviceOrientation.portraitDown,
                                 DeviceOrientation.portraitUp,
                               ],
-                              //       progressIndicatorDelay: bufferDelay != null ? Duration(milliseconds: bufferDelay!) : null,
-                              hideControlsTimer: const Duration(seconds: 1),
+                              hideControlsTimer: const Duration(seconds: 3),
                               showOptions: false,
                               materialProgressColors: ChewieProgressColors(
                                 playedColor: ColorUtils.colorPrimary,
@@ -759,32 +717,48 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                                 backgroundColor: textSecondaryColorGlobal,
                                 bufferedColor: textSecondaryColorGlobal,
                               ),
-                              // autoInitialize: true,
                             );
-                            // Added material widget cause there is no layout to show video
-                            return Material(
-                              child: Container(
-                                width: context.width(),
-                                height: context.height(),
-                                child: Stack(
-                                  children: [
-                                    AspectRatio(
-                                      aspectRatio: 9 / 16,
-                                      child: chewieController != null &&
-                                              chewieController
-                                                  .videoPlayerController
-                                                  .value
-                                                  .isInitialized
-                                          ? Chewie(controller: chewieController)
-                                          : SizedBox(),
-                                    ).center(),
-                                    Icon(
-                                      size: 16,
-                                      Icons.close,
-                                      color: Colors.red,
-                                    ).onTap(() {})
-                                  ],
-                                ),
+
+                            return Dialog(
+                              backgroundColor: Colors.black,
+                              insetPadding: EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 16),
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  AspectRatio(
+                                    aspectRatio: 16 / 9,
+                                    child: chewieController
+                                            .videoPlayerController
+                                            .value
+                                            .isInitialized
+                                        ? Chewie(controller: chewieController)
+                                        : Center(
+                                            child: CircularProgressIndicator()),
+                                  ),
+                                  Positioned(
+                                    top: 16,
+                                    right: 16,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        chewieController.dispose();
+                                        Navigator.pop(context); // Close dialog
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.white.withOpacity(0.7),
+                                        ),
+                                        padding: EdgeInsets.all(8),
+                                        child: Icon(
+                                          Icons.close,
+                                          color: Colors.red,
+                                          size: 24,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             );
                           },
