@@ -360,7 +360,7 @@ Future updateOrder({
   int? orderId,
   File? picUpSignature,
   File? deliverySignature,
-  List<PlatformFile>? selectedFiles
+  List<File>? selectedFiles
 }) async {
   MultipartRequest multiPartRequest = await getMultiPartRequest('order-update/$orderId');
   if (pickupDatetime != null) multiPartRequest.fields['pickup_datetime'] = pickupDatetime;
@@ -375,8 +375,8 @@ Future updateOrder({
 
   if (selectedFiles != null) {
     for (var file in selectedFiles) {
-      if (file.path != null) {
-        multiPartRequest.files.add(await MultipartFile.fromPath('prof_file[]', file.path!));
+      if (file.path.isNotEmpty) {
+        multiPartRequest.files.add(await MultipartFile.fromPath('prof_file[]', file.path));
       }
     }
   }

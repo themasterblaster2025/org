@@ -79,12 +79,29 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
 
   String? _pickupDatetime;
   String? _deliveryDatetime;
-  List<PlatformFile>? selectedFiles;
+
+  List<File>? _image = [];
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
     super.initState();
     init();
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final XFile? pickedFile = await _picker.pickImage(source: source);
+
+    if (pickedFile != null) {
+      _image!.add(File(pickedFile.path));
+      setState(() {});
+    }
+  }
+
+  void _removeImage(int index) {
+    setState(() {
+      _image!.removeAt(index);
+    });
   }
 
   Future<void> init() async {
@@ -130,20 +147,21 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   saveDelivery() async {
     appStore.setLoading(true);
     await updateOrder(
-      orderId: widget.orderData!.id,
-      pickupDatetime: _pickupDatetime,
-      deliveryDatetime: _deliveryDatetime,
-      clientName:
-          (deliverySignature != null || imageSignature != null) ? '1' : '0',
-      deliveryman: deliverySignature != null ? '1' : '0',
-      picUpSignature: imageSignature,
-      reason: reasonController.text,
-      deliverySignature: deliverySignature,
-      orderStatus: widget.orderData!.status == ORDER_DEPARTED
-          ? ORDER_DELIVERED
-          : ORDER_PICKED_UP,
-      selectedFiles: selectedFiles
-    ).then((value) {
+            orderId: widget.orderData!.id,
+            pickupDatetime: _pickupDatetime,
+            deliveryDatetime: _deliveryDatetime,
+            clientName: (deliverySignature != null || imageSignature != null)
+                ? '1'
+                : '0',
+            deliveryman: deliverySignature != null ? '1' : '0',
+            picUpSignature: imageSignature,
+            reason: reasonController.text,
+            deliverySignature: deliverySignature,
+            orderStatus: widget.orderData!.status == ORDER_DEPARTED
+                ? ORDER_DELIVERED
+                : ORDER_PICKED_UP,
+            selectedFiles: _image)
+        .then((value) {
       appStore.setLoading(false);
       toast(widget.orderData!.status == ORDER_DEPARTED
           ? language.orderDeliveredSuccessfully
@@ -361,7 +379,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                         setState(() {});
                       },
                     ).visible(widget.isShowPayment),
-                    Text("Proof", style: boldTextStyle()),
+                    Text(language.proof, style: boldTextStyle()),
                     16.height,
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -378,53 +396,21 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                             color: ColorUtils.colorPrimary,
                             size: 24,
                           ),
-                        ).onTap(() async {
-                          try {
-                            final result = await FilePicker.platform.pickFiles(
-                              type: FileType.custom,
-                              allowedExtensions: ['jpg', 'png', 'mp4', 'mov'],
-                              allowMultiple: true,
-                            );
-                            if (result != null) {
-                              setState(() {
-                                if (selectedFiles == null) {
-                                  selectedFiles = result.files;
-                                } else {
-                                  selectedFiles!.addAll(result.files);
-                                }
-                              });
-                            }
-                          } catch (e) {
-                            print("Error picking files: $e");
-                          }
+                        ).onTap(() {
+                          _pickImage(ImageSource.camera);
                         }),
-                        if (selectedFiles != null && selectedFiles!.isNotEmpty)
+                        if (_image != null && _image!.isNotEmpty)
                           Expanded(
                             child: Container(
                               height: 120,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                itemCount: selectedFiles!.length,
+                                itemCount: _image!.length,
                                 itemBuilder: (context, index) {
-                                  VideoPlayerController? videoPlayerController;
-                                  bool isImage = selectedFiles![index]
-                                              .extension ==
-                                          'jpg' ||
-                                      selectedFiles![index].extension ==
-                                          'jpeg' ||
-                                      selectedFiles![index].extension == 'png';
-                                  if (!isImage) {
-                                    videoPlayerController =
-                                        VideoPlayerController.networkUrl(
-                                      Uri.parse(selectedFiles![index]
-                                          .path
-                                          .toString()),
-                                    );
-                                    Future.wait(
-                                        [videoPlayerController.initialize()]);
-                                  }
-                                  return buildFileWidget(selectedFiles![index],
-                                      index, isImage, videoPlayerController);
+                                  return buildFileWidget(
+                                    _image![index],
+                                    index,
+                                  );
                                 },
                               ),
                             ),
@@ -476,7 +462,10 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                                                         .contactNumber
                                                         .validate(),
                                             onUpdate: () async {
-                                              await saveProofData();
+                                              if (_image!.isNotEmpty &&
+                                                  _image != null) {
+                                                await saveProofData();
+                                              }
                                               saveOrderData();
                                             },
                                             verificationId: verificationId),
@@ -484,7 +473,9 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                                   },
                                 );
                               } else {
-                                await saveProofData();
+                                if (_image!.isNotEmpty && _image != null) {
+                                  await saveProofData();
+                                }
                                 saveOrderData();
                               }
                             }
@@ -539,10 +530,12 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
     multiPartRequest.fields['type'] = widget.orderData!.status == ORDER_DEPARTED
         ? ORDER_DELIVERY_TIME
         : ORDER_PICK_UP_TIME;
-    if (selectedFiles != null && selectedFiles!.length > 0) {
-      for (var element in selectedFiles!) {
-        multiPartRequest.files.add(await MultipartFile.fromPath("prof_file[]", element.path!));
-      };
+    if (_image != null && _image!.length > 0) {
+      for (var element in _image!) {
+        multiPartRequest.files
+            .add(await MultipartFile.fromPath("prof_file[]", element.path!));
+      }
+      ;
     }
 
     multiPartRequest.headers.addAll(buildHeaderTokens());
@@ -650,120 +643,23 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
     });
   }
 
-  Widget buildFileWidget(PlatformFile file, int index, bool isImage,
-      VideoPlayerController? videoPlayerController) {
-    bool isImage = file.extension == 'jpg' ||
-        file.extension == 'jpeg' ||
-        file.extension == 'png';
+  Widget buildFileWidget(
+    File file,
+    int index,
+  ) {
     return Stack(
       children: [
         Container(
                 width: 100,
                 height: 100,
                 decoration: boxDecorationWithRoundedCorners(
-                  border: Border.all(color: ColorUtils.colorPrimary),
-                  backgroundColor: Color(0xff1A1A1A)
-                ),
-                child: isImage
-                    ? Image.file(
-                        width: 100, height: 100,
-                        File(file.path!), // File object for local image display
-                        fit: BoxFit.cover,
-                      ).cornerRadiusWithClipRRect(10)
-                    // .onTap(() {
-                    //     return showDialog(
-                    //         context: context,
-                    //         builder: (_) {
-                    //           return AspectRatio(
-                    //             aspectRatio: 9 / 16,
-                    //             child: Stack(
-                    //               children: [
-                    //                 Image.file(
-                    //                   width: context.width() * 0.85,
-                    //                   height: context.height() * 0.85,
-                    //                   File(file.path!), // File object for local image display
-                    //                   fit: BoxFit.cover,
-                    //                 ),
-                    //               ],
-                    //             ),
-                    //           );
-                    //         });
-                    //   })
-                    :  Container(
-                        child: Icon(
-                          Icons.play_circle,
-                          color: Colors.white,
-                        ),
-                      ).onTap(() {
-                        return showDialog(
-                          context: context,
-                          barrierDismissible:
-                              true, // Dismiss dialog when tapping outside
-                          builder: (_) {
-                            ChewieController chewieController =
-                                ChewieController(
-                              videoPlayerController: videoPlayerController!,
-                              autoPlay: true,
-                              looping: true,
-                              deviceOrientationsAfterFullScreen: [
-                                DeviceOrientation.portraitDown,
-                                DeviceOrientation.portraitUp,
-                              ],
-                              hideControlsTimer: const Duration(seconds: 3),
-                              showOptions: false,
-                              materialProgressColors: ChewieProgressColors(
-                                playedColor: ColorUtils.colorPrimary,
-                                handleColor: ColorUtils.colorPrimary,
-                                backgroundColor: textSecondaryColorGlobal,
-                                bufferedColor: textSecondaryColorGlobal,
-                              ),
-                            );
-
-                            return Dialog(
-                              backgroundColor: Colors.black,
-                              insetPadding: EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 16),
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  AspectRatio(
-                                    aspectRatio: 16 / 9,
-                                    child: chewieController
-                                            .videoPlayerController
-                                            .value
-                                            .isInitialized
-                                        ? Chewie(controller: chewieController)
-                                        : Center(
-                                            child: CircularProgressIndicator()),
-                                  ),
-                                  Positioned(
-                                    top: 16,
-                                    right: 16,
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        chewieController.dispose();
-                                        Navigator.pop(context); // Close dialog
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Colors.white.withOpacity(0.7),
-                                        ),
-                                        padding: EdgeInsets.all(8),
-                                        child: Icon(
-                                          Icons.close,
-                                          color: Colors.red,
-                                          size: 24,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        );
-                      }).cornerRadiusWithClipRRect(10))
+                    border: Border.all(color: ColorUtils.colorPrimary),
+                    backgroundColor: Color(0xff1A1A1A)),
+                child: Image.file(
+                  width: 100, height: 100,
+                  File(file.path), // File object for local image display
+                  fit: BoxFit.cover,
+                ).cornerRadiusWithClipRRect(10))
             .paddingOnly(left: 4),
         Positioned(
             right: 4,
@@ -774,16 +670,12 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
               color: ColorUtils.borderColor,
               child: Icon(
                 size: 16,
-                Icons.close,
+                Icons.delete_forever,
                 color: Colors.red,
               ).center(),
             ).onTap(() {
-              if (index < selectedFiles!.length) {
-                // Check if index is valid
-                setState(() {
-                  selectedFiles!.removeAt(index);
-                });
-              }
+              _removeImage(index);
+              setState(() {});
             }).cornerRadiusWithClipRRect(40))
       ],
     );

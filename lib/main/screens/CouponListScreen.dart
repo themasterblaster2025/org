@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mighty_delivery/extensions/animatedList/animated_list_view.dart';
 import 'package:mighty_delivery/extensions/colors.dart';
 import 'package:mighty_delivery/extensions/common.dart';
 import 'package:mighty_delivery/main/models/CouponListResponseModel.dart';
+import '../../extensions/animatedList/animated_configurations.dart';
 import '../../extensions/extension_util/int_extensions.dart';
 import '../../extensions/extension_util/string_extensions.dart';
 import '../../extensions/extension_util/widget_extensions.dart';
@@ -77,12 +79,13 @@ class _CouponListScreenState extends State<CouponListScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
-      appBarTitle: "Coupon List",
+      appBarTitle: language.couponList,
       body: Observer(builder: (context) {
         return Stack(
           children: [
             couponList.isNotEmpty
-                ? ListView.builder(
+                ? AnimatedListView(
+                    listAnimationType: ListAnimationType.Slide,
                     itemCount: couponList.length,
                     shrinkWrap: true,
                     controller: scrollController,
@@ -153,11 +156,11 @@ class _CouponListScreenState extends State<CouponListScreen> {
                                           4.height,
                                           item.valueType == "fixed"
                                               ? Text(
-                                                  "Save ${appStore.currencySymbol}${item.discountAmount} On Your Order",
+                                                  "${language.save} ${appStore.currencySymbol}${item.discountAmount} ${language.onThisOrder}",
                                                   style: secondaryTextStyle(),
                                                 )
                                               : Text(
-                                                  "Save ${item.discountAmount}% On Your Order",
+                                                  "${language.save} ${item.discountAmount}% ${language.onThisOrder}",
                                                   style: secondaryTextStyle(),
                                                 ),
                                           4.height,
@@ -169,7 +172,7 @@ class _CouponListScreenState extends State<CouponListScreen> {
                                           pop(item);
                                         },
                                         child: Text(
-                                          'Select',
+                                          '${language.select}',
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold),
@@ -188,7 +191,7 @@ class _CouponListScreenState extends State<CouponListScreen> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "Expires In: ",
+                                        "${language.expiresIn} ",
                                         style: secondaryTextStyle(),
                                       ),
                                       CountdownTimer(
@@ -277,13 +280,13 @@ class _CountdownTimerState extends State<CountdownTimer> {
       final hours = _timeLeft.inHours;
       final minutes = _timeLeft.inMinutes % 60;
       final seconds = _timeLeft.inSeconds % 60;
-      return "$hours hrs $minutes mins $seconds secs";
+      return "$hours ${language.hrs} $minutes ${language.mins} $seconds ${language.secs}";
     } else {
       final days = _timeLeft.inDays;
       final hours = _timeLeft.inHours % 24;
       final minutes = _timeLeft.inMinutes % 60;
       final seconds = _timeLeft.inSeconds % 60;
-      return "$days days $hours hrs $minutes mins $seconds secs";
+      return "$days ${language.days} $hours ${language.hrs} $minutes ${language.mins} $seconds ${language.secs}";
     }
   }
 

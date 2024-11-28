@@ -246,7 +246,7 @@ class OrderAmountDataWidgetState extends State<OrderAmountDataWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Coupon Applied",
+                    Text(language.couponApplied,
                         style: boldTextStyle(color: darkRed)),
                     Text(printAmount((widget.totalAmount! - calculateTotalAmount()) ?? 0),
                         style: boldTextStyle(color: darkRed))

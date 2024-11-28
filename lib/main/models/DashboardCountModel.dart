@@ -4,9 +4,9 @@ class DashboardCount {
   int? inprogressOrder;
   int? completeOrder;
   num? commission;
-  int? walletBalance;
-  int? pendingWithdrawRequest;
-  int? completeWithdrawRequest;
+  num? walletBalance;
+  num? pendingWithdrawRequest;
+  num? completeWithdrawRequest;
 
   DashboardCount({
     this.todayOrder,
