@@ -85,6 +85,7 @@ dependencies:
   firebase_database: ^10.4.7
   paginate_firestore: ^1.0.3+1
   cloud_firestore: ^4.15.6
+  #flutterfire_cli: ^1.0.1-dev.4
 
   # DOWNLOAD INVOICE PDF
   pdf: ^3.10.8
@@ -127,6 +128,10 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+  #FLUTTER ANIMATE
+  flutter_animate: ^4.5.0
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -156,4 +161,3 @@ flutter:
     - assets/icon/
     - assets/packing_symbols/
     - assets/staticjson/
-
