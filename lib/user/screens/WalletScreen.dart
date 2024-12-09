@@ -1,29 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import '../../extensions/extension_util/context_extensions.dart';
-import '../../extensions/extension_util/int_extensions.dart';
-import '../../extensions/extension_util/string_extensions.dart';
-import '../../extensions/extension_util/widget_extensions.dart';
-import '../../main/models/LoginResponse.dart';
+import 'package:mighty_delivery/main/models/LoginResponse.dart';
+import '../../main/screens/BankDetailScreen.dart';
+import '../../main/utils/Colors.dart';
+import '../../user/components/PaymentScreen.dart';
+import 'package:nb_utils/nb_utils.dart';
+
 import '../../delivery/screens/WithDrawScreen.dart';
-import '../../extensions/animatedList/animated_list_view.dart';
-import '../../extensions/app_text_field.dart';
-import '../../extensions/common.dart';
-import '../../extensions/decorations.dart';
-import '../../extensions/shared_pref.dart';
-import '../../extensions/system_utils.dart';
-import '../../extensions/text_styles.dart';
 import '../../main.dart';
-import '../../main/components/CommonScaffoldComponent.dart';
+import '../../main/components/BodyCornerWidget.dart';
 import '../../main/models/WalletListModel.dart';
 import '../../main/network/RestApis.dart';
-import '../../main/screens/BankDetailScreen.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/Widgets.dart';
-import '../../main/utils/dynamic_theme.dart';
-import 'PaymentScreen.dart';
 
 class WalletScreen extends StatefulWidget {
   static String tag = '/WalletScreen';
@@ -80,7 +71,7 @@ class WalletScreenState extends State<WalletScreen> {
 
       currentPage = value.pagination!.currentPage!;
       totalPage = value.pagination!.totalPages!;
-      if (value.walletBalance != null) totalAmount = value.walletBalance!.totalAmount ?? 0;
+      if(value.walletBalance!=null) totalAmount = value.walletBalance!.totalAmount ?? 0;
       if (currentPage == 1) {
         walletData.clear();
       }
@@ -100,187 +91,150 @@ class WalletScreenState extends State<WalletScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () {
+      onWillPop: () async{
         appStore.availableBal = totalAmount;
-        finish(context, true);
-        return Future.value(false);
+        finish(context,true);
+        return false;
       },
-      child: CommonScaffoldComponent(
-        appBar: PreferredSize(
-          preferredSize: Size(context.width(), 130),
-          child: commonAppBarWidget(
-            language.walletHistory,
-            bottom: PreferredSize(
-              preferredSize: Size(context.width(), 80),
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Scaffold(
+        appBar: AppBar(title: Text(language.wallet)),
+        body: Stack(
+          children: [
+            BodyCornerWidget(
+              child: SingleChildScrollView(
+                controller: scrollController,
+                padding: EdgeInsets.only(left: 16, top: 30, right: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(language.availableBalance, style: secondaryTextStyle(size: 16, color: Colors.white)),
-                        6.height,
-                        Text('${printAmount(totalAmount)}', style: boldTextStyle(size: 24, color: Colors.white)),
-                      ],
+                    Container(
+                      decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary),
+                      padding: EdgeInsets.all(16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(language.availableBalance, style: primaryTextStyle(size: 16, color: white.withOpacity(0.7))),
+                              6.height,
+                              Text('${printAmount(totalAmount)}', style: boldTextStyle(size: 22, color: Colors.white)),
+                            ],
+                          ),
+                          commonButton(language.addMoney, () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Dialog(
+                                  insetPadding: EdgeInsets.all(16),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(language.addMoney, style: boldTextStyle(size: 18)),
+                                      Divider(),
+                                      16.height,
+                                      Text(language.amount, style: primaryTextStyle()),
+                                      8.height,
+                                      AppTextField(
+                                        controller: amountCont,
+                                        textFieldType: TextFieldType.PHONE,
+                                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                        decoration: commonInputDecoration(),
+                                      ),
+                                      16.height,
+                                      commonButton(
+                                        language.add,
+                                        () async {
+                                          Navigator.pop(context);
+                                          bool? res = await PaymentScreen(
+                                            totalAmount: amountCont.text.toDouble(),
+                                            isWallet: true,
+                                          ).launch(context);
+                                          if (res == true) {
+                                            getWalletData();
+                                          }
+                                        },
+                                        width: context.width(),
+                                      ),
+                                      16.height,
+                                    ],
+                                  ).paddingAll(16),
+                                );
+                              },
+                            );
+                          }, color:  context.cardColor, textColor: colorPrimary)
+                        ],
+                      ),
                     ),
-                    commonButton(language.addMoney, () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return Dialog(
-                            insetPadding: EdgeInsets.all(16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(language.addMoney, style: boldTextStyle(size: 18)),
-                                Divider(color: context.dividerColor),
-                                16.height,
-                                Text(language.amount, style: primaryTextStyle()),
-                                8.height,
-                                AppTextField(
-                                  controller: amountCont,
-                                  textFieldType: TextFieldType.PHONE,
-                                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                  decoration: commonInputDecoration(),
+                    16.height,
+                    ListView.builder(
+                      padding: EdgeInsets.only(top: 8, bottom: 8),
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: walletData.length,
+                      shrinkWrap: true,
+                      itemBuilder: (_, index) {
+                        WalletModel data = walletData[index];
+                        return Container(
+                          margin: EdgeInsets.only(bottom: 16),
+                          padding: EdgeInsets.all(8),
+                          decoration: boxDecorationRoundedWithShadow(defaultRadius.toInt(),backgroundColor: context.cardColor,shadowColor: appStore.isDarkMode ? Colors.transparent : null),
+                          child: Row(
+                            children: [
+                              Container(
+                                decoration: boxDecorationWithRoundedCorners(backgroundColor: Colors.grey.withOpacity(0.2)),
+                                padding: EdgeInsets.all(6),
+                                child: Icon(data.type == CREDIT ? Icons.add : Icons.remove, color: colorPrimary),
+                              ),
+                              10.width,
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(transactionType(data.transactionType!), style: boldTextStyle(size: 16)),
+                                    SizedBox(height: 8),
+                                    Text(printDate(data.createdAt.validate()), style: secondaryTextStyle(size: 12)),
+                                  ],
                                 ),
-                                16.height,
-                                commonButton(
-                                  language.add,
-                                  () async {
-                                    if (amountCont.text.isNotEmpty) {
-                                      Navigator.pop(context);
-                                      bool? res = await PaymentScreen(
-                                        totalAmount: amountCont.text.toDouble(),
-                                        isWallet: true,
-                                      ).launch(context);
-                                      if (res == true) {
-                                        getWalletData();
-                                      }
-                                    } else {
-                                      toast(language.addAmount);
-                                    }
-                                  },
-                                  width: context.width(),
-                                ),
-                                16.height,
-                              ],
-                            ).paddingAll(16),
-                          );
-                        },
-                      );
-                    }, color: Colors.white38, textColor: Colors.white)
+                              ),
+                              Text('${printAmount(data.amount)}', style: secondaryTextStyle(color:data.type == CREDIT? Colors.green:Colors.red))
+                            ],
+                          ),
+                        );
+                      },
+                    )
                   ],
                 ),
               ),
             ),
-          ),
-        ),
-        body: Stack(
-          children: [
-            AnimatedListView(
-              padding: EdgeInsets.all(16),
-              itemCount: walletData.length,
-              emptyWidget: Stack(
-                children: [
-                  loaderWidget().visible(appStore.isLoading),
-                  emptyWidget().visible(!appStore.isLoading),
-                ],
-              ),
-              onPageScrollChange: () {
-                // appStore.setLoading(true);
-              },
-              onNextPage: () {
-                if (currentPage < totalPage) {
-                  appStore.setLoading(true);
-                  currentPage++;
-                  getWalletData();
-                }
-              },
-              shrinkWrap: true,
-              itemBuilder: (_, index) {
-                WalletModel data = walletData[index];
-                return walletCard(data);
-              },
-            ),
             Observer(builder: (context) => loaderWidget().visible(appStore.isLoading)),
           ],
         ),
-        bottomNavigationBar: totalAmount != 0
-            ? commonButton(
-                language.withdrawHistory,
-                () {
-                  if (userBankAccount != null)
-                    WithDrawScreen(
-                      onTap: () {
-                        init();
-                      },
-                    ).launch(context);
-                  else {
-                    toast(language.bankNotFound);
-                    BankDetailScreen(isWallet: true).launch(context).then((value) {
-                      init();
-                    });
-                  }
-                },
-              ).paddingSymmetric(horizontal: 16, vertical: 8)
-            : SizedBox(),
-      ),
-    );
-  }
-
-  Widget walletCard(WalletModel data) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 16),
-      padding: EdgeInsets.all(8),
-      decoration: boxDecorationWithRoundedCorners(
-          borderRadius: radius(defaultRadius),
-          backgroundColor: Colors.transparent,
-          border: Border.all(color: ColorUtils.colorPrimary.withOpacity(0.08))),
-      child: Row(
-        children: [
-          Container(
-            decoration: boxDecorationWithRoundedCorners(backgroundColor: ColorUtils.colorPrimary.withOpacity(0.08)),
-            padding: EdgeInsets.all(6),
-            child: Icon(data.type == CREDIT ? Icons.add : Icons.remove, color: ColorUtils.colorPrimary),
+        bottomNavigationBar: Padding(
+          padding: EdgeInsets.all(16),
+          child: Row(
+            children: [
+              if (totalAmount != 0)
+                Expanded(
+                  child: commonButton(
+                    language.withdraw,
+                    () {
+                      if (userBankAccount != null)
+                        WithDrawScreen(
+                          onTap: () {
+                            init();
+                          },
+                        ).launch(context);
+                      else {
+                        toast(language.bankNotFound);
+                        BankDetailScreen(isWallet: true).launch(context);
+                      }
+                    },
+                  ),
+                ),
+            ],
           ),
-          10.width,
-          Expanded(
-            flex: 2,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(transactionType(data.transactionType!), style: secondaryTextStyle(color: textPrimaryColorGlobal)),
-                SizedBox(height: 8),
-                Text(printDate(data.createdAt.validate()), style: secondaryTextStyle(size: 12)),
-                SizedBox(height: 8),
-              ],
-            ),
-          ),
-          Container(
-            child: Column(
-              children: [
-                Text('${data.type == CREDIT ? '+' : '-'} ${printAmount(data.amount)}',
-                    style: boldTextStyle(color: data.type == CREDIT ? Colors.green : Colors.red)),
-                6.height,
-                Container(
-                        decoration: boxDecorationDefault(
-                            border: Border.all(color: Colors.grey.withOpacity(0.2)), color: Colors.transparent),
-                        child: Text(language.copy, style: boldTextStyle(color: ColorUtils.colorPrimary, size: 14))
-                            .paddingAll(6)
-                            .center())
-                    .onTap(() {
-                  Clipboard.setData(ClipboardData(text: data.transactionType!.split(":")[1])).then((_) {
-                    snackBar(context,
-                        content: Text("${data.transactionType!.split(":")[1]}  ${language.copiedToClipboard}"));
-                  });
-                }).visible(data.transactionType!.contains("Transaction Id")),
-              ],
-            ),
-          )
-        ],
+        ),
       ),
     );
   }

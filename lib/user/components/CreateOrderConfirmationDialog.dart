@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../extensions/extension_util/int_extensions.dart';
-import '../../extensions/system_utils.dart';
-import '../../extensions/text_styles.dart';
 import '../../main/utils/Widgets.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
 
@@ -20,6 +18,16 @@ class CreateOrderConfirmationDialog extends StatefulWidget {
 }
 
 class CreateOrderConfirmationDialogState extends State<CreateOrderConfirmationDialog> {
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  Future<void> init() async {
+    //
+  }
+
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);

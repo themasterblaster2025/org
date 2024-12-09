@@ -3,9 +3,9 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  file_selector_linux
   maps_launcher
-  open_file_linux
+  nb_utils
+  printing
   url_launcher_linux
 )
 

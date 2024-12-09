@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
-import '../../extensions/extension_util/context_extensions.dart';
-import '../../extensions/extension_util/int_extensions.dart';
-import '../../extensions/extension_util/widget_extensions.dart';
-
-import '../../extensions/text_styles.dart';
-import '../../main.dart';
-
+import 'package:nb_utils/nb_utils.dart';
 class NoInternetScreen extends StatefulWidget {
   @override
   _NoInternetScreenState createState() => _NoInternetScreenState();
 }
 
 class _NoInternetScreenState extends State<NoInternetScreen> {
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  void init() async {
+    //
+  }
+
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
@@ -26,7 +30,7 @@ class _NoInternetScreenState extends State<NoInternetScreen> {
         children: [
           Icon(Icons.wifi_off, size: 100, color: context.iconColor),
           16.height,
-          Text(language.errorInternetNotAvailable, style: boldTextStyle(size: 20)),
+          Text(errorInternetNotAvailable, style: boldTextStyle(size: 20)),
         ],
       ).center(),
     );

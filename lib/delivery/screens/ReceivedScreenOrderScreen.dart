@@ -4,33 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import '../../extensions/extension_util/bool_extensions.dart';
-import '../../extensions/extension_util/context_extensions.dart';
-import '../../extensions/extension_util/int_extensions.dart';
-import '../../extensions/extension_util/string_extensions.dart';
-import '../../extensions/extension_util/widget_extensions.dart';
-import '../../main/utils/Widgets.dart';
+import '../../main.dart';
+import '../../main/components/BodyCornerWidget.dart';
+import '../../main/models/OrderListModel.dart';
+import '../../main/network/RestApis.dart';
+import '../../main/services/AuthSertvices.dart';
+import '../../main/utils/Colors.dart';
+import '../../main/utils/Common.dart';
+import '../../main/utils/Constants.dart';
+import '../../user/components/CancelOrderDialog.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
 
-import '../../extensions/app_button.dart';
-import '../../extensions/app_text_field.dart';
-import '../../extensions/colors.dart';
-import '../../extensions/common.dart';
-import '../../extensions/confirmation_dialog.dart';
-import '../../extensions/system_utils.dart';
-import '../../extensions/text_styles.dart';
-import '../../extensions/widgets.dart';
-import '../../main.dart';
-import '../../main/components/CommonScaffoldComponent.dart';
-import '../../main/models/OrderListModel.dart';
-import '../../main/network/RestApis.dart';
-import '../../main/services/AuthServices.dart';
-import '../../main/utils/Common.dart';
-import '../../main/utils/Constants.dart';
-import '../../main/utils/dynamic_theme.dart';
-import '../../user/components/CancelOrderDialog.dart';
 import '../components/OTPDialog.dart';
 
 class ReceivedScreenOrderScreen extends StatefulWidget {
@@ -66,9 +53,6 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   String? reason;
   bool mIsCheck = false;
 
-  String? _pickupDatetime;
-  String? _deliveryDatetime;
-
   @override
   void initState() {
     super.initState();
@@ -78,24 +62,13 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   Future<void> init() async {
     mIsUpdate = widget.orderData != null;
     if (mIsUpdate) {
-      if (widget.orderData!.pickupDatetime.validate().isEmpty) {
-        _pickupDatetime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now().toUtc());
-      } else {
-        _pickupDatetime = widget.orderData!.pickupDatetime.validate();
-      }
-      picUpController.text = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(
-          widget.orderData!.pickupDatetime.validate().isEmpty
-              ? DateTime.now().toString()
-              : DateTime.parse("${widget.orderData!.pickupDatetime.validate()}Z").toLocal().toString()));
+      picUpController.text = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(widget.orderData!.pickupDatetime.validate().isEmpty ? DateTime.now().toString() : widget.orderData!.pickupDatetime.validate()));
       reasonController.text = widget.orderData!.reason.validate();
       reason = widget.orderData!.reason.validate();
       log(picUpController);
     }
 
-    if (widget.orderData!.status == ORDER_DEPARTED) {
-      deliveryDateController.text = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
-      _deliveryDatetime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now().toUtc());
-    }
+    if (widget.orderData!.status == ORDER_DEPARTED) deliveryDateController.text = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
   }
 
   Future<File> saveSignature(ScreenshotController screenshotController) async {
@@ -112,8 +85,8 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
     appStore.setLoading(true);
     await updateOrder(
       orderId: widget.orderData!.id,
-      pickupDatetime: _pickupDatetime,
-      deliveryDatetime: _deliveryDatetime,
+      pickupDatetime: picUpController.text,
+      deliveryDatetime: deliveryDateController.text,
       clientName: (deliverySignature != null || imageSignature != null) ? '1' : '0',
       deliveryman: deliverySignature != null ? '1' : '0',
       picUpSignature: imageSignature,
@@ -122,12 +95,11 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
       orderStatus: widget.orderData!.status == ORDER_DEPARTED ? ORDER_DELIVERED : ORDER_PICKED_UP,
     ).then((value) {
       appStore.setLoading(false);
-      toast(widget.orderData!.status == ORDER_DEPARTED
-          ? language.orderDeliveredSuccessfully
-          : language.orderPickupSuccessfully);
+      toast(widget.orderData!.status == ORDER_DEPARTED ? language.orderDeliveredSuccessfully : language.orderPickupSuccessfully);
       finish(context, true);
     }).catchError((error) {
       appStore.setLoading(false);
+
       log(error);
     });
   }
@@ -141,7 +113,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               AppButton(
-                color: ColorUtils.colorPrimary,
+                color: colorPrimary,
                 text: language.imagePickToCamera,
                 textStyle: primaryTextStyle(color: white),
                 onTap: () {
@@ -152,7 +124,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
               ),
               16.height,
               AppButton(
-                color: ColorUtils.colorPrimary,
+                color: colorPrimary,
                 text: language.imagePicToGallery,
                 textStyle: primaryTextStyle(color: white),
                 onTap: () {
@@ -184,14 +156,14 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CommonScaffoldComponent(
-      appBar: commonAppBarWidget(
-        widget.orderData!.status == ORDER_DEPARTED ? language.orderDeliver : language.orderPickup,
-        backWidget: IconButton(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.orderData!.status == ORDER_DEPARTED ? language.orderDeliver : language.orderPickup),
+        leading: IconButton(
           onPressed: () {
             finish(context, false);
           },
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: Icon(Icons.arrow_back),
         ),
       ),
       body: Observer(builder: (context) {
@@ -199,25 +171,21 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
           key: formKey,
           child: Stack(
             children: [
-              SingleChildScrollView(
-                padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (widget.isShowPayment.validate()) ...[
-                      Text('${language.collectedAmount} : ${printAmount(widget.orderData!.totalAmount ?? 0)}',
-                          style: boldTextStyle()),
-                      8.height,
-                    ],
-                    if (widget.orderData!.paymentId == null)
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(defaultRadius),
-                          color: Colors.red.withOpacity(0.2),
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
+              BodyCornerWidget(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.only(left: 16, top: 30, right: 16, bottom: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (widget.orderData!.paymentId == null)
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(defaultRadius),
+                            color: Colors.red.withOpacity(0.2),
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(defaultRadius),
@@ -225,207 +193,182 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
                                   ),
                                 ),
                                 padding: EdgeInsets.all(8),
-                                child: Icon(Icons.info_outlined)),
-                            16.width,
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(language.info, style: boldTextStyle()),
-                                4.height,
-                                widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY
-                                    ? Text(language.paymentCollectFromDelivery,
-                                        style: secondaryTextStyle(), overflow: TextOverflow.ellipsis, maxLines: 2)
-                                    : Text(language.paymentCollectFromPickup, style: secondaryTextStyle()),
-                              ],
-                            ).paddingAll(8).expand(),
+                                child: Icon(Icons.info_outlined),
+                              ),
+                              16.width,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(language.info, style: boldTextStyle()),
+                                  4.height,
+                                  widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY
+                                      ? Text(language.paymentCollectFromDelivery, style: secondaryTextStyle())
+                                      : Text(language.paymentCollectFromPickup, style: secondaryTextStyle()),
+                                ],
+                              ).paddingAll(8),
+                            ],
+                          ),
+                        ),
+                      16.height,
+                      Text('${language.order} ${language.pickupDatetime}', style: boldTextStyle()),
+                      8.height,
+                      AppTextField(
+                        readOnly: true,
+                        textFieldType: TextFieldType.OTHER,
+                        controller: picUpController,
+                        decoration: commonInputDecoration(),
+                      ),
+                      16.height,
+                      if (widget.orderData!.status == ORDER_DEPARTED)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(language.deliveryDatetime, style: boldTextStyle()),
+                            8.height,
+                            AppTextField(
+                              readOnly: true,
+                              textFieldType: TextFieldType.PHONE,
+                              controller: deliveryDateController,
+                              decoration: commonInputDecoration(),
+                            ),
                           ],
                         ),
-                      ),
-                    16.height,
-                    Text('${language.order} ${language.pickupDatetime.toLowerCase()}', style: boldTextStyle()),
-                    8.height,
-                    AppTextField(
-                      readOnly: true,
-                      textFieldType: TextFieldType.OTHER,
-                      controller: picUpController,
-                      decoration: commonInputDecoration(),
-                    ),
-                    8.height,
-                    if (widget.orderData!.status == ORDER_DEPARTED)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(language.deliveryDatetime, style: boldTextStyle()),
-                          8.height,
-                          AppTextField(
-                            readOnly: true,
-                            textFieldType: TextFieldType.PHONE,
-                            controller: deliveryDateController,
-                            decoration: commonInputDecoration(),
-                          ),
-                        ],
-                      ),
-                    8.height,
-                    Text(language.userSignature, style: boldTextStyle()),
-                    8.height,
-                    widget.orderData!.pickupConfirmByClient == 1 || widget.orderData!.status == ORDER_DEPARTED
-                        ? commonCachedNetworkImage(widget.orderData!.pickupTimeSignature,
-                            fit: BoxFit.cover, height: 150, width: context.width())
-                        : Container(
-                            height: 150,
-                            width: context.width(),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(defaultRadius),
-                                color: Colors.grey.withOpacity(0.15)),
-                            child: Screenshot(
-                              controller: pickupScreenshotController,
-                              child: SfSignaturePad(
-                                key: signaturePicUPPadKey,
-                                minimumStrokeWidth: 1,
-                                maximumStrokeWidth: 3,
-                                strokeColor: ColorUtils.colorPrimary,
+                      16.height,
+                      Text(language.userSignature, style: boldTextStyle()),
+                      8.height,
+                      widget.orderData!.pickupConfirmByClient == 1 || widget.orderData!.status == ORDER_DEPARTED
+                          ? commonCachedNetworkImage(widget.orderData!.pickupTimeSignature, fit: BoxFit.cover, height: 150, width: context.width())
+                          : Container(
+                              height: 150,
+                              width: context.width(),
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(defaultRadius), color: Colors.grey.withOpacity(0.15)),
+                              child: Screenshot(
+                                controller: pickupScreenshotController,
+                                child: SfSignaturePad(
+                                  key: signaturePicUPPadKey,
+                                  minimumStrokeWidth: 1,
+                                  maximumStrokeWidth: 3,
+                                  strokeColor: colorPrimary,
+                                ),
                               ),
                             ),
-                          ),
-                    if (widget.orderData!.pickupConfirmByClient != 1)
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            8.width,
-                            TextButton(
-                              child: Text(language.clear,
-                                  style: boldTextStyle(
-                                      color: ColorUtils.colorPrimary, decoration: TextDecoration.underline)),
-                              onPressed: () async {
-                                signaturePicUPPadKey.currentState!.clear();
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    Text(language.deliveryTimeSignature, style: boldTextStyle()).visible(
-                        widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
-                    8.height.visible(
-                        widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
-                    if (widget.orderData!.status == ORDER_DEPARTED)
-                      Container(
-                        height: 150,
-                        width: context.width(),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(defaultRadius), color: Colors.grey.withOpacity(0.15)),
-                        child: Screenshot(
-                          controller: deliveryScreenshotController,
-                          child: SfSignaturePad(
-                            key: signatureDeliveryPadKey,
-                            minimumStrokeWidth: 1,
-                            maximumStrokeWidth: 3,
-                            strokeColor: ColorUtils.colorPrimary,
+                      if (widget.orderData!.pickupConfirmByClient != 1)
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              8.width,
+                              TextButton(
+                                child: Text(language.clear, style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
+                                onPressed: () async {
+                                  signaturePicUPPadKey.currentState!.clear();
+                                },
+                              ),
+                            ],
                           ),
                         ),
-                      ).visible(
-                          widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
-                    if (widget.orderData!.status == ORDER_DEPARTED)
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            8.width,
-                            TextButton(
-                              child: Text(language.clear,
-                                  style: boldTextStyle(
-                                      color: ColorUtils.colorPrimary, decoration: TextDecoration.underline)),
-                              onPressed: () async {
-                                signatureDeliveryPadKey.currentState!.clear();
-                              },
-                            ),
-                          ],
-                        ),
-                      ).visible(
-                          widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
-                    CheckboxListTile(
-                      dense: true,
-                      contentPadding: EdgeInsets.zero,
-                      value: mIsCheck,
-                      activeColor: ColorUtils.colorPrimary,
-                      checkColor: Colors.white,
-                      title: Text(
-                          widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY
-                              ? language.paymentCollectFrom
-                              : language.isPaymentCollected,
-                          style: primaryTextStyle()),
-                      onChanged: (val) {
-                        mIsCheck = val!;
-                        setState(() {});
-                      },
-                    ).visible(widget.isShowPayment),
-                    16.height,
-                    Row(
-                      children: [
-                        AppButton(
+                      Text(language.deliveryTimeSignature, style: boldTextStyle()).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
+                      8.height.visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
+                      if (widget.orderData!.status == ORDER_DEPARTED)
+                        Container(
+                          height: 150,
                           width: context.width(),
-                          text: widget.orderData!.status == ORDER_DEPARTED
-                              ? language.confirmDelivery
-                              : language.confirmPickup,
-                          textStyle: primaryTextStyle(color: white),
-                          color: ColorUtils.colorPrimary,
-                          onTap: () async {
-                            if (!mIsCheck && widget.orderData!.paymentId == null && widget.isShowPayment) {
-                              return toast(language.pleaseConfirmPayment);
-                            } else {
-                              (appStore.isOtpVerifyOnPickupDelivery == true)
-                                  ? sendOtp(
-                                      context,
-                                      phoneNumber: widget.orderData!.status == ORDER_DEPARTED
-                                          ? widget.orderData!.deliveryPoint!.contactNumber.validate()
-                                          : widget.orderData!.pickupPoint!.contactNumber.validate(),
-                                      onUpdate: (verificationId) async {
-                                        await showInDialog(context,
-                                            builder: (context) => OTPDialog(
-                                                phoneNumber: widget.orderData!.status == ORDER_DEPARTED
-                                                    ? widget.orderData!.deliveryPoint!.contactNumber.validate()
-                                                    : widget.orderData!.pickupPoint!.contactNumber.validate(),
-                                                onUpdate: () {
-                                                  saveOrderData();
-                                                },
-                                                verificationId: verificationId),
-                                            barrierDismissible: false);
-                                      },
-                                    )
-                                  : saveOrderData();
-                            }
-                          },
-                        ).expand(),
-                        if (widget.orderData!.status == ORDER_ACCEPTED && widget.orderData!.status == ORDER_ARRIVED)
-                          16.width,
-                        if (widget.orderData!.status == ORDER_ACCEPTED && widget.orderData!.status == ORDER_ARRIVED)
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(defaultRadius), color: Colors.grey.withOpacity(0.15)),
+                          child: Screenshot(
+                            controller: deliveryScreenshotController,
+                            child: SfSignaturePad(
+                              key: signatureDeliveryPadKey,
+                              minimumStrokeWidth: 1,
+                              maximumStrokeWidth: 3,
+                              strokeColor: colorPrimary,
+                            ),
+                          ),
+                        ).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
+                      if (widget.orderData!.status == ORDER_DEPARTED)
+                        Align(
+                          alignment: Alignment.bottomRight,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              8.width,
+                              TextButton(
+                                child: Text(language.clear, style: boldTextStyle(color: colorPrimary, decoration: TextDecoration.underline)),
+                                onPressed: () async {
+                                  signatureDeliveryPadKey.currentState!.clear();
+                                },
+                              ),
+                            ],
+                          ),
+                        ).visible(widget.orderData!.status == ORDER_DEPARTED || widget.orderData!.status == ORDER_DELIVERED),
+                      16.height,
+                      CheckboxListTile(
+                        value: mIsCheck,
+                        activeColor: colorPrimary,
+                        title: Text(widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY ? language.paymentCollectFrom : language.paymentCollectFromPickup, style: primaryTextStyle()),
+                        onChanged: (val) {
+                          mIsCheck = val!;
+                          setState(() {});
+                        },
+                      ).visible(widget.isShowPayment),
+                      16.height,
+                      Row(
+                        children: [
                           AppButton(
                             width: context.width(),
-                            text: language.cancelOrder,
+                            text: widget.orderData!.status == ORDER_DEPARTED ? language.confirmDelivery : language.confirmPickup,
                             textStyle: primaryTextStyle(color: white),
-                            elevation: 0,
-                            color: Colors.red,
+                            color: colorPrimary,
                             onTap: () async {
-                              showInDialog(
-                                context,
-                                barrierDismissible: false,
-                                contentPadding: EdgeInsets.all(16),
-                                builder: (p0) {
-                                  return CancelOrderDialog(
-                                    orderId: widget.orderData!.id.validate(),
-                                    onUpdate: () {
-                                      finish(context);
-                                    },
-                                  );
-                                },
-                              );
+                              if (!mIsCheck && widget.orderData!.paymentId == null && widget.isShowPayment) {
+                                return toast(language.pleaseConfirmPayment);
+                              } else {
+                                appStore.isOtpVerifyOnPickupDelivery
+                                    ? sendOtp(
+                                        context,
+                                        phoneNumber: widget.orderData!.status == ORDER_DEPARTED ? widget.orderData!.deliveryPoint!.contactNumber.validate() : widget.orderData!.pickupPoint!.contactNumber.validate(),
+                                        onUpdate: (verificationId) async {
+                                          await showInDialog(context,
+                                              builder: (context) => OTPDialog(
+                                                  phoneNumber: widget.orderData!.status == ORDER_DEPARTED ? widget.orderData!.deliveryPoint!.contactNumber.validate() : widget.orderData!.pickupPoint!.contactNumber.validate(),
+                                                  onUpdate: () {
+                                                    saveOrderData();
+                                                  },
+                                                  verificationId: verificationId),
+                                              barrierDismissible: false);
+                                        },
+                                      )
+                                    : saveOrderData();
+                              }
                             },
                           ).expand(),
-                      ],
-                    ),
-                  ],
+                          if (widget.orderData!.status == ORDER_ACCEPTED && widget.orderData!.status == ORDER_ARRIVED) 16.width,
+                          if (widget.orderData!.status == ORDER_ACCEPTED && widget.orderData!.status == ORDER_ARRIVED)
+                            AppButton(
+                              width: context.width(),
+                              text: language.cancelOrder,
+                              textStyle: primaryTextStyle(color: white),
+                              elevation: 0,
+                              color: Colors.red,
+                              onTap: () async {
+                                showInDialog(
+                                  context,
+                                  contentPadding: EdgeInsets.all(16),
+                                  builder: (p0) {
+                                    return CancelOrderDialog(
+                                      orderId: widget.orderData!.id.validate(),
+                                      onUpdate: () {
+                                        finish(context);
+                                      },
+                                    );
+                                  },
+                                );
+                              },
+                            ).expand(),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Observer(
@@ -458,22 +401,18 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
       }
     }
 
-    if (widget.orderData!.paymentId == null &&
-        widget.orderData!.paymentCollectFrom == PAYMENT_ON_PICKUP &&
-        (widget.orderData!.status == ORDER_ACCEPTED || widget.orderData!.status == ORDER_ARRIVED)) {
+    if (widget.orderData!.paymentId == null && widget.orderData!.paymentCollectFrom == PAYMENT_ON_PICKUP && (widget.orderData!.status == ORDER_ACCEPTED || widget.orderData!.status == ORDER_ARRIVED)) {
       appStore.setLoading(true);
       await paymentConfirmDialog(widget.orderData!);
       appStore.setLoading(false);
-    } else if (widget.orderData!.paymentId == null &&
-        widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY &&
-        widget.orderData!.status == ORDER_DEPARTED) {
+    } else if (widget.orderData!.paymentId == null && widget.orderData!.paymentCollectFrom == PAYMENT_ON_DELIVERY && widget.orderData!.status == ORDER_DEPARTED) {
       appStore.setLoading(true);
       await paymentConfirmDialog(widget.orderData!);
       appStore.setLoading(false);
     } else {
       showConfirmDialogCustom(
         context,
-        primaryColor: ColorUtils.colorPrimary,
+        primaryColor: colorPrimary,
         dialogType: DialogType.CONFIRMATION,
         title: orderTitle(widget.orderData!.status!),
         positiveText: language.yes,
@@ -486,12 +425,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
   }
 
   Future<void> paymentConfirmDialog(OrderData orderData) {
-    return showConfirmDialogCustom(context,
-        primaryColor: ColorUtils.colorPrimary,
-        dialogType: DialogType.CONFIRMATION,
-        title: orderTitle(orderData.status!),
-        positiveText: language.yes,
-        negativeText: language.cancel, onAccept: (c) async {
+    return showConfirmDialogCustom(context, primaryColor: colorPrimary, dialogType: DialogType.CONFIRMATION, title: orderTitle(orderData.status!), positiveText: language.yes, negativeText: language.cancel, onAccept: (c) async {
       appStore.setLoading(true);
       Map req = {
         'order_id': orderData.id,
@@ -504,7 +438,7 @@ class ReceivedScreenOrderScreenState extends State<ReceivedScreenOrderScreen> {
       await savePayment(req).then((value) async {
         await saveDelivery().then((value) async {
           appStore.setLoading(false);
-          // finish(context, true);
+          finish(context, true);
         }).catchError((error) {
           appStore.setLoading(false);
           log(error);

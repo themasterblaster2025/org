@@ -1,22 +1,19 @@
-import 'package:flutter/cupertino.dart';
+import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import '../../extensions/extension_util/int_extensions.dart';
-import '../../extensions/extension_util/list_extensions.dart';
-import '../../extensions/extension_util/widget_extensions.dart';
-import '../../extensions/LiveStream.dart';
-import '../../extensions/animatedList/animated_configurations.dart';
-import '../../extensions/animatedList/animated_list_view.dart';
-import '../../extensions/common.dart';
-import '../../extensions/shared_pref.dart';
-import '../../extensions/system_utils.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:intl/intl.dart';
 import '../../main.dart';
 import '../../main/models/OrderListModel.dart';
 import '../../main/models/models.dart';
 import '../../main/network/RestApis.dart';
+import '../../user/screens/OrderTrackingScreen.dart';
+import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
-import '../components/OrderCardComponent.dart';
+import '../../user/screens/OrderDetailScreen.dart';
+import 'package:nb_utils/nb_utils.dart';
+
+import '../components/GenerateInvoice.dart';
 
 class OrderFragment extends StatefulWidget {
   static String tag = '/OrderFragment';
@@ -27,15 +24,23 @@ class OrderFragment extends StatefulWidget {
 
 class OrderFragmentState extends State<OrderFragment> {
   List<OrderData> orderList = [];
+  ScrollController scrollController = ScrollController();
   int page = 1;
   int totalPage = 1;
   bool isLastPage = false;
-  List storeList = [];
 
   @override
   void initState() {
     super.initState();
     init();
+    scrollController.addListener(() {
+      if (scrollController.position.pixels == scrollController.position.maxScrollExtent && !appStore.isLoading) {
+        if (page < totalPage) {
+          page++;
+          getOrderListApiCall();
+        }
+      }
+    });
     LiveStream().on('UpdateOrderData', (p0) {
       page = 1;
       getOrderListApiCall();
@@ -43,69 +48,50 @@ class OrderFragmentState extends State<OrderFragment> {
     });
   }
 
-  Future<void> getOrderData() async {
-    await getOrderListApiCall();
-  }
-
   Future<void> init() async {
-    getOrderData();
-
+    await getOrderListApiCall();
     await getAppSetting().then((value) {
       appStore.setOtpVerifyOnPickupDelivery(value.otpVerifyOnPickupDelivery == 1);
-      appStore.setCurrencyCode(value.currencyCode ?? CURRENCY_CODE);
-      appStore.setCurrencySymbol(value.currency ?? CURRENCY_SYMBOL);
+      appStore.setCurrencyCode(value.currencyCode ?? currencyCode);
+      appStore.setCurrencySymbol(value.currency ?? currencySymbol);
       appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
-      appStore.setSiteEmail(value.siteEmail ?? "");
-      appStore.setCopyRight(value.siteCopyright ?? "");
       appStore.isVehicleOrder = value.isVehicleInOrder ?? 0;
-      appStore.setDistanceUnit(value.distanceUnit ?? DISTANCE_UNIT_KM);
-      appStore.setCopyRight(value.siteCopyright ?? "");
-      // appStore.setOrderTrackingIdPrefix(value.orderTrackingIdPrefix ?? "");
-      appStore.setIsInsuranceAllowed(value.isInsuranceAllowed ?? "0");
-      appStore.setInsurancePercentage(value.insurancePercentage ?? "0");
-      appStore.setInsuranceDescription(value.insuranceDescription ?? "");
-      appStore.setMaxAmountPerMonth(value.maxEarningsPerMonth ?? '');
-      appStore.setClaimDuration(value.claimDuration ?? '');
-      if (value.storeType!.validate().isNotEmpty) {
-        storeList = value.storeType.validate();
-        setState(() {});
-        // storeList.add(value.storeManage.validate());
-      }
     }).catchError((error) {
       log(error.toString());
+    });
+    await getInvoiceSetting().then((value) {
+      if(value.invoiceData!=null && value.invoiceData!.isNotEmpty){
+        appStore.setInvoiceCompanyName(value.invoiceData!.firstWhere((element) => element.key=='company_name').value.validate());
+        appStore.setInvoiceContactNumber(value.invoiceData!.firstWhere((element) => element.key=='company_contact_number').value.validate());
+        appStore.setCompanyAddress(value.invoiceData!.firstWhere((element) => element.key=='company_address').value.validate());
+      }
+    }).catchError((error) {
+      toast(error.toString());
     });
   }
 
   getOrderListApiCall() async {
     appStore.setLoading(true);
-
     FilterAttributeModel filterData = FilterAttributeModel.fromJson(getJSONAsync(FILTER_DATA));
-
-    await getOrderList(
-            page: page,
-            orderStatus: filterData.orderStatus,
-            fromDate: filterData.fromDate,
-            toDate: filterData.toDate,
-            excludeStatus: ORDER_DRAFT)
-        .then((value) {
+    await getOrderList(page: page, orderStatus: filterData.orderStatus, fromDate: filterData.fromDate, toDate: filterData.toDate,excludeStatus:ORDER_DRAFT).then((value) {
+      appStore.setLoading(false);
       appStore.setAllUnreadCount(value.allUnreadCount.validate());
       totalPage = value.pagination!.totalPages.validate(value: 1);
       page = value.pagination!.currentPage.validate(value: 1);
-
-      if (value.walletData != null) {
+      if(value.walletData!=null){
         appStore.availableBal = value.walletData!.totalAmount;
       }
-
       isLastPage = false;
-      if (page == 1) orderList.clear();
+      if (page == 1) {
+        orderList.clear();
+      }
       orderList.addAll(value.data!);
-
       setState(() {});
     }).catchError((e) {
       isLastPage = true;
+      appStore.setLoading(false);
       toast(e.toString(), print: true);
-      print("------------${e.toString()}");
-    }).whenComplete(() => appStore.setLoading(false));
+    });
   }
 
   @override
@@ -115,43 +101,203 @@ class OrderFragmentState extends State<OrderFragment> {
 
   @override
   void dispose() {
+    scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedListView(
-      itemCount: orderList.length,
-      shrinkWrap: true,
-      physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-      listAnimationType: ListAnimationType.Slide,
-      padding: EdgeInsets.only(left: 16, right: 16, top: 16, bottom: 60),
-      flipConfiguration: FlipConfiguration(duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn),
-      fadeInConfiguration: FadeInConfiguration(duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn),
-      onNextPage: () {
-        if (page < totalPage) {
-          page++;
-          setState(() {});
-          getOrderData();
-        }
-      },
-      emptyWidget: Stack(
-        children: [
-          loaderWidget().visible(appStore.isLoading),
-          emptyWidget().visible(!appStore.isLoading),
-        ],
-      ),
-      onSwipeRefresh: () async {
+    return RefreshIndicator(
+      onRefresh: () async {
+        await Future.delayed(Duration(milliseconds: 1500));
         page = 1;
-        getOrderData();
-        return Future.value(true);
+        init();
       },
-      itemBuilder: (context, i) {
-        OrderData item = orderList[i];
-        return item.status != ORDER_DRAFT ? OrderCardComponent(item: item) : SizedBox();
-      },
-      /*   ),
-      ],*/
+      child: Observer(builder: (context) {
+        return Stack(
+          children: [
+            orderList.isNotEmpty
+                ? ListView(
+                    shrinkWrap: true,
+                    controller: scrollController,
+                    padding: EdgeInsets.only(left: 16, right: 16, bottom: context.height() * 0.1, top: 16),
+                    children: orderList.map((item) {
+                      return item.status != ORDER_DRAFT
+                          ? GestureDetector(
+                              child: Container(
+                                margin: EdgeInsets.only(bottom: 16),
+                                decoration: appStore.isDarkMode
+                                    ? boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(defaultRadius), backgroundColor: context.cardColor)
+                                    : boxDecorationRoundedWithShadow(defaultRadius.toInt()),
+                                padding: EdgeInsets.all(16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text('${language.order}# ${item.id}', style: secondaryTextStyle(size: 16)).expand(),
+                                        Container(
+                                          decoration: BoxDecoration(color: statusColor(item.status.validate()).withOpacity(0.15), borderRadius: BorderRadius.circular(defaultRadius)),
+                                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                          child: Text(orderStatus(item.status!), style: boldTextStyle(color: statusColor(item.status.validate()))),
+                                        ),
+                                      ],
+                                    ),
+                                    8.height,
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          decoration: boxDecorationWithRoundedCorners(
+                                              borderRadius: BorderRadius.circular(8),
+                                              border: Border.all(color: borderColor, width: appStore.isDarkMode ? 0.2 : 1),
+                                              backgroundColor: Colors.transparent),
+                                          padding: EdgeInsets.all(8),
+                                          child: Image.asset(parcelTypeIcon(item.parcelType.validate()), height: 24, width: 24, color: Colors.grey),
+                                        ),
+                                        8.width,
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(item.parcelType.validate(), style: boldTextStyle(), maxLines: 1, overflow: TextOverflow.ellipsis),
+                                            4.height,
+                                            Row(
+                                              children: [
+                                                item.date != null ? Text(printDate(item.date!), style: secondaryTextStyle()).expand() : SizedBox(),
+                                                if(item.status != ORDER_CANCELLED) Text(printAmount(item.totalAmount ?? 0), style: boldTextStyle()),
+                                              ],
+                                            ),
+                                          ],
+                                        ).expand(),
+                                      ],
+                                    ),
+                                    Divider(height: 30, thickness: 1),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        if (item.pickupDatetime != null)
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(language.picked, style: boldTextStyle(size: 18)),
+                                              4.height,
+                                              Text('${language.at} ${printDate(item.pickupDatetime!)}', style: secondaryTextStyle()),
+                                              16.height,
+                                            ],
+                                          ),
+                                        Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            ImageIcon(AssetImage('assets/icons/ic_pick_location.png'), size: 24, color: colorPrimary),
+                                            12.width,
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text('${item.pickupPoint!.address}', style: primaryTextStyle()),
+                                                if (item.pickupDatetime == null && item.pickupPoint!.endTime != null && item.pickupPoint!.startTime != null)
+                                                  Text('${language.note} ${language.courierWillPickupAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(item.pickupPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(item.pickupPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(item.pickupPoint!.endTime!).toLocal())}',
+                                                          style: secondaryTextStyle())
+                                                      .paddingOnly(top: 8),
+                                              ],
+                                            ).expand(),
+                                            12.width,
+                                            if (item.pickupPoint!.contactNumber != null)
+                                              Image.asset('assets/icons/ic_call.png', width: 24, height: 24).onTap(() {
+                                                commonLaunchUrl('tel:${item.pickupPoint!.contactNumber}');
+                                              }),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    DottedLine(dashColor: borderColor).paddingSymmetric(vertical: 16, horizontal: 24),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        if (item.deliveryDatetime != null)
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(language.delivered, style: boldTextStyle(size: 18)),
+                                              4.height,
+                                              Text('${language.at} ${printDate(item.deliveryDatetime!)}', style: secondaryTextStyle()),
+                                              16.height,
+                                            ],
+                                          ),
+                                        Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            ImageIcon(AssetImage('assets/icons/ic_delivery_location.png'), size: 24, color: colorPrimary),
+                                            12.width,
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text('${item.deliveryPoint!.address}', style: primaryTextStyle()),
+                                                if (item.deliveryDatetime == null && item.deliveryPoint!.endTime != null && item.deliveryPoint!.startTime != null)
+                                                  Text('${language.note} ${language.courierWillDeliverAt} ${DateFormat('dd MMM yyyy').format(DateTime.parse(item.deliveryPoint!.startTime!).toLocal())} ${language.from} ${DateFormat('hh:mm').format(DateTime.parse(item.deliveryPoint!.startTime!).toLocal())} ${language.to} ${DateFormat('hh:mm').format(DateTime.parse(item.deliveryPoint!.endTime!).toLocal())}',
+                                                          style: secondaryTextStyle())
+                                                      .paddingOnly(top: 8),
+                                              ],
+                                            ).expand(),
+                                            12.width,
+                                            if (item.deliveryPoint!.contactNumber != null)
+                                              Image.asset('assets/icons/ic_call.png', width: 24, height: 24).onTap(() {
+                                               commonLaunchUrl('tel:${item.deliveryPoint!.contactNumber}');
+                                              }),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        if(item.status != ORDER_CANCELLED) Row(
+                                          children: [
+                                            Text(language.invoice, style: primaryTextStyle(color: colorPrimary)),
+                                            4.width,
+                                            Icon(Icons.download_rounded, color: colorPrimary),
+                                          ],
+                                        ).onTap(() {
+                                          generateInvoiceCall(item);
+                                        }),
+                                        AppButton(
+                                          elevation: 0,
+                                          height: 35,
+                                          color: Colors.transparent,
+                                          padding: EdgeInsets.symmetric(horizontal: 8),
+                                          shapeBorder: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(defaultRadius),
+                                            side: BorderSide(color: colorPrimary),
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(language.trackOrder, style: primaryTextStyle(color: colorPrimary)),
+                                              Icon(Icons.arrow_right, color: colorPrimary),
+                                            ],
+                                          ),
+                                          onTap: () {
+                                            OrderTrackingScreen(orderData: item).launch(context);
+                                          },
+                                        ).visible(item.status == ORDER_DEPARTED || item.status == ORDER_ACCEPTED),
+                                      ],
+                                    ).paddingOnly(top: 16),
+                                  ],
+                                ),
+                              ),
+                              onTap: () {
+                                OrderDetailScreen(orderId: item.id.validate()).launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop, duration: 400.milliseconds);
+                              },
+                            )
+                          : SizedBox();
+                    }).toList(),
+                  )
+                : !appStore.isLoading
+                    ? emptyWidget()
+                    : SizedBox(),
+            loaderWidget().center().visible(appStore.isLoading)
+          ],
+        );
+      }),
     );
   }
 }

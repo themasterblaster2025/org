@@ -1,17 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:http/http.dart';
-import '../../extensions/extension_util/int_extensions.dart';
-import '../../extensions/extension_util/string_extensions.dart';
-import '../../main.dart';
-import '../../extensions/shared_pref.dart';
-import '../../extensions/system_utils.dart';
+import 'package:nb_utils/nb_utils.dart';
+
 import '../utils/Constants.dart';
-import '../utils/Images.dart';
 
 class NotificationService {
-  Future<void> sendPushNotifications(String title, String content,
-      {String? id, String? image, String? receiverPlayerId}) async {
+  Future<void> sendPushNotifications(String title, String content, {String? id, String? image, String? receiverPlayerId}) async {
     log(receiverPlayerId);
     Map req = {
       'headings': {
@@ -25,7 +21,7 @@ class NotificationService {
       },
       'big_picture': image.validate().isNotEmpty ? image.validate() : '',
       'large_icon': image.validate().isNotEmpty ? image.validate() : '',
-      'small_icon': ic_logo,
+      'small_icon': mAppIconUrl,
       'app_id': mOneSignalAppId,
       'android_channel_id': mOneSignalChannelId,
       'include_player_ids': [receiverPlayerId],
@@ -47,7 +43,7 @@ class NotificationService {
 
     if (res.statusCode.isSuccessful()) {
     } else {
-      throw language.errorSomethingWentWrong;
+      throw errorSomethingWentWrong;
     }
   }
 }

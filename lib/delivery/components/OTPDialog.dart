@@ -1,19 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import '../../extensions/extension_util/int_extensions.dart';
-import '../../extensions/extension_util/string_extensions.dart';
-import '../../extensions/extension_util/widget_extensions.dart';
-import '../../main/services/AuthServices.dart';
+import 'package:mighty_delivery/main/services/AuthSertvices.dart';
+import '../../main.dart';
+import '../../main/utils/Colors.dart';
+import '../../main/utils/Common.dart';
+import 'package:nb_utils/nb_utils.dart' hide OTPTextField;
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 
-import '../../extensions/common.dart';
-import '../../extensions/system_utils.dart';
-import '../../extensions/text_styles.dart';
-import '../../main.dart';
-import '../../main/utils/Common.dart';
-import '../../main/utils/dynamic_theme.dart';
 
 class OTPDialog extends StatefulWidget {
   final String? phoneNumber;
@@ -41,6 +36,39 @@ class OTPDialogState extends State<OTPDialog> {
     setState(() {});
   }
 
+  /*Future sendOTP() async {
+    appStore.setLoading(true);
+    log('********${widget.phoneNumber.validate()}');
+    FirebaseAuth auth = FirebaseAuth.instance;
+    await auth.verifyPhoneNumber(
+      timeout: const Duration(seconds: 60),
+      phoneNumber: widget.phoneNumber.validate(),
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        appStore.setLoading(false);
+        toast(language.verificationCompleted);
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        appStore.setLoading(false);
+        if (e.code == 'invalid-phone-number') {
+          toast(language.phoneNumberInvalid);
+          throw language.phoneNumberInvalid;
+        } else {
+          toast(e.toString());
+          throw e.toString();
+        }
+      },
+      codeSent: (String verificationId, int? resendToken) async {
+        appStore.setLoading(false);
+        toast(language.codeSent);
+        verId = verificationId;
+        setState(() {});
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        appStore.setLoading(false);
+      },
+    );
+  }*/
+
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
@@ -53,7 +81,7 @@ class OTPDialogState extends State<OTPDialog> {
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.message, color: ColorUtils.colorPrimary, size: 50),
+            Icon(Icons.message, color: colorPrimary, size: 50),
             16.height,
             Text(language.otpVerification, style: boldTextStyle(size: 18)),
             16.height,
@@ -66,33 +94,30 @@ class OTPDialogState extends State<OTPDialog> {
               ],
             ),
             30.height,
-            Directionality(
-              textDirection: TextDirection.ltr,
-              child: OTPTextField(
-                controller: otpController,
-                length: 6,
-                width: MediaQuery.of(context).size.width,
-                fieldWidth: 35,
-                style: primaryTextStyle(),
-                textFieldAlignment: MainAxisAlignment.spaceAround,
-                fieldStyle: FieldStyle.box,
-                onChanged: (s) {
-                  //
-                },
-                onCompleted: (pin) async {
-                  appStore.setLoading(true);
-                  AuthCredential credential = PhoneAuthProvider.credential(verificationId: verId, smsCode: pin);
-                  await FirebaseAuth.instance.signInWithCredential(credential).then((value) {
-                    appStore.setLoading(false);
-                    finish(context);
-                    widget.onUpdate!.call();
-                  }).catchError((error) {
-                    appStore.setLoading(false);
-                    toast(language.invalidVerificationCode);
-                    finish(context);
-                  });
-                },
-              ),
+            OTPTextField(
+              controller: otpController,
+              length: 6,
+              width: MediaQuery.of(context).size.width,
+              fieldWidth: 35,
+              style: primaryTextStyle(),
+              textFieldAlignment: MainAxisAlignment.spaceAround,
+              fieldStyle: FieldStyle.box,
+              onChanged: (s) {
+                //
+              },
+              onCompleted: (pin) async {
+                appStore.setLoading(true);
+                AuthCredential credential = PhoneAuthProvider.credential(verificationId: verId, smsCode: pin);
+                await FirebaseAuth.instance.signInWithCredential(credential).then((value) {
+                  appStore.setLoading(false);
+                  finish(context);
+                  widget.onUpdate!.call();
+                }).catchError((error) {
+                  appStore.setLoading(false);
+                  toast(language.invalidVerificationCode);
+                  finish(context);
+                });
+              },
             ),
             30.height,
             Wrap(
@@ -100,8 +125,8 @@ class OTPDialogState extends State<OTPDialog> {
               children: [
                 Text(language.didNotReceiveTheCode, style: secondaryTextStyle(size: 16)),
                 4.width,
-                Text(language.resend, style: boldTextStyle(color: ColorUtils.colorPrimary)).onTap(() {
-                  sendOtp(context, phoneNumber: widget.phoneNumber.validate(), onUpdate: (verificationId) {
+                Text(language.resend, style: boldTextStyle(color: colorPrimary)).onTap(() {
+                  sendOtp(context, phoneNumber: widget.phoneNumber.validate(), onUpdate: (verificationId){
                     verId = verificationId;
                     setState(() {});
                   });

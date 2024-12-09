@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import '../../extensions/extension_util/int_extensions.dart';
-import '../../extensions/extension_util/widget_extensions.dart';
-import '../../extensions/app_text_field.dart';
-import '../../extensions/common.dart';
-import '../../extensions/system_utils.dart';
-import '../../extensions/text_styles.dart';
 import '../../main.dart';
+import '../../main/components/BodyCornerWidget.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Widgets.dart';
+import 'package:nb_utils/nb_utils.dart';
 
-import '../components/CommonScaffoldComponent.dart';
+import '../utils/Constants.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   static String tag = '/ChangePasswordScreen';
@@ -31,6 +27,16 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
   FocusNode newPassFocus = FocusNode();
   FocusNode confirmPassFocus = FocusNode();
 
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  Future<void> init() async {
+    //
+  }
+
   Future<void> submit() async {
     Map req = {
       'old_password': oldPassController.text.trim(),
@@ -38,7 +44,7 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
     };
     appStore.setLoading(true);
 
-    // await setValue(USER_PASSWORD, newPassController.text.trim());
+    await setValue(USER_PASSWORD, newPassController.text.trim());
 
     await changePassword(req).then((value) {
       toast(value.message.toString());
@@ -59,57 +65,59 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CommonScaffoldComponent(
-      appBarTitle: language.changePassword,
+    return Scaffold(
+      appBar: AppBar(title: Text(language.changePassword)),
       body: Stack(
         children: [
           Form(
             key: formKey,
-            child: SingleChildScrollView(
-              padding: EdgeInsets.only(left: 16, top: 16, right: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(language.oldPassword, style: primaryTextStyle()),
-                  8.height,
-                  AppTextField(
-                    controller: oldPassController,
-                    textFieldType: TextFieldType.PASSWORD,
-                    focus: oldPassFocus,
-                    nextFocus: newPassFocus,
-                    decoration: commonInputDecoration(),
-                    errorThisFieldRequired: language.fieldRequiredMsg,
-                    errorMinimumPasswordLength: language.passwordInvalid,
-                  ),
-                  16.height,
-                  Text(language.newPassword, style: primaryTextStyle()),
-                  8.height,
-                  AppTextField(
-                    controller: newPassController,
-                    textFieldType: TextFieldType.PASSWORD,
-                    focus: newPassFocus,
-                    nextFocus: confirmPassFocus,
-                    decoration: commonInputDecoration(),
-                    errorThisFieldRequired: language.fieldRequiredMsg,
-                    errorMinimumPasswordLength: language.passwordInvalid,
-                  ),
-                  16.height,
-                  Text(language.confirmPassword, style: primaryTextStyle()),
-                  8.height,
-                  AppTextField(
-                    controller: confirmPassController,
-                    textFieldType: TextFieldType.PASSWORD,
-                    focus: confirmPassFocus,
-                    decoration: commonInputDecoration(),
-                    errorThisFieldRequired: language.fieldRequiredMsg,
-                    errorMinimumPasswordLength: language.passwordInvalid,
-                    validator: (val) {
-                      if (val!.isEmpty) return language.fieldRequiredMsg;
-                      if (val != newPassController.text) return language.passwordNotMatch;
-                      return null;
-                    },
-                  ),
-                ],
+            child: BodyCornerWidget(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(left: 16, top: 30, right: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(language.oldPassword, style: primaryTextStyle()),
+                    8.height,
+                    AppTextField(
+                      controller: oldPassController,
+                      textFieldType: TextFieldType.PASSWORD,
+                      focus: oldPassFocus,
+                      nextFocus: newPassFocus,
+                      decoration: commonInputDecoration(),
+                      errorThisFieldRequired: language.fieldRequiredMsg,
+                      errorMinimumPasswordLength: language.passwordInvalid,
+                    ),
+                    16.height,
+                    Text(language.newPassword, style: primaryTextStyle()),
+                    8.height,
+                    AppTextField(
+                      controller: newPassController,
+                      textFieldType: TextFieldType.PASSWORD,
+                      focus: newPassFocus,
+                      nextFocus: confirmPassFocus,
+                      decoration: commonInputDecoration(),
+                      errorThisFieldRequired: language.fieldRequiredMsg,
+                      errorMinimumPasswordLength: language.passwordInvalid,
+                    ),
+                    16.height,
+                    Text(language.confirmPassword, style: primaryTextStyle()),
+                    8.height,
+                    AppTextField(
+                      controller: confirmPassController,
+                      textFieldType: TextFieldType.PASSWORD,
+                      focus: confirmPassFocus,
+                      decoration: commonInputDecoration(),
+                      errorThisFieldRequired: language.fieldRequiredMsg,
+                      errorMinimumPasswordLength: language.passwordInvalid,
+                      validator: (val) {
+                        if (val!.isEmpty) return language.fieldRequiredMsg;
+                        if (val != newPassController.text) return language.passwordNotMatch;
+                        return null;
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -120,7 +128,11 @@ class ChangePasswordScreenState extends State<ChangePasswordScreen> {
         padding: EdgeInsets.all(16),
         child: commonButton(language.saveChanges, () {
           if (formKey.currentState!.validate()) {
-            submit();
+            if (getStringAsync(USER_EMAIL) == 'jose@gmail.com' || getStringAsync(USER_EMAIL) == 'mark@gmail.com') {
+              toast(language.demoMsg);
+            } else {
+              submit();
+            }
           }
         }),
       ),
