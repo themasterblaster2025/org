@@ -10,13 +10,10 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:mighty_delivery/extensions/colors.dart';
 import '../../extensions/extension_util/context_extensions.dart';
 import '../../extensions/extension_util/int_extensions.dart';
 import '../../extensions/extension_util/string_extensions.dart';
 import '../../extensions/extension_util/widget_extensions.dart';
-import '../../main/models/CouponListResponseModel.dart';
-import '../../main/screens/CouponListScreen.dart';
 import '../../main/utils/DataProviders.dart';
 import '../../user/screens/insurance_details_screen.dart';
 import '../../user/screens/packaging_symbols_info.dart';
@@ -117,6 +114,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
 
   bool? isCash = false;
 
+  bool biddingSelectedOption = false;
+
   String paymentCollectFrom = PAYMENT_ON_PICKUP;
   TotalAmountResponse? totalAmountResponse;
 
@@ -153,9 +152,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     language.reviewRoute,
     language.details
   ];
-  CouponListResponseModel? couponListResponseModel;
-  CouponModel? selectedCoupon;
-  bool isAppliedCoupon = false;
 
   @override
   void initState() {
@@ -166,7 +162,15 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     });
   }
 
-  getStaticDetailsForOrder() async {
+  Future<void> init() async {
+    pickupCountryCode =
+        CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.isEmptyOrNull
+            ? defaultPhoneCode
+            : CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate();
+    deliverCountryCode =
+        CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.isEmptyOrNull
+            ? defaultPhoneCode
+            : CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate();
     await getCreateOrderDetails(getIntAsync(CITY_ID)).then((value) async {
       appStore.setLoading(false);
       await setValue(CITY_DATA, value.cityDetail!.toJson());
@@ -202,42 +206,14 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           value.appSettingDetail!.insurancePercentage.toString());
       appStore.setInsuranceDescription(
           value.appSettingDetail!.insuranceDescription.toString());
+      appStore.setIsBiddingStatus(
+          value.appSettingDetail!.isBiddingEnabled.toString());
       appStore.isVehicleOrder = value.appSettingDetail!.isVehicleInOrder ?? 0;
       setState(() {});
     }).catchError((error) {
       appStore.setLoading(false);
       toast(error.toString());
     });
-  }
-
-  getCouponList() async {
-    try {
-      await getCouponListApi(1).then((value) async {
-        couponListResponseModel = value;
-        if (value.data != null && value.data!.isNotEmpty) {
-          selectedCoupon = value.data!.first;
-          log("SELECTED COUPON LEN::::::: ${selectedCoupon}");
-        } else {
-          selectedCoupon = null;
-          log("VALUE OF SELECTEDCOUPON IS::::::::::: ${selectedCoupon}");
-        }
-      });
-    } catch (e, s) {
-      log("COUPON ERROR ${e} STACK TRACE ${s}");
-    }
-  }
-
-  Future<void> init() async {
-    pickupCountryCode =
-        CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.isEmptyOrNull
-            ? defaultPhoneCode
-            : CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate();
-    deliverCountryCode =
-        CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.isEmptyOrNull
-            ? defaultPhoneCode
-            : CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate();
-    await getStaticDetailsForOrder();
-    await getCouponList();
     if (widget.orderData != null) {
       if (widget.orderData!.totalWeight != 0)
         weightController.text = widget.orderData!.totalWeight!.toString();
@@ -329,60 +305,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     });
   }
 
-  getTotalForOrder() async {
-    print("getTotalForOrder called");
-    appStore.setLoading(true);
-    Map request = {
-      "city_id": getIntAsync(CITY_ID).toString(),
-      if (appStore.isVehicleOrder != 0)
-        "vehicle_id": vehicleList
-            .firstWhere((element) => element.id == selectedVehicle)
-            .id,
-      "is_insurance":
-          insuranceSelectedOption == 0 && appStore.isInsuranceAllowed == "1",
-      // "is_insurance": 0,
-      "total_weight": weightController.text.toDouble(),
-      "total_distance": totalDistance,
-      "insurance_amount": insuranceAmountController.text.isEmpty
-          ? 0
-          : insuranceAmountController.text
-    };
-    await getTotalAmountForOrder(request).then((value) {
-      print("getTotalForOrder response");
-      appStore.setLoading(false);
-      print("------------request${request.toString()}");
-      totalAmountResponse = value;
-      print("---------------${totalAmountResponse!.baseTotal}");
-      if (value.vehicleAmount != null) {
-        vehicleCharge = value.vehicleAmount!;
-      }
-      setState(() {});
-    });
-  }
-
-  double calculateTotalAmount() {
-    double totalAmount = totalAmountResponse!.totalAmount?.toDouble() ?? 0.00;
-    double result = 0.00;
-
-    if (selectedCoupon?.valueType == "fixed") {
-      double couponAmount = selectedCoupon?.discountAmount?.toDouble() ?? 0;
-      double finalTotal =
-          (totalAmount - couponAmount).clamp(0.00, double.infinity);
-      result = isAppliedCoupon ? finalTotal : totalAmount;
-    } else if (selectedCoupon?.valueType == "percentage") {
-      double percentage = selectedCoupon?.discountAmount?.toDouble() ?? 0;
-      double discountAmount = (totalAmount * percentage) / 100;
-      double finalAmount =
-          (totalAmount - discountAmount).clamp(0.00, double.infinity);
-
-      result = isAppliedCoupon ? finalAmount : totalAmount;
-    } else if (selectedCoupon == null && isAppliedCoupon == false) {
-      result = totalAmount.toDouble();
-    }
-
-    return (result * 100).round() / 100;
-  }
-
   createOrderApiCall(String orderStatus) async {
     List<Map<String, String>> packaging_symbols = [];
     selectedPackingSymbols.map((item) {
@@ -454,18 +376,16 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           totalDistance.toStringAsFixed(digitAfterDecimal).validate(),
       "payment_collect_from": paymentCollectFrom,
       "status": orderStatus,
+      "bid_type": biddingSelectedOption ? 1 : 0,
       "payment_type": "",
       "payment_status": "",
       "fixed_charges": totalAmountResponse!.fixedAmount!.toDouble(),
       "parent_order_id": "",
-      "total_amount": calculateTotalAmount(),
+      "total_amount": totalAmountResponse!.totalAmount!,
       "weight_charge": totalAmountResponse!.weightAmount!.toDouble(),
       "distance_charge": totalAmountResponse!.distanceAmount!.toDouble(),
       "total_parcel": totalParcelController.text.toInt(),
       "insurance_charge": insuranceAmount,
-      "discount_amount":
-          (totalAmountResponse!.totalAmount! - calculateTotalAmount()),
-      "coupon_code": selectedCoupon?.couponCode ?? null,
     };
 
     log("req----" + req.toString());
@@ -488,7 +408,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           savePaymentApiCall(
               paymentType: PAYMENT_TYPE_WALLET,
               paymentStatus: PAYMENT_PAID,
-              totalAmount: (calculateTotalAmount()).toString(),
+              totalAmount: (totalAmountResponse!.totalAmount!).toString(),
               orderID: value.orderId.toString());
         }
       } else {
@@ -504,6 +424,34 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
   }
 
   /// Save Payment
+
+  getTotalForOrder() {
+    appStore.setLoading(true);
+    Map request = {
+      "city_id": getIntAsync(CITY_ID).toString(),
+      if (appStore.isVehicleOrder != 0)
+        "vehicle_id": vehicleList
+            .firstWhere((element) => element.id == selectedVehicle)
+            .id,
+      "is_insurance":
+          insuranceSelectedOption == 0 && appStore.isInsuranceAllowed == "1",
+      // "is_insurance": 0,
+      "total_weight": weightController.text.toDouble(),
+      "total_distance": totalDistance,
+      "insurance_amount": insuranceAmountController.text
+    };
+    getTotalAmountForOrder(request).then((value) {
+      appStore.setLoading(false);
+      print("------------request${request.toString()}");
+      totalAmountResponse = value;
+      print("---------------${totalAmountResponse!.baseTotal}");
+      if (value.vehicleAmount != null) {
+        vehicleCharge = value.vehicleAmount!;
+      }
+      setState(() {});
+    });
+  }
+
   Future<void> savePaymentApiCall(
       {String? paymentType,
       String? totalAmount,
@@ -594,6 +542,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               scheduleOptionWidget(
                       context, isDeliverNow, ic_clock, language.deliveryNow)
@@ -601,7 +551,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 isDeliverNow = true;
                 setState(() {});
               }).expand(),
-              16.width,
+              8.width,
               scheduleOptionWidget(
                       context, !isDeliverNow, ic_schedule, language.schedule)
                   .onTap(() {
@@ -610,6 +560,21 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               }).expand(),
             ],
           ),
+          16.height,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              enableBidOptionWidget(context, biddingSelectedOption,
+                      Icons.handshake_outlined, language.bids)
+                  .onTap(() {
+                biddingSelectedOption = !biddingSelectedOption;
+                setState(() {});
+              }).expand(),
+              const Spacer(),
+            ],
+          ).visible(appStore.isBiddingEnabled == "1"),
+
           16.height,
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1548,8 +1513,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                                 width: 40),
                             SizedBox(width: 16),
                             Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              // Align to start
+                              crossAxisAlignment:
+                                  CrossAxisAlignment.start, // Align to start
                               children: [
                                 Container(
                                   width: context.width() * 0.6,
@@ -1624,7 +1589,6 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
             ),
           ),
           16.height,
-          //insurance start
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -1682,120 +1646,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 return null;
               },
             ).visible(insuranceSelectedOption == 0),
-            //16.height,
+            16.height,
           ],
-          // insurance end
-          //Coupon start
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("${language.offersAndBenefits}", style: boldTextStyle()),
-              8.height,
-              Container(
-                decoration: boxDecorationWithRoundedCorners(
-                  borderRadius: BorderRadius.circular(defaultRadius),
-                  border: Border.all(
-                      color: ColorUtils.colorPrimary.withOpacity(0.2)),
-                  backgroundColor: isAppliedCoupon
-                      ? Colors.grey.withOpacity(0.5)
-                      : Colors.transparent,
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.local_offer,
-                                    color: ColorUtils.colorPrimary,
-                                  ),
-                                  SizedBox(width: 4),
-                                  Expanded(
-                                    child: Text(
-                                      selectedCoupon?.couponCode.toString() ??
-                                          "",
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: boldTextStyle(
-                                          color: ColorUtils.colorPrimary),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 4),
-                              Text(
-                                selectedCoupon?.valueType == "fixed"
-                                    ? "${language.save} ${appStore.currencySymbol}${selectedCoupon?.discountAmount} ${language.onThisOrder}"
-                                    : "${language.save} ${selectedCoupon?.discountAmount}% ${language.onThisOrder}",
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: secondaryTextStyle(),
-                              ),
-                            ],
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () async {
-                            appStore.setLoading(true);
-                            await Future.delayed(Duration(seconds: 1));
-                            isAppliedCoupon = !isAppliedCoupon;
-                            appStore.setLoading(false);
-                            setState(() {});
-                          },
-                          child: Text(
-                            isAppliedCoupon ? language.cancel : language.apply,
-                            style: boldTextStyle(
-                              color: isAppliedCoupon
-                                  ? darkRed
-                                  : ColorUtils.colorPrimary,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ).paddingAll(16),
-                    10.height.visible(selectedCoupon == null ? false : true),
-                    Divider(color: Colors.grey.withOpacity(0.3), height: 0.5)
-                        .visible(selectedCoupon == null ? false : true),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("${language.moreCoupons}",
-                            style: primaryTextStyle(size: 16)),
-                        Icon(
-                          Icons.navigate_next,
-                          size: 18,
-                        )
-                      ],
-                    )
-                        .paddingAll(8)
-                        .visible(selectedCoupon == null ? false : true)
-                        .onTap(isAppliedCoupon
-                            ? null
-                            : () {
-                                CouponListScreen()
-                                    .launch(context)
-                                    .then((result) {
-                                  if (result != null) {
-                                    selectedCoupon = result;
-                                    setState(() {});
-                                  }
-
-                                  setState(() {});
-                                });
-                              }),
-                  ],
-                ),
-              ),
-            ],
-          ).visible(selectedCoupon == null ? false : true),
-          // Coupon end
-          16.height,
           if (totalAmountResponse != null)
             OrderAmountDataWidget(
                 fixedAmount: totalAmountResponse!.fixedAmount!.toDouble(),
@@ -1809,14 +1661,11 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                 weightAmount: totalAmountResponse!.weightAmount!.toDouble(),
                 perWeightCharge: cityData!.perWeightCharges!.toDouble(),
                 perKmCityDataCharge: cityData!.perDistanceCharges!.toDouble(),
-                coupon: selectedCoupon ?? null,
-                isAppliedCoupon: isAppliedCoupon,
                 perkmVehiclePrice: vehicleList
                     .firstWhere((element) => element.id == selectedVehicle)
                     .perKmCharge!
                     .toDouble(),
                 baseTotal: totalAmountResponse!.baseTotal!.toDouble()),
-
           16.height,
           Text(language.payment, style: boldTextStyle()),
           16.height,
@@ -1891,109 +1740,38 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
     );
   }
 
-  // Widget InsuranceOptionsWidget(int value, String text) {
-  //   return Container(
-  //     decoration: boxDecorationWithRoundedCorners(
-  //         backgroundColor: insuranceSelectedOption == value
-  //             ? ColorUtils.colorPrimary
-  //             : Colors.grey.withOpacity(0.1)),
-  //     //  padding: EdgeInsets.all(8.0),
-  //     child: Row(
-  //       children: [
-  //         Radio<int>(
-  //           value: value,
-  //           groupValue: insuranceSelectedOption,
-  //           onChanged: (int? newValue) async {
-  //             print("---------${value}");
-  //             if (newValue != insuranceSelectedOption) {
-  //               insuranceSelectedOption = value;
-  //               if (insuranceSelectedOption == 0) {
-  //                 // Do nothing...
-  //                 log("I am here2....");
-  //               } else {
-  //                 log("I am here....");
-  //                 insuranceAmountController.clear();
-  //                 insuranceAmount = 0.0;
-  //                 setState(() {});
-  //               }
-  //             }
-  //             await  getTotalForOrder();
-  //           },
-  //           fillColor: MaterialStateProperty.resolveWith<Color?>(
-  //             (Set<MaterialState> states) {
-  //               if (states.contains(MaterialState.selected)) {
-  //                 return Colors.white;
-  //               }
-  //               return ColorUtils.colorPrimary;
-  //             },
-  //           ),
-  //           activeColor: Colors.white,
-  //         ),
-  //         SizedBox(width: 8),
-  //         Column(
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           mainAxisAlignment: MainAxisAlignment.start,
-  //           children: [
-  //             Text(text,
-  //                 style: primaryTextStyle(
-  //                     color: insuranceSelectedOption == value
-  //                         ? Colors.white
-  //                         : ColorUtils.themeColor)),
-  //             if (insuranceSelectedOption == 0 && value == 0)
-  //               Text(
-  //                 insuranceSelectedOption == 0
-  //                     ? "${appStore.insurancePercentage} ${language.ofApproxParcelValue}"
-  //                     : "",
-  //                 style: secondaryTextStyle(
-  //                     color: Colors.white.withOpacity(0.5), size: 13),
-  //               ),
-  //           ],
-  //         ).expand(),
-  //         Text(
-  //           insuranceSelectedOption == 0
-  //               ? "${printAmount(insuranceAmount)}"
-  //               : "",
-  //           style: primaryTextStyle(color: Colors.white),
-  //         ).visible(value == 0).paddingOnly(right: 10),
-  //       ],
-  //     ),
-  //   ).onTap(() async {
-  //     setState(() {
-  //       insuranceSelectedOption = value;
-  //       if (insuranceSelectedOption == 0) {
-  //         // Do nothing...
-  //         log("I am here2....");
-  //       } else {
-  //         log("I am here....");
-  //         insuranceAmountController.clear();
-  //         insuranceAmount = 0.0;
-  //         setState(() {});
-  //       }
-  //       await  getTotalForOrder();
-  //     });
-  //     setState(() {});
-  //   });
-  // }
-  //
-
   Widget InsuranceOptionsWidget(int value, String text) {
     return Container(
       decoration: boxDecorationWithRoundedCorners(
-        backgroundColor: insuranceSelectedOption == value
-            ? ColorUtils.colorPrimary
-            : Colors.grey.withOpacity(0.1),
-      ),
+          backgroundColor: insuranceSelectedOption == value
+              ? ColorUtils.colorPrimary
+              : Colors.grey.withOpacity(0.1)),
+      //  padding: EdgeInsets.all(8.0),
       child: Row(
         children: [
           Radio<int>(
             value: value,
             groupValue: insuranceSelectedOption,
             onChanged: (int? newValue) {
-              _onOptionSelected(newValue);
+              print("---------${value}");
+              // setState(() {
+              //   insuranceSelectedOption = newValue!;
+              // });
+              if (newValue != insuranceSelectedOption) {
+                insuranceSelectedOption = value;
+                if (insuranceSelectedOption == 0) {
+                  insuranceAmountController.clear();
+                  //     getTotalAmount();
+                } else {
+                  insuranceAmount = 0.0;
+                  //     getTotalAmount();
+                }
+              }
+              getTotalForOrder();
             },
-            fillColor: WidgetStateProperty.resolveWith<Color?>(
-              (Set<WidgetState> states) {
-                if (states.contains(WidgetState.selected)) {
+            fillColor: MaterialStateProperty.resolveWith<Color?>(
+              (Set<MaterialState> states) {
+                if (states.contains(MaterialState.selected)) {
                   return Colors.white;
                 }
                 return ColorUtils.colorPrimary;
@@ -2004,46 +1782,44 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           SizedBox(width: 8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(
-                text,
-                style: primaryTextStyle(
-                  color: insuranceSelectedOption == value
-                      ? Colors.white
-                      : ColorUtils.themeColor,
-                ),
-              ),
-              if (value == 0 && insuranceSelectedOption == 0)
+              Text(text,
+                  style: primaryTextStyle(
+                      color: insuranceSelectedOption == value
+                          ? Colors.white
+                          : ColorUtils.themeColor)),
+              if (insuranceSelectedOption == 0 && value == 0)
                 Text(
-                  "${appStore.insurancePercentage} ${language.ofApproxParcelValue}",
+                  insuranceSelectedOption == 0
+                      ? "${appStore.insurancePercentage} ${language.ofApproxParcelValue}"
+                      : "",
                   style: secondaryTextStyle(
-                    color: Colors.white.withOpacity(0.5),
-                    size: 13,
-                  ),
+                      color: Colors.white.withOpacity(0.5), size: 13),
                 ),
             ],
           ).expand(),
           Text(
-            insuranceSelectedOption == 0 ? printAmount(insuranceAmount) : "",
+            insuranceSelectedOption == 0
+                ? "${printAmount(insuranceAmount)}"
+                : "",
             style: primaryTextStyle(color: Colors.white),
           ).visible(value == 0).paddingOnly(right: 10),
         ],
       ),
-    ).onTap(() => _onOptionSelected(value));
-  }
-
-  void _onOptionSelected(int? newValue) async {
-    if (newValue == null || newValue == insuranceSelectedOption) return;
-
-    setState(() {
-      insuranceSelectedOption = newValue;
-      if (insuranceSelectedOption != 0) {
-        insuranceAmountController.clear();
-        insuranceAmount = 0.0;
-      }
+    ).onTap(() {
+      setState(() {
+        insuranceSelectedOption = value;
+        if (insuranceSelectedOption == 0) {
+          //   getTotalAmount();
+        } else {
+          insuranceAmount = 0.0;
+          insuranceAmountController.clear();
+          //    getTotalAmount();
+        }
+      });
+      setState(() {});
     });
-
-    await getTotalForOrder();
   }
 
   Widget rowWidget({required String title, required String value}) {
@@ -2194,14 +1970,9 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
                   finish(context);
                   finish(context);
                 },
-                onSuccess: () async {
+                onSuccess: () {
                   finish(context);
-                  if (totalAmountResponse == null) {
-                    await getTotalForOrder();
-                    await createOrderApiCall(ORDER_DRAFT);
-                  } else {
-                    createOrderApiCall(ORDER_DRAFT);
-                  }
+                  createOrderApiCall(ORDER_DRAFT);
                 },
                 message: language.saveDraftConfirmationMsg,
                 primaryText: language.saveDraft,

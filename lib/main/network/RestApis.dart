@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
@@ -38,7 +37,6 @@ import '../models/AddressListModel.dart';
 import '../models/AdminChatModel.dart';
 import '../models/AppSettingModel.dart';
 import '../models/AutoCompletePlacesListModel.dart';
-import '../models/CouponListResponseModel.dart';
 import '../models/CreateOrderDetailModel.dart';
 import '../models/CustomerSupportModel.dart';
 import '../models/DeliverymanVehicleListModel.dart';
@@ -360,7 +358,6 @@ Future updateOrder({
   int? orderId,
   File? picUpSignature,
   File? deliverySignature,
-  List<File>? selectedFiles
 }) async {
   MultipartRequest multiPartRequest = await getMultiPartRequest('order-update/$orderId');
   if (pickupDatetime != null) multiPartRequest.fields['pickup_datetime'] = pickupDatetime;
@@ -372,14 +369,6 @@ Future updateOrder({
 
   if (picUpSignature != null) multiPartRequest.files.add(await MultipartFile.fromPath('pickup_time_signature', picUpSignature.path));
   if (deliverySignature != null) multiPartRequest.files.add(await MultipartFile.fromPath('delivery_time_signature', deliverySignature.path));
-
-  if (selectedFiles != null) {
-    for (var file in selectedFiles) {
-      if (file.path.isNotEmpty) {
-        multiPartRequest.files.add(await MultipartFile.fromPath('prof_file[]', file.path));
-      }
-    }
-  }
   print("==> ${multiPartRequest.toString()}");
   await sendMultiPartRequest(multiPartRequest, onSuccess: (data) async {
     if (data != null) {
@@ -672,11 +661,4 @@ Future<ClaimListResponseModel> getClaimList(int page) async {
 
 Future<OrderRescheduleResponse> rescheduleOrder(Map request) async {
   return OrderRescheduleResponse.fromJson(await handleResponse(await buildHttpResponse('reschedule-save', method: HttpMethod.POST, request: request)));
-}
-
-Future<CouponListResponseModel> getCouponListApi(int page) async {
-  return CouponListResponseModel.fromJson(await handleResponse(await buildHttpResponse(
-    'coupon-list?page=$page',
-    method: HttpMethod.GET,
-  )));
 }
