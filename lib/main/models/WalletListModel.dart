@@ -9,7 +9,7 @@ class WalletListModel {
 
   factory WalletListModel.fromJson(Map<String, dynamic> json) {
     return WalletListModel(
-     data: json['data'] != null ? (json['data'] as List).map((i) => WalletModel.fromJson(i)).toList() : null,
+      data: json['data'] != null ? (json['data'] as List).map((i) => WalletModel.fromJson(i)).toList() : null,
       pagination: json['pagination'] != null ? PaginationModel.fromJson(json['pagination']) : null,
       walletBalance: json['wallet_data'] != null ? UserWalletModel.fromJson(json['wallet_data']) : null,
     );
@@ -47,23 +47,22 @@ class WalletModel {
   String? createdAt;
   String? updatedAt;
 
-  WalletModel({
-    this.id,
-    this.userId,
-    this.userName,
-    this.type,
-    this.transactionType,
-    this.currency,
-    this.amount,
-    this.balance,
-    this.walletBalance,
-    this.datetime,
-    this.orderId,
-    this.description,
-    this.data,
-    this.createdAt,
-    this.updatedAt
-  });
+  WalletModel(
+      {this.id,
+      this.userId,
+      this.userName,
+      this.type,
+      this.transactionType,
+      this.currency,
+      this.amount,
+      this.balance,
+      this.walletBalance,
+      this.datetime,
+      this.orderId,
+      this.description,
+      this.data,
+      this.createdAt,
+      this.updatedAt});
 
   WalletModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -135,7 +134,7 @@ class UserWalletModel {
   int? onlineReceived;
   int? collectedCash;
   var manualReceived;
-  int? totalWithdrawn;
+  num? totalWithdrawn;
   String? currency;
   String? createdAt;
   String? updatedAt;

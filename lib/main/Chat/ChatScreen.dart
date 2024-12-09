@@ -1,24 +1,29 @@
-import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import '../../main/utils/Colors.dart';
-import 'package:nb_utils/nb_utils.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/utils/Widgets.dart';
+import '../../extensions/colors.dart';
+import '../../extensions/decorations.dart';
+import '../../extensions/shared_pref.dart';
+import '../../extensions/system_utils.dart';
+import '../../extensions/text_styles.dart';
 import 'package:paginate_firestore/paginate_firestore.dart';
-
 import '../../main.dart';
-import '../services/ChatMessagesService.dart';
+import '../components/CommonScaffoldComponent.dart';
 import '../models/ChatMessageModel.dart';
-import '../models/FileModel.dart';
 import '../models/LoginResponse.dart';
-import '../services/UserServices.dart';
 import '../utils/Constants.dart';
+import '../utils/dynamic_theme.dart';
 import 'ChatItemWidget.dart';
 
 class ChatScreen extends StatefulWidget {
   final UserData? userData;
+  String? orderId;
 
-  ChatScreen({this.userData});
+  ChatScreen({this.userData, this.orderId});
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -49,8 +54,9 @@ class _ChatScreenState extends State<ChatScreen> {
     mIsEnterKey = getBoolAsync(IS_ENTER_KEY, defaultValue: false);
     mSelectedImage = getStringAsync(SELECTED_WALLPAPER, defaultValue: "assets/default_wallpaper.png");
 
-    chatMessageService = ChatMessageService();
-    chatMessageService.setUnReadStatusToTrue(senderId: sender.uid!, receiverId: widget.userData!.uid!);
+    //   chatMessageService = ChatMessageService();
+    ordersMessageService.setUnReadStatusToTrue(orderId: widget.orderId);
+    print(widget.userData!.uid!);
     setState(() {});
   }
 
@@ -81,66 +87,41 @@ class _ChatScreenState extends State<ChatScreen> {
       data.messageType = MessageType.TEXT.name;
     }
 
-    notificationService.sendPushNotifications(getStringAsync(USER_NAME), messageCont.text, receiverPlayerId: widget.userData!.playerId).catchError(log);
+    notificationService
+        .sendPushNotifications(getStringAsync(USER_NAME), messageCont.text, receiverPlayerId: widget.userData!.playerId)
+        .catchError(log);
     messageCont.clear();
     setState(() {});
-    return await chatMessageService.addMessage(data).then((value) async {
-      if (result != null) {
-        FileModel fileModel = FileModel();
-        fileModel.id = value.id;
-        fileModel.file = File(result.files.single.path!);
-        fileList.add(fileModel);
-
-        setState(() {});
-      }
-
-      await chatMessageService.addMessageToDb(value, data, sender, widget.userData, image: result != null ? File(result.files.single.path!) : null).then((value) {
-        //
-      });
-
-      userService.fireStore
-          .collection(USER_COLLECTION)
-          .doc(getIntAsync(USER_ID).toString())
-          .collection(CONTACT_COLLECTION)
-          .doc(widget.userData!.uid)
-          .update({'lastMessageTime': DateTime.now().millisecondsSinceEpoch}).catchError((e) {
-        log(e);
-      });
-      userService.fireStore
-          .collection(USER_COLLECTION)
-          .doc(widget.userData!.uid)
-          .collection(CONTACT_COLLECTION)
-          .doc(getIntAsync(USER_ID).toString())
-          .update({'lastMessageTime': DateTime.now().millisecondsSinceEpoch}).catchError((e) {
-        log(e);
-      });
-    });
+    return await ordersMessageService.addOrderMessage(data, widget.orderId).then((value) async {});
   }
 
   @override
   Widget build(BuildContext context) {
     log(widget.userData!.uid);
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: StreamBuilder<UserData>(
-          stream: UserService().singleUser(widget.userData!.uid),
-          builder: (context, snap) {
-            if (snap.hasData) {
-              return Row(
-                children: [
-                  Icon(Icons.arrow_back, color: whiteColor).paddingSymmetric(vertical: 16).onTap(() => finish(context)),
-                  10.width,
-                  CircleAvatar(backgroundColor: context.cardColor, backgroundImage: NetworkImage(widget.userData!.profileImage.validate()), minRadius: 20),
-                  10.width,
-                  Text(widget.userData!.name.validate(), style: TextStyle(color: whiteColor)).paddingSymmetric(vertical: 16).expand(),
-                ],
-              );
-            }
-            return snapWidgetHelper(snap, loadingWidget: Offstage());
-          },
+    return CommonScaffoldComponent(
+      showBack: false,
+      appBar: commonAppBarWidget(
+        '',
+        titleWidget: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CircleAvatar(
+                backgroundColor: context.cardColor,
+                backgroundImage: NetworkImage(widget.userData!.profileImage.validate()),
+                minRadius: 20),
+            10.width,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(widget.userData!.name.validate(), style: secondaryTextStyle(size: 16, color: whiteColor)),
+                4.height,
+                Text(' # ${widget.orderId.validate()}', style: secondaryTextStyle(size: 14, color: Colors.white60)),
+              ],
+            ).expand(),
+          ],
         ),
-        backgroundColor: context.primaryColor,
       ),
       body: Container(
         height: context.height(),
@@ -155,7 +136,10 @@ class _ChatScreenState extends State<ChatScreen> {
                 isLive: true,
                 padding: EdgeInsets.only(left: 8, top: 8, right: 8, bottom: 0),
                 physics: BouncingScrollPhysics(),
-                query: chatMessageService.chatMessagesWithPagination(currentUserId: getStringAsync(UID), receiverUserId: widget.userData!.uid.validate()),
+                query: ordersMessageService.chatMessagesWithPagination(
+                    currentUserId: getStringAsync(UID),
+                    receiverUserId: widget.userData!.uid.validate(),
+                    orderId: widget.orderId),
                 itemsPerPage: PER_PAGE_CHAT_COUNT,
                 shrinkWrap: true,
                 onEmpty: Offstage(),
@@ -163,6 +147,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 itemBuilder: (context, snap, index) {
                   ChatMessageModel data = ChatMessageModel.fromJson(snap[index].data() as Map<String, dynamic>);
                   data.isMe = data.senderId == sender.uid;
+                  if (widget.orderId == data.orderId) {}
                   return ChatItemWidget(data: data);
                 },
               ).paddingBottom(76),
@@ -197,15 +182,23 @@ class _ChatScreenState extends State<ChatScreen> {
                       style: primaryTextStyle(),
                       textInputAction: mIsEnterKey ? TextInputAction.send : TextInputAction.newline,
                       onSubmitted: (s) {
-                        sendMessage();
+                        try {
+                          sendMessage();
+                        } catch (e) {
+                          print("error : ${e.toString()}");
+                        }
                       },
                       cursorHeight: 20,
                       maxLines: 5,
                     ).expand(),
                     IconButton(
-                      icon: Icon(Icons.send, color: colorPrimary),
+                      icon: Icon(Icons.send, color: ColorUtils.colorPrimary),
                       onPressed: () {
-                        sendMessage();
+                        try {
+                          sendMessage();
+                        } catch (e) {
+                          print("error :${e.toString()}");
+                        }
                       },
                     )
                   ],

@@ -4,17 +4,27 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:http/http.dart';
-import '../../main/components/BodyCornerWidget.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/list_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+
+import '../../extensions/common.dart';
+import '../../extensions/confirmation_dialog.dart';
+import '../../extensions/decorations.dart';
+import '../../extensions/shared_pref.dart';
+import '../../extensions/system_utils.dart';
+import '../../extensions/text_styles.dart';
+import '../../main.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
 import '../../main/models/DeliveryDocumentListModel.dart';
 import '../../main/models/DocumentListModel.dart';
-import '../../main/network/RestApis.dart';
-import '../../main/utils/Colors.dart';
-import '../../main/utils/Common.dart';
-import 'package:nb_utils/nb_utils.dart';
-
-import '../../main.dart';
 import '../../main/network/NetworkUtils.dart';
+import '../../main/network/RestApis.dart';
+import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
+import '../../main/utils/dynamic_theme.dart';
 
 class VerifyDeliveryPersonScreen extends StatefulWidget {
   static String tag = '/VerifyDeliveryPersonScreen';
@@ -25,6 +35,7 @@ class VerifyDeliveryPersonScreen extends StatefulWidget {
 
 class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> {
   List<DocumentData> documents = [];
+  List<DocumentData> remainingDocuments = [];
   List<DeliveryDocumentData> deliveryPersonDocuments = [];
   DocumentListModel? documentListModel;
   FilePickerResult? filePickerResult;
@@ -49,10 +60,11 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
   }
 
   /// get Document list
-  getDocListApiCall() {
+  Future<void> getDocListApiCall() async {
     appStore.setLoading(true);
-    getDocumentList().then((res) {
+    await getDocumentList().then((res) {
       documents.addAll(res.data!);
+      remainingDocuments.addAll(res.data!);
       setState(() {});
       appStore.setLoading(false);
     }).catchError((e) {
@@ -62,12 +74,15 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
   }
 
   ///Get Delivery Documents List
-  getDeliveryDocListApiCall() {
-    getDeliveryPersonDocumentList().then((res) {
+  Future<void> getDeliveryDocListApiCall() async {
+    await getDeliveryPersonDocumentList().then((res) {
       appStore.setLoading(false);
       deliveryPersonDocuments.addAll(res.data!);
       deliveryPersonDocuments.forEach((element) {
         uploadedDocList!.add(element.documentId!);
+        remainingDocuments.removeWhere((doc) => element.documentId == doc.id);
+        selectedDoc = remainingDocuments.validate().isNotEmpty ? remainingDocuments[0] : null;
+        setState(() {});
         updateDocId = element.id;
         log(uploadedDocList);
       });
@@ -79,7 +94,8 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
 
   /// SelectImage
   getMultipleFile(int? docId, {int? updateId}) async {
-    filePickerResult = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf']);
+    filePickerResult =
+        await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf']);
 
     if (filePickerResult != null) {
       showConfirmDialogCustom(
@@ -94,11 +110,12 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
         },
         positiveText: language.yes,
         negativeText: language.no,
-        primaryColor: colorPrimary,
+        primaryColor: ColorUtils.colorPrimary,
       );
     } else {}
   }
 
+  /// Add Documents
   /// Add Documents
   addDocument(int? docId, {int? updateId}) async {
     MultipartRequest multiPartRequest = await getMultiPartRequest('delivery-man-document-save');
@@ -131,7 +148,11 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
   }
 
   /// Delete Documents
-  deleteDoc(int? id) {
+  deleteDoc(int? id, int? documentId) {
+    if (!remainingDocuments.any((element) => element.id == documentId)) {
+      remainingDocuments.add(documents.firstWhere((element) => element.id == documentId));
+      selectedDoc = remainingDocuments[0];
+    }
     appStore.setLoading(true);
     deleteDeliveryDoc(id!).then((value) {
       toast(value.message, print: true);
@@ -158,9 +179,9 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
   }
 
   Color getColor(int i) {
-    Color color = colorPrimary;
+    Color color = ColorUtils.colorPrimary;
     if (i == 0) {
-      color = colorPrimary;
+      color = Colors.red;
     } else if (i == 1) {
       color = Colors.green;
     } else if (i == 2) {
@@ -176,137 +197,147 @@ class VerifyDeliveryPersonScreenState extends State<VerifyDeliveryPersonScreen> 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(language.verifyDocument)),
-      body: BodyCornerWidget(
-        child: Observer(
-          builder: (_) => Stack(
-            children: [
-              SingleChildScrollView(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        if (documents.isNotEmpty)
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(defaultRadius), color: Colors.grey.withOpacity(0.15)),
-                            child: DropdownButtonFormField<DocumentData>(
-                              decoration: InputDecoration.collapsed(hintText: null),
-                              hint: Text(language.selectDocument, style: primaryTextStyle()),
-                              value: selectedDoc,
-                              dropdownColor: context.cardColor,
-                              items: documents.map((DocumentData e) {
-                                return DropdownMenuItem<DocumentData>(
-                                    value: e,
-                                    child: Text(
-                                      e.name! + '${e.isRequired == 1 ? '*' : ''}',
-                                      style: primaryTextStyle(),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ));
-                              }).toList(),
-                              onChanged: (DocumentData? value) async {
-                                selectedDoc = value;
-                                docId = value!.id!;
-                                setState(() {});
-                              },
-                            ),
-                          ).expand(),
-                        if (docId != 0)
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            margin: EdgeInsets.only(left: 16),
-                            decoration: boxDecorationWithRoundedCorners(backgroundColor: colorPrimary, borderRadius: BorderRadius.circular(defaultRadius)),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.add, color: Colors.white, size: 24),
-                                8.width,
-                                Text(language.addDocument, style: secondaryTextStyle(color: Colors.white)),
-                              ],
-                            ),
-                          ).onTap(() {
-                            getMultipleFile(docId);
-                          }).visible(!uploadedDocList!.contains(docId)),
-                      ],
-                    ),
-                    30.height,
-                    ListView.separated(
-                      shrinkWrap: true,
-                      itemCount: deliveryPersonDocuments.length,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(deliveryPersonDocuments[index].documentName!, style: boldTextStyle()).expand(),
-                                Text(
-                                  getStatus(deliveryPersonDocuments[index].isVerified.validate()),
-                                  style: primaryTextStyle(
-                                    color: getColor(deliveryPersonDocuments[index].isVerified.validate()),
-                                  ),
+    return CommonScaffoldComponent(
+      appBarTitle: language.verifyDocument,
+      body: Observer(
+        builder: (_) => Stack(
+          children: [
+            SingleChildScrollView(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      if (remainingDocuments.isNotEmpty)
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(defaultRadius), color: Colors.transparent),
+                          child: DropdownButtonFormField<DocumentData>(
+                            isExpanded: true,
+                            decoration: commonInputDecoration(),
+                            hint: Text(language.selectDocument, style: primaryTextStyle()),
+                            value: selectedDoc ?? remainingDocuments[0],
+                            dropdownColor: context.cardColor,
+                            items: remainingDocuments.map((DocumentData e) {
+                              return DropdownMenuItem<DocumentData>(
+                                value: e,
+                                child: Text(
+                                  e.name! + '${e.isRequired == 1 ? '*' : ''}',
+                                  style: primaryTextStyle(),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                8.width,
-                                Container(
-                                  height: 25,
-                                  width: 25,
-                                  decoration: BoxDecoration(
-                                    color: colorPrimary.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(4),
-                                    border: Border.all(color: colorPrimary),
-                                  ),
-                                  child: Icon(Icons.edit, color: colorPrimary, size: 14),
+                              );
+                            }).toList(),
+                            onChanged: (DocumentData? value) async {
+                              selectedDoc = value;
+                              docId = value!.id!;
+                              setState(() {});
+                            },
+                          ),
+                        ).expand(),
+                      if (docId != 0)
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          margin: EdgeInsets.only(left: 16),
+                          decoration: boxDecorationWithRoundedCorners(
+                              backgroundColor: ColorUtils.colorPrimary,
+                              borderRadius: BorderRadius.circular(defaultRadius)),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.add, color: Colors.white, size: 24),
+                              8.width,
+                              Text(language.addDocument, style: secondaryTextStyle(color: Colors.white)),
+                            ],
+                          ),
+                        ).onTap(() async {
+                          await getMultipleFile(docId);
+                          selectedDoc = remainingDocuments[0];
+                        }).visible(!uploadedDocList!.contains(docId)),
+                    ],
+                  ),
+                  30.height,
+                  ListView.separated(
+                    shrinkWrap: true,
+                    itemCount: deliveryPersonDocuments.length,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(deliveryPersonDocuments[index].documentName!, style: boldTextStyle()).expand(),
+                              Text(
+                                getStatus(deliveryPersonDocuments[index].isVerified.validate()),
+                                style: primaryTextStyle(
+                                  color: getColor(deliveryPersonDocuments[index].isVerified.validate()),
+                                ),
+                              ),
+                              8.width,
+                              Container(
+                                height: 25,
+                                width: 25,
+                                decoration: BoxDecoration(
+                                  color: ColorUtils.colorPrimary.withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(color: ColorUtils.colorPrimary),
+                                ),
+                                child: Icon(Icons.edit, color: ColorUtils.colorPrimary, size: 14),
+                              ).onTap(() {
+                                getMultipleFile(deliveryPersonDocuments[index].documentId,
+                                    updateId: deliveryPersonDocuments[index].id.validate());
+                              }).visible(deliveryPersonDocuments[index].isVerified != 1),
+                              8.width.visible(deliveryPersonDocuments[index].isVerified != 1),
+                              Container(
+                                height: 25,
+                                width: 25,
+                                decoration: BoxDecoration(
+                                  color: Colors.red.withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(color: Colors.red),
+                                ),
+                                child: Icon(Icons.delete, color: Colors.red, size: 14),
+                              ).onTap(() {
+                                deleteDoc(deliveryPersonDocuments[index].id, deliveryPersonDocuments[index].documentId);
+                              }).visible(deliveryPersonDocuments[index].isVerified != 1),
+                              Icon(Icons.verified_user, color: Colors.green)
+                                  .visible(deliveryPersonDocuments[index].isVerified == 1),
+                            ],
+                          ),
+                          12.height,
+                          deliveryPersonDocuments[index].deliveryManDocument!.contains('.pdf')
+                              ? Container(
+                                  padding: EdgeInsets.all(8),
+                                  decoration:
+                                      boxDecorationWithRoundedCorners(backgroundColor: Colors.grey.withOpacity(0.2)),
+                                  child: Text(deliveryPersonDocuments[index].deliveryManDocument!.split('/').last,
+                                      style: primaryTextStyle()),
                                 ).onTap(() {
-                                  getMultipleFile(deliveryPersonDocuments[index].documentId, updateId: deliveryPersonDocuments[index].id.validate());
-                                }).visible(deliveryPersonDocuments[index].isVerified != 1),
-                                8.width.visible(deliveryPersonDocuments[index].isVerified != 1),
-                                Container(
-                                  height: 25,
-                                  width: 25,
-                                  decoration: BoxDecoration(
-                                    color: Colors.red.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(4),
-                                    border: Border.all(color: Colors.red),
-                                  ),
-                                  child: Icon(Icons.delete, color: Colors.red, size: 14),
-                                ).onTap(() {
-                                  deleteDoc(deliveryPersonDocuments[index].id);
-                                }).visible(deliveryPersonDocuments[index].isVerified != 1),
-                                Icon(Icons.verified_user, color: Colors.green).visible(deliveryPersonDocuments[index].isVerified == 1),
-                              ],
-                            ),
-                            12.height,
-                            deliveryPersonDocuments[index].deliveryManDocument!.contains('.pdf')
-                                ? Container(
-                                    padding: EdgeInsets.all(8),
-                                    decoration: boxDecorationWithRoundedCorners(backgroundColor: Colors.grey.withOpacity(0.2)),
-                                    child: Text(deliveryPersonDocuments[index].deliveryManDocument!.split('/').last, style: primaryTextStyle()),
-                                  ).onTap(() {
-                                    commonLaunchUrl(deliveryPersonDocuments[index].deliveryManDocument.validate());
-                                  })
-                                : commonCachedNetworkImage(deliveryPersonDocuments[index].deliveryManDocument!, height: 200, width: context.width(), fit: BoxFit.cover).cornerRadiusWithClipRRect(8).onTap(() {
-                                    commonLaunchUrl(deliveryPersonDocuments[index].deliveryManDocument!.validate());
-                                  }),
-                          ],
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        return Divider(height: 30);
-                      },
-                    ),
-                  ],
-                ),
+                                  commonLaunchUrl(deliveryPersonDocuments[index].deliveryManDocument.validate());
+                                })
+                              : commonCachedNetworkImage(deliveryPersonDocuments[index].deliveryManDocument!,
+                                      height: 200, width: context.width(), fit: BoxFit.cover)
+                                  .cornerRadiusWithClipRRect(8)
+                                  .onTap(() {
+                                  commonLaunchUrl(deliveryPersonDocuments[index].deliveryManDocument!.validate());
+                                }),
+                        ],
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return Divider(height: 30, color: context.dividerColor);
+                    },
+                  ),
+                ],
               ),
-              emptyWidget().visible(!appStore.isLoading && documents.isEmpty && deliveryPersonDocuments.isEmpty),
-              loaderWidget().center().visible(appStore.isLoading),
-            ],
-          ),
+            ),
+            emptyWidget().visible(!appStore.isLoading && documents.isEmpty && deliveryPersonDocuments.isEmpty),
+            loaderWidget().center().visible(appStore.isLoading),
+          ],
         ),
       ),
     );

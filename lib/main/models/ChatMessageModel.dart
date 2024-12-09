@@ -8,8 +8,18 @@ class ChatMessageModel {
   bool? isMessageRead;
   String? message;
   int? createdAt;
+  String? orderId;
 
-  ChatMessageModel({this.id, this.senderId, this.receiverId, this.createdAt, this.message, this.isMessageRead, this.photoUrl, this.messageType});
+  ChatMessageModel(
+      {this.id,
+      this.senderId,
+      this.receiverId,
+      this.createdAt,
+      this.message,
+      this.isMessageRead,
+      this.photoUrl,
+      this.messageType,
+      this.orderId});
 
   factory ChatMessageModel.fromJson(Map<String, dynamic> json) {
     return ChatMessageModel(
@@ -21,6 +31,7 @@ class ChatMessageModel {
       photoUrl: json['photoUrl'],
       messageType: json['messageType'],
       createdAt: json['createdAt'],
+      orderId: json['orderId'],
     );
   }
 
@@ -34,6 +45,7 @@ class ChatMessageModel {
     data['receiverId'] = this.receiverId;
     data['photoUrl'] = this.photoUrl;
     data['messageType'] = this.messageType;
+    data['orderId'] = this.orderId;
     return data;
   }
 }

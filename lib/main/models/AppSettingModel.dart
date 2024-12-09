@@ -21,31 +21,46 @@ class AppSettingModel {
   String? currencyCode;
   String? currencyPosition;
   int? isVehicleInOrder;
+  int? isVerifiedDeliveryMan;
+  String? orderTrackingIdPrefix;
+  String? isInsuranceAllowed;
+  String? insurancePercentage;
+  String? insuranceDescription;
+  String? maxEarningsPerMonth;
+  List<StoreType>? storeType;
+  String? claimDuration;
 
-  AppSettingModel({
-    this.createdAt,
-    this.facebookUrl,
-    this.id,
-    this.instagramUrl,
-    this.linkedinUrl,
-    this.notificationSettings,
-    this.siteCopyright,
-    this.siteDescription,
-    this.siteEmail,
-    this.siteName,
-    this.supportEmail,
-    this.supportNumber,
-    this.twitterUrl,
-    this.updatedAt,
-    this.autoAssign,
-    this.distanceUnit,
-    this.distance,
-    this.otpVerifyOnPickupDelivery,
-    this.currency,
-    this.currencyCode,
-    this.currencyPosition,
-    this.isVehicleInOrder,
-  });
+  AppSettingModel(
+      {this.createdAt,
+      this.facebookUrl,
+      this.id,
+      this.instagramUrl,
+      this.linkedinUrl,
+      this.notificationSettings,
+      this.siteCopyright,
+      this.siteDescription,
+      this.siteEmail,
+      this.siteName,
+      this.supportEmail,
+      this.supportNumber,
+      this.twitterUrl,
+      this.updatedAt,
+      this.autoAssign,
+      this.distanceUnit,
+      this.distance,
+      this.otpVerifyOnPickupDelivery,
+      this.currency,
+      this.currencyCode,
+      this.currencyPosition,
+      this.isVehicleInOrder,
+      this.isVerifiedDeliveryMan,
+      this.storeType,
+      this.orderTrackingIdPrefix,
+      this.insurancePercentage,
+      this.isInsuranceAllowed,
+      this.insuranceDescription,
+      this.maxEarningsPerMonth,
+      this.claimDuration});
 
   factory AppSettingModel.fromJson(Map<String, dynamic> json) {
     return AppSettingModel(
@@ -54,7 +69,8 @@ class AppSettingModel {
       id: json['id'],
       instagramUrl: json['instagram_url'] != null ? json['instagram_url'] : "",
       linkedinUrl: json['linkedin_url'] != null ? json['linkedin_url'] : "",
-      notificationSettings: json['notification_settings'] != null ? NotificationSettings.fromJson(json['notification_settings']) : null,
+      notificationSettings:
+          json['notification_settings'] != null ? NotificationSettings.fromJson(json['notification_settings']) : null,
       siteCopyright: json['site_copyright'] != null ? json['site_copyright'] : "",
       siteDescription: json['site_description'] != null ? json['site_description'] : "",
       siteEmail: json['site_email'] != null ? json['site_email'] : "",
@@ -71,6 +87,15 @@ class AppSettingModel {
       currencyCode: json['currency_code'],
       currencyPosition: json['currency_position'],
       isVehicleInOrder: json['is_vehicle_in_order'],
+      isVerifiedDeliveryMan: json['is_verified_delivery_man'],
+      orderTrackingIdPrefix: json['prefix'],
+      insurancePercentage: json['insurance_percentage'],
+      isInsuranceAllowed: json['insurance_allow'],
+      insuranceDescription: json['insurance_description'],
+      maxEarningsPerMonth: json['max_earning_per_month'],
+      claimDuration: json['claim_duration'],
+      storeType:
+          json["store_type"] == null ? [] : List<StoreType>.from(json["store_type"]!.map((x) => StoreType.fromJson(x))),
     );
   }
 
@@ -120,9 +145,20 @@ class AppSettingModel {
     data['currency_code'] = this.currencyCode;
     data['currency_position'] = this.currencyPosition;
     data['is_vehicle_in_order'] = this.isVehicleInOrder;
+    data['is_verified_delivery_man'] = this.isVerifiedDeliveryMan;
+    data['prefix'] = this.orderTrackingIdPrefix;
+    data['insurance_allow'] = this.isInsuranceAllowed;
+    data['insurance_percentage'] = this.insurancePercentage;
+    data['insurance_description'] = this.insuranceDescription;
+    data['max_earning_per_month'] = this.maxEarningsPerMonth;
+    data['claim_duration'] = this.claimDuration;
+    data["store_type"] = this.storeType == null ? [] : List<dynamic>.from(storeType!.map((x) => x.toJson()));
+
     return data;
   }
 }
+
+class AppSetting {}
 
 class NotificationSettings {
   Notifications? active;
@@ -139,7 +175,18 @@ class NotificationSettings {
   Notifications? paymentStatusMessage;
 
   NotificationSettings(
-      {this.active, this.cancelled, this.completed, this.courierArrived, this.courierAssigned, this.courierDeparted, this.courierPickedUp, this.courierTransfer, this.create, this.delayed, this.failed, this.paymentStatusMessage});
+      {this.active,
+      this.cancelled,
+      this.completed,
+      this.courierArrived,
+      this.courierAssigned,
+      this.courierDeparted,
+      this.courierPickedUp,
+      this.courierTransfer,
+      this.create,
+      this.delayed,
+      this.failed,
+      this.paymentStatusMessage});
 
   factory NotificationSettings.fromJson(Map<String, dynamic> json) {
     return NotificationSettings(
@@ -154,7 +201,8 @@ class NotificationSettings {
       create: json['create'] != null ? Notifications.fromJson(json['create']) : null,
       delayed: json['delayed'] != null ? Notifications.fromJson(json['delayed']) : null,
       failed: json['failed'] != null ? Notifications.fromJson(json['failed']) : null,
-      paymentStatusMessage: json['payment_status_message'] != null ? Notifications.fromJson(json['payment_status_message']) : null,
+      paymentStatusMessage:
+          json['payment_status_message'] != null ? Notifications.fromJson(json['payment_status_message']) : null,
     );
   }
 
@@ -204,12 +252,12 @@ class Notifications {
   String? isOnesignalNotification;
   String? isFirebaseNotification;
 
-  Notifications({this.isOnesignalNotification,this.isFirebaseNotification});
+  Notifications({this.isOnesignalNotification, this.isFirebaseNotification});
 
   factory Notifications.fromJson(Map<String, dynamic> json) {
     return Notifications(
       isOnesignalNotification: json['IS_ONESIGNAL_NOTIFICATION'],
-        isFirebaseNotification : json['IS_FIREBASE_NOTIFICATION'],
+      isFirebaseNotification: json['IS_FIREBASE_NOTIFICATION'],
     );
   }
 
@@ -219,4 +267,32 @@ class Notifications {
     data['IS_FIREBASE_NOTIFICATION'] = this.isFirebaseNotification;
     return data;
   }
+}
+
+class StoreType {
+  int? id;
+  int? storeOwnerId;
+  String? name;
+  String? image;
+
+  StoreType({
+    this.id,
+    this.storeOwnerId,
+    this.name,
+    this.image,
+  });
+
+  factory StoreType.fromJson(Map<String, dynamic> json) => StoreType(
+        id: json["id"],
+        storeOwnerId: json["storeowner_id"],
+        name: json["name"],
+        image: json["storetype_image"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "storeowner_id": storeOwnerId,
+        "name": name,
+        "storetype_image": image,
+      };
 }

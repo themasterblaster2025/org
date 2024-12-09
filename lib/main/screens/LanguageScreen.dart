@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
-import '../../main/components/BodyCornerWidget.dart';
-import '../../main/utils/Colors.dart';
-import '../../main/utils/Constants.dart';
-import 'package:nb_utils/nb_utils.dart';
-
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/utils/Common.dart';
+import '../../extensions/LiveStream.dart';
+import '../../extensions/animatedList/animated_scroll_view.dart';
+import '../../extensions/decorations.dart';
+import '../../extensions/shared_pref.dart';
+import '../../extensions/system_utils.dart';
+import '../../extensions/text_styles.dart';
+import '../../languageConfiguration/LanguageDataConstant.dart';
+import '../../languageConfiguration/LanguageDefaultJson.dart';
+import '../../languageConfiguration/ServerLanguageResponse.dart';
 import '../../main.dart';
+import '../components/CommonScaffoldComponent.dart';
+import '../utils/dynamic_theme.dart';
 
 class LanguageScreen extends StatefulWidget {
   static String tag = '/LanguageScreen';
@@ -14,15 +25,7 @@ class LanguageScreen extends StatefulWidget {
 }
 
 class LanguageScreenState extends State<LanguageScreen> {
-  @override
-  void initState() {
-    super.initState();
-    init();
-  }
-
-  Future<void> init() async {
-    //
-  }
+  // int? currentIndex = 0;
 
   @override
   void setState(fn) {
@@ -30,42 +33,52 @@ class LanguageScreenState extends State<LanguageScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    print(getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguageCode));
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(language.language)),
-      body: BodyCornerWidget(
-        child: ListView(
-          children: List.generate(localeLanguageList.length, (index) {
-            LanguageDataModel data = localeLanguageList[index];
-            return Padding(
-              padding: EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  Image.asset(data.flag.validate(), width: 34),
-                  16.width,
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('${data.name.validate()}', style: boldTextStyle()),
-                      8.height,
-                      Text('${data.subTitle.validate()}', style: secondaryTextStyle()),
-                    ],
-                  ).expand(),
-                  if (getStringAsync(SELECTED_LANGUAGE_CODE,defaultValue: defaultLanguage) == data.languageCode) Icon(Icons.check_circle, color: colorPrimary),
-                ],
-              ),
-            ).onTap(
-              () async {
-                await setValue(SELECTED_LANGUAGE_CODE, data.languageCode);
-                selectedLanguageDataModel = data;
-                appStore.setLanguage(data.languageCode!, context: context);
-                setState(() {});
-                LiveStream().emit('UpdateLanguage');
-                finish(context);
-              },
-            );
-          }),
-        ),
+    return CommonScaffoldComponent(
+      appBarTitle: language.language,
+      body: AnimatedScrollView(
+        padding: EdgeInsets.all(8),
+        children: List.generate(defaultServerLanguageData!.length, (index) {
+          LanguageJsonData data = defaultServerLanguageData![index];
+          return Container(
+            margin: EdgeInsets.all(8),
+            decoration: boxDecorationWithRoundedCorners(
+                backgroundColor: Colors.transparent,
+                border: Border.all(
+                    color: getStringAsync(SELECTED_LANGUAGE_COUNTRY_CODE, defaultValue: defaultCountryCode) ==
+                            data.countryCode
+                        ? ColorUtils.colorPrimary
+                        : ColorUtils.dividerColor)),
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            child: Row(
+              children: [
+                commonCachedNetworkImage(data.languageImage.validate(), width: 34, height: 34)
+                    .cornerRadiusWithClipRRect(4),
+                //Image.asset(data.languageName.validate(), width: 34, height: 34).cornerRadiusWithClipRRect(4),
+                8.width,
+                Text('${data.languageName.validate()}', style: primaryTextStyle()).expand(),
+                getStringAsync(SELECTED_LANGUAGE_COUNTRY_CODE, defaultValue: defaultCountryCode) == data.countryCode
+                    ? Icon(Ionicons.radio_button_on, size: 20, color: ColorUtils.colorPrimary)
+                    : Icon(Ionicons.radio_button_off_sharp, size: 20, color: ColorUtils.dividerColor),
+              ],
+            ),
+          ).onTap(() async {
+            await setValue(SELECTED_LANGUAGE_CODE, data.languageCode);
+            setValue(SELECTED_LANGUAGE_COUNTRY_CODE, data.countryCode);
+            selectedServerLanguageData = data;
+            setValue(IS_SELECTED_LANGUAGE_CHANGE, true);
+            appStore.setLanguage(data.languageCode!, context: context);
+            setState(() {});
+            LiveStream().emit('UpdateLanguage');
+            finish(context);
+          }, splashColor: Colors.transparent, highlightColor: Colors.transparent);
+        }),
       ),
     );
   }

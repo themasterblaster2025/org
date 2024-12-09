@@ -1,6 +1,7 @@
 import '../../main/models/WalletListModel.dart';
 
 import '../../main/models/PaginationModel.dart';
+import 'CreateOrderDetailModel.dart';
 import 'VehicleModel.dart';
 
 class OrderListModel {
@@ -45,6 +46,7 @@ class OrderListModel {
 }
 
 class PickupPoint {
+  String? name;
   String? address;
   String? latitude;
   String? longitude;
@@ -52,17 +54,22 @@ class PickupPoint {
   String? contactNumber;
   String? startTime;
   String? endTime;
+  String? instruction;
 
   PickupPoint(
       {this.address,
+      this.name,
       this.latitude,
       this.longitude,
       this.description,
       this.contactNumber,
       this.startTime,
+      this.instruction,
       this.endTime});
 
   PickupPoint.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    instruction = json["instruction"];
     address = json['address'];
     latitude = json['latitude'];
     longitude = json['longitude'];
@@ -81,11 +88,35 @@ class PickupPoint {
     data['contact_number'] = this.contactNumber;
     data['start_time'] = this.startTime;
     data['end_time'] = this.endTime;
+    data['name'] = this.name;
+    data['instruction'] = this.instruction;
     return data;
   }
 }
 
+class PackagingSymbol {
+  final String key;
+  final String title;
+
+  PackagingSymbol({
+    required this.key,
+    required this.title,
+  });
+
+  factory PackagingSymbol.fromJson(Map<String, dynamic> json) =>
+      PackagingSymbol(
+        key: json["key"],
+        title: json["title"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "key": key,
+        "title": title,
+      };
+}
+
 class OrderData {
+  String? orderTrackingId;
   int? id;
   int? clientId;
   String? clientName;
@@ -100,6 +131,7 @@ class OrderData {
   num? totalWeight;
   var totalDistance;
   String? pickupDatetime;
+  int? bid_type; // Added for bid type
   String? deliveryDatetime;
   int? parentOrderId;
   String? status;
@@ -121,15 +153,26 @@ class OrderData {
   bool? returnOrderId;
   num? weightCharge;
   num? distanceCharge;
+  num? vehicleCharge;
   num? totalParcel;
   int? autoAssign;
   List<dynamic>? cancelledDeliverManIds;
   int? vehicleId;
   VehicleData? vehicleData;
   String? vehicleImage;
+  String? invoice;
+  List<PackagingSymbol>? packagingSymbols = [];
+  num? insuranceCharge;
+  num? baseTotal;
+  List<ExtraCharges>? extraChargesList;
+  CityDetail? cityDetails;
+  int? isClaimed;
+  int? isRescheduled;
+  String? reScheduleDateTime;
 
   OrderData(
-      {this.id,
+      {this.orderTrackingId,
+      this.id,
       this.clientId,
       this.clientName,
       this.date,
@@ -154,6 +197,7 @@ class OrderData {
       this.deliveryManName,
       this.fixedCharges,
       this.extraCharges,
+      this.vehicleCharge,
       this.totalAmount,
       this.reason,
       this.pickupConfirmByClient,
@@ -169,9 +213,20 @@ class OrderData {
       this.cancelledDeliverManIds,
       this.vehicleId,
       this.vehicleData,
-      this.vehicleImage});
+      this.vehicleImage,
+      this.packagingSymbols,
+      this.invoice,
+      this.insuranceCharge,
+      this.baseTotal,
+      this.extraChargesList,
+      this.bid_type = 0,
+      this.cityDetails,
+      this.isClaimed,
+      this.isRescheduled,
+      this.reScheduleDateTime});
 
   OrderData.fromJson(Map<String, dynamic> json) {
+    orderTrackingId = json['order_tracking_id'];
     id = json['id'];
     clientId = json['client_id'];
     clientName = json['client_name'];
@@ -199,7 +254,9 @@ class OrderData {
     paymentCollectFrom = json['payment_collect_from'];
     deliveryManId = json['delivery_man_id'];
     deliveryManName = json['delivery_man_name'];
+    bid_type = json['bid_type'];
     fixedCharges = json['fixed_charges'];
+    vehicleCharge = json['vehicle_charge'];
     extraCharges = json['extra_charges'];
     totalAmount = json['total_amount'];
     reason = json['reason'];
@@ -219,11 +276,31 @@ class OrderData {
         ? new VehicleData.fromJson(json['vehicle_data'])
         : null;
     vehicleImage = json['vehicle_image'];
+    invoice = json['invoice'];
+    insuranceCharge = json['insurance_charge'];
+    baseTotal = json['base_total'];
+    isClaimed = json['isClaimed'];
+    isRescheduled = json['is_reschedule'];
+    reScheduleDateTime = json['rescheduledatetime'];
+    // Fixing the issue for extraChargesList:
+    extraChargesList = json['extra_charge_list'] != null
+        ? List<ExtraCharges>.from(
+            json['extra_charge_list'].map((x) => ExtraCharges.fromJson(x)))
+        : [];
+
+    cityDetails = json['city_details_list'] != null
+        ? CityDetail.fromJson(json['city_details_list'])
+        : null;
+    packagingSymbols = json["packaging_symbols"] == null
+        ? []
+        : List<PackagingSymbol>.from(
+            json["packaging_symbols"]!.map((x) => PackagingSymbol.fromJson(x)));
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['order_tracking_id'] = this.orderTrackingId;
     data['client_id'] = this.clientId;
     data['client_name'] = this.clientName;
     data['date'] = this.date;
@@ -251,6 +328,7 @@ class OrderData {
     data['delivery_man_id'] = this.deliveryManId;
     data['delivery_man_name'] = this.deliveryManName;
     data['fixed_charges'] = this.fixedCharges;
+    data['vehicle_charge'] = this.vehicleCharge;
     data['extra_charges'] = this.extraCharges;
     data['total_amount'] = this.totalAmount;
     data['reason'] = this.reason;
@@ -265,11 +343,24 @@ class OrderData {
     data['total_parcel'] = this.totalParcel;
     data['auto_assign'] = this.autoAssign;
     data['cancelled_delivery_man_ids'] = this.cancelledDeliverManIds;
+    data['bid_type'] = this.bid_type;
     data['vehicle_id'] = this.vehicleId;
     if (this.vehicleData != null) {
       data['vehicle_data'] = this.vehicleData!.toJson();
     }
     data['vehicle_image'] = this.vehicleImage;
+    data['invoice'] = this.invoice;
+    data['insurance_charge'] = this.insuranceCharge;
+    data['base_total'] = this.baseTotal;
+    data['isClaimed'] = this.isClaimed;
+    data['extra_charge_list'] = this.extraChargesList;
+    data['city_details_list'] = this.cityDetails;
+    data['rescheduledatetime'] = this.reScheduleDateTime;
+    data['is_reschedule'] = this.isRescheduled;
+    data["packaging_symbols"] = packagingSymbols == null
+        ? []
+        : List<PackagingSymbol>.from(
+            this.packagingSymbols!.map((x) => x.toJson()));
     return data;
   }
 }

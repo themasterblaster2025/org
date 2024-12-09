@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../main/utils/Colors.dart';
-import '../../main/utils/Common.dart';
-import 'package:nb_utils/nb_utils.dart';
+import '../../extensions/extension_util/bool_extensions.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
 
+import '../../extensions/colors.dart';
+import '../../extensions/common.dart';
+import '../../extensions/decorations.dart';
+import '../../extensions/loader_widget.dart';
+import '../../extensions/system_utils.dart';
+import '../../extensions/text_styles.dart';
+import '../../extensions/widgets.dart';
 import '../../main.dart';
+import '../../main/utils/Common.dart';
 import '../models/ChatMessageModel.dart';
 import '../utils/Constants.dart';
+import '../utils/dynamic_theme.dart';
 
 class ChatItemWidget extends StatefulWidget {
   final ChatMessageModel? data;
@@ -20,13 +31,6 @@ class ChatItemWidget extends StatefulWidget {
 class _ChatItemWidgetState extends State<ChatItemWidget> {
   String? images;
 
-  void initState() {
-    super.initState();
-    init();
-  }
-
-  init() async {}
-
   @override
   Widget build(BuildContext context) {
     String time;
@@ -35,7 +39,8 @@ class _ChatItemWidgetState extends State<ChatItemWidget> {
     if (date.day == DateTime.now().day) {
       time = DateFormat('hh:mm a').format(DateTime.fromMicrosecondsSinceEpoch(widget.data!.createdAt! * 1000));
     } else {
-      time = DateFormat('dd-mm-yyyy hh:mm a').format(DateTime.fromMicrosecondsSinceEpoch(widget.data!.createdAt! * 1000));
+      time =
+          DateFormat('dd-mm-yyyy hh:mm a').format(DateTime.fromMicrosecondsSinceEpoch(widget.data!.createdAt! * 1000));
     }
 
     Widget chatItem(String? messageTypes) {
@@ -45,14 +50,20 @@ class _ChatItemWidgetState extends State<ChatItemWidget> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: widget.data!.isMe! ? CrossAxisAlignment.end : CrossAxisAlignment.start,
             children: [
-              Text(widget.data!.message!, style: primaryTextStyle(color: widget.data!.isMe! ? Colors.white : textPrimaryColorGlobal), maxLines: null),
+              Text(widget.data!.message!,
+                  style: primaryTextStyle(color: widget.data!.isMe! ? Colors.white : textPrimaryColorGlobal),
+                  maxLines: null),
               1.height,
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     time,
-                    style: primaryTextStyle(color: !widget.data!.isMe.validate() ? Colors.blueGrey.withOpacity(0.6) : whiteColor.withOpacity(0.6), size: 10),
+                    style: primaryTextStyle(
+                        color: !widget.data!.isMe.validate()
+                            ? Colors.blueGrey.withOpacity(0.6)
+                            : whiteColor.withOpacity(0.6),
+                        size: 10),
                   ),
                   2.width,
                   widget.data!.isMe!
@@ -82,7 +93,9 @@ class _ChatItemWidgetState extends State<ChatItemWidget> {
                         Text(
                           time,
                           style: primaryTextStyle(
-                            color: !widget.data!.isMe.validate() ? Colors.blueGrey.withOpacity(0.6) : whiteColor.withOpacity(0.6),
+                            color: !widget.data!.isMe.validate()
+                                ? Colors.blueGrey.withOpacity(0.6)
+                                : whiteColor.withOpacity(0.6),
                             size: 10,
                           ),
                         ),
@@ -123,10 +136,11 @@ class _ChatItemWidgetState extends State<ChatItemWidget> {
       onLongPress: !widget.data!.isMe!
           ? null
           : () async {
-              bool? res = await showConfirmDialog(context, language.deleteMessage, positiveText: language.yes, negativeText: language.no, buttonColor: colorPrimary);
+              bool? res = await showConfirmDialog(context, language.deleteMessage,
+                  positiveText: language.yes, negativeText: language.no, buttonColor: ColorUtils.colorPrimary);
               if (res ?? false) {
                 hideKeyboard(context);
-                chatMessageService.deleteSingleMessage(senderId: widget.data!.senderId, receiverId: widget.data!.receiverId!, documentId: widget.data!.id).then((value) {
+                ordersMessageService.deleteSingleMessage(docId: widget.data!.id.toString()).then((value) {
                   //
                 }).catchError(
                   (e) {
@@ -148,9 +162,10 @@ class _ChatItemWidgetState extends State<ChatItemWidget> {
               padding: customPadding(widget.data!.messageType),
               decoration: BoxDecoration(
                 boxShadow: appStore.isDarkMode ? null : defaultBoxShadow(),
-                color: widget.data!.isMe.validate() ? colorPrimary : context.cardColor,
-                borderRadius:
-                    widget.data!.isMe.validate() ? radiusOnly(bottomLeft: 12, topLeft: 12, bottomRight: 0, topRight: 12) : radiusOnly(bottomLeft: 0, topLeft: 12, bottomRight: 12, topRight: 12),
+                color: widget.data!.isMe.validate() ? ColorUtils.colorPrimary : context.cardColor,
+                borderRadius: widget.data!.isMe.validate()
+                    ? radiusOnly(bottomLeft: 12, topLeft: 12, bottomRight: 0, topRight: 12)
+                    : radiusOnly(bottomLeft: 0, topLeft: 12, bottomRight: 12, topRight: 12),
               ),
               child: chatItem(widget.data!.messageType),
             ),
