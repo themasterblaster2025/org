@@ -206,6 +206,8 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
           value.appSettingDetail!.insurancePercentage.toString());
       appStore.setInsuranceDescription(
           value.appSettingDetail!.insuranceDescription.toString());
+      appStore.setIsBiddingStatus(
+          value.appSettingDetail!.isBiddingEnabled.toString());
       appStore.isVehicleOrder = value.appSettingDetail!.isVehicleInOrder ?? 0;
       setState(() {});
     }).catchError((error) {
@@ -571,7 +573,7 @@ class CreateOrderScreenState extends State<CreateOrderScreen> {
               }).expand(),
               const Spacer(),
             ],
-          ),
+          ).visible(appStore.isBiddingEnabled == "1"),
 
           16.height,
           Column(
