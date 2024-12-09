@@ -1148,7 +1148,8 @@
         "keyword_id": 463,
         "keyword_name": "noThanksRisk",
         "keyword_value": "No thanks, I'll risk it"
-      },  {
+      },
+      {
         "screenId": "19",
         "keyword_id": 505,
         "keyword_name": "approxParcelValue",
@@ -1159,7 +1160,8 @@
         "keyword_id": 506,
         "keyword_name": "reviewRoute",
         "keyword_value": "Review route"
-      },    {
+      },
+      {
         "screenId": "19",
         "keyword_id": 507,
         "keyword_name": "pickupDescription",
@@ -1218,8 +1220,25 @@
         "keyword_id": 559,
         "keyword_name": "perKmCharge:",
         "keyword_value": "Per km charge:"
+      },
+      {
+        "screenId": "19",
+        "keyword_id": 598,
+        "keyword_name": "offersAndBenefits",
+        "keyword_value": "Offers & Benefits"
+      },
+      {
+        "screenId": "19",
+        "keyword_id": 599,
+        "keyword_name": "onThisOrder",
+        "keyword_value": "on this order"
+      },
+      {
+        "screenId": "19",
+        "keyword_id": 600,
+        "keyword_name": "moreCoupons",
+        "keyword_value": "More coupons"
       }
-
     ]
   },
   {
@@ -2575,6 +2594,18 @@
         "keyword_id": 409,
         "keyword_name": "collectedAmount",
         "keyword_value": "Collected amount"
+      },
+      {
+        "screenId": "35",
+        "keyword_id": 601,
+        "keyword_name": "proof",
+        "keyword_value": "Proof"
+      },
+      {
+        "screenId": "35",
+        "keyword_id": 602,
+        "keyword_name": "proofDataValidation",
+        "keyword_value": "You can only add 3 proof data."
       }
     ]
   },
@@ -3314,7 +3345,6 @@
         "keyword_name": "supportType4",
         "keyword_value": "Delivery timing"
       }
-
     ]
   },
   {
@@ -3518,7 +3548,8 @@
         "keyword_id": 522,
         "keyword_name": "updateVehicle",
         "keyword_value": "Update vehicle"
-      },  {
+      },
+      {
         "screenId": "54",
         "keyword_id": 523,
         "keyword_name": "vehicleInfo",
@@ -3655,57 +3686,68 @@
         "keyword_id": 545,
         "keyword_name": "proofValue",
         "keyword_value": "Proof value"
-      },{
+      },
+      {
         "screenId": "56",
         "keyword_id": 546,
         "keyword_name": "trackinNo",
         "keyword_value": "Tracking no"
-      },{
+      },
+      {
         "screenId": "56",
         "keyword_id": 548,
         "keyword_name": "ofApproxParcelValue",
         "keyword_value": "% of approx parcel value"
-      },{
+      },
+      {
         "screenId": "56",
         "keyword_id": 550,
         "keyword_name": "claimInsurance",
         "keyword_value": "Claim insurance"
-      },{
+      },
+      {
         "screenId": "56",
         "keyword_id": 551,
         "keyword_name": "fillTheDetailsForClaim",
         "keyword_value": "Fill the details for claim"
-      },{
+      },
+      {
         "screenId": "56",
         "keyword_id": 552,
         "keyword_name": "addAttachmentMsg",
         "keyword_value": "Please add images or pdfs for better clarity,however it is not compulsory to do so click 'claim' to proceed further."
-      },{
+      },
+      {
         "screenId": "56",
         "keyword_id": 553,
         "keyword_name": "title",
         "keyword_value": "Title"
-      },{
+      },
+      {
         "screenId": "56",
         "keyword_id": 554,
         "keyword_name": "enterProofValue",
         "keyword_value": "Enter proof value"
-      },{
+      },
+      {
         "screenId": "56",
         "keyword_id": 555,
         "keyword_name": "selectedFiles",
         "keyword_value": "Selected files"
-      },{
+      },
+      {
         "screenId": "56",
         "keyword_id": 556,
         "keyword_name": "addProofs",
         "keyword_value": "Add proofs"
-      },{
+      },
+      {
         "screenId": "56",
         "keyword_id": 543,
         "keyword_name": "claim",
         "keyword_value": "Claim"
-      },{
+      },
+      {
         "screenId": "56",
         "keyword_id": 557,
         "keyword_name": "proofDetails",
@@ -3718,5 +3760,53 @@
         "keyword_value": "Approved Amount"
       }
     ]
-  }
+  },
+  {
+    "screenID": "58",
+    "ScreenName": "CouponListScreen",
+    "keyword_data": [
+      {
+        "screenId": "58",
+        "keyword_id": 603,
+        "keyword_name": "couponList",
+        "keyword_value": "Coupon List"
+      },
+      {
+        "screenId": "58",
+        "keyword_id": 604,
+        "keyword_name": "expiresIn",
+        "keyword_value": "Expires In:"
+      },
+      {
+        "screenId": "58",
+        "keyword_id": 605,
+        "keyword_name": "days",
+        "keyword_value": "days"
+      },
+      {
+        "screenId": "58",
+        "keyword_id": 606,
+        "keyword_name": "hrs",
+        "keyword_value": "hrs"
+      },
+      {
+        "screenId": "58",
+        "keyword_id": 607,
+        "keyword_name": "mins",
+        "keyword_value": "mins"
+      },
+      {
+        "screenId": "58",
+        "keyword_id": 608,
+        "keyword_name": "secs",
+        "keyword_value": "secs"
+      },
+      {
+        "screenId": "58",
+        "keyword_id": 609,
+        "keyword_name": "couponApplied",
+        "keyword_value": "Coupon Applied"
+      }
     ]
+  }
+]

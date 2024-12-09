@@ -428,9 +428,8 @@ class AppSettingDetail {
   String? isInsuranceAllow;
   String? insurancePercentage;
   String? insuranceDescription;
-  int? isBiddingEnabled;
 
-  AppSettingDetail({this.currencyCode, this.currency, this.currencyPosition, this.isVehicleInOrder, this.isBiddingEnabled});
+  AppSettingDetail({this.currencyCode, this.currency, this.currencyPosition, this.isVehicleInOrder});
 
   AppSettingDetail.fromJson(Map<String, dynamic> json) {
     currencyCode = json['currency_code'];
@@ -440,7 +439,6 @@ class AppSettingDetail {
     isInsuranceAllow = json['insurance_allow'];
     insurancePercentage = json['insurance_perntage'];
     insuranceDescription = json['insurance_description'];
-    isBiddingEnabled = json['is_bidding_in_order'];
   }
 
   Map<String, dynamic> toJson() {
@@ -452,7 +450,6 @@ class AppSettingDetail {
     data['insurance_allow'] = this.isInsuranceAllow;
     data['insurance_perntage'] = this.insurancePercentage;
     data['insurance_description'] = this.insuranceDescription;
-    data['is_bidding_in_order'] = this.isBiddingEnabled;
     return data;
   }
 }
