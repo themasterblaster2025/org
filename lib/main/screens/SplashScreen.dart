@@ -40,7 +40,8 @@ class SplashScreenState extends State<SplashScreen> {
 
   Future<void> init() async {
     String versionNo = await getStringAsync(CURRENT_LAN_VERSION, defaultValue: LanguageVersion);
-    await getLanguageList(versionNo).then((value) {
+    // Language version update is giving issues
+    await getLanguageList(103).then((value) {
       appStore.setThemeColor(value.themeColor!);
       appStore.updateTheme(colorFromHex(value.themeColor!));
       appStore.setIsAllowDeliveryMan(value.isAllowDeliveryMan ?? false);

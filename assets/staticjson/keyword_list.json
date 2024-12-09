@@ -1220,6 +1220,24 @@
         "keyword_id": 559,
         "keyword_name": "perKmCharge:",
         "keyword_value": "Per km charge:"
+      },
+      {
+        "screenId": "19",
+        "keyword_id": 598,
+        "keyword_name": "offersAndBenefits",
+        "keyword_value": "Offers & Benefits"
+      },
+      {
+        "screenId": "19",
+        "keyword_id": 599,
+        "keyword_name": "onThisOrder",
+        "keyword_value": "on this order"
+      },
+      {
+        "screenId": "19",
+        "keyword_id": 600,
+        "keyword_name": "moreCoupons",
+        "keyword_value": "More coupons"
       }
     ]
   },
@@ -2576,6 +2594,18 @@
         "keyword_id": 409,
         "keyword_name": "collectedAmount",
         "keyword_value": "Collected amount"
+      },
+      {
+        "screenId": "35",
+        "keyword_id": 601,
+        "keyword_name": "proof",
+        "keyword_value": "Proof"
+      },
+      {
+        "screenId": "35",
+        "keyword_id": 602,
+        "keyword_name": "proofDataValidation",
+        "keyword_value": "You can only add 3 proof data."
       }
     ]
   },
@@ -3732,194 +3762,50 @@
     ]
   },
   {
-    "screenID": "57",
-    "ScreenName": "BidListScreen",
+    "screenID": "58",
+    "ScreenName": "CouponListScreen",
     "keyword_data": [
       {
-        "screenId": "57",
-        "keyword_id": 567,
-        "keyword_name": "acceptBid",
-        "keyword_value": "Accept Bid"
+        "screenId": "58",
+        "keyword_id": 603,
+        "keyword_name": "couponList",
+        "keyword_value": "Coupon List"
       },
       {
-        "screenId": "57",
-        "keyword_id": 568,
-        "keyword_name": "viewAll",
-        "keyword_value": "View All"
+        "screenId": "58",
+        "keyword_id": 604,
+        "keyword_name": "expiresIn",
+        "keyword_value": "Expires In:"
       },
       {
-        "screenId": "57",
-        "keyword_id": 569,
-        "keyword_name": "estimateAmount",
-        "keyword_value": "Estimate Amount"
+        "screenId": "58",
+        "keyword_id": 605,
+        "keyword_name": "days",
+        "keyword_value": "days"
       },
       {
-        "screenId": "57",
-        "keyword_id": 570,
-        "keyword_name": "decline",
-        "keyword_value": "Decline"
+        "screenId": "58",
+        "keyword_id": 606,
+        "keyword_name": "hrs",
+        "keyword_value": "hrs"
       },
       {
-        "screenId": "57",
-        "keyword_id": 571,
-        "keyword_name": "declineBidConfirm",
-        "keyword_value": "Are you sure you want to decline this bid"
+        "screenId": "58",
+        "keyword_id": 607,
+        "keyword_name": "mins",
+        "keyword_value": "mins"
       },
       {
-        "screenId": "57",
-        "keyword_id": 572,
-        "keyword_name": "cancelBid",
-        "keyword_value": "Cancel Bid"
+        "screenId": "58",
+        "keyword_id": 608,
+        "keyword_name": "secs",
+        "keyword_value": "secs"
       },
       {
-        "screenId": "57",
-        "keyword_id": 573,
-        "keyword_name": "withdrawBid",
-        "keyword_value": "Withdraw Bid"
-      },
-      {
-        "screenId": "57",
-        "keyword_id": 574,
-        "keyword_name": "withdrawBidConfirm",
-        "keyword_value": "Do you want to withdraw this bid"
-      },
-      {
-        "screenId": "57",
-        "keyword_id": 575,
-        "keyword_name": "confirm",
-        "keyword_value": "Confirm"
-      },
-      {
-        "screenId": "57",
-        "keyword_id": 576,
-        "keyword_name": "confirmBid",
-        "keyword_value": "Confirm Bid"
-      },
-      {
-        "screenId": "57",
-        "keyword_id": 577,
-        "keyword_name": "saySomething",
-        "keyword_value": "Say anything... (Optional)"
-      },
-      {
-        "screenId": "57",
-        "keyword_id": 578,
-        "keyword_name": "placeYourBid",
-        "keyword_value": "Place your Bid"
-      },
-      {
-        "screenId": "57",
-        "keyword_id": 579,
-        "keyword_name": "deliveryBid",
-        "keyword_value": "Delivery Bids"
-      },
-      {
-        "screenId": "57",
-        "keyword_id": 580,
-        "keyword_name": "note",
-        "keyword_value": "Note"
-      },
-      {
-        "screenId": "57",
-        "keyword_id": 581,
-        "keyword_name": "noNotesAvailable",
-        "keyword_value": "No notes available"
-      },
-      {
-        "screenId": "57",
-        "keyword_id": 582,
-        "keyword_name": "bidAmount",
-        "keyword_value": "Bid Amount"
-      },
-      {
-        "screenId": "57",
-        "keyword_id": 583,
-        "keyword_name": "bidFetchFailedMsg",
-        "keyword_value": "Failed to fetch bids. Please try again."
-      },
-      {
-        "screenId": "57",
-        "keyword_id": 584,
-        "keyword_name": "bids",
-        "keyword_value": "Bids"
-      },
-      {
-        "screenId": "57",
-        "keyword_id": 585,
-        "keyword_name": "noBidsFound",
-        "keyword_value": "There are no bids for this order! Please wait."
-      },
-      {
-        "screenId": "57",
-        "keyword_id": 586,
-        "keyword_name": "bidRequest",
-        "keyword_value": "Bid Request"
-      },
-      {
-        "screenId": "57",
-        "keyword_id": 587,
-        "keyword_name": "acceptBidConfirm",
-        "keyword_value": "Do you want to accept this bid"
-      },
-      {
-        "screenId": "57",
-        "keyword_id": 588,
-        "keyword_name": "close",
-        "keyword_value": "Close"
-      },
-      {
-        "screenId": "57",
-        "keyword_id": 589,
-        "keyword_name": "orderAvailableForBidding",
-        "keyword_value": "New Orders are available for bidding"
-      },
-      {
-        "screenId": "57",
-        "keyword_id": 590,
-        "keyword_name": "bidAvailableForCancel",
-        "keyword_value": "Placed bid can be cancelled"
-      },
-      {
-        "screenId": "57",
-        "keyword_id": 591,
-        "keyword_name": "bidAccepted",
-        "keyword_value": "Bid accepted"
-      },
-      {
-        "screenId": "57",
-        "keyword_id": 592,
-        "keyword_name": "bidPlaced",
-        "keyword_value": "Bid placed"
-      },
-      {
-        "screenId": "57",
-        "keyword_id": 593,
-        "keyword_name": "newOrder",
-        "keyword_value": "New Order"
-      },
-      {
-        "screenId": "57",
-        "keyword_id": 594,
-        "keyword_name": "bidRejected",
-        "keyword_value": "Bid rejected"
-      },
-      {
-        "screenId": "57",
-        "keyword_id": 595,
-        "keyword_name": "placeBid",
-        "keyword_value": "Place Bid"
-      },
-      {
-        "screenId": "57",
-        "keyword_id": 596,
-        "keyword_name": "totalAmount",
-        "keyword_value": "Total Amount"
-      },
-      {
-        "screenId": "57",
-        "keyword_id": 597,
-        "keyword_name": "youPlaced",
-        "keyword_value": "You Placed"
+        "screenId": "58",
+        "keyword_id": 609,
+        "keyword_name": "couponApplied",
+        "keyword_value": "Coupon Applied"
       }
     ]
   }
