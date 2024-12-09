@@ -10,13 +10,10 @@ class OrderListModel {
   int? allUnreadCount;
   UserWalletModel? walletData;
 
-  OrderListModel(
-      {this.pagination, this.data, this.allUnreadCount, this.walletData});
+  OrderListModel({this.pagination, this.data, this.allUnreadCount, this.walletData});
 
   OrderListModel.fromJson(Map<String, dynamic> json) {
-    pagination = json['pagination'] != null
-        ? new PaginationModel.fromJson(json['pagination'])
-        : null;
+    pagination = json['pagination'] != null ? new PaginationModel.fromJson(json['pagination']) : null;
     if (json['data'] != null) {
       data = <OrderData>[];
       json['data'].forEach((v) {
@@ -24,9 +21,7 @@ class OrderListModel {
       });
     }
     allUnreadCount = json['all_unread_count'];
-    walletData = json['wallet_data'] != null
-        ? new UserWalletModel.fromJson(json['wallet_data'])
-        : null;
+    walletData = json['wallet_data'] != null ? new UserWalletModel.fromJson(json['wallet_data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -103,8 +98,7 @@ class PackagingSymbol {
     required this.title,
   });
 
-  factory PackagingSymbol.fromJson(Map<String, dynamic> json) =>
-      PackagingSymbol(
+  factory PackagingSymbol.fromJson(Map<String, dynamic> json) => PackagingSymbol(
         key: json["key"],
         title: json["title"],
       );
@@ -131,7 +125,6 @@ class OrderData {
   num? totalWeight;
   var totalDistance;
   String? pickupDatetime;
-  int? bid_type; // Added for bid type
   String? deliveryDatetime;
   int? parentOrderId;
   String? status;
@@ -219,7 +212,6 @@ class OrderData {
       this.insuranceCharge,
       this.baseTotal,
       this.extraChargesList,
-      this.bid_type = 0,
       this.cityDetails,
       this.isClaimed,
       this.isRescheduled,
@@ -231,12 +223,8 @@ class OrderData {
     clientId = json['client_id'];
     clientName = json['client_name'];
     date = json['date'];
-    pickupPoint = json['pickup_point'] != null
-        ? new PickupPoint.fromJson(json['pickup_point'])
-        : null;
-    deliveryPoint = json['delivery_point'] != null
-        ? new PickupPoint.fromJson(json['delivery_point'])
-        : null;
+    pickupPoint = json['pickup_point'] != null ? new PickupPoint.fromJson(json['pickup_point']) : null;
+    deliveryPoint = json['delivery_point'] != null ? new PickupPoint.fromJson(json['delivery_point']) : null;
     countryId = json['country_id'];
     countryName = json['country_name'];
     cityId = json['city_id'];
@@ -254,7 +242,6 @@ class OrderData {
     paymentCollectFrom = json['payment_collect_from'];
     deliveryManId = json['delivery_man_id'];
     deliveryManName = json['delivery_man_name'];
-    bid_type = json['bid_type'];
     fixedCharges = json['fixed_charges'];
     vehicleCharge = json['vehicle_charge'];
     extraCharges = json['extra_charges'];
@@ -272,9 +259,7 @@ class OrderData {
     autoAssign = json['auto_assign'];
     cancelledDeliverManIds = json['cancelled_delivery_man_ids'];
     vehicleId = json['vehicle_id'];
-    vehicleData = json['vehicle_data'] != null
-        ? new VehicleData.fromJson(json['vehicle_data'])
-        : null;
+    vehicleData = json['vehicle_data'] != null ? new VehicleData.fromJson(json['vehicle_data']) : null;
     vehicleImage = json['vehicle_image'];
     invoice = json['invoice'];
     insuranceCharge = json['insurance_charge'];
@@ -284,17 +269,13 @@ class OrderData {
     reScheduleDateTime = json['rescheduledatetime'];
     // Fixing the issue for extraChargesList:
     extraChargesList = json['extra_charge_list'] != null
-        ? List<ExtraCharges>.from(
-            json['extra_charge_list'].map((x) => ExtraCharges.fromJson(x)))
+        ? List<ExtraCharges>.from(json['extra_charge_list'].map((x) => ExtraCharges.fromJson(x)))
         : [];
 
-    cityDetails = json['city_details_list'] != null
-        ? CityDetail.fromJson(json['city_details_list'])
-        : null;
+    cityDetails = json['city_details_list'] != null ? CityDetail.fromJson(json['city_details_list']) : null;
     packagingSymbols = json["packaging_symbols"] == null
         ? []
-        : List<PackagingSymbol>.from(
-            json["packaging_symbols"]!.map((x) => PackagingSymbol.fromJson(x)));
+        : List<PackagingSymbol>.from(json["packaging_symbols"]!.map((x) => PackagingSymbol.fromJson(x)));
   }
 
   Map<String, dynamic> toJson() {
@@ -343,7 +324,6 @@ class OrderData {
     data['total_parcel'] = this.totalParcel;
     data['auto_assign'] = this.autoAssign;
     data['cancelled_delivery_man_ids'] = this.cancelledDeliverManIds;
-    data['bid_type'] = this.bid_type;
     data['vehicle_id'] = this.vehicleId;
     if (this.vehicleData != null) {
       data['vehicle_data'] = this.vehicleData!.toJson();
@@ -357,10 +337,8 @@ class OrderData {
     data['city_details_list'] = this.cityDetails;
     data['rescheduledatetime'] = this.reScheduleDateTime;
     data['is_reschedule'] = this.isRescheduled;
-    data["packaging_symbols"] = packagingSymbols == null
-        ? []
-        : List<PackagingSymbol>.from(
-            this.packagingSymbols!.map((x) => x.toJson()));
+    data["packaging_symbols"] =
+        packagingSymbols == null ? [] : List<PackagingSymbol>.from(this.packagingSymbols!.map((x) => x.toJson()));
     return data;
   }
 }
