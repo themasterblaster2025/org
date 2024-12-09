@@ -1,68 +1,61 @@
 import 'dart:async';
-import 'dart:io';
+import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:http/http.dart';
 import 'package:intl/intl.dart';
-import 'package:lottie/lottie.dart';
-import '../../bidding/user/screens/BidListScreen.dart';
-import '../../extensions/colors.dart';
-import '../../extensions/extension_util/context_extensions.dart';
-import '../../extensions/extension_util/int_extensions.dart';
-import '../../extensions/extension_util/list_extensions.dart';
-import '../../extensions/extension_util/num_extensions.dart';
-import '../../extensions/extension_util/string_extensions.dart';
-import '../../extensions/extension_util/widget_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/int_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/string_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import 'package:mighty_delivery/main/utils/Widgets.dart';
 
-import '../../extensions/LiveStream.dart';
-import '../../extensions/animatedList/animated_scroll_view.dart';
-import '../../extensions/app_button.dart';
-import '../../extensions/app_text_field.dart';
-import '../../extensions/common.dart';
-import '../../extensions/decorations.dart';
-import '../../extensions/shared_pref.dart';
-import '../../extensions/system_utils.dart';
-import '../../extensions/text_styles.dart';
-import '../../extensions/widgets.dart';
-import '../../main.dart';
-import '../../main/Chat/ChatScreen.dart';
-import '../../main/components/CommonScaffoldComponent.dart';
-import '../../main/components/OrderSummeryWidget.dart';
-import '../../main/models/CountryListModel.dart';
-import '../../main/models/ExtraChargeRequestModel.dart';
-import '../../main/models/LoginResponse.dart';
-import '../../main/models/OrderDetailModel.dart';
-import '../../main/models/OrderListModel.dart';
-import '../../main/network/NetworkUtils.dart';
-import '../../main/network/RestApis.dart';
-import '../../main/utils/Colors.dart';
-import '../../main/utils/Common.dart';
-import '../../main/utils/Constants.dart';
-import '../../main/utils/DataProviders.dart';
-import '../../main/utils/Images.dart';
-import '../../main/utils/Widgets.dart';
-import '../../main/utils/dynamic_theme.dart';
-import '../../user/components/CancelOrderDialog.dart';
-import '../../user/screens/ReturnOrderScreen.dart';
-import '../components/OrderCardComponent.dart';
-import 'OrderHistoryScreen.dart';
-import 'packaging_symbols_info.dart';
+import '../../../delivery/fragment/DHomeFragment.dart';
+import '../../../extensions/animatedList/animated_scroll_view.dart';
+import '../../../extensions/app_button.dart';
+import '../../../extensions/app_text_field.dart';
+import '../../../extensions/colors.dart';
+import '../../../extensions/common.dart';
+import '../../../extensions/confirmation_dialog.dart';
+import '../../../extensions/decorations.dart';
+import '../../../extensions/shared_pref.dart';
+import '../../../extensions/text_styles.dart';
+import '../../../main.dart';
+import '../../../main/components/CommonScaffoldComponent.dart';
+import '../../../main/components/OrderSummeryWidget.dart';
+import '../../../main/models/CountryListModel.dart';
+import '../../../main/models/ExtraChargeRequestModel.dart';
+import '../../../main/models/LoginResponse.dart';
+import '../../../main/models/OrderDetailModel.dart';
+import '../../../main/models/OrderListModel.dart';
+import '../../../main/network/RestApis.dart';
+import '../../../main/utils/Common.dart';
+import '../../../main/utils/Constants.dart';
+import '../../../main/utils/DataProviders.dart';
+import '../../../main/utils/Images.dart';
+import '../../../main/utils/dynamic_theme.dart';
+import '../../../user/screens/packaging_symbols_info.dart';
+import '../../../extensions/extension_util/num_extensions.dart';
+import '../../utils/Constants.dart';
+import '../models/BidListResponseModel.dart';
+import '../models/BidOrderModel.dart';
+import '../network/RestApis.dart';
 
-class OrderDetailScreen extends StatefulWidget {
-  static String tag = '/OrderDetailScreen';
-
+class OrderDetailWithBidScreen extends StatefulWidget {
   final int orderId;
+  final BidListData? bidData;
 
-  OrderDetailScreen({required this.orderId});
+  OrderDetailWithBidScreen({required this.orderId, this.bidData});
 
   @override
-  OrderDetailScreenState createState() => OrderDetailScreenState();
+  OrderDetailWithBidScreenState createState() =>
+      OrderDetailWithBidScreenState();
 }
 
-class OrderDetailScreenState extends State<OrderDetailScreen> {
+class OrderDetailWithBidScreenState extends State<OrderDetailWithBidScreen> {
   UserData? userData;
 
   OrderData? orderData;
@@ -92,9 +85,16 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
   bool isUserEligibleForClaim = true;
   String vehicleDataitle = "";
 
+  late double biddedAmount;
+
+  late StreamSubscription _getOrdersWithBidsStreamToCancelBid;
+  BidOrderModel? latestOrderToCancelBid;
+  bool isBidAvailable = false;
+
   @override
   void initState() {
     super.initState();
+    listenToOrderWithBidsStreamToCancelBid();
     afterBuildCreated(() {
       init();
     });
@@ -149,12 +149,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
       } else {
         userData = value.clientDetail;
       }
-      if (getStringAsync(USER_TYPE) == CLIENT) {
-        canUserCancelOrder();
-        if (orderData!.pickupDatetime != null) {
-          checkIfUserIsEligibleForClaim();
-        }
-      }
       getDistanceApiCall();
       if (orderData!.status == ORDER_TRANSFER ||
           orderData!.status == ORDER_ASSIGNED ||
@@ -178,89 +172,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
       print("------------${error.toString()}");
       toast(error.toString());
     }).whenComplete(() => appStore.setLoading(false));
-  }
-
-  cancelOrderByDeliveryManApiCall() async {
-    appStore.setLoading(true);
-    await updateOrder(
-      orderId: widget.orderId,
-      reason: reason == isOtherOptionSelected ? otherReason : reason,
-      orderStatus: ORDER_CANCELLED,
-    ).then((value) {
-      appStore.setLoading(false);
-      toast(language.orderCancelledSuccessfully);
-      finish(context);
-    }).catchError((error) {
-      appStore.setLoading(false);
-      finish(context);
-      log(error);
-    });
-  }
-
-  canUserCancelOrder() {
-    DateTime orderDate = DateTime.parse("${orderData!.date!}").toLocal();
-    DateTime currentDate =
-        DateTime.parse(DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()))
-            .toLocal();
-    Duration difference = currentDate.difference(orderDate);
-    int differenceInMinutes = currentDate.difference(orderDate).inMinutes;
-    canCancel = differenceInMinutes < cancelOrderDuration;
-    if (difference.inMinutes < 60 && difference.inMinutes >= 0) {
-      setState(() {
-        remainingTime = Duration(hours: 1) - difference;
-        startTimer();
-      });
-    } else {
-      setState(() {
-        remainingTime = Duration.zero;
-      });
-    }
-  }
-
-  checkIfUserIsEligibleForClaim() {
-    // Parse the given date string
-    DateTime givenDate = DateTime.parse(orderData!.pickupDatetime.toString());
-
-    // Parse the days to add as an integer
-    int daysToAdd = int.parse(appStore.claimDuration);
-
-    // Add the days to the given date
-    DateTime newDate = givenDate.add(Duration(days: daysToAdd));
-
-    // Compare newDate with today's date
-    if (newDate.isBefore(DateTime.now())) {
-      // If the new date is in the past, hide the button
-      setState(() {
-        isUserEligibleForClaim = false;
-      });
-    }
-  }
-
-  void startTimer() {
-    timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
-      setState(() {
-        remainingTime = DateTime.parse("${orderData!.date!}")
-            .toLocal()
-            .add(Duration(hours: 1))
-            .difference(DateTime.parse(
-                    DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now()))
-                .toLocal());
-
-        // Stop the timer if time is over
-        if (remainingTime.isNegative || remainingTime.inSeconds <= 0) {
-          remainingTime = Duration.zero;
-          timer.cancel();
-        }
-      });
-    });
-  }
-
-  String formatRemainingTime(Duration duration) {
-    int minutes = duration.inMinutes;
-    int seconds = duration.inSeconds % 60;
-    String formattedMinutes = minutes.toString().padLeft(2, '0');
-    String formattedSeconds = seconds.toString().padLeft(2, '0');
-    return '$formattedMinutes:$formattedSeconds';
   }
 
   getDistanceApiCall() async {
@@ -287,47 +198,239 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
     });
   }
 
-  createOrderApiCall() async {
+  createApplyForBidApiCall() async {
+    log('createApplyForBidApiCall called');
     appStore.setLoading(true);
+
     Map req = {
-      "client_id": orderData!.clientId!,
-      "date": DateTime.now().toString(),
-      "country_id": orderData!.countryId!,
-      "city_id": orderData!.cityId!,
-      "vehicle_id": orderData!.vehicleId.validate(),
-      "pickup_point": orderData!.deliveryPoint!,
-      "delivery_point": orderData!.pickupPoint!,
-      "extra_charges": orderData!.extraCharges!,
-      "parcel_type": orderData!.parcelType!,
-      "total_weight": orderData!.totalWeight!,
-      "total_distance": orderData!.totalDistance!,
-      "payment_collect_from": orderData!.paymentCollectFrom,
-      "status": ORDER_CREATED,
-      "payment_type": "",
-      "payment_status": "",
-      "fixed_charges": orderData!.fixedCharges!,
-      "total_amount": orderData!.totalAmount ?? 0,
-      "reason": reason == isOtherOptionSelected ? otherReason : reason,
+      "id": widget.bidData!.id,
       "order_id": orderData!.id,
-      "cancelorderreturn": 1,
-      "parent_order_id": "",
-      "vehicle_charge": orderData!.vehicleCharge,
-      "packaging_symbols": orderData!.packagingSymbols,
-      "weight_charge": orderData!.weightCharge,
-      "distance_charge": orderData!.distanceCharge,
-      "total_parcel": orderData!.totalParcel,
-      "insurance_charge": orderData!.insuranceCharge,
+      "bid_amount": biddedAmount.toDouble(),
+      "notes": reasonController.text.trim(),
     };
 
-    await createOrder(req).then((value) async {
-      print("------------------------${value}");
+    try {
+      await createBid(req).then((value) {
+        appStore.setLoading(false);
+        toast(value.message);
+        DHomeFragment().launch(context, isNewTask: true);
+      }).whenComplete(
+        () {
+          appStore.setLoading(false);
+        },
+      );
+    } catch (error) {
       appStore.setLoading(false);
-      toast(value.message);
-      finish(context);
-    }).catchError((error) {
-      appStore.setLoading(false);
-      toast(error.toString());
+      log('Error during apply bid API call: $error');
+      toast(language.errorSomethingWentWrong);
+    }
+  }
+
+  void _showBidBottomSheet(BuildContext context) {
+    biddedAmount = orderData!.totalAmount.toDouble();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      isDismissible: false,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) {
+            return Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: appStore.isDarkMode
+                    ? ColorUtils.scaffoldSecondaryDark
+                    : ColorUtils.scaffoldColorLight,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(language.placeYourBid,
+                              style: boldTextStyle(size: 20)),
+                          IconButton(
+                            icon: Icon(Icons.close,
+                                color: ColorUtils.colorPrimary, size: 30),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                        ],
+                      ),
+                      24.height,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            decoration: boxDecorationWithRoundedCorners(
+                              boxShape: BoxShape.circle,
+                              border: Border.all(color: Colors.red),
+                            ),
+                            child: IconButton(
+                              icon: Icon(Icons.remove,
+                                  color: Colors.red, size: 30),
+                              onPressed: () {
+                                setModalState(() {
+                                  if (biddedAmount > 0) {
+                                    biddedAmount -=
+                                        (biddedAmount >= 10) ? 10 : 1;
+                                    if (biddedAmount < 0) {
+                                      biddedAmount = 0;
+                                    }
+                                  }
+                                });
+                              },
+                            ),
+                          ),
+                          24.width,
+                          Text('${appStore.currencyCode}',
+                              style: boldTextStyle(size: 24)),
+                          SizedBox(width: 4),
+                          Text(biddedAmount.toStringAsFixed(2),
+                              style: boldTextStyle(size: 40)),
+                          24.width,
+                          Container(
+                            decoration: boxDecorationWithRoundedCorners(
+                              boxShape: BoxShape.circle,
+                              border: Border.all(color: Colors.green),
+                            ),
+                            child: IconButton(
+                              icon: Icon(Icons.add,
+                                  color: Colors.green, size: 30),
+                              onPressed: () {
+                                setModalState(() {
+                                  biddedAmount += 10;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ).paddingSymmetric(horizontal: 16, vertical: 12),
+                      16.height,
+                      Text(language.saySomething,
+                          style: boldTextStyle(size: 16)),
+                      SizedBox(height: 8),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: ColorUtils.colorPrimary.withOpacity(0.3),
+                        ),
+                        child: AppTextField(
+                          controller: reasonController,
+                          textFieldType: TextFieldType.NAME,
+                          decoration: InputDecoration(
+                            hintText: language.writeAMessage,
+                            hintStyle: secondaryTextStyle(
+                                size: 16, color: Colors.grey),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                      ),
+                      20.height,
+                      ElevatedButton(
+                        onPressed: () async {
+                          hideKeyboard(context);
+                          context.pop();
+                          await showConfirmDialogCustom(
+                            context,
+                            primaryColor: ColorUtils.colorPrimary,
+                            title: "${language.confirmBid}?",
+                            positiveText: language.yes,
+                            negativeText: language.no,
+                            onAccept: (c) async {
+                              createApplyForBidApiCall();
+                            },
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: ColorUtils.colorPrimary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: Text(language.confirm,
+                            style:
+                                boldTextStyle(size: 20, color: Colors.white)),
+                      ).withSize(width: context.width(), height: 60),
+                      8.height,
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  listenToOrderWithBidsStreamToCancelBid() {
+    _getOrdersWithBidsStreamToCancelBid = FirebaseFirestore.instance
+        .collection(ORDERS_BID_COLLECTION)
+        .where(ACCEPTED_DELIVERY_MAN_IDS, arrayContains: getIntAsync(USER_ID))
+        .snapshots()
+        .listen((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        try {
+          List<BidOrderModel> data = snapshot.docs
+              .map((e) => BidOrderModel.fromJson(e.data()))
+              .toList();
+
+          if (data.isNotEmpty) {
+            latestOrderToCancelBid = data[0];
+            if (latestOrderToCancelBid?.status == ORDER_CREATED) {
+              isBidAvailable = true;
+              setState(() {});
+            }
+          }
+        } catch (e) {
+          log("ERROR::: $e");
+        }
+      } else {
+        latestOrderToCancelBid = null;
+        setState(() {});
+      }
     });
+  }
+
+  declineOrCancelBid({required bool isDecline}) async {
+    appStore.setLoading(true);
+    Map req = {
+      "id": orderData!.id,
+      "delivery_man_id": getIntAsync(USER_ID).toString(),
+      "is_bid_accept": isDecline ? "2" : "3"
+    };
+
+    try {
+      await acceptOrRejectBid(req).then(
+        (value) {
+          appStore.setLoading(false);
+          toast(value.message);
+          DHomeFragment().launch(context, isNewTask: true);
+        },
+      ).whenComplete(
+        () {
+          appStore.setLoading(false);
+        },
+      );
+    } catch (e) {
+      appStore.setLoading(false);
+      toast(language.errorSomethingWentWrong);
+    }
   }
 
   @override
@@ -338,6 +441,9 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
   @override
   void dispose() {
     super.dispose();
+    timer?.cancel();
+    reasonController.dispose();
+    _getOrdersWithBidsStreamToCancelBid.cancel();
     afterBuildCreated(() {
       appStore.setLoading(false);
     });
@@ -349,7 +455,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            //   contentPadding: EdgeInsets.all(8),
             title: Column(
               children: [
                 Row(
@@ -409,7 +514,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
-      //    appBarTitle: '${orderData != null ? orderStatus(orderData!.status.validate()) : ''}',
       appBar: commonAppBarWidget(
         '',
         titleWidget: Row(
@@ -420,11 +524,10 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                    '${orderData != null ? orderStatus(orderData!.status.validate()) : ''}',
+                Text('${orderData?.clientName ?? ''}'.capitalizeFirstLetter(),
                     style: secondaryTextStyle(size: 16, color: whiteColor)),
                 4.height,
-                Text(' # ${widget.orderId.validate()}',
+                Text('# ${widget.orderId.validate()}',
                     style: secondaryTextStyle(size: 14, color: Colors.white60)),
               ],
             ).expand(),
@@ -770,83 +873,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                             .paddingOnly(top: 4)
                                     ],
                                   ),
-                                  if (orderData!.status != ORDER_CANCELLED ||
-                                      (orderData!.status == ORDER_DEPARTED ||
-                                          orderData!.status == ORDER_ACCEPTED))
-                                    16.height,
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      AppButton(
-                                        elevation: 0,
-                                        height: 35,
-                                        color: Colors.transparent,
-                                        padding:
-                                            EdgeInsets.symmetric(horizontal: 8),
-                                        shapeBorder: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              defaultRadius),
-                                          side: BorderSide(
-                                              color: ColorUtils.colorPrimary),
-                                        ),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(language.viewHistory,
-                                                style: primaryTextStyle(
-                                                    color: ColorUtils
-                                                        .colorPrimary)),
-                                            Icon(Icons.arrow_right,
-                                                color: ColorUtils.colorPrimary),
-                                          ],
-                                        ),
-                                        onTap: () {
-                                          OrderHistoryScreen(
-                                                  orderHistory:
-                                                      orderHistory.validate())
-                                              .launch(context);
-                                        },
-                                      ),
-                                      if (orderData!.status ==
-                                              ORDER_DELIVERED &&
-                                          appStore.userType == CLIENT) ...[
-                                        AppButton(
-                                          elevation: 0,
-                                          height: 35,
-                                          color: Colors.transparent,
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 8),
-                                          shapeBorder: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                defaultRadius),
-                                            side: BorderSide(
-                                                color: ColorUtils.colorPrimary),
-                                          ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(language.invoice,
-                                                  style: primaryTextStyle(
-                                                      color: ColorUtils
-                                                          .colorPrimary)),
-                                              Icon(Icons.arrow_right,
-                                                  color:
-                                                      ColorUtils.colorPrimary),
-                                            ],
-                                          ),
-                                          onTap: () {
-                                            PDFViewer(
-                                              invoice:
-                                                  "${orderData!.invoice.validate()}",
-                                              filename:
-                                                  "${orderData!.id.validate()}",
-                                            ).launch(context);
-                                          },
-                                        )
-                                      ],
-                                    ],
-                                  ),
                                 ],
                               ),
                             ),
@@ -941,10 +967,7 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                 })
                               ],
                             ).visible(packagingSymbols.isNotEmpty),
-                            //  Text(language.labels, style: boldTextStyle(size: 16)).visible(packagingSymbols
-                            //  .isNotEmpty),
                             12.height.visible(packagingSymbols.isNotEmpty),
-
                             Container(
                               width: context.width(),
                               decoration: boxDecorationWithRoundedCorners(
@@ -1055,8 +1078,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                   .toString());
                                             },
                                           ),
-
-                                        //  .visible(orderData!.status != ORDER_DELIVERED && orderData!.status != ORDER_CANCELLED && userData!.userType!=ADMIN && userData!.userType!=DEMO_ADMIN)
                                       ],
                                     ),
                                   ],
@@ -1301,7 +1322,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                 .cornerRadiusWithClipRRect(60)
                                                 .visible(!userData!.profileImage
                                                     .isEmptyOrNull),
-
                                             commonCachedNetworkImage(ic_profile,
                                                     height: 60,
                                                     width: 60,
@@ -1377,8 +1397,6 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                                     : SizedBox()
                                               ],
                                             ).expand(),
-
-                                            //  .visible(orderData!.status != ORDER_DELIVERED && orderData!.status != ORDER_CANCELLED && userData!.userType!=ADMIN && userData!.userType!=DEMO_ADMIN)
                                           ],
                                         ),
                                       ],
@@ -1430,11 +1448,9 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                 ],
                               ),
                             16.height,
-
                             (orderData!.extraCharges.runtimeType ==
                                     List<dynamic>)
                                 ? OrderSummeryWidget(
-                                    // productAmount: productAmount,
                                     vehiclePrice:
                                         orderData!.vehicleCharge.validate(),
                                     extraChargesList: list,
@@ -1602,327 +1618,14 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                                           ).visible(orderData!
                                                   .extraCharges.keys.length !=
                                               0),
-                                        16.height,
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(language.total,
-                                                style: boldTextStyle(size: 20)),
-                                            (orderData!.status ==
-                                                        ORDER_CANCELLED &&
-                                                    payment != null &&
-                                                    payment!.deliveryManFee ==
-                                                        0)
-                                                ? Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    children: [
-                                                      Text(
-                                                          '${printAmount(orderData!.totalAmount.validate())}',
-                                                          style: secondaryTextStyle(
-                                                              size: 16,
-                                                              decoration:
-                                                                  TextDecoration
-                                                                      .lineThrough)),
-                                                      8.width,
-                                                      Text(
-                                                          '${printAmount(payment!.cancelCharges.validate())}',
-                                                          style: boldTextStyle(
-                                                              size: 20)),
-                                                    ],
-                                                  )
-                                                : Text(
-                                                    '${printAmount(orderData!.totalAmount ?? 0)}',
-                                                    style: boldTextStyle(
-                                                        size: 20)),
-                                          ],
-                                        ),
                                       ],
                                     ),
                                   ),
-                            16.height,
-                            Text(language.reason,
-                                    style: boldTextStyle(size: 16))
-                                .visible(getStringAsync(USER_TYPE) ==
-                                        DELIVERY_MAN &&
-                                    (orderData!.status == ORDER_ACCEPTED ||
-                                        orderData!.status == ORDER_PICKED_UP ||
-                                        orderData!.status == ORDER_ARRIVED ||
-                                        orderData!.status == ORDER_DEPARTED)),
-                            8.height,
-                            DropdownButtonFormField<String>(
-                              value: reason,
-                              isExpanded: true,
-                              isDense: true,
-                              decoration: commonInputDecoration(),
-                              items: reasonsList.map((e) {
-                                return DropdownMenuItem(
-                                    value: e, child: Text(e));
-                              }).toList(),
-                              onChanged: (String? val) {
-                                int index = reasonsList.indexOf(val.toString());
-                                isOtherOptionSelected =
-                                    index == reasonsList.length - 1;
-                                reason = val;
-                                setState(() {});
-                              },
-                              validator: (value) {
-                                if (value == null)
-                                  return language.fieldRequiredMsg;
-                                return null;
-                              },
-                            ).visible(
-                                getStringAsync(USER_TYPE) == DELIVERY_MAN &&
-                                    (orderData!.status == ORDER_ACCEPTED ||
-                                        orderData!.status == ORDER_PICKED_UP ||
-                                        orderData!.status == ORDER_ARRIVED ||
-                                        orderData!.status == ORDER_DEPARTED)),
-                            16.height,
-                            // controller for reason if selected reason type is others
-                            AppTextField(
-                              textFieldType: TextFieldType.OTHER,
-                              controller: reasonController,
-                              decoration: commonInputDecoration(
-                                  hintText: language.writeReasonHere),
-                              maxLines: 3,
-                              minLines: 3,
-                              onChanged: (value) {
-                                if (value.isNotEmpty) {
-                                  otherReason =
-                                      reasonController.text.toString();
-                                }
-                              },
-                              textInputAction: TextInputAction.done,
-                            ).visible(reason.validate().trim() ==
-                                language.other.trim()),
-                            16.height,
-                            if (orderData!.status == ORDER_CANCELLED &&
-                                payment != null)
-                              Container(
-                                width: context.width(),
-                                decoration: BoxDecoration(
-                                    color: appStore.isDarkMode
-                                        ? ColorUtils.scaffoldSecondaryDark
-                                        : ColorUtils.colorPrimary
-                                            .withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(8)),
-                                padding: EdgeInsets.all(12),
-                                child: Text(
-                                    '${language.note} ${payment!.deliveryManFee == 0 ? language.cancelBeforePickMsg : language.cancelAfterPickMsg}',
-                                    style:
-                                        secondaryTextStyle(color: Colors.red)),
-                              ),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: commonButton("Check for Bid", () {
-                                Bidlistscreen(
-                                  orderData: orderData,
-                                ).launch(context);
-                              }, width: context.width()),
-                            ).visible(orderData!.bid_type == 1 &&
-                                orderData!.status == ORDER_CREATED &&
-                                getStringAsync(USER_TYPE) == CLIENT),
-                            36.height,
-                            Container(
-                              width: context.width(),
-                              child: RichText(
-                                textAlign: TextAlign.center,
-                                text: TextSpan(
-                                  style: secondaryTextStyle(),
-                                  children: [
-                                    TextSpan(
-                                        text: '${language.canOrderWithinHour} ',
-                                        style: secondaryTextStyle(
-                                            color: Colors.red, size: 12)),
-                                    TextSpan(
-                                        text:
-                                            "${formatRemainingTime(remainingTime)}",
-                                        style:
-                                            boldTextStyle(color: Colors.red)),
-                                  ],
-                                ),
-                              ).visible(getStringAsync(USER_TYPE) == CLIENT &&
-                                  orderData!.status != ORDER_DELIVERED &&
-                                  orderData!.status != ORDER_CANCELLED &&
-                                  canCancel),
-                            ),
-                            8.height,
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Column(
-                                children: [
-                                  commonButton(language.cancelOrder, () {
-                                    showInDialog(
-                                      context,
-                                      backgroundColor:
-                                          ColorUtils.colorPrimaryLight,
-                                      contentPadding: EdgeInsets.all(16),
-                                      builder: (p0) {
-                                        return CancelOrderDialog(
-                                            orderId: orderData!.id.validate(),
-                                            onUpdate: () {
-                                              //  list.clear();
-                                              orderDetailApiCall();
-                                              LiveStream()
-                                                  .emit('UpdateOrderData');
-                                              setState(() {});
-                                            });
-                                      },
-                                    );
-                                  }, width: context.width()),
-                                  8.height,
-                                  Container(
-                                    width: context.width(),
-                                    decoration: BoxDecoration(
-                                        color: appStore.isDarkMode
-                                            ? scaffoldSecondaryDark
-                                            : ColorUtils.colorPrimary
-                                                .withOpacity(0.1),
-                                        borderRadius: BorderRadius.circular(8)),
-                                    padding: EdgeInsets.all(12),
-                                    child: Text(language.cancelNote,
-                                        style: secondaryTextStyle()),
-                                  ),
-                                ],
-                              ),
-                            ).visible(getStringAsync(USER_TYPE) == CLIENT &&
-                                orderData!.status != ORDER_DELIVERED &&
-                                orderData!.status != ORDER_CANCELLED &&
-                                canCancel),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: commonButton(language.returnOrder, () {
-                                ReturnOrderScreen(
-                                  orderData!,
-                                ).launch(context);
-                              }, width: context.width()),
-                            ).visible(orderData!.status == ORDER_DELIVERED &&
-                                !orderData!.returnOrderId! &&
-                                orderData!.parentOrderId == null &&
-                                getStringAsync(USER_TYPE) == CLIENT),
                           ],
                         ),
+                        16.height,
                       ],
                     ),
-                    // return order option for delivery person
-                    Positioned(
-                      bottom: 10,
-                      left: 14,
-                      right: 14,
-                      child: commonButton(language.cancelOrder, () {
-                        if (!reason.isEmptyOrNull) {
-                          cancelOrderByDeliveryManApiCall();
-                        } else {
-                          toast(language.pleaseSelectReason);
-                        }
-                      }, width: context.width()),
-                    ).visible((orderData!.status == ORDER_TRANSFER ||
-                            orderData!.status == ORDER_ACCEPTED) &&
-                        getStringAsync(USER_TYPE) == DELIVERY_MAN),
-                    // return & cancel order option for delivery person
-                    Positioned(
-                      bottom: 10,
-                      left: 14,
-                      right: 14,
-                      child: commonButton(language.cancelAndReturn, () {
-                        if (!reason.isEmptyOrNull) {
-                          createOrderApiCall();
-                        } else {
-                          toast(language.pleaseSelectReason);
-                        }
-
-                        //      ReturnOrderScreen(orderData!, orderItems: orderItems, isCancelAndReturn: 1).launch(context);
-                      }, width: context.width()),
-                    ).visible((orderData!.status == ORDER_ARRIVED ||
-                            orderData!.status == ORDER_DEPARTED ||
-                            orderData!.status == ORDER_PICKED_UP) &&
-                        getStringAsync(USER_TYPE) == DELIVERY_MAN),
-                    // chat option
-                    Positioned(
-                        bottom: 50,
-                        right: 10,
-                        child: Container(
-                            width: 60,
-                            height: 60,
-                            margin: EdgeInsets.only(bottom: 20),
-                            decoration: boxDecorationWithRoundedCorners(
-                                borderRadius: BorderRadius.circular(40),
-                                border: Border.all(
-                                    color: ColorUtils.colorPrimary
-                                        .withOpacity(0.3)),
-                                backgroundColor: ColorUtils.colorPrimary),
-                            child: Stack(
-                              children: [
-                                if (userData != null && userData!.uid != null)
-                                  Positioned(
-                                    top: 8,
-                                    right: 10,
-                                    child: StreamBuilder<int>(
-                                        stream:
-                                            ordersMessageService.getUnReadCount(
-                                                receiverId: userData!.uid!,
-                                                orderId:
-                                                    orderData!.id.toString()),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasData &&
-                                              snapshot.data != null &&
-                                              snapshot.data! > 0) {
-                                            return Lottie.asset(
-                                                ic_chat_unread_count,
-                                                width: 18,
-                                                height: 18,
-                                                fit: BoxFit.cover);
-                                          }
-                                          return SizedBox();
-                                        }),
-                                  ).visible(orderData!.status !=
-                                          ORDER_DELIVERED &&
-                                      orderData!.status != ORDER_CANCELLED &&
-                                      userData!.userType.validate() != ADMIN),
-                                Positioned(
-                                  top: 0,
-                                  right: 0,
-                                  bottom: 0,
-                                  left: 0,
-                                  child: Icon(
-                                    Icons.chat_bubble_outline,
-                                    size: 25,
-                                    color: white,
-                                  ),
-                                )
-                              ],
-                            )).onTap(() {
-                          ChatScreen(
-                                  userData: userData,
-                                  orderId: orderData!.id.toString().validate())
-                              .launch(context);
-                        })).visible(orderData!.status !=
-                            ORDER_CREATED &&
-                        orderData!.status != ORDER_DELIVERED &&
-                        orderData!.status != ORDER_CANCELLED &&
-                        userData!.userType.validate() != ADMIN),
-                    //    claim option for user
-                    Positioned(
-                      bottom: 10,
-                      left: 16,
-                      right: 16,
-                      child: commonButton(language.claimInsurance, () {
-                        //  UploadClaimDetailsScreen().launch(context);
-                        proofTitleTextEditingController.text = "";
-                        proofDetailsTextEditingController.text = "";
-                        if (selectedFiles != null) {
-                          selectedFiles!.clear();
-                        }
-
-                        selectProofData();
-                      }, width: context.width()),
-                    ).visible((orderData!.status == ORDER_PICKED_UP ||
-                            orderData!.status == ORDER_ARRIVED ||
-                            orderData!.status == ORDER_DEPARTED) &&
-                        ((getStringAsync(USER_TYPE) == CLIENT) &&
-                            orderData!.isClaimed == 0 &&
-                            isUserEligibleForClaim == true))
                   ],
                 )
               : SizedBox(),
@@ -1931,232 +1634,83 @@ class OrderDetailScreenState extends State<OrderDetailScreen> {
                   loaderWidget().center().visible(appStore.isLoading)),
         ],
       ),
-    );
-  }
-
-  Future<void> pickFiles() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      allowMultiple: true,
-      type: FileType.custom,
-      allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf'],
-    );
-
-    if (result != null) {
-      setState(() {
-        selectedFiles = result.files;
-      });
-    } else {
-      // User canceled the picker
-    }
-  }
-
-  Future<void> selectProofData() async {
-    return showInDialog(
-      barrierDismissible: false,
-      getContext,
-      //    contentPadding: EdgeInsets.all(16),
-      builder: (p0) {
-        return StatefulBuilder(builder: (context, selectedImagesUpdate) {
-          return Form(
-            key: claimFormKey,
-            child: SingleChildScrollView(
-              child: Container(
-                constraints: BoxConstraints(
-                  minHeight: 200.0, // Set your minimum height here
+      bottomNavigationBar: Material(
+        elevation: 4,
+        child: Container(
+          height: 80,
+          padding: EdgeInsets.all(16),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (widget.bidData!.bidAmount! > 0) ...[
+                      Text(
+                        '${language.youPlaced}:',
+                        style: boldTextStyle(),
+                      ),
+                      Text(
+                        '${appStore.currencySymbol} ${widget.bidData!.bidAmount!}',
+                        style: boldTextStyle(size: 20),
+                      ),
+                    ] else ...[
+                      Text(
+                        '${language.totalAmount}:',
+                        style: boldTextStyle(),
+                      ),
+                      Text(
+                        '${appStore.currencySymbol} ${orderData?.totalAmount ?? 0}',
+                        style: boldTextStyle(size: 20),
+                      ),
+                    ]
+                  ],
                 ),
-                child: !appStore.isLoading
-                    ? Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(language.fillTheDetailsForClaim,
-                              style: boldTextStyle(),
-                              textAlign: TextAlign.start),
-                          8.height,
-                          Text(language.addAttachmentMsg,
-                              style: secondaryTextStyle(size: 12),
-                              textAlign: TextAlign.start),
-                          10.height,
-                          Divider(color: dividerColor, height: 1),
-                          8.height,
-                          Text(language.title, style: boldTextStyle()),
-                          12.height,
-                          AppTextField(
-                            isValidationRequired: true,
-                            controller: proofTitleTextEditingController,
-                            textFieldType: TextFieldType.NAME,
-                            errorThisFieldRequired: language.fieldRequiredMsg,
-                            decoration: commonInputDecoration(
-                                hintText: language.enterProofValue),
-                          ),
-                          8.height,
-                          Text(language.description, style: boldTextStyle()),
-                          12.height,
-                          AppTextField(
-                            isValidationRequired: true,
-                            controller: proofDetailsTextEditingController,
-                            textFieldType: TextFieldType.NAME,
-                            errorThisFieldRequired: language.fieldRequiredMsg,
-                            minLines: 4,
-                            maxLines: 8,
-                            decoration: commonInputDecoration(
-                                hintText: language.enterProofDetails),
-                          ),
-                          8.height,
-                          if (selectedFiles != null &&
-                              selectedFiles!.length > 0)
-                            Text(language.selectedFiles,
-                                style: boldTextStyle()),
-                          if (selectedFiles != null &&
-                              selectedFiles!.length > 0)
-                            10.height,
-                          if (selectedFiles != null &&
-                              selectedFiles!.length > 0)
-                            Container(
-                              width: context.width(),
-                              height: 120,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: selectedFiles!.length,
-                                itemBuilder: (context, index) {
-                                  return buildFileWidget(selectedFiles![index]);
-                                },
-                              ),
-                            ),
-                          16.height,
-                          Row(
-                            children: [
-                              commonButton(language.cancel, size: 14, () {
-                                if (selectedFiles != null)
-                                  selectedFiles!.clear();
-                                finish(getContext, 0);
-                              }).expand(),
-                              6.width,
-                              commonButton(
-                                language.addProofs,
-                                size: 14,
-                                () async {
-                                  if (selectedFiles != null)
-                                    selectedFiles!.clear();
-                                  FilePickerResult? result =
-                                      await FilePicker.platform.pickFiles(
-                                    allowMultiple: true,
-                                    type: FileType.custom,
-                                    allowedExtensions: [
-                                      'jpg',
-                                      'jpeg',
-                                      'png',
-                                      'pdf'
-                                    ],
-                                  );
-                                  if (result != null) {
-                                    selectedImagesUpdate(() {
-                                      selectedFiles = result.files;
-                                    });
-                                  }
-                                },
-                              ).expand(),
-                              6.width,
-                              commonButton(language.claim, size: 14, () async {
-                                if (claimFormKey.currentState!.validate()) {
-                                  selectedImagesUpdate(() {
-                                    appStore.setLoading(true);
-                                  });
-                                  hideKeyboard(context);
-
-                                  MultipartRequest multiPartRequest =
-                                      await getMultiPartRequest('claims-save');
-                                  multiPartRequest.fields['traking_no'] =
-                                      orderData!.orderTrackingId.validate();
-                                  multiPartRequest.fields['prof_value'] =
-                                      proofTitleTextEditingController.text;
-                                  multiPartRequest.fields['detail'] =
-                                      proofDetailsTextEditingController.text;
-                                  multiPartRequest.fields['client_id'] =
-                                      getIntAsync(USER_ID).toString();
-                                  if (selectedFiles != null &&
-                                      selectedFiles!.length > 0) {
-                                    selectedFiles!.forEach((element) async {
-                                      multiPartRequest.files.add(
-                                          await MultipartFile.fromPath(
-                                              "attachment_file[]",
-                                              element.path!));
-                                    });
-                                  }
-                                  // multiPartRequest.files.add(await MultipartFile.fromPath('vehicle_history_image', file.path));
-                                  multiPartRequest.headers
-                                      .addAll(buildHeaderTokens());
-                                  sendMultiPartRequest(
-                                    multiPartRequest,
-                                    onSuccess: (data) async {
-                                      if (data != null) {
-                                        appStore.setLoading(false);
-                                        toast(data["message"]);
-
-                                        finish(context);
-                                        print(data.toString());
-                                        selectedImagesUpdate(() {
-                                          appStore.setLoading(false);
-                                        });
-                                        orderDetailApiCall();
-                                      }
-                                    },
-                                    onError: (error) {
-                                      toast(error.toString(), print: true);
-                                      appStore.setLoading(false);
-                                    },
-                                  ).catchError((e) {
-                                    appStore.setLoading(false);
-                                    toast(e.toString());
-                                  });
-                                  //  claimInsuranceVehicleApiCall();
-                                }
-                              }).expand(),
-                            ],
-                          ),
-                        ],
-                      )
-                    : Observer(
-                            builder: (context) =>
-                                loaderWidget().visible(appStore.isLoading))
-                        .center(),
               ),
-            ),
-          );
-        });
-      },
-    );
-  }
-}
-
-Widget buildFileWidget(PlatformFile file) {
-  // Check if the file is an image or PDF
-  bool isImage = file.extension == 'jpg' ||
-      file.extension == 'jpeg' ||
-      file.extension == 'png';
-
-  return Stack(
-    children: [
-      Container(
-        width: 100,
-        height: 100,
-        decoration: boxDecorationWithRoundedCorners(
-            border: Border.all(color: ColorUtils.colorPrimary)),
-        child: isImage
-            ? Image.file(
-                width: 100, height: 100,
-                File(file.path!), // File object for local image display
-                fit: BoxFit.cover,
-              ).cornerRadiusWithClipRRect(10)
-            : Center(
-                child: Icon(
-                  Icons.picture_as_pdf,
-                  size: 40,
+              SizedBox(width: 16),
+              if (widget.bidData!.isBidAccept == 0 && isBidAvailable)
+                AppButton(
+                  text: language.cancelBid,
                   color: Colors.red,
+                  onTap: () async {
+                    await showConfirmDialogCustom(
+                      context,
+                      primaryColor: ColorUtils.colorPrimary,
+                      title: "${language.declineBidConfirm}?",
+                      positiveText: language.yes,
+                      negativeText: language.no,
+                      onAccept: (c) async {
+                        declineOrCancelBid(isDecline: false);
+                      },
+                    );
+                  },
+                ).expand()
+              else if (widget.bidData!.isBidAccept == null)
+                AppButton(
+                  text: "${language.placeBid}",
+                  color: ColorUtils.colorPrimary,
+                  onTap: () {
+                    _showBidBottomSheet(context);
+                  },
+                ).expand()
+              else if (widget.bidData!.isBidAccept == 1)
+                Center(
+                  child: Text(
+                    "${language.bidAccepted}",
+                    style: boldTextStyle(color: ColorUtils.colorPrimary),
+                  ),
+                )
+              else
+                Center(
+                  child: Text(
+                    "${language.bidRejected}",
+                    style: boldTextStyle(color: Colors.red),
+                  ),
                 ),
-              ),
-      ).paddingOnly(left: 8, right: 8)
-    ],
-  );
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

@@ -1073,16 +1073,4 @@ class BaseLanguage {
   String get reschedule => getContentValueFromKey(564);
   String get rescheduleTitle => getContentValueFromKey(565);
   String get rescheduleMsg => getContentValueFromKey(566);
-  String get offersAndBenefits => getContentValueFromKey(598);
-  String get onThisOrder => getContentValueFromKey(599);
-  String get moreCoupons => getContentValueFromKey(600);
-  String get proof => getContentValueFromKey(601);
-  String get proofDataValidation => getContentValueFromKey(602);
-  String get couponList => getContentValueFromKey(603);
-  String get expiresIn => getContentValueFromKey(604);
-  String get days => getContentValueFromKey(605);
-  String get hrs => getContentValueFromKey(606);
-  String get mins => getContentValueFromKey(607);
-  String get secs => getContentValueFromKey(608);
-  String get couponApplied => getContentValueFromKey(609);
 }

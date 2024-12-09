@@ -90,6 +90,7 @@ abstract class _AppStore with Store {
   String maxAmountEarning = '';
   @observable
   String themeColor = '0xff00000';
+
   // @observable
   // String orderTrackingIdPrefixId = 'DOCS';
   @observable
@@ -100,6 +101,15 @@ abstract class _AppStore with Store {
   String insuranceDescription = '';
   @observable
   String claimDuration = '';
+
+  @observable
+  String isBiddingEnabled = '0';
+
+  @action
+  Future<void> setIsBiddingStatus(String val) async {
+    isBiddingEnabled = val;
+  }
+
   @action
   Future<void> setLoading(bool val) async {
     isLoading = val;
@@ -288,8 +298,9 @@ abstract class _AppStore with Store {
     appBarTheme: AppBarTheme(
         color: ColorUtils.colorPrimary,
         elevation: 0,
-        systemOverlayStyle:
-            SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light, statusBarColor: Colors.transparent)),
+        systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarIconBrightness: Brightness.light,
+            statusBarColor: Colors.transparent)),
     dialogTheme: DialogTheme(shape: dialogShape()),
     bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.white),
     colorScheme: ColorScheme.light(
@@ -326,8 +337,10 @@ abstract class _AppStore with Store {
       ),
     ),
     dialogTheme: DialogTheme(shape: dialogShape()),
-    snackBarTheme: SnackBarThemeData(backgroundColor: ColorUtils.appButtonColorDark),
-    bottomSheetTheme: BottomSheetThemeData(backgroundColor: ColorUtils.appButtonColorDark),
+    snackBarTheme:
+        SnackBarThemeData(backgroundColor: ColorUtils.appButtonColorDark),
+    bottomSheetTheme:
+        BottomSheetThemeData(backgroundColor: ColorUtils.appButtonColorDark),
     colorScheme: ColorScheme.dark(
       primary: ColorUtils.colorPrimary,
     ),
@@ -339,6 +352,7 @@ abstract class _AppStore with Store {
       TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
     },
   ));
+
   @action
   void updateTheme(Color newColor) {
     ColorUtils.updateColors(appStore.themeColor);
@@ -356,8 +370,9 @@ abstract class _AppStore with Store {
       appBarTheme: AppBarTheme(
           color: newColor,
           elevation: 0,
-          systemOverlayStyle:
-              SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light, statusBarColor: Colors.transparent)),
+          systemOverlayStyle: SystemUiOverlayStyle(
+              statusBarIconBrightness: Brightness.light,
+              statusBarColor: Colors.transparent)),
       dialogTheme: DialogTheme(shape: dialogShape()),
       bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.white),
       colorScheme: ColorScheme.light(
@@ -392,8 +407,10 @@ abstract class _AppStore with Store {
         ),
       ),
       dialogTheme: DialogTheme(shape: dialogShape()),
-      snackBarTheme: SnackBarThemeData(backgroundColor: ColorUtils.appButtonColorDark),
-      bottomSheetTheme: BottomSheetThemeData(backgroundColor: ColorUtils.appButtonColorDark),
+      snackBarTheme:
+          SnackBarThemeData(backgroundColor: ColorUtils.appButtonColorDark),
+      bottomSheetTheme:
+          BottomSheetThemeData(backgroundColor: ColorUtils.appButtonColorDark),
       colorScheme: ColorScheme.dark(
         primary: newColor,
       ),
