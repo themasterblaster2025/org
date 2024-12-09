@@ -12,16 +12,20 @@ import '../../extensions/text_styles.dart';
 import '../../main.dart';
 import 'Constants.dart';
 
-Widget commonButton(String title, Function() onTap, {double? width, Color? color, Color? textColor, int? size}) {
+Widget commonButton(String title, Function() onTap,
+    {double? width, Color? color, Color? textColor, int? size}) {
   return SizedBox(
     width: width,
     child: AppButton(
       padding: EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-      shapeBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(defaultRadius)),
+      shapeBorder: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(defaultRadius)),
       elevation: 0,
       child: Text(
         title,
-        style: boldTextStyle(color: textColor ?? white, size: size ?? textBoldSizeGlobal.toInt()),
+        style: boldTextStyle(
+            color: textColor ?? white,
+            size: size ?? textBoldSizeGlobal.toInt()),
       ),
       color: color ?? ColorUtils.colorPrimary,
       onTap: onTap,
@@ -29,7 +33,8 @@ Widget commonButton(String title, Function() onTap, {double? width, Color? color
   );
 }
 
-Widget outlineButton(String title, Function() onTap, {double? width, Color? color}) {
+Widget outlineButton(String title, Function() onTap,
+    {double? width, Color? color}) {
   return SizedBox(
     width: width,
     child: TextButton(
@@ -50,7 +55,8 @@ Widget outlineButton(String title, Function() onTap, {double? width, Color? colo
   );
 }
 
-Widget scheduleOptionWidget(BuildContext context, bool isSelected, String imagePath, String title) {
+Widget scheduleOptionWidget(
+    BuildContext context, bool isSelected, String imagePath, String title) {
   return Container(
     padding: EdgeInsets.all(16),
     alignment: Alignment.center,
@@ -61,7 +67,8 @@ Widget scheduleOptionWidget(BuildContext context, bool isSelected, String imageP
                 : appStore.isDarkMode
                     ? Colors.transparent
                     : ColorUtils.borderColor),
-        backgroundColor: isSelected ? ColorUtils.colorPrimary : context.cardColor),
+        backgroundColor:
+            isSelected ? ColorUtils.colorPrimary : context.cardColor),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -70,7 +77,40 @@ Widget scheduleOptionWidget(BuildContext context, bool isSelected, String imageP
             size: 18, color: isSelected ? Colors.white : context.iconColor),
         // ImageIcon(AssetImage(imagePath), size: 20, color: isSelected ? colorPrimary : Colors.grey),
         8.width,
-        Text(title, style: boldTextStyle(color: isSelected ? Colors.white : textPrimaryColorGlobal)),
+        Text(title,
+            style: boldTextStyle(
+                color: isSelected ? Colors.white : textPrimaryColorGlobal)),
+      ],
+    ),
+  );
+}
+
+Widget enableBidOptionWidget(
+    BuildContext context, bool isSelected, IconData icon, String title) {
+  return Container(
+    padding: EdgeInsets.all(16),
+    alignment: Alignment.center,
+    decoration: boxDecorationWithRoundedCorners(
+        border: Border.all(
+            color: isSelected
+                ? ColorUtils.colorPrimary
+                : appStore.isDarkMode
+                    ? Colors.transparent
+                    : ColorUtils.borderColor),
+        backgroundColor:
+            isSelected ? ColorUtils.colorPrimary : context.cardColor),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          icon,
+          color: isSelected ? Colors.white : context.iconColor,
+        ),
+        8.width,
+        Text(title,
+            style: boldTextStyle(
+                color: isSelected ? Colors.white : textPrimaryColorGlobal)),
       ],
     ),
   );
@@ -101,13 +141,21 @@ AppBar commonAppBarWidget(
   return AppBar(
     centerTitle: center,
     title: titleWidget ??
-        Text(title, style: titleTextStyle ?? (boldTextStyle(color: textColor ?? Colors.white, size: textSize))),
+        Text(title,
+            style: titleTextStyle ??
+                (boldTextStyle(
+                    color: textColor ?? Colors.white, size: textSize))),
     actions: actions ?? [],
     automaticallyImplyLeading: showBack,
     backgroundColor: color ?? ColorUtils.colorPrimary,
-    leading: showBack ? (backWidget ?? BackButton(color: textColor ?? Colors.white)) : null,
+    leading: showBack
+        ? (backWidget ?? BackButton(color: textColor ?? Colors.white))
+        : null,
     shadowColor: shadowColor,
-    shape: isBottom ? RoundedRectangleBorder(borderRadius: radiusOnly(bottomRight: 20, bottomLeft: 20)) : null,
+    shape: isBottom
+        ? RoundedRectangleBorder(
+            borderRadius: radiusOnly(bottomRight: 20, bottomLeft: 20))
+        : null,
     elevation: elevation ?? defaultAppBarElevation,
     systemOverlayStyle: systemUiOverlayStyle,
     bottom: bottom,

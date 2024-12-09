@@ -1,8 +1,15 @@
+import 'dart:async';
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:intl/intl.dart';
+import 'package:mighty_delivery/bidding/extensions/extension_util/animation_extensions.dart';
+import 'package:mighty_delivery/extensions/extension_util/context_extensions.dart';
+import '../../bidding/delivery/models/BidOrderModel.dart';
+import '../../bidding/delivery/screens/DeliveryBidListScreen.dart';
+import '../../bidding/utils/Constants.dart';
 import '../../delivery/screens/EarningHistoryScreen.dart';
 import '../../delivery/screens/FilterCountScreen.dart';
 
@@ -43,9 +50,20 @@ class DHomeFragment extends StatefulWidget {
   State<DHomeFragment> createState() => _DHomeFragmentState();
 }
 
-class _DHomeFragmentState extends State<DHomeFragment> {
+class _DHomeFragmentState extends State<DHomeFragment>
+    with TickerProviderStateMixin {
   int currentPage = 1;
   DashboardCount? countData;
+
+  late AnimationController _animationController;
+
+  late double biddedAmount;
+  TextEditingController reasonController = TextEditingController();
+  late StreamSubscription _getOrdersWithBidsStream;
+  late StreamSubscription _getOrdersWithBidsStreamToCancelBid;
+
+  BidOrderModel? latestOrder;
+  BidOrderModel? latestOrderToCancelBid;
 
   ScrollController scrollController = ScrollController();
   UserBankAccount? userBankAccount;
@@ -93,6 +111,10 @@ class _DHomeFragmentState extends State<DHomeFragment> {
       default:
         return "0";
     }
+  }
+
+  void startShake() {
+    _animationController.repeat(reverse: true);
   }
 
   Future<void> goToCountScreen(int index) async {
@@ -145,8 +167,18 @@ class _DHomeFragmentState extends State<DHomeFragment> {
     LiveStream().on('UpdateTheme', (p0) {
       setState(() {});
     });
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 1000),
+    );
+    startShake();
     init();
     getDashboardCountDataApi();
+
+    listenToOrderWithBidsStream();
+
+    listenToOrderWithBidsStreamToCancelBid();
   }
 
   Future<void> init() async {
@@ -159,7 +191,8 @@ class _DHomeFragmentState extends State<DHomeFragment> {
       //  appStore.setOrderTrackingIdPrefix(value.orderTrackingIdPrefix ?? "");
       appStore.setIsInsuranceAllowed(value.isInsuranceAllowed ?? "0");
       appStore.setInsurancePercentage(value.insurancePercentage ?? "0");
-      appStore.setCurrencyPosition(value.currencyPosition ?? CURRENCY_POSITION_LEFT);
+      appStore.setCurrencyPosition(
+          value.currencyPosition ?? CURRENCY_POSITION_LEFT);
       appStore.setInsuranceDescription(value.insuranceDescription ?? '');
       appStore.setMaxAmountPerMonth(value.maxEarningsPerMonth ?? '');
       setState(() {});
@@ -173,9 +206,11 @@ class _DHomeFragmentState extends State<DHomeFragment> {
     if (mounted) super.setState(fn);
   }
 
-  Future<void> getDashboardCountDataApi({String? startDate, String? endDate}) async {
+  Future<void> getDashboardCountDataApi(
+      {String? startDate, String? endDate}) async {
     appStore.setLoading(true);
-    await getDashboardCount(startDate: startDate, endDate: endDate).then((value) {
+    await getDashboardCount(startDate: startDate, endDate: endDate)
+        .then((value) {
       appStore.setLoading(false);
       countData = value;
       setState(() {});
@@ -196,6 +231,109 @@ class _DHomeFragmentState extends State<DHomeFragment> {
   }
 
   @override
+  void dispose() {
+    _getOrdersWithBidsStream.cancel();
+    _getOrdersWithBidsStreamToCancelBid.cancel();
+    reasonController.dispose();
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  Widget bidAcceptView({required BidOrderModel? order}) {
+    if (order == null) return SizedBox();
+    return InkWell(
+      onTap: () {
+        DeliveryBidListScreen().launch(context);
+      },
+      child: Container(
+        width: context.width(),
+        decoration: boxDecorationWithRoundedCorners(
+            borderRadius: BorderRadius.circular(defaultRadius),
+            backgroundColor: darkRed),
+        child: Text("${language.orderAvailableForBidding}".capitalizedByWord(),
+                style: boldTextStyle(size: 16, color: Colors.white))
+            .paddingAll(16),
+      )
+          .visible(latestOrder != null || latestOrderToCancelBid != null)
+          .withShakeAnimation(_animationController),
+    );
+  }
+
+  Widget bidCancelView({required BidOrderModel? order}) {
+    if (order == null) return SizedBox();
+    return InkWell(
+        onTap: () {
+          DeliveryBidListScreen().launch(context);
+        },
+        child: Container(
+          width: context.width(),
+          decoration: boxDecorationWithRoundedCorners(
+              borderRadius: BorderRadius.circular(defaultRadius),
+              backgroundColor: darkRed),
+          child: Text("${language.bidAvailableForCancel}".capitalizedByWord(),
+                  style: boldTextStyle(size: 16, color: Colors.white))
+              .paddingAll(16),
+        )
+            .visible(latestOrder != null || latestOrderToCancelBid != null)
+            .withShakeAnimation(_animationController));
+  }
+
+  listenToOrderWithBidsStream() {
+    _getOrdersWithBidsStream = FirebaseFirestore.instance
+        .collection(ORDERS_BID_COLLECTION)
+        .where(ALL_DELIVERY_MAN_IDS, arrayContains: getIntAsync(USER_ID))
+        .snapshots()
+        .listen(
+      (snapshot) {
+        if (snapshot.docs.isEmpty) {
+          latestOrder = null;
+          setState(() {});
+        } else {
+          try {
+            List<BidOrderModel> data = snapshot.docs
+                .map((e) => BidOrderModel.fromJson(e.data()))
+                .toList();
+
+            if (data.isNotEmpty) {
+              latestOrder = data[0];
+            }
+          } catch (e) {
+            log("ERROR::: $e");
+          }
+        }
+      },
+      onError: (error) {
+        log("ERROR::: $error");
+      },
+    );
+  }
+
+  listenToOrderWithBidsStreamToCancelBid() {
+    _getOrdersWithBidsStreamToCancelBid = FirebaseFirestore.instance
+        .collection(ORDERS_BID_COLLECTION)
+        .where(ACCEPTED_DELIVERY_MAN_IDS, arrayContains: getIntAsync(USER_ID))
+        .snapshots()
+        .listen((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        try {
+          List<BidOrderModel> data = snapshot.docs
+              .map((e) => BidOrderModel.fromJson(e.data()))
+              .toList();
+
+          if (data.isNotEmpty) {
+            latestOrderToCancelBid = data[0];
+          }
+        } catch (e) {
+          log("ERROR::: $e");
+        }
+      } else {
+        latestOrderToCancelBid = null;
+        setState(() {});
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return CommonScaffoldComponent(
       appBar: commonAppBarWidget(
@@ -205,12 +343,15 @@ class _DHomeFragmentState extends State<DHomeFragment> {
           Container(
             margin: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration:
-                boxDecorationWithRoundedCorners(borderRadius: radius(defaultRadius), backgroundColor: Colors.white24),
+            decoration: boxDecorationWithRoundedCorners(
+                borderRadius: radius(defaultRadius),
+                backgroundColor: Colors.white24),
             child: Row(children: [
-              Icon(Ionicons.ios_location_outline, color: Colors.white, size: 18),
+              Icon(Ionicons.ios_location_outline,
+                  color: Colors.white, size: 18),
               8.width,
-              Text(CityModel.fromJson(getJSONAsync(CITY_DATA)).name!.validate(), style: primaryTextStyle(color: white)),
+              Text(CityModel.fromJson(getJSONAsync(CITY_DATA)).name!.validate(),
+                  style: primaryTextStyle(color: white)),
             ]).onTap(() {
               UserCitySelectScreen(
                 isBack: true,
@@ -219,14 +360,18 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                   setState(() {});
                 },
               ).launch(context);
-            }, highlightColor: Colors.transparent, hoverColor: Colors.transparent, splashColor: Colors.transparent),
+            },
+                highlightColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                splashColor: Colors.transparent),
           ),
           Stack(
             clipBehavior: Clip.none,
             children: [
               Align(
                   alignment: AlignmentDirectional.center,
-                  child: Icon(Ionicons.md_notifications_outline, color: Colors.white)),
+                  child: Icon(Ionicons.md_notifications_outline,
+                      color: Colors.white)),
               Observer(builder: (context) {
                 return Positioned(
                   right: 0,
@@ -235,9 +380,13 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                       height: 20,
                       width: 20,
                       alignment: Alignment.center,
-                      decoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
-                      child: Text('${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}',
-                          style: primaryTextStyle(size: appStore.allUnreadCount < 99 ? 12 : 8, color: Colors.white))),
+                      decoration: BoxDecoration(
+                          color: Colors.orange, shape: BoxShape.circle),
+                      child: Text(
+                          '${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}',
+                          style: primaryTextStyle(
+                              size: appStore.allUnreadCount < 99 ? 12 : 8,
+                              color: Colors.white))),
                 ).visible(appStore.allUnreadCount != 0);
               }),
             ],
@@ -247,7 +396,8 @@ class _DHomeFragmentState extends State<DHomeFragment> {
           IconButton(
             padding: EdgeInsets.only(right: 8),
             onPressed: () async {
-              DProfileFragment().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
+              DProfileFragment().launch(context,
+                  pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
             },
             icon: Icon(Ionicons.settings_outline, color: Colors.white),
           ),
@@ -262,14 +412,20 @@ class _DHomeFragmentState extends State<DHomeFragment> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: ListView(
-                physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                physics: BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
                 children: [
                   12.height,
+                  latestOrderToCancelBid != null
+                      ? bidCancelView(order: latestOrderToCancelBid ?? null)
+                      : bidAcceptView(order: latestOrder ?? null),
+                  16.height,
                   Row(
                     children: [
                       Text(
                         language.filterBelowCount,
-                        style: boldTextStyle(size: 16, color: ColorUtils.colorPrimary),
+                        style: boldTextStyle(
+                            size: 16, color: ColorUtils.colorPrimary),
                       ),
                       Spacer(),
                       Icon(
@@ -277,13 +433,17 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                         color: ColorUtils.colorPrimary,
                       ).onTap(() async {
                         await showInDialog(context,
-                                shape: RoundedRectangleBorder(borderRadius: radius()),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: radius()),
                                 builder: (_) => FilterCountScreen(),
                                 contentPadding: EdgeInsets.zero)
                             .then((value) {
-                          String startDate = DateFormat('yyyy-MM-dd').format(value[0]);
-                          String endDate = DateFormat('yyyy-MM-dd').format(value[1]);
-                          getDashboardCountDataApi(startDate: startDate, endDate: endDate);
+                          String startDate =
+                              DateFormat('yyyy-MM-dd').format(value[0]);
+                          String endDate =
+                              DateFormat('yyyy-MM-dd').format(value[1]);
+                          getDashboardCountDataApi(
+                              startDate: startDate, endDate: endDate);
                         });
                       }),
                     ],
@@ -298,12 +458,15 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                     ),
                     cacheExtent: 2.0,
                     shrinkWrap: true,
-                    // physics: BouncingScrollPhysics(
-                    //     parent: AlwaysScrollableScrollPhysics()),
                     controller: scrollController,
                     padding: EdgeInsets.fromLTRB(7, 5, 7, 5),
                     itemBuilder: (context, index) {
-                      return countWidget(text: items[index], value: getCount(index), color: colorList[index]).onTap(() {
+                      log("GETCOUNT::: ${getCount(index)}");
+                      return countWidget(
+                              text: items[index],
+                              value: getCount(index),
+                              color: colorList[index])
+                          .onTap(() {
                         goToCountScreen(index);
                       });
                     },
@@ -312,7 +475,9 @@ class _DHomeFragmentState extends State<DHomeFragment> {
                 ],
               ),
             ),
-            Observer(builder: (context) => Positioned.fill(child: loaderWidget().visible(appStore.isLoading))),
+            Observer(
+                builder: (context) => Positioned.fill(
+                    child: loaderWidget().visible(appStore.isLoading))),
           ],
         ),
       ),
@@ -320,11 +485,13 @@ class _DHomeFragmentState extends State<DHomeFragment> {
         padding: EdgeInsets.only(left: 16, right: 16, bottom: 16),
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: boxDecorationWithRoundedCorners(backgroundColor: ColorUtils.colorPrimary),
+          decoration: boxDecorationWithRoundedCorners(
+              backgroundColor: ColorUtils.colorPrimary),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(language.viewAllOrders, style: boldTextStyle(color: Colors.white)),
+              Text(language.viewAllOrders,
+                  style: boldTextStyle(color: Colors.white)),
             ],
           ).onTap(() {
             DeliveryDashBoard().launch(context).then((value) {
@@ -345,8 +512,11 @@ class _DHomeFragmentState extends State<DHomeFragment> {
     // Color color =
     return Container(
       decoration: appStore.isDarkMode
-          ? boxDecorationWithRoundedCorners(borderRadius: BorderRadius.circular(defaultRadius), backgroundColor: color)
-          : boxDecorationRoundedWithShadow(defaultRadius.toInt(), backgroundColor: color),
+          ? boxDecorationWithRoundedCorners(
+              borderRadius: BorderRadius.circular(defaultRadius),
+              backgroundColor: color)
+          : boxDecorationRoundedWithShadow(defaultRadius.toInt(),
+              backgroundColor: color),
       padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
