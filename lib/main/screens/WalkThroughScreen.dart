@@ -1,21 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import '../../extensions/extension_util/context_extensions.dart';
-import '../../extensions/extension_util/int_extensions.dart';
-import '../../extensions/extension_util/widget_extensions.dart';
-import '../../main/components/CommonScaffoldComponent.dart';
-import '../../main/utils/dynamic_theme.dart';
-
-import '../../extensions/colors.dart';
-import '../../extensions/common.dart';
-import '../../extensions/shared_pref.dart';
-import '../../extensions/text_styles.dart';
-import '../../main.dart';
 import '../../main/models/models.dart';
+import '../../main/utils/Colors.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/DataProviders.dart';
 import '../../main/utils/Widgets.dart';
-import '../utils/DotsIndicator.dart';
+import 'package:nb_utils/nb_utils.dart';
+
+import '../../main.dart';
 import 'LoginScreen.dart';
 
 class WalkThroughScreen extends StatefulWidget {
@@ -31,99 +22,101 @@ class WalkThroughScreenState extends State<WalkThroughScreen> {
   int currentPage = 0;
 
   @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  Future<void> init() async {
+    setStatusBarColor(appStore.isDarkMode ? scaffoldColorDark : Colors.white, statusBarBrightness: appStore.isDarkMode ? Brightness.light : Brightness.dark);
+  }
+
+  @override
   void setState(fn) {
     if (mounted) super.setState(fn);
   }
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
-    return CommonScaffoldComponent(
+    return Scaffold(
       appBar: AppBar(
+        title: Text(''),
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         actions: [
           Text(language.skip, style: boldTextStyle(color: grey)).onTap(
             () async {
               await setValue(IS_FIRST_TIME, false);
-              LoginScreen().launch(context,
-                  isNewTask: true,
-                  duration: Duration(milliseconds: 1000),
-                  pageRouteAnimation: PageRouteAnimation.Scale);
+              LoginScreen().launch(context, isNewTask: true, duration: Duration(milliseconds: 1000), pageRouteAnimation: PageRouteAnimation.Scale);
             },
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
-          ).paddingOnly(bottom: 8, right: 16),
+          ).paddingOnly(top: 16, right: 16),
         ],
-        systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Colors.transparent),
       ),
-      body: Stack(
-        children: [
-          PageView(
-            controller: pageController,
-            children: List.generate(
-              pages.length,
-              (index) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: PageView(
+        controller: pageController,
+        children: List.generate(
+          pages.length,
+          (index) {
+            return Center(
+              child: SingleChildScrollView(
+                child: Column(
                   children: [
-                    Center(
-                        child: Image.asset(pages[index].image!,
-                            width: context.width(), height: context.height() * 0.4, fit: BoxFit.cover)),
-                    Text(pages[currentPage].title!, style: boldTextStyle(size: 24), textAlign: TextAlign.center)
-                        .paddingOnly(left: 30, right: 30),
-                    16.height,
-                    Text(pages[currentPage].subTitle!, textAlign: TextAlign.center, style: secondaryTextStyle(size: 16))
-                        .paddingOnly(left: 30, right: 30),
-                  ],
-                );
-              },
-            ),
-            onPageChanged: (value) {
-              currentPage = value;
-              setState(() {});
-            },
-          ),
-          Positioned(
-            bottom: 30,
-            left: 16,
-            right: 16,
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Icon(Icons.navigate_before, color: ColorUtils.colorPrimary, size: 30).onTap(() {
-                      pageController.animateToPage(--currentPage,
-                          duration: Duration(milliseconds: 800), curve: Curves.easeInOut);
-                    }).visible(currentPage != 0),
-                    DotIndicator(
-                      pages: pages,
-                      pageController: pageController,
-                      indicatorColor: ColorUtils.colorPrimary,
+                    Image.asset(pages[index].image!, width: context.width(), height: context.height() * 0.4, fit: BoxFit.cover),
+                    50.height,
+                    Column(
+                      children: [
+                        Text(
+                          pages[index].title!,
+                          style: boldTextStyle(size: headingSize),
+                          textAlign: TextAlign.center,
+                        ).paddingOnly(left: 30, right: 30),
+                        16.height,
+                        Text(
+                          pages[index].subTitle!,
+                          textAlign: TextAlign.center,
+                          style: secondaryTextStyle(size: 16),
+                        ).paddingOnly(left: 30, right: 30),
+                      ],
                     ),
-                    currentPage != 2
-                        ? Icon(Icons.navigate_next, color: ColorUtils.colorPrimary, size: 30).onTap(() {
-                            pageController.animateToPage(++currentPage,
-                                duration: Duration(milliseconds: 800), curve: Curves.easeInOut);
-                          })
-                        : commonButton(
-                            language.getStarted,
-                            () async {
-                              await setValue(IS_FIRST_TIME, false);
-                              LoginScreen().launch(context,
-                                  isNewTask: true,
-                                  duration: Duration(milliseconds: 1000),
-                                  pageRouteAnimation: PageRouteAnimation.Scale);
-                            },
-                          ),
+                    16.height,
                   ],
                 ),
-              ],
-            ),
-          ),
-        ],
+              ),
+            );
+          },
+        ),
+        onPageChanged: (value) {
+          currentPage = value;
+          setState(() {});
+        },
       ),
+      bottomNavigationBar: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Icon(Icons.navigate_before, color: colorPrimary, size: 30).onTap(() {
+            pageController.animateToPage(--currentPage, duration: Duration(milliseconds: 800), curve: Curves.easeInOut);
+          }).visible(currentPage != 0),
+          DotIndicator(
+            pages: pages,
+            pageController: pageController,
+            indicatorColor: colorPrimary,
+          ),
+          currentPage != 2
+              ? Icon(Icons.navigate_next, color: colorPrimary, size: 30).onTap(() {
+                  pageController.animateToPage(++currentPage, duration: Duration(milliseconds: 800), curve: Curves.easeInOut);
+                })
+              : commonButton(
+                  language.getStarted,
+                  () async {
+                    await setValue(IS_FIRST_TIME, false);
+                    LoginScreen().launch(context, isNewTask: true, duration: Duration(milliseconds: 1000), pageRouteAnimation: PageRouteAnimation.Scale);
+                  },
+                ),
+        ],
+      ).paddingAll(16),
     );
   }
 }

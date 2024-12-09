@@ -1,17 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:developer' as lg;
 
-import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-import '../../extensions/extension_util/int_extensions.dart';
-import '../../extensions/extension_util/string_extensions.dart';
-
-import '../../extensions/common.dart';
-import '../../extensions/shared_pref.dart';
-import '../../extensions/system_utils.dart';
-import '../../main.dart';
+import 'package:http/http.dart' as http;
+import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
+import 'package:nb_utils/nb_utils.dart';
+
+import '../../main.dart';
 import 'RestApis.dart';
 
 Map<String, String> buildHeaderTokens() {
@@ -22,7 +18,8 @@ Map<String, String> buildHeaderTokens() {
     'Access-Control-Allow-Headers': '*',
     'Access-Control-Allow-Origin': '*',
   };
-  if (!getStringAsync(USER_TOKEN).isEmptyOrNull) {
+
+  if (appStore.isLoggedIn) {
     header.putIfAbsent(HttpHeaders.authorizationHeader, () => 'Bearer ${getStringAsync(USER_TOKEN)}');
   }
   log(jsonEncode(header));
@@ -49,32 +46,23 @@ Future<Response> buildHttpResponse(String endPoint, {HttpMethod method = HttpMet
       if (method == HttpMethod.POST) {
         log('Request: $request');
 
-        response = await http
-            .post(url, body: jsonEncode(request), headers: headers)
-            .timeout(20.seconds, onTimeout: () => throw 'Timeout');
+        response = await http.post(url, body: jsonEncode(request), headers: headers).timeout(20.seconds, onTimeout: () => throw 'Timeout');
       } else if (method == HttpMethod.DELETE) {
         response = await delete(url, headers: headers).timeout(20.seconds, onTimeout: () => throw 'Timeout');
       } else if (method == HttpMethod.PUT) {
-        response = await put(url, body: jsonEncode(request), headers: headers)
-            .timeout(20.seconds, onTimeout: () => throw 'Timeout');
+        response = await put(url, body: jsonEncode(request), headers: headers).timeout(20.seconds, onTimeout: () => throw 'Timeout');
       } else {
         response = await get(url, headers: headers).timeout(20.seconds, onTimeout: () => throw 'Timeout');
       }
 
       log('Response ($method): ${url.toString()} ${response.statusCode} ${response.body}');
-      dynamic responseLog = json.decode(response.body);
-      if (responseLog is Map) {
-        var encoder = const JsonEncoder.withIndent("    ");
-        lg.log("\n${encoder.convert(responseLog)}", name: "$method ${url.toString()} ${response.statusCode}");
-      }
 
       return response;
     } catch (e) {
-      print("---------------------------${e.toString()}");
-      throw language.errorSomethingWentWrong;
+      throw errorSomethingWentWrong;
     }
   } else {
-    throw language.errorInternetNotAvailable;
+    throw errorInternetNotAvailable;
   }
 }
 
@@ -82,7 +70,7 @@ Future<Response> buildHttpResponse(String endPoint, {HttpMethod method = HttpMet
 
 Future handleResponse(Response response, [bool? avoidTokenError]) async {
   if (!await isNetworkAvailable()) {
-    throw language.errorInternetNotAvailable;
+    throw errorInternetNotAvailable;
   }
   if (response.statusCode == 401) {
     if (appStore.isLoggedIn) {
@@ -96,7 +84,7 @@ Future handleResponse(Response response, [bool? avoidTokenError]) async {
       }).catchError((e) {
         throw TokenException(e);
       });
-    } else {
+    }else{
       throw '';
     }
   }
@@ -109,11 +97,10 @@ Future handleResponse(Response response, [bool? avoidTokenError]) async {
       throw parseHtmlString(body['message']);
     } on Exception catch (e) {
       log(e);
-      throw language.errorSomethingWentWrong;
+      throw errorSomethingWentWrong;
     }
   }
 }
-
 enum HttpMethod { GET, POST, DELETE, PUT }
 
 class TokenException implements Exception {

@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import '../../extensions/extension_util/int_extensions.dart';
-import '../../extensions/extension_util/widget_extensions.dart';
+import '../../main/components/BodyCornerWidget.dart';
+import '../../main/utils/Constants.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:timeline_tile/timeline_tile.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
-import '../../extensions/text_styles.dart';
 import '../../main.dart';
 import '../../main/models/OrderDetailModel.dart';
+import '../../main/utils/Colors.dart';
 import '../../main/utils/Common.dart';
-import '../../main/utils/Constants.dart';
-import '../../main/utils/Widgets.dart';
-import '../../main/utils/dynamic_theme.dart';
 
 class OrderHistoryScreen extends StatefulWidget {
   static String tag = '/OrderHistoryScreen';
@@ -24,6 +23,16 @@ class OrderHistoryScreen extends StatefulWidget {
 
 class OrderHistoryScreenState extends State<OrderHistoryScreen> {
   @override
+  void initState() {
+    super.initState();
+    init();
+  }
+
+  Future<void> init() async {
+    //
+  }
+
+  @override
   void setState(fn) {
     if (mounted) super.setState(fn);
   }
@@ -31,60 +40,67 @@ class OrderHistoryScreenState extends State<OrderHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: commonAppBarWidget(language.orderHistory),
-      body: ListView.builder(
-        padding: EdgeInsets.all(16),
-        itemCount: widget.orderHistory.length,
-        itemBuilder: (context, index) {
-          OrderHistory mData = widget.orderHistory[index];
-          return TimelineTile(
-            alignment: TimelineAlign.start,
-            isFirst: index == 0 ? true : false,
-            axis: TimelineAxis.vertical,
-            isLast: index == (widget.orderHistory.length - 1) ? true : false,
-            indicatorStyle: IndicatorStyle(width: 15, color: ColorUtils.colorPrimary),
-            afterLineStyle: LineStyle(color: ColorUtils.colorPrimary, thickness: 3),
-            beforeLineStyle: LineStyle(color: ColorUtils.colorPrimary, thickness: 3),
-            endChild: Row(
-              children: [
-                ImageIcon(AssetImage(statusTypeIcon(type: mData.historyType)),
-                    color: ColorUtils.colorPrimary.withOpacity(0.8), size: 20),
-                12.width,
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(orderStatus('${mData.historyType!}'), style: boldTextStyle()),
-                    2.height,
-                    Text(messageData(mData)),
-                    2.height,
-                    Text('${printDate('${mData.createdAt}')}', style: secondaryTextStyle(size: 12)),
-                  ],
-                ).expand(),
-              ],
-            ).paddingAll(12),
-          );
-        },
+      appBar: AppBar(
+        title: Text(language.orderHistory),
       ),
+      body: Observer(builder :(context) {
+        return BodyCornerWidget(
+          child: ListView.builder(
+            padding: EdgeInsets.all(16),
+            itemCount: widget.orderHistory.length,
+            itemBuilder: (context, index) {
+              OrderHistory mData = widget.orderHistory[index];
+              return TimelineTile(
+                alignment: TimelineAlign.start,
+                isFirst: index == 0 ? true : false,
+                isLast: index == (widget.orderHistory.length - 1)
+                    ? true
+                    : false,
+                indicatorStyle: IndicatorStyle(width: 15, color: colorPrimary),
+                afterLineStyle: LineStyle(color: colorPrimary, thickness: 3),
+                beforeLineStyle: LineStyle(color: colorPrimary, thickness: 3),
+                endChild: Row(
+                  children: [
+                    ImageIcon(AssetImage(
+                        statusTypeIcon(type: mData.historyType)),
+                        color: colorPrimary, size: 30),
+                    16.width,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                            '${mData.historyType!
+                                .replaceAll("_", " ")
+                                .capitalizeFirstLetter()}',
+                            style: boldTextStyle()),
+                        8.height,
+                        Text(messageData(mData)),
+                        8.height,
+                        Text('${printDate('${mData.createdAt}')}',
+                            style: secondaryTextStyle()),
+                      ],
+                    ).expand(),
+                  ],
+                ).paddingAll(12),
+              );
+            },
+          ),
+        );
+
+      }  ),
     );
   }
 
+
   messageData(OrderHistory orderData) {
-    if (orderData.historyType == ORDER_ASSIGNED) {
-      return '${language.yourOrder} #${orderData.orderId} ${language.hasBeenAssignedTo} ${orderData.historyData!.deliveryManName}.';
-    } else if (orderData.historyType == ORDER_TRANSFER) {
-      return '${language.yourOrder} #${orderData.orderId} ${language.hasBeenTransferedTo} ${orderData.historyData!.deliveryManName}.';
-    } else if (orderData.historyType == ORDER_CREATED) {
-      return language.newOrderHasBeenCreated;
-    } else if (orderData.historyType == ORDER_PICKED_UP) {
-      return language.deliveryPersonArrivedMsg;
-    } else if (orderData.historyType == ORDER_CREATED) {
-      return language.deliveryPersonPickedUpCourierMsg;
-    } else if (orderData.historyType == ORDER_DEPARTED) {
-      return '${language.yourOrder} #${orderData.orderId}  ${language.hasBeenOutForDelivery}';
-    } else if (orderData.historyType == ORDER_PAYMENT) {
-      return '${language.yourOrder} #${orderData.orderId} ${language.paymentStatusPaisMsg}';
-    } else if (orderData.historyType == ORDER_DELIVERED) {
-      return '${language.yourOrder} #${orderData.orderId}  ${language.deliveredMsg}';
+    if (getStringAsync(USER_TYPE) == CLIENT) {
+      if (orderData.historyType == ORDER_ASSIGNED) {
+        return 'Your Order#${orderData.orderId} has been assigned to ${orderData.historyData!.deliveryManName}.';
+      } else if (orderData.historyType == ORDER_TRANSFER) {
+        return 'Your Order#${orderData.orderId} has been transfered to ${orderData.historyData!.deliveryManName}.';
+      } else {
+        return '${orderData.historyMessage}';
+      }
     } else {
       return '${orderData.historyMessage}';
     }

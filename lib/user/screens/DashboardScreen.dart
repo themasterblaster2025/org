@@ -1,31 +1,21 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import '../../extensions/extension_util/context_extensions.dart';
-import '../../extensions/extension_util/int_extensions.dart';
-import '../../extensions/extension_util/string_extensions.dart';
-import '../../extensions/extension_util/widget_extensions.dart';
-import '../../main/utils/Widgets.dart';
-import '../../extensions/LiveStream.dart';
-import '../../extensions/colors.dart';
-import '../../extensions/common.dart';
-import '../../extensions/decorations.dart';
-import '../../extensions/shared_pref.dart';
-import '../../extensions/text_styles.dart';
+import '../../user/screens/WalletScreen.dart';
 import '../../main.dart';
-import '../../main/components/CommonScaffoldComponent.dart';
+import '../../main/components/BodyCornerWidget.dart';
+import '../../main/components/UserCitySelectScreen.dart';
 import '../../main/models/CityListModel.dart';
 import '../../main/models/models.dart';
+import '../../main/network/RestApis.dart';
 import '../../main/screens/NotificationScreen.dart';
-import '../../main/screens/UserCitySelectScreen.dart';
+import '../../main/utils/Colors.dart';
 import '../../main/utils/Constants.dart';
-import '../../main/utils/dynamic_theme.dart';
 import '../../user/components/FilterOrderComponent.dart';
 import '../../user/fragment/AccountFragment.dart';
 import '../../user/fragment/OrderFragment.dart';
 import '../../user/screens/CreateOrderScreen.dart';
-import '../../user/screens/WalletScreen.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 class DashboardScreen extends StatefulWidget {
   static String tag = '/DashboardScreen';
@@ -38,10 +28,6 @@ class DashboardScreenState extends State<DashboardScreen> {
   List<BottomNavigationBarItemModel> bottomNavBarItems = [];
 
   int currentIndex = 0;
-  List widgetList = [
-    OrderFragment(),
-    AccountFragment(),
-  ];
 
   @override
   void initState() {
@@ -60,6 +46,20 @@ class DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
+  getOrderListApiCall() async {
+    appStore.setLoading(true);
+    FilterAttributeModel filterData = FilterAttributeModel.fromJson(getJSONAsync(FILTER_DATA));
+    await getOrderList(orderStatus: filterData.orderStatus, fromDate: filterData.fromDate, toDate: filterData.toDate, page: 1).then((value) {
+      appStore.setLoading(false);
+      if (value.walletData != null) {
+        appStore.availableBal = value.walletData!.totalAmount;
+      }
+    }).catchError((e) {
+      appStore.setLoading(false);
+      log(e.toString());
+    });
+  }
+
   @override
   void setState(fn) {
     if (mounted) super.setState(fn);
@@ -68,7 +68,7 @@ class DashboardScreenState extends State<DashboardScreen> {
   String getTitle() {
     String title = language.myOrders;
     if (currentIndex == 0) {
-      title = '${language.hey} ${getStringAsync(NAME)} 👋';
+      title = language.myOrders;
     } else if (currentIndex == 1) {
       title = language.account;
     }
@@ -77,104 +77,85 @@ class DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CommonScaffoldComponent(
-      extendedBody: true,
-      appBar: PreferredSize(
-        preferredSize: Size(context.width(), 60),
-        child: commonAppBarWidget(getTitle(),
-            actions: [
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: boxDecorationWithRoundedCorners(
-                    borderRadius: radius(defaultRadius), backgroundColor: Colors.white24),
-                child: Row(
-                  children: [
-                    Icon(Ionicons.ios_location_outline, color: Colors.white, size: 18),
-                    8.width,
-                    Text(CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate(),
-                        style: primaryTextStyle(color: white)),
-                  ],
-                ).onTap(() {
-                  UserCitySelectScreen(
-                    isBack: true,
-                    onUpdate: () {
-                      setState(() {});
-                    },
-                  ).launch(context);
-                }, highlightColor: Colors.transparent, hoverColor: Colors.transparent, splashColor: Colors.transparent),
-              ),
-              4.width,
-              4.width,
-              Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Align(
-                      alignment: AlignmentDirectional.center,
-                      child: Icon(Ionicons.md_notifications_outline, color: Colors.white)),
-                  if (appStore.allUnreadCount != 0)
-                    Observer(builder: (context) {
-                      return Positioned(
-                        right: -5,
-                        top: 8,
-                        child: Container(
-                          height: 20,
-                          width: 20,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
-                          child: Text(appStore.allUnreadCount.toString(),
-                              style: boldTextStyle(size: appStore.allUnreadCount > 99 ? 10 : 10)),
-                        ),
-                      );
-                    }),
-                ],
-              ).onTap(() {
-                NotificationScreen().launch(context);
-              },
-                  highlightColor: Colors.transparent,
-                  hoverColor: Colors.transparent,
-                  splashColor: Colors.transparent).visible(currentIndex == 0),
+    getOrderListApiCall();
+
+    return Scaffold(
+      extendBody: true,
+      appBar: AppBar(
+        title: Text('${getTitle()}'),
+        actions: [
+          Row(
+            children: [
+              Icon(Icons.location_on, color: Colors.white),
               8.width,
-              Stack(
-                children: [
-                  Align(
-                      alignment: AlignmentDirectional.center,
-                      child: Icon(Ionicons.md_options_outline, color: Colors.white)),
-                  Observer(builder: (context) {
-                    return Positioned(
-                      right: 8,
-                      top: 16,
-                      child: Container(
-                        height: 10,
-                        width: 10,
-                        decoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
-                      ),
-                    ).visible(appStore.isFiltering);
-                  }),
-                ],
-              ).withWidth(40).onTap(() {
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(defaultRadius), topRight: Radius.circular(defaultRadius))),
-                  builder: (context) {
-                    return FilterOrderComponent();
-                  },
-                );
-              },
-                  splashColor: Colors.transparent,
-                  hoverColor: Colors.transparent,
-                  highlightColor: Colors.transparent).visible(currentIndex == 0),
+              Text(CityModel.fromJson(getJSONAsync(CITY_DATA)).name.validate(), style: primaryTextStyle(color: white)),
             ],
-            showBack: false),
+          ).onTap(() {
+            UserCitySelectScreen(
+                isBack: true,
+                onUpdate: () {
+                  setState(() {});
+                }).launch(context);
+          }).paddingOnly(right: 16),
+          Stack(
+            children: [
+              Align(alignment: AlignmentDirectional.center, child: Icon(Icons.notifications)),
+              Observer(builder: (context) {
+                return Positioned(
+                  right: 2,
+                  top: 8,
+                  child: Container(
+                    height: 20,
+                    width: 20,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
+                    child: Text('${appStore.allUnreadCount < 99 ? appStore.allUnreadCount : '99+'}', style: primaryTextStyle(size: appStore.allUnreadCount > 99 ? 8 : 12, color: Colors.white)),
+                  ),
+                ).visible(appStore.allUnreadCount != 0);
+              }),
+            ],
+          ).withWidth(40).onTap(() {
+            NotificationScreen().launch(context);
+          }).visible(currentIndex == 0),
+          Stack(
+            children: [
+              Align(
+                alignment: AlignmentDirectional.center,
+                child: ImageIcon(AssetImage('assets/icons/ic_filter.png'), size: 18, color: Colors.white),
+              ),
+              Observer(builder: (context) {
+                return Positioned(
+                  right: 8,
+                  top: 16,
+                  child: Container(
+                    height: 10,
+                    width: 10,
+                    decoration: BoxDecoration(color: Colors.orange, shape: BoxShape.circle),
+                  ),
+                ).visible(appStore.isFiltering);
+              }),
+            ],
+          ).withWidth(40).onTap(() {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(defaultRadius), topRight: Radius.circular(defaultRadius))),
+              builder: (context) {
+                return FilterOrderComponent();
+              },
+            );
+          }).visible(currentIndex == 0),
+        ],
       ),
-      body: widgetList[currentIndex],
+      body: BodyCornerWidget(
+        child: [
+          OrderFragment(),
+          AccountFragment(),
+        ][currentIndex],
+      ),
       floatingActionButton: FloatingActionButton(
-        shape: RoundedRectangleBorder(borderRadius: radius(40)),
-        backgroundColor: appStore.availableBal >= 0 ? ColorUtils.colorPrimary : textSecondaryColorGlobal,
-        child: Icon(AntDesign.plus, color: Colors.white),
+        backgroundColor: appStore.availableBal >= 0 ? colorPrimary : textSecondaryColorGlobal,
+        child: Icon(Icons.add, color: Colors.white),
         onPressed: () {
           if (appStore.availableBal >= 0) {
             CreateOrderScreen().launch(context, pageRouteAnimation: PageRouteAnimation.SlideBottomTop);
@@ -186,13 +167,15 @@ class DashboardScreenState extends State<DashboardScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: AnimatedBottomNavigationBar(
-        backgroundColor: ColorUtils.bottomNavigationColor,
-        icons: [AntDesign.home, FontAwesome.user_o],
+        backgroundColor: context.cardColor,
+        icons: [Icons.reorder, Icons.person],
         activeIndex: currentIndex,
         gapLocation: GapLocation.center,
         notchSmoothness: NotchSmoothness.defaultEdge,
-        activeColor: ColorUtils.colorPrimary,
+        activeColor: colorPrimary,
         inactiveColor: Colors.grey,
+        leftCornerRadius: 30,
+        rightCornerRadius: 30,
         onTap: (index) => setState(() => currentIndex = index),
       ),
     );

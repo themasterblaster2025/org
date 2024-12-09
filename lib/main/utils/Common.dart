@@ -1,68 +1,39 @@
 import 'dart:core';
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-import '../../extensions/extension_util/int_extensions.dart';
-import '../../extensions/extension_util/string_extensions.dart';
-import '../../extensions/extension_util/widget_extensions.dart';
-import '../../main/utils/dynamic_theme.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../extensions/common.dart';
-import '../../extensions/extension_util/device_extensions.dart';
-import '../../extensions/shared_pref.dart';
-import '../../extensions/system_utils.dart';
-import '../../extensions/text_styles.dart';
-import '../../extensions/widgets.dart';
-import '../../main.dart';
 import '../../main/utils/Colors.dart';
 import '../../main/utils/Constants.dart';
-import '../../user/screens/OrderDetailScreen.dart';
-import '../Chat/ChatScreen.dart';
-import '../models/LoginResponse.dart';
-import '../network/RestApis.dart';
-import '../screens/LoginScreen.dart';
-import '../services/AuthServices.dart';
-import 'Images.dart';
+import 'package:nb_utils/nb_utils.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+
+import '../../main.dart';
 import 'Widgets.dart';
 
-InputDecoration commonInputDecoration(
-    {String? hintText,
-    IconData? suffixIcon,
-    Function()? suffixOnTap,
-    Widget? dateTime,
-    Widget? prefixIcon,
-    bool? isFill = true}) {
+InputDecoration commonInputDecoration({String? hintText, IconData? suffixIcon, Function()? suffixOnTap, Widget? dateTime, Widget? prefixIcon}) {
   return InputDecoration(
-    errorMaxLines: 3,
     contentPadding: EdgeInsets.all(16),
     filled: true,
     prefixIcon: prefixIcon,
-    isDense: true,
     hintText: hintText != null ? hintText : '',
     hintStyle: secondaryTextStyle(size: 16, color: Colors.grey),
-    fillColor: ColorUtils.colorPrimary.withOpacity(0.06),
+    fillColor: Colors.grey.withOpacity(0.15),
     counterText: '',
     suffixIcon: dateTime != null
         ? dateTime
         : suffixIcon != null
-            ? Icon(suffixIcon, color: ColorUtils.colorPrimary, size: 22).onTap(suffixOnTap)
+            ? Icon(suffixIcon, color: Colors.grey, size: 22).onTap(suffixOnTap)
             : null,
-    enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(style: BorderStyle.solid, color: ColorUtils.colorPrimary.withOpacity(0.9)),
-        borderRadius: BorderRadius.circular(defaultRadius)),
-    focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: ColorUtils.colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
-    errorBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(defaultRadius)),
-    focusedErrorBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(defaultRadius)),
+    enabledBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.none), borderRadius: BorderRadius.circular(defaultRadius)),
+    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: colorPrimary), borderRadius: BorderRadius.circular(defaultRadius)),
+    errorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(defaultRadius)),
+    focusedErrorBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.red), borderRadius: BorderRadius.circular(defaultRadius)),
   );
 }
 
@@ -71,7 +42,6 @@ Widget commonCachedNetworkImage(
   double? height,
   double? width,
   BoxFit? fit,
-  Color? color,
   AlignmentGeometry? alignment,
   bool usePlaceholderIfUrlEmpty = true,
   double? radius,
@@ -83,7 +53,6 @@ Widget commonCachedNetworkImage(
       imageUrl: url!,
       height: height,
       width: width,
-      color: color,
       fit: fit,
       alignment: alignment as Alignment? ?? Alignment.center,
       errorWidget: (_, s, d) {
@@ -95,52 +64,43 @@ Widget commonCachedNetworkImage(
       },
     );
   } else {
-    return Image.asset(url!, height: height, width: width, fit: fit, alignment: alignment ?? Alignment.center)
-        .cornerRadiusWithClipRRect(radius ?? defaultRadius);
+    return Image.asset(url!, height: height, width: width, fit: fit, alignment: alignment ?? Alignment.center).cornerRadiusWithClipRRect(radius ?? defaultRadius);
   }
 }
 
 Widget placeHolderWidget({double? height, double? width, BoxFit? fit, AlignmentGeometry? alignment, double? radius}) {
-  return Image.asset('assets/placeholder.jpg',
-          height: height, width: width, fit: fit ?? BoxFit.cover, alignment: alignment ?? Alignment.center)
-      .cornerRadiusWithClipRRect(radius ?? defaultRadius);
+  return Image.asset('assets/placeholder.jpg', height: height, width: width, fit: fit ?? BoxFit.cover, alignment: alignment ?? Alignment.center).cornerRadiusWithClipRRect(radius ?? defaultRadius);
+}
+
+String parseHtmlString(String? htmlString) {
+  return parse(parse(htmlString).body!.text).documentElement!.text;
 }
 
 Color statusColor(String status) {
-  Color color = ColorUtils.colorPrimary;
+  Color color = colorPrimary;
   switch (status) {
     case ORDER_ACCEPTED:
-      return acceptColor;
-    case ORDER_CREATED:
-      return CreatedColorColor;
-    case ORDER_DEPARTED:
-      return acceptColor;
-    case ORDER_ASSIGNED:
-      return pendingApprovalColorColor;
-    case ORDER_PICKED_UP:
-      return in_progressColor;
-    case ORDER_ARRIVED:
-      return in_progressColor;
+      return colorPrimary;
     case ORDER_CANCELLED:
-      return cancelledColor;
+      return Colors.red;
     case ORDER_DELIVERED:
-      return completedColor;
+      return Colors.green;
     case ORDER_DRAFT:
-      return holdColor;
+      return Colors.grey;
     case ORDER_DELAYED:
-      return WaitingStatusColor;
+      return Colors.grey;
   }
   return color;
 }
 
 Color paymentStatusColor(String status) {
-  Color color = ColorUtils.colorPrimary;
+  Color color = colorPrimary;
   if (status == PAYMENT_PAID) {
     color = Colors.green;
   } else if (status == PAYMENT_FAILED) {
     color = Colors.red;
   } else if (status == PAYMENT_PENDING) {
-    color = ColorUtils.colorPrimary;
+    color = colorPrimary;
   }
   return color;
 }
@@ -167,28 +127,21 @@ String parcelTypeIcon(String? parcelType) {
 }
 
 String printDate(String date) {
-  return DateFormat('dd MMM yyyy').format(DateTime.parse(date).toLocal()) +
-      " at " +
-      DateFormat('hh:mm a').format(DateTime.parse(date).toLocal());
+  return DateFormat('dd MMM yyyy').format(DateTime.parse(date).toLocal()) + " at " + DateFormat('hh:mm a').format(DateTime.parse(date).toLocal());
 }
 
-String printDateWithoutAt(String date) {
-  return DateFormat('dd MMM yyyy').format(DateTime.parse(date).toLocal()) +
-      " " +
-      DateFormat('hh:mm a').format(DateTime.parse(date).toLocal());
+double calculateDistance(lat1, lon1, lat2, lon2) {
+  var p = 0.017453292519943295;
+  var a = 0.5 - cos((lat2 - lat1) * p) / 2 + cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
+  return (12742 * asin(sqrt(a))).toStringAsFixed(digitAfterDecimal).toDouble();
 }
 
 Widget loaderWidget() {
-  return Center(
-    child: LoadingAnimationWidget.hexagonDots(
-      color: ColorUtils.colorPrimary,
-      size: 50,
-    ),
-  );
+  return Center(child: Lottie.asset('assets/loader.json', width: 50, height: 70));
 }
 
 Widget emptyWidget() {
-  return Center(child: Image.asset(ic_no_data, width: 80, height: 80, color: ColorUtils.colorPrimary));
+  return Center(child: Lottie.asset('assets/no_data.json', width: 150, height: 250));
 }
 
 String orderStatus(String orderStatus) {
@@ -210,31 +163,8 @@ String orderStatus(String orderStatus) {
     return language.delivered;
   } else if (orderStatus == ORDER_CANCELLED) {
     return language.cancelled;
-  } else if (orderStatus == ORDER_SHIPPED) {
-    return language.shipped;
   }
   return language.assigned;
-}
-
-String countName(String count) {
-  if (count == TODAY_ORDER) {
-    return language.todayOrder;
-  } else if (count == REMAINING_ORDER) {
-    return language.remainingOrder;
-  } else if (count == COMPLETED_ORDER) {
-    return language.completedOrder;
-  } else if (count == INPROGRESS_ORDER) {
-    return language.inProgressOrder;
-  } else if (count == TOTAL_EARNING) {
-    return language.commission;
-  } else if (count == WALLET_BALANCE) {
-    return language.walletBalance;
-  } else if (count == PENDING_WITHDRAW_REQUEST) {
-    return language.pendingWithdReq;
-  } else if (count == COMPLETED_WITHDRAW_REQUEST) {
-    return language.completedWithReq;
-  }
-  return "";
 }
 
 String transactionType(String type) {
@@ -253,108 +183,73 @@ String transactionType(String type) {
   } else if (type == TRANSACTION_WITHDRAW) {
     return language.withdraw;
   }
-  return type;
+  return '';
 }
 
-oneSignalSettings() async {
-  if (isMobile) {
-    PermissionStatus status = await Permission.notification.status;
-    if (!status.isGranted) {
-      await Permission.notification.request();
+Future<bool> checkPermission() async {
+  // Request app level location permission
+  LocationPermission locationPermission = await Geolocator.requestPermission();
+
+  if (locationPermission == LocationPermission.whileInUse || locationPermission == LocationPermission.always) {
+    // Check system level location permission
+    if (!await Geolocator.isLocationServiceEnabled()) {
+      return await Geolocator.openLocationSettings().then((value) => false).catchError((e) => false);
+    } else {
+      return true;
     }
+  } else {
+    toast(language.allowLocationPermission);
 
-    OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
-    OneSignal.Debug.setAlertLevel(OSLogLevel.none);
-    OneSignal.consentRequired(false);
-    OneSignal.initialize(mOneSignalAppId);
-    OneSignal.Notifications.requestPermission(true);
-    saveOneSignalPlayerId();
-    OneSignal.Notifications.addPermissionObserver((state) {
-      print("Has permission " + state.toString());
-    });
-    OneSignal.Notifications.addClickListener((notification) async {
-      var notId = notification.notification.additionalData!["id"];
-      if (notId != null) {
-        if (!appStore.isLoggedIn) {
-          LoginScreen().launch(getContext);
-        } else if (notId.toString().contains('CHAT')) {
-          UserData user = await getUserDetail(int.parse(notId.toString().replaceAll("CHAT_", "")));
-          ChatScreen(userData: user).launch(getContext);
-        } else {
-          OrderDetailScreen(orderId: int.parse(notId.toString())).launch(getContext);
-        }
-      }
-    });
-    OneSignal.Notifications.addForegroundWillDisplayListener((event) {
-      print('NOTIFICATION WILL DISPLAY LISTENER CALLED WITH: ${event.notification.jsonRepresentation()}');
-      event.preventDefault();
-      event.notification.display();
-      if (event.notification.additionalData!["type"].toString().contains(ORDER_TRANSFER) ||
-          event.notification.additionalData!["type"].toString().contains(ORDER_ASSIGNED)) {
-        if (getStringAsync(USER_TYPE) == DELIVERY_MAN) {
-          playSoundForDuration();
-        }
-      }
-    });
-  }
-}
+    // Open system level location permission
+    await Geolocator.openAppSettings();
 
-// Method to play the sound for 60 seconds
-void playSoundForDuration() async {
-  print("===========type=====================${getStringAsync(USER_TYPE)}");
-  try {
-    // FlutterRingtonePlayer().play(
-    //   fromAsset: "assets/ringtone/ringtone.mp3",
-    //   android: AndroidSounds.alarm,
-    //   ios: IosSounds.triTone,
-    //   looping: true,
-    //   volume: 0.1,
-    //   asAlarm: false,
-    // );
-    FlutterRingtonePlayer().play(fromAsset: "assets/ringtone/ringtone.mp3", looping: true);
-    await Future.delayed(Duration(seconds: 60));
-    FlutterRingtonePlayer().stop();
-  } catch (e) {
-    print('Error playing sound: $e');
+    return false;
   }
 }
 
 Future<void> saveOneSignalPlayerId() async {
-  OneSignal.User.pushSubscription.addObserver((state) async {
-    print(OneSignal.User.pushSubscription.optedIn);
-    print("Player Id" + OneSignal.User.pushSubscription.id.toString());
-    print(OneSignal.User.pushSubscription.token);
-    print(state.current.jsonRepresentation());
-
-    if (OneSignal.User.pushSubscription.id.validate().isNotEmpty)
-      await setValue(PLAYER_ID, OneSignal.User.pushSubscription.id.validate());
+  await OneSignal.shared.getDeviceState().then((value) async {
+    if (value!.userId.validate().isNotEmpty) await setValue(PLAYER_ID, value.userId.validate());
   });
 }
 
 String statusTypeIcon({String? type}) {
-  String icon = ic_order;
+  String icon = 'assets/icons/ic_create.png';
   if (type == ORDER_ASSIGNED) {
-    icon = ic_order_assigned;
+    icon = 'assets/icons/ic_assign.png';
   } else if (type == ORDER_ACCEPTED) {
-    icon = ic_order_accept;
+    icon = 'assets/icons/ic_active.png';
   } else if (type == ORDER_PICKED_UP) {
-    icon = ic_order_pickedUp;
+    icon = 'assets/icons/ic_picked.png';
   } else if (type == ORDER_ARRIVED) {
-    icon = ic_order_arrived;
+    icon = 'assets/icons/ic_arrived.png';
   } else if (type == ORDER_DEPARTED) {
-    icon = ic_order_departed;
+    icon = 'assets/icons/ic_departed.png';
   } else if (type == ORDER_DELIVERED) {
-    icon = ic_order_delivered;
+    icon = 'assets/icons/ic_completed.png';
   } else if (type == ORDER_CANCELLED) {
-    icon = ic_order_cancelled;
+    icon = 'assets/icons/ic_cancelled.png';
   } else if (type == ORDER_CREATED) {
-    icon = ic_order_created;
+    icon = 'assets/icons/ic_create.png';
   } else if (type == ORDER_DRAFT) {
-    icon = ic_order_draft;
-  } else if (type == ORDER_TRANSFER) {
-    icon = ic_order_transfer;
+    icon = 'assets/icons/ic_draft.png';
   }
   return icon;
+}
+
+Widget settingItemWidget(IconData icon, String title, Function() onTap, {bool isLast = false, IconData? suffixIcon}) {
+  return Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: Icon(icon, size: 30, color: colorPrimary),
+          title: Text(title),
+          trailing: suffixIcon != null ? Icon(suffixIcon, color: Colors.green) : Icon(Icons.navigate_next, color: appStore.isDarkMode ? Colors.white : Colors.grey),
+          onTap: onTap),
+      if (!isLast) Divider()
+    ],
+  );
 }
 
 String? orderTitle(String orderStatus) {
@@ -376,6 +271,31 @@ String? orderTitle(String orderStatus) {
     return language.orderCreateConfirmation;
   }
   return '';
+}
+
+String historyStatus(String orderStatus) {
+  if (orderStatus == ORDER_ASSIGNED) {
+    return language.courierAssigned;
+  } else if (orderStatus == ORDER_CREATED) {
+    return language.created;
+  } else if (orderStatus == ORDER_ACCEPTED) {
+    return language.courierAccepted;
+  } else if (orderStatus == ORDER_PICKED_UP) {
+    return language.courierPickedUp;
+  } else if (orderStatus == ORDER_ARRIVED) {
+    return language.courierArrived;
+  } else if (orderStatus == ORDER_DEPARTED) {
+    return language.courierDeparted;
+  } else if (orderStatus == ORDER_DELIVERED) {
+    return language.completed;
+  } else if (orderStatus == ORDER_CANCELLED) {
+    return language.cancelled;
+  }else if (orderStatus == ORDER_TRANSFER) {
+    return language.courierTransfer;
+  }else if (orderStatus == ORDER_PAYMENT) {
+    return language.paymentStatusMessage;
+  }
+  return language.assigned;
 }
 
 String dateParse(String date) {
@@ -440,9 +360,7 @@ String paymentType(String paymentType) {
 }
 
 String printAmount(var amount) {
-  return appStore.currencyPosition == CURRENCY_POSITION_LEFT
-      ? '${appStore.currencySymbol} ${amount.toStringAsFixed(digitAfterDecimal)}'
-      : '${amount.toStringAsFixed(digitAfterDecimal)} ${appStore.currencySymbol}';
+  return appStore.currencyPosition == CURRENCY_POSITION_LEFT ? '${appStore.currencySymbol} ${amount.toStringAsFixed(digitAfterDecimal)}' : '${amount.toStringAsFixed(digitAfterDecimal)} ${appStore.currencySymbol}';
 }
 
 Future<void> commonLaunchUrl(String url, {bool forceWebView = false}) async {
@@ -470,119 +388,3 @@ cashConfirmDialog() {
     },
   );
 }
-
-Future deleteAccount(BuildContext context) async {
-  appStore.setLoading(true);
-  await userService.removeDocument(getStringAsync(UID)).then((value) async {
-    await deleteUserFirebase().then((value) async {
-      Map deleteAccountReq = {"id": getIntAsync(USER_ID), "type": "forcedelete"};
-      await userAction(deleteAccountReq).then((value) async {
-        await logout(context, isDeleteAccount: true).then((value) async {
-          appStore.setLoading(false);
-          await removeKey(USER_EMAIL);
-          await removeKey(USER_PASSWORD);
-        });
-      });
-    }).catchError((error) {
-      appStore.setLoading(false);
-      toast(error.toString());
-    });
-  }).catchError((error) {
-    appStore.setLoading(false);
-    toast(error.toString());
-  });
-}
-
-String timeAgo(String date) {
-  if (date.contains("week ago")) {
-    return date.splitBefore("week ago").trim() + "w";
-  }
-  if (date.contains("year ago")) {
-    return date.splitBefore("year ago").trim() + "y";
-  }
-  if (date.contains("month ago")) {
-    return date.splitBefore("month ago").trim() + "m";
-  }
-  return date.toString();
-}
-
-String getMessageFromErrorCode(FirebaseException error) {
-  switch (error.code) {
-    case "ERROR_EMAIL_ALREADY_IN_USE":
-    case "account-exists-with-different-credential":
-    case "email-already-in-use":
-      return "The email address is already in use by another account.";
-    case "ERROR_WRONG_PASSWORD":
-    case "wrong-password":
-      return "Wrong email/password combination.";
-    case "ERROR_USER_NOT_FOUND":
-    case "user-not-found":
-      return "No user found with this email.";
-    case "ERROR_USER_DISABLED":
-    case "user-disabled":
-      return "User disabled.";
-    case "ERROR_TOO_MANY_REQUESTS":
-    case "operation-not-allowed":
-      return "Too many requests to log into this account.";
-    case "ERROR_OPERATION_NOT_ALLOWED":
-    case "operation-not-allowed":
-      return "Server error, please try again later.";
-    case "ERROR_INVALID_EMAIL":
-    case "invalid-email":
-      return "Email address is invalid.";
-    default:
-      return error.message.toString();
-  }
-}
-
-List<String> userTypeList = [CLIENT, DELIVERY_MAN];
-
-// Future<void> openMap(double latitude, double longitude) async {
-//   String googleUrl = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
-//   if (await canLaunchUrl(Uri.parse(googleUrl))) {
-//     await launchUrl(Uri.parse(googleUrl));
-//   } else {
-//     throw language.mapLoadingError;
-//   }
-// }
-
-Future<void> openMap(
-    double originLatitude, double originLongitude, double destinationLatitude, double destinationLongitude) async {
-  String googleUrl =
-      'https://www.google.com/maps/dir/?api=1&origin=$originLatitude,$originLongitude&destination=$destinationLatitude,$destinationLongitude';
-
-  if (await canLaunchUrl(Uri.parse(googleUrl))) {
-    await launchUrl(Uri.parse(googleUrl));
-  } else {
-    throw language.mapLoadingError;
-  }
-}
-
-Future<BitmapDescriptor> createMarkerIconFromAsset(String assetPath) async {
-  final ByteData data = await rootBundle.load(assetPath);
-  final Uint8List bytes = data.buffer.asUint8List();
-  return BitmapDescriptor.fromBytes(bytes);
-}
-
-Color colorFromHex(String hexColor) {
-  hexColor = hexColor.toUpperCase().replaceAll("#", "");
-  if (hexColor.length == 6) {
-    hexColor = "FF$hexColor";
-  }
-  return Color(int.parse(hexColor, radix: 16));
-}
-
-getClaimStatus(String status) {
-  if (status == STATUS_PENDING) {
-    return Text(status, style: boldTextStyle(color: pendingColor));
-  } else if (status == STATUS_IN_REVIEW) {
-    return Text(status, style: boldTextStyle(color: WaitingStatusColor));
-  } else if (status == APPROVED) {
-    return Text(status, style: boldTextStyle(color: acceptColor));
-  } else if (status == STATUS_REJECTED) {
-    return Text(status, style: boldTextStyle(color: rejectedColor));
-  } else {
-    return Text(status, style: boldTextStyle(color: completedColor));
-  }
-}
-//List<String> SUPPORT_TYPE = ["Vehicle", "Orders", "Delivery person"];

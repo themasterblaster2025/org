@@ -1,23 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import '../../extensions/extension_util/context_extensions.dart';
-import '../../extensions/extension_util/int_extensions.dart';
-import '../../extensions/extension_util/string_extensions.dart';
-import '../../extensions/extension_util/widget_extensions.dart';
-
-import '../../extensions/LiveStream.dart';
-import '../../extensions/app_text_field.dart';
-import '../../extensions/common.dart';
-import '../../extensions/shared_pref.dart';
-import '../../extensions/system_utils.dart';
-import '../../extensions/text_styles.dart';
-import '../../main.dart';
 import '../../main/network/RestApis.dart';
 import '../../main/utils/Common.dart';
 import '../../main/utils/Constants.dart';
 import '../../main/utils/DataProviders.dart';
 import '../../main/utils/Widgets.dart';
-import '../../main/utils/dynamic_theme.dart';
+import 'package:nb_utils/nb_utils.dart';
+
+import '../../main.dart';
 
 class CancelOrderDialog extends StatefulWidget {
   static String tag = '/CancelOrderDialog';
@@ -91,25 +80,23 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(language.cancelOrder, style: boldTextStyle(size: 18)),
-              Icon(
-                Ionicons.close_circle_outline,
-                color: ColorUtils.colorPrimary,
-              ).onTap(() {
+              Icon(Icons.clear).onTap(() {
                 finish(context);
               }),
             ],
           ),
           16.height,
-          Text(language.reason, style: primaryTextStyle()),
+          Text(language.reason, style: boldTextStyle()),
           8.height,
           DropdownButtonFormField<String>(
             value: reason,
             isExpanded: true,
-            isDense: true,
             decoration: commonInputDecoration(),
-            items: (getStringAsync(USER_TYPE) == CLIENT ? userCancelOrderReasonList : deliveryBoyCancelOrderReasonList)
-                .map((e) {
-              return DropdownMenuItem(value: e, child: Text(e));
+            items: (getStringAsync(USER_TYPE) == CLIENT ? userCancelOrderReasonList : deliveryBoyCancelOrderReasonList).map((e) {
+              return DropdownMenuItem(
+                value: e,
+                child: Text(e),
+              );
             }).toList(),
             onChanged: (String? val) {
               reason = val;
@@ -133,11 +120,14 @@ class CancelOrderDialogState extends State<CancelOrderDialog> {
             },
           ).visible(reason.validate().trim() == language.other.trim()),
           16.height,
-          commonButton(language.submit, () {
-            if (formKey.currentState!.validate()) {
-              updateOrderApiCall();
-            }
-          }, width: context.width())
+          Align(
+            alignment: Alignment.centerRight,
+            child: commonButton(language.submit, () {
+              if (formKey.currentState!.validate()) {
+                updateOrderApiCall();
+              }
+            }),
+          )
         ],
       ),
     );

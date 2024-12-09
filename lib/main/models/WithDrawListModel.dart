@@ -1,3 +1,4 @@
+
 import 'PaginationModel.dart';
 import 'WalletListModel.dart';
 
@@ -40,18 +41,16 @@ class WithDrawModel {
   String? status;
   String? createdAt;
   String? updatedAt;
-  WithdrawDetails? withdrawDetails;
 
   WithDrawModel(
       {this.id,
-      this.userId,
-      this.userName,
-      this.amount,
-      this.currency,
-      this.status,
-      this.createdAt,
-      this.updatedAt,
-      this.withdrawDetails});
+        this.userId,
+        this.userName,
+        this.amount,
+        this.currency,
+        this.status,
+        this.createdAt,
+        this.updatedAt});
 
   WithDrawModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -62,7 +61,6 @@ class WithDrawModel {
     status = json['status'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
-    withdrawDetails = json['withdraw_details'] != null ? WithdrawDetails.fromJson(json['withdraw_details']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -73,50 +71,6 @@ class WithDrawModel {
     data['amount'] = this.amount;
     data['currency'] = this.currency;
     data['status'] = this.status;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    if (this.withdrawDetails != null) {
-      data['withdraw_details'] = this.withdrawDetails!.toJson();
-    }
-    return data;
-  }
-}
-
-class WithdrawDetails {
-  int? id;
-  String? transactionId;
-  String? via;
-  String? otherDetail;
-  String? withdrawDetailImage;
-  String? createdAt;
-  String? updatedAt;
-
-  WithdrawDetails({
-    required this.id,
-    required this.transactionId,
-    required this.via,
-    required this.otherDetail,
-    required this.withdrawDetailImage,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-  WithdrawDetails.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    transactionId = json['transaction_id'];
-    via = json['via'];
-    otherDetail = json['other_detail'];
-    withdrawDetailImage = json['withdrawdetail_image'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['transactionId'] = this.transactionId;
-    data['via'] = this.via;
-    data['otherDetail'] = this.otherDetail;
-    data['withdrawDetailImage'] = this.withdrawDetailImage;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     return data;
