@@ -1,0 +1,11 @@
+  environment:
+    groups:
+      - firebase_credentials
+
+  scripts:
+    - name: Load Firebase configuration
+      script: | 
+        #!/usr/bin/env sh
+        set -e # exit on first failed command
+
+        echo $ANDROID_FIREBASE_SECRET > $CM_BUILD_DIR/android/app/google-services.json
