@@ -40,7 +40,17 @@ class PaymentGatewayData {
   String? createdAt;
   String? updatedAt;
 
-  PaymentGatewayData({this.id, this.title, this.type, this.status, this.isTest, this.testValue, this.liveValue, this.gatewayLogo, this.createdAt, this.updatedAt});
+  PaymentGatewayData(
+      {this.id,
+      this.title,
+      this.type,
+      this.status,
+      this.isTest,
+      this.testValue,
+      this.liveValue,
+      this.gatewayLogo,
+      this.createdAt,
+      this.updatedAt});
 
   PaymentGatewayData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -50,7 +60,7 @@ class PaymentGatewayData {
     isTest = json['is_test'];
     testValue = json['test_value'] != null ? new TestValue.fromJson(json['test_value']) : null;
     liveValue = json['live_value'] != null ? new TestValue.fromJson(json['live_value']) : null;
-    gatewayLogo = json['gateway_logo'];
+    gatewayLogo = json['gateway_image'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
   }
@@ -68,7 +78,7 @@ class PaymentGatewayData {
     if (this.liveValue != null) {
       data['live_value'] = this.liveValue!.toJson();
     }
-    data['gateway_logo'] = this.gatewayLogo;
+    data['gateway_image'] = this.gatewayLogo;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     return data;

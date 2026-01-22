@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../extensions/extension_util/context_extensions.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
 import '../../main.dart';
-import '../../main/utils/Colors.dart';
-import 'package:nb_utils/nb_utils.dart';
+import '../utils/dynamic_theme.dart';
 
 class BodyCornerWidget extends StatelessWidget {
   final Widget child;
@@ -12,16 +13,13 @@ class BodyCornerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: appStore.isDarkMode ? scaffoldSecondaryDark : colorPrimary,
+      color: appStore.isDarkMode ? ColorUtils.scaffoldSecondaryDark : ColorUtils.colorPrimary,
       child: Container(
-        color: context.scaffoldBackgroundColor,
+        color: ColorUtils.colorPrimaryLight,
         height: context.height(),
         width: context.width(),
         child: child,
-      ).cornerRadiusWithClipRRectOnly(
-        topRight: 24,
-        topLeft: 24,
-      ),
+      ).cornerRadiusWithClipRRectOnly(topRight: 24, topLeft: 24),
     );
   }
 }

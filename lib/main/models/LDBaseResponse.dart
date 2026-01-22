@@ -3,7 +3,7 @@ class LDBaseResponse {
   bool? status;
   String? message;
 
-  LDBaseResponse({this.status, this.message,this.orderId});
+  LDBaseResponse({this.status, this.message, this.orderId});
 
   LDBaseResponse.fromJson(Map<String, dynamic> json) {
     orderId = json['order_id'];

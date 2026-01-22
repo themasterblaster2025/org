@@ -1,45 +1,91 @@
-import 'dart:convert';
-
-import '../../main/models/CountryListModel.dart';
-import '../../main/models/PlaceAddressModel.dart';
-import '../../main/utils/Constants.dart';
-import 'package:nb_utils/nb_utils.dart';
-
-import '../../main.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
-import 'package:google_maps_webservice/places.dart';
+import '../../extensions/extension_util/widget_extensions.dart';
+import '../../extensions/system_utils.dart';
+import '../../main.dart';
+import '../../main/components/CommonScaffoldComponent.dart';
+import '../../main/models/PlaceAddressModel.dart';
+import '../../main/utils/Constants.dart';
 
 class GoogleMapScreen extends StatefulWidget {
   static final kInitialPosition = LatLng(-33.8567844, 151.213108);
   final bool isPick;
+  final bool isSaveAddress;
+  final bool isAddAddress;
 
-  GoogleMapScreen({this.isPick = true});
+  GoogleMapScreen(
+      {this.isPick = true,
+      this.isSaveAddress = false,
+      this.isAddAddress = false});
 
   @override
   _GoogleMapScreenState createState() => _GoogleMapScreenState();
 }
 
-class _GoogleMapScreenState extends State<GoogleMapScreen> {
+class _GoogleMapScreenState extends State<GoogleMapScreen>
+    with WidgetsBindingObserver {
   PickResult? selectedPlace;
   bool showPlacePickerInContainer = false;
   bool showGoogleMapInContainer = false;
+  GlobalKey<_GoogleMapScreenState> placePickerKey =
+      GlobalKey<_GoogleMapScreenState>();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print("--onResume called");
+    if (state == AppLifecycleState.resumed) {
+      setState(() {
+        placePickerKey = GlobalKey<_GoogleMapScreenState>();
+      });
+    }
+  }
+
+  String buildTitle() {
+    if (widget.isSaveAddress || widget.isAddAddress) {
+      return language.selectLocation;
+    } else if (widget.isPick) {
+      return language.selectPickupLocation;
+    } else {
+      return language.selectDeliveryLocation;
+    }
+  }
+
+  String buildButtonText() {
+    print("buildButtonText() called ---------------------------");
+    if (widget.isPick) {
+      return language.confirmPickupLocation;
+    } else if (widget.isAddAddress) {
+      return language.addNewAddress;
+    } else {
+      return language.confirmDeliveryLocation;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.isPick ? language.selectPickupLocation : language.selectDeliveryLocation),
-      ),
+    return CommonScaffoldComponent(
+      appBarTitle: buildTitle(),
       body: Column(
         children: [
           PlacePicker(
+            key: placePickerKey,
             apiKey: googleMapAPIKey,
             hintText: language.searchAddress,
             searchingText: language.pleaseWait,
-            autocompleteComponents: [Component(Component.country,CountryModel.fromJson(getJSONAsync(COUNTRY_DATA)).code.validate(value: 'IN'))],
-            selectText: widget.isPick ? language.confirmPickupLocation : language.confirmDeliveryLocation,
+            selectText:buildButtonText(),
             outsideOfPickAreaText: language.addressNotInArea,
             initialPosition: GoogleMapScreen.kInitialPosition,
             useCurrentLocation: true,
@@ -53,6 +99,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
             onMapCreated: (GoogleMapController controller) {
               //
             },
+            // resizeToAvoidBottomInset: false,
             onPlacePicked: (PickResult result) {
               setState(() {
                 selectedPlace = result;
@@ -62,12 +109,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
                   longitude: selectedPlace!.geometry!.location.lng,
                   placeAddress: selectedPlace!.formattedAddress,
                 );
-                List<PlaceAddressModel> list = (getStringListAsync(RECENT_ADDRESS_LIST) ?? []).map((e) => PlaceAddressModel.fromJson(jsonDecode(e))).toList();
-                bool isExist = list.any((element) => element.placeId == selectedPlace!.placeId);
-                if (!isExist) {
-                  list.add(selectedModel);
-                  setValue(RECENT_ADDRESS_LIST, list.map((element) => jsonEncode(element)).toList());
-                }
+                print("===============KK${selectedModel.toJson().toString()}");
                 finish(context, selectedModel);
               });
             },
@@ -75,11 +117,6 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
               //
             },
           ).expand(),
-          Container(
-            color: Colors.red.shade50,
-            padding: EdgeInsets.all(8),
-            child: Text('NOTE: Drag-drop address place search is disable for demo user', style: secondaryTextStyle(color: Colors.red)),
-          ),
         ],
       ),
     );

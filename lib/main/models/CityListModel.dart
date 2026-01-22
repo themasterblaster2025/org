@@ -124,7 +124,17 @@ class ExtraChargesData {
   String? updatedAt;
   String? deletedAt;
 
-  ExtraChargesData({this.id, this.title, this.chargesType, this.charges, this.countryId, this.cityId, this.status, this.createdAt, this.updatedAt, this.deletedAt});
+  ExtraChargesData(
+      {this.id,
+      this.title,
+      this.chargesType,
+      this.charges,
+      this.countryId,
+      this.cityId,
+      this.status,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt});
 
   ExtraChargesData.fromJson(Map<String, dynamic> json) {
     id = json['id'];

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:nb_utils/nb_utils.dart';
+
+import '../../extensions/system_utils.dart';
 
 abstract class BaseService {
   CollectionReference? ref;
@@ -15,11 +16,14 @@ abstract class BaseService {
   Future<DocumentReference> addDocumentWithCustomId(String id, Map<String, dynamic> data) async {
     var doc = ref!.doc(id);
 
+    print("Data:: $data");
+
     return await doc.set(data).then((value) {
       log('Added: $data');
 
       return doc;
     }).catchError((e) {
+      print("doc:: $e");
       log(e);
       throw e;
     });

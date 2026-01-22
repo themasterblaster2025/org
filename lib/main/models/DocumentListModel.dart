@@ -7,9 +7,7 @@ class DocumentListModel {
   DocumentListModel({this.pagination, this.data});
 
   DocumentListModel.fromJson(Map<String, dynamic> json) {
-    pagination = json['pagination'] != null
-        ? new PaginationModel.fromJson(json['pagination'])
-        : null;
+    pagination = json['pagination'] != null ? new PaginationModel.fromJson(json['pagination']) : null;
     if (json['data'] != null) {
       data = <DocumentData>[];
       json['data'].forEach((v) {
@@ -39,14 +37,7 @@ class DocumentData {
   String? updatedAt;
   String? deletedAt;
 
-  DocumentData(
-      {this.id,
-        this.name,
-        this.status,
-        this.isRequired,
-        this.createdAt,
-        this.updatedAt,
-        this.deletedAt});
+  DocumentData({this.id, this.name, this.status, this.isRequired, this.createdAt, this.updatedAt, this.deletedAt});
 
   DocumentData.fromJson(Map<String, dynamic> json) {
     id = json['id'];

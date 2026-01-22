@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/system_utils.dart';
+import '../../extensions/text_styles.dart';
 import '../../main/utils/Widgets.dart';
-import 'package:nb_utils/nb_utils.dart';
 
 import '../../main.dart';
 
@@ -19,16 +21,6 @@ class CreateOrderConfirmationDialog extends StatefulWidget {
 
 class CreateOrderConfirmationDialogState extends State<CreateOrderConfirmationDialog> {
   @override
-  void initState() {
-    super.initState();
-    init();
-  }
-
-  Future<void> init() async {
-    //
-  }
-
-  @override
   void setState(fn) {
     if (mounted) super.setState(fn);
   }
@@ -39,7 +31,7 @@ class CreateOrderConfirmationDialogState extends State<CreateOrderConfirmationDi
       mainAxisSize: MainAxisSize.min,
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: .spaceBetween,
           children: [
             Text(language.confirmation, style: boldTextStyle(size: 18)),
             CloseButton(),
@@ -49,7 +41,7 @@ class CreateOrderConfirmationDialogState extends State<CreateOrderConfirmationDi
         Text(widget.message!, style: primaryTextStyle(size: 16)),
         30.height,
         Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: .end,
           children: [
             commonButton(language.cancel, () {
               widget.onCancel != null ? widget.onCancel!.call() : finish(context);

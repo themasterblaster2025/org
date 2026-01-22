@@ -1,13 +1,20 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:developer' as lg;
 
-import 'package:http/http.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../../main/utils/Common.dart';
-import '../../main/utils/Constants.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:http/http.dart';
+import 'package:mighty_delivery/extensions/extension_util/widget_extensions.dart';
+import '../../extensions/extension_util/int_extensions.dart';
+import '../../extensions/extension_util/string_extensions.dart';
 
+import '../../extensions/common.dart';
+import '../../extensions/shared_pref.dart';
+import '../../extensions/system_utils.dart';
 import '../../main.dart';
+import '../../main/utils/Constants.dart';
+import '../screens/LoginScreen.dart';
 import 'RestApis.dart';
 
 Map<String, String> buildHeaderTokens() {
@@ -18,8 +25,7 @@ Map<String, String> buildHeaderTokens() {
     'Access-Control-Allow-Headers': '*',
     'Access-Control-Allow-Origin': '*',
   };
-
-  if (appStore.isLoggedIn) {
+  if (!getStringAsync(USER_TOKEN).isEmptyOrNull) {
     header.putIfAbsent(HttpHeaders.authorizationHeader, () => 'Bearer ${getStringAsync(USER_TOKEN)}');
   }
   log(jsonEncode(header));
@@ -46,23 +52,29 @@ Future<Response> buildHttpResponse(String endPoint, {HttpMethod method = HttpMet
       if (method == HttpMethod.POST) {
         log('Request: $request');
 
-        response = await http.post(url, body: jsonEncode(request), headers: headers).timeout(20.seconds, onTimeout: () => throw 'Timeout');
+        response = await http.post(url, body: jsonEncode(request), headers: headers).timeout(300.seconds, onTimeout: () => throw 'Timeout');
       } else if (method == HttpMethod.DELETE) {
-        response = await delete(url, headers: headers).timeout(20.seconds, onTimeout: () => throw 'Timeout');
+        response = await delete(url, headers: headers).timeout(600.seconds, onTimeout: () => throw 'Timeout');
       } else if (method == HttpMethod.PUT) {
-        response = await put(url, body: jsonEncode(request), headers: headers).timeout(20.seconds, onTimeout: () => throw 'Timeout');
+        response = await put(url, body: jsonEncode(request), headers: headers).timeout(600.seconds, onTimeout: () => throw 'Timeout');
       } else {
-        response = await get(url, headers: headers).timeout(20.seconds, onTimeout: () => throw 'Timeout');
+        response = await get(url, headers: headers).timeout(600.seconds, onTimeout: () => throw 'Timeout');
       }
 
       log('Response ($method): ${url.toString()} ${response.statusCode} ${response.body}');
+      dynamic responseLog = json.decode(response.body);
+      if (responseLog is Map) {
+        var encoder = const JsonEncoder.withIndent("    ");
+        lg.log("\n${encoder.convert(responseLog)}", name: "$method ${url.toString()} ${response.statusCode}");
+      }
 
       return response;
     } catch (e) {
-      throw errorSomethingWentWrong;
+      print("--NetworkUtils Catch----${e.toString()}");
+      throw language.errorSomethingWentWrong;
     }
   } else {
-    throw errorInternetNotAvailable;
+    throw language.errorInternetNotAvailable;
   }
 }
 
@@ -70,23 +82,42 @@ Future<Response> buildHttpResponse(String endPoint, {HttpMethod method = HttpMet
 
 Future handleResponse(Response response, [bool? avoidTokenError]) async {
   if (!await isNetworkAvailable()) {
-    throw errorInternetNotAvailable;
+    throw language.errorInternetNotAvailable;
   }
   if (response.statusCode == 401) {
-    if (appStore.isLoggedIn) {
-      Map req = {
-        'email': appStore.userEmail,
-        'password': getStringAsync(USER_PASSWORD),
-      };
+    // if (appStore.isLoggedIn) {
+    //   Map req = {
+    //     'email': appStore.userEmail,
+    //     'password': getStringAsync(USER_PASSWORD),
+    //   };
+    //   await logInApi(req).then((value) {
+    //     throw '';
+    //   }).catchError((e) {
+    //     throw TokenException(e);
+    //   });
+    showDialog(
+        context: navigatorKey.currentState!.context, // Ensure you have a GlobalKey<NavigatorState>()
+        barrierDismissible: false, // Prevent user from dismissing dialog
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(language.sessionExpired),
+            content: Text(language.sessionExpiredMsg),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                  // Navigate to login screen or perform logout
+                  LoginScreen().launch(context, isNewTask: true); // Implement your logout logic here
+                },
+                child: Text(language.yes),
+              ),
+            ],
+          );
+        });
 
-      await logInApi(req).then((value) {
-        throw '';
-      }).catchError((e) {
-        throw TokenException(e);
-      });
-    }else{
-      throw '';
-    }
+    // } else {
+    //   throw '';
+    // }
   }
 
   if (response.statusCode.isSuccessful()) {
@@ -97,10 +128,11 @@ Future handleResponse(Response response, [bool? avoidTokenError]) async {
       throw parseHtmlString(body['message']);
     } on Exception catch (e) {
       log(e);
-      throw errorSomethingWentWrong;
+      throw language.errorSomethingWentWrong;
     }
   }
 }
+
 enum HttpMethod { GET, POST, DELETE, PUT }
 
 class TokenException implements Exception {

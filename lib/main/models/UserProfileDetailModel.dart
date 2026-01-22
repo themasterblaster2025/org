@@ -7,20 +7,13 @@ class UserProfileDetailModel {
   EarningDetail? earningDetail;
   EarningList? earningList;
 
-  UserProfileDetailModel(
-      {this.data, this.walletHistory, this.earningDetail, this.earningList});
+  UserProfileDetailModel({this.data, this.walletHistory, this.earningDetail, this.earningList});
 
   UserProfileDetailModel.fromJson(Map<String, dynamic> json) {
     data = json['data'] != null ? new UserData.fromJson(json['data']) : null;
-    walletHistory = json['wallet_history'] != null
-        ? new WalletHistory.fromJson(json['wallet_history'])
-        : null;
-    earningDetail = json['earning_detail'] != null
-        ? new EarningDetail.fromJson(json['earning_detail'])
-        : null;
-    earningList = json['earning_list'] != null
-        ? new EarningList.fromJson(json['earning_list'])
-        : null;
+    walletHistory = json['wallet_history'] != null ? new WalletHistory.fromJson(json['wallet_history']) : null;
+    earningDetail = json['earning_detail'] != null ? new EarningDetail.fromJson(json['earning_detail']) : null;
+    earningList = json['earning_list'] != null ? new EarningList.fromJson(json['earning_list']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -48,9 +41,7 @@ class WalletHistory {
   WalletHistory({this.pagination, this.data});
 
   WalletHistory.fromJson(Map<String, dynamic> json) {
-    pagination = json['pagination'] != null
-        ? new PaginationModel.fromJson(json['pagination'])
-        : null;
+    pagination = json['pagination'] != null ? new PaginationModel.fromJson(json['pagination']) : null;
     if (json['data'] != null) {
       data = <WalletData>[];
       json['data'].forEach((v) {
@@ -90,20 +81,20 @@ class WalletData {
 
   WalletData(
       {this.id,
-        this.userId,
-        this.userName,
-        this.type,
-        this.transactionType,
-        this.currency,
-        this.amount,
-        this.balance,
-        this.walletBalance,
-        this.datetime,
-        this.orderId,
-        this.description,
-        this.data,
-        this.createdAt,
-        this.updatedAt});
+      this.userId,
+      this.userName,
+      this.type,
+      this.transactionType,
+      this.currency,
+      this.amount,
+      this.balance,
+      this.walletBalance,
+      this.datetime,
+      this.orderId,
+      this.description,
+      this.data,
+      this.createdAt,
+      this.updatedAt});
 
   WalletData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -153,12 +144,7 @@ class WalletPaymentData {
   num? deliveryManCommission;
   num? adminCommission;
 
-  WalletPaymentData(
-      {this.paymentId,
-        this.tip,
-        this.orderHistory,
-        this.deliveryManCommission,
-        this.adminCommission});
+  WalletPaymentData({this.paymentId, this.tip, this.orderHistory, this.deliveryManCommission, this.adminCommission});
 
   WalletPaymentData.fromJson(Map<String, dynamic> json) {
     paymentId = json['payment_id'];
@@ -191,13 +177,13 @@ class EarningDetail {
 
   EarningDetail(
       {this.id,
-        this.name,
-        this.walletBalance,
-        this.totalWithdrawn,
-        this.adminCommission,
-        this.deliveryManCommission,
-        this.totalOrder,
-        this.paidOrder});
+      this.name,
+      this.walletBalance,
+      this.totalWithdrawn,
+      this.adminCommission,
+      this.deliveryManCommission,
+      this.totalOrder,
+      this.paidOrder});
 
   EarningDetail.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -231,9 +217,7 @@ class EarningList {
   EarningList({this.pagination, this.data});
 
   EarningList.fromJson(Map<String, dynamic> json) {
-    pagination = json['pagination'] != null
-        ? new PaginationModel.fromJson(json['pagination'])
-        : null;
+    pagination = json['pagination'] != null ? new PaginationModel.fromJson(json['pagination']) : null;
     if (json['data'] != null) {
       data = <EarningData>[];
       json['data'].forEach((v) {
@@ -278,25 +262,25 @@ class EarningData {
 
   EarningData(
       {this.id,
-        this.orderId,
-        this.clientId,
-        this.clientName,
-        this.orderStatus,
-        this.datetime,
-        this.totalAmount,
-        this.paymentType,
-        this.txnId,
-        this.paymentStatus,
-        this.transactionDetail,
-        this.createdAt,
-        this.updatedAt,
-        this.deletedAt,
-        this.cancelCharges,
-        this.adminCommission,
-        this.receivedBy,
-        this.deliveryManFee,
-        this.deliveryManTip,
-        this.deliveryManCommission});
+      this.orderId,
+      this.clientId,
+      this.clientName,
+      this.orderStatus,
+      this.datetime,
+      this.totalAmount,
+      this.paymentType,
+      this.txnId,
+      this.paymentStatus,
+      this.transactionDetail,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt,
+      this.cancelCharges,
+      this.adminCommission,
+      this.receivedBy,
+      this.deliveryManFee,
+      this.deliveryManTip,
+      this.deliveryManCommission});
 
   EarningData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -309,7 +293,7 @@ class EarningData {
     paymentType = json['payment_type'];
     txnId = json['txn_id'];
     paymentStatus = json['payment_status'];
-   /* if (json['transaction_detail'] != null) {
+    /* if (json['transaction_detail'] != null) {
       transactionDetail = <Null>[];
       json['transaction_detail'].forEach((v) {
         transactionDetail!.add(new Null.fromJson(v));

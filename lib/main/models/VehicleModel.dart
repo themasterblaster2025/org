@@ -1,4 +1,3 @@
-
 import 'PaginationModel.dart';
 
 class VehicleListModel {
@@ -36,6 +35,7 @@ class VehicleData {
   String? size;
   String? capacity;
   List<String>? cityIds;
+  num? price;
   Map<String, dynamic>? cityText;
   int? status;
   String? description;
@@ -43,6 +43,8 @@ class VehicleData {
   String? createdAt;
   String? updatedAt;
   String? deletedAt;
+  num? minKm;
+  num? perKmCharge;
 
   VehicleData({
     this.id,
@@ -51,6 +53,7 @@ class VehicleData {
     this.size,
     this.capacity,
     this.cityIds,
+    this.price,
     this.cityText,
     this.status,
     this.description,
@@ -58,6 +61,8 @@ class VehicleData {
     this.createdAt,
     this.updatedAt,
     this.deletedAt,
+    this.minKm,
+    this.perKmCharge,
   });
 
   VehicleData.fromJson(Map<String, dynamic> json) {
@@ -68,12 +73,15 @@ class VehicleData {
     capacity = json['capacity'];
     cityIds = json['city_ids'] != null ? new List<String>.from(json['city_ids']) : null;
     cityText = json['city_text'];
+    price = json['price'];
     status = json['status'];
     description = json['description'];
     vehicleImage = json['vehicle_image'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
+    minKm = json['min_km'];
+    perKmCharge = json['per_km_charge'];
   }
 
   Map<String, dynamic> toJson() {
@@ -84,6 +92,7 @@ class VehicleData {
     data['size'] = this.size;
     data['capacity'] = this.capacity;
     data['city_ids'] = this.cityIds;
+    data['price'] = this.price;
     data['city_text'] = this.cityText;
     data['status'] = this.status;
     data['description'] = this.description;
@@ -91,6 +100,8 @@ class VehicleData {
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['deleted_at'] = this.deletedAt;
+    data['min_km'] = this.minKm;
+    data['per_km_charge'] = this.perKmCharge;
     return data;
   }
 }

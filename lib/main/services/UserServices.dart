@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import '../../extensions/extension_util/string_extensions.dart';
+import '../../extensions/shared_pref.dart';
+import '../../extensions/system_utils.dart';
 import '../../main.dart';
-import 'package:nb_utils/nb_utils.dart';
 import '../models/LoginResponse.dart';
 import '../utils/Constants.dart';
 import 'BaseServices.dart';
 
 class UserService extends BaseService {
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
-  FirebaseStorage _storage = FirebaseStorage.instance;
+//  FirebaseStorage _storage = FirebaseStorage.instance;
 
   UserService() {
     ref = fireStore.collection(USER_COLLECTION);
@@ -20,7 +21,9 @@ class UserService extends BaseService {
 
   Future<UserData> getUser({String? email}) {
     return ref!.where("email", isEqualTo: email).limit(1).get().then((value) {
+      log("value.docs ${value.docs}");
       if (value.docs.length == 1) {
+        setValue(UID, value.docs.first.id);
         return UserData.fromJson(value.docs.first.data() as Map<String, dynamic>);
       } else {
         throw language.userNotFound;

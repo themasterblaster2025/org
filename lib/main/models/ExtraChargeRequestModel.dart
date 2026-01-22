@@ -3,7 +3,7 @@ class ExtraChargeRequestModel {
   num? value;
   String? valueType;
 
-  ExtraChargeRequestModel({this.key, this.value,this.valueType});
+  ExtraChargeRequestModel({this.key, this.value, this.valueType});
 
   ExtraChargeRequestModel.fromJson(Map<String, dynamic> json) {
     key = json['key'];

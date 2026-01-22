@@ -1,11 +1,24 @@
+import '../../main/models/LoginResponse.dart';
+
 import 'OrderListModel.dart';
 
 class OrderDetailModel {
   OrderData? data;
   Payment? payment;
   List<OrderHistory>? orderHistory;
+  CourierCompanyDetail? courierCompanyDetail;
+  UserData? clientDetail;
+  UserData? deliveryManDetail;
+  String? errorMessage;
 
-  OrderDetailModel({this.data, this.orderHistory});
+  OrderDetailModel({
+    this.data,
+    this.orderHistory,
+    this.clientDetail,
+    this.deliveryManDetail,
+    this.courierCompanyDetail,
+    this.errorMessage,
+  });
 
   OrderDetailModel.fromJson(Map<String, dynamic> json) {
     data = json['data'] != null ? new OrderData.fromJson(json['data']) : null;
@@ -16,6 +29,10 @@ class OrderDetailModel {
         orderHistory!.add(new OrderHistory.fromJson(v));
       });
     }
+    clientDetail = json['client_detail'] != null ? new UserData.fromJson(json['client_detail']) : null;
+    deliveryManDetail = json['delivery_man_detail'] != null ? new UserData.fromJson(json['delivery_man_detail']) : null;
+    courierCompanyDetail = json["courier_company_detail"] == null ? null : CourierCompanyDetail.fromJson(json["courier_company_detail"]);
+    errorMessage = json['errorMessage'] ?? '';
   }
 
   Map<String, dynamic> toJson() {
@@ -29,6 +46,16 @@ class OrderDetailModel {
     if (this.orderHistory != null) {
       data['order_history'] = this.orderHistory!.map((v) => v.toJson()).toList();
     }
+    if (this.clientDetail != null) {
+      data['client_detail'] = this.clientDetail!.toJson();
+    }
+    if (this.deliveryManDetail != null) {
+      data['delivery_man_detail'] = this.deliveryManDetail!.toJson();
+    }
+    if (this.courierCompanyDetail != null) {
+      data['courier_company_detail'] = this.courierCompanyDetail!.toJson();
+    }
+    data['errorMessage'] = errorMessage;
     return data;
   }
 }
@@ -191,6 +218,113 @@ class HistoryData {
     data['delivery_man_name'] = this.deliveryManName;
     data['order_id'] = this.orderId;
     data['payment_status'] = this.paymentStatus;
+    return data;
+  }
+}
+
+class OrderItem {
+  int? id;
+  int? orderId;
+  int? productId;
+  int? amount;
+  num? totalAmount;
+  int? quantity;
+
+  OrderItem({
+    this.id,
+    this.orderId,
+    this.productId,
+    this.amount,
+    this.totalAmount,
+    this.quantity,
+  });
+
+  factory OrderItem.fromJson(Map<String, dynamic> json) => OrderItem(
+        id: json["id"],
+        orderId: json["order_id"],
+        productId: json["product_id"],
+        amount: json["amount"],
+        totalAmount: json["total_amount"],
+        quantity: json["quantity"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "order_id": orderId,
+        "product_id": productId,
+        "amount": amount,
+        "total_amount": totalAmount,
+        "quantity": quantity,
+      };
+}
+
+class OrderRating {
+  int? id;
+  int? storeDetailId;
+  int? userId;
+  int? orderId;
+  num? rating;
+  String? review;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+
+  OrderRating({
+    this.id,
+    this.storeDetailId,
+    this.userId,
+    this.orderId,
+    this.rating,
+    this.review,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  factory OrderRating.fromJson(Map<String, dynamic> json) => OrderRating(
+        id: json["id"],
+        storeDetailId: json["store_detail_id"],
+        userId: json["user_id"],
+        orderId: json["order_id"],
+        rating: json["rating"],
+        review: json["review"],
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "store_detail_id": storeDetailId,
+        "user_id": userId,
+        "order_id": orderId,
+        "rating": rating,
+        "review": review,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+      };
+}
+
+class CourierCompanyDetail {
+  int? id;
+  String? name;
+  String? link;
+
+  CourierCompanyDetail({
+    this.id,
+    this.name,
+    this.link,
+  });
+
+  CourierCompanyDetail.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    link = json['link'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['link'] = this.link;
+
     return data;
   }
 }

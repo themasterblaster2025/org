@@ -7,9 +7,7 @@ class ParcelTypeListModel {
   ParcelTypeListModel({this.pagination, this.data});
 
   ParcelTypeListModel.fromJson(Map<String, dynamic> json) {
-    pagination = json['pagination'] != null
-        ? new PaginationModel.fromJson(json['pagination'])
-        : null;
+    pagination = json['pagination'] != null ? new PaginationModel.fromJson(json['pagination']) : null;
     if (json['data'] != null) {
       data = <ParcelTypeData>[];
       json['data'].forEach((v) {
@@ -30,7 +28,7 @@ class ParcelTypeListModel {
   }
 }
 
-class ParcelTypeData{
+class ParcelTypeData {
   int? id;
   String? type;
   String? label;
@@ -38,13 +36,7 @@ class ParcelTypeData{
   String? createdAt;
   String? updatedAt;
 
-  ParcelTypeData(
-      {this.id,
-        this.type,
-        this.label,
-        this.value,
-        this.createdAt,
-        this.updatedAt});
+  ParcelTypeData({this.id, this.type, this.label, this.value, this.createdAt, this.updatedAt});
 
   ParcelTypeData.fromJson(Map<String, dynamic> json) {
     id = json['id'];

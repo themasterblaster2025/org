@@ -7,9 +7,7 @@ class DeliveryDocumentListModel {
   DeliveryDocumentListModel({this.pagination, this.data});
 
   DeliveryDocumentListModel.fromJson(Map<String, dynamic> json) {
-    pagination = json['pagination'] != null
-        ? new PaginationModel.fromJson(json['pagination'])
-        : null;
+    pagination = json['pagination'] != null ? new PaginationModel.fromJson(json['pagination']) : null;
     if (json['data'] != null) {
       data = <DeliveryDocumentData>[];
       json['data'].forEach((v) {
@@ -43,14 +41,14 @@ class DeliveryDocumentData {
 
   DeliveryDocumentData(
       {this.id,
-        this.deliveryManId,
-        this.documentId,
-        this.documentName,
-        this.isVerified,
-        this.deliveryManDocument,
-        this.createdAt,
-        this.updatedAt,
-        this.deletedAt});
+      this.deliveryManId,
+      this.documentId,
+      this.documentName,
+      this.isVerified,
+      this.deliveryManDocument,
+      this.createdAt,
+      this.updatedAt,
+      this.deletedAt});
 
   DeliveryDocumentData.fromJson(Map<String, dynamic> json) {
     id = json['id'];

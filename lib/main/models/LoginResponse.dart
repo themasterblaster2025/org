@@ -1,9 +1,16 @@
+import 'DeliverymanVehicleListModel.dart';
+
 class LoginResponse {
   UserData? data;
   String? message;
+
   var status;
 
-  LoginResponse({this.data, this.message,this.status});
+  LoginResponse({
+    this.data,
+    this.message,
+    this.status,
+  });
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) {
     return LoginResponse(
@@ -48,10 +55,19 @@ class UserData {
   String? playerId;
   String? fcmToken;
   String? lastNotificationSeen;
-  int? isVerifiedDeliveryMan;
+  num? averageRating;
+
+  // int? isVerifiedDeliveryMan;
   String? deletedAt;
   UserBankAccount? userBankAccount;
   String? otpVerifyAt;
+  String? emailVerifiedAt;
+  String? documentVerifiedAt;
+  String? app_version;
+  String? app_source;
+  String? referralCode;
+  String? partnerReferralCode;
+  List<DeliverymanVehicle>? deliverymanVehicleHistory;
 
   UserData(
       {this.apiToken,
@@ -77,14 +93,23 @@ class UserData {
       this.playerId,
       this.fcmToken,
       this.lastNotificationSeen,
-      this.isVerifiedDeliveryMan,
+      // this.isVerifiedDeliveryMan,
       this.deletedAt,
       this.userBankAccount,
-      this.otpVerifyAt});
+      this.otpVerifyAt,
+      this.emailVerifiedAt,
+      this.documentVerifiedAt,
+      this.app_version,
+      this.app_source,
+      this.partnerReferralCode,
+      this.referralCode,
+      this.deliverymanVehicleHistory,
+      this.averageRating});
 
   UserData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     apiToken = json['api_token'];
+    print("--------------api token${apiToken}");
     name = json['name'];
     email = json['email'];
     username = json['username'];
@@ -106,10 +131,18 @@ class UserData {
     playerId = json['player_id'];
     fcmToken = json['fcm_token'];
     lastNotificationSeen = json['last_notification_seen'];
-    isVerifiedDeliveryMan = json['is_verified_delivery_man'];
+    // isVerifiedDeliveryMan = json['is_verified_delivery_man'];
     deletedAt = json['deleted_at'];
     userBankAccount = json['user_bank_account'] != null ? new UserBankAccount.fromJson(json['user_bank_account']) : null;
     otpVerifyAt = json['otp_verify_at'];
+    emailVerifiedAt = json['email_verified_at'];
+    documentVerifiedAt = json['document_verified_at'];
+    app_version = json['app_version'];
+    app_source = json['app_source'];
+    referralCode = json['referral_code'];
+    partnerReferralCode = json['partner_referral_code'];
+    averageRating = json['average_rating'];
+    deliverymanVehicleHistory = json["DeliverymanVehicleHistory"] != null ? List<DeliverymanVehicle>.from(json["DeliverymanVehicleHistory"].map((x) => DeliverymanVehicle.fromJson(x))) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -137,12 +170,21 @@ class UserData {
     data['player_id'] = this.playerId;
     data['fcm_token'] = this.fcmToken;
     data['last_notification_seen'] = this.lastNotificationSeen;
-    data['is_verified_delivery_man'] = this.isVerifiedDeliveryMan;
+    // data['is_verified_delivery_man'] = this.isVerifiedDeliveryMan;
+    data['app_version'] = this.app_version;
+    data['app_source'] = this.app_source;
     data['deleted_at'] = this.deletedAt;
     if (this.userBankAccount != null) {
       data['user_bank_account'] = this.userBankAccount!.toJson();
     }
     data['otp_verify_at'] = this.otpVerifyAt;
+    data['email_verified_at'] = this.emailVerifiedAt;
+    data['document_verified_at'] = this.documentVerifiedAt;
+    data['referral_code'] = this.referralCode;
+    data['partner_referral_code'] = this.partnerReferralCode;
+    data['average_rating'] = this.averageRating;
+    data['DeliverymanVehicleHistory'] = this.deliverymanVehicleHistory != null ? List<DeliverymanVehicle>.from(this.deliverymanVehicleHistory!.map((x) => x.toJson())) : null;
+
     return data;
   }
 }
@@ -154,11 +196,15 @@ class UserBankAccount {
   String? bankCode;
   String? accountHolderName;
   String? accountNumber;
+  String? bankAddress;
+  String? routingNumber;
+  String? bankIban;
+  String? bankSwift;
   String? createdAt;
   String? updatedAt;
   String? deletedAt;
 
-  UserBankAccount({this.id, this.userId, this.bankName, this.bankCode, this.accountHolderName, this.accountNumber, this.createdAt, this.updatedAt, this.deletedAt});
+  UserBankAccount({this.id, this.userId, this.bankName, this.bankCode, this.accountHolderName, this.accountNumber, this.bankAddress, this.bankIban, this.bankSwift, this.routingNumber, this.createdAt, this.updatedAt, this.deletedAt});
 
   UserBankAccount.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -167,6 +213,10 @@ class UserBankAccount {
     bankCode = json['bank_code'];
     accountHolderName = json['account_holder_name'];
     accountNumber = json['account_number'];
+    bankAddress = json['bank_address'];
+    routingNumber = json['routing_number'];
+    bankIban = json['bank_iban'];
+    bankSwift = json['bank_swift'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
@@ -180,6 +230,10 @@ class UserBankAccount {
     data['bank_code'] = this.bankCode;
     data['account_holder_name'] = this.accountHolderName;
     data['account_number'] = this.accountNumber;
+    data['bank_address'] = this.bankAddress;
+    data['routing_number'] = this.routingNumber;
+    data['bank_iban'] = this.bankIban;
+    data['bank_swift'] = this.bankSwift;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['deleted_at'] = this.deletedAt;

@@ -35,7 +35,42 @@ class StripePayModel {
   String? transferData;
   String? transferGroup;
 
-  StripePayModel({this.object, this.amount, this.amountCapturable, this.amountReceived, this.application, this.applicationFeeAmount, this.canceledAt, this.cancellationReason, this.captureMethod, this.charges, this.clientSecret, this.confirmationMethod, this.created, this.currency, this.customer, this.description, this.id, this.invoice, this.lastPaymentError, this.liveMode, this.nextAction, this.onBehalfOf, this.paymentMethod, this.paymentMethodOptions, this.paymentMethodTypes, this.receiptEmail, this.review, this.setupFutureUsage, this.shipping, this.source, this.statementDescriptor, this.statementDescriptorSuffix, this.status, this.transferData, this.transferGroup});
+  StripePayModel(
+      {this.object,
+      this.amount,
+      this.amountCapturable,
+      this.amountReceived,
+      this.application,
+      this.applicationFeeAmount,
+      this.canceledAt,
+      this.cancellationReason,
+      this.captureMethod,
+      this.charges,
+      this.clientSecret,
+      this.confirmationMethod,
+      this.created,
+      this.currency,
+      this.customer,
+      this.description,
+      this.id,
+      this.invoice,
+      this.lastPaymentError,
+      this.liveMode,
+      this.nextAction,
+      this.onBehalfOf,
+      this.paymentMethod,
+      this.paymentMethodOptions,
+      this.paymentMethodTypes,
+      this.receiptEmail,
+      this.review,
+      this.setupFutureUsage,
+      this.shipping,
+      this.source,
+      this.statementDescriptor,
+      this.statementDescriptorSuffix,
+      this.status,
+      this.transferData,
+      this.transferGroup});
 
   factory StripePayModel.fromJson(Map<String, dynamic> json) {
     return StripePayModel(
