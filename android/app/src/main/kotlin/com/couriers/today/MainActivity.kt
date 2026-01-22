@@ -1,4 +1,4 @@
-package com.mighty.delivery
+package com.couriers.today
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
