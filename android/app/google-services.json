@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "901363056998",
+    "firebase_url": "https://courierstoday-68e3b-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "courierstoday-68e3b",
+    "storage_bucket": "courierstoday-68e3b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:901363056998:android:ea3cf4bf492da002ed48a7",
+        "android_client_info": {
+          "package_name": "com.couriers.today"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "901363056998-4857eh3d76tpdp6tg0v6t6ir0k7jeorg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.couriers.today",
+            "certificate_hash": "339e45016f2400dc480fb785b65e1458b86a12ba"
+          }
+        },
+        {
+          "client_id": "901363056998-91h43b1mmdv9j6pdr5g9vucq3a1lbo94.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlGoBhNCFuhA4ipwxdaLCwM01axYxGDTY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "901363056998-91h43b1mmdv9j6pdr5g9vucq3a1lbo94.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
