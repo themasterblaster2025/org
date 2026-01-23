@@ -53,8 +53,8 @@ const defaultPhoneCode = '+44';
 //endregion
 
 //region country symnbol and code
-const CURRENCY_SYMBOL = '₹';
-const CURRENCY_CODE = 'INR';
+const CURRENCY_SYMBOL = '£';
+const CURRENCY_CODE = 'GBP';
 //endregion
 final mPrivacyPolicy = "$DOMAIN_URL/privacypolicy";
 final mTermAndCondition = "$DOMAIN_URL/termofservice";
