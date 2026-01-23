@@ -1,7 +1,7 @@
-import 'dart:ui';
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:country_code_picker/country_code_picker.dart';
