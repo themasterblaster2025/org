@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -39,17 +38,17 @@ import 'main/utils/firebase_options.dart';
 final navigatorKey = GlobalKey<NavigatorState>();
 
 late SharedPreferences sharedPreferences;
-AppStore appStore = AppStore();
+final AppStore appStore = AppStore();
 late BaseLanguage language;
 
 // Added by SK
 LanguageJsonData? selectedServerLanguageData;
 List<LanguageJsonData>? defaultServerLanguageData = [];
 
-UserService userService = UserService();
-AuthServices authService = AuthServices();
-OrdersMessageService ordersMessageService = OrdersMessageService();
-NotificationService notificationService = NotificationService();
+final UserService userService = UserService();
+final AuthServices authService = AuthServices();
+final OrdersMessageService ordersMessageService = OrdersMessageService();
+final NotificationService notificationService = NotificationService();
 
 late List<FileModel> fileList = [];
 
@@ -68,14 +67,12 @@ Future<void> main() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-  } else {
-    Firebase.app();
   }
 
   // Crashlytics: Flutter framework errors
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
-  // Crashlytics: async/platform errors (optional but recommended)
+  // Crashlytics: async/platform errors
   PlatformDispatcher.instance.onError = (error, stack) {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
@@ -101,7 +98,7 @@ Future<void> main() async {
           !filterData.toDate.isEmptyOrNull,
     );
 
-    int themeModeIndex = getIntAsync(THEME_MODE_INDEX);
+    final int themeModeIndex = getIntAsync(THEME_MODE_INDEX);
     if (themeModeIndex == appThemeMode.themeModeLight) {
       appStore.setDarkMode(false);
     } else if (themeModeIndex == appThemeMode.themeModeDark) {
@@ -110,8 +107,8 @@ Future<void> main() async {
 
     initJsonFile();
     oneSignalSettings();
-  } catch (e) {
-    log("main init error: $e");
+  } catch (e, st) {
+    log("main init error: $e", stackTrace: st);
   }
 
   runApp(MyApp());
@@ -123,7 +120,7 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
-  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
+  StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
 
   @override
   void initState() {
@@ -150,62 +147,58 @@ class MyAppState extends State<MyApp> {
 
   @override
   void dispose() {
-    _connectivitySubscription.cancel();
+    _connectivitySubscription?.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Observer(builder: (context) {
-      return MaterialApp(
-        navigatorKey: navigatorKey,
-        builder: (context, child) {
-          return SafeArea(
-            top: false,
-            child: ValueListenableBuilder<bool>(
-              valueListenable: isSosVisible,
-              builder: (context, isVisible, _) {
-                return Stack(
-                  children: [
-                    ScrollConfiguration(
-                      behavior: MyBehavior(),
-                      child: child!,
-                    ),
-                    // if (isVisible) const EmergencyAlertScreen(),
-                  ],
-                );
-              },
-            ),
-          );
-        },
-title: mAppName,
-debugShowCheckedModeBanner: false,
-theme: appStore.lightTheme,
-darkTheme: appStore.darkTheme,
-themeMode: appStore.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-
-home: SplashScreen(),
-supportedLocales: getSupportedLocales(),
-localizationsDelegates: [
-  GlobalMaterialLocalizations.delegate,
-  GlobalWidgetsLocalizations.delegate,
-  GlobalCupertinoLocalizations.delegate,
-  CountryLocalizations.delegate,
-  AppLocalizations(),
-],
-
-localeResolutionCallback: (locale, supportedLocales) {
-  if (locale == null) return supportedLocales.first;
-
-  return supportedLocales.firstWhere(
-    (l) => l.languageCode == locale.languageCode,
-    orElse: () => supportedLocales.first,
-  );
-},
-
-locale: Locale(
-  appStore.selectedLanguage.validate(value: defaultLanguageCode),
-),
+    return Observer(
+      builder: (context) {
+        return MaterialApp(
+          navigatorKey: navigatorKey,
+          builder: (context, child) {
+            return SafeArea(
+              top: false,
+              child: ValueListenableBuilder<bool>(
+                valueListenable: isSosVisible,
+                builder: (context, isVisible, _) {
+                  return Stack(
+                    children: [
+                      ScrollConfiguration(
+                        behavior: MyBehavior(),
+                        child: child ?? const SizedBox.shrink(),
+                      ),
+                      // if (isVisible) const EmergencyAlertScreen(),
+                    ],
+                  );
+                },
+              ),
+            );
+          },
+          title: mAppName,
+          debugShowCheckedModeBanner: false,
+          theme: appStore.lightTheme,
+          darkTheme: appStore.darkTheme,
+          themeMode: appStore.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+          home: SplashScreen(),
+          supportedLocales: getSupportedLocales(),
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            CountryLocalizations.delegate,
+            AppLocalizations(), // ✅ your app’s localization
+          ],
+          localeResolutionCallback: (locale, supportedLocales) => locale,
+          locale: Locale(
+            appStore.selectedLanguage.validate(value: defaultLanguageCode),
+          ),
+        );
+      },
+    );
+  }
+}
 
 class MyBehavior extends ScrollBehavior {
   @override
