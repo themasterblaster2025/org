@@ -22,21 +22,21 @@ final DOMAIN_URL = AppServerConfig.baseUrl;
 //endregion
 
 //region Google map key
-const googleMapAPIKey = 'GOOGLE_MAPS_API_KEY';
+const googleMapAPIKey = 'AIzaSyCOP7CIHTEIN9-gjRPHJZDpyCF22DOwiPU';
 //endregion
 
 // region onesignal keys
-const mOneSignalAppId = 'ONESIGNAL_APP_ID';
-const mOneSignalRestKey = 'ONESIGNAL_REST_KEY';
-const mOneSignalChannelId = 'ONESIGNAL_CHANNEL_ID';
+const mOneSignalAppId = '49f1574d-0353-48b3-8451-534c796b7015';
+const mOneSignalRestKey = 'wzlz53zr6uwefnswpqg2wfc25';
+const mOneSignalChannelId = '14f105b4-cb52-4c22-8a21-866d62b63495';
 //endregion
 
 //region  firebase data  for firebase_options.dart
-const String FIREBASE_API_KEY = "FIREBASE_API_KEY";
-const String FIREBASE_APP_ID = "FIREBASE_APP_ID";
-const String FIREBASE_MESSAGING_SENDER_ID = "FIREBASE_MESSAGING_SENDER_ID";
-const String FIREBASE_PROJECT_ID = "FIREBASE_PROJECT_ID";
-const String FIREBASE_STORAGE_BUCKET = "FIREBASE_STORAGE_BUCKET";
+const String FIREBASE_API_KEY = "AIzaSyBlGoBhNCFuhA4ipwxdaLCwM01axYxGDTY";
+const String FIREBASE_APP_ID = "1:901363056998:android:ea3cf4bf492da002ed48a7";
+const String FIREBASE_MESSAGING_SENDER_ID = "901363056998";
+const String FIREBASE_PROJECT_ID = "courierstoday-68e3b";
+const String FIREBASE_STORAGE_BUCKET = "courierstoday-68e3b.firebasestorage.app";
 
 //region  firebase data  for firebase_options.dart FOR IOS APP USE
 const String FIREBASE_APP_ID_IOS = "FIREBASE_APP_ID_IOS";
@@ -49,7 +49,7 @@ const String IOS_BUNDLE_ID = 'com.couriers.today';
 
 //region languages and phone code
 //const defaultLanguageCode = "en";
-const defaultPhoneCode = '+91';
+const defaultPhoneCode = '+44';
 //endregion
 
 //region country symnbol and code
