@@ -178,25 +178,34 @@ class MyAppState extends State<MyApp> {
             ),
           );
         },
-        title: mAppName,
-        debugShowCheckedModeBanner: false,
-        theme: appStore.lightTheme,
-        darkTheme: appStore.darkTheme,
-        themeMode: appStore.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-        home: SplashScreen(),
-        supportedLocales: getSupportedLocales(),
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-          CountryLocalizations.delegate,
-        ],
-        localeResolutionCallback: (locale, supportedLocales) => locale,
-        locale: Locale(appStore.selectedLanguage.validate(value: defaultLanguageCode)),
-      );
-    });
-  }
-}
+title: mAppName,
+debugShowCheckedModeBanner: false,
+theme: appStore.lightTheme,
+darkTheme: appStore.darkTheme,
+themeMode: appStore.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+
+home: SplashScreen(),
+supportedLocales: getSupportedLocales(),
+localizationsDelegates: [
+  GlobalMaterialLocalizations.delegate,
+  GlobalWidgetsLocalizations.delegate,
+  GlobalCupertinoLocalizations.delegate,
+  CountryLocalizations.delegate,
+  AppLocalizations(),
+],
+
+localeResolutionCallback: (locale, supportedLocales) {
+  if (locale == null) return supportedLocales.first;
+
+  return supportedLocales.firstWhere(
+    (l) => l.languageCode == locale.languageCode,
+    orElse: () => supportedLocales.first,
+  );
+},
+
+locale: Locale(
+  appStore.selectedLanguage.validate(value: defaultLanguageCode),
+),
 
 class MyBehavior extends ScrollBehavior {
   @override
