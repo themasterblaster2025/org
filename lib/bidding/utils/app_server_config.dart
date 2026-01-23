@@ -7,7 +7,7 @@ class AppServerConfig {
     } else if (kProfileMode) {
       return 'https://courierstoday.com';
     } else {
-      return 'https://courierstoday.com/adminHub';
+      return 'https://courierstoday.com';
     }
   }
 }
