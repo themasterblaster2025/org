@@ -61,7 +61,7 @@
         "screenId": "2",
         "keyword_id": 9,
         "keyword_name": "appName",
-        "keyword_value": "Mighty Delivery"
+        "keyword_value": "Couriers Today"
       }
     ]
   },
@@ -157,7 +157,7 @@
         "screenId": "3",
         "keyword_id": 24,
         "keyword_name": "becomeADeliveryBoy",
-        "keyword_value": "Become a delivery boy ?"
+        "keyword_value": "Become a Delivery Partner ?"
       },
       {
         "screenId": "3",
@@ -181,7 +181,7 @@
         "screenId": "3",
         "keyword_id": 28,
         "keyword_name": "lblDeliveryBoy",
-        "keyword_value": "Delivery boy"
+        "keyword_value": "Delivery Partner"
       },
       {
         "screenId": "3",
@@ -277,7 +277,7 @@
         "screenId": "4",
         "keyword_id": 310,
         "keyword_name": "allowLocationPermission",
-        "keyword_value": "allow location permission"
+        "keyword_value": "Allow location permission"
       },
       {
         "screenId": "4",
@@ -373,7 +373,7 @@
         "screenId": "6",
         "keyword_id": 37,
         "keyword_name": "forgotPassword",
-        "keyword_value": "Forgot password"
+        "keyword_value": "Forgot Password"
       },
       {
         "screenId": "6",
@@ -415,7 +415,7 @@
         "screenId": "7",
         "keyword_id": 354,
         "keyword_name": "copyRight",
-        "keyword_value": "© 2024 MeetMighty IT Solutions"
+        "keyword_value": "© 2026 Couriers Today"
       }
     ]
   },
@@ -1093,7 +1093,7 @@
         "screenId": "19",
         "keyword_id": 340,
         "keyword_name": "balanceInsufficientCashPayment",
-        "keyword_value": "Balance is insufficient,Order is created with cash payment."
+        "keyword_value": "Balance is insufficient, Plase pay via Card Payment."
       },
       {
         "screenId": "19",
@@ -1675,13 +1675,13 @@
         "screenId": "27",
         "keyword_id": 189,
         "keyword_name": "cancelBeforePickMsg",
-        "keyword_value": "The order was cancelled before pickup the parcel.So,only cancellation charge is cut.If payment is already done then amount is refund to wallet."
+        "keyword_value": "The order was cancelled before pickup the parcel. So only cancellation charge is cut. If payment is already done then amount is refunded."
       },
       {
         "screenId": "27",
         "keyword_id": 190,
         "keyword_name": "cancelAfterPickMsg",
-        "keyword_value": "The order was cancelled after pickup the parcel.So,fully charge is cut."
+        "keyword_value": "The order was cancelled after pickup the parcel. So fully charge is cut."
       },
       {
         "screenId": "27",
