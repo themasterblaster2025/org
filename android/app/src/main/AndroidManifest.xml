@@ -14,15 +14,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="CouriersToday"
         tools:replace="android:label"
-        android:enableOnBackInvokedCallback="false">
+        android:enableOnBackInvokedCallback="true">
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAxfiZRFhtftXlgg8jAG8D0tcj-BmltaAc" />
-
-	<meta-data
-            android:name="com.google.android.geo.MAP_ID"
-            android:value="489b808d55292be07e49babb" />
+            android:value="AIzaSyCOP7CIHTEIN9-gjRPHJZDpyCF22DOwiPU" />
 
         <activity
             android:name=".MainActivity"
