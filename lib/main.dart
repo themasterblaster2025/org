@@ -52,17 +52,48 @@ String mSelectedImage = "assets/default_wallpaper.png";
 ValueNotifier<bool> isSosVisible = ValueNotifier(false);
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (Platform.isIOS) {
-    await Firebase.initializeApp().then((value) {
-      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-    });
-  } else {
+
+  // ✅ Only initialize if it hasn't already been created by the native layer
+  if (Firebase.apps.isEmpty) {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
-    ).then((value) {
-      FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-    });
+    );
+  } else {
+    Firebase.app(); // just ensure default app is available
   }
+
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+
+  sharedPreferences = await SharedPreferences.getInstance();
+  appStore.setLanguage(getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguageCode));
+
+  try {
+    appStore.setLogin(getBoolAsync(IS_LOGGED_IN), isInitializing: true);
+    appStore.setUserEmail(getStringAsync(USER_EMAIL), isInitialization: true);
+    appStore.setUserProfile(getStringAsync(USER_PROFILE_PHOTO), isInitializing: true);
+
+    FilterAttributeModel? filterData = FilterAttributeModel.fromJson(getJSONAsync(FILTER_DATA));
+    appStore.setFiltering(
+      filterData.orderStatus != null ||
+      !filterData.fromDate.isEmptyOrNull ||
+      !filterData.toDate.isEmptyOrNull,
+    );
+
+    int themeModeIndex = getIntAsync(THEME_MODE_INDEX);
+    if (themeModeIndex == appThemeMode.themeModeLight) {
+      appStore.setDarkMode(false);
+    } else if (themeModeIndex == appThemeMode.themeModeDark) {
+      appStore.setDarkMode(true);
+    }
+
+    initJsonFile();
+    oneSignalSettings();
+  } catch (e) {
+    print("error========${e.toString()}");
+  }
+
+  runApp(MyApp());
+}
 
   // await initialize(aLocaleLanguageList: languageList());
   sharedPreferences = await SharedPreferences.getInstance();
