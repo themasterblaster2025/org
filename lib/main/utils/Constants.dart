@@ -48,7 +48,7 @@ const String IOS_BUNDLE_ID = 'com.couriers.today';
 //endregion
 
 //region languages and phone code
-const defaultLanguageCode = "en-GB";
+//const defaultLanguageCode = "en";
 const defaultPhoneCode = '+44';
 //endregion
 
