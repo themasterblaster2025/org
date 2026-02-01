@@ -6,7 +6,7 @@ import '../../extensions/extension_util/int_extensions.dart';
 import '../../extensions/colors.dart';
 import '../../extensions/common.dart';
 
-const mAppName = 'CouriersToday';
+const mAppName = 'Couriers Today';
 //endregion
 
 //region Baseurl
@@ -32,7 +32,7 @@ const mOneSignalChannelId = '14f105b4-cb52-4c22-8a21-866d62b63495';
 //endregion
 
 //region  firebase data  for firebase_options.dart
-const String FIREBASE_API_KEY = "AIzaSyBlGoBhNCFuhA4ipwxdaLCwM01axYxGDTY";
+const String FIREBASE_API_KEY = "AIzaSyCznE2McZzrYLml4ZUNaVXDvAqSCepWiGc";
 const String FIREBASE_APP_ID = "1:901363056998:android:ea3cf4bf492da002ed48a7";
 const String FIREBASE_MESSAGING_SENDER_ID = "901363056998";
 const String FIREBASE_PROJECT_ID = "courierstoday-68e3b";
